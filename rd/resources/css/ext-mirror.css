@@ -1,0 +1,503 @@
+.x-mirror {
+    direction: rtl;
+}
+
+.x-box-item {
+    right: 0;
+    left: auto;
+}
+
+.x-box-inner {
+    right: 0;
+    left: auto;
+}
+
+/* Grid */
+.x-mirror-scrollbar-left .x-column-header {
+    border-right: 0 none;
+    border-left: 1px solid #C5C5C5;
+}
+
+.x-column-header-trigger {
+    right: auto;
+    left: 0;
+    background-image: url('../../resources/themes/images/default/grid/grid3-hd-btn.gif');
+    background-position: right center;
+}
+
+.x-column-header-align-right .x-column-header-text {
+    padding-right: 0;
+    padding-left: .5ex;
+    margin-right: 0;
+    margin-left: 6px;
+}
+
+.x-column-header-sort-ASC .x-column-header-text,
+.x-column-header-sort-DESC .x-column-header-text {
+    padding-left: 16px;
+    background-position: left 6px;
+}
+
+.x-column-header-sort-ASC .x-column-header-text {
+    background-image: url('../../resources/themes/images/default/grid/sort_asc.gif');
+}
+
+.x-column-header-sort-DESC .x-column-header-text {
+    background-image: url('../../resources/themes/images/default/grid/sort_desc.gif');
+}
+
+.x-grid-row .x-grid-cell-special {
+    border-left: 1px solid #D0D0D0;
+    border-right: 0;
+}
+.x-grid-row-selected .x-grid-cell-special {
+    border-left: 1px solid #AACCF6;
+    border-right: 0;
+}
+
+.x-column-header-align-left {
+    text-align: right;
+}
+
+.x-column-header-align-right {
+    text-align: left;
+}
+
+/* Menu Item */
+.x-menu-item-link {
+    padding-right: 32px;
+    padding-left: 2px;
+}
+
+.x-menu-item-icon {
+    right: 6px;
+    left: auto;
+}
+
+.x-menu-item-arrow {
+    left: 0;
+    right: auto;
+    background-image: url('../../resources/themes/images/default/menu/menu-parent.gif');
+}
+
+.x-menu-icon-separator {
+    right: 27px;
+    left: auto;
+}
+
+.x-menu-item-icon-right {
+    right: auto;
+    left: 4px;
+}
+
+/* DD */
+.x-dd-drop-icon {
+    right: 3px;
+    left: auto;
+}
+
+.x-dd-drag-ghost {
+    padding-right: 20px;
+    padding-left: 5px;
+}
+
+/* Button */
+.x-btn-arrow {
+    background-image: url('../../resources/themes/images/default/button/arrow.gif');
+}
+
+.x-btn-arrow-right {
+    background-position: left center;
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.x-btn-arrow-right .x-btn-inner {
+    padding-left: 0;
+    padding-right: 4px !important;
+}
+
+.x-btn-split-right {
+    background-image: url('../../resources/themes/images/default/button/s-arrow.gif');
+}
+
+.x-btn-over .x-btn-split-right {
+    background-image: url('../../resources/themes/images/default/button/s-arrow-o.gif');
+}
+
+.x-btn-split-right,
+.x-btn-over .x-btn-split-right {
+    background-position: left center;
+    padding-left: 14px;
+    padding-right: 0 !important;
+}
+
+.x-btn-default-small-icon-text-left .x-btn-inner {
+    padding-right: 20px !important;
+    padding-left: 4px;
+}
+
+.x-btn-default-medium-icon-text-left .x-btn-inner {
+    padding-right: 28px !important;
+    padding-left: 3px;
+}
+
+.x-btn-default-large-icon-text-left .x-btn-inner {
+    padding-right: 36px !important;
+    padding-left: 3px;
+}
+
+.x-btn-default-small-icon-text-right .x-btn-inner {
+    padding-left: 20px;
+    padding-right: 4px !important;
+}
+
+.x-btn-default-medium-icon-text-right .x-btn-inner {
+    padding-left: 28px;
+    padding-right: 3px !important;
+}
+
+.x-btn-default-large-icon-text-right .x-btn-inner {
+    padding-left: 36px;
+    padding-right: 3px !important;
+}
+
+.x-btn-default-small-icon-text-left .x-btn-icon,
+.x-btn-default-medium-icon-text-left .x-btn-icon,
+.x-btn-default-large-icon-text-left .x-btn-icon {
+    right: 0;
+    left: auto;
+}
+
+.x-btn-default-small-icon-text-right .x-btn-icon,
+.x-btn-default-medium-icon-text-right .x-btn-icon,
+.x-btn-default-large-icon-text-right .x-btn-icon {
+    left: 0;
+    right: auto;
+}
+
+.x-btn .x-btn-left .x-btn-inner {
+    text-align: right;
+}
+
+.x-btn .x-btn-right .x-btn-inner {
+    text-align: left;
+}
+
+/* Toolbar */
+.x-toolbar {
+    padding: 2px 2px 2px 0;
+}
+
+.x-toolbar .x-toolbar-item {
+    margin: 0 0 0 2px;
+}
+
+.x-toolbar .x-toolbar-separator-horizontal {
+    margin: 0 2px 0 3px;
+}
+
+.x-toolbar .x-toolbar-text {
+    margin-right: 4px;
+    margin-left: 6px;
+}
+
+.x-toolbar .x-btn-split-right {
+    background-image: url('../../resources/themes/images/default/button/s-arrow-noline.gif');
+    padding-left: 12px;
+    padding-right: 0 !important;
+}
+
+.x-toolbar .x-btn-arrow-right {
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.x-toolbar-more-icon {
+    background-image: url('../../resources/themes/images/default/toolbar/more.gif') !important;
+}
+
+.x-btn-default-toolbar-small-icon-text-left .x-btn-icon {
+    right: 0;
+    left: auto;
+}
+
+.x-btn-default-toolbar-small-icon-text-left .x-btn-inner {
+    padding-right: 20px !important;
+    padding-left: 0;
+}
+
+.x-tbar-page-prev {
+    background-image: url('../../resources/themes/images/default/grid/page-prev.gif') !important;
+}
+
+.x-tbar-page-next {
+    background-image: url('../../resources/themes/images/default/grid/page-next.gif') !important;
+}
+
+/* Tool Images */
+.x-tool-expand-right,
+.x-tool-collapse-right {
+    background-position: 0 -180px;
+}
+
+.x-tool-over .x-tool-expand-right,
+.x-tool-over .x-tool-collapse-right {
+    background-position: -15px -180px;
+}
+
+.x-tool-expand-left,
+.x-tool-collapse-left {
+    background-position: 0 -165px;
+}
+
+.x-tool-over .x-tool-expand-left,
+.x-tool-over .x-tool-collapse-left {
+    background-position: -15px -165px;
+}
+
+/* Splitter */
+.x-layout-split-left {
+    background-image: url('../../resources/themes/images/default/util/splitter/mini-left.gif');
+}
+
+.x-splitter-collapsed .x-layout-split-left {
+    background-image: url('../../resources/themes/images/default/util/splitter/mini-right.gif');
+}
+
+/* Panel */
+.x-panel-header-icon,
+.x-window-header-icon {
+    margin-left: 4px;
+    margin-right: 0;
+}
+
+/* Tree */
+.x-tree-icon {
+    margin: 2px 0 0 3px;
+}
+
+/* Tab Bar */
+.x-tab-close-btn {
+    left: 2px;
+    right: auto;
+}
+
+.x-tab-closable em {
+    padding-left: 14px;
+    padding-right: 6px;
+}
+
+.x-tab-icon-text-left .x-tab-inner {
+    padding-right: 20px;
+    padding-left: 0;
+}
+
+.x-tab-icon {
+    right: 0;
+    left: auto;
+}
+
+.x-horizontal-box-overflow-body {
+    float: right;
+}
+
+/* Trigger */
+.x-form-trigger {
+    background-image: url('../../resources/themes/images/default/form/trigger.gif');
+    background-position: -85px 0;
+}
+
+.x-form-trigger-over {
+    background-position: -68px 0;
+}
+
+.x-form-trigger-wrap-focus .x-form-trigger {
+    background-position: -34px 0;
+}
+
+.x-form-trigger-wrap-focus .x-form-trigger-over {
+    background-position: -17px 0;
+}
+
+.x-form-trigger-click,
+.x-form-trigger-wrap-focus .x-form-trigger-click {
+    background-position: -51px 0;
+}
+
+/* Form Validation */
+.x-form-invalid-under {
+    padding: 2px 18px 2px 2px;
+    background-position: right 2px;
+}
+
+/* Mask */
+.x-mask,
+.x-mask-msg {
+    right: 0;
+    left: auto;
+}
+
+/* Column Layout */
+.x-column {
+    float: right;
+}
+
+/* Date Picker */
+.x-datepicker .x-monthpicker {
+    right: 0;
+    left: auto;
+}
+
+.x-datepicker-prev {
+    right: 5px;
+    left: auto;
+}
+
+.x-datepicker-next {
+    left: 5px;
+    right: auto;
+}
+
+.x-datepicker-prev a {
+    background-image: url('../../resources/themes/images/default/shared/left-btn.gif');
+}
+
+.x-datepicker-next a {
+    background-image: url('../../resources/themes/images/default/shared/right-btn.gif');
+}
+
+.x-monthpicker-item,
+.x-monthpicker-months,
+.x-monthpicker-years {
+    float: right;
+}
+
+.x-monthpicker-months {
+    border-left: 1px solid #1B376C;
+    border-right: 0;
+}
+
+.x-monthpicker-yearnav-prev {
+    background-position: 0 -120px;
+}
+
+.x-monthpicker-yearnav-prev-over {
+    background-position: 15px -120px;
+}
+
+.x-monthpicker-yearnav-next {
+    background-position: 0 -105px;
+}
+
+.x-monthpicker-yearnav-next-over {
+    background-position: 15px -105px;
+}
+
+table.x-datepicker-inner a {
+    padding-left: 4px;
+    padding-right: 0;
+    text-align: left;
+}
+
+table.x-datepicker-inner th span {
+    padding-left: 7px;
+    padding-right: 0;
+}
+
+table.x-datepicker-inner th {
+    text-align: left;
+}
+
+/* Number Field */
+.x-form-trigger-wrap .x-form-spinner-up, .x-form-trigger-wrap .x-form-spinner-down {
+    background-image: url('../../resources/themes/images/default/form/spinner.gif');
+}
+
+.x-form-trigger-wrap .x-form-spinner-down {
+    background-position: -85px -11px;
+}
+
+.x-form-trigger-wrap-focus .x-form-spinner-down {
+    background-position: -34px -11px;
+}
+
+.x-form-trigger-wrap-focus .x-form-spinner-down-over {
+    background-position: -17px -11px;
+}
+
+.x-form-trigger-wrap .x-form-spinner-down-click {
+    background-position: -51px -11px;
+}
+
+/* Date Field */
+.x-form-date-trigger {
+    background-image: url('../../resources/themes/images/default/form/date-trigger.gif');
+}
+
+/* Charts */
+.x-surface svg {
+    direction: ltr;
+}
+
+/* Label */
+.x-form-item-label-right {
+    text-align: left;
+}
+
+/* Dock */
+.x-docked-left {
+    border-right-width: 0 !important;
+    border-left-width: 1 !important;
+}
+
+.x-docked-right {
+    border-left-width: 0 !important;
+    border-right-width: 1 !important;
+}
+
+/* Internet Explorer */
+/* Buttons */
+.x-nbr .x-btn-tl {
+    background-position: right -9px !important;
+}
+
+.x-nbr .x-btn-tr {
+    background-position: left -6px !important;
+}
+
+.x-nbr .x-btn-ml {
+    background-position: right 0 !important;
+}
+
+.x-nbr .x-btn-mr {
+    background-position: left 0 !important;
+}
+
+.x-nbr .x-btn-bl {
+    background-position: right -15px !important;
+}
+
+.x-nbr .x-btn-br {
+    background-position: left -12px !important;
+}
+/* Tabs */
+.x-nbr .x-tab-tl {
+    background-position: right -12px !important;
+}
+
+.x-nbr .x-tab-tr {
+    background-position: left -8px !important;
+}
+
+.x-nbr .x-tab-ml {
+    background-position: right 0 !important;
+}
+
+.x-nbr .x-tab-mr {
+    background-position: left 0 !important;
+}
+
+.x-nbr .x-tab-close-btn {
+    right: auto;
+}
