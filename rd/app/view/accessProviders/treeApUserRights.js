@@ -1,0 +1,111 @@
+Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
+    extend:'Ext.tree.Panel',
+    requires:   ['Rd.view.components.advCheckColumn'],
+    useArrows: true,
+    alias : 'widget.treeApUserRights',
+    rootVisible: true,
+    rowLines: true,
+    stripeRows: true,
+    border: false,
+    ap_id:  null,
+    columns: [{
+            xtype: 'treecolumn', //this is so we know which column will show the tree
+            text: 'Name',
+            flex: 1,
+            sortable: true,
+            dataIndex: 'alias',
+            tdCls: 'gridTree'
+        },
+        {
+            xtype: 'advCheckColumn',
+            text: 'Allow',
+            dataIndex: 'allowed',
+            renderer: function(value, meta, record) {
+                var cssPrefix = Ext.baseCSSPrefix,
+                cls = [cssPrefix + 'grid-checkheader'],
+                disabled = true;
+
+                if(record.isLeaf()){
+                    disabled = false;// logic to disable checkbox e.g.: !can_be_checked
+                }
+
+                if (value && disabled) {
+                    cls.push(cssPrefix + 'grid-checkheader-checked-disabled');
+                } else if (value) {
+                    cls.push(cssPrefix + 'grid-checkheader-checked');
+                } else if (disabled) {
+                    cls.push(cssPrefix + 'grid-checkheader-disabled');
+                }
+                return '<div class="' + cls.join(' ') + '">&#160;</div>';
+            }
+        },
+        { 
+            text:   'Default Group Right',  
+            xtype:  'templatecolumn', 
+            width:  '120px',
+            tpl:    new Ext.XTemplate(
+                        "<tpl if='group_right == \"yes\"'><div class=\"hasRight\">Yes</div></tpl>",
+                        "<tpl if='group_right == \"no\"'><div class=\"noRight\">No</div></tpl>"
+                    )
+        },
+        {
+            text: 'Comment',
+            flex: 2,
+            dataIndex: 'comment',
+            sortable: false,
+            tdCls: 'gridComment'
+        }
+    ],
+    tbar: [      
+        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload', tooltip: 'Reload'},              
+        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: 'Expand'},
+        { xtype: 'tbfill'}
+    ],
+    initComponent: function(){
+
+        //We have to create this treeview's own store since it is unique to the AP
+        var me = this;
+
+        //Create a store specific to this Access Provider
+        me.store = Ext.create(Ext.data.TreeStore,{
+            model: 'Rd.model.mApUserRight',
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                format  : 'json',
+                batchActions: true, 
+                'url'   : '/cake2/rd_cake/acos_rights/index_ap.json',
+                extraParams: { 'ap_id' : me.ap_id },
+                reader: {
+                    type: 'json',
+                    root: 'items',
+                    messageProperty: 'message'
+                },
+                api: {
+                    read    : '/cake2/rd_cake/acos_rights/index_ap.json',
+                    update  : '/cake2/rd_cake/acos_rights/edit_ap.json'
+                }
+            },
+            root: {alias: 'Access Provider Rights',leaf: false, id:'0', iconCls: 'root', expanded: false},
+            folderSort: true,
+            clearOnLoad: true,
+            listeners: {
+                load: function( store, records, a,successful,b) {
+                    if(!successful){
+                        Ext.ux.Toaster.msg(
+                                'Error encountered',
+                                store.getProxy().getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                        );
+                    //console.log(store.getProxy().getReader().rawData.message.message);
+                    }  
+                },
+                scope: this
+            }
+        });
+
+        me.callParent(arguments);
+    }
+    
+});
