@@ -104,7 +104,7 @@ Ext.define('Rd.view.login.pnlLogin', {
                         items: [ '->',
                             {
                                 text: i18n('sOK'),
-                                margin: '0 20 40 0',
+                                margin: '0 20 40 20',
                                 action: 'ok',
                                 type: 'submit',
                                 formBind: true,
