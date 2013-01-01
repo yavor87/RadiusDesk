@@ -1,0 +1,63 @@
+Ext.define('Rd.view.i18n.winPhpEdit', {
+    extend: 'Ext.window.Window',
+    alias : 'widget.winPhpEdit',
+    title : 'Edit Msgid',
+    layout: 'fit',
+    autoShow: true,
+    width: 300,
+    iconCls: 'edit',
+    old_msgid: '',
+    initComponent: function() {
+        var me = this;
+        this.items = [
+            {
+                xtype: 'form',
+                border: false,
+                layout: 'anchor',
+                width: '100%',
+                flex: 1,
+                defaults: {
+                    anchor: '100%'
+                },
+                fieldDefaults: {
+                    msgTarget: 'under',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'top',
+                    labelSeparator: '',
+                    margin: 15
+                },
+                defaultType: 'textfield',
+                items: [
+                     {
+                        xtype:  'hiddenfield',
+                        name:   'old_msgid',
+                        value:  me.old_msgid,
+                        hidden: true
+                    },
+                    {
+                        xtype: 'displayfield',
+                        fieldLabel: 'Previous value',
+                        value: me.old_msgid
+                    },
+                    {
+                        xtype: 'textfield',
+                        fieldLabel: 'Msgid',
+                        name : "msgid",
+                        allowBlank:false,
+                        blankText:"Enter Message ID"
+                    }],
+                buttons: [
+                    {
+                        itemId: 'save',
+                        text: 'OK',
+                        scale: 'large',
+                        iconCls: 'b-btn_ok',
+                        formBind: true,
+                        margin: '0 15 10 0'
+                    }
+                ]
+            }
+        ];
+        this.callParent(arguments);
+    }
+});

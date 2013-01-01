@@ -1,0 +1,22 @@
+Ext.define('Rd.view.accessProviders.winDetail', {
+    extend: 'Ext.window.Window',
+    alias : 'widget.winAccessProviderDetail',
+    title : 'New Access Provider',
+    layout: 'fit',
+    autoShow: true,
+    width: 400,
+    height: 500,
+    resizable:  false,
+    iconCls: 'add',
+    requires: [
+        'Rd.view.accessProviders.frmDetail'
+    ],
+    parent_name: '',
+    parent_id: '',
+    initComponent: function(){
+        var me = this;
+        me.items = [{ 'xtype' : 'frmAccessProviderDetail', 'pwdHidden': false, parent_id: this.parent_id, parent_name: this.parent_name}];
+        me.callParent(arguments);
+    }
+    
+});
