@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (i486)
 --
--- Host: localhost    Database: yfii
+-- Host: localhost    Database: rd
 -- ------------------------------------------------------
 -- Server version	5.1.63-0ubuntu0.10.04.1
 
@@ -155,7 +155,7 @@ CREATE TABLE `countries` (
 
 LOCK TABLES `countries` WRITE;
 /*!40000 ALTER TABLE `countries` DISABLE KEYS */;
-INSERT INTO `countries` VALUES (4,'United Kingdom','GB','/cake2/yfii_cake/webroot/img/flags/GB.png','2012-10-05 04:55:12','2012-11-23 21:15:38'),(5,'South Africa','ZA','/cake2/yfii_cake/webroot/img/flags/ZA.png','2012-10-07 04:30:48','2012-10-07 04:30:48'),(17,'Brazil','BR','/cake2/yfii_cake/webroot/img/flags/BR.png','2012-12-04 15:24:50','2012-12-04 15:35:35');
+INSERT INTO `countries` VALUES (4,'United Kingdom','GB','/cake2/rd_cake/webroot/img/flags/GB.png','2012-10-05 04:55:12','2012-11-23 21:15:38'),(5,'South Africa','ZA','/cake2/rd_cake/webroot/img/flags/ZA.png','2012-10-07 04:30:48','2012-10-07 04:30:48'),(17,'Brazil','BR','/cake2/rd_cake/webroot/img/flags/BR.png','2012-12-04 15:24:50','2012-12-04 15:35:35');
 /*!40000 ALTER TABLE `countries` ENABLE KEYS */;
 UNLOCK TABLES;
 
