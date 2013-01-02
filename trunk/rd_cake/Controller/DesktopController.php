@@ -119,6 +119,7 @@ class DesktopController extends AppController {
             ),
         //    array(  'text'  => __('Profiles'),              'iconCls' => 'profiles'),
           //  array(  'text'  => __('Activity/Stats'),        'iconCls' => 'stats'),
+            array(  'text'  => __('NAS Devices'),           'iconCls' => 'nas',         'itemId' => 'cNas'),
             array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
             array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
         );
