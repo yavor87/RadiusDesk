@@ -568,8 +568,12 @@ class RealmsController extends AppController {
         if($q_r){
 
             foreach($q_r as $line_num => $i){
-                $username = $i['User']['username'];
-                $path_string = $path_string.'/'.$username; 
+                $username       = $i['User']['username'];
+                if($line_num == 0){
+                    $path_string    = $username;
+                }else{
+                    $path_string    = $path_string.' -> '.$username;
+                }
             }
             if($line_num > 0){
                 return $username." (".$path_string.")";
@@ -577,7 +581,6 @@ class RealmsController extends AppController {
                 return $username;
             }
         }else{
-
             return "orphaned!!!!";
         }
     }
