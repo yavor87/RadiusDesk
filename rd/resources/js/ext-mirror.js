@@ -26,11 +26,10 @@ var Element = Ext.dom.Element,
 
 Ext.onReady(function () {
 
-//RADIUSdesk add on
+    //RADIUSdesk add on
     var l = Ext.util.Cookies.get("ext-rdLanguage");
     if(l != null){
         if(l != "s:18_13"){ //Not rtl language keep as is
-
             var styleSheet,
             len = document.styleSheets.length,
             i = 0;
@@ -41,10 +40,20 @@ Ext.onReady(function () {
                 }
             }   
             return;
-   
         }
+    }else{
+        var styleSheet,
+        len = document.styleSheets.length,
+        i = 0;
+        for(; i < len; i += 1) {
+            styleSheet = document.styleSheets.item(i);
+            if (styleSheet.href && styleSheet.href.indexOf('ext-mirror.css') > -1) {
+                styleSheet.disabled = true;
+            }
+        }   
+        return;
     }
-//End RADIUSdesk add on
+    //End RADIUSdesk add on
     
     //<debug>
     if (window.location.search.indexOf('ext-mirror-off') !== -1) {

@@ -262,6 +262,10 @@
     background-image:url(../images/16x16/home.png) !important;
 }
 
+.nas {
+    background-image:url(../images/16x16/nas.png) !important;
+}
+
 .access_provider {
     background-image:url(../images/16x16/access_provider.png) !important;
 }
@@ -413,6 +417,7 @@ td.grdEditable div {
 
 .combo-wrapper img{
     float: right;
+    margin: 0px 4px 0px 4px;
 }
 .combo-language {
     font-size: 12px;
@@ -614,5 +619,21 @@ background-position: left center;
     line-height: 16px;
     padding-bottom: 0;
 }
+
+/* Windows needs a banner */
+.banner {
+    width: 100%;
+    height: 100%;
+    background-color: #f5fbfb;
+}
+
+.banner h1{
+    margin-left: 52px;
+    padding: 10px;
+    color: #555;
+    font-size:25px;
+    text-align: left;
+}
+
 
 

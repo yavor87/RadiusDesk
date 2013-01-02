@@ -15,22 +15,36 @@ Ext.define('Rd.controller.cAccessProviders', {
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
-                layout: 'fit',
+                layout: 'border',
                 stateful: true,
                 stateId: 'accessProvidersWin',
-                items: [{
-                    'xtype':    'tabpanel',
-                    items: [
-                        { 'title' : 'Access Providers', 'iconCls':  'view', 'xtype':'treeAccessProviders'}
-                    ]
-                }]
+                items: [
+                    {
+                        region: 'north',
+                        xtype:  'pnlBanner',
+                        heading:'Access Providers',
+                        image:  'resources/images/48x48/key.png'
+                    },
+                    {
+                        region  : 'center',
+                        xtype   : 'tabpanel',
+                        layout  : 'fit',
+                        xtype   : 'tabpanel',
+                        items: [
+                            { 'title' : 'Access Providers','xtype':'treeAccessProviders'}
+                        ],
+                        margins : '0 0 0 0',
+                        border  : false
+                    }
+                ]
             });
         }
         desktop.restoreWindow(win);    
         return win;
     },
     views:  ['accessProviders.treeAccessProviders', 'accessProviders.pnlAccessProvider','accessProviders.frmDetail',
-             'accessProviders.winDetail',           'accessProviders.treeApUserRights', 'accessProviders.gridRealms'
+             'accessProviders.winDetail',           'accessProviders.treeApUserRights', 'accessProviders.gridRealms',   
+            'components.pnlBanner'
             ],
     stores: ['sAccessProviders','sLanguages','sApRights'],
     models: ['mAccessProvider','mApUserRight','mApRealms'],
