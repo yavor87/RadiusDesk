@@ -16,7 +16,7 @@ Ext.define('Rd.store.sAccessProviders', {
                 destroy : '/cake2/rd_cake/access_providers/delete.json'
             }
     },
-    root: {username: 'Created by me',leaf: false, id:'0', iconCls: 'admin', expanded: false},
+    root: {username: 'Created by me',leaf: false, id:'0', iconCls: 'admin', expanded: false,monitor: 'na', active: 'na'},
     folderSort: true,
     clearOnLoad: true,
     listeners: {

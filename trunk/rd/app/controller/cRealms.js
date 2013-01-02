@@ -15,23 +15,34 @@ Ext.define('Rd.controller.cRealms', {
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
-                layout: 'fit',
+                layout: 'border',
                 stateful: true,
                 stateId: 'realmsWin',
-                items: [{
-                    'xtype': 'tabpanel',
-                    layout: 'fit',
-                    items: [
-                        { 'title' : 'Realms', 'xtype':'gridRealms', iconCls: 'home'},
-                       // { 'title' : 'Advanced realms'}
-                    ]
-                }]
+                items: [
+                    {
+                        region: 'north',
+                        xtype:  'pnlBanner',
+                        heading:'Realms',
+                        image:  'resources/images/48x48/realm.png'
+                    },
+                    {
+                        region  : 'center',
+                        xtype   : 'tabpanel',
+                        layout  : 'fit',
+                        items: [
+                            { 'title' : 'Realms', 'xtype':'gridRealms'},
+                            // { 'title' : 'Advanced realms'}
+                        ],
+                        margins : '0 0 0 0',
+                        border  : false
+                    }
+                ]
             });
         }
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['realms.gridRealms', 'realms.winRealmAddWizard', 'realms.winRealmAdd', 'realms.pnlRealm'],
+    views:  ['realms.gridRealms', 'realms.winRealmAddWizard', 'realms.winRealmAdd', 'realms.pnlRealm','components.pnlBanner'],
     stores: ['sRealms','sAccessProviders'],
     models: ['mRealms','mAccessProvider'],
     selectedRecord: null,
