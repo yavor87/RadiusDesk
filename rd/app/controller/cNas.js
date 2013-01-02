@@ -22,24 +22,26 @@ Ext.define('Rd.controller.cNas', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'NAS Devices',
+                        heading:'NAS devices',
                         image:  'resources/images/48x48/nas.png'
                     },
-                    {
+                 /*   {
                         region:'west',
                         xtype: 'panel',
                         margins: '0 0 0 0',
                         width: 150,
-                        split: true, 
+                        split: true,
                         layout: 'fit',
                         border: true,
-                       // items: [tree]
-                    },{
-                        region: 'center',     // center region is required, no width/height specified
-                        xtype: 'panel',
-                        layout: 'fit',
-                        margins: '0 0 0 0',
-                        border: true
+                        items: [{xtype: 'treeNas'}]
+                    }*/,{
+                        region  : 'center',
+                        xtype   : 'tabpanel',
+                        layout  : 'fit',
+                        xtype   : 'tabpanel',
+                        margins : '0 0 0 0',
+                        border  : true,
+                        items   : { 'title' : 'NAS devices', xtype: 'gridNas'}
                     }
                 ]
             });
@@ -47,9 +49,9 @@ Ext.define('Rd.controller.cNas', {
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['components.pnlBanner'],
-    stores: [],
-    models: [],
+    views:  ['components.pnlBanner', 'nas.treeNas', 'nas.gridNas'],
+    stores: ['sAccessProviders','sNas'],
+    models: ['mAccessProvider','mNas'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/realms/add.json',
