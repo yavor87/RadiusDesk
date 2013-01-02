@@ -30,11 +30,9 @@ Ext.define('Rd.controller.cAccessProviders', {
                         xtype   : 'tabpanel',
                         layout  : 'fit',
                         xtype   : 'tabpanel',
-                        items: [
-                            { 'title' : 'Access Providers','xtype':'treeAccessProviders'}
-                        ],
                         margins : '0 0 0 0',
-                        border  : false
+                        border  : false,
+                        items   : { 'title' : 'Access Providers','xtype':'treeAccessProviders'}   
                     }
                 ]
             });

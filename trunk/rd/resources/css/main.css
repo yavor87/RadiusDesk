@@ -345,6 +345,14 @@
     background-image:url(../images/32x32/password.png);
 }
 
+.b-map {
+    background-image:url(../images/32x32/map.png);
+}
+
+.b-filter {
+    background-image:url(../images/32x32/filter.png);
+}
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }
@@ -632,7 +640,7 @@ background-position: left center;
     padding: 10px;
     color: #555;
     font-size:25px;
-    text-align: left;
+  /*  text-align: left;*/
 }
 
 
