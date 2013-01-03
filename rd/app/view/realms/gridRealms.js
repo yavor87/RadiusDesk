@@ -13,7 +13,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
     columns: [
         {xtype: 'rownumberer'},
         { text: 'Name',     dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
-        { text: 'Creator',  dataIndex: 'creator',   tdCls: 'gridTree', flex: 1},
+        { text: 'Owner',    dataIndex: 'creator',   tdCls: 'gridTree', flex: 1},
         { text: 'Phone',    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, hidden: true},
         { text: 'Fax',      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, hidden: true},
         { text: 'Cell',     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, hidden: true},
