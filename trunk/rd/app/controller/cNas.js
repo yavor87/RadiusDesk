@@ -25,16 +25,7 @@ Ext.define('Rd.controller.cNas', {
                         heading:'NAS devices',
                         image:  'resources/images/48x48/nas.png'
                     },
-                 /*   {
-                        region:'west',
-                        xtype: 'panel',
-                        margins: '0 0 0 0',
-                        width: 150,
-                        split: true,
-                        layout: 'fit',
-                        border: true,
-                        items: [{xtype: 'treeNas'}]
-                    }*/,{
+                    {
                         region  : 'center',
                         xtype   : 'tabpanel',
                         layout  : 'fit',
@@ -49,17 +40,18 @@ Ext.define('Rd.controller.cNas', {
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['components.pnlBanner', 'nas.treeNas', 'nas.gridNas'],
-    stores: ['sAccessProviders','sNas'],
-    models: ['mAccessProvider','mNas'],
+
+    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard'],
+    stores: ['sNas','sAccessProviders'],
+    models: ['mNas','mAccessProvider'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/realms/add.json',
-        urlEdit:            '/cake2/rd_cake/realms/edit.json',
+        urlAdd:             '/cake2/rd_cake/nas/add.json',
+        urlEdit:            '/cake2/rd_cake/nas/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json'
     },
     refs: [
-        
+        {  ref: 'gridNas',  selector:   'gridNas'}       
     ],
     init: function() {
         me = this;
@@ -68,13 +60,82 @@ Ext.define('Rd.controller.cNas', {
         }
         me.inited = true;
 
-        //me.getStore('sRealms').addListener('load',me.onStoreRealmsLoaded, me);
+        me.getStore('sNas').addListener('load',me.onStoreNasLoaded, me);
         me.control({
-           // 'gridRealms #reload': {
-           //     click:      me.reload
-          //  },
-            
-            
+            'gridNas #reload': {
+                click:      me.reload
+            },
+            'gridNas #add'   : {
+                click:      me.add
+            },
+            'winNasAddWizard #btnTreeNext' : {
+                click:  me.btnTreeNext
+            },
+            'winNasAddWizard #btnConTypePrev' : {
+                click:  me.btnConTypePrev
+            },
         });
+    },
+    reload: function(){
+        var me =this;
+        me.getStore('sNas').load();
+    },
+    add: function(button){
+        var me = this;
+        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
+        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
+        //simply show the nas connection typer selection 
+        //if it does have, we will show the tree to select an access provider.
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                        
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
+                            var w = Ext.widget('winNasAddWizard',{id:'winNasAddWizardId',startScreen: 'selAP'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
+                            var w = Ext.widget('winNasAddWizard',{id:'winNasAddWizardId',startScreen: 'selConnectType'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+    },
+    btnTreeNext: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winNasAddWizard');
+          //  win.down('#creator').setValue(sr.get('username'));
+          //  win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnConType');
+        }else{
+            Ext.ux.Toaster.msg(
+                        'Select a owner',
+                        'First select an Access Provider who will be the owner',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnConTypePrev: function(button){
+        var me = this;
+        var win = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    onStoreNasLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sNas').getTotalCount();
+        me.getGridNas().down('#count').update({count: count});
     }
 });

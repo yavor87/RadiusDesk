@@ -102,6 +102,12 @@
     font-size:14px;
 }
 
+.x-toolbar .lblWizard {
+    color: #2F4078; 
+    font-size:16px;
+    padding: 5px;
+}
+
 .lblRd .x-btn-inner {
     color: #2F4078; 
     font-size:14px !important;

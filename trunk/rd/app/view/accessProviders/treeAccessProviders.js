@@ -21,7 +21,7 @@ Ext.define('Rd.view.accessProviders.treeAccessProviders' ,{
     columns: [
         {
             xtype: 'treecolumn', //this is so we know which column will show the tree
-            text: 'Username',
+            text: 'Access Provider hierarchy',
             sortable: true,
             flex: 1,
             dataIndex: 'username',
