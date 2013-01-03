@@ -355,8 +355,7 @@ class AccessProvidersController extends AppController {
             ($user['group_name'] == Configure::read('group.admin'))||
             ($user['group_name'] == Configure::read('group.ap'))
         ){  //Admin or AP
-            
-            if($this->User->childCount() > 0){
+            if($this->User->childCount($user['id']) > 0){
                 $tree = true;
             }
         }
