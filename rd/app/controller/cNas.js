@@ -41,9 +41,9 @@ Ext.define('Rd.controller.cNas', {
         return win;
     },
 
-    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard'],
+    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner'],
     stores: ['sNas','sAccessProviders'],
-    models: ['mNas','mAccessProvider'],
+    models: ['mNas','mAccessProvider','mRealmForNasOwner'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -74,6 +74,16 @@ Ext.define('Rd.controller.cNas', {
             'winNasAddWizard #btnConTypePrev' : {
                 click:  me.btnConTypePrev
             },
+            'winNasAddWizard #btnConTypeNext' : {
+                click:  me.btnConTypeNext
+            },
+            'winNasAddWizard #btnDirectPrev' : {
+                click:  me.btnDirectPrev
+            },
+            'winNasAddWizard #btnDirectNext' : {
+                click:  me.btnDirectNext
+            }
+            
         });
     },
     reload: function(){
@@ -133,6 +143,27 @@ Ext.define('Rd.controller.cNas', {
         var win = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnApTree');
     },
+    btnConTypeNext: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        //Find out the selected connection type:
+        var form    = button.up('form');
+        var rbg     = form.down('radiogroup');
+        if(rbg.getValue().rb == 'direct'){
+           win.getLayout().setActiveItem('scrnDirect'); 
+        }
+    },
+    btnDirectPrev:  function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnConType');
+    },
+    btnDirectNext:  function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnRealmsForNasOwner');
+    },
+
     onStoreNasLoaded: function() {
         var me      = this;
         var count   = me.getStore('sNas').getTotalCount();
