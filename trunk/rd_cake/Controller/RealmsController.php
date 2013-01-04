@@ -1,6 +1,15 @@
 <?php
 App::uses('AppController', 'Controller');
 
+
+//----- Some notes: ----------------------------
+// When we add a NAS device, we have can either have the option that a user from ANY realm can (e.g. Eduroam users)
+// connect through the NAS, or specify CERTAIN realms that is exclusively allowed to connect through the device
+// so during the creation process we will show a list of realms to the person creating the NAS that they can select one or more realms
+// Another influence on the list of realms which will be returned is the value of the 'available_to_siblings' flag of an NAS
+// If the flag is set -> All downstream realms will be listed
+// If not set all PUBLIC upstream realms will be listed...
+
 class RealmsController extends AppController {
 
 
@@ -66,6 +75,84 @@ class RealmsController extends AppController {
         $this->set(array(
             'items' => $items,
             'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    public function list_realms_for_nas_owner(){
+
+        //This will, depending on the value of  available_to_siblings in the query string and the value of owner_id return a list of available realms
+        $owner_id   = '44';
+        $a_to_s      = true;
+
+        
+
+        $items = array();
+
+        //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
+        if($a_to_s == false){
+
+            $this->User = ClassRegistry::init('User');
+            $this->User->contain();
+            $q_r        = $this->User->getPath($owner_id, array('id'));
+            foreach($q_r as $i){
+                $user_id = $i['User']['id'];
+                $this->Realm->contain();
+                $q = $this->Realm->find('all',
+                    array(  'conditions'    => array('Realm.available_to_siblings' => true,'Realm.user_id' => $user_id),
+                            'fields'        => array('Realm.id','Realm.name')
+                    ));
+                foreach($q as $j){
+                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                }
+
+                //When it got down to the owner; also get the private realms
+                if($user_id == $owner_id){
+
+                    $q = $this->Realm->find('all',
+                    array(  'conditions'    => array('Realm.available_to_siblings' => false,'Realm.user_id' => $user_id),
+                            'fields'        => array('Realm.id','Realm.name')
+                    ));
+                    foreach($q as $j){
+                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                    }
+                }
+            }
+        }
+
+        //If $a_to_s is true, we neet to find the chain downwards to list ALL the realms of belonging to children of the owner
+        if($a_to_s == true){
+
+            //First find all the realms beloning to the owner:
+            $q = $this->Realm->find('all',
+                array(  'conditions'    => array('Realm.user_id' => $owner_id),
+                        'fields'        => array('Realm.id','Realm.name')
+                ));
+            foreach($q as $j){
+                array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+            }
+            
+            //Now get all the realms of the siblings of the owner
+            $this->User = ClassRegistry::init('User');
+            $this->User->contain();
+            $q_r        = $this->User->children($owner_id,false, array('id'));
+            foreach($q_r as $i){
+                $user_id = $i['User']['id'];
+                $this->Realm->contain();
+                $q = $this->Realm->find('all',
+                    array(  'conditions'    => array('Realm.user_id' => $user_id),
+                            'fields'        => array('Realm.id','Realm.name')
+                    ));
+                foreach($q as $j){
+                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                }
+            }
+        }
+       
+
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
             '_serialize' => array('items','success')
         ));
     }
