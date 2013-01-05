@@ -3,15 +3,13 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
     alias : 'widget.gridRealmsForNasOwner',
     border: false,
     requires:   ['Rd.view.components.advCheckColumn'],
-    owner_id:  44,
-    available_to_siblings: false,
     columns: [
         {xtype: 'rownumberer'},
         { text: 'Name',    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
         {
             xtype: 'advCheckColumn',
             text: 'Include',
-            dataIndex: 'include',
+            dataIndex: 'selected',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
                 cls = [cssPrefix + 'grid-checkheader'],
@@ -40,6 +38,8 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
         //We have to create this treeview's own store since it is unique to the AP
         var me = this;
 
+        console.log("eeeeeee");
+
         //Create a store specific to this Owner
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mRealmForNasOwner',
@@ -48,19 +48,17 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
                 format  : 'json',
                 batchActions: true, 
                 'url'   : '/cake2/rd_cake/realms/list_realms_for_nas_owner.json',
-                extraParams: { 'owner_id' : me.owner_id, 'available_to_siblings': me.available_to_siblings },
                 reader: {
                     type: 'json',
                     root: 'items',
                     messageProperty: 'message'
                 },
                 api: {
-                  //  read    : '/cake2/rd_cake/realms/index_ap.json',
-                  //  update  : '/cake2/rd_cake/realms/edit_ap.json'
+                    update  : '/cake2/rd_cake/realms/dummy_edit.json'
                 }
             },
             listeners: {
-                load: function(store, records, successful) {
+                load: function(store, records, successful) {      
                     if(!successful){
                         Ext.ux.Toaster.msg(
                             'Error encountered',
@@ -69,31 +67,24 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
                             Ext.ux.Constants.msgWarn
                         );
                         //console.log(store.getProxy().getReader().rawData.message.message);
+                    }else{
+                        var count   = me.getStore().getTotalCount();
+                        me.down('#count').update({count: count});
                     }  
                 },
                 update: function(store, records, success, options) {
                     store.sync({
                         success: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                'Updated right',
-                                'Right has been updated',
-                                Ext.ux.Constants.clsInfo,
-                                Ext.ux.Constants.msgInfo
-                            );   
+                           
                         },
                         failure: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                'Problems updating the right',
-                                'Right could not be updated',
-                                Ext.ux.Constants.clsWarn,
-                                Ext.ux.Constants.msgWarn
-                            );
+                          
                         }
                     });
                 },
                 scope: this
             },
-            autoLoad: true    
+            autoLoad: false    
         });
         me.callParent(arguments);
     }

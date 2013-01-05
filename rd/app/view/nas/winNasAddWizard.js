@@ -198,7 +198,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 {
                     xtype       : 'textfield',
                     fieldLabel  : 'Secret',
-                    name        : "shortname",
+                    name        : "secret",
                     allowBlank  : false,
                     blankText   : "Supply the shared secret",
                     labelClsExtra: 'lblRdReq'
@@ -208,6 +208,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     boxLabel    : 'Make available to sub-providers',
                     name        : 'available_to_siblings',
                     inputValue  : 'available_to_siblings',
+                    itemId      : 'a_to_s',
                     checked     : false,
                     boxLabelCls : 'lblRdReq'
                 }
@@ -243,7 +244,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             items: grid,
             layout:     'fit',
             itemId:     'scrnRealmsForNasOwner',
-            tbar: [{xtype: 'checkboxfield',boxLabel  : 'Make available to any realm', boxLabelCls : 'lblRd'}],
+            tbar: [{xtype: 'checkboxfield',boxLabel  : 'Make available to any realm', boxLabelCls : 'lblRd',itemId: 'chkAvailForAll'}],
             buttons: [
                 {
                     itemId: 'btnRealmsForNasOwnerPrev',

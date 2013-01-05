@@ -389,7 +389,7 @@ Ext.define('Rd.controller.cAccessProviders', {
         });
     },
     apRealmsReload: function(button){
-        me = this;
+        var me = this;
         var grid = button.up('gridApRealms');
         grid.getStore().load();
     }

@@ -125,9 +125,13 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                             Ext.ux.Constants.msgWarn
                         );
                         //console.log(store.getProxy().getReader().rawData.message.message);
-                    }  
+                    }else{
+                        var count   = me.getStore().getTotalCount();
+                        me.down('#count').update({count: count});
+                    }   
                 },
                 update: function(store, records, success, options) {
+                    console.log("AP Right pappie");
                     store.sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(

@@ -13,6 +13,7 @@ Ext.define('Rd.view.login.pnlLogin', {
 
         var l = Ext.create('Ext.form.ComboBox', {
             fieldLabel: i18n('sChoose_a_language'),
+           // fieldLabel: i18n('sChoose a {k}',{k: 'Kitzimbers'}),
             labelSeparator: '',
             labelClsExtra: 'lblRd',
             labelWidth: 150,
