@@ -17,6 +17,7 @@ class RealmsController extends AppController {
     public $components = array('Aa');
     private $base      = "Access Providers/Controllers/Realms/";
 
+
 //------------------------------------------------------------------------
 
     //____ Access Providers application ______
@@ -81,16 +82,38 @@ class RealmsController extends AppController {
 
     public function list_realms_for_nas_owner(){
 
-        //This will, depending on the value of  available_to_siblings in the query string and the value of owner_id return a list of available realms
-        $owner_id   = '44';
-        $a_to_s      = true;
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 
-        
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+
+        if(isset($this->request->query['owner_id'])){
+
+            //Check if it was 0 -> which means it is the current user
+            if($this->request->query['owner_id'] == 0){
+                $owner_id = $user_id;
+            }else{
+                $owner_id = $this->request->query['owner_id'];
+            }
+        }
+
+        if(isset($this->request->query['available_to_siblings'])){
+            $a_to_s      = $this->request->query['available_to_siblings'];  
+        }
 
         $items = array();
 
         //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
-        if($a_to_s == false){
+        if($a_to_s == 'false'){
 
             $this->User = ClassRegistry::init('User');
             $this->User->contain();
@@ -121,7 +144,7 @@ class RealmsController extends AppController {
         }
 
         //If $a_to_s is true, we neet to find the chain downwards to list ALL the realms of belonging to children of the owner
-        if($a_to_s == true){
+        if($a_to_s == 'true'){
 
             //First find all the realms beloning to the owner:
             $q = $this->Realm->find('all',
@@ -152,6 +175,14 @@ class RealmsController extends AppController {
 
         $this->set(array(
             'items'     => $items,
+            'success'   => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    public function dummy_edit(){
+          $this->set(array(
+            'items'     => array(),
             'success'   => true,
             '_serialize' => array('items','success')
         ));

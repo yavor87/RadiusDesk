@@ -40,140 +40,23 @@ class NasController extends AppController {
             foreach($q_r as $i){
                 $id         = $i['Na']['id'];
                 $nasname    = $i['Na']['nasname'];
+                $shortname  = $i['Na']['shortname'];
                 $owner_id   = $i['Na']['user_id'];
-               // $owner_tree = $this->_find_parents($creator_id);
+                $owner_tree = $this->_find_parents($owner_id);
                 $a_t_s      = $i['Na']['available_to_siblings'];
 
                 array_push($items,array(
                     'id'                    => $id, 
-                    'nasname'               => $nasname, 
-                   // 'creator'               => $creator_tree, 
+                    'nasname'               => $nasname,
+                    'shortname'             => $shortname,
+                    'owner'                 => $owner_tree, 
                     'available_to_siblings' => $a_t_s,
                     'update'                => true,
                     'delete'                =>true
                 ));
             }
         }
-/*
-        //_____ AP _____
-        if($user['group_name'] == Configure::read('group.ap')){  
 
-            //If it is an Access Provider that requested this list; we should show:
-            //1.) all those realms that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
-            //2.) all those he created himself (if any) (this he can manage, depending on his right)
-            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
-
-            $this->Realm->contain();
-            $q_r = $this->Realm->find('all');
-
-            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $this->User = ClassRegistry::init('User');
-            $ap_child_count = $this->User->childCount($user_id);
-
-            foreach($q_r as $i){
-                $id             = $i['Realm']['id'];
-                $name           = $i['Realm']['name'];
-                $a_t_s          = $i['Realm']['available_to_siblings'];
-                $creator_id     = $i['Realm']['user_id'];
-                $creator_tree   = $this->_find_parents($creator_id);
-
-                //Rest of the fields
-                //'phone','fax', 'cell', 'email','url', 'street_no', 'street','town_suburb','city','country','lat','lon'
-                $phone          = $i['Realm']['phone'];
-                $fax            = $i['Realm']['fax'];
-                $cell           = $i['Realm']['cell'];
-                $email          = $i['Realm']['email'];
-                $url            = $i['Realm']['url'];
-                $street_no      = $i['Realm']['street_no'];
-                $street         = $i['Realm']['street'];
-                $town_suburb    = $i['Realm']['town_suburb'];
-                $city           = $i['Realm']['city'];
-                $country        = $i['Realm']['country'];
-                $lat            = $i['Realm']['lat'];
-                $lon            = $i['Realm']['lon'];
-                
- 
-                //Filter for parents and children
-                //Realms of parent's can not be edited, where realms of childern can be edited
-                if($creator_id != $user_id){
-                    if($this->_is_sibling_of($creator_id,$user_id)){ //Is the user_id an upstream parent of the AP
-                        //Only those available to siblings:
-                        if($a_t_s == 1){
-                            array_push($items,array(
-                                'id'                    => $id, 
-                                'name'                  => $name, 
-                                'creator'               => $creator_tree, 
-                                'available_to_siblings' => $a_t_s,
-                                'phone'                 => $phone,
-                                'fax'                   => $fax,
-                                'cell'                  => $cell,
-                                'email'                 => $email,
-                                'url'                   => $url,
-                                'street_no'             => $street_no,
-                                'street'                => $street,
-                                'town_suburb'           => $town_suburb,
-                                'city'                  => $city,
-                                'country'                => $country,
-                                'lat'                   => $lat,
-                                'lon'                   => $lon,
-                                'update'                => false, //AP can not manage Realms of parents
-                                'delete'                => false
-                            ));
-                        }
-                    }
-                    if($ap_child_count != 0){ //See if this realm is perhaps not one of those created by a sibling of the Access Provider
-                        if($this->_is_sibling_of($user_id,$creator_id)){ //Is the creator a downstream sibling of the AP - Full rights
-                            array_push($items,array(
-                                'id'                    => $id, 
-                                'name'                  => $name, 
-                                'creator'               => $creator_tree, 
-                                'available_to_siblings' => $a_t_s,
-                                'phone'                 => $phone,
-                                'fax'                   => $fax,
-                                'cell'                  => $cell,
-                                'email'                 => $email,
-                                'url'                   => $url,
-                                'street_no'             => $street_no,
-                                'street'                => $street,
-                                'town_suburb'           => $town_suburb,
-                                'city'                  => $city,
-                                'country'                => $country,
-                                'lat'                   => $lat,
-                                'lon'                   => $lon,
-                                'update'                => true, //AP can manage realms of siblings
-                                'delete'                => true
-                            ));
-                        }
-                    }
-                }
-
-                //Created himself
-                if($creator_id == $user_id){    
-                    array_push($items,array(
-                        'id'                    => $id, 
-                        'name'                  => $name, 
-                        'creator'               => $creator_tree, 
-                        'available_to_siblings' => $a_t_s,
-                        'phone'                 => $phone,
-                        'fax'                   => $fax,
-                        'cell'                  => $cell,
-                        'email'                 => $email,
-                        'url'                   => $url,
-                        'street_no'             => $street_no,
-                        'street'                => $street,
-                        'town_suburb'           => $town_suburb,
-                        'city'                  => $city,
-                        'country'                => $country,
-                        'lat'                   => $lat,
-                        'lon'                   => $lon,
-                        'update'                => true, //AP can manage their own
-                        'delete'                => true
-                    ));
-                }
-            }
-        }
-
-*/
         //___ FINAL PART ___
         $this->set(array(
             'items' => $items,
@@ -187,7 +70,7 @@ class NasController extends AppController {
         if(!$this->_ap_right_check()){
             return;
         }
-
+     
         $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
 
@@ -217,6 +100,7 @@ class NasController extends AppController {
                 '_serialize' => array('errors','success','message')
             ));
         }
+
 	}
 
 
@@ -342,6 +226,7 @@ class NasController extends AppController {
                 array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                 array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                 array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'meta',    'tooltip'=> __('Manage tags')),
                 array('xtype' => 'button', 'iconCls' => 'b-filter',  'scale' => 'large', 'itemId' => 'filter',   'tooltip'=> __('Filter')),
                 array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
                 array('xtype' => 'tbfill') 
