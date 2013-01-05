@@ -30,4 +30,8 @@ class Na extends AppModel {
 			'foreignKey'    => 'user_id'
         )
 	);
+
+    public $hasMany = array(
+        'NaRealm'
+    );
 }
