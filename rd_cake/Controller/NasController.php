@@ -15,24 +15,21 @@ class NasController extends AppController {
     //Display a list of realms with their owners
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
+        //This works nice :-)
+        if(!$this->_ap_right_check()){
             return;
         }
+ 
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
 
-        $user_id = null;
-
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
-        }
-
-        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }
 
         //_____ ADMIN _____
         $items = array();
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            //This contain behaviour is something else man!
+            //http://www.youtube.com/watch?v=mgQg4ze1_KU
+            $this->Na->contain(array('NaRealm' => array('Realm.name','Realm.id','Realm.available_to_siblings')));
             $q_r = $this->Na->find('all');
 
             //Init before the loop
@@ -44,16 +41,106 @@ class NasController extends AppController {
                 $owner_id   = $i['Na']['user_id'];
                 $owner_tree = $this->_find_parents($owner_id);
                 $a_t_s      = $i['Na']['available_to_siblings'];
+                $realms     = array();
+                foreach($i['NaRealm'] as $nr){
 
+                    array_push($realms, 
+                        array(
+                            'id'                    => $nr['Realm']['id'],
+                            'name'                  => $nr['Realm']['name'],
+                            'available_to_siblings' => $nr['Realm']['available_to_siblings']
+                        ));
+                } 
                 array_push($items,array(
                     'id'                    => $id, 
                     'nasname'               => $nasname,
                     'shortname'             => $shortname,
                     'owner'                 => $owner_tree, 
                     'available_to_siblings' => $a_t_s,
+                    'realms'                => $realms,
                     'update'                => true,
-                    'delete'                =>true
+                    'delete'                => true
                 ));
+            }
+        }
+
+        //_____ AP _____
+        if($user['group_name'] == Configure::read('group.ap')){  
+
+            //If it is an Access Provider that requested this list; we should show:
+            //1.) all those NAS devices that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
+            //2.) all those he created himself (if any) (this he can manage, depending on his right)
+            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
+
+            $this->Na->contain(array('NaRealm' => array('Realm.name','Realm.id','Realm.available_to_siblings')));
+            $q_r = $this->Na->find('all');
+
+            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
+            $this->User = ClassRegistry::init('User');
+            $ap_child_count = $this->User->childCount($user_id);
+
+            //Init before the loop
+            $this->User = ClassRegistry::init('User');
+            foreach($q_r as $i){
+
+                $owner_id   = $i['Na']['user_id'];
+                $a_t_s      = $i['Na']['available_to_siblings'];
+                $add_flag   = false;
+                
+                //Filter for parents and children
+                //NAS devices of parent's can not be edited, where realms of childern can be edited
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($owner_id,$user_id)){ //Is the user_id an upstream parent of the AP
+                        //Only those available to siblings:
+                        if($a_t_s == 1){
+                            $add_flag = true;
+                            $edit     = false;
+                            $delete   = false;
+                        }
+                    }
+                }
+
+                if($ap_child_count != 0){ //See if this NAS device is perhaps not one of those created by a sibling of the Access Provider
+                    if($this->_is_sibling_of($user_id,$owner_id)){ //Is the creator a downstream sibling of the AP - Full rights
+                        $add_flag = true;
+                        $edit     = true;
+                        $delete   = true; 
+                    }
+                }
+
+                //Created himself
+                if($owner_id == $user_id){
+                    $add_flag = true;
+                    $edit     = true;
+                    $delete   = true;
+                }
+
+                if($add_flag == true ){
+                    $owner_tree = $this->_find_parents($owner_id);
+
+                    //Create realms list
+                    $realms     = array();
+                    foreach($i['NaRealm'] as $nr){
+                        array_push($realms, 
+                            array(
+                                'id'                    => $nr['Realm']['id'],
+                                'name'                  => $nr['Realm']['name'],
+                                'available_to_siblings' => $nr['Realm']['available_to_siblings']
+                        ));
+                    } 
+                    
+                    //Add to return items
+                    array_push($items,array(
+                        'id'            => $i['Na']['id'], 
+                        'nasname'       => $i['Na']['nasname'],
+                        'shortname'     => $i['Na']['shortname'],
+                        'owner'         => $this->_find_parents($owner_id), 
+                        'available_to_siblings' => $a_t_s,
+                        'realms'                => $realms,
+                        'update'                => $edit,
+                        'delete'                => $delete
+                    ));
+                }
             }
         }
 
@@ -67,6 +154,7 @@ class NasController extends AppController {
 
     public function add() {
 
+        //This works nice :-)
         if(!$this->_ap_right_check()){
             return;
         }
@@ -86,7 +174,22 @@ class NasController extends AppController {
             $this->request->data['available_to_siblings'] = 0;
         }
 
+        $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+                //Available to all does not add any na_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }
+
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
@@ -342,4 +445,16 @@ class NasController extends AppController {
         return true;
         //__ AA Check Ends ___
     }
+
+    private function _add_nas_realm($nas_id,$realm_id){
+        $d                          = array();
+        $d['NaRealm']['id']         = '';
+        $d['NaRealm']['na_id']      = $nas_id;
+        $d['NaRealm']['realm_id']   = $realm_id;
+
+        $this->Na->NaRealm->create();
+        $this->Na->NaRealm->save($d);
+        $this->Na->NaRealm->id      = false;
+    }
+
 }
