@@ -621,6 +621,17 @@ background-position: left center;
     font-size:12px;
 }
 
+.gridRealm.availAll {
+     border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: black;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 2px 2px 2px 10px;
+    color: white;
+    font-size:12px;
+}
+
 .gridComment .x-grid-cell-inner {
     color: #676d76;
     font-size:12px;

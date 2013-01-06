@@ -196,20 +196,35 @@ Ext.define('Rd.controller.cNas', {
         var grid    = win.down('gridRealmsForNasOwner');
         var form    = win.down('#scrnDirect');
         var extra_params ={};   //Get the extra params to submit with form
+        var select_flag = false;
 
         //See if 'Make available to any realm' is selected...
         var chk = win.down('#chkAvailForAll');
         if(chk.getValue() == true){
-            extra_params.avail_for_all == true;
+            extra_params.avail_for_all = true;
         }else{
             grid.getStore().each(function(record){
-
                 if(record.get('selected') == true){
+                    select_flag = true;
                     extra_params[record.getId()] = record.get('selected');
                 }
             }, me);
         }
-        
+
+        //If they did not select avail_for_all and NOT selected ANY realm, refuse to continue
+        if(extra_params.avail_for_all == undefined){
+            if(select_flag != true){
+                Ext.ux.Toaster.msg(
+                        'Select at least one realm',
+                        'Select one or meore realms',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+                return;
+            }
+        }
+
+        //Checks passed fine...      
         form.submit({
             clientValidation: true,
             url: me.urlAdd,
@@ -226,8 +241,6 @@ Ext.define('Rd.controller.cNas', {
             },
             failure: Ext.ux.formFail
         });
-
-        console.log(selected_realms);
     },
     chkAvailForAllChange: function(chk){
         var me      = this;
