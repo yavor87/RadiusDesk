@@ -145,6 +145,11 @@ class DesktopController extends AppController {
             array_push($menu, array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'menu'  => array('items' =>$sm_r_p)));     
         }
 
+        //____ NAS devices _____
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){    //Required to show the NAS Devices menu item
+           array_push($menu, array(  'text'  => __('NAS Devices'),           'iconCls' => 'nas',         'itemId' => 'cNas'));
+        }
+
         //___ What What ______
         return $menu;
     }
