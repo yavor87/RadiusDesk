@@ -1,18 +1,17 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class NasController extends AppController {
+class TagsController extends AppController {
 
-
-    public $name       = 'Nas';
+    public $name       = 'Tags';
     public $components = array('Aa');
-    private $base      = "Access Providers/Controllers/Nas/";
+    private $base      = "Access Providers/Controllers/Tags/";
 
 //------------------------------------------------------------------------
 
-    //____ BASIC CRUD Realm Manager ________
+    //____ BASIC CRUD Tags Manager ________
     public function index(){
-    //Display a list of realms with their owners
+    //Display a list of nas tags with their owners
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
         //This works nice :-)
@@ -27,40 +26,26 @@ class NasController extends AppController {
         //_____ ADMIN _____
         $items = array();
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            //This contain behaviour is something else man!
-            //http://www.youtube.com/watch?v=mgQg4ze1_KU
-            $this->Na->contain(array('NaRealm' => array('Realm.name','Realm.id','Realm.available_to_siblings')));
-            $q_r = $this->Na->find('all');
+
+            $this->Tag->contain();
+            $q_r = $this->Tag->find('all');
 
             //Init before the loop
             $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
-                $id         = $i['Na']['id'];
-                $nasname    = $i['Na']['nasname'];
-                $shortname  = $i['Na']['shortname'];
-                $owner_id   = $i['Na']['user_id'];
+                $id         = $i['Tag']['id'];
+                $nasname    = $i['Tag']['name'];
+                $owner_id   = $i['Tag']['user_id'];
                 $owner_tree = $this->_find_parents($owner_id);
-                $a_t_s      = $i['Na']['available_to_siblings'];
-                $realms     = array();
-                //Realms
-                foreach($i['NaRealm'] as $nr){
-                    array_push($realms, 
-                        array(
-                            'id'                    => $nr['Realm']['id'],
-                            'name'                  => $nr['Realm']['name'],
-                            'available_to_siblings' => $nr['Realm']['available_to_siblings']
-                        ));
-                } 
+                $a_t_s      = $i['Tag']['available_to_siblings'];
+                
                 array_push($items,array(
-                    'id'                    => $id, 
-                    'nasname'               => $nasname,
-                    'shortname'             => $shortname,
-                    'owner'                 => $owner_tree, 
+                    'id'            => $i['Tag']['id'], 
+                    'name'          => $i['Tag']['name'],
+                    'owner'         => $owner_tree, 
                     'available_to_siblings' => $a_t_s,
-                    'realms'                => $realms,
                     'update'                => true,
-                    'delete'                => true,
-                    'manage_tags'           => true
+                    'delete'                => true
                 ));
             }
         }
@@ -72,12 +57,8 @@ class NasController extends AppController {
             //1.) all those NAS devices that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
             //2.) all those he created himself (if any) (this he can manage, depending on his right)
             //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
-
-            $this->Na->contain(
-                array(  'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
-                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings')
-            ));
-            $q_r = $this->Na->find('all');
+       
+            $q_r = $this->Tag->find('all');
 
             //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
             $this->User = ClassRegistry::init('User');
@@ -85,8 +66,8 @@ class NasController extends AppController {
 
             foreach($q_r as $i){
 
-                $owner_id   = $i['Na']['user_id'];
-                $a_t_s      = $i['Na']['available_to_siblings'];
+                $owner_id   = $i['Tag']['user_id'];
+                $a_t_s      = $i['Tag']['available_to_siblings'];
                 $add_flag   = false;
                 
                 //Filter for parents and children
@@ -98,7 +79,6 @@ class NasController extends AppController {
                             $add_flag = true;
                             $edit     = false;
                             $delete   = false;
-                            $manage_tags = false;
                         }
                     }
                 }
@@ -107,8 +87,7 @@ class NasController extends AppController {
                     if($this->_is_sibling_of($user_id,$owner_id)){ //Is the creator a downstream sibling of the AP - Full rights
                         $add_flag = true;
                         $edit     = true;
-                        $delete   = true;
-                        $manage_tags = true; 
+                        $delete   = true; 
                     }
                 }
 
@@ -117,47 +96,18 @@ class NasController extends AppController {
                     $add_flag = true;
                     $edit     = true;
                     $delete   = true;
-                    $manage_tags = true;
                 }
 
                 if($add_flag == true ){
-                    $owner_tree = $this->_find_parents($owner_id);
-
-                    //Create realms list
-                    $realms     = array();
-                    foreach($i['NaRealm'] as $nr){
-                        array_push($realms, 
-                            array(
-                                'id'                    => $nr['Realm']['id'],
-                                'name'                  => $nr['Realm']['name'],
-                                'available_to_siblings' => $nr['Realm']['available_to_siblings']
-                        ));
-                    }
-
-                    //Create tags list
-                    $tags       = array();
-                    foreach($i['NaTag'] as $nr){
-                        array_push($tags, 
-                            array(
-                                'id'                    => $nr['Tag']['id'],
-                                'name'                  => $nr['Tag']['name'],
-                                'available_to_siblings' => $nr['Tag']['available_to_siblings']
-                        ));
-                    }
-
-                    
+                    $owner_tree = $this->_find_parents($owner_id);                      
                     //Add to return items
                     array_push($items,array(
-                        'id'            => $i['Na']['id'], 
-                        'nasname'       => $i['Na']['nasname'],
-                        'shortname'     => $i['Na']['shortname'],
+                        'id'            => $i['Tag']['id'], 
+                        'name'          => $i['Tag']['name'],
                         'owner'         => $owner_tree, 
                         'available_to_siblings' => $a_t_s,
-                        'realms'                => $realms,
-                        'tags'                  => $tags,
                         'update'                => $edit,
-                        'delete'                => $delete,
-                        'manage_tags'           => $manage_tags
+                        'delete'                => $delete
                     ));
                 }
             }
@@ -195,20 +145,6 @@ class NasController extends AppController {
 
         $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
-
-            //Check if we need to add na_realms table
-            if(isset($this->request->data['avail_for_all'])){
-                //Available to all does not add any na_realm entries
-            }else{
-                foreach(array_keys($this->request->data) as $key){
-                    if(preg_match('/^\d+/',$key)){
-                        //----------------
-                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
-                        //-------------
-                    }
-                }
-            }
-
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
@@ -222,37 +158,8 @@ class NasController extends AppController {
                 '_serialize' => array('errors','success','message')
             ));
         }
-
 	}
 
-    public function manage_tags(){
-
-        //This works nice :-)
-        if(!$this->_ap_right_check()){
-            return;
-        }
-
-        $tag_id = $this->request->data['tag_id'];
-        $rb     = $this->request->data['rb'];
-
-        foreach(array_keys($this->request->data) as $key){
-            if(preg_match('/^\d+/',$key)){
-                //----------------
-                if($rb == 'add'){
-                    $this->_add_nas_tag($key,$tag_id);
-                }
-                if($rb == 'remove'){
-                    $this->Na->NaTag->deleteAll(array('NaTag.na_id' => $key,'NaTag.tag_id' => $tag_id), false);
-                }
-                //-------------
-            }
-        }
-     
-        $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-        ));
-    }
 
     public function edit() {
 
@@ -263,20 +170,26 @@ class NasController extends AppController {
         //We will not modify user_id
         unset($this->request->data['user_id']);
 
-		if ($this->Realm->save($this->request->data)) {
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+		if ($this->Tag->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
         }else{
              $this->set(array(
-                'success' => false,
-                '_serialize' => array('success')
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not update item'),
+                '_serialize' => array('errors','success','message')
             ));
-
         }
 	}
-
 
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
@@ -287,24 +200,63 @@ class NasController extends AppController {
             return;
         }
 
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
+        $this->User = ClassRegistry::init('User');
+        $fail_flag = false;
+
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
-            $this->Realm->id = $this->data['id'];
-            $this->Realm->delete();
-      
+
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item       = $this->{$this->modelClass}->findById($this->data['id']);
+            $owner_id   = $item['Tag']['user_id'];
+            if($owner_id != $user_id){
+                if($this->_is_sibling_of($user_id,$owner_id)== true){
+                    $this->{$this->modelClass}->id = $this->data['id'];
+                    $this->{$this->modelClass}->delete();
+                }else{
+                    $fail_flag = true;
+                }
+            }else{
+                $this->{$this->modelClass}->id = $this->data['id'];
+                $this->{$this->modelClass}->delete();
+            }
+   
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
-                $this->Realm->id = $d['id'];
-                $this->Realm->delete();
+
+                $item       = $this->{$this->modelClass}->findById($d['id']);
+                $owner_id   = $item['Tag']['user_id'];
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                        $this->{$this->modelClass}->id = $d['id'];
+                        $this->{$this->modelClass}->delete();
+                    }else{
+                        $fail_flag = true;
+                    }
+                }else{
+                    $this->{$this->modelClass}->id = $d['id'];
+                    $this->{$this->modelClass}->delete();
+                }
+   
             }
         }
 
-        $this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
-        ));
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => 'Could not delete some items'),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
 	}
-
+/*
 //------------------ EXPERIMENTAL WORK --------------------------
 
     public function display_realms_and_users($id = 0){
@@ -355,6 +307,8 @@ class NasController extends AppController {
         ));
     }
 
+*/
+
 //------------------ END EXPERIMENTAL WORK ------------------------------
 
     //----- Menus ------------------------
@@ -376,9 +330,6 @@ class NasController extends AppController {
                 array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                 array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                 array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
-                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'meta',    'tooltip'=> __('Manage tags')),
-                array('xtype' => 'button', 'iconCls' => 'b-filter',  'scale' => 'large', 'itemId' => 'filter',   'tooltip'=> __('Filter')),
-                array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
                 array('xtype' => 'tbfill') 
             );
         }
@@ -420,20 +371,6 @@ class NasController extends AppController {
                     'disabled'  => true,     
                     'tooltip'   => __('Edit')));
             }
-
-            //Tags
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($menu,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-meta_edit',    
-                    'scale'     => 'large', 
-                    'itemId'    => 'tag',
-                    'disabled'  => true,     
-                    'tooltip'=> __('Manage tags')));
-            }
-
-            array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-filter',  'scale' => 'large', 'itemId' => 'filter',   'tooltip'=> __('Filter')));
-
             array_push($menu,array('xtype' => 'tbfill'));
         }
         $this->set(array(
@@ -505,30 +442,6 @@ class NasController extends AppController {
 
         return true;
         //__ AA Check Ends ___
-    }
-
-    private function _add_nas_realm($nas_id,$realm_id){
-        $d                          = array();
-        $d['NaRealm']['id']         = '';
-        $d['NaRealm']['na_id']      = $nas_id;
-        $d['NaRealm']['realm_id']   = $realm_id;
-
-        $this->Na->NaRealm->create();
-        $this->Na->NaRealm->save($d);
-        $this->Na->NaRealm->id      = false;
-    }
-
-    private function _add_nas_tag($nas_id,$tag_id){
-        //Delete any previous tags if there were any
-        $this->Na->NaTag->deleteAll(array('NaTag.na_id' => $nas_id,'NaTag.tag_id' => $tag_id), false);
-
-        $d                      = array();
-        $d['NaTag']['id']       = '';
-        $d['NaTag']['na_id']    = $nas_id;
-        $d['NaTag']['tag_id']   = $tag_id;
-        $this->Na->NaTag->create();
-        $this->Na->NaTag->save($d);
-        $this->Na->NaTag->id    = false;
     }
 
 }

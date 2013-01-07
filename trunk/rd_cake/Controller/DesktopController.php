@@ -119,7 +119,14 @@ class DesktopController extends AppController {
             ),
         //    array(  'text'  => __('Profiles'),              'iconCls' => 'profiles'),
           //  array(  'text'  => __('Activity/Stats'),        'iconCls' => 'stats'),
-            array(  'text'  => __('NAS Devices'),           'iconCls' => 'nas',         'itemId' => 'cNas'),
+            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array('text' => __('NAS Devices') ,     'iconCls' => 'nas',   'itemId' => 'cNas'),
+                        array('text' => __('NAS Device tags') , 'iconCls' => 'tags',  'itemId' => 'cTags'),
+                    )
+                )
+            ),
             array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
             array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
         );
@@ -147,7 +154,17 @@ class DesktopController extends AppController {
 
         //____ NAS devices _____
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){    //Required to show the NAS Devices menu item
-           array_push($menu, array(  'text'  => __('NAS Devices'),           'iconCls' => 'nas',         'itemId' => 'cNas'));
+
+            $sm_nas_devices = array();
+            array_push($sm_nas_devices, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'itemId' => 'cNas'));
+
+            //___Check the sub-menu rights___:
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Tags/index")){
+                array_push($sm_nas_devices, array(  'text'  => __('NAS Device tags'),   'iconCls' => 'tags', 'itemId' => 'cTags'));
+            } 
+            //___ END Sub Menu___
+
+            array_push($menu, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  => array('items' =>$sm_nas_devices)));     
         }
 
         //___ What What ______
