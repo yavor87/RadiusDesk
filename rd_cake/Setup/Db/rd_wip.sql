@@ -32,7 +32,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `acos` (
 
 LOCK TABLES `acos` WRITE;
 /*!40000 ALTER TABLE `acos` DISABLE KEYS */;
-INSERT INTO `acos` VALUES (35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',59,72),(29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,52),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',53,58),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,43),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',44,51),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',54,55),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',56,57),(67,31,NULL,NULL,'Realms','',23,32),(68,67,NULL,NULL,'index','',24,25),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',47,48),(42,32,NULL,NULL,'View users or vouchers not created self','',45,46),(43,31,NULL,NULL,'Vouchers','',3,6),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',7,10),(46,45,NULL,NULL,'index','',8,9),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',49,50),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',11,22),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',12,13),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',14,15),(61,58,NULL,NULL,'edit','',16,17),(62,58,NULL,NULL,'delete','',18,19),(65,58,NULL,NULL,'change_password','',20,21),(69,67,NULL,NULL,'add','',26,27),(70,67,NULL,NULL,'edit','',28,29),(71,67,NULL,NULL,'delete','',30,31),(100,35,'Realm',22,'RootPrivate',NULL,68,69),(89,35,'Realm',11,'AP Private',NULL,64,65),(91,35,'Realm',13,'AP Public',NULL,66,67),(101,35,'Realm',23,'RootPublic',NULL,70,71),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',33,42),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',34,35),(104,102,NULL,NULL,'add','',36,37),(105,102,NULL,NULL,'edit','',38,39),(106,102,NULL,NULL,'delete','',40,41);
+INSERT INTO `acos` VALUES (35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',71,84),(29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,64),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',65,70),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,55),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',56,63),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',66,67),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',68,69),(67,31,NULL,NULL,'Realms','',23,32),(68,67,NULL,NULL,'index','',24,25),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',59,60),(42,32,NULL,NULL,'View users or vouchers not created self','',57,58),(43,31,NULL,NULL,'Vouchers','',3,6),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',7,10),(46,45,NULL,NULL,'index','',8,9),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',61,62),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',11,22),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',12,13),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',14,15),(61,58,NULL,NULL,'edit','',16,17),(62,58,NULL,NULL,'delete','',18,19),(65,58,NULL,NULL,'change_password','',20,21),(69,67,NULL,NULL,'add','',26,27),(70,67,NULL,NULL,'edit','',28,29),(71,67,NULL,NULL,'delete','',30,31),(100,35,'Realm',22,'RootPrivate',NULL,80,81),(89,35,'Realm',11,'AP Private',NULL,76,77),(91,35,'Realm',13,'AP Public',NULL,78,79),(101,35,'Realm',23,'RootPublic',NULL,82,83),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',33,44),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',34,35),(104,102,NULL,NULL,'add','',36,37),(105,102,NULL,NULL,'edit','',38,39),(106,102,NULL,NULL,'delete','',40,41),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',45,54),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',46,47),(109,107,NULL,NULL,'add','',48,49),(110,107,NULL,NULL,'edit','',50,51),(111,107,NULL,NULL,'delete','',52,53),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',42,43);
 /*!40000 ALTER TABLE `acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `aros_acos` (
   `_delete` varchar(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ARO_ACO_KEY` (`aro_id`,`aco_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `aros_acos` (
 
 LOCK TABLES `aros_acos` WRITE;
 /*!40000 ALTER TABLE `aros_acos` DISABLE KEYS */;
-INSERT INTO `aros_acos` VALUES (16,3116,44,'-1','-1','-1','-1'),(17,3116,46,'-1','-1','-1','-1'),(18,3116,59,'1','1','1','1'),(19,3116,60,'1','1','1','1'),(20,3116,62,'1','1','1','1'),(21,3116,42,'-1','-1','-1','-1'),(22,3116,61,'1','1','1','1'),(23,3116,63,'-1','-1','-1','-1'),(24,3116,64,'1','1','1','1'),(26,3132,63,'1','1','1','1'),(25,3116,65,'1','1','1','1'),(27,3132,42,'-1','-1','-1','-1'),(28,3132,64,'-1','-1','-1','-1'),(32,3132,44,'1','1','1','1'),(33,3132,46,'1','1','1','1'),(34,3132,59,'1','1','1','1'),(68,3132,69,'1','1','1','1'),(66,3132,68,'1','1','1','1'),(61,3116,68,'1','1','1','1'),(62,3116,69,'1','1','1','1'),(63,3116,70,'1','1','1','1'),(64,3116,71,'1','1','1','1'),(72,3132,91,'1','1','1','1'),(73,3132,101,'1','1','1','-1'),(75,3116,103,'1','1','1','1'),(74,3118,101,'1','1','-1','-1'),(76,3116,104,'1','1','1','1'),(77,3116,105,'1','1','1','1'),(78,3116,106,'1','1','1','1');
+INSERT INTO `aros_acos` VALUES (16,3116,44,'-1','-1','-1','-1'),(17,3116,46,'-1','-1','-1','-1'),(18,3116,59,'1','1','1','1'),(19,3116,60,'1','1','1','1'),(20,3116,62,'1','1','1','1'),(21,3116,42,'-1','-1','-1','-1'),(22,3116,61,'1','1','1','1'),(23,3116,63,'-1','-1','-1','-1'),(24,3116,64,'1','1','1','1'),(26,3132,63,'1','1','1','1'),(25,3116,65,'1','1','1','1'),(27,3132,42,'-1','-1','-1','-1'),(28,3132,64,'-1','-1','-1','-1'),(32,3132,44,'1','1','1','1'),(33,3132,46,'1','1','1','1'),(34,3132,59,'1','1','1','1'),(68,3132,69,'1','1','1','1'),(66,3132,68,'1','1','1','1'),(61,3116,68,'1','1','1','1'),(62,3116,69,'1','1','1','1'),(63,3116,70,'1','1','1','1'),(64,3116,71,'1','1','1','1'),(72,3132,91,'1','1','1','1'),(73,3132,101,'1','1','1','-1'),(75,3116,103,'1','1','1','1'),(74,3118,101,'1','1','-1','-1'),(76,3116,104,'1','1','1','1'),(77,3116,105,'1','1','1','1'),(78,3116,106,'-1','-1','-1','-1'),(79,3116,108,'1','1','1','1'),(80,3116,109,'1','1','1','1'),(81,3116,110,'1','1','1','1'),(82,3116,111,'1','1','1','1'),(83,3116,112,'1','1','1','1');
 /*!40000 ALTER TABLE `aros_acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +226,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,8 +235,35 @@ CREATE TABLE `na_realms` (
 
 LOCK TABLES `na_realms` WRITE;
 /*!40000 ALTER TABLE `na_realms` DISABLE KEYS */;
-INSERT INTO `na_realms` VALUES (3,6,22,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(4,6,23,'2013-01-06 17:26:22','2013-01-06 17:26:22');
+INSERT INTO `na_realms` VALUES (3,6,22,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(4,6,23,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(5,8,13,'2013-01-07 11:57:39','2013-01-07 11:57:39'),(6,8,11,'2013-01-07 11:57:39','2013-01-07 11:57:39');
 /*!40000 ALTER TABLE `na_realms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `na_tags`
+--
+
+DROP TABLE IF EXISTS `na_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `na_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `na_id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `na_tags`
+--
+
+LOCK TABLES `na_tags` WRITE;
+/*!40000 ALTER TABLE `na_tags` DISABLE KEYS */;
+INSERT INTO `na_tags` VALUES (8,8,15,'2013-01-07 15:29:45','2013-01-07 15:29:45');
+/*!40000 ALTER TABLE `na_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -261,7 +288,7 @@ CREATE TABLE `nas` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +297,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (6,'1','2',0,1,0,'3','direct',NULL,NULL,44,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(7,'b','b',1,1,0,'b','direct',NULL,NULL,44,'2013-01-06 18:27:01','2013-01-06 18:27:01');
+INSERT INTO `nas` VALUES (6,'1','2',0,1,0,'3','direct',NULL,NULL,44,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(7,'b','b',1,1,0,'b','direct',NULL,NULL,44,'2013-01-06 18:27:01','2013-01-06 18:27:01'),(8,'Gooi','Hom',0,1,0,'Nou','direct',NULL,NULL,58,'2013-01-07 11:57:39','2013-01-07 11:57:39');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -400,6 +427,34 @@ INSERT INTO `realms` VALUES (11,'AP Private',0,'logo.jpg','','','','','','','','
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tags`
+--
+
+LOCK TABLES `tags` WRITE;
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES (13,'RootPrivate',0,44,'2013-01-07 08:19:15','2013-01-07 08:19:15'),(14,'RootPublic',1,44,'2013-01-07 08:20:13','2013-01-07 08:20:13'),(15,'Gooi',1,58,'2013-01-07 10:29:34','2013-01-07 10:29:34'),(16,'Home',1,58,'2013-01-07 10:29:50','2013-01-07 11:04:54');
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -451,4 +506,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-06 19:17:18
+-- Dump completed on 2013-01-07 15:42:23
