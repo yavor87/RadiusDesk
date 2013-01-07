@@ -1,40 +1,36 @@
-Ext.define('Rd.controller.cRealms', {
+Ext.define('Rd.controller.cTags', {
     extend: 'Ext.app.Controller',
     actionIndex: function(){
 
         var me = this;
         var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('realmsWin');
+        var win = desktop.getWindow('tagsWin');
         if(!win){
             win = desktop.createWindow({
-                id: 'realmsWin',
-                title:'Realms manager',
+                id: 'tagsWin',
+                title:'Tags manager',
                 width:800,
                 height:400,
-                iconCls: 'realms',
+                iconCls: 'tags',
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'realmsWin',
+                stateId: 'tagsWin',
                 items: [
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'Realms',
-                        image:  'resources/images/48x48/realm.png'
+                        heading:'NAS device tags',
+                        image:  'resources/images/48x48/tags.png'
                     },
                     {
                         region  : 'center',
-                        xtype   : 'tabpanel',
                         layout  : 'fit',
-                        items: [
-                            { 'title' : 'Realms', 'xtype':'gridRealms'},
-                            // { 'title' : 'Advanced realms'}
-                        ],
+                        xtype   : 'gridTags',
                         margins : '0 0 0 0',
-                        border  : false
+                        border  : true
                     }
                 ]
             });
@@ -42,18 +38,18 @@ Ext.define('Rd.controller.cRealms', {
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['realms.gridRealms', 'realms.winRealmAddWizard', 'realms.winRealmAdd', 'realms.pnlRealm','components.pnlBanner'],
-    stores: ['sRealms','sAccessProviders'],
-    models: ['mRealms','mAccessProvider'],
+
+    views:  ['components.pnlBanner','tags.gridTags','tags.winTagAddWizard','tags.winTagEdit'],
+    stores: ['sTags','sAccessProviders'],
+    models: ['mTag','mAccessProvider'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/realms/add.json',
-        urlEdit:            '/cake2/rd_cake/realms/edit.json',
+        urlAdd:             '/cake2/rd_cake/tags/add.json',
+        urlEdit:            '/cake2/rd_cake/tags/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json'
     },
     refs: [
-         {  ref:    'gridRealms',           selector:   'gridRealms'},
-         {  ref:    'gridAdvancedRealms',   selector:   'gridAdvancedRealms'} 
+        {  ref: 'grid',  selector:   'gridTags'}       
     ],
     init: function() {
         me = this;
@@ -62,50 +58,123 @@ Ext.define('Rd.controller.cRealms', {
         }
         me.inited = true;
 
-        me.getStore('sRealms').addListener('load',me.onStoreRealmsLoaded, me);
+        me.getStore('sTags').addListener('load',me.onStoreTagsLoaded, me);
         me.control({
-            'gridRealms #reload': {
+            'grid #reload': {
                 click:      me.reload
             },
-            'gridRealms #add': {
+            'grid #add'   : {
                 click:      me.add
             },
-            'gridRealms #delete': {
+            'grid #delete'   : {
                 click:      me.del
             },
-            'gridRealms #edit': {
+            'grid #edit'   : {
                 click:      me.edit
             },
-            'gridRealms'   : {
-                itemclick:  me.gridClick
+            'grid'   : {
+                select:      me.select
             },
-            'winRealmAddWizard #btnTreeNext' : {
+            'winTagAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
-            'winRealmAddWizard #btnRealmDetailPrev' : {
-                click:  me.btnRealmDetailPrev
+            'winTagAddWizard #btnDataPrev' : {
+                click:  me.btnDataPrev
             },
-            'winRealmAddWizard #save' : {
-                click:  me.addSubmit
+            'winTagAddWizard #btnDataNext' : {
+                click:  me.btnDataNext
             },
-            'pnlRealm frmRealmDetail #save' : {
+            'winTagEdit #save' : {
                 click:  me.editSubmit
-            },
-            '#realmsWin':   {
-                afterrender: me.onStoreRealmsLoaded //Prime it initially
             }
-            
-        });;
+        });
     },
     reload: function(){
         var me =this;
-        me.getStore('sRealms').load();
+        me.getStore('sTags').load();
     },
-    gridClick:  function(grid, record, item, index, event){
-        var me                  = this;
-        me.selectedRecord = record;
+    add: function(button){
+
+        var me = this;
+        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
+        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
+        //simply show the nas connection typer selection 
+        //if it does have, we will show the tree to select an access provider.
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                        
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
+                            var w = Ext.widget('winTagAddWizard',{id:'winTagAddWizardId'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
+                            var w = Ext.widget('winTagAddWizard',
+                                {id:'winTagAddWizardId',startScreen: 'scrnData',user_id:'0',owner: 'Logged in user', no_tree: true}
+                            );
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+
+    },
+    btnTreeNext: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winTagAddWizard');
+            win.down('#owner').setValue(sr.get('username'));
+            win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnData');
+        }else{
+            Ext.ux.Toaster.msg(
+                        'Select a owner',
+                        'First select an Access Provider who will be the owner',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnDataPrev:  function(button){
+        var me      = this;
+        var win     = button.up('winTagAddWizard');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnDataNext:  function(button){
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAdd,
+            success: function(form, action) {
+                win.close();
+                me.getStore('sTags').load();
+                Ext.ux.Toaster.msg(
+                    'New Tag Created',
+                    'Tag created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    select: function(grid,record){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+
         //Dynamically update the top toolbar
-        tb = me.getGridRealms().down('toolbar[dock=top]');
+        tb = me.getGrid().down('toolbar[dock=top]');
 
         var edit = record.get('update');
         if(edit == true){
@@ -129,80 +198,10 @@ Ext.define('Rd.controller.cRealms', {
             }
         }
     },
-    add: function(button){
-        var me = this;
-        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
-        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will simply show the add window
-        //if it does have, we will show the add wizard.
-
-        Ext.Ajax.request({
-            url: me.urlApChildCheck,
-            method: 'GET',
-            success: function(response){
-                var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){
-                    if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
-                            var w = Ext.widget('winRealmAddWizard',{id:'winRealmAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
-                    }else{
-                        Ext.widget('winRealmAdd',{});
-                    }
-                }   
-            },
-            scope: me
-        });
-
-    },
-    btnTreeNext: function(button){
-        var me = this;
-        var tree = button.up('treepanel');
-        //Get selection:
-        var sr = tree.getSelectionModel().getLastSelected();
-        if(sr){    
-            var win = button.up('winRealmAddWizard');
-            win.down('#creator').setValue(sr.get('username'));
-            win.down('#user_id').setValue(sr.getId());
-            win.getLayout().setActiveItem('scrnRealmDetail');
-        }else{
-            Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }
-    },
-    btnRealmDetailPrev: function(button){
-        var me = this;
-        var win = button.up('winRealmAddWizard');
-        win.getLayout().setActiveItem('scrnApTree');
-    },
-    addSubmit: function(button){
-        var me      = this;
-        var win     = button.up('window');
-        var form    = win.down('form');
-        form.submit({
-            clientValidation: true,
-            url: me.urlAdd,
-            success: function(form, action) {
-                win.close();
-                me.getStore('sRealms').load();
-                Ext.ux.Toaster.msg(
-                    'New Realm Created',
-                    'Realm created fine',
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
-    },
-    del:   function(button){
+    del:   function(){
         var me      = this;     
         //Find out if there was something selected
-        if(me.getGridRealms().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item to delete',
@@ -212,8 +211,8 @@ Ext.define('Rd.controller.cRealms', {
         }else{
             Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
                 if(val== 'yes'){
-                    me.getGridRealms().getStore().remove(me.getGridRealms().getSelectionModel().getSelection());
-                    me.getGridRealms().getStore().sync({
+                    me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
+                    me.getGrid().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
                                 'Item Deleted',
@@ -221,7 +220,7 @@ Ext.define('Rd.controller.cRealms', {
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStoreRealmsLoaded();   //Update the count   
+                            me.onStoreTagsLoaded();   //Update the count   
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
@@ -230,18 +229,19 @@ Ext.define('Rd.controller.cRealms', {
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
-                            me.getGridRealms().getStore().load(); //Reload from server since the sync was not good
+                            me.getGrid().getStore().load(); //Reload from server since the sync was not good
                         }
                     });
-
                 }
             });
         }
     },
+
     edit: function(button){
-        var me = this;   
+        var me      = this;     
         //Find out if there was something selected
-        if(me.getGridRealms().getSelectionModel().getCount() == 0){
+        var selCount = me.getGrid().getSelectionModel().getCount();
+        if(selCount == 0){
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item to edit',
@@ -249,44 +249,35 @@ Ext.define('Rd.controller.cRealms', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
+            if(selCount > 1){
+                Ext.ux.Toaster.msg(
+                        'Limit the selection',
+                        'Selection limited to one',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
 
-            //Check if the node is not already open; else open the node:
-            var tp      = me.getGridRealms().up('tabpanel');
-            var sr      = me.getGridRealms().getSelectionModel().getLastSelected();
-            var id      = sr.getId();
-            var tab_id  = 'realmTab_'+id;
-            var nt      = tp.down('#'+tab_id);
-            if(nt){
-                tp.setActiveTab(tab_id); //Set focus on  Tab
-                return;
+                if(!me.application.runAction('cDesktop','AlreadyExist','winTagEditId')){
+                    var w = Ext.widget('winTagEdit',{id:'winTagEditId'});
+                    me.application.runAction('cDesktop','Add',w);
+                    var sr      = me.getGrid().getSelectionModel().getLastSelected();
+                    w.down('form').loadRecord(sr);         
+                }
             }
-
-            var tab_name = me.selectedRecord.get('name');
-            //Tab not there - add one
-            tp.add({ 
-                title :     tab_name,
-                itemId:     tab_id,
-                closable:   true,
-                iconCls:    'edit', 
-                layout:     'fit', 
-                items:      {'xtype' : 'pnlRealm',realm_id: id}
-            });
-            tp.setActiveTab(tab_id); //Set focus on Add Tab
-            //Load the record:
-            nt  = tp.down('#'+tab_id);
-            var f   = nt.down('frmRealmDetail');
-            f.loadRecord(sr);    //Load the record
-            f.down('#creator').setValue(sr.get('creator'));   
         }
     },
+
     editSubmit: function(button){
         var me      = this;
+        var win     = button.up('window');
         var form    = button.up('form');
         form.submit({
             clientValidation: true,
             url: me.urlEdit,
             success: function(form, action) {
-                me.getStore('sRealms').load();
+                win.close();
+                me.getStore('sTags').load();
                 Ext.ux.Toaster.msg(
                     'Item updated',
                     'Item updated fine',
@@ -297,9 +288,10 @@ Ext.define('Rd.controller.cRealms', {
             failure: Ext.ux.formFail
         });
     },
-    onStoreRealmsLoaded: function() {
-        var me = this;
-        var count = me.getStore('sRealms').getTotalCount();
-        me.getGridRealms().down('#count').update({count: count});
-    },
+
+    onStoreTagsLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sTags').getTotalCount();
+        me.getGrid().down('#count').update({count: count});
+    }
 });
