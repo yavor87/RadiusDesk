@@ -41,13 +41,14 @@ Ext.define('Rd.controller.cNas', {
         return win;
     },
 
-    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner'],
-    stores: ['sNas','sAccessProviders'],
-    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms'],
+    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage'],
+    stores: ['sNas','sAccessProviders','sTags'],
+    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
         urlEdit:            '/cake2/rd_cake/nas/edit.json',
+        urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json'
     },
     refs: [
@@ -67,6 +68,12 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #add'   : {
                 click:      me.add
+            },
+            'gridNas #tag'   : {
+                click:      me.tag
+            },
+            'gridNas'       : {
+                select:      me.select
             },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -94,7 +101,10 @@ Ext.define('Rd.controller.cNas', {
             },
             '#scrnRealmsForNasOwner #chkAvailForAll': {
                 change:     me.chkAvailForAllChange
-            }
+            },
+            'winTagManage #save' : {
+                click:  me.btnTagManageSave
+            },
             
         });
     },
@@ -258,6 +268,113 @@ Ext.define('Rd.controller.cNas', {
         var grid    = button.up('gridRealmsForNasOwner');
         grid.getStore().load();
     },
+
+    tag: function(button){
+        var me      = this;     
+        //Find out if there was something selected
+        if(me.getGridNas().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item to tag',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(!me.application.runAction('cDesktop','AlreadyExist','winTagManageId')){
+                var w = Ext.widget('winTagManage',{id:'winTagManageId'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
+        }
+    },
+
+    btnTagManageSave: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        var cmb     = form.down('combo');
+        var rbg     = form.down('radiogroup');
+
+        if(cmb.getValue() == null){
+            Ext.ux.Toaster.msg(
+                        'Select a tag',
+                        'Select a tag please',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            var extra_params    = {};
+            var s               = me.getGridNas().getSelectionModel().getSelection();
+            Ext.Array.each(s,function(record){
+                var r_id = record.getId();
+                console.log("lekker "+r_id);
+                extra_params[r_id] = r_id;
+            });
+
+            //Checks passed fine...      
+            form.submit({
+                clientValidation: true,
+                url: me.urlManageTags,
+                params: extra_params,
+                success: function(form, action) {
+
+                win.close();
+                me.getGridNas().getStore().load();
+                Ext.ux.Toaster.msg(
+                    'Tags modified',
+                    'Tags modified fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+
+                },
+                failure: Ext.ux.formFail
+            });
+
+        }
+        console.log(cmb.getValue());
+        console.log(rbg.getValue().rb);
+    },
+    select: function(grid,record){
+        var me = this;
+        //Adjust the Edit Delete and Tag buttons accordingly...
+
+        //Dynamically update the top toolbar
+        tb = me.getGridNas().down('toolbar[dock=top]');
+        var edit = record.get('update');
+        if(edit == true){
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(true);
+            }
+        }
+
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
+        }
+
+        var m_tag = record.get('manage_tags');
+        if(del == true){
+            if(tb.down('#tag') != null){
+                tb.down('#tag').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#tag') != null){
+                tb.down('#tag').setDisabled(true);
+            }
+        } 
+    },
+
     onStoreNasLoaded: function() {
         var me      = this;
         var count   = me.getStore('sNas').getTotalCount();

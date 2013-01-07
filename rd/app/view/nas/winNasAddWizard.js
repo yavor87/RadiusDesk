@@ -115,7 +115,6 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     text: 'Prev',
                     scale: 'large',
                     iconCls: 'b-prev',
-                    formBind: true,
                     margin: '0 20 40 0'
                 },
                 {
@@ -219,7 +218,6 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     text: 'Prev',
                     scale: 'large',
                     iconCls: 'b-prev',
-                    formBind: true,
                     margin: '0 20 40 0'
                 },
                 {
@@ -251,7 +249,6 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     text: 'Prev',
                     scale: 'large',
                     iconCls: 'b-prev',
-                    formBind: true,
                     margin: '0 20 40 0'
                 },
                 {
