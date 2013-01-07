@@ -5,14 +5,13 @@ App::uses('AppModel', 'Model');
  *
  * @property User $User
  */
-class Na extends AppModel {
+class Tag extends AppModel {
 
     public $actsAs = array('Containable');
-
-	public $displayField = 'nasname';
+	public $displayField = 'name';
 
 	public $validate = array(
-        'nasname' => array(
+        'name' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Value is required'
@@ -32,7 +31,6 @@ class Na extends AppModel {
 	);
 
     public $hasMany = array(
-        'NaRealm',
         'NaTag'
     );
 }
