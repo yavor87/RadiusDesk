@@ -29,7 +29,10 @@ class NasController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             //This contain behaviour is something else man!
             //http://www.youtube.com/watch?v=mgQg4ze1_KU
-            $this->Na->contain(array('NaRealm' => array('Realm.name','Realm.id','Realm.available_to_siblings')));
+             $this->Na->contain(
+                array(  'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
+                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings')
+            ));
             $q_r = $this->Na->find('all');
 
             //Init before the loop
@@ -51,6 +54,18 @@ class NasController extends AppController {
                             'available_to_siblings' => $nr['Realm']['available_to_siblings']
                         ));
                 } 
+
+                //Create tags list
+                $tags       = array();
+                foreach($i['NaTag'] as $nr){
+                    array_push($tags, 
+                        array(
+                            'id'                    => $nr['Tag']['id'],
+                            'name'                  => $nr['Tag']['name'],
+                            'available_to_siblings' => $nr['Tag']['available_to_siblings']
+                    ));
+                }
+
                 array_push($items,array(
                     'id'                    => $id, 
                     'nasname'               => $nasname,
@@ -58,6 +73,7 @@ class NasController extends AppController {
                     'owner'                 => $owner_tree, 
                     'available_to_siblings' => $a_t_s,
                     'realms'                => $realms,
+                    'tags'                  => $tags,
                     'update'                => true,
                     'delete'                => true,
                     'manage_tags'           => true
@@ -356,6 +372,25 @@ class NasController extends AppController {
     }
 
 //------------------ END EXPERIMENTAL WORK ------------------------------
+
+    //------ List of available connection types ------
+    public function conn_types_available(){
+
+        $items = array();
+
+        $ct = Configure::read('conn_type');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
 
     //----- Menus ------------------------
     public function menu_for_grid(){
