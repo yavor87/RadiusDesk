@@ -171,8 +171,21 @@ Ext.define('Rd.controller.cNas', {
         //Find out the selected connection type:
         var form    = button.up('form');
         var rbg     = form.down('radiogroup');
+
         if(rbg.getValue().rb == 'direct'){
-           win.getLayout().setActiveItem('scrnDirect'); 
+            rb = rbg.down('radio[inputValue="direct"]')
+            win.down('#connectionType').setValue(rb.boxLabel);
+            win.down('#connection_type').setValue('direct');
+            win.getLayout().setActiveItem('scrnDirect'); 
+        }
+
+        if(rbg.getValue().rb == 'openvpn'){
+            rb = rbg.down('radio[inputValue="openvpn"]')
+            win.down('#connectionType').setValue(rb.boxLabel);
+            win.down('#connection_type').setValue('openvpn');
+            win.down('#nasname').setValue('Assigned by server');
+            win.down('#nasname').setDisabled(true);
+            win.getLayout().setActiveItem('scrnDirect'); 
         }
     },
     btnDirectPrev:  function(button){
@@ -307,7 +320,6 @@ Ext.define('Rd.controller.cNas', {
             var s               = me.getGridNas().getSelectionModel().getSelection();
             Ext.Array.each(s,function(record){
                 var r_id = record.getId();
-                console.log("lekker "+r_id);
                 extra_params[r_id] = r_id;
             });
 
@@ -330,10 +342,7 @@ Ext.define('Rd.controller.cNas', {
                 },
                 failure: Ext.ux.formFail
             });
-
         }
-        console.log(cmb.getValue());
-        console.log(rbg.getValue().rb);
     },
     select: function(grid,record){
         var me = this;
