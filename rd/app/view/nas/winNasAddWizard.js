@@ -12,6 +12,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
     layout:     'card',
     iconCls:    'add',
     autoShow:   false,
+    urlConnTypes: '/cake2/rd_cake/nas/conn_types_available.json',
     defaults: {
             border: false
     },
@@ -36,6 +37,32 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             scrnRealmsForNasOwner
         ]; 
         this.callParent(arguments);
+
+        //Get the connection types:
+        Ext.Ajax.request({
+            url: me.urlConnTypes,
+            method: 'GET',
+            success: me.addConnTypes,
+            scope: me
+        });
+
+    },
+
+    addConnTypes: function(response){
+
+        var me          = this;
+        var jsonData    = Ext.JSON.decode(response.responseText);
+        var rbgrp       = me.down('radiogroup');
+
+        if(jsonData.success){
+            Ext.Array.each(jsonData.items, function(i,j){
+                if(j == 0){
+                    rbgrp.add({ boxLabel: i.name, name: 'rb', inputValue: i.id, checked: true});
+                }else{
+                    rbgrp.add({ boxLabel: i.name, name: 'rb', inputValue: i.id});
+                } 
+            });
+        }
     },
 
     //____ AccessProviders tree SCREEN ____
@@ -76,8 +103,12 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         });
         return pnlTree;
     },
+    
+
     //_______ Connetion Type selection _______
     mkScrnConType: function(){
+
+        var me = this;
 
         var frmConType = Ext.create('Ext.form.Panel',{
             border:     false,
@@ -91,7 +122,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 labelClsExtra: 'lblRd',
                 labelAlign: 'top',
                 labelSeparator: '',
-                margin: 15
+                margin: '15 10 15 10'
             },
             defaultType: 'textfield',
             tbar: [
@@ -102,12 +133,12 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 fieldLabel: 'Connection type',
                 columns: 1,
                 vertical: true,
-                items: [
-                    { boxLabel: 'Direct (fixed IP)',    name: 'rb', inputValue: 'direct', checked: true },
-                    { boxLabel: 'OpenVPN',              name: 'rb', inputValue: 'openvpn'},
-                    { boxLabel: 'PPTP',                 name: 'rb', inputValue: 'pptpd' },
-                    { boxLabel: 'Dynamic client',       name: 'rb', inputValue: 'dynamic' }
-                ]
+               // items: [
+                  //  { boxLabel: 'Direct (fixed IP)',    name: 'rb', inputValue: 'direct', checked: true },
+                 //   { boxLabel: 'OpenVPN',              name: 'rb', inputValue: 'openvpn'},
+                  //  { boxLabel: 'PPTP',                 name: 'rb', inputValue: 'pptpd' },
+                  //  { boxLabel: 'Dynamic client',       name: 'rb', inputValue: 'dynamic' }
+               // ]
             }],
             buttons: [
                 {
@@ -161,7 +192,8 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 },
                 {
                     xtype   : 'textfield',
-                    name    : "id",
+                    itemId  : 'connection_type',
+                    name    : "connection_type",
                     hidden  : true
                 }, 
                 {
@@ -179,6 +211,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     labelClsExtra: 'lblRdReq'
                 },
                 {
+                    itemId      : 'nasname',
                     xtype       : 'textfield',
                     fieldLabel  : 'IP Address',
                     name        : "nasname",
