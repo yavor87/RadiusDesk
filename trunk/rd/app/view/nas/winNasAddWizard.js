@@ -27,12 +27,14 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         var me = this;
         var scrnApTree      = me.mkScrnApTree();
         var scrnConType     = me.mkScrnConType();
+        var scrnOpenvpn     = me.mkScrnOpenvpn();
         var scrnDirect      = me.mkScrnDirect();
         var scrnRealmsForNasOwner = me.scrnRealmsForNasOwner();
 
         this.items = [
             scrnApTree,
             scrnConType,
+            scrnOpenvpn,
             scrnDirect,
             scrnRealmsForNasOwner
         ]; 
@@ -159,6 +161,68 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             ]
         });
         return frmConType;
+    },
+
+    //______ OpenVPN username and optional password) _____
+    mkScrnOpenvpn: function(){
+
+        var frmOpenvpn = Ext.create('Ext.form.Panel',{
+            border:     false,
+            layout:     'anchor',
+            itemId:     'scrnOpenvpn',
+            autoScroll: true,
+            defaults: {
+                anchor: '100%'
+            },
+            fieldDefaults: {
+                msgTarget: 'under',
+                labelClsExtra: 'lblRd',
+                labelAlign: 'left',
+                labelSeparator: '',
+                margin: 15
+            },
+            defaultType: 'textfield',
+            tbar: [
+                { xtype: 'tbtext', text: 'Credentials for OpenVPN tunnel', cls: 'lblWizard' }
+            ],
+            items:[
+                {
+                    itemId      : 'vpn_username',
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Username',
+                    name        : 'vpn_username',
+                    allowBlank  : false,
+                    blankText   : 'Required OpenVPN username',
+                    labelClsExtra: 'lblRdReq'
+                },
+                {
+                    itemId      : 'vpn_password',
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Password',
+                    name        : 'vpn_password',
+                    blankText   : 'Supply an optional password',
+                    labelClsExtra: 'lblRd'
+                } 
+            ],
+            buttons: [
+                {
+                    itemId: 'btnOpenvpnPrev',
+                    text: 'Prev',
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'btnOpenvpnNext',
+                    text: 'Next',
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ]
+        });
+        return frmOpenvpn;
     },
 
     //_______ Direct connection  _______

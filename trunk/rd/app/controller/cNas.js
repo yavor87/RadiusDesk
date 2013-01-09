@@ -84,6 +84,12 @@ Ext.define('Rd.controller.cNas', {
             'winNasAddWizard #btnConTypeNext' : {
                 click:  me.btnConTypeNext
             },
+            'winNasAddWizard #btnOpenvpnPrev' : {
+                click: me.btnOpenvpnPrev
+            },
+            'winNasAddWizard #btnOpenvpnNext' : {
+                click: me.btnOpenvpnNext
+            },
             'winNasAddWizard #btnDirectPrev' : {
                 click:  me.btnDirectPrev
             },
@@ -185,8 +191,18 @@ Ext.define('Rd.controller.cNas', {
             win.down('#connection_type').setValue('openvpn');
             win.down('#nasname').setValue('Assigned by server');
             win.down('#nasname').setDisabled(true);
-            win.getLayout().setActiveItem('scrnDirect'); 
+            win.getLayout().setActiveItem('scrnOpenvpn'); 
         }
+    },
+    btnOpenvpnPrev: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnConType');
+    },
+    btnOpenvpnNext: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnDirect');
     },
     btnDirectPrev:  function(button){
         var me      = this;
@@ -245,6 +261,13 @@ Ext.define('Rd.controller.cNas', {
                 );
                 return;
             }
+        }
+
+        //Check if it was not a direct connection... then get other attributes
+        var rbg = win.down('radiogroup');
+        if(rbg.getValue().rb == 'openvpn'){
+            extra_params.vpn_username = win.down('#vpn_username').getValue();
+            extra_params.vpn_password = win.down('#vpn_password').getValue();
         }
 
         //Checks passed fine...      
