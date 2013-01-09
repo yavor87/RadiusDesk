@@ -209,12 +209,39 @@ class NasController extends AppController {
             $this->request->data['available_to_siblings'] = 0;
         }
 
+        //We need to see what the connection type was that was chosen
+        $connection_type = 'direct'; //Default
+        if(isset($this->request->data['connection_type'])){
+            if($this->request->data['connection_type'] == 'openvpn'){   //Add the OpenVPN item
+                $d = array();
+                $d['OpenvpnClient']['username'] = $this->request->data['vpn_username'];
+                $d['OpenvpnClient']['password'] = $this->request->data['vpn_password'];
+                $this->Na->OpenvpnClient->create();
+                if(!$this->Na->OpenvpnClient->save($d)){
+                    $first_error = reset($this->Na->OpenvpnClient->validationErrors);
+                    $this->set(array(
+                        'errors'    => $this->Na->OpenvpnClient->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => 'Could not create OpenVPN Client <br>'.$first_error[0]),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                    return;
+                }else{
+                    //Derive the nasname (ip address) from the new OpenvpnClient entry
+                    $qr = $this->Na->OpenvpnClient->findById($this->Na->OpenvpnClient->id);
+                    //IP Address =
+                    $nasname = Configure::read('openvpn.ip_half').$qr['OpenvpnClient']['subnet'].'.'.$qr['OpenvpnClient']['peer1'];
+                    $this->request->data['nasname'] = $nasname;
+                }
+            }
+        }
+
         $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
 
             //Check if we need to add na_realms table
             if(isset($this->request->data['avail_for_all'])){
-                //Available to all does not add any na_realm entries
+            //Available to all does not add any na_realm entries
             }else{
                 foreach(array_keys($this->request->data) as $key){
                     if(preg_match('/^\d+/',$key)){
@@ -225,16 +252,28 @@ class NasController extends AppController {
                 }
             }
 
+            //If it was an OpenvpnClient we need to update the na_id field
+            if($this->request->data['connection_type'] == 'openvpn'){
+                $this->Na->OpenvpnClient->saveField('na_id', $this->{$this->modelClass}->id);
+            }
+          
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
         } else {
             $message = 'Error';
+
+            //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
+            if($this->request->data['connection_type'] == 'openvpn'){
+                $this->Na->OpenvpnClient->delete($this->Na->OpenvpnClient->id);
+            }
+
+            $first_error = reset($this->{$this->modelClass}->validationErrors);
             $this->set(array(
                 'errors'    => $this->{$this->modelClass}->validationErrors,
                 'success'   => false,
-                'message'   => array('message' => 'Could not create item'),
+                'message'   => array('message' => 'Could not create item <br>'.$first_error[0]),
                 '_serialize' => array('errors','success','message')
             ));
         }
