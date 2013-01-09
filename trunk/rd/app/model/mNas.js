@@ -5,7 +5,7 @@ Ext.define('Rd.model.mNas', {
          {name: 'nasname',      type: 'string'  },
          {name: 'shortname',    type: 'string'  },
          {name: 'owner',        type: 'string'  },
-          'realms', 'tags',
+          'realms', 'tags','connection_type',
          {name: 'available_to_siblings',  type: 'bool'},
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'},

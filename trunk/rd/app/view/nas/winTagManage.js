@@ -47,6 +47,7 @@ Ext.define('Rd.view.tags.winTagManage', {
                         store: 'sTags',
                         queryMode: 'local',
                         editable: false,
+                        allowBlank: false,
                         name: 'tag_id',
                         displayField: 'name',
                         valueField: 'id',

@@ -21,13 +21,15 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
-        'Ext.form.field.Radio'
+        'Ext.form.field.Radio',
+        'Rd.store.sDynamicAttributes' 
     ],
     initComponent: function() {
         var me = this;
         var scrnApTree      = me.mkScrnApTree();
         var scrnConType     = me.mkScrnConType();
         var scrnOpenvpn     = me.mkScrnOpenvpn();
+        var scrnDynamic     = me.mkScrnDynamic();
         var scrnDirect      = me.mkScrnDirect();
         var scrnRealmsForNasOwner = me.scrnRealmsForNasOwner();
 
@@ -35,6 +37,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             scrnApTree,
             scrnConType,
             scrnOpenvpn,
+            scrnDynamic,
             scrnDirect,
             scrnRealmsForNasOwner
         ]; 
@@ -223,6 +226,74 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             ]
         });
         return frmOpenvpn;
+    },
+
+    //______ Dynamic Clients Attribute selection and value _____
+    mkScrnDynamic: function(){
+
+        var frmDynamic = Ext.create('Ext.form.Panel',{
+            border:     false,
+            layout:     'anchor',
+            itemId:     'scrnDynamic',
+            autoScroll: true,
+            defaults: {
+                anchor: '100%'
+            },
+            fieldDefaults: {
+                msgTarget: 'under',
+                labelClsExtra: 'lblRd',
+                labelAlign: 'left',
+                labelSeparator: '',
+                margin: 15
+            },
+            defaultType: 'textfield',
+            tbar: [
+                { xtype: 'tbtext', text: 'Unique AVP combination', cls: 'lblWizard' }
+            ],
+            items:[
+                {
+                    xtype: 'combo',
+                    fieldLabel: 'Attribute',
+                    labelSeparator: '',
+                    store: 'sDynamicAttributes',
+                    queryMode: 'local',
+                    valueField: 'id',
+                    displayField: 'name',
+                    allowBlank: false,
+                    editable: false,
+                    mode: 'local',
+                    itemId: 'dynamic_attribute',
+                    name: 'dynamic_attribute'
+                },
+                {
+                    itemId      : 'dynamic_value',
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Value',
+                    name        : 'dynamic_value',
+                    allowBlank  : false,
+                    blankText   : 'Value to identify the NAS with',
+                    labelClsExtra: 'lblRdReq'
+                } 
+            ],
+            buttons: [
+                {
+                    itemId: 'btnDynamicPrev',
+                    text: 'Prev',
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'btnDynamicNext',
+                    text: 'Next',
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ]
+        });
+        return frmDynamic;
     },
 
     //_______ Direct connection  _______
