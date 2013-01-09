@@ -74,6 +74,7 @@ class NasController extends AppController {
                     'available_to_siblings' => $a_t_s,
                     'realms'                => $realms,
                     'tags'                  => $tags,
+                    'connection_type'       => $i['Na']['connection_type'],
                     'update'                => true,
                     'delete'                => true,
                     'manage_tags'           => true
@@ -171,6 +172,7 @@ class NasController extends AppController {
                         'available_to_siblings' => $a_t_s,
                         'realms'                => $realms,
                         'tags'                  => $tags,
+                        'connection_type'       => $i['Na']['connection_type'],
                         'update'                => $edit,
                         'delete'                => $delete,
                         'manage_tags'           => $manage_tags
@@ -209,6 +211,11 @@ class NasController extends AppController {
             $this->request->data['available_to_siblings'] = 0;
         }
 
+        //If this attribute is not present it will fail empty check
+        if(!isset($this->request->data['nasname'])){
+            $this->request->data['nasname'] = ''; //Make it empty if not present
+        }
+
         //We need to see what the connection type was that was chosen
         $connection_type = 'direct'; //Default
         if(isset($this->request->data['connection_type'])){
@@ -236,8 +243,40 @@ class NasController extends AppController {
             }
         }
 
+        if(isset($this->request->data['connection_type'])){
+            if($this->request->data['connection_type'] == 'dynamic'){   //Add discover the next dynamic-<number>
+
+                $qr = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => 'dynamic-%'), 'order' => 'Na.nasname DESC'));
+                if($qr == ''){
+                    $this->request->data['nasname'] = 'dynamic-1';
+                }else{
+                    $last_id = $qr['Na']['nasname'];
+                    $last_nr = preg_replace('/^dynamic-/', "", $last_id);
+                    //See if there are not any holes:
+                    $start_id = 1;
+                    $hole_flag = false;
+                    while($start_id < $last_nr){
+                        $nn = 'dynamic-'.$start_id;
+                        $count = $this->Na->find('count', array('conditions' => array('Na.nasname' => $nn))); //This name is missing; we can take it
+                        if($count == 0){
+                            $this->request->data['nasname'] = $nn; 
+                            $hole_flag = true;
+                            break;
+                        }
+                        $start_id++;
+                    }
+                    if(!$hole_flag){ //There was no gap; take the next number
+                        $this->request->data['nasname'] = 'dynamic-'.($last_nr+1);
+                    }     
+                }   
+            }
+        }
+
         $this->{$this->modelClass}->create();
+        //print_r($this->request->data);
         if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            
 
             //Check if we need to add na_realms table
             if(isset($this->request->data['avail_for_all'])){
@@ -266,7 +305,7 @@ class NasController extends AppController {
 
             //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
             if($this->request->data['connection_type'] == 'openvpn'){
-                $this->Na->OpenvpnClient->delete($this->Na->OpenvpnClient->id);
+                $this->Na->OpenvpnClient->delete();
             }
 
             $first_error = reset($this->{$this->modelClass}->validationErrors);
@@ -418,6 +457,23 @@ class NasController extends AppController {
         $items = array();
 
         $ct = Configure::read('conn_type');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    //------ List of configured dynamic attributes types ------
+    public function dynamic_attributes(){
+        $items = array();
+        $ct = Configure::read('dynamic_attributes');
         foreach($ct as $i){
             if($i['active']){
                 array_push($items, $i);
