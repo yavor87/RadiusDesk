@@ -46,12 +46,19 @@ class OpenvpnClient extends AppModel {
         }
 
         //First check if the $this->data['OpenvpnClient']['id'] is set
-        if($existing_flag){ 
+        if($existing_flag == true){ 
             //______ EXISTING ONE _______
             //This is the save of an existing one, check if the name did not change
+            $new_username = '';
+            if(isset($this->data['OpenvpnClient']['username'])){ //It may not always be set...
+                $new_username = $this->data['OpenvpnClient']['username'];
+            }else{
+                return true; //They are not saving this field... return without doing the callback!
+            }
+
             $qr = $this->findById($this->data['OpenvpnClient']['id']);
             $username = $qr['OpenvpnClient']['username'];
-            if($username != $this->data['OpenvpnClient']['username']){
+            if($username != $new_username){
                 //Name changed, remove old file
                 $file       = $username;
                 $filename   = $this->ccd_folder.$file;
