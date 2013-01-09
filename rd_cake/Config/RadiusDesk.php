@@ -16,6 +16,7 @@ $config['conn_type'][3]     = array('name' => 'Dynamic Client',     'id' => 'dyn
 
 //Define the location of ccd (client config directory)
 //FIXME This value does not get read by the OpenvpnClients Model - investigate
-$config['openvpn']['ccd_dir_location'] = '/etc/openvpn/ccd/';
+$config['openvpn']['ccd_dir_location']  = '/etc/openvpn/ccd/';
+$config['openvpn']['ip_half']           = '10.8.';
 
 ?>
