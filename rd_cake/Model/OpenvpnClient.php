@@ -37,8 +37,16 @@ class OpenvpnClient extends AppModel {
 
     public function beforeSave(){
 
+        //Try to detect if it is an existing (edit):
+        $existing_flag = false;
+        if(isset($this->data['OpenvpnClient']['id'])){
+            if($this->data['OpenvpnClient']['id'] != ''){
+                $existing_flag = true;
+            }
+        }
+
         //First check if the $this->data['OpenvpnClient']['id'] is set
-        if($this->data['OpenvpnClient']['id'] != ''){ 
+        if($existing_flag){ 
             //______ EXISTING ONE _______
             //This is the save of an existing one, check if the name did not change
             $qr = $this->findById($this->data['OpenvpnClient']['id']);

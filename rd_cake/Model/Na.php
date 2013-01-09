@@ -21,6 +21,16 @@ class Na extends AppModel {
                 'rule'    => 'isUnique',
                 'message' => 'This name is already taken'
             )
+        ),
+        'shortname' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This name is already taken'
+            )
         )
     );
 
@@ -33,6 +43,7 @@ class Na extends AppModel {
 
     public $hasMany = array(
         'NaRealm',
-        'NaTag'
+        'NaTag',
+        'OpenvpnClient'
     );
 }
