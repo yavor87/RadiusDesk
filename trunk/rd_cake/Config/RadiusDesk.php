@@ -19,4 +19,10 @@ $config['conn_type'][3]     = array('name' => 'Dynamic Client',     'id' => 'dyn
 $config['openvpn']['ccd_dir_location']  = '/etc/openvpn/ccd/';
 $config['openvpn']['ip_half']           = '10.8.';
 
+
+//Define the configured dynamic attributes
+$config['dynamic_attributes'][0]     = array('name' => 'Called-Station-Id',  'id' => 'Called-Station-Id',   'active' => true);
+$config['dynamic_attributes'][1]     = array('name' => 'Mikrotik-Realm',     'id' => 'Mikrotik-Realm',      'active' => true);
+
+
 ?>
