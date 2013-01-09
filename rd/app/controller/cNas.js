@@ -42,8 +42,8 @@ Ext.define('Rd.controller.cNas', {
     },
 
     views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage'],
-    stores: ['sNas','sAccessProviders','sTags'],
-    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag'],
+    stores: ['sNas','sAccessProviders','sTags','sDynamicAttributes'],
+    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -89,6 +89,12 @@ Ext.define('Rd.controller.cNas', {
             },
             'winNasAddWizard #btnOpenvpnNext' : {
                 click: me.btnOpenvpnNext
+            },
+            'winNasAddWizard #btnDynamicPrev' : {
+                click: me.btnDynamicPrev
+            },
+            'winNasAddWizard #btnDynamicNext' : {
+                click: me.btnDynamicNext
             },
             'winNasAddWizard #btnDirectPrev' : {
                 click:  me.btnDirectPrev
@@ -193,6 +199,15 @@ Ext.define('Rd.controller.cNas', {
             win.down('#nasname').setDisabled(true);
             win.getLayout().setActiveItem('scrnOpenvpn'); 
         }
+
+         if(rbg.getValue().rb == 'dynamic'){
+            rb = rbg.down('radio[inputValue="dynamic"]')
+            win.down('#connectionType').setValue(rb.boxLabel);
+            win.down('#connection_type').setValue('dynamic');
+            win.down('#nasname').setValue('Assigned by server');
+            win.down('#nasname').setDisabled(true);
+            win.getLayout().setActiveItem('scrnDynamic'); 
+        }
     },
     btnOpenvpnPrev: function(button){
         var me      = this;
@@ -200,6 +215,16 @@ Ext.define('Rd.controller.cNas', {
         win.getLayout().setActiveItem('scrnConType');
     },
     btnOpenvpnNext: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnDirect');
+    },
+    btnDynamicPrev: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnConType');
+    },
+    btnDynamicNext: function(button){
         var me      = this;
         var win     = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnDirect');
@@ -268,6 +293,13 @@ Ext.define('Rd.controller.cNas', {
         if(rbg.getValue().rb == 'openvpn'){
             extra_params.vpn_username = win.down('#vpn_username').getValue();
             extra_params.vpn_password = win.down('#vpn_password').getValue();
+        }
+
+        //Check if it was not a direct connection... then get other attributes
+        var rbg = win.down('radiogroup');
+        if(rbg.getValue().rb == 'dynamic'){
+            extra_params.dynamic_attribute  = win.down('#dynamic_attribute').getValue();
+            extra_params.dynamic_value      = win.down('#dynamic_value').getValue();
         }
 
         //Checks passed fine...      

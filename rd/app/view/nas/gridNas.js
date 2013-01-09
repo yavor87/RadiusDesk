@@ -3,6 +3,7 @@ Ext.define('Rd.view.realms.gridNas' ,{
     alias : 'widget.gridNas',
     store : 'sNas',
     stateful: true,
+    multiSelect: true,
     stateId: 'StateGridNas',
     stateEvents:['groupclick','columnhide'],
     border: false,
@@ -15,6 +16,7 @@ Ext.define('Rd.view.realms.gridNas' ,{
         { text: 'IP Address',   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1},
         { text: 'Name',         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1},
         { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1},
+        { text: 'Connection type', dataIndex: 'connection_type',        tdCls: 'gridTree', flex: 1},
         { 
             text:   'Available to sub-providers',
             flex: 1,  
