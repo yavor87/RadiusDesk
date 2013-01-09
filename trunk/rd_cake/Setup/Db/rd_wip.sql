@@ -226,7 +226,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +235,6 @@ CREATE TABLE `na_realms` (
 
 LOCK TABLES `na_realms` WRITE;
 /*!40000 ALTER TABLE `na_realms` DISABLE KEYS */;
-INSERT INTO `na_realms` VALUES (3,6,22,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(4,6,23,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(5,8,13,'2013-01-07 11:57:39','2013-01-07 11:57:39'),(6,8,11,'2013-01-07 11:57:39','2013-01-07 11:57:39');
 /*!40000 ALTER TABLE `na_realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,7 +252,7 @@ CREATE TABLE `na_tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -262,7 +261,6 @@ CREATE TABLE `na_tags` (
 
 LOCK TABLES `na_tags` WRITE;
 /*!40000 ALTER TABLE `na_tags` DISABLE KEYS */;
-INSERT INTO `na_tags` VALUES (8,8,15,'2013-01-07 15:29:45','2013-01-07 15:29:45');
 /*!40000 ALTER TABLE `na_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,21 +272,35 @@ DROP TABLE IF EXISTS `nas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `nasname` varchar(128) NOT NULL,
   `shortname` varchar(32) DEFAULT NULL,
-  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
-  `monitor` tinyint(1) NOT NULL DEFAULT '1',
-  `on_public_maps` tinyint(1) NOT NULL DEFAULT '0',
+  `type` varchar(30) DEFAULT 'other',
+  `ports` int(5) DEFAULT NULL,
   `secret` varchar(60) NOT NULL DEFAULT 'secret',
+  `server` varchar(64) DEFAULT NULL,
+  `community` varchar(50) DEFAULT NULL,
+  `description` varchar(200) DEFAULT 'RADIUS Client',
   `connection_type` enum('direct','openvpn','pptp','dynamic') DEFAULT 'direct',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  `record_auth` tinyint(1) NOT NULL DEFAULT '0',
+  `dynamic_attribute` varchar(50) NOT NULL DEFAULT '',
+  `dynamic_value` varchar(50) NOT NULL DEFAULT '',
+  `heartbeat_id` varchar(50) NOT NULL DEFAULT '',
+  `heartbeat_dead_after` int(5) NOT NULL DEFAULT '600',
+  `session_auto_close` tinyint(1) NOT NULL DEFAULT '0',
+  `session_dead_time` int(5) NOT NULL DEFAULT '3600',
+  `on_public_maps` tinyint(1) NOT NULL DEFAULT '0',
   `lat` double DEFAULT NULL,
   `lon` double DEFAULT NULL,
+  `photo_file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `nasname` (`nasname`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,8 +309,39 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (6,'1','2',0,1,0,'3','direct',NULL,NULL,44,'2013-01-06 17:26:22','2013-01-06 17:26:22'),(7,'b','b',1,1,0,'b','direct',NULL,NULL,44,'2013-01-06 18:27:01','2013-01-06 18:27:01'),(8,'Gooi','Hom',0,1,0,'Nou','direct',NULL,NULL,58,'2013-01-07 11:57:39','2013-01-07 11:57:39');
+INSERT INTO `nas` VALUES (2,'','jkjkj','other',NULL,'jkjkj',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Called-Station-Id','jkjkljkj','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:39:57','2013-01-09 13:39:57'),(3,'','kkk','other',NULL,'kkk',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','kkkkkkkkk','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:46:19','2013-01-09 13:46:19'),(4,'dynamic-1','vvvv','other',NULL,'vvvv',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','bbbbbbbbbb','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:00:09','2013-01-09 14:00:09'),(8,'dynamic-2','99','other',NULL,'00',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','0000','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:11:05','2013-01-09 14:11:05'),(6,'dynamic-3','e','other',NULL,'z',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','z','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:01:22','2013-01-09 14:01:22'),(7,'dynamic-4','zzz','other',NULL,'zz',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','eeeeeeeee','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:09:51','2013-01-09 14:09:51');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `openvpn_clients`
+--
+
+DROP TABLE IF EXISTS `openvpn_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `openvpn_clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `subnet` int(3) DEFAULT NULL,
+  `peer1` int(3) DEFAULT NULL,
+  `peer2` int(3) DEFAULT NULL,
+  `na_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `openvpn_clients`
+--
+
+LOCK TABLES `openvpn_clients` WRITE;
+/*!40000 ALTER TABLE `openvpn_clients` DISABLE KEYS */;
+INSERT INTO `openvpn_clients` VALUES (61,'Koos','',1,1,2,16,'2013-01-09 10:59:12','2013-01-09 10:59:12'),(62,'Bad','Ass',1,5,6,17,'2013-01-09 11:05:36','2013-01-09 11:05:36');
+/*!40000 ALTER TABLE `openvpn_clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -506,4 +549,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-07 15:42:23
+-- Dump completed on 2013-01-09 14:12:33
