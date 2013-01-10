@@ -1,6 +1,12 @@
 Ext.define('Rd.store.sNas', {
     extend: 'Ext.data.Store',
     model: 'Rd.model.mNas',
+    //To make it load AJAXly from the server specify the follown 3 attributes
+    buffered: true,
+    leadingBufferZone: 150, 
+    pageSize: 50,
+    //To force server side sorting:
+    remoteSort: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',
@@ -9,11 +15,13 @@ Ext.define('Rd.store.sNas', {
             reader: {
                 type: 'json',
                 root: 'items',
-                messageProperty: 'message'
+                messageProperty: 'message',
+                totalProperty: 'totalCount' //Required for dynamic paging
             },
             api: {
                 destroy  : '/cake2/rd_cake/nas/delete.json'
-            }
+            },
+            simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
     autoLoad: true
 });

@@ -123,6 +123,7 @@ Ext.define('Rd.controller.cNas', {
     reload: function(){
         var me =this;
         me.getStore('sNas').load();
+        //me.getStore('sNas').filter('connection_type','openvpn');
     },
     add: function(button){
         var me = this;
