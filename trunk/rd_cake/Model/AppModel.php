@@ -32,6 +32,9 @@ App::uses('Model', 'Model');
  */
 class AppModel extends Model {
 
+
+    public $actsAs = array('Containable');
+
         /**
     * checks a record, if it is unique - depending on other fields in this table (transfered as array)
     * example in model: 'rule' => array ('validateUnique',array('belongs_to_table_id','some_id','user_id')),
