@@ -12,8 +12,8 @@ class NasController extends AppController {
 
     //____ BASIC CRUD Realm Manager ________
     public function index(){
-    //Display a list of realms with their owners
-    //This will be dispalyed to the Administrator as well as Access Providers who has righs
+        //Display a list of realms with their owners
+        //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
         //This works nice :-)
         if(!$this->_ap_right_check()){
@@ -23,17 +23,143 @@ class NasController extends AppController {
         $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
 
+        //Empty to start with
+        $c['joins']         = array(); 
+        $c['conditions']    = array();
+
+        //What should we include....
+        $c['contain']       = array(
+                                'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
+                                'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings'),
+                                'User'
+                            );
+
+        
+
+        //===== SORT =====
+
+        //Default values for sort and dir
+        $sort   = 'nasname';
+        $dir    = 'DESC';
+
+        if(isset($this->request->query['sort'])){
+            if($this->request->query['sort'] == 'owner'){
+                $sort = 'User.username';
+            }else{
+                $sort = $this->modelClass.'.'.$this->request->query['sort'];
+            }
+            $dir  = $this->request->query['dir'];
+        } 
+        $c['order'] = array("$sort $dir");
+
+        //_____________________
+        
+
+        //====== FILTER =====
+
+        //--- Filter protion --------
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            foreach($filter as $f){
+                //Lists
+                if($f->type == 'list'){
+
+                    //The tags field has to be treated specially
+                    if($f->field == 'tags'){
+
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = 'Tag.name';
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+
+                        array_push($c['joins'],array(
+                            'table'         => 'na_tags',
+                            'alias'         => 'NaTag',
+                            'type'          => 'INNER',
+                            'conditions'    => array('NaTag.na_id = Na.id')
+                        ));
+                        array_push($c['joins'],array(
+                            'table'         => 'tags',
+                            'alias'         => 'Tag',
+                            'type'          => 'INNER',
+                            'conditions'    => array('Tag.id = NaTag.tag_id',array('OR' => $list_array))
+                        ));
+
+                    }elseif($f->field == 'realms'){
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = 'Realm.name';
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+                        array_push($c['joins'],array(
+                            'table'         => 'na_realms',
+                            'alias'         => 'NaRealm',
+                            'type'          => 'INNER',
+                            'conditions'    => array('NaRealm.na_id = Na.id')
+                        ));
+                        array_push($c['joins'],array(
+                            'table'         => 'realms',
+                            'alias'         => 'Realm',
+                            'type'          => 'INNER',
+                            'conditions'    => array('Realm.id = NaRealm.realm_id',array('OR' => $list_array))
+                        ));                     
+                    }else{
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = $this->modelClass.'.'.$f->field;
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+                        //Add it as an OR condition
+                        array_push($c['conditions'],array('OR' => $list_array));
+                    }
+                }
+                //Strings
+                if($f->type == 'string'){
+                    if($f->field == 'owner'){
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
+                }
+                //Bools
+                if($f->type == 'boolean'){
+                     $col = $this->modelClass.'.'.$f->field;
+                     array_push($c['conditions'],array("$col" => $f->value));
+                }
+            }
+        }
+
+        array_push($c['conditions'],array('OR' => array(array('User.id' => 58,'Na.available_to_siblings' => false),array('User.id' => 44,'Na.available_to_siblings' => false))));
+
+        //--- End filter protion ----
+        //_____________________
+
+        //===== PAGING (MUST BE LAST) ======
+
+        $limit  = 50;   //Defaults
+        $page   = 1;
+        $offset = 0;
+        if(isset($this->request->query['limit'])){
+            $limit  = $this->request->query['limit'];
+            $page   = $this->request->query['page'];
+            $offset = $this->request->query['start'];
+        }
+
+        $c_page             = $c;
+        $c_page['page']     = $page;
+        $c_page['limit']    = $limit;
+        $c_page['offset']   = $offset;
+
+        //_____________________
 
         //_____ ADMIN _____
         $items = array();
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            //This contain behaviour is something else man!
-            //http://www.youtube.com/watch?v=mgQg4ze1_KU
-             $this->Na->contain(
-                array(  'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
-                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings')
-            ));
-            $q_r = $this->Na->find('all');
+
+            $total  = $this->Na->find('count',$c);       
+            $q_r    = $this->Na->find('all',$c_page);
 
             //Init before the loop
             $this->User = ClassRegistry::init('User');
@@ -90,11 +216,14 @@ class NasController extends AppController {
             //2.) all those he created himself (if any) (this he can manage, depending on his right)
             //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
 
-            $this->Na->contain(
+            $total  = $this->Na->find('count',$c);
+          /*  $this->Na->contain(
                 array(  'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
-                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings')
-            ));
-            $q_r = $this->Na->find('all');
+                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings'),
+                        'User'
+            )); */
+            $q_r    = $this->Na->find('all',$c_page);
+
 
             //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
             $this->User = ClassRegistry::init('User');
@@ -161,8 +290,7 @@ class NasController extends AppController {
                                 'available_to_siblings' => $nr['Tag']['available_to_siblings']
                         ));
                     }
-
-                    
+                
                     //Add to return items
                     array_push($items,array(
                         'id'            => $i['Na']['id'], 
@@ -185,7 +313,8 @@ class NasController extends AppController {
         $this->set(array(
             'items' => $items,
             'success' => true,
-            '_serialize' => array('items','success')
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
         ));
     }
 
