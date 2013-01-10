@@ -77,6 +77,12 @@ class User extends AppModel {
         
 	);
 
+    public $hasMany = array(
+        'Na',
+        'Tag',
+        'Realm'
+    );
+
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
 
 
