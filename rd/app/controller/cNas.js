@@ -43,7 +43,7 @@ Ext.define('Rd.controller.cNas', {
 
     views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage'],
     stores: ['sNas','sAccessProviders','sTags','sDynamicAttributes'],
-    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute'],
+    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
