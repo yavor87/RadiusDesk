@@ -8,6 +8,10 @@ class NasController extends AppController {
     public $components = array('Aa');
     private $base      = "Access Providers/Controllers/Nas/";
 
+    //List of parents and children (for APs)
+    private $parents   = array();
+    private $children  = array();
+
 //------------------------------------------------------------------------
 
     //____ BASIC CRUD Realm Manager ________
@@ -29,8 +33,8 @@ class NasController extends AppController {
 
         //What should we include....
         $c['contain']       = array(
-                                'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
-                                'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings'),
+                                'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
+                                'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings','Tag.user_id'),
                                 'User'
                             );
 
@@ -131,7 +135,31 @@ class NasController extends AppController {
             }
         }
 
-        array_push($c['conditions'],array('OR' => array(array('User.id' => 58,'Na.available_to_siblings' => false),array('User.id' => 44,'Na.available_to_siblings' => false))));
+        //If the user is an AP; we need to add an extra clause to only show the NAS devices which he is allowed to see.
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $tree_array = array();
+            $this->User = ClassRegistry::init('User');
+
+            //**AP and upward in the tree**
+            $this->parents = $this->User->getPath($user_id,'User.id');
+            //So we loop this results asking for the parent nodes who have available_to_siblings = true
+            foreach($this->parents as $i){
+                $i_id = $i['User']['id'];
+                if($i_id != $user_id){ //upstream
+                    array_push($tree_array,array('Na.user_id' => $i_id,'Na.available_to_siblings' => true));
+                }else{
+                    array_push($tree_array,array('Na.user_id' => $i_id));
+                }
+            }
+            //** ALL the AP's children
+            $this->children   = $this->User->children($user_id,false,'User.id');
+            foreach($this->children as $i){
+                $i_id = $i['User']['id'];
+                array_push($tree_array,array('Na.user_id' => $i_id));
+            }      
+            //Add it as an OR clause
+            array_push($c['conditions'],array('OR' => $tree_array));  
+        }       
 
         //--- End filter protion ----
         //_____________________
@@ -152,38 +180,31 @@ class NasController extends AppController {
         $c_page['limit']    = $limit;
         $c_page['offset']   = $offset;
 
-        //_____________________
+        $total  = $this->Na->find('count',$c);       
+        $q_r    = $this->Na->find('all',$c_page);
 
-        //_____ ADMIN _____
         $items = array();
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+        $this->User = ClassRegistry::init('User');
 
-            $total  = $this->Na->find('count',$c);       
-            $q_r    = $this->Na->find('all',$c_page);
+        foreach($q_r as $i){
 
-            //Init before the loop
-            $this->User = ClassRegistry::init('User');
-            foreach($q_r as $i){
-                $id         = $i['Na']['id'];
-                $nasname    = $i['Na']['nasname'];
-                $shortname  = $i['Na']['shortname'];
-                $owner_id   = $i['Na']['user_id'];
-                $owner_tree = $this->_find_parents($owner_id);
-                $a_t_s      = $i['Na']['available_to_siblings'];
-                $realms     = array();
-                //Realms
-                foreach($i['NaRealm'] as $nr){
+            $realms     = array();
+            //Realms
+            foreach($i['NaRealm'] as $nr){
+                if(!$this->_test_for_private_parent($nr['Realm'],$user)){
                     array_push($realms, 
                         array(
                             'id'                    => $nr['Realm']['id'],
                             'name'                  => $nr['Realm']['name'],
                             'available_to_siblings' => $nr['Realm']['available_to_siblings']
                         ));
-                } 
+                }
+            } 
 
-                //Create tags list
-                $tags       = array();
-                foreach($i['NaTag'] as $nr){
+            //Create tags list
+            $tags       = array();
+            foreach($i['NaTag'] as $nr){
+                if(!$this->_test_for_private_parent($nr['Tag'],$user)){
                     array_push($tags, 
                         array(
                             'id'                    => $nr['Tag']['id'],
@@ -191,122 +212,26 @@ class NasController extends AppController {
                             'available_to_siblings' => $nr['Tag']['available_to_siblings']
                     ));
                 }
-
-                array_push($items,array(
-                    'id'                    => $id, 
-                    'nasname'               => $nasname,
-                    'shortname'             => $shortname,
-                    'owner'                 => $owner_tree, 
-                    'available_to_siblings' => $a_t_s,
-                    'realms'                => $realms,
-                    'tags'                  => $tags,
-                    'connection_type'       => $i['Na']['connection_type'],
-                    'update'                => true,
-                    'delete'                => true,
-                    'manage_tags'           => true
-                ));
             }
-        }
 
-        //_____ AP _____
-        if($user['group_name'] == Configure::read('group.ap')){  
+            $owner_id   = $i['Na']['user_id'];
+            $owner_tree = $this->_find_parents($owner_id);
 
-            //If it is an Access Provider that requested this list; we should show:
-            //1.) all those NAS devices that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
-            //2.) all those he created himself (if any) (this he can manage, depending on his right)
-            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
+            $action_flags  = $this->_get_action_flags($owner_id,$user);
 
-            $total  = $this->Na->find('count',$c);
-          /*  $this->Na->contain(
-                array(  'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings'),
-                        'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings'),
-                        'User'
-            )); */
-            $q_r    = $this->Na->find('all',$c_page);
-
-
-            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $this->User = ClassRegistry::init('User');
-            $ap_child_count = $this->User->childCount($user_id);
-
-            foreach($q_r as $i){
-
-                $owner_id   = $i['Na']['user_id'];
-                $a_t_s      = $i['Na']['available_to_siblings'];
-                $add_flag   = false;
-                
-                //Filter for parents and children
-                //NAS devices of parent's can not be edited, where realms of childern can be edited
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($owner_id,$user_id)){ //Is the user_id an upstream parent of the AP
-                        //Only those available to siblings:
-                        if($a_t_s == 1){
-                            $add_flag = true;
-                            $edit     = false;
-                            $delete   = false;
-                            $manage_tags = false;
-                        }
-                    }
-                }
-
-                if($ap_child_count != 0){ //See if this NAS device is perhaps not one of those created by a sibling of the Access Provider
-                    if($this->_is_sibling_of($user_id,$owner_id)){ //Is the creator a downstream sibling of the AP - Full rights
-                        $add_flag = true;
-                        $edit     = true;
-                        $delete   = true;
-                        $manage_tags = true; 
-                    }
-                }
-
-                //Created himself
-                if($owner_id == $user_id){
-                    $add_flag = true;
-                    $edit     = true;
-                    $delete   = true;
-                    $manage_tags = true;
-                }
-
-                if($add_flag == true ){
-                    $owner_tree = $this->_find_parents($owner_id);
-
-                    //Create realms list
-                    $realms     = array();
-                    foreach($i['NaRealm'] as $nr){
-                        array_push($realms, 
-                            array(
-                                'id'                    => $nr['Realm']['id'],
-                                'name'                  => $nr['Realm']['name'],
-                                'available_to_siblings' => $nr['Realm']['available_to_siblings']
-                        ));
-                    }
-
-                    //Create tags list
-                    $tags       = array();
-                    foreach($i['NaTag'] as $nr){
-                        array_push($tags, 
-                            array(
-                                'id'                    => $nr['Tag']['id'],
-                                'name'                  => $nr['Tag']['name'],
-                                'available_to_siblings' => $nr['Tag']['available_to_siblings']
-                        ));
-                    }
-                
-                    //Add to return items
-                    array_push($items,array(
-                        'id'            => $i['Na']['id'], 
-                        'nasname'       => $i['Na']['nasname'],
-                        'shortname'     => $i['Na']['shortname'],
-                        'owner'         => $owner_tree, 
-                        'available_to_siblings' => $a_t_s,
-                        'realms'                => $realms,
-                        'tags'                  => $tags,
-                        'connection_type'       => $i['Na']['connection_type'],
-                        'update'                => $edit,
-                        'delete'                => $delete,
-                        'manage_tags'           => $manage_tags
-                    ));
-                }
-            }
+            array_push($items,array(
+                'id'                    => $i['Na']['id'], 
+                'nasname'               => $i['Na']['nasname'],
+                'shortname'             => $i['Na']['shortname'],
+                'owner'                 => $owner_tree, 
+                'available_to_siblings' => $i['Na']['available_to_siblings'],
+                'realms'                => $realms,
+                'tags'                  => $tags,
+                'connection_type'       => $i['Na']['connection_type'],
+                'update'                => $action_flags['update'],
+                'delete'                => $action_flags['delete'],
+                'manage_tags'           => $action_flags['manage_tags']
+            ));
         }
 
         //___ FINAL PART ___
@@ -635,8 +560,7 @@ class NasController extends AppController {
                 array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                 array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                 array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
-                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'meta',    'tooltip'=> __('Manage tags')),
-                array('xtype' => 'button', 'iconCls' => 'b-filter',  'scale' => 'large', 'itemId' => 'filter',   'tooltip'=> __('Filter')),
+                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',    'tooltip'=> __('Manage tags')),
                 array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
                 array('xtype' => 'tbfill') 
             );
@@ -691,8 +615,6 @@ class NasController extends AppController {
                     'tooltip'=> __('Manage tags')));
             }
 
-            array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-filter',  'scale' => 'large', 'itemId' => 'filter',   'tooltip'=> __('Filter')));
-
             array_push($menu,array('xtype' => 'tbfill'));
         }
         $this->set(array(
@@ -725,19 +647,6 @@ class NasController extends AppController {
         }else{
             return "orphaned!!!!";
         }
-    }
-
-    private function _is_sibling_of($parent_id,$user_id){
-        $this->User->contain();//No dependencies
-        $q_r        = $this->User->getPath($user_id);
-        foreach($q_r as $i){
-            $id = $i['User']['id'];
-            if($id == $parent_id){
-                return true;
-            }
-        }
-        //No match
-        return false;
     }
 
     private function _ap_right_check(){
@@ -788,6 +697,61 @@ class NasController extends AppController {
         $this->Na->NaTag->create();
         $this->Na->NaTag->save($d);
         $this->Na->NaTag->id    = false;
+    }
+
+    private function _get_action_flags($owner_id,$user){
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return array('update' => true, 'delete' => true ,'manage_tags' => true);
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $user_id = $user['id'];
+
+            //test for self
+            if($owner_id == $user_id){
+                return array('update' => true, 'delete' => true ,'manage_tags' => true);
+            }
+            //Test for Parents
+            foreach($this->parents as $i){
+                if($i['User']['id'] == $owner_id){
+                    return array('update' => false, 'delete' => false ,'manage_tags' => false);
+                }
+            }
+
+            //Test for Children
+            foreach($this->children as $i){
+                if($i['User']['id'] == $owner_id){
+                    return array('update' => true, 'delete' => true ,'manage_tags' => true);
+                }
+            }  
+        }
+    }
+
+    private function _test_for_private_parent($item,$user){
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return false;
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $user_id = $user['id'];
+            $owner_id= $item['user_id'];
+            $open    = $item['available_to_siblings'];
+
+            //test for self
+            if($owner_id == $user_id){
+                return false;
+            }
+            //Test Parents
+            foreach($this->parents as $i){
+                if($i['User']['id'] == $owner_id){
+                    if($open == false){
+                        return true; //private item
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
     }
 
 }
