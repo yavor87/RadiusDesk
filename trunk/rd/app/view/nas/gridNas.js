@@ -10,76 +10,9 @@ Ext.define('Rd.view.realms.gridNas' ,{
     requires: [
         'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu: '/cake2/rd_cake/nas/menu_for_grid.json',
-    columns: [
-        {xtype: 'rownumberer'},
-        { text: 'IP Address',   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-        { text: 'Name',         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-        { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-        { 
-            text        : 'Connection type', 
-            dataIndex   : 'connection_type',        
-            tdCls       :  'gridTree', 
-            flex        : 1,
-            filter      : {
-                            type: 'list',
-                            phpMode: false,
-                            // options will be used as data to implicitly creates an ArrayStore
-                            options: ['direct', 'openvpn', 'pptp', 'dynamic']
-                            }
-        },
-        { 
-            text    : 'Available to sub-providers',
-            flex    : 1,  
-            xtype   : 'templatecolumn', 
-            tpl     : new Ext.XTemplate(
-                        "<tpl if='available_to_siblings == true'><div class=\"hasRight\">Yes</div></tpl>",
-                        "<tpl if='available_to_siblings == false'><div class=\"noRight\">No</div></tpl>"
-                    ),
-            dataIndex: 'available_to_siblings',
-            filter  : {
-                        type: 'boolean'    
-                      }
-        },
-        { 
-            text:   'Realms',
-            sortable: false,
-            flex: 1,  
-            xtype:  'templatecolumn', 
-            tpl:    new Ext.XTemplate(
-                        '<tpl if="Ext.isEmpty(realms)"><div class=\"gridRealm availAll\">Available to all!</div></tpl>', //Warn them when available to all
-                        '<tpl for="realms">',     // interrogate the realms property within the data
-                            "<tpl if='available_to_siblings == true'><div class=\"gridRealm hasRight\">{name}</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"gridRealm noRight\">{name}</div></tpl>",
-                        '</tpl>'
-                    ),
-            dataIndex: 'realms',
-            filter: {
-                        type: 'list',
-                        phpMode: false,
-                        options: ['RootPublic', 'AP Public', 'pptp', 'dynamic']
-                    }
-        },  
-        { 
-            text:   'Tags',
-            sortable: false,
-            flex: 1,  
-            xtype:  'templatecolumn', 
-            tpl:    new Ext.XTemplate(
-                        '<tpl if="Ext.isEmpty(tags)"><div"></div></tpl>', //Warn them when available to all
-                        '<tpl for="tags">',     // interrogate the realms property within the data
-                            "<tpl if='available_to_siblings == true'><div class=\"gridTag\">{name}</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"gridTag\">{name}</div></tpl>",
-                        '</tpl>'
-                    ),
-            dataIndex: 'tags',
-            filter: {
-                        type: 'list',
-                        phpMode: false,
-                        options: ['Home', 'openvpn', 'pptp', 'dynamic']
-                    }
-        }      
-    ],
+    urlMenu:        '/cake2/rd_cake/nas/menu_for_grid.json',
+    urlTagFilter:   '/cake2/rd_cake/tags/index_for_filter.json',
+    urlRealmFilter: '/cake2/rd_cake/realms/index_for_filter.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
@@ -93,6 +26,114 @@ Ext.define('Rd.view.realms.gridNas' ,{
 
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.features = [filters];
+
+        //Unfortunately the ListMenu filter is still buggy when loading it from a store, so we have to give it a manual list taken form a store:
+        //http://www.sencha.com/forum/showthread.php?132914-ux.grid.filter.ListFilter-doesn-t-fire-load-on-associated-Store
+        //http://stackoverflow.com/questions/6004386/extjs-grid-filters-how-can-i-load-list-filter-options-from-external-json
+
+        var sTags = Ext.create(Ext.data.Store,{
+            model: 'Rd.model.mGenericList',
+            extend: 'Ext.data.Store',
+            proxy: {
+                type    : 'ajax',
+                format  : 'json',
+                batchActions: true, 
+                url     : me.urlTagFilter,
+                reader: {
+                    type: 'json',
+                    root: 'items',
+                    messageProperty: 'message'
+                }
+            },
+            autoLoad: true
+        });
+
+        var sRealms = Ext.create(Ext.data.Store,{
+            model: 'Rd.model.mGenericList',
+            extend: 'Ext.data.Store',
+            proxy: {
+                type    : 'ajax',
+                format  : 'json',
+                batchActions: true, 
+                url     : me.urlRealmFilter,
+                reader: {
+                    type: 'json',
+                    root: 'items',
+                    messageProperty: 'message'
+                }
+            },
+            autoLoad: true
+        });
+        
+        me.columns = [
+            {xtype: 'rownumberer'},
+            { text: 'IP Address',   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: 'Name',         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { 
+                text        : 'Connection type', 
+                dataIndex   : 'connection_type',        
+                tdCls       :  'gridTree', 
+                flex        : 1,
+                filter      : {
+                                type: 'list',
+                                phpMode: false,
+                                // options will be used as data to implicitly creates an ArrayStore
+                                options: ['direct', 'openvpn', 'pptp', 'dynamic']
+                                }
+            },
+            { 
+                text    : 'Available to sub-providers',
+                flex    : 1,  
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">Yes</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">No</div></tpl>"
+                        ),
+                dataIndex: 'available_to_siblings',
+                filter  : {
+                            type: 'boolean'    
+                          }
+            },
+            { 
+                text:   'Realms',
+                sortable: false,
+                flex: 1,  
+                xtype:  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            '<tpl if="Ext.isEmpty(realms)"><div class=\"gridRealm availAll\">Available to all!</div></tpl>', //Warn them when available     to all
+                            '<tpl for="realms">',     // interrogate the realms property within the data
+                                "<tpl if='available_to_siblings == true'><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                                "<tpl if='available_to_siblings == false'><div class=\"gridRealm noRight\">{name}</div></tpl>",
+                            '</tpl>'
+                        ),
+                dataIndex: 'realms',
+                filter: {
+                            type: 'list',
+                            phpMode: false,
+                            store: sRealms
+                        }
+            },  
+            { 
+                text:   'Tags',
+                sortable: false,
+                flex: 1,  
+                xtype:  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            '<tpl if="Ext.isEmpty(tags)"><div"></div></tpl>', //Warn them when available to all
+                            '<tpl for="tags">',     // interrogate the realms property within the data
+                                "<tpl if='available_to_siblings == true'><div class=\"gridTag\">{name}</div></tpl>",
+                                "<tpl if='available_to_siblings == false'><div class=\"gridTag\">{name}</div></tpl>",
+                            '</tpl>'
+                        ),
+                dataIndex: 'tags',
+                filter: {
+                            type: 'list',
+                            phpMode: false,
+                            store: sTags
+                        }
+            }      
+        ];
         me.callParent(arguments);
     }
 });
