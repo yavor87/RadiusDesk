@@ -467,6 +467,98 @@ class RealmsController extends AppController {
         ));
     }
 
+    public function index_for_filter(){
+    //Display a list of realms with their owners
+    //This will be dispalyed to the Administrator as well as Access Providers who has righs
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $user_id = null;
+
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+
+        //_____ ADMIN _____
+        $items = array();
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $q_r = $this->Realm->find('all');
+
+            //Init before the loop
+            $this->User = ClassRegistry::init('User');
+            foreach($q_r as $i){
+                $name   = $i['Realm']['name'];
+                array_push($items,array(
+                        'id'                    => $name, 
+                        'text'                  => $name
+                    ));
+            }
+        }
+
+        //_____ AP _____
+        if($user['group_name'] == Configure::read('group.ap')){  
+
+            //If it is an Access Provider that requested this list; we should show:
+            //1.) all those realms that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
+            //2.) all those he created himself (if any) (this he can manage, depending on his right)
+            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
+
+            $this->Realm->contain();
+            $q_r = $this->Realm->find('all');
+
+            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
+            $this->User = ClassRegistry::init('User');
+            $ap_child_count = $this->User->childCount($user_id);
+
+            foreach($q_r as $i){        
+                $name           = $i['Realm']['name'];
+                //Filter for parents and children
+                //Realms of parent's can not be edited, where realms of childern can be edited
+                if($creator_id != $user_id){
+                    if($this->_is_sibling_of($creator_id,$user_id)){ //Is the user_id an upstream parent of the AP
+                        //Only those available to siblings:
+                        if($a_t_s == 1){
+                            array_push($items,array(
+                                'id'                    => $name, 
+                                'text'                  => $name
+                            ));
+                        }
+                    }
+                    if($ap_child_count != 0){ //See if this realm is perhaps not one of those created by a sibling of the Access Provider
+                        if($this->_is_sibling_of($user_id,$creator_id)){ //Is the creator a downstream sibling of the AP - Full rights
+                            array_push($items,array(
+                                'id'                    => $name, 
+                                'text'                  => $name
+                            ));
+                        }
+                    }
+                }
+
+                //Created himself
+                if($creator_id == $user_id){    
+                    array_push($items,array(
+                        'id'                    => $name, 
+                        'text'                  => $name
+                    ));
+                }
+            }
+        }
+
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
     public function add() {
 
         if(!$this->_ap_right_check()){
