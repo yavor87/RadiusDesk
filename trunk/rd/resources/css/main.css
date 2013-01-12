@@ -369,6 +369,10 @@
     background-image:url(../images/32x32/filter.png);
 }
 
+.b-csv {
+    background-image:url(../images/32x32/csv.png);
+}
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }
