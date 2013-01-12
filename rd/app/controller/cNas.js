@@ -41,7 +41,7 @@ Ext.define('Rd.controller.cNas', {
         return win;
     },
 
-    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage'],
+    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 'components.winCsvColumnSelect'],
     stores: ['sNas','sAccessProviders','sTags','sDynamicAttributes'],
     models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
     selectedRecord: null,
@@ -68,6 +68,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #add'   : {
                 click:      me.add
+            },
+            'gridNas #csv'  : {
+                click:      me.csvExport
             },
             'gridNas #tag'   : {
                 click:      me.tag
@@ -117,6 +120,9 @@ Ext.define('Rd.controller.cNas', {
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
             },
+            'winCsvColumnSelect #save': {
+                click:  me.csvExportSubmit
+            }
             
         });
     },
@@ -444,5 +450,92 @@ Ext.define('Rd.controller.cNas', {
         var me      = this;
         var count   = me.getStore('sNas').getTotalCount();
         me.getGridNas().down('#count').update({count: count});
+    },
+
+    csvExport: function(button,format) {
+
+        var me          = this;
+        var columns     = me.getGridNas().columns;
+        var col_list    = [];
+        Ext.Array.each(columns, function(item,index){
+            if(item.dataIndex != ''){
+                var chk = {boxLabel: item.text, name: item.dataIndex};
+                col_list[index] = chk;
+            }
+        }); 
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectNas')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectNas',columns: col_list});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+
+        /*
+        var me = this;
+        var filters = [];
+        me.getGridNas().filters.filters.each(function(item) {
+            
+            if (item.active) {
+                console.log(item);
+                console.log(item.getInitialConfig());
+                Ext.Array.each(item.serialize(), function(item) {
+                    filters.push(item);
+                });
+            }
+        });
+        
+        */
+       // console.log(Ext.Object.toQueryString(Ext.Ajax.extraParams));
+    },
+    csvExportSubmit: function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var chkList = form.query('checkbox');
+        var c_found = false;
+        var columns = [];
+        var c_count = 0;
+        Ext.Array.each(chkList,function(item){
+            if(item.getValue()){ //Only selected items
+                c_found = true;
+                columns[c_count] = {'name': item.getName()};
+                c_count = c_count +1; //For next one
+            }
+        },me);
+
+        if(!c_found){
+            Ext.ux.Toaster.msg(
+                        'Select one or more',
+                        'Select one or more columns please',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{     
+            //next we need to find the filter values:
+            var filters     = [];
+            var f_count     = 0;
+            var f_found     = false;
+            var filter_json ='';
+            me.getGridNas().filters.filters.each(function(item) {
+                if (item.active) {
+                    f_found         = true;
+                    var ser_item    = item.serialize();
+                    ser_item.field  = item.dataIndex;
+                    filters[f_count]= ser_item;
+                    f_count         = f_count + 1;
+                }
+            });   
+            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.extraParams);
+            var append_url      = "?"+extra_params+'&'+col_json;
+            if(f_found){
+                filter_json = "filter="+Ext.JSON.encode(filters);
+                append_url  = append_url+'&'+filter_json;
+            }
+           // console.log(filter_json);
+            window.open('http://127.0.0.1/cake2/rd_cake/nas/test.json'+append_url);
+        }
     }
+
 });
