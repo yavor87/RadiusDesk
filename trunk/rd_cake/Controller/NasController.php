@@ -14,6 +14,25 @@ class NasController extends AppController {
 
 //------------------------------------------------------------------------
 
+    public function test(){
+
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            print_r($filter);
+
+        }
+        exit;
+    }
+
+    public function export() {
+        $this->autoRender = false;
+        $modelClass = $this->modelClass;
+        $this->response->type('Content-Type: text/csv');
+        $this->response->download( strtolower( Inflector::pluralize( $modelClass ) ) . '.csv' );
+        $this->response->body( $this->$modelClass->exportCSV() );
+    }
+
+
     //____ BASIC CRUD Realm Manager ________
     public function index(){
         //Display a list of realms with their owners
@@ -560,7 +579,8 @@ class NasController extends AppController {
                 array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                 array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                 array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
-                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',    'tooltip'=> __('Manage tags')),
+                array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
                 array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
                 array('xtype' => 'tbfill') 
             );
@@ -603,6 +623,13 @@ class NasController extends AppController {
                     'disabled'  => true,     
                     'tooltip'   => __('Edit')));
             }
+
+            array_push($menu,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-csv',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'csv',      
+                    'tooltip'   => __('Export CSV')));
 
             //Tags
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){

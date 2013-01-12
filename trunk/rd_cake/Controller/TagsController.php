@@ -127,9 +127,9 @@ class TagsController extends AppController {
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
         //This works nice :-)
-        if(!$this->_ap_right_check()){
-            return;
-        }
+      //  if(!$this->_ap_right_check()){
+      //      return;
+     //   }
  
         $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
@@ -165,6 +165,9 @@ class TagsController extends AppController {
             $ap_child_count = $this->User->childCount($user_id);
 
             foreach($q_r as $i){
+                $add_flag   = false;
+                $owner_id   = $i['Tag']['user_id'];
+                $a_t_s      = $i['Tag']['available_to_siblings'];
                 $add_flag   = false;
                 
                 //Filter for parents and children

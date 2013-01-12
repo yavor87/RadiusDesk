@@ -519,6 +519,8 @@ class RealmsController extends AppController {
 
             foreach($q_r as $i){        
                 $name           = $i['Realm']['name'];
+                $creator_id     = $i['Realm']['user_id'];
+                $a_t_s          = $i['Realm']['available_to_siblings'];
                 //Filter for parents and children
                 //Realms of parent's can not be edited, where realms of childern can be edited
                 if($creator_id != $user_id){
