@@ -373,6 +373,10 @@
     background-image:url(../images/32x32/csv.png);
 }
 
+.b-note {
+    background-image:url(../images/32x32/note.png);
+}
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }
