@@ -575,27 +575,40 @@ class NasController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
 
             $menu = array(
-                array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
-                array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
-                array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
-                array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
-                array('xtype' => 'tbfill') 
+                array('xtype' => 'buttongroup','title' => 'Action', 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                )),
+                array('xtype' => 'buttongroup','title' => 'Document', 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                )),
+                array('xtype' => 'buttongroup','title' => 'Nas', 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
+                    array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
+                )) 
             );
         }
 
         //AP depend on rights
         if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
-            $id     = $user['id'];
-            $menu   = array(
-                array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload'))
-            );
+
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
-                array_push($menu,array(
+                array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-add',     
                     'scale'     => 'large', 
@@ -604,7 +617,7 @@ class NasController extends AppController {
             }
             //Delete
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
-                array_push($menu,array(
+                array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
@@ -615,7 +628,7 @@ class NasController extends AppController {
 
             //Edit
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
-                array_push($menu,array(
+                array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',    
                     'scale'     => 'large', 
@@ -624,7 +637,17 @@ class NasController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            array_push($menu,array(
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){ //Change FIXME
+                array_push($document_group,array(
+                        'xtype'     => 'button', 
+                        'iconCls'   => 'b-note',     
+                        'scale'     => 'large', 
+                        'itemId'    => 'note',      
+                        'tooltip'   => __('Add Notes')));
+            }
+
+
+            array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
                     'scale'     => 'large', 
@@ -633,7 +656,7 @@ class NasController extends AppController {
 
             //Tags
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($menu,array(
+                array_push($specific_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-meta_edit',    
                     'scale'     => 'large', 
@@ -642,7 +665,20 @@ class NasController extends AppController {
                     'tooltip'=> __('Manage tags')));
             }
 
-            array_push($menu,array('xtype' => 'tbfill'));
+            array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-map',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'map',      
+                    'tooltip'   => __('Maps')));
+
+           // array_push($menu,array('xtype' => 'tbfill'));
+
+            $menu = array(
+                        array('xtype' => 'buttongroup','title' => 'Action',        'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => 'Document',   'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => 'Nas',        'items' => $specific_group)
+                    );
         }
         $this->set(array(
             'items'         => $menu,
