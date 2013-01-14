@@ -5,186 +5,110 @@ class NasController extends AppController {
 
 
     public $name       = 'Nas';
-    public $components = array('Aa');
-    private $base      = "Access Providers/Controllers/Nas/";
+    public $components = array('Aa','RequestHandler');
+    protected $base    = "Access Providers/Controllers/Nas/";
 
     //List of parents and children (for APs)
     private $parents   = array();
     private $children  = array();
 
+    protected $tmpDir  = 'csvexport';
+
 //------------------------------------------------------------------------
 
-    public function test(){
+    public function export_csv(){
 
-        if(isset($this->request->query['filter'])){
-            $filter = json_decode($this->request->query['filter']);
-            print_r($filter);
+        $this->autoRender   = false;
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
         }
-        exit;
-    }
 
-    public function export() {
-        $this->autoRender = false;
-        $modelClass = $this->modelClass;
-        $this->response->type('Content-Type: text/csv');
-        $this->response->download( strtolower( Inflector::pluralize( $modelClass ) ) . '.csv' );
-        $this->response->body( $this->$modelClass->exportCSV() );
-    }
+        //Build query
+        $user_id    = $user['id'];
+        $c          = $this->_build_common_query($user);
+        $q_r        = $this->Na->find('all',$c);
 
+        //Create file
+        $this->ensureTmp();     
+        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
+        $fp             = fopen($tmpFilename, 'w');
+
+        //Headings
+        $heading_line   = array();
+        if(isset($this->request->query['columns'])){
+            $columns = json_decode($this->request->query['columns']);
+            foreach($columns as $c){
+                array_push($heading_line,$c->name);
+            }
+        }
+        fputcsv($fp, $heading_line,';','"');
+
+        //Results
+        $this->User = ClassRegistry::init('User');
+        foreach($q_r as $i){
+
+            $columns    = array();
+            $csv_line   = array();
+            if(isset($this->request->query['columns'])){
+                $columns = json_decode($this->request->query['columns']);
+                foreach($columns as $c){
+                    //Realms
+                    $column_name = $c->name;
+                    if($column_name == 'realms'){
+                        $realms = '';
+                        foreach($i['NaRealm'] as $nr){
+                            if(!$this->_test_for_private_parent($nr['Realm'],$user)){
+                                $realms = $realms.'['.$nr['Realm']['name'].']';
+                            }
+                        }
+                        array_push($csv_line,$realms);
+                    }elseif($column_name == 'tags'){
+                        $tags   = '';
+                        foreach($i['NaTag'] as $nr){
+                            if(!$this->_test_for_private_parent($nr['Tag'],$user)){
+                                $tags = $tags.'['.$nr['Tag']['name'].']';    
+                            }
+                        }
+                        array_push($csv_line,$tags);
+                    }elseif($column_name =='owner'){
+                        $owner_id       = $i['Na']['user_id'];
+                        $owner_tree     = $this->_find_parents($owner_id);
+                        array_push($csv_line,$owner_tree); 
+                    }else{
+                        array_push($csv_line,$i['Na']["$column_name"]);  
+                    }
+                }
+                fputcsv($fp, $csv_line,';','"');
+            }
+        }
+
+        //Return results
+        fclose($fp);
+        $data = file_get_contents( $tmpFilename );
+        $this->cleanupTmp( $tmpFilename );
+        $this->RequestHandler->respondAs('csv');
+        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
+        $this->response->body($data);
+    }
 
     //____ BASIC CRUD Realm Manager ________
     public function index(){
         //Display a list of realms with their owners
         //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
-        //This works nice :-)
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
- 
-        $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
 
-        //Empty to start with
-        $c['joins']         = array(); 
-        $c['conditions']    = array();
-
-        //What should we include....
-        $c['contain']       = array(
-                                'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
-                                'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings','Tag.user_id'),
-                                'User'
-                            );
-
-        
-
-        //===== SORT =====
-
-        //Default values for sort and dir
-        $sort   = 'nasname';
-        $dir    = 'DESC';
-
-        if(isset($this->request->query['sort'])){
-            if($this->request->query['sort'] == 'owner'){
-                $sort = 'User.username';
-            }else{
-                $sort = $this->modelClass.'.'.$this->request->query['sort'];
-            }
-            $dir  = $this->request->query['dir'];
-        } 
-        $c['order'] = array("$sort $dir");
-
-        //_____________________
-        
-
-        //====== FILTER =====
-
-        //--- Filter protion --------
-        if(isset($this->request->query['filter'])){
-            $filter = json_decode($this->request->query['filter']);
-            foreach($filter as $f){
-                //Lists
-                if($f->type == 'list'){
-
-                    //The tags field has to be treated specially
-                    if($f->field == 'tags'){
-
-                        $list_array = array();
-                        foreach($f->value as $filter_list){
-                            $col = 'Tag.name';
-                            array_push($list_array,array("$col" => "$filter_list"));
-                        }
-
-                        array_push($c['joins'],array(
-                            'table'         => 'na_tags',
-                            'alias'         => 'NaTag',
-                            'type'          => 'INNER',
-                            'conditions'    => array('NaTag.na_id = Na.id')
-                        ));
-                        array_push($c['joins'],array(
-                            'table'         => 'tags',
-                            'alias'         => 'Tag',
-                            'type'          => 'INNER',
-                            'conditions'    => array('Tag.id = NaTag.tag_id',array('OR' => $list_array))
-                        ));
-
-                    }elseif($f->field == 'realms'){
-                        $list_array = array();
-                        foreach($f->value as $filter_list){
-                            $col = 'Realm.name';
-                            array_push($list_array,array("$col" => "$filter_list"));
-                        }
-                        array_push($c['joins'],array(
-                            'table'         => 'na_realms',
-                            'alias'         => 'NaRealm',
-                            'type'          => 'INNER',
-                            'conditions'    => array('NaRealm.na_id = Na.id')
-                        ));
-                        array_push($c['joins'],array(
-                            'table'         => 'realms',
-                            'alias'         => 'Realm',
-                            'type'          => 'INNER',
-                            'conditions'    => array('Realm.id = NaRealm.realm_id',array('OR' => $list_array))
-                        ));                     
-                    }else{
-                        $list_array = array();
-                        foreach($f->value as $filter_list){
-                            $col = $this->modelClass.'.'.$f->field;
-                            array_push($list_array,array("$col" => "$filter_list"));
-                        }
-                        //Add it as an OR condition
-                        array_push($c['conditions'],array('OR' => $list_array));
-                    }
-                }
-                //Strings
-                if($f->type == 'string'){
-                    if($f->field == 'owner'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
-                    }else{
-                        $col = $this->modelClass.'.'.$f->field;
-                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
-                    }
-                }
-                //Bools
-                if($f->type == 'boolean'){
-                     $col = $this->modelClass.'.'.$f->field;
-                     array_push($c['conditions'],array("$col" => $f->value));
-                }
-            }
-        }
-
-        //If the user is an AP; we need to add an extra clause to only show the NAS devices which he is allowed to see.
-        if($user['group_name'] == Configure::read('group.ap')){  //AP
-            $tree_array = array();
-            $this->User = ClassRegistry::init('User');
-
-            //**AP and upward in the tree**
-            $this->parents = $this->User->getPath($user_id,'User.id');
-            //So we loop this results asking for the parent nodes who have available_to_siblings = true
-            foreach($this->parents as $i){
-                $i_id = $i['User']['id'];
-                if($i_id != $user_id){ //upstream
-                    array_push($tree_array,array('Na.user_id' => $i_id,'Na.available_to_siblings' => true));
-                }else{
-                    array_push($tree_array,array('Na.user_id' => $i_id));
-                }
-            }
-            //** ALL the AP's children
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array('Na.user_id' => $i_id));
-            }      
-            //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $tree_array));  
-        }       
-
-        //--- End filter protion ----
-        //_____________________
+        $c = $this->_build_common_query($user);  
 
         //===== PAGING (MUST BE LAST) ======
-
         $limit  = 50;   //Defaults
         $page   = 1;
         $offset = 0;
@@ -233,10 +157,9 @@ class NasController extends AppController {
                 }
             }
 
-            $owner_id   = $i['Na']['user_id'];
-            $owner_tree = $this->_find_parents($owner_id);
-
-            $action_flags  = $this->_get_action_flags($owner_id,$user);
+            $owner_id       = $i['Na']['user_id'];
+            $owner_tree     = $this->_find_parents($owner_id);
+            $action_flags   = $this->_get_action_flags($owner_id,$user);
 
             array_push($items,array(
                 'id'                    => $i['Na']['id'], 
@@ -264,12 +187,11 @@ class NasController extends AppController {
 
     public function add() {
 
-        //This works nice :-)
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
-     
-        $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
 
         //Get the creator's id
@@ -394,10 +316,13 @@ class NasController extends AppController {
 
     public function manage_tags(){
 
-        //This works nice :-)
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
+        $user_id    = $user['id'];
+
 
         $tag_id = $this->request->data['tag_id'];
         $rb     = $this->request->data['rb'];
@@ -423,9 +348,12 @@ class NasController extends AppController {
 
     public function edit() {
 
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
+        $user_id    = $user['id'];  
 
         //We will not modify user_id
         unset($this->request->data['user_id']);
@@ -450,9 +378,12 @@ class NasController extends AppController {
 			throw new MethodNotAllowedException();
 		}
 
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
+        $user_id    = $user['id'];  
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
@@ -524,7 +455,10 @@ class NasController extends AppController {
 
 //------------------ END EXPERIMENTAL WORK ------------------------------
 
+    //______ EXT JS UI functions ___________
+
     //------ List of available connection types ------
+    //This is displayed as options when a user adds a new NAS device
     public function conn_types_available(){
 
         $items = array();
@@ -544,6 +478,7 @@ class NasController extends AppController {
     }
 
     //------ List of configured dynamic attributes types ------
+    //This is displayed as a select to choose from when the user adds a NAS of connection type 
     public function dynamic_attributes(){
         $items = array();
         $ct = Configure::read('dynamic_attributes');
@@ -687,6 +622,8 @@ class NasController extends AppController {
         ));
     }
 
+    //______ END EXT JS UI functions ________
+
     private function _find_parents($id){
 
         $this->User->contain();//No dependencies
@@ -712,32 +649,6 @@ class NasController extends AppController {
         }
     }
 
-    private function _ap_right_check(){
-
-        $action = $this->request->action;
-        //___AA Check Starts ___
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-        $user_id = null;
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
-        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
-                $this->Aa->fail_no_rights($this);
-                return;
-            }
-        }else{
-           $this->Aa->fail_no_rights($this);
-           return;
-        }
-
-        return true;
-        //__ AA Check Ends ___
-    }
-
     private function _add_nas_realm($nas_id,$realm_id){
         $d                          = array();
         $d['NaRealm']['id']         = '';
@@ -752,7 +663,6 @@ class NasController extends AppController {
     private function _add_nas_tag($nas_id,$tag_id){
         //Delete any previous tags if there were any
         $this->Na->NaTag->deleteAll(array('NaTag.na_id' => $nas_id,'NaTag.tag_id' => $tag_id), false);
-
         $d                      = array();
         $d['NaTag']['id']       = '';
         $d['NaTag']['na_id']    = $nas_id;
@@ -790,30 +700,169 @@ class NasController extends AppController {
         }
     }
 
-    private function _test_for_private_parent($item,$user){
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            return false;
-        }
+    function _build_common_query($user){
 
-        if($user['group_name'] == Configure::read('group.ap')){  //AP
-            $user_id = $user['id'];
-            $owner_id= $item['user_id'];
-            $open    = $item['available_to_siblings'];
+        //Empty to start with
+        $c                  = array();
+        $c['joins']         = array(); 
+        $c['conditions']    = array();
 
-            //test for self
-            if($owner_id == $user_id){
-                return false;
+        //What should we include....
+        $c['contain']   = array(
+                            'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
+                            'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings','Tag.user_id'),
+                            'User'
+                        );
+
+        //===== SORT =====
+        //Default values for sort and dir
+        $sort   = 'nasname';
+        $dir    = 'DESC';
+
+        if(isset($this->request->query['sort'])){
+            if($this->request->query['sort'] == 'owner'){
+                $sort = 'User.username';
+            }else{
+                $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
-            //Test Parents
-            foreach($this->parents as $i){
-                if($i['User']['id'] == $owner_id){
-                    if($open == false){
-                        return true; //private item
+            $dir  = $this->request->query['dir'];
+        } 
+        $c['order'] = array("$sort $dir");
+        //==== END SORT ===
+
+
+        //====== REQUEST FILTER =====
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            foreach($filter as $f){
+                //Lists
+                if($f->type == 'list'){
+
+                    //The tags field has to be treated specially
+                    if($f->field == 'tags'){
+
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = 'Tag.name';
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+                        array_push($c['joins'],array(
+                            'table'         => 'na_tags',
+                            'alias'         => 'NaTag',
+                            'type'          => 'INNER',
+                            'conditions'    => array('NaTag.na_id = Na.id')
+                        ));
+                        array_push($c['joins'],array(
+                            'table'         => 'tags',
+                            'alias'         => 'Tag',
+                            'type'          => 'INNER',
+                            'conditions'    => array('Tag.id = NaTag.tag_id',array('OR' => $list_array))
+                        ));
+
+                    }elseif($f->field == 'realms'){
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = 'Realm.name';
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+                        array_push($c['joins'],array(
+                            'table'         => 'na_realms',
+                            'alias'         => 'NaRealm',
+                            'type'          => 'INNER',
+                            'conditions'    => array('NaRealm.na_id = Na.id')
+                        ));
+                        array_push($c['joins'],array(
+                            'table'         => 'realms',
+                            'alias'         => 'Realm',
+                            'type'          => 'INNER',
+                            'conditions'    => array('Realm.id = NaRealm.realm_id',array('OR' => $list_array))
+                        ));                     
                     }else{
-                        return false;
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            $col = $this->modelClass.'.'.$f->field;
+                            array_push($list_array,array("$col" => "$filter_list"));
+                        }
+                        //Add it as an OR condition
+                        array_push($c['conditions'],array('OR' => $list_array));
                     }
                 }
+                //Strings
+                if($f->type == 'string'){
+                    if($f->field == 'owner'){
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
+                }
+                //Bools
+                if($f->type == 'boolean'){
+                     $col = $this->modelClass.'.'.$f->field;
+                     array_push($c['conditions'],array("$col" => $f->value));
+                }
             }
+        }
+        //====== END REQUEST FILTER =====
+
+        //====== AP FILTER =====
+        //If the user is an AP; we need to add an extra clause to only show the NAS devices which he is allowed to see.
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $tree_array = array();
+            $this->User = ClassRegistry::init('User');
+
+            //**AP and upward in the tree**
+            $this->parents = $this->User->getPath($user_id,'User.id');
+            //So we loop this results asking for the parent nodes who have available_to_siblings = true
+            foreach($this->parents as $i){
+                $i_id = $i['User']['id'];
+                if($i_id != $user_id){ //upstream
+                    array_push($tree_array,array('Na.user_id' => $i_id,'Na.available_to_siblings' => true));
+                }else{
+                    array_push($tree_array,array('Na.user_id' => $i_id));
+                }
+            }
+            //** ALL the AP's children
+            $this->children   = $this->User->children($user_id,false,'User.id');
+            foreach($this->children as $i){
+                $i_id = $i['User']['id'];
+                array_push($tree_array,array('Na.user_id' => $i_id));
+            }      
+            //Add it as an OR clause
+            array_push($c['conditions'],array('OR' => $tree_array));  
+        }       
+        //====== END AP FILTER =====      
+        return $c;
+    }
+
+
+    /**
+    * This Behavior writes tmp files to take advantage of the built-in fputcsv function.
+    *
+    */
+    protected function ensureTmp() {
+        $tmpDir = TMP . $this->tmpDir;
+        if ( !file_exists($tmpDir ) ) {
+            mkdir( $tmpDir, 0777);
+        }
+    }
+
+
+    /**
+    * Delete the tmp file, only if $tmp_file lives in TMP directory
+    * otherwise throw an Exception
+    *
+    * @param mixed $tmp_file
+    */
+    protected function cleanupTmp( $tmp_file='' ) {
+        $realpath = realpath( $tmp_file );
+         
+        if ( substr( $realpath, 0, strlen( TMP ) ) != TMP ) {
+            throw new Exception('I refuse to delete a file outside of ' . TMP );
+        }
+         
+        if ( file_exists( $tmp_file ) ) {
+            unlink( $tmp_file );
         }
     }
 

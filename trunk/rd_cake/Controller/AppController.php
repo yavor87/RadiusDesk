@@ -38,6 +38,9 @@ class AppController extends Controller {
         'Acl'
     );
 
+    //Set this on the controller that will use the _ap_right_check()...
+    protected $base = "Access Providers/Controllers/Your Controller/";
+
     public function beforeFilter() {
 
         //If it was requested as a POST or PUT it will be in the $this->data array
@@ -87,4 +90,67 @@ class AppController extends Controller {
         $locale     = "$l_iso".'_'."$c_iso";
         Configure::write('Config.language', "$locale");
     }
+
+
+    protected function _ap_right_check(){
+        //This is a common function which will check the right for an access provider on the called action.
+        //We have this as a common function but beware that each controlleer which uses it; 
+        //have to set the value of 'base' in order for it to work correct.
+
+        $action = $this->request->action;
+        //___AA Check Starts ___
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
+                $this->Aa->fail_no_rights($this);
+                return;
+            }
+        }else{
+           $this->Aa->fail_no_rights($this);
+           return;
+        }
+
+        return $user;
+        //__ AA Check Ends ___
+    }
+
+    protected function _test_for_private_parent($item,$user){
+        //Most tables that has entries which belongs to an Access Provider as the user_id also includes
+        // and available_to_siblings flag which if not set; makes the entry private
+        // This peice of code will take the current user making the request; and compare it with fields in an entry from a table
+        // It will then evaluate where it is in the hirarchy and is below the item marked as private; not display it
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return false;
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $user_id = $user['id'];
+            $owner_id= $item['user_id'];
+            $open    = $item['available_to_siblings'];
+
+            //test for self
+            if($owner_id == $user_id){
+                return false;
+            }
+            //Test Parents
+            foreach($this->parents as $i){
+                if($i['User']['id'] == $owner_id){
+                    if($open == false){
+                        return true; //private item
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+
 }

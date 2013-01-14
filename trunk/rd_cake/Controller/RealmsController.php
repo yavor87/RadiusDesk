@@ -15,7 +15,7 @@ class RealmsController extends AppController {
 
     public $name       = 'Realms';
     public $components = array('Aa');
-    private $base      = "Access Providers/Controllers/Realms/";
+    protected $base    = "Access Providers/Controllers/Realms/";
 
 
 //------------------------------------------------------------------------
@@ -808,31 +808,5 @@ class RealmsController extends AppController {
         }
         //No match
         return false;
-    }
-
-    private function _ap_right_check(){
-
-        $action = $this->request->action;
-        //___AA Check Starts ___
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-        $user_id = null;
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
-        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
-                $this->Aa->fail_no_rights($this);
-                return;
-            }
-        }else{
-           $this->Aa->fail_no_rights($this);
-           return;
-        }
-
-        return true;
-        //__ AA Check Ends ___
     }
 }
