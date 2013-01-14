@@ -49,7 +49,8 @@ Ext.define('Rd.controller.cNas', {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
         urlEdit:            '/cake2/rd_cake/nas/edit.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json'
+        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlExportCsv:       '/cake2/rd_cake/nas/export_csv'
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'}       
@@ -533,8 +534,8 @@ Ext.define('Rd.controller.cNas', {
                 filter_json = "filter="+Ext.JSON.encode(filters);
                 append_url  = append_url+'&'+filter_json;
             }
-           // console.log(filter_json);
-            window.open('http://127.0.0.1/cake2/rd_cake/nas/test.json'+append_url);
+            window.open(me.urlExportCsv+append_url);
+            win.close();
         }
     }
 
