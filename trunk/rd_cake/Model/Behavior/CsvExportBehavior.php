@@ -74,7 +74,7 @@ class CsvExportBehavior extends ModelBehavior {
         $Model->recursive = -1;
         $Model->contain('User');
         $records = $Model->find('all');
-        print_r($records);
+       // print_r($records);
         if ( !empty($records ) ) {
             $this->ensureTmp();
              

@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  */
 class Na extends AppModel {
 
-    public $actsAs = array('Containable','CsvExport');
+    public $actsAs = array('Containable');
 
 	public $displayField = 'nasname';
 
