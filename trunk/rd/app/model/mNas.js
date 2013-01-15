@@ -7,6 +7,7 @@ Ext.define('Rd.model.mNas', {
          {name: 'owner',        type: 'string'  },
           'realms', 'tags','connection_type',
          {name: 'available_to_siblings',  type: 'bool'},
+         {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'},
          {name: 'manage_tags',  type: 'bool'}

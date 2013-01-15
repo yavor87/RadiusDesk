@@ -280,10 +280,23 @@
     background-image:url(../images/16x16/access_provider.png) !important;
 }
 
+.note {
+      background-image:url(../images/16x16/note.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;
     padding-left: 16px;
+}
+
+.x-grid-cell .note {
+    background-image:url(../images/16x16/note.png) !important;
+    background-repeat:no-repeat;
+    padding-left: 20px;
+    color: #676d76;
+    font-size:12px;
+    height: 17px;
 }
 
 
@@ -688,6 +701,14 @@ background-position: left center;
     font-size:25px;
   /*  text-align: left;*/
 }
+
+
+.multiLine .x-grid-cell-inner {
+    white-space: normal;
+    color: #676d76;
+    font-size:12px;
+}
+
 
 
 

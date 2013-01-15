@@ -132,7 +132,17 @@ Ext.define('Rd.view.realms.gridNas' ,{
                             phpMode: false,
                             store: sTags
                         }
-            }      
+            },
+            { 
+                text    : 'Notes',
+                //flex    : 1,
+                width   : 130,
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                            "<tpl if='notes == true'><div class=\"note\">Existing Notes</div></tpl>"
+                        ),
+                dataIndex: 'notes'
+            }     
         ];
         me.callParent(arguments);
     }
