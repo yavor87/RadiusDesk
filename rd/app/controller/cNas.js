@@ -41,7 +41,10 @@ Ext.define('Rd.controller.cNas', {
         return win;
     },
 
-    views:  ['components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 'components.winCsvColumnSelect'],
+    views:  [
+        'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
+        'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd'
+    ],
     stores: ['sNas','sAccessProviders','sTags','sDynamicAttributes'],
     models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
     selectedRecord: null,
@@ -50,7 +53,8 @@ Ext.define('Rd.controller.cNas', {
         urlEdit:            '/cake2/rd_cake/nas/edit.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/nas/export_csv'
+        urlExportCsv:       '/cake2/rd_cake/nas/export_csv',
+        urlNoteAdd:         '/cake2/rd_cake/nas/note_add.json'
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'}       
@@ -72,6 +76,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #csv'  : {
                 click:      me.csvExport
+            },
+            'gridNas #note'   : {
+                click:      me.note
             },
             'gridNas #tag'   : {
                 click:      me.tag
@@ -123,8 +130,25 @@ Ext.define('Rd.controller.cNas', {
             },
             'winCsvColumnSelect #save': {
                 click:  me.csvExportSubmit
+            },
+            'gridNote #reload' : {
+                click:  me.noteReload
+            },
+            'gridNote #add' : {
+                click:  me.noteAdd
+            },
+            'gridNote #delete' : {
+                click:  me.noteDelete
+            },
+            'winNoteAdd #btnNoteTreeNext' : {
+                click:  me.btnNoteTreeNext
+            },
+            'winNoteAdd #btnNoteAddPrev'  : {   
+                click: me.btnNoteAddPrev
+            },
+            'winNoteAdd #btnNoteAddNext'  : {   
+                click: me.btnNoteAddNext
             }
-            
         });
     },
     reload: function(){
@@ -454,7 +478,6 @@ Ext.define('Rd.controller.cNas', {
     },
 
     csvExport: function(button,format) {
-
         var me          = this;
         var columns     = me.getGridNas().columns;
         var col_list    = [];
@@ -469,23 +492,6 @@ Ext.define('Rd.controller.cNas', {
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectNas',columns: col_list});
             me.application.runAction('cDesktop','Add',w);         
         }
-
-        /*
-        var me = this;
-        var filters = [];
-        me.getGridNas().filters.filters.each(function(item) {
-            
-            if (item.active) {
-                console.log(item);
-                console.log(item.getInitialConfig());
-                Ext.Array.each(item.serialize(), function(item) {
-                    filters.push(item);
-                });
-            }
-        });
-        
-        */
-       // console.log(Ext.Object.toQueryString(Ext.Ajax.extraParams));
     },
     csvExportSubmit: function(button){
 
@@ -537,6 +543,151 @@ Ext.define('Rd.controller.cNas', {
             window.open(me.urlExportCsv+append_url);
             win.close();
         }
-    }
+    },
 
+    note: function(button,format) {
+        var me      = this;     
+        //Find out if there was something selected
+        var sel_count = me.getGridNas().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        'Limit the selection',
+                        'Selection limited to one',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr = me.getGridNas().getSelectionModel().getLastSelected();
+                
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNas'+sr.getId())){
+                    var w = Ext.widget('winNote',
+                        {
+                            id          : 'winNoteNas'+sr.getId(),
+                            noteForId   : sr.getId(),
+                            noteForGrid : 'nas',
+                            noteForName : sr.get('nasname')
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    noteReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        grid.getStore().load();
+    },
+    noteAdd: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
+            var w   = Ext.widget('winNoteAdd',
+            {
+                id          : 'winNoteNasAdd'+grid.noteForId,
+                noteForId   : grid.noteForId,
+                noteForGrid : grid.noteForGrid,
+                refreshGrid : grid
+            });
+            me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    btnNoteTreeNext: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winNoteAdd');
+            win.down('#owner').setValue(sr.get('username'));
+            win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnNote');
+        }else{
+            Ext.ux.Toaster.msg(
+                        'Select a owner',
+                        'First select an Access Provider who will be the owner',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnNoteAddPrev: function(button){
+        var me = this;
+        var win = button.up('winNoteAdd');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnNoteAddNext: function(button){
+        var me      = this;
+        var win     = button.up('winNoteAdd');
+        console.log(win.noteForId);
+        console.log(win.noteForGrid);
+        win.refreshGrid.getStore().load();
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlNoteAdd,
+            params: {for_id : win.noteForId},
+            success: function(form, action) {
+                win.close();
+                win.refreshGrid.getStore().load();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    'New Note Created',
+                    'Note created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    noteDelete: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item to delete',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                'Item Deleted',
+                                'Item deleted fine',
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();   //Update the count
+                            me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                'Problems deleting item',
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    }
 });
