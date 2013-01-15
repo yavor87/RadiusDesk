@@ -128,6 +128,7 @@ class NasController extends AppController {
 
         $items = array();
         $this->User = ClassRegistry::init('User');
+        $notes  = true;
 
         foreach($q_r as $i){
 
@@ -157,16 +158,26 @@ class NasController extends AppController {
                 }
             }
 
+            //Create notes flag
+            $notes_flag  = false;
+            foreach($i['NaNote'] as $nn){
+                if(!$this->_test_for_private_parent($nn['Note'],$user)){
+                    $notes_flag = true;
+                    break;
+                }
+            }
+
             $owner_id       = $i['Na']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
-
+      
             array_push($items,array(
                 'id'                    => $i['Na']['id'], 
                 'nasname'               => $i['Na']['nasname'],
                 'shortname'             => $i['Na']['shortname'],
                 'owner'                 => $owner_tree, 
                 'available_to_siblings' => $i['Na']['available_to_siblings'],
+                'notes'                 => $notes_flag,
                 'realms'                => $realms,
                 'tags'                  => $tags,
                 'connection_type'       => $i['Na']['connection_type'],
@@ -402,6 +413,167 @@ class NasController extends AppController {
             '_serialize' => array('success')
         ));
 	}
+
+
+    public function note_index(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['for_id'])){
+            $na_id  = $this->request->query['for_id'];
+            $q_r    = $this->Na->NaNote->find('all', 
+                array(
+                    'contain'       => array('Note'),
+                    'conditions'    => array('NaNote.na_id' => $na_id)
+                )
+            );
+            $this->User = ClassRegistry::init('User');
+            foreach($q_r as $i){
+                if(!$this->_test_for_private_parent($i['Note'],$user)){
+                    $owner_id   = $i['Note']['user_id'];
+                    $owner      = $this->_find_parents($owner_id);
+                    $afs        = $this->_get_action_flags($owner_id,$user);
+                    array_push($items,
+                        array(
+                            'id'        => $i['Note']['id'], 
+                            'note'      => $i['Note']['note'], 
+                            'available_to_siblings' => $i['Note']['available_to_siblings'],
+                            'owner'     => $owner,
+                            'delete'    => $afs['delete']
+                        )
+                    );
+                }
+            }
+        } 
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
+    public function note_add(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //Get the creator's id
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        $success    = false;
+        $msg        = array('message' => 'Could not create note');
+        $this->Na->NaNote->Note->create(); 
+        //print_r($this->request->data);
+        if ($this->Na->NaNote->Note->save($this->request->data)) {
+            $d                      = array();
+            $d['NaNote']['na_id']   = $this->request->data['for_id'];
+            $d['NaNote']['note_id'] = $this->Na->NaNote->Note->id;
+            $this->Na->NaNote->create();
+            if ($this->Na->NaNote->save($d)) {
+                $success = true;
+            }
+        }
+
+        if($success){
+            $this->set(array(
+                'success' => $success,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'success' => $success,
+                'message' => $message,
+                '_serialize' => array('success','message')
+            ));
+        }
+    }
+
+    public function note_del(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $this->User = ClassRegistry::init('User');
+        $fail_flag  = false;
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item       = $this->Na->NaNote->Note->findById($this->data['id']);
+            $owner_id   = $item['Note']['user_id'];
+            if($owner_id != $user_id){
+                if($this->_is_sibling_of($user_id,$owner_id)== true){
+                    $this->Na->NaNote->Note->id = $this->data['id'];
+                    $this->Na->NaNote->Note->delete($this->data['id'],true);
+                }else{
+                    $fail_flag = true;
+                }
+            }else{
+                $this->Na->NaNote->Note->id = $this->data['id'];
+                $this->Na->NaNote->Note->delete($this->data['id'],true);
+            }
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+
+                $item       = $this->Na->NaNote->Note->findById($d['id']);
+                $owner_id   = $item['Note']['user_id'];
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                        $this->Na->NaNote->Note->id = $d['id'];
+                        $this->Na->NaNote->Note->delete($d['id'],true);
+                    }else{
+                        $fail_flag = true;
+                    }
+                }else{
+                    $this->Na->NaNote->Note->id = $d['id'];
+                    $this->Na->NaNote->Note->delete($d['id'],true);
+                }
+   
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => 'Could not delete some items'),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
+
+    }
 
 //------------------ EXPERIMENTAL WORK --------------------------
 
@@ -711,6 +883,7 @@ class NasController extends AppController {
         $c['contain']   = array(
                             'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
                             'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings','Tag.user_id'),
+                            'NaNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'User'
                         );
 
@@ -833,6 +1006,19 @@ class NasController extends AppController {
         }       
         //====== END AP FILTER =====      
         return $c;
+    }
+
+    private function _is_sibling_of($parent_id,$user_id){
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($user_id);
+        foreach($q_r as $i){
+            $id = $i['User']['id'];
+            if($id == $parent_id){
+                return true;
+            }
+        }
+        //No match
+        return false;
     }
 
 
