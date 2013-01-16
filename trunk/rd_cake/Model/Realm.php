@@ -55,7 +55,8 @@ class Realm extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-        'NaRealm'
+        'NaRealm',
+        'RealmNote'
 	);
 
     public $belongsTo = array(

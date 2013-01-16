@@ -28,6 +28,7 @@ class Note extends AppModel {
 
     public $hasMany = array(
         'NaNote'    => array('dependent'    => true),
-        'TagNote'   => array('dependent'    => true)
+        'TagNote'   => array('dependent'    => true),
+        'RealmNote' => array('dependent'    => true),
     );
 }
