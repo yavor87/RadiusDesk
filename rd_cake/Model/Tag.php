@@ -31,6 +31,7 @@ class Tag extends AppModel {
 	);
 
     public $hasMany = array(
-        'NaTag'
+        'NaTag',
+        'TagNote'
     );
 }
