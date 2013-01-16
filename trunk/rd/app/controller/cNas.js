@@ -73,12 +73,12 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #add'   : {
                 click:      me.add
+            },  
+            'gridNas #note'   : {
+                click:      me.note
             },
             'gridNas #csv'  : {
                 click:      me.csvExport
-            },
-            'gridNas #note'   : {
-                click:      me.note
             },
             'gridNas #tag'   : {
                 click:      me.tag

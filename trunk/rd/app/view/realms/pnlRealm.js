@@ -23,8 +23,7 @@ Ext.define('Rd.view.desktop.pnlRealm', {
                     } 
             },
             { 
-                title   : 'Logo',
-                html: 'lklklk'
+                title   : 'Logo'
             },
             { 
                 title   : 'Notes'
