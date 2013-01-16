@@ -5,6 +5,7 @@ Ext.define('Rd.model.mTag', {
          {name: 'name',         type: 'string'  },
          {name: 'owner',        type: 'string'  },
          {name: 'available_to_siblings',  type: 'bool'},
+         {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'}
         ]

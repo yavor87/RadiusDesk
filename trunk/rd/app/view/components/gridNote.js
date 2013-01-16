@@ -9,7 +9,7 @@ Ext.define('Rd.view.components.gridNote' ,{
     tbar:   [
         { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},              
         { xtype: 'button',  iconCls: 'b-add',       scale: 'large', itemId: 'add',      tooltip:    i18n('sAdd')   },
-        { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete',   tooltip:    i18n('sDelete')}
+        { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete',   tooltip:    i18n('sDelete'), disabled: true}
     ],
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }

@@ -1,6 +1,6 @@
 Ext.define('Rd.store.sRealms', {
     extend: 'Ext.data.Store',
-    model: 'Rd.model.mRealms',
+    model: 'Rd.model.mRealm',
     proxy: {
             'type'  :'ajax',
             'url'   : '/cake2/rd_cake/realms/index.json',
