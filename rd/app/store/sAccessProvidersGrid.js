@@ -1,7 +1,7 @@
-Ext.define('Rd.store.sRealms', {
+Ext.define('Rd.store.sAccessProvidersGrid', {
     extend: 'Ext.data.Store',
-    model: 'Rd.model.mRealm',
-     //To make it load AJAXly from the server specify the follown 3 attributes
+    model: 'Rd.model.mAccessProviderGrid',
+    //To make it load AJAXly from the server specify the follown 3 attributes
     buffered: true,
     leadingBufferZone: 150, 
     pageSize: 50,
@@ -11,7 +11,7 @@ Ext.define('Rd.store.sRealms', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/realms/index.json',
+            url     : '/cake2/rd_cake/tags/index.json',
             reader: {
                 type: 'json',
                 root: 'items',
@@ -19,7 +19,7 @@ Ext.define('Rd.store.sRealms', {
                 totalProperty: 'totalCount' //Required for dynamic paging
             },
             api: {
-                destroy  : '/cake2/rd_cake/realms/delete.json'
+                destroy  : '/cake2/rd_cake/tags/delete.json'
             },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },

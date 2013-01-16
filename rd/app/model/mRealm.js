@@ -3,7 +3,7 @@ Ext.define('Rd.model.mRealm', {
     fields: [
          {name: 'id',       type: 'int'     },
          {name: 'name',     type: 'string'  },
-         {name: 'creator',  type: 'string'  },
+         {name: 'owner',    type: 'string'  },
          'phone','fax', 'cell', 'email','url', 'street_no', 'street','town_suburb','city','country','lat','lon',
          {name: 'available_to_siblings',  type: 'bool'},
          {name: 'notes',   type: 'bool'},

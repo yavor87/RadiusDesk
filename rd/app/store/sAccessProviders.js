@@ -1,7 +1,8 @@
 Ext.define('Rd.store.sAccessProviders', {
     extend: 'Ext.data.TreeStore',
     model: 'Rd.model.mAccessProvider',
-    autoLoad: true,
+    //To force server side sorting:
+    remoteSort: true,
     proxy: {
             type: 'ajax',
             format  : 'json',
@@ -14,11 +15,12 @@ Ext.define('Rd.store.sAccessProviders', {
             },
             api: {
                 destroy : '/cake2/rd_cake/access_providers/delete.json'
-            }
+            },
+            simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
     root: {username: 'Logged in user',leaf: false, id:'0', iconCls: 'admin', expanded: false,monitor: 'na', active: 'na'},
-    folderSort: true,
-    clearOnLoad: true,
+    //folderSort: true,
+    //clearOnLoad: true,
     listeners: {
         load: function( store, records, a,successful,b) {
             if(!successful){
@@ -31,5 +33,6 @@ Ext.define('Rd.store.sAccessProviders', {
             }  
         },
         scope: this
-    }
+    },
+    autoLoad: true,
 });

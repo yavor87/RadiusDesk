@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : false,
-                        items   : { 'title' : 'Access Providers','xtype':'treeAccessProviders'}   
+                        items   : { 'title' : 'Access Providers','xtype':'gridAccessProviders'}   
                     }
                 ]
             });
@@ -40,12 +40,13 @@ Ext.define('Rd.controller.cAccessProviders', {
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['accessProviders.treeAccessProviders', 'accessProviders.pnlAccessProvider','accessProviders.frmDetail',
-             'accessProviders.winDetail',           'accessProviders.treeApUserRights', 'accessProviders.gridRealms',   
-            'components.pnlBanner'
+    views:  [
+        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider','accessProviders.frmDetail',
+        'accessProviders.winDetail',            'accessProviders.treeApUserRights', 'accessProviders.gridRealms',   
+        'components.pnlBanner',                 'accessProviders.gridAccessProviders'
             ],
-    stores: ['sAccessProviders','sLanguages','sApRights'],
-    models: ['mAccessProvider','mApUserRight','mApRealms'],
+    stores: ['sAccessProviders','sLanguages','sApRights','sAccessProvidersGrid'],
+    models: ['mAccessProvider','mApUserRight','mApRealms','mAccessProviderGrid'],
     selectedRecord: undefined,
     config: {
         urlAdd:   '/cake2/rd_cake/access_providers/add.json',

@@ -41,9 +41,9 @@ Ext.define('Rd.view.realms.frmDetail', {
             hidden  : true
         }, 
         {
-            itemId      : 'creator',
+            itemId      : 'owner',
             xtype       : 'displayfield',
-            fieldLabel  : 'Creator',
+            fieldLabel  : 'Owner',
             value       : '',
             labelClsExtra: 'lblRdReq'
         },

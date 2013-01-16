@@ -77,11 +77,11 @@ Ext.define('Rd.controller.cTags', {
             'gridTags #edit'   : {
                 click:      me.edit
             },
-            'gridTags #csv'  : {
-                click:      me.csvExport
-            },
             'gridTags #note'   : {
                 click:      me.note
+            },
+            'gridTags #csv'  : {
+                click:      me.csvExport
             },
             'gridTags'   : {
                 select:      me.select
