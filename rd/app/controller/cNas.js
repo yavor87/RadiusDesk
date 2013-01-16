@@ -128,25 +128,28 @@ Ext.define('Rd.controller.cNas', {
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
             },
-            'winCsvColumnSelect #save': {
+            '#winCsvColumnSelectNas #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote #reload' : {
+            'gridNote[noteForGrid=nas] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote #add' : {
+            'gridNote[noteForGrid=nas] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote #delete' : {
+            'gridNote[noteForGrid=nas] #delete' : {
                 click:  me.noteDelete
             },
-            'winNoteAdd #btnNoteTreeNext' : {
+            'gridNote[noteForGrid=nas]' : {
+                itemclick: me.gridNoteClick
+            },
+            'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=nas] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=nas] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             }
         });
@@ -483,7 +486,7 @@ Ext.define('Rd.controller.cNas', {
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
             if(item.dataIndex != ''){
-                var chk = {boxLabel: item.text, name: item.dataIndex};
+                var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
                 col_list[index] = chk;
             }
         }); 
@@ -599,6 +602,22 @@ Ext.define('Rd.controller.cNas', {
                 refreshGrid : grid
             });
             me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    gridNoteClick: function(item,record){
+        var me = this;
+        //Dynamically update the top toolbar
+        grid    = item.up('gridNote');
+        tb      = grid.down('toolbar[dock=top]');
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
         }
     },
     btnNoteTreeNext: function(button){

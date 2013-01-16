@@ -135,7 +135,7 @@ Ext.define('Rd.view.realms.gridNas' ,{
             },
             { 
                 text    : 'Notes',
-                //flex    : 1,
+                sortable: false,
                 width   : 130,
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(

@@ -13,6 +13,9 @@ Ext.define('Rd.view.components.winNoteAdd', {
     iconCls     : 'add',
     autoShow    : false,
     startScreen: 'scrnApTree', //Default start screen
+    noteForId:  '', //Some attribute definitions
+    noteForGrid:'',
+    refreshGrid:'',
     requires: [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
