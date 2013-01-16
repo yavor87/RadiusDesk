@@ -61,7 +61,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3145 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3148 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `aros` (
 
 LOCK TABLES `aros` WRITE;
 /*!40000 ALTER TABLE `aros` DISABLE KEYS */;
-INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,8),(3117,NULL,'Group',10,NULL,9,10),(3118,3115,'User',44,NULL,2,3),(3132,3116,'User',58,NULL,6,7);
+INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,14),(3117,NULL,'Group',10,NULL,15,16),(3118,3115,'User',44,NULL,2,3),(3132,3116,'User',58,NULL,6,7),(3145,3116,'User',59,NULL,8,9),(3146,3116,'User',60,NULL,10,11),(3147,3116,'User',61,NULL,12,13);
 /*!40000 ALTER TABLE `aros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,6 +213,33 @@ INSERT INTO `languages` VALUES (4,'English','en','2012-10-05 04:55:28','2012-10-
 UNLOCK TABLES;
 
 --
+-- Table structure for table `na_notes`
+--
+
+DROP TABLE IF EXISTS `na_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `na_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `na_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `na_notes`
+--
+
+LOCK TABLES `na_notes` WRITE;
+/*!40000 ALTER TABLE `na_notes` DISABLE KEYS */;
+INSERT INTO `na_notes` VALUES (23,11,28,'2013-01-15 10:17:44','2013-01-15 10:17:44');
+/*!40000 ALTER TABLE `na_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `na_realms`
 --
 
@@ -226,7 +253,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,6 +262,7 @@ CREATE TABLE `na_realms` (
 
 LOCK TABLES `na_realms` WRITE;
 /*!40000 ALTER TABLE `na_realms` DISABLE KEYS */;
+INSERT INTO `na_realms` VALUES (1,10,23,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(2,10,13,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(3,10,11,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(4,11,22,'2013-01-10 22:57:39','2013-01-10 22:57:39'),(5,11,23,'2013-01-10 22:57:39','2013-01-10 22:57:39');
 /*!40000 ALTER TABLE `na_realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +280,7 @@ CREATE TABLE `na_tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,6 +289,7 @@ CREATE TABLE `na_tags` (
 
 LOCK TABLES `na_tags` WRITE;
 /*!40000 ALTER TABLE `na_tags` DISABLE KEYS */;
+INSERT INTO `na_tags` VALUES (1,6,16,'2013-01-10 10:03:46','2013-01-10 10:03:46'),(2,10,15,'2013-01-10 22:38:20','2013-01-10 22:38:20'),(3,4,13,'2013-01-11 06:47:09','2013-01-11 06:47:09');
 /*!40000 ALTER TABLE `na_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,7 +329,7 @@ CREATE TABLE `nas` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nasname` (`nasname`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -309,8 +338,36 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (2,'','jkjkj','other',NULL,'jkjkj',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Called-Station-Id','jkjkljkj','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:39:57','2013-01-09 13:39:57'),(3,'','kkk','other',NULL,'kkk',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','kkkkkkkkk','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:46:19','2013-01-09 13:46:19'),(4,'dynamic-1','vvvv','other',NULL,'vvvv',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','bbbbbbbbbb','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:00:09','2013-01-09 14:00:09'),(8,'dynamic-2','99','other',NULL,'00',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','0000','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:11:05','2013-01-09 14:11:05'),(6,'dynamic-3','e','other',NULL,'z',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','z','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:01:22','2013-01-09 14:01:22'),(7,'dynamic-4','zzz','other',NULL,'zz',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','eeeeeeeee','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:09:51','2013-01-09 14:09:51');
+INSERT INTO `nas` VALUES (2,'','jkjkj','other',NULL,'jkjkj',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Called-Station-Id','jkjkljkj','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:39:57','2013-01-09 13:39:57'),(3,'','kkk','other',NULL,'kkk',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','kkkkkkkkk','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:46:19','2013-01-09 13:46:19'),(4,'dynamic-1','vvvv','other',NULL,'vvvv',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','bbbbbbbbbb','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:00:09','2013-01-09 14:00:09'),(8,'dynamic-2','99','other',NULL,'00',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','0000','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:11:05','2013-01-09 14:11:05'),(6,'dynamic-3','e','other',NULL,'z',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','z','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:01:22','2013-01-09 14:01:22'),(7,'dynamic-4','zzz','other',NULL,'zz',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','eeeeeeeee','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:09:51','2013-01-09 14:09:51'),(9,'10.8.1.9','bb','other',NULL,'bbb',NULL,NULL,'RADIUS Client','openvpn',0,0,0,'','','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:28:50','2013-01-09 14:28:50'),(10,'Gooi','Hom','other',NULL,'Pappie',NULL,NULL,'RADIUS Client','direct',0,0,0,'','','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(11,'dynamic-5','gaan','other',NULL,'bars',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','hjkhjkh','',600,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-01-10 22:57:39','2013-01-10 22:57:39');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notes`
+--
+
+DROP TABLE IF EXISTS `notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `note` text NOT NULL,
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notes`
+--
+
+LOCK TABLES `notes` WRITE;
+/*!40000 ALTER TABLE `notes` DISABLE KEYS */;
+INSERT INTO `notes` VALUES (28,'Coool Dude!',0,44,'2013-01-15 10:17:44','2013-01-15 10:17:44'),(30,'Laat lees',0,58,'2013-01-16 08:06:51','2013-01-16 08:06:51'),(32,'Slaat hom pappies',0,44,'2013-01-16 08:43:01','2013-01-16 08:43:01'),(35,'Blib blib blib',0,44,'2013-01-16 12:55:25','2013-01-16 12:55:25'),(36,'blib blip blib',0,58,'2013-01-16 12:55:48','2013-01-16 12:55:48');
+/*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -331,7 +388,7 @@ CREATE TABLE `openvpn_clients` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -340,7 +397,7 @@ CREATE TABLE `openvpn_clients` (
 
 LOCK TABLES `openvpn_clients` WRITE;
 /*!40000 ALTER TABLE `openvpn_clients` DISABLE KEYS */;
-INSERT INTO `openvpn_clients` VALUES (61,'Koos','',1,1,2,16,'2013-01-09 10:59:12','2013-01-09 10:59:12'),(62,'Bad','Ass',1,5,6,17,'2013-01-09 11:05:36','2013-01-09 11:05:36');
+INSERT INTO `openvpn_clients` VALUES (61,'Koos','',1,1,2,16,'2013-01-09 10:59:12','2013-01-09 10:59:12'),(62,'Bad','Ass',1,5,6,17,'2013-01-09 11:05:36','2013-01-09 11:05:36'),(63,'GooiHom','',1,9,10,9,'2013-01-09 14:28:50','2013-01-09 14:28:50');
 /*!40000 ALTER TABLE `openvpn_clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,6 +486,33 @@ INSERT INTO `radcheck` VALUES (15029,'dvdwalt','Cleartext-Password','==','qwerty
 UNLOCK TABLES;
 
 --
+-- Table structure for table `realm_notes`
+--
+
+DROP TABLE IF EXISTS `realm_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realm_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `realm_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `realm_notes`
+--
+
+LOCK TABLES `realm_notes` WRITE;
+/*!40000 ALTER TABLE `realm_notes` DISABLE KEYS */;
+INSERT INTO `realm_notes` VALUES (21,23,35,'2013-01-16 12:55:25','2013-01-16 12:55:25'),(22,23,36,'2013-01-16 12:55:48','2013-01-16 12:55:48');
+/*!40000 ALTER TABLE `realm_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `realms`
 --
 
@@ -470,6 +554,33 @@ INSERT INTO `realms` VALUES (11,'AP Private',0,'logo.jpg','','','','','','','','
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tag_notes`
+--
+
+DROP TABLE IF EXISTS `tag_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tag_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tag_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tag_notes`
+--
+
+LOCK TABLES `tag_notes` WRITE;
+/*!40000 ALTER TABLE `tag_notes` DISABLE KEYS */;
+INSERT INTO `tag_notes` VALUES (17,10,30,'2013-01-16 08:06:52','2013-01-16 08:06:52'),(18,13,32,'2013-01-16 08:43:01','2013-01-16 08:43:01');
+/*!40000 ALTER TABLE `tag_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tags`
 --
 
@@ -493,8 +604,34 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES (13,'RootPrivate',0,44,'2013-01-07 08:19:15','2013-01-07 08:19:15'),(14,'RootPublic',1,44,'2013-01-07 08:20:13','2013-01-07 08:20:13'),(15,'Gooi',1,58,'2013-01-07 10:29:34','2013-01-07 10:29:34'),(16,'Home',1,58,'2013-01-07 10:29:50','2013-01-07 11:04:54');
+INSERT INTO `tags` VALUES (13,'RootPrivate',0,44,'2013-01-07 08:19:15','2013-01-07 08:19:15'),(14,'RootPublic',1,44,'2013-01-07 08:20:13','2013-01-07 08:20:13'),(15,'Gooi',1,58,'2013-01-07 10:29:34','2013-01-07 10:29:34'),(16,'Home',1,58,'2013-01-07 10:29:50','2013-01-16 09:59:57');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_notes`
+--
+
+DROP TABLE IF EXISTS `user_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_notes`
+--
+
+LOCK TABLES `user_notes` WRITE;
+/*!40000 ALTER TABLE `user_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -527,7 +664,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,7 +673,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','',1,0,4,8,4,NULL,NULL,14,1,4,'2012-12-10 13:14:13','2012-12-20 23:45:00'),(58,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','50c5fe31-4f1c-4449-b90a-5b1403662c24','','','','','',1,1,5,9,5,44,NULL,NULL,2,3,'2012-12-10 17:22:25','2013-01-02 09:08:56');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','',1,0,4,8,4,NULL,NULL,14,1,10,'2012-12-10 13:14:13','2012-12-20 23:45:00'),(58,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','50c5fe31-4f1c-4449-b90a-5b1403662c24','','','','','',1,1,5,9,5,44,NULL,NULL,2,9,'2012-12-10 17:22:25','2013-01-02 09:08:56'),(59,'ab','f380fca6e01ffa71b9946bcd384c666f0e1fab5a','50ef8dd9-f380-4a9b-9f0f-2b6f03662c24','','','','','',1,1,5,9,5,58,NULL,NULL,3,4,'2013-01-11 05:58:17','2013-01-11 05:58:17'),(60,'ac','059e8aa58f663b04f4cbdb897553ebd374f6dd2f','50f68dc4-c11c-4cf6-ba44-3e2703662c24','','','','','',1,1,5,9,5,58,NULL,NULL,5,6,'2013-01-16 13:23:48','2013-01-16 13:23:48'),(61,'ad','7a6d0efcba484e3b435bd95c19ba6acc445dd214','50f68ddf-b904-4227-95f6-243c03662c24','','','','','',1,1,5,9,5,58,NULL,NULL,7,8,'2013-01-16 13:24:15','2013-01-16 13:24:15');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -549,4 +686,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-09 14:12:33
+-- Dump completed on 2013-01-16 15:19:07
