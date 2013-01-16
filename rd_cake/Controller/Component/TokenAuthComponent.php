@@ -56,12 +56,12 @@ class TokenAuthComponent extends Component {
         ));
 
         if($q_r == ''){
-            return array('success' => false, 'message' => array('message' => 'No user for token'));
+            return array('success' => false, 'message' => array('message' => __('No user for token')));
         }else{
 
             //Check if account is active or not:
             if($q_r['User']['active']==0){
-                return array('success' => false, 'message' => array('message' => 'Account disabled'));
+                return array('success' => false, 'message' => array('message' => __('Account disabled')));
             }else{
                 $user = array(
                     'id'            => $q_r['User']['id'],

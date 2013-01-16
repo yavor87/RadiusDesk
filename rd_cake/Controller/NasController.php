@@ -73,6 +73,14 @@ class NasController extends AppController {
                             }
                         }
                         array_push($csv_line,$tags);
+                    }elseif($column_name == 'notes'){
+                        $notes   = '';
+                        foreach($i['NaNote'] as $n){
+                            if(!$this->_test_for_private_parent($n['Note'],$user)){
+                                $notes = $notes.'['.$n['Note']['note'].']';    
+                            }
+                        }
+                        array_push($csv_line,$notes);
                     }elseif($column_name =='owner'){
                         $owner_id       = $i['Na']['user_id'];
                         $owner_tree     = $this->_find_parents($owner_id);
@@ -128,7 +136,6 @@ class NasController extends AppController {
 
         $items = array();
         $this->User = ClassRegistry::init('User');
-        $notes  = true;
 
         foreach($q_r as $i){
 
@@ -307,8 +314,6 @@ class NasController extends AppController {
                 '_serialize' => array('success')
             ));
         } else {
-            $message = 'Error';
-
             //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
             if($this->request->data['connection_type'] == 'openvpn'){
                 $this->Na->OpenvpnClient->delete();
@@ -318,7 +323,7 @@ class NasController extends AppController {
             $this->set(array(
                 'errors'    => $this->{$this->modelClass}->validationErrors,
                 'success'   => false,
-                'message'   => array('message' => 'Could not create item <br>'.$first_error[0]),
+                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
                 '_serialize' => array('errors','success','message')
             ));
         }
@@ -397,7 +402,7 @@ class NasController extends AppController {
         $user_id    = $user['id'];  
 
 	    if(isset($this->data['id'])){   //Single item delete
-            $message = "Single item ".$this->data['id'];
+            $message = __("Single item")." ".$this->data['id'];
             $this->Realm->id = $this->data['id'];
             $this->Realm->delete();
       
@@ -480,7 +485,7 @@ class NasController extends AppController {
         }
 
         $success    = false;
-        $msg        = array('message' => 'Could not create note');
+        $msg        = array('message' => __('Could not create note'));
         $this->Na->NaNote->Note->create(); 
         //print_r($this->request->data);
         if ($this->Na->NaNote->Note->save($this->request->data)) {
@@ -563,7 +568,7 @@ class NasController extends AppController {
         if($fail_flag == true){
             $this->set(array(
                 'success'   => false,
-                'message'   => array('message' => 'Could not delete some items'),
+                'message'   => array('message' => __('Could not delete some items')),
                 '_serialize' => array('success','message')
             ));
         }else{
@@ -682,17 +687,17 @@ class NasController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
 
             $menu = array(
-                array('xtype' => 'buttongroup','title' => 'Action', 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
-                array('xtype' => 'buttongroup','title' => 'Document', 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
-                array('xtype' => 'buttongroup','title' => 'Nas', 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Nas'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-meta_edit','scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
                     array('xtype' => 'button', 'iconCls' => 'b-map',     'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
                 )) 
@@ -744,7 +749,7 @@ class NasController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){ //Change FIXME
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ //Change FIXME
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',     
@@ -782,9 +787,9 @@ class NasController extends AppController {
            // array_push($menu,array('xtype' => 'tbfill'));
 
             $menu = array(
-                        array('xtype' => 'buttongroup','title' => 'Action',        'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => 'Document',   'items' => $document_group),
-                        array('xtype' => 'buttongroup','title' => 'Nas',        'items' => $specific_group)
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('Nas'),        'items' => $specific_group)
                     );
         }
         $this->set(array(
@@ -817,7 +822,7 @@ class NasController extends AppController {
                 return $username;
             }
         }else{
-            return "orphaned!!!!";
+            return __("orphaned");
         }
     }
 
@@ -1019,37 +1024,6 @@ class NasController extends AppController {
         }
         //No match
         return false;
-    }
-
-
-    /**
-    * This Behavior writes tmp files to take advantage of the built-in fputcsv function.
-    *
-    */
-    protected function ensureTmp() {
-        $tmpDir = TMP . $this->tmpDir;
-        if ( !file_exists($tmpDir ) ) {
-            mkdir( $tmpDir, 0777);
-        }
-    }
-
-
-    /**
-    * Delete the tmp file, only if $tmp_file lives in TMP directory
-    * otherwise throw an Exception
-    *
-    * @param mixed $tmp_file
-    */
-    protected function cleanupTmp( $tmp_file='' ) {
-        $realpath = realpath( $tmp_file );
-         
-        if ( substr( $realpath, 0, strlen( TMP ) ) != TMP ) {
-            throw new Exception('I refuse to delete a file outside of ' . TMP );
-        }
-         
-        if ( file_exists( $tmp_file ) ) {
-            unlink( $tmp_file );
-        }
     }
 
 }

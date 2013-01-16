@@ -368,7 +368,7 @@ class PhpPhrasesController extends AppController {
                 $this->set(array(
                     'items' => array(),
                     'success'   => false,
-                    'message'   => array('message' => "The file default.po is missing for $locale"),
+                    'message'   => array('message' => __("The file default.po is missing for")." ".$locale),
                     '_serialize' => array('items','success','message')
                 ));
                 return;
@@ -388,7 +388,7 @@ class PhpPhrasesController extends AppController {
                 $this->set(array(
                     'items' => array(),
                     'success'   => false,
-                     'message'   => array('message' => "No language specified"),
+                     'message'   => array('message' => __("No language specified")),
                     '_serialize' => array('items','success','message')
                 ));
             }

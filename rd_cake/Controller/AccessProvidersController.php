@@ -34,24 +34,35 @@ class AccessProvidersController extends AppController {
         //-- FILTER <- This will need fine tunning!!!!
         //-- AND SORT ORDER <- This will need fine tunning!!!!
 
-       // $this->User->recover();
-
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
+        $user_id    = $user['id'];
+        $c = $this->_build_common_query($user); 
 
-        $user_id = null;
-
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
+        //===== PAGING (MUST BE LAST) ======
+        $limit  = 50;   //Defaults
+        $page   = 1;
+        $offset = 0;
+        if(isset($this->request->query['limit'])){
+            $limit  = $this->request->query['limit'];
+            $page   = $this->request->query['page'];
+            $offset = $this->request->query['start'];
         }
 
-         if($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }
+        $c_page             = $c;
+        $c_page['page']     = $page;
+        $c_page['limit']    = $limit;
+        $c_page['offset']   = $offset;
 
-        $items = array();
+        $total  = $this->{$this->modelClass}->find('count',$c);       
+        $q_r    = $this->{$this->modelClass}->find('all',$c_page);
+
+        $items  = array();
+
+
     
         //If id is not set return an empty list:
         if($user_id != null){
@@ -247,45 +258,110 @@ class AccessProvidersController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
 
             $menu = array(
-                array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                array('xtype' => 'button', 'iconCls' => 'b-expand',  'scale' => 'large', 'itemId' => 'expand',   'tooltip'=> __('Expand')),
-                array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
-                array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change Password')),
-                array('xtype' => 'tbfill') 
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                    
+                )),
+                array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                )),
+                array('xtype' => 'buttongroup','title' => __('Access Provider'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-expand',  'scale' => 'large', 'itemId' => 'expand',   'tooltip'=> __('Expand')),
+                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change Password'))
+                )) 
             );
         }
 
         //AP depend on rights
         if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
-            $id     = $user['id'];
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+
             $base   = "Access Providers/Controllers/AccessProviders/";
-            $menu   = array(
-                array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload'))
-            );
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."add")){
-                array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')));
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',      
+                    'tooltip'   => __('Add')));
             }
             //Delete
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'delete')){
-                array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')));
+                 array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-delete',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'delete',
+                    'disabled'  => true,   
+                    'tooltip'   => __('Delete')));
             }
 
             //Edit
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'edit')){
-                array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')));
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,     
+                    'tooltip'   => __('Edit')));
             }
-            array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-expand',  'scale' => 'large', 'itemId' => 'expand',   'tooltip'=> __('Expand')));
 
-             //Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+                array_push($document_group,array(
+                        'xtype'     => 'button', 
+                        'iconCls'   => 'b-note',     
+                        'scale'     => 'large', 
+                        'itemId'    => 'note',      
+                        'tooltip'   => __('Add Notes')));
+            }
+
+
+            array_push($document_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-csv',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'csv',      
+                    'tooltip'   => __('Export CSV')));
+
+        
+            array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-expand',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'expand',   
+                    'tooltip'   => __('Expand')));
+
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'change_password')){      
-                array_push($menu,array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change Password')));
+                array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-password',
+                    'scale'     => 'large', 
+                    'itemId'    => 'password', 
+                    'tooltip'   => __('Change Password')));
             }
 
-            array_push($menu,array('xtype' => 'tbfill'));
+             $menu = array(
+                        array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),       'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('Access Provider'),'items' => $specific_group)
+             );
         }
 
         $this->set(array(
@@ -367,5 +443,87 @@ class AccessProvidersController extends AppController {
             'success'       => true,
             '_serialize'    => array('items','success')
         ));
+    }
+
+
+    function _build_common_query($user){
+
+        //Empty to start with
+        $c                  = array();
+        $c['joins']         = array(); 
+        $c['conditions']    = array();
+
+        //What should we include....
+        $c['contain']   = array(
+                            'UserNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id')
+                        );
+
+        //===== SORT =====
+        //Default values for sort and dir
+        $sort   = 'User.username';
+        $dir    = 'DESC';
+
+        if(isset($this->request->query['sort'])){
+            if($this->request->query['sort'] == 'owner'){
+                $sort = 'User.username';
+            }else{
+                $sort = $this->modelClass.'.'.$this->request->query['sort'];
+            }
+            $dir  = $this->request->query['dir'];
+        } 
+        $c['order'] = array("$sort $dir");
+        //==== END SORT ===
+
+
+        //====== REQUEST FILTER =====
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            foreach($filter as $f){
+                //Strings
+                if($f->type == 'string'){
+                    if($f->field == 'owner'){
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
+                }
+                //Bools
+                if($f->type == 'boolean'){
+                     $col = $this->modelClass.'.'.$f->field;
+                     array_push($c['conditions'],array("$col" => $f->value));
+                }
+            }
+        }
+        //====== END REQUEST FILTER =====
+
+        //====== AP FILTER =====
+        //If the user is an AP; we need to add an extra clause to only show the Realms which he is allowed to see.
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $tree_array = array();
+            $this->User = ClassRegistry::init('User');
+
+            //**AP and upward in the tree**
+            $this->parents = $this->User->getPath($user_id,'User.id');
+            //So we loop this results asking for the parent nodes who have available_to_siblings = true
+            foreach($this->parents as $i){
+                $i_id = $i['User']['id'];
+                if($i_id != $user_id){ //upstream
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
+                }else{
+                    array_push($tree_array,array('User.user_id' => $i_id));
+                }
+            }
+            //** ALL the AP's children
+            $this->children   = $this->User->children($user_id,false,'User.id');
+            foreach($this->children as $i){
+                $i_id = $i['User']['id'];
+                array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
+            }      
+            //Add it as an OR clause
+            array_push($c['conditions'],array('OR' => $tree_array));  
+        }       
+        //====== END AP FILTER =====      
+        return $c;
     }
 }
