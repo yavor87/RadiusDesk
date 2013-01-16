@@ -38,7 +38,7 @@ class PhraseKeysController extends AppController {
             $this->set(array(
                 'errors'    => $this->{$this->modelClass}->validationErrors,
                 'success'   => false,
-                'message'   => array('message' => 'Could not create key'),
+                'message'   => array('message' => __('Could not create key')),
                 '_serialize' => array('errors','success','message')
             ));
         }   

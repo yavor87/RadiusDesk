@@ -152,5 +152,36 @@ class AppController extends Controller {
         }
     }
 
+    /**
+    * This Behavior writes tmp files to take advantage of the built-in fputcsv function.
+    *
+    */
+    protected function ensureTmp() {
+        $tmpDir = TMP . $this->tmpDir;
+        if ( !file_exists($tmpDir ) ) {
+            mkdir( $tmpDir, 0777);
+        }
+    }
+
+
+    /**
+    * Delete the tmp file, only if $tmp_file lives in TMP directory
+    * otherwise throw an Exception
+    *
+    * @param mixed $tmp_file
+    */
+    protected function cleanupTmp( $tmp_file='' ) {
+        $realpath = realpath( $tmp_file );
+         
+        if ( substr( $realpath, 0, strlen( TMP ) ) != TMP ) {
+            throw new Exception('I refuse to delete a file outside of ' . TMP );
+        }
+         
+        if ( file_exists( $tmp_file ) ) {
+            unlink( $tmp_file );
+        }
+    }
+
+
 
 }
