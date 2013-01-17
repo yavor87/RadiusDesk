@@ -77,7 +77,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         var pnlTree = Ext.create('Ext.tree.Panel',{
             itemId: 'scrnApTree',
             useArrows: true,
-            store: 'sAccessProviders',
+            store: 'sAccessProvidersTree',
             rootVisible: true,
             rowLines: true,
             layout: 'fit',

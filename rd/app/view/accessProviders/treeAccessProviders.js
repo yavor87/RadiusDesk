@@ -6,7 +6,7 @@ Ext.define('Rd.view.accessProviders.treeAccessProviders' ,{
     extend:'Ext.tree.Panel',
     useArrows: true,
     alias : 'widget.treeAccessProviders',
-    store: 'sAccessProviders',
+    store: 'sAccessProvidersTree',
     rootVisible: true,
     rowLines: true,
     stripeRows: true,
