@@ -9,6 +9,9 @@ App::uses('AuthComponent', 'Controller/Component');
  */
 class User extends AppModel {
 
+    //Used to build the list of children an Access Provider may have up to the end nodes.
+    private $ap_children    = array();
+
 /**
  * Validation rules
  *
@@ -74,13 +77,18 @@ class User extends AppModel {
             'className'     => 'Realm',
 			'foreignKey'    => 'realm_id'
         ),
+        'Owner' => array(
+            'className'     => 'User',
+            'foreignKey'    => 'parent_id'
+        )
         
 	);
 
     public $hasMany = array(
         'Na',
         'Tag',
-        'Realm'
+        'Realm',
+        'UserNote'
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
@@ -114,6 +122,38 @@ class User extends AppModel {
             return null;
         } else {
             return array('Group' => array('id' => $groupId));
+        }
+    }
+
+    //Used to get a list of all the access provider's owned by $ap_id, including their children and children's children etc...
+    public function find_access_provider_children($ap_id){
+
+        $ap_name = Configure::read('group.ap');
+
+        $this->contain();
+        $parent = $this->findById($ap_id);
+        $this->contain('Group');
+        $parentAndChildren = $this->find('threaded', array(
+            'conditions' => array(
+                'User.lft >'    => $parent['User']['lft'], 
+                'User.rght <'   => $parent['User']['rght'],
+                'Group.name'    => $ap_name
+            )
+        ));
+
+        $this->_build_access_provider_children($parentAndChildren);
+        return $this->ap_children;
+    }
+
+    //Called recusrively to find the children downward from an AP
+    private function _build_access_provider_children($results){
+        foreach($results as $i){
+            $id         = $i['User']['id'];
+            $username   = $i['User']['username'];
+            array_push($this->ap_children,array('id' => $id, 'username' => $username));
+            if(count($i['children']) > 0){ //Call recursivley
+                $this->_build_access_provider_children($i['children']);
+            }
         }
     }
 
