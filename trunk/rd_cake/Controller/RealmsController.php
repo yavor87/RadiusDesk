@@ -959,6 +959,7 @@ class RealmsController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
             $this->User = ClassRegistry::init('User');
+            $user_id    = $user['id'];
 
             //**AP and upward in the tree**
             $this->parents = $this->User->getPath($user_id,'User.id');

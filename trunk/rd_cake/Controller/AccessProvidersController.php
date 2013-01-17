@@ -7,7 +7,10 @@ class AccessProvidersController extends AppController {
     public $components = array('Aa');
     public $uses       = array('User'); //This has primaraly to do with users :-)
 
-    public $ap_acl     = 'Access Providers/Controllers/';    
+    public $ap_acl     = 'Access Providers/Controllers/'; 
+    protected $base    = "Access Providers/Controllers/AccessProviders/";   //This is required for Aa component  
+
+    protected $ap_children  = array(); 
 
 
     //-- NOTES on users:
@@ -57,12 +60,62 @@ class AccessProvidersController extends AppController {
         $c_page['limit']    = $limit;
         $c_page['offset']   = $offset;
 
-        $total  = $this->{$this->modelClass}->find('count',$c);       
-        $q_r    = $this->{$this->modelClass}->find('all',$c_page);
+        $total  = $this->{$this->modelClass}->find('count'  , $c);       
+        $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
 
         $items  = array();
+        foreach($q_r as $i){ 
 
+            $owner_id       = $i['Owner']['id'];
+            $owner_tree     = $this->_find_parents($owner_id);
 
+            array_push($items,
+                array(
+                    'id'        => $i['User']['id'], 
+                    'owner'     => $owner_tree,
+                    'username'  => $i['User']['username'],
+                    'name'      => $i['User']['name'],
+                    'surname'   => $i['User']['surname'], 
+                    'phone'     => $i['User']['phone'], 
+                    'email'     => $i['User']['email'],
+                    'active'    => $i['User']['active'], 
+                    'monitor'   => $i['User']['monitor']
+                )
+            );
+        }                
+        $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            'totalCount'    => $total,
+            '_serialize'    => array('items','success','totalCount')
+        ));
+    }
+
+     public function index_tree(){
+        //-- Required query attributes: token;
+        //-- Optional query attribute: sel_language (for i18n error messages)
+        //-- also LIMIT: limit, page, start (optional - use sane defaults)
+        //-- FILTER <- This will need fine tunning!!!!
+        //-- AND SORT ORDER <- This will need fine tunning!!!!
+
+       // $this->User->recover();
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $user_id = null;
+
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+         if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+
+        $items = array();
     
         //If id is not set return an empty list:
         if($user_id != null){
@@ -80,13 +133,7 @@ class AccessProvidersController extends AppController {
                 $id         = $i['User']['id'];
                 $parent_id  = $i['User']['parent_id'];
                 $username   = $i['User']['username'];
-                $name       = $i['User']['name'];
-                $surname    = $i['User']['surname'];
-                $phone      = $i['User']['phone'];
-                $email      = $i['User']['email'];
-                $active     = $i['User']['active'];
-                $monitor    = $i['User']['monitor'];
-
+               
                 $leaf       = false;
                 $icon       = 'users';
 
@@ -97,7 +144,7 @@ class AccessProvidersController extends AppController {
                     $icon = 'user';
                 }
                 array_push($items,
-                    array('id' => $id, 'username' => $username,'leaf' => $leaf,'name' => $name,'surname' => $surname, 'phone' => $phone, 'email' => $email,'active' => $active, 'monitor' => $monitor,'iconCls' => $icon,'language' => '4_4')
+                    array('id' => $id, 'username' => $username,'leaf' => $leaf,'iconCls' => $icon)
                 ); 
             }
         }     
@@ -109,6 +156,7 @@ class AccessProvidersController extends AppController {
         ));
 
     }
+
 
     public function add(){
 
@@ -455,7 +503,9 @@ class AccessProvidersController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'UserNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id')
+                            'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'Owner'     => array('Owner.username'),
+                            'Group'        
                         );
 
         //===== SORT =====
@@ -482,7 +532,7 @@ class AccessProvidersController extends AppController {
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
@@ -495,35 +545,54 @@ class AccessProvidersController extends AppController {
                 }
             }
         }
+    
+        //== ONLY Access Providers ==
+        $ap_name = Configure::read('group.ap');
+        array_push($c['conditions'],array('Group.name' => $ap_name ));
+
         //====== END REQUEST FILTER =====
 
         //====== AP FILTER =====
-        //If the user is an AP; we need to add an extra clause to only show the Realms which he is allowed to see.
+        //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
         if($user['group_name'] == Configure::read('group.ap')){  //AP
-            $tree_array = array();
-            $this->User = ClassRegistry::init('User');
-
-            //**AP and upward in the tree**
-            $this->parents = $this->User->getPath($user_id,'User.id');
-            //So we loop this results asking for the parent nodes who have available_to_siblings = true
-            foreach($this->parents as $i){
-                $i_id = $i['User']['id'];
-                if($i_id != $user_id){ //upstream
-                    array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
-                }else{
-                    array_push($tree_array,array('User.user_id' => $i_id));
-                }
-            }
-            //** ALL the AP's children
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
+    
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            $ap_clause      = array();
+            foreach($ap_children as $i){
+                $id = $i['id'];
+                array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
             }      
             //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $tree_array));  
+            array_push($c['conditions'],array('OR' => $ap_clause));  
         }       
-        //====== END AP FILTER =====      
+        //====== END AP FILTER =====
         return $c;
     }
+
+
+    private function _find_parents($id){
+
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($id);
+        $path_string= '';
+        if($q_r){
+
+            foreach($q_r as $line_num => $i){
+                $username       = $i['User']['username'];
+                if($line_num == 0){
+                    $path_string    = $username;
+                }else{
+                    $path_string    = $path_string.' -> '.$username;
+                }
+            }
+            if($line_num > 0){
+                return $username." (".$path_string.")";
+            }else{
+                return $username;
+            }
+        }else{
+            return __("orphaned");
+        }
+    }
+
 }
