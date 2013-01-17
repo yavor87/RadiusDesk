@@ -30,5 +30,6 @@ class Note extends AppModel {
         'NaNote'    => array('dependent'    => true),
         'TagNote'   => array('dependent'    => true),
         'RealmNote' => array('dependent'    => true),
+        'UserNote'  => array('dependent'    => true),
     );
 }
