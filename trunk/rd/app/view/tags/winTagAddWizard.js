@@ -45,7 +45,7 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
         var pnlTree = Ext.create('Ext.tree.Panel',{
             itemId: 'scrnApTree',
             useArrows: true,
-            store: 'sAccessProviders',
+            store: 'sAccessProvidersTree',
             rootVisible: true,
             rowLines: true,
             layout: 'fit',

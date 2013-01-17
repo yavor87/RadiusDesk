@@ -40,7 +40,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
         var pnlTree = Ext.create('Ext.tree.Panel',{
             itemId: 'scrnApTree',
             useArrows: true,
-            store: 'sAccessProviders',
+            store: 'sAccessProvidersTree',
             rootVisible: true,
             rowLines: true,
             layout: 'fit',
