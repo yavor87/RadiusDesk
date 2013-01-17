@@ -46,8 +46,8 @@ Ext.define('Rd.controller.cRealms', {
         'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd'
     ],
-    stores: ['sRealms','sAccessProviders'],
-    models: ['mRealm','mAccessProvider'],
+    stores: ['sRealms'],
+    models: ['mRealm'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/realms/add.json',

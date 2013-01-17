@@ -26,8 +26,8 @@ Ext.define('Rd.view.realms.gridTags' ,{
 
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: 'Name',         dataIndex: 'name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: 'Owner',        dataIndex: 'owner', tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: 'Name',         dataIndex: 'name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { 
                 text:   'Available to sub-providers',
                 flex: 1,  

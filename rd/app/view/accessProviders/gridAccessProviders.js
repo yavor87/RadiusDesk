@@ -27,6 +27,14 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
         me.columns  = [
             {xtype: 'rownumberer'},
             {
+                text        : 'Owner',
+                sortable    : true,
+                flex        : 1,
+                dataIndex   : 'owner',
+                tdCls       : 'gridTree',
+                filter      : {type: 'string'}
+            },
+            {
                 text        : 'Username',
                 sortable    : true,
                 flex        : 1,

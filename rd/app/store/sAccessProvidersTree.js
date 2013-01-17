@@ -1,6 +1,6 @@
-Ext.define('Rd.store.sAccessProviders', {
+Ext.define('Rd.store.sAccessProvidersTree', {
     extend: 'Ext.data.TreeStore',
-    model: 'Rd.model.mAccessProvider',
+    model: 'Rd.model.mAccessProviderTree',
     proxy: {
             type: 'ajax',
             format  : 'json',
@@ -11,7 +11,6 @@ Ext.define('Rd.store.sAccessProviders', {
                 root: 'items',
                 messageProperty: 'message'
             }
-            simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
     root: {username: 'Logged in user',leaf: false, id:'0', iconCls: 'admin', expanded: false,monitor: 'na', active: 'na'},
     listeners: {

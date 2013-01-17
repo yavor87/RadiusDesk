@@ -11,7 +11,7 @@ Ext.define('Rd.store.sAccessProvidersGrid', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/tags/index.json',
+            url     : '/cake2/rd_cake/access_providers/index.json',
             reader: {
                 type: 'json',
                 root: 'items',
@@ -19,7 +19,7 @@ Ext.define('Rd.store.sAccessProvidersGrid', {
                 totalProperty: 'totalCount' //Required for dynamic paging
             },
             api: {
-                destroy  : '/cake2/rd_cake/tags/delete.json'
+                destroy  : '/cake2/rd_cake/access_providers/delete.json'
             },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },

@@ -21,7 +21,9 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
         'Ext.form.field.Radio',
-        'Rd.view.realms.frmDetail'
+        'Rd.view.realms.frmDetail',
+        'Rd.store.sAccessProvidersTree',
+        'Rd.model.mAccessProviderTree'
     ],
      initComponent: function() {
         var me = this;
@@ -37,11 +39,13 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
     //____ AccessProviders tree SCREEN ____
     mkScrnApTree: function(){
 
+        var store = Ext.create('Rd.store.sAccessProvidersTree', {});
+
         //A form which allows the user to select
         var pnlTree = Ext.create('Ext.tree.Panel',{
             itemId: 'scrnApTree',
             useArrows: true,
-            store: 'sAccessProviders',
+            store: store,
             rootVisible: true,
             rowLines: true,
             layout: 'fit',

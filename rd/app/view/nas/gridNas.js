@@ -67,9 +67,9 @@ Ext.define('Rd.view.realms.gridNas' ,{
         
         me.columns = [
             {xtype: 'rownumberer'},
+            { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { text: 'IP Address',   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { text: 'Name',         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { 
                 text        : 'Connection type', 
                 dataIndex   : 'connection_type',        

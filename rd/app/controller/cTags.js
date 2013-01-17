@@ -43,8 +43,8 @@ Ext.define('Rd.controller.cTags', {
         'components.pnlBanner',             'tags.gridTags',        'tags.winTagAddWizard',     'tags.winTagEdit',
         'components.winCsvColumnSelect',    'components.winNote',   'components.winNoteAdd'
     ],
-    stores: ['sTags','sAccessProviders'],
-    models: ['mTag','mAccessProvider'],
+    stores: ['sTags'],
+    models: ['mTag' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/tags/add.json',
