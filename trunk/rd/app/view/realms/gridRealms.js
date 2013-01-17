@@ -25,8 +25,8 @@ Ext.define('Rd.view.realms.gridRealms' ,{
 
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: 'Name',     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { text: 'Owner',    dataIndex: 'owner',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: 'Name',     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { text: 'Phone',    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { text: 'Fax',      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { text: 'Cell',     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},

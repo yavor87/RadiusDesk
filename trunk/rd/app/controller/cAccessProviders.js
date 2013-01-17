@@ -45,16 +45,17 @@ Ext.define('Rd.controller.cAccessProviders', {
         'accessProviders.winDetail',            'accessProviders.treeApUserRights', 'accessProviders.gridRealms',   
         'components.pnlBanner',                 'accessProviders.gridAccessProviders'
             ],
-    stores: ['sAccessProviders','sLanguages','sApRights','sAccessProvidersGrid'],
-    models: ['mAccessProvider','mApUserRight','mApRealms','mAccessProviderGrid'],
+    stores: ['sLanguages','sApRights','sAccessProvidersGrid'],
+    models: ['mApUserRight','mApRealms','mAccessProviderGrid'],
     selectedRecord: undefined,
     config: {
         urlAdd:   '/cake2/rd_cake/access_providers/add.json',
         urlEdit:   '/cake2/rd_cake/access_providers/edit.json'
     },
     refs: [
-        { ref:    'treeAccessProviders',    selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
-        { ref: 'winAccessProviders',        selector:   '#accessProvidersWin'}
+        { ref:  'treeAccessProviders',  selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
+        { ref:  'winAccessProviders',   selector:   '#accessProvidersWin'},
+        { ref:  'grid',                 selector:   'gridAccessProviders'}
     ],
     init: function() {
         me = this;
@@ -62,17 +63,20 @@ Ext.define('Rd.controller.cAccessProviders', {
             return;
         }
         me.inited = true;
+
+        me.getStore('sAccessProvidersGrid').addListener('load',me.onStoreApLoaded, me);
+
         me.control({
-            'treeAccessProviders #reload': {
+            'gridAccessProviders #reload': {
                 click:      me.reload
             },
-            'treeAccessProviders #add': {
+            'gridAccessProviders #add': {
                 click:      me.add
             },
-            'treeAccessProviders #edit': {
+            'gridAccessProviders #edit': {
                 click:      me.edit
             },
-            'treeAccessProviders #delete': {
+            'gridAccessProviders #delete': {
                 click:      me.del
             },
             '#accessProvidersWin treeAccessProviders'   : {
@@ -106,7 +110,7 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
     reload: function(){
         var me =this;
-        me.getStore('sAccessProviders').load();
+        me.getStore('sAccessProvidersGrid').load();
     },
     add:    function(){
         var me = this;
@@ -393,5 +397,10 @@ Ext.define('Rd.controller.cAccessProviders', {
         var me = this;
         var grid = button.up('gridApRealms');
         grid.getStore().load();
-    }
+    },
+    onStoreApLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sAccessProvidersGrid').getTotalCount();
+        me.getGrid().down('#count').update({count: count});
+    },
 });

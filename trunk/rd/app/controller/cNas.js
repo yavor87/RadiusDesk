@@ -45,8 +45,8 @@ Ext.define('Rd.controller.cNas', {
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd'
     ],
-    stores: ['sNas','sAccessProviders','sTags','sDynamicAttributes'],
-    models: ['mNas','mAccessProvider','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
+    stores: ['sNas','sTags','sDynamicAttributes'],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
