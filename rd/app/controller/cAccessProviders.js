@@ -93,7 +93,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                 click:      me.password
             },
             'winApAddWizard':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winApAddWizard #btnTreeNext': {
                 click:      me.btnTreeNext
@@ -126,7 +126,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                 click:  me.csvExportSubmit
             },
             '#winCsvColumnSelectAp':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'gridNote[noteForGrid=access_providers] #reload' : {
                 click:  me.noteReload
@@ -141,7 +141,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                 itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=access_providers]':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=access_providers] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext

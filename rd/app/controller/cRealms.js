@@ -91,7 +91,7 @@ Ext.define('Rd.controller.cRealms', {
                 itemclick:  me.gridClick
             },
             'winRealmAddWizard' :{
-                show: me.maskHide
+                toFront: me.maskHide
             },
             'winRealmAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -112,7 +112,7 @@ Ext.define('Rd.controller.cRealms', {
                 click:  me.csvExportSubmit
             },
             '#winCsvColumnSelectRealms':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'gridNote[noteForGrid=realms] #reload' : {
                 click:  me.noteReload
@@ -127,7 +127,7 @@ Ext.define('Rd.controller.cRealms', {
                 itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=realms]':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=realms] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
