@@ -1,4 +1,4 @@
-Ext.define('Ext.form.SubmitFix', {
+Ext.define('Rd.patch.form.SubmitFix', {
     override: 'Ext.ZIndexManager',
     register : function(comp) {
         var me = this,

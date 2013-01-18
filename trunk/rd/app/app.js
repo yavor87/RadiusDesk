@@ -7,8 +7,9 @@ Ext.require([
     'Ext.state.*'
 ]);
 
-
 Ext.application({
+    //Patch like a profesional: http://flexblog.faratasystems.com/2012/02/27/the-best-way-to-organize-your-ext-js-overrides
+    requires: ['Rd.patch.ExtJS411aPatch'],
     name: 'Rd',
     autoCreateViewport: true,
     desktopData:    null,  //Data on how the desktop will look like which will be returned after login

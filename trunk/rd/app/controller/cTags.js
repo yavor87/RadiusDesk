@@ -87,7 +87,7 @@ Ext.define('Rd.controller.cTags', {
                 select:      me.select
             },
             'winTagAddWizard' :{
-                show: me.maskHide
+                toFront: me.maskHide
             },
             'winTagAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -99,13 +99,13 @@ Ext.define('Rd.controller.cTags', {
                 click:  me.btnDataNext
             },
             'winTagEdit' :{
-                show: me.maskHide
+                toFront: me.maskHide
             },
             'winTagEdit #save' : {
                 click:  me.editSubmit
             },
             '#winCsvColumnSelectTags':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             '#winCsvColumnSelectTags #save': {
                 click:  me.csvExportSubmit
@@ -123,7 +123,7 @@ Ext.define('Rd.controller.cTags', {
                 itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=tags]':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=tags] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext

@@ -87,7 +87,7 @@ Ext.define('Rd.controller.cNas', {
                 select:      me.select
             },
             'winNasAddWizard' :{
-                show: me.maskHide
+                toFront: me.maskHide
             },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -129,13 +129,13 @@ Ext.define('Rd.controller.cNas', {
                 change:     me.chkAvailForAllChange
             },
             'winTagManage' : {
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
             },
             '#winCsvColumnSelectNas':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             '#winCsvColumnSelectNas #save': {
                 click:  me.csvExportSubmit
@@ -153,7 +153,7 @@ Ext.define('Rd.controller.cNas', {
                 itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=nas]':{
-                show:       me.maskHide
+                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -173,6 +173,7 @@ Ext.define('Rd.controller.cNas', {
     },
     maskHide: function(){
         var me = this;
+        console.log('hide');
         me.getGridNas().mask.hide();
     },
     add: function(button){
@@ -574,7 +575,7 @@ Ext.define('Rd.controller.cNas', {
         //Find out if there was something selected
         var sel_count = me.getGridNas().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.gridHide();
+            me.maskHide();
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item',
@@ -583,7 +584,7 @@ Ext.define('Rd.controller.cNas', {
             );
         }else{
             if(sel_count > 1){
-                 me.gridHide();
+                 me.maskHide();
                 Ext.ux.Toaster.msg(
                         'Limit the selection',
                         'Selection limited to one',
