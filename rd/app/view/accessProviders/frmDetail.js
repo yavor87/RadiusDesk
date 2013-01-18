@@ -19,21 +19,9 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         labelSeparator: '',
         margin: 15
     },
-    pwdHidden: true,
-    parent_id: '',
-    parent_name: '',
+    pwdHidden: true,//For pwd display
+    noTree: false, //For back button control
     defaultType: 'textfield',
-    buttons: [
-        {
-            itemId: 'save',
-            text: 'OK',
-            scale: 'large',
-            iconCls: 'b-btn_ok',
-            formBind: true,
-            margin: '0 20 40 0'
-        }
-    ],
-
     initComponent: function() {
         var me = this;
 
@@ -41,6 +29,40 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         if(me.pwdHidden == true){
             pwdBlankAllow = true;
         } 
+
+        var buttons = [
+                {
+                    itemId: 'btnDetailPrev',
+                    text: 'Prev',
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'save',
+                    text: 'OK',
+                    scale: 'large',
+                    iconCls: 'b-btn_ok',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+
+        if(me.noTree == true){
+            var buttons = [
+                {
+                    itemId: 'save',
+                    text: 'OK',
+                    scale: 'large',
+                    iconCls: 'b-btn_ok',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+        }
+
+        me.buttons = buttons;
+
 
         var aCb = Ext.create('Rd.view.components.ajaxCheckbox',{
             'url':      me.urlCheckbox,
@@ -53,21 +75,22 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
 
         me.items = [
         {
-            xtype: 'textfield',
-            name : "parent_id",
-            hidden: true,
-            value: me.parent_id
+            itemId  : 'parent_id',
+            xtype   : 'textfield',
+            name    : "parent_id",
+            hidden  : true
+        },   
+        {
+            itemId      : 'owner',
+            xtype       : 'displayfield',
+            fieldLabel  : 'Owner',
+            value       : '',
+            labelClsExtra: 'lblRdReq'
         },
         {
             xtype: 'textfield',
             name : "id",
             hidden: true
-        },
-        {
-            xtype: 'displayfield',
-            fieldLabel: 'Creator',
-            value: me.parent_name,
-            labelClsExtra: 'lblRdReq'
         },
         {
             xtype: 'textfield',
@@ -89,46 +112,57 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         }, 
         { xtype: 'cmbLanguages', width: 350, fieldLabel: 'Language',  name: 'language', allowBlank: false,labelClsExtra: 'lblRdReq' },
         {
-            xtype: 'textfield',
-            fieldLabel: 'Name',
-            name : "name",
-            allowBlank:true
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'Surname',
-            name : "surname",
-            allowBlank:true
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'Phone',
-            name : "phone",
-            allowBlank:true
-        },
-        {
-            xtype: 'textfield',
-            fieldLabel: 'email',
-            name : "email",
-            allowBlank:true
-        },
-        {
-            xtype     : 'textareafield',
-            grow      : true,
-            name      : 'address',
-            fieldLabel: 'Address',
-            anchor    : '100%'
-        },
-        {
             xtype     : 'checkbox',      
             boxLabel  : 'Activate',
             name      : 'active',
             inputValue: 'active',
             checked   : true,
             boxLabelCls: 'lblRdReq'
-
         },
-        aCb //Ajax checkbox - state depends on the rights of the AP and their own record activity setting
+        aCb, //Ajax checkbox - state depends on the rights of the AP and their own record activity setting
+        {
+            xtype:'fieldset',
+            title: 'Optional Info',
+            collapsible: true,
+            border: false,
+            collapsed: true,
+            defaults: {
+                anchor: '100%'
+            },
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    name : "name",
+                    allowBlank:true
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Surname',
+                    name : "surname",
+                    allowBlank:true
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Phone',
+                    name : "phone",
+                    allowBlank:true
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'email',
+                    name : "email",
+                    allowBlank:true
+                },
+                {
+                    xtype     : 'textareafield',
+                    grow      : true,
+                    name      : 'address',
+                    fieldLabel: 'Address',
+                    anchor    : '100%'
+                }
+            ]
+        }
         ];
         this.callParent(arguments);
     }

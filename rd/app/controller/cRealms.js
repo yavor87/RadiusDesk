@@ -46,8 +46,8 @@ Ext.define('Rd.controller.cRealms', {
         'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd'
     ],
-    stores: ['sRealms'],
-    models: ['mRealm'],
+    stores: ['sRealms','sAccessProvidersTree'],
+    models: ['mRealm','mAccessProviderTree'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/realms/add.json',
@@ -90,6 +90,9 @@ Ext.define('Rd.controller.cRealms', {
             'gridRealms'   : {
                 itemclick:  me.gridClick
             },
+            'winRealmAddWizard' :{
+                show: me.maskHide
+            },
             'winRealmAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -108,6 +111,9 @@ Ext.define('Rd.controller.cRealms', {
             '#winCsvColumnSelectRealms #save': {
                 click:  me.csvExportSubmit
             },
+            '#winCsvColumnSelectRealms':{
+                show:       me.maskHide
+            },
             'gridNote[noteForGrid=realms] #reload' : {
                 click:  me.noteReload
             },
@@ -119,6 +125,9 @@ Ext.define('Rd.controller.cRealms', {
             },
             'gridNote[noteForGrid=realms]' : {
                 itemclick: me.gridNoteClick
+            },
+            'winNote[noteForGrid=realms]':{
+                show:       me.maskHide
             },
             'winNoteAdd[noteForGrid=realms] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -135,6 +144,10 @@ Ext.define('Rd.controller.cRealms', {
     reload: function(){
         var me =this;
         me.getStore('sRealms').load();
+    },
+    maskHide:   function(){
+        var me =this;
+        me.getGridRealms().mask.hide();
     },
     gridClick:  function(grid, record, item, index, event){
         var me                  = this;
@@ -166,6 +179,7 @@ Ext.define('Rd.controller.cRealms', {
     },
     add: function(button){
         var me = this;
+         me.getGridRealms().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will simply show the add window
         //if it does have, we will show the add wizard.
@@ -188,7 +202,6 @@ Ext.define('Rd.controller.cRealms', {
             },
             scope: me
         });
-
     },
     btnTreeNext: function(button){
         var me = this;
@@ -274,9 +287,11 @@ Ext.define('Rd.controller.cRealms', {
         }
     },
     edit: function(button){
-        var me = this;   
+        var me = this;
+         me.getGridRealms().mask.show();   
         //Find out if there was something selected
         if(me.getGridRealms().getSelectionModel().getCount() == 0){
+             me.maskHide();
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item to edit',
@@ -284,7 +299,7 @@ Ext.define('Rd.controller.cRealms', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-
+            me.maskHide();
             //Check if the node is not already open; else open the node:
             var tp      = me.getGridRealms().up('tabpanel');
             var sr      = me.getGridRealms().getSelectionModel().getLastSelected();
@@ -340,6 +355,7 @@ Ext.define('Rd.controller.cRealms', {
 
      csvExport: function(button,format) {
         var me          = this;
+        me.getGridRealms().mask.show();
         var columns     = me.getGridRealms().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -407,10 +423,12 @@ Ext.define('Rd.controller.cRealms', {
     },
 
     note: function(button,format) {
-        var me      = this;     
+        var me      = this;
+        me.getGridRealms().mask.show();     
         //Find out if there was something selected
         var sel_count = me.getGridRealms().getSelectionModel().getCount();
         if(sel_count == 0){
+            me.maskHide();
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item',
@@ -419,6 +437,7 @@ Ext.define('Rd.controller.cRealms', {
             );
         }else{
             if(sel_count > 1){
+                me.maskHide();
                 Ext.ux.Toaster.msg(
                         'Limit the selection',
                         'Selection limited to one',
