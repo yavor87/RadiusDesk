@@ -55,7 +55,10 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 ),
                 dataIndex: 'notes'
             }
-        ];   
+        ];
+
+        //Create a mask and assign is as a property to the window
+        me.mask = new Ext.LoadMask(me, {msg: i18n('sConnecting')+" ...."});   
 
         me.callParent(arguments);
     }

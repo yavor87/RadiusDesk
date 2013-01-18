@@ -41,16 +41,20 @@ Ext.define('Rd.controller.cAccessProviders', {
         return win;
     },
     views:  [
-        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider','accessProviders.frmDetail',
-        'accessProviders.winDetail',            'accessProviders.treeApUserRights', 'accessProviders.gridRealms',   
-        'components.pnlBanner',                 'accessProviders.gridAccessProviders'
-            ],
-    stores: ['sLanguages','sApRights','sAccessProvidersGrid'],
-    models: ['mApUserRight','mApRealms','mAccessProviderGrid'],
+        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.frmDetail',
+        'accessProviders.winDetail',            'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
+        'components.pnlBanner',                 'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
+        'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd'
+    ],
+    stores: ['sLanguages',  'sApRights',    'sAccessProvidersGrid',     'sAccessProvidersTree'],
+    models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd:   '/cake2/rd_cake/access_providers/add.json',
-        urlEdit:   '/cake2/rd_cake/access_providers/edit.json'
+        urlAdd          : '/cake2/rd_cake/access_providers/add.json',
+        urlEdit         : '/cake2/rd_cake/access_providers/edit.json',
+        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlExportCsv    : '/cake2/rd_cake/access_providers/export_csv',
+        urlNoteAdd      : '/cake2/rd_cake/access_providers/note_add.json'
     },
     refs: [
         { ref:  'treeAccessProviders',  selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
@@ -58,7 +62,7 @@ Ext.define('Rd.controller.cAccessProviders', {
         { ref:  'grid',                 selector:   'gridAccessProviders'}
     ],
     init: function() {
-        me = this;
+        var me = this;
         if (me.inited) {
             return;
         }
@@ -79,17 +83,29 @@ Ext.define('Rd.controller.cAccessProviders', {
             'gridAccessProviders #delete': {
                 click:      me.del
             },
-            '#accessProvidersWin treeAccessProviders'   : {
-                itemclick:  me.gridClick
+            'gridAccessProviders #note'   : {
+                click:      me.note
+            },
+            'gridAccessProviders #csv'  : {
+                click:      me.csvExport
+            },
+            'gridAccessProviders #password': {
+                click:      me.password
+            },
+            'winApAddWizard':{
+                show:       me.maskHide
+            },
+            'winApAddWizard #btnTreeNext': {
+                click:      me.btnTreeNext
+            },
+            'winApAddWizard #btnDetailPrev': {
+                click:      me.btnDetailPrev
+            },
+            'winApAddWizard #save': {
+                click:      me.addSubmit
             },
             'winAccessProviderDetail #save': {
                 click:      me.addSubmit
-            },
-            'treeAccessProviders #expand': {
-                click:      me.expand
-            },
-            'treeAccessProviders #password': {
-                click:      me.password
             },
             'pnlAccessProvider frmAccessProviderDetail #save': {
                 click:      me.editSubmit
@@ -106,57 +122,96 @@ Ext.define('Rd.controller.cAccessProviders', {
             'pnlAccessProvider gridApRealms #reload': {
                 click:      me.apRealmsReload
             },
+            '#winCsvColumnSelectAp #save': {
+                click:  me.csvExportSubmit
+            },
+            '#winCsvColumnSelectAp':{
+                show:       me.maskHide
+            },
+            'gridNote[noteForGrid=access_providers] #reload' : {
+                click:  me.noteReload
+            },
+            'gridNote[noteForGrid=access_providers] #add' : {
+                click:  me.noteAdd
+            },
+            'gridNote[noteForGrid=access_providers] #delete' : {
+                click:  me.noteDelete
+            },
+            'gridNote[noteForGrid=access_providers]' : {
+                itemclick: me.gridNoteClick
+            },
+            'winNote[noteForGrid=access_providers]':{
+                show:       me.maskHide
+            },
+            'winNoteAdd[noteForGrid=access_providers] #btnNoteTreeNext' : {
+                click:  me.btnNoteTreeNext
+            },
+            'winNoteAdd[noteForGrid=access_providers] #btnNoteAddPrev'  : {   
+                click: me.btnNoteAddPrev
+            },
+            'winNoteAdd[noteForGrid=access_providers] #btnNoteAddNext'  : {   
+                click: me.btnNoteAddNext
+            }
+
         });;
     },
     reload: function(){
         var me =this;
-        me.getStore('sAccessProvidersGrid').load();
+        me.getGrid().getStore().load();
+    },
+    maskHide:   function(){
+        var me =this;
+        me.getGrid().mask.hide();
     },
     add:    function(){
         var me = this;
-        console.log("Add node");
-        //See if there are anything selected... if not, inform the user
-        var sel_count = me.getTreeAccessProviders().getSelectionModel().getCount();
-        if(sel_count == 0){
+        me.getGrid().mask.show(); 
+
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
+                            var w = Ext.widget('winApAddWizard',{id:'winApAddWizardId',noTree: false});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
+                            var w = Ext.widget('winApAddWizard',{id:'winApAddWizardId',noTree: true, startScreen: 'scrnDetail'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }   
+                    }
+                }   
+            },
+            scope: me
+        });
+    },
+    btnTreeNext: function(button){
+        var me      = this;
+        var tree    = button.up('treepanel');
+        //Get selection:
+        var sr      = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winApAddWizard');
+            win.down('#owner').setValue(sr.get('username'));
+            win.down('#parent_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnDetail');
+        }else{
             Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node of the tree under which to add an item',
+                        'Select a owner',
+                        'First select an Access Provider who will be the owner',
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
-        }else{
-            if(sel_count > 1){
-                Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-            }else{
-
-                var otherWarn = false;
-                //Check if the owner = the person under which the new AP is added
-                if(me.selectedRecord.getId() != '0'){
-                    otherWarn = true;
-                }
-
-                if(otherWarn == true){
-                    var parent = me.selectedRecord.get('username');
-                    Ext.Msg.confirm('Confirm', 'The creator of the Access Provider will be '+parent, function(val){
-                        if(val== 'yes'){
-                            Ext.widget('winAccessProviderDetail',
-                                { parent_name: me.selectedRecord.get('username'),parent_id: me.selectedRecord.getId() }
-                            );
-                        }
-                    });  
-
-                }else{          
-                    Ext.widget('winAccessProviderDetail',
-                        { parent_name: me.selectedRecord.get('username'),parent_id: me.selectedRecord.getId() }
-                    );
-                }
-            }
-        }  
+        }
+    },
+    btnDetailPrev: function(button){
+        var me = this;
+        var win = button.up('winApAddWizard');
+        win.getLayout().setActiveItem('scrnApTree');
     },
     addSubmit: function(button){
         var me       = this;
@@ -167,7 +222,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             url: me.urlAdd,
             success: function(form, action) {
                 win.close();
-                me.getTreeAccessProviders().getStore().load();
+                me.reload();
                 Ext.ux.Toaster.msg(
                     'New Access Provider Created',
                     'Access Provider created fine',
@@ -179,10 +234,11 @@ Ext.define('Rd.controller.cAccessProviders', {
         });
     },
     edit:   function(){
-        console.log("Edit node");
+        console.log("Edit node");  
         var me = this;
+        me.getGrid().mask.show();
         //See if there are anything selected... if not, inform the user
-        var sel_count = me.getTreeAccessProviders().getSelectionModel().getCount();
+        var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
             Ext.ux.Toaster.msg(
                         'Select a node',
@@ -190,57 +246,46 @@ Ext.define('Rd.controller.cAccessProviders', {
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
+            me.maskHide(); 
         }else{
-            if(sel_count > 1){
-                Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-            }else{
 
-                //We are not suppose to edit the root node
-                if(me.selectedRecord.getId() == 0){
-                    Ext.ux.Toaster.msg(
-                        'Root node selected',
-                        'You can not edit the root node',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                    );
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
 
-                }else{
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var ap_id       = sr.getId();
+                var ap_tab_id   = 'apTab_'+ap_id;
+                var nt          = tp.down('#'+ap_tab_id);
+                if(nt){
+                    tp.setActiveTab(ap_tab_id); //Set focus on  Tab
+                    return;
+                }
 
-                    //Check if the node is not already open; else open the node:
-                    var tp          = me.getTreeAccessProviders().up('tabpanel');
-                    var ap_id       = me.selectedRecord.getId();
-                    var ap_tab_id   = 'apTab_'+ap_id;
-                    var nt          = tp.down('#'+ap_tab_id);
-                    if(nt){
-                        tp.setActiveTab(ap_tab_id); //Set focus on  Tab
-                        return;
-                    }
+                var ap_tab_name = sr.get('username');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     ap_tab_name,
+                    itemId:     ap_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlAccessProvider',ap_id: ap_id}
+                });
+                tp.setActiveTab(ap_tab_id); //Set focus on Add Tab
+                //Load the record:
+                var nt  = tp.down('#'+ap_tab_id);
+                var f   = nt.down('form');
+                f.loadRecord(sr);    //Load the record
+                //Get the parent node
+                f.down("#owner").setValue(sr.get('owner'));
 
-                    var ap_tab_name = me.selectedRecord.get('username');
-                    //Tab not there - add one
-                    tp.add({ 
-                        title :     ap_tab_name,
-                        itemId:     ap_tab_id,
-                        closable:   true,
-                        iconCls:    'edit', 
-                        layout:     'fit', 
-                        items:      {'xtype' : 'pnlAccessProvider',ap_id: ap_id}
-                    });
-                    tp.setActiveTab(ap_tab_id); //Set focus on Add Tab
-                    //Load the record:
-                    var nt  = tp.down('#'+ap_tab_id);
-                    var f   = nt.down('form');
-                    f.loadRecord(me.selectedRecord);    //Load the record
-                    //Get the parent node
-                    me.selectedRecord.parentNode.get('username');
-                    f.down("displayfield").setValue(me.selectedRecord.parentNode.get('username'));
-                }  
-            }
+                //Take mask down on last one
+                if(index == (count-1)){
+                    me.getGrid().mask.hide(); 
+                }
+            });
         }
     },
     editSubmit: function(button){
@@ -251,7 +296,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             clientValidation: true,
             url: me.urlEdit,
             success: function(form, action) {
-                me.getTreeAccessProviders().getStore().load();
+                me.reload();
                 Ext.ux.Toaster.msg(
                     'Access Provider Updated',
                     'Access Provider updated fine',
@@ -263,100 +308,53 @@ Ext.define('Rd.controller.cAccessProviders', {
         });
     },
     del:   function(){
-        console.log("Delete node");
         var me      = this;     
         //Find out if there was something selected
-        var sel_count = me.getTreeAccessProviders().getSelectionModel().getCount();
-        if(me.getTreeAccessProviders().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node to delete',
+                        'Select an item',
+                        'First select an item to delete',
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-             if(sel_count > 1){
-                Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-            }else{
-                if(!me.selectedRecord.isLeaf()){
-                    Ext.ux.Toaster.msg(
-                        'Access Provider has children',
-                        'First delete all the children',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                    ); 
-                }else{
-                    me.delClear();
+            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+                if(val== 'yes'){
+                    me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
+                    me.getGrid().getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                'Item Deleted',
+                                'Item deleted fine',
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.onStoreApLoaded();   //Update the count   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                'Problems deleting item',
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.getGrid().getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
                 }
-            }
-        }
-    },
-    delClear: function(){
-        var me = this;
-        Ext.Msg.confirm('Confirm', 'Are you sure you want to do that?', function(val){
-            if(val== 'yes'){
-                Ext.each(me.getTreeAccessProviders().getSelectionModel().getSelection(), function(item){
-                    //console.log(item.getId());
-                    item.remove(true);
-                });
-                me.getTreeAccessProviders().getStore().sync({
-                    success: function(batch,options){
-                        Ext.ux.Toaster.msg(
-                            'Node Deleted',
-                            'Deletion went fine',
-                            Ext.ux.Constants.clsInfo,
-                            Ext.ux.Constants.msgInfo
-                        ); 
-                        //Reload to sort out the leaf nodes
-                        me.getTreeAccessProviders().getStore().load();
-                    },
-                    failure: function(batch,options){
-                        Ext.ux.Toaster.msg(
-                            'Problems deleting node',
-                            'There were some problems experienced during the deleting of the node',
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                    }
-                });
-
-            }
-        });
-    },
-    gridClick:  function(grid, record, item, index, event){
-        var me = this;
-        me.selectedRecord = record;
-    },
-    expand: function(){
-        var me = this;
-        //See if there are anything selected... if not, inform the user
-        var sel_count = me.getTreeAccessProviders().getSelectionModel().getCount();
-        if(sel_count == 0){
-            Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node to expand',
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }else{
-            me.getTreeAccessProviders().expandNode(me.selectedRecord,true); 
+            });
         }
     },
     password: function(){
         console.log("Change password");
     },
     apRightReload: function(button){
-        me = this;
+        var me = this;
         var tree = button.up('treeApUserRights');
         tree.getStore().load();
     },
     apRightExpand: function(button){
-        me = this;
+        var me = this;
         var tree = button.up('treeApUserRights');
         var sel_count = tree.getSelectionModel().getCount();
         if(sel_count == 0){
@@ -403,4 +401,238 @@ Ext.define('Rd.controller.cAccessProviders', {
         var count   = me.getStore('sAccessProvidersGrid').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
+    csvExport: function(button,format) {
+        var me          = this;
+        me.getGrid().mask.show();
+        var columns     = me.getGrid().columns;
+        var col_list    = [];
+        Ext.Array.each(columns, function(item,index){
+            if(item.dataIndex != ''){
+                var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
+                col_list[index] = chk;
+            }
+        }); 
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAp')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAp',columns: col_list});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    csvExportSubmit: function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var chkList = form.query('checkbox');
+        var c_found = false;
+        var columns = [];
+        var c_count = 0;
+        Ext.Array.each(chkList,function(item){
+            if(item.getValue()){ //Only selected items
+                c_found = true;
+                columns[c_count] = {'name': item.getName()};
+                c_count = c_count +1; //For next one
+            }
+        },me);
+
+        if(!c_found){
+            Ext.ux.Toaster.msg(
+                        'Select one or more',
+                        'Select one or more columns please',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{     
+            //next we need to find the filter values:
+            var filters     = [];
+            var f_count     = 0;
+            var f_found     = false;
+            var filter_json ='';
+            me.getGrid().filters.filters.each(function(item) {
+                if (item.active) {
+                    f_found         = true;
+                    var ser_item    = item.serialize();
+                    ser_item.field  = item.dataIndex;
+                    filters[f_count]= ser_item;
+                    f_count         = f_count + 1;
+                }
+            });   
+            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.extraParams);
+            var append_url      = "?"+extra_params+'&'+col_json;
+            if(f_found){
+                filter_json = "filter="+Ext.JSON.encode(filters);
+                append_url  = append_url+'&'+filter_json;
+            }
+            window.open(me.urlExportCsv+append_url);
+            win.close();
+        }
+    },
+
+    note: function(button,format) {
+        var me      = this;
+        me.getGrid().mask.show();     
+        //Find out if there was something selected
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             me.maskHide();
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                me.maskHide();
+                Ext.ux.Toaster.msg(
+                        'Limit the selection',
+                        'Selection limited to one',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr = me.getGrid().getSelectionModel().getLastSelected();
+                
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteAp'+sr.getId())){
+                    var w = Ext.widget('winNote',
+                        {
+                            id          : 'winNoteAp'+sr.getId(),
+                            noteForId   : sr.getId(),
+                            noteForGrid : 'access_providers',
+                            noteForName : sr.get('name')
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    noteReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        grid.getStore().load();
+    },
+    noteAdd: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
+            var w   = Ext.widget('winNoteAdd',
+            {
+                id          : 'winNoteApAdd'+grid.noteForId,
+                noteForId   : grid.noteForId,
+                noteForGrid : grid.noteForGrid,
+                refreshGrid : grid
+            });
+            me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    gridNoteClick: function(item,record){
+        var me = this;
+        //Dynamically update the top toolbar
+        grid    = item.up('gridNote');
+        tb      = grid.down('toolbar[dock=top]');
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
+        }
+    },
+    btnNoteTreeNext: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winNoteAdd');
+            win.down('#owner').setValue(sr.get('username'));
+            win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnNote');
+        }else{
+            Ext.ux.Toaster.msg(
+                        'Select a owner',
+                        'First select an Access Provider who will be the owner',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnNoteAddPrev: function(button){
+        var me = this;
+        var win = button.up('winNoteAdd');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnNoteAddNext: function(button){
+        var me      = this;
+        var win     = button.up('winNoteAdd');
+        console.log(win.noteForId);
+        console.log(win.noteForGrid);
+        win.refreshGrid.getStore().load();
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlNoteAdd,
+            params: {for_id : win.noteForId},
+            success: function(form, action) {
+                win.close();
+                win.refreshGrid.getStore().load();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    'New Note Created',
+                    'Note created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    noteDelete: function(button){
+        var me      = this;
+        var grid    = button.up('gridNote');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item to delete',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                'Item Deleted',
+                                'Item deleted fine',
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();   //Update the count
+                            me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                'Problems deleting item',
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    }
+
 });

@@ -45,8 +45,8 @@ Ext.define('Rd.controller.cNas', {
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd'
     ],
-    stores: ['sNas','sTags','sDynamicAttributes'],
-    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList'],
+    stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree'],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -85,6 +85,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas'       : {
                 select:      me.select
+            },
+            'winNasAddWizard' :{
+                show: me.maskHide
             },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -125,8 +128,14 @@ Ext.define('Rd.controller.cNas', {
             '#scrnRealmsForNasOwner #chkAvailForAll': {
                 change:     me.chkAvailForAllChange
             },
+            'winTagManage' : {
+                show:       me.maskHide
+            },
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
+            },
+            '#winCsvColumnSelectNas':{
+                show:       me.maskHide
             },
             '#winCsvColumnSelectNas #save': {
                 click:  me.csvExportSubmit
@@ -142,6 +151,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNote[noteForGrid=nas]' : {
                 itemclick: me.gridNoteClick
+            },
+            'winNote[noteForGrid=nas]':{
+                show:       me.maskHide
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -159,8 +171,13 @@ Ext.define('Rd.controller.cNas', {
         me.getStore('sNas').load();
         //me.getStore('sNas').filter('connection_type','openvpn');
     },
+    maskHide: function(){
+        var me = this;
+        me.getGridNas().mask.hide();
+    },
     add: function(button){
         var me = this;
+        me.getGridNas().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -373,9 +390,11 @@ Ext.define('Rd.controller.cNas', {
     },
 
     tag: function(button){
-        var me      = this;     
+        var me      = this;
+        me.getGridNas().mask.show();     
         //Find out if there was something selected
         if(me.getGridNas().getSelectionModel().getCount() == 0){
+            me.maskHide(); 
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item to tag',
@@ -482,6 +501,7 @@ Ext.define('Rd.controller.cNas', {
 
     csvExport: function(button,format) {
         var me          = this;
+        me.getGridNas().mask.show();
         var columns     = me.getGridNas().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -549,10 +569,12 @@ Ext.define('Rd.controller.cNas', {
     },
 
     note: function(button,format) {
-        var me      = this;     
+        var me      = this;  
+        me.getGridNas().mask.show();   
         //Find out if there was something selected
         var sel_count = me.getGridNas().getSelectionModel().getCount();
         if(sel_count == 0){
+            me.gridHide();
              Ext.ux.Toaster.msg(
                         'Select an item',
                         'First select an item',
@@ -561,6 +583,7 @@ Ext.define('Rd.controller.cNas', {
             );
         }else{
             if(sel_count > 1){
+                 me.gridHide();
                 Ext.ux.Toaster.msg(
                         'Limit the selection',
                         'Selection limited to one',
