@@ -30,6 +30,73 @@ class AccessProvidersController extends AppController {
 
     //-------- BASIC CRUD -------------------------------
 
+     public function export_csv(){
+
+        $this->autoRender   = false;
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //Build query
+        $user_id    = $user['id'];
+        $c          = $this->_build_common_query($user);
+        $q_r        = $this->{$this->modelClass}->find('all', $c);
+
+        //Create file
+        $this->ensureTmp();     
+        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
+        $fp             = fopen($tmpFilename, 'w');
+
+        //Headings
+        $heading_line   = array();
+        if(isset($this->request->query['columns'])){
+            $columns = json_decode($this->request->query['columns']);
+            foreach($columns as $c){
+                array_push($heading_line,$c->name);
+            }
+        }
+        fputcsv($fp, $heading_line,';','"');
+
+        foreach($q_r as $i){
+
+            $columns    = array();
+            $csv_line   = array();
+            if(isset($this->request->query['columns'])){
+                $columns = json_decode($this->request->query['columns']);
+                foreach($columns as $c){
+                    $column_name = $c->name;
+                    if($column_name == 'notes'){
+                        $notes   = '';
+                        foreach($i['UserNote'] as $n){
+                            if(!$this->_test_for_private_parent($n['Note'],$user)){
+                                $notes = $notes.'['.$n['Note']['note'].']';    
+                            }
+                        }
+                        array_push($csv_line,$notes);
+                    }elseif($column_name =='owner'){
+                        $owner_id       = $i['User']['parent_id'];
+                        $owner_tree     = $this->_find_parents($owner_id);
+                        array_push($csv_line,$owner_tree); 
+                    }else{
+                        array_push($csv_line,$i['User']["$column_name"]);  
+                    }
+                }
+                fputcsv($fp, $csv_line,';','"');
+            }
+        }
+
+        //Return results
+        fclose($fp);
+        $data = file_get_contents( $tmpFilename );
+        $this->cleanupTmp( $tmpFilename );
+        $this->RequestHandler->respondAs('csv');
+        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
+        $this->response->body($data);
+    }
+
     public function index(){
         //-- Required query attributes: token;
         //-- Optional query attribute: sel_language (for i18n error messages)
@@ -69,6 +136,15 @@ class AccessProvidersController extends AppController {
             $owner_id       = $i['Owner']['id'];
             $owner_tree     = $this->_find_parents($owner_id);
 
+            //Create notes flag
+            $notes_flag  = false;
+            foreach($i['UserNote'] as $un){
+                if(!$this->_test_for_private_parent($un['Note'],$user)){
+                    $notes_flag = true;
+                    break;
+                }
+            }
+
             array_push($items,
                 array(
                     'id'        => $i['User']['id'], 
@@ -79,7 +155,8 @@ class AccessProvidersController extends AppController {
                     'phone'     => $i['User']['phone'], 
                     'email'     => $i['User']['email'],
                     'active'    => $i['User']['active'], 
-                    'monitor'   => $i['User']['monitor']
+                    'monitor'   => $i['User']['monitor'],
+                    'notes'     => $notes_flag
                 )
             );
         }                
@@ -225,6 +302,13 @@ class AccessProvidersController extends AppController {
 
     public function delete(){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
         if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
             $this->User->id = $this->data['id'];
@@ -241,7 +325,6 @@ class AccessProvidersController extends AppController {
             'success' => true,
             '_serialize' => array('success')
         ));
-
     }
 
     public function edit(){
@@ -283,7 +366,161 @@ class AccessProvidersController extends AppController {
         }
     }
 
-    public function view(){
+     public function note_index(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['for_id'])){
+            $u_id   = $this->request->query['for_id'];
+            $q_r    = $this->User->UserNote->find('all', 
+                array(
+                    'contain'       => array('Note'),
+                    'conditions'    => array('UserNote.user_id' => $u_id)
+                )
+            );
+            foreach($q_r as $i){
+                if(!$this->_test_for_private_parent($i['Note'],$user)){
+                    $owner_id   = $i['Note']['user_id'];
+                    $owner      = $this->_find_parents($owner_id);
+                    array_push($items,
+                        array(
+                            'id'        => $i['Note']['id'], 
+                            'note'      => $i['Note']['note'], 
+                            'available_to_siblings' => $i['Note']['available_to_siblings'],
+                            'owner'     => $owner,
+                            'delete'    => true
+                        )
+                    );
+                }
+            }
+        } 
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
+    public function note_add(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //Get the creator's id
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        $success    = false;
+        $msg        = array('message' => __('Could not create note'));
+        $this->User->UserNote->Note->create(); 
+        //print_r($this->request->data);
+        if ($this->User->UserNote->Note->save($this->request->data)) {
+            $d                          = array();
+            $d['UserNote']['user_id']   = $this->request->data['for_id'];
+            $d['UserNote']['note_id']   = $this->User->UserNote->Note->id;
+            $this->User->UserNote->create();
+            if ($this->User->UserNote->save($d)) {
+                $success = true;
+            }
+        }
+
+        if($success){
+            $this->set(array(
+                'success' => $success,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'success' => $success,
+                'message' => $message,
+                '_serialize' => array('success','message')
+            ));
+        }
+    }
+
+    public function note_del(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $this->User = ClassRegistry::init('User');
+        $fail_flag  = false;
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item       = $this->User->UserNote->Note->findById($this->data['id']);
+            $owner_id   = $item['Note']['user_id'];
+            if($owner_id != $user_id){
+                if($this->_is_sibling_of($user_id,$owner_id)== true){
+                    $this->User->UserNote->Note->id = $this->data['id'];
+                    $this->User->UserNote->Note->delete($this->data['id'],true);
+                }else{
+                    $fail_flag = true;
+                }
+            }else{
+                $this->User->UserNote->Note->id = $this->data['id'];
+                $this->User->UserNote->Note->delete($this->data['id'],true);
+            }
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+
+                $item       = $this->User->UserNote->Note->findById($d['id']);
+                $owner_id   = $item['Note']['user_id'];
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                        $this->User->UserNote->Note->id = $d['id'];
+                        $this->User->UserNote->Note->delete($d['id'],true);
+                    }else{
+                        $fail_flag = true;
+                    }
+                }else{
+                    $this->User->UserNote->Note->id = $d['id'];
+                    $this->User->UserNote->Note->delete($d['id'],true);
+                }
+ 
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
 
     }
 
