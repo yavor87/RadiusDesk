@@ -155,12 +155,11 @@ class TagsController extends AppController {
     //Display a list of nas tags with their owners
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
-        //This works nice :-)
-      //  if(!$this->_ap_right_check()){
-      //      return;
-     //   }
- 
-        $user       = $this->Aa->user_for_token($this);
+       //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
         $user_id    = $user['id'];
 
 
@@ -243,12 +242,11 @@ class TagsController extends AppController {
 
     public function add() {
 
-        //This works nice :-)
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
-     
-        $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
 
         //Get the creator's id
@@ -283,7 +281,9 @@ class TagsController extends AppController {
 
     public function edit() {
 
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
 
@@ -316,11 +316,12 @@ class TagsController extends AppController {
 			throw new MethodNotAllowedException();
 		}
 
-        if(!$this->_ap_right_check()){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
 
-        $user       = $this->Aa->user_for_token($this);
         $user_id    = $user['id'];
         $this->User = ClassRegistry::init('User');
         $fail_flag = false;
@@ -611,7 +612,7 @@ class TagsController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ //Change FIXME
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',     
@@ -620,13 +621,14 @@ class TagsController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-
-            array_push($document_group,array(
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+                array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
+            }
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
