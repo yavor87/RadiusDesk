@@ -32,7 +32,9 @@ Ext.define('Rd.view.acos.treeAco' ,{
         { xtype: 'tbfill'}
     ],
     initComponent: function(){
-
-     this.callParent(arguments);
+        var me = this;
+        //Create a mask and assign is as a property to the window
+        me.mask = new Ext.LoadMask(me, {msg: i18n('sConnecting')+" ...."});
+        this.callParent(arguments);
     }
 });

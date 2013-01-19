@@ -15,24 +15,32 @@ Ext.define('Rd.controller.cAcos', {
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
-                layout: 'fit',
+                layout: 'border',
                 stateful: true,
                 stateId: 'acosWin',
-                items: [{
-                    'xtype': 'tabpanel',
-                    layout: 'fit',
-                    items: [
-                        { 'title' : 'Access Controll Objects','xtype':'treeAco'},
-                        { 'title' : 'Access Provider Rights','xtype':'treeApRights'},  
-                        { 'title' : 'Permanent User Rights'},
-                    ]
+                items: [
+                    {
+                        region: 'north',
+                        xtype:  'pnlBanner',
+                        heading:'Rights management',
+                        image:  'resources/images/48x48/rights.png'
+                    },
+                    {
+                    region  : 'center',
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    items   : [
+                            { 'title' : 'Access Controll Objects','xtype':'treeAco'},
+                            { 'title' : 'Access Provider Rights','xtype':'treeApRights'},  
+                            { 'title' : 'Permanent User Rights'},
+                        ]
                 }]
             });
         }
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['acos.treeAco','acos.winAcoAdd','acos.winAcoEdit','acos.treeApRights'],
+    views:  ['components.pnlBanner','acos.treeAco','acos.winAcoAdd','acos.winAcoEdit','acos.treeApRights'],
     stores: ['sAcos','sApRights'],
     models: ['mAco','mApRight'],
     acoSelectedRecord: undefined,
@@ -67,8 +75,14 @@ Ext.define('Rd.controller.cAcos', {
             'treeAco #expand': {
                 click:      me.acoExpand
             },
+            'winAcoAdd' :{
+                toFront: me.maskHide
+            },
             'winAcoAdd #save':{
                 click:      me.acoAddSubmit
+            },
+            'winAcoEdit' :{
+                toFront: me.maskHide
             },
             'winAcoEdit #save':{
                 click:      me.acoEditSubmit
@@ -94,12 +108,17 @@ Ext.define('Rd.controller.cAcos', {
         var me =this;
         me.getStore('sAcos').load();
     },
+    maskHide:   function(){
+        var me =this;
+        me.getTreeAco().mask.hide();
+    },
     acoAdd:    function(){
         var me = this;
-        console.log("Add node");
+        me.getTreeAco().mask.show();
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getTreeAco().getSelectionModel().getCount();
         if(sel_count == 0){
+            me.maskHide();
             Ext.ux.Toaster.msg(
                         'Select a node',
                         'First select a node of the tree under which to add an ACO entry',
@@ -108,6 +127,7 @@ Ext.define('Rd.controller.cAcos', {
             );
         }else{
             if(sel_count > 1){
+                me.maskHide();
                 Ext.ux.Toaster.msg(
                         'Limit the selection',
                         'Selection limited to one',
@@ -115,12 +135,15 @@ Ext.define('Rd.controller.cAcos', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-
                 console.log(me.acoSelectedRecord.getId());
                 var parent_id = me.acoSelectedRecord.getId();
                 var alias     = me.acoSelectedRecord.get('alias');
-                Ext.widget('winAcoAdd',{'parentId': parent_id,'parentDisplay': alias});
-
+                if(!me.application.runAction('cDesktop','AlreadyExist','winAcoAddId')){
+                     var parent_id = me.acoSelectedRecord.getId();
+                var alias     = me.acoSelectedRecord.get('alias');
+                    var w = Ext.widget('winAcoAdd',{id:'winAcoAddId','parentId': parent_id,'parentDisplay': alias});
+                    me.application.runAction('cDesktop','Add',w);         
+                }
             }
         }
         
@@ -146,11 +169,12 @@ Ext.define('Rd.controller.cAcos', {
         });
     },
     acoEdit:   function(){
-        console.log("Edit node");
         var me = this;
+        me.getTreeAco().mask.show();
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getTreeAco().getSelectionModel().getCount();
         if(sel_count == 0){
+            me.maskHide();
             Ext.ux.Toaster.msg(
                         'Select a node',
                         'First select a node to edit',
@@ -159,6 +183,7 @@ Ext.define('Rd.controller.cAcos', {
             );
         }else{
             if(sel_count > 1){
+                me.maskHide();
                 Ext.ux.Toaster.msg(
                         'Limit the selection',
                         'Selection limited to one',
@@ -169,6 +194,7 @@ Ext.define('Rd.controller.cAcos', {
 
                 //We are not suppose to edit the root node
                 if(me.acoSelectedRecord.getId() == 0){
+                    me.maskHide();
                     Ext.ux.Toaster.msg(
                         'Root node selected',
                         'You can not edit the root node',
@@ -177,10 +203,13 @@ Ext.define('Rd.controller.cAcos', {
                     );
 
                 }else{
-                    var w_edit = Ext.widget('winAcoEdit',{});
-                    w_edit.down('form').loadRecord(me.acoSelectedRecord);
-                    //Set the parent ID
-                    w_edit.down('hiddenfield[name="parent_id"]').setValue(me.acoSelectedRecord.parentNode.getId());
+                    if(!me.application.runAction('cDesktop','AlreadyExist','winAcoEditId')){
+                        var w = Ext.widget('winAcoEdit',{id:'winAcoAddId'});
+                        me.application.runAction('cDesktop','Add',w);  
+                        w.down('form').loadRecord(me.acoSelectedRecord);
+                        //Set the parent ID
+                        w.down('hiddenfield[name="parent_id"]').setValue(me.acoSelectedRecord.parentNode.getId());
+                    }  
                 }  
             }
         }
