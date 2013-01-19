@@ -2,28 +2,29 @@ Ext.define('Rd.view.acos.winAcoEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winAcoEdit',
     title : 'Edit ACO object',
-    layout: 'fit',
-    autoShow: true,
-    width: 300,
-    iconCls: 'add',
+    closable    :  true,
+    draggable   :  false,
+    resizable   :  false,
+    border      : false,
+    layout      : 'fit',
+    autoShow    : false,
+    width       : 350,
+    height      : 350,
+    iconCls     : 'edit',
     initComponent: function() {
         var me = this;
         this.items = [
             {
                 xtype: 'form',
-                border: false,
-                layout: 'anchor',
-                width: '100%',
-                flex: 1,
-                defaults: {
-                    anchor: '100%'
-                },
                 fieldDefaults: {
                     msgTarget: 'under',
-                    labelStyle: 'font-weight: bold; color: #980820; font-size:120%;',
-                    labelAlign: 'top',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'left',
                     labelSeparator: '',
                     margin: 15
+                },
+                defaults: {
+                    anchor: '100%'
                 },
                 defaultType: 'textfield',
                 items: [
@@ -38,11 +39,12 @@ Ext.define('Rd.view.acos.winAcoEdit', {
                         hidden: true
                     },
                     {
-                        xtype: 'textfield',
-                        fieldLabel: 'Alias',
-                        name : "alias",
-                        allowBlank:false,
-                        blankText:"Enter Alias"
+                        xtype       : 'textfield',
+                        fieldLabel  : 'Alias',
+                        name        : "alias",
+                        allowBlank  :false,
+                        blankText   :"Enter Alias",
+                        labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype     : 'textareafield',
@@ -53,7 +55,7 @@ Ext.define('Rd.view.acos.winAcoEdit', {
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'Next',
+                        text: 'Save',
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'
