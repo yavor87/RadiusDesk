@@ -20,14 +20,20 @@ Ext.define('Rd.view.i18n.gridPhpPhrases' ,{
         })
     ],
     tbar: [
-        { xtype: 'cmbLanguages', width: 350 },'-',
-        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},              
-        { xtype: 'button',  iconCls: 'b-add',       scale: 'large', itemId: 'add',      tooltip:    i18n('sAdd')   },
-        { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete',   tooltip:    i18n('sDelete')},
-        { xtype: 'button',  iconCls: 'b-edit',      scale: 'large', itemId: 'edit',     tooltip:    i18n('sEdit')  },
-        { xtype: 'button',  iconCls: 'b-copy',      scale: 'large', itemId: 'copy',     tooltip:    i18n('sCopy')},
-        { xtype: 'button',  iconCls: 'b-meta_edit', scale: 'large', itemId: 'meta',     tooltip:    i18n('sEdit_meta_info')},
-        { xtype: 'button',  iconCls: 'b-comment',   scale: 'large', itemId: 'comment',  tooltip:    i18n('sAdd_comment')}
+        { xtype: 'buttongroup', title: i18n('sSelection'), height: 60, padding:4,items : [
+            { xtype: 'cmbLanguages', width: 350 }
+        ]},
+        { xtype: 'buttongroup', title: i18n('sAction'), items : [
+            { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},              
+            { xtype: 'button',  iconCls: 'b-add',       scale: 'large', itemId: 'add',      tooltip:    i18n('sAdd')   },
+            { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete',   tooltip:    i18n('sDelete')},
+            { xtype: 'button',  iconCls: 'b-edit',      scale: 'large', itemId: 'edit',     tooltip:    i18n('sEdit')  }
+        ]},
+        { xtype: 'buttongroup', title: i18n('sPHP_Phrases'), items : [
+            { xtype: 'button',  iconCls: 'b-copy',      scale: 'large', itemId: 'copy',     tooltip:    i18n('sCopy')},
+            { xtype: 'button',  iconCls: 'b-meta_edit', scale: 'large', itemId: 'meta',     tooltip:    i18n('sEdit_meta_info')},
+            { xtype: 'button',  iconCls: 'b-comment',   scale: 'large', itemId: 'comment',  tooltip:    i18n('sAdd_comment')}
+        ]}
          
     ],
     bbar: [
