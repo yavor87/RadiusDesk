@@ -15,7 +15,7 @@ Ext.define('Rd.controller.cI18n', {
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
-                layout: 'fit',
+                layout: 'border',
                 stateful: true,
                 stateId: 'i18nWin',
                 tools: [{
@@ -24,14 +24,20 @@ Ext.define('Rd.controller.cI18n', {
     
                 } ],
                 items: [
-                    {'xtype' : 'i18nP'}
+                    {
+                        region: 'north',
+                        xtype:  'pnlBanner',
+                        heading:'Translation management',
+                        image:  'resources/images/48x48/i18n.png'
+                    },
+                    {'xtype' : 'i18nP',region  : 'center',}
                 ]
             });
         }
         desktop.restoreWindow(win);    
         return win;
     },
-    views:  ['i18n.vPanI18n',       'i18n.vWinLanguageAdd',     'i18n.vWinKeyAdd',      'i18n.vWinCountryDel',
+    views:  ['components.pnlBanner', 'i18n.vPanI18n',       'i18n.vWinLanguageAdd',     'i18n.vWinKeyAdd',      'i18n.vWinCountryDel',
              'i18n.vWinLanguageDel','i18n.vWinKeyEdit',         'i18n.vWinLanguageEdit','i18n.vWinCountryEdit',
              'i18n.vWinLanguageCopy','i18n.gridPhpPhrases',     'i18n.gridJavascriptPhrases', 'i18n.winPhpAdd', 
              'i18n.winPhpEdit',     'i18n.winPhpComment',       'i18n.winPhpCopy',      'i18n.winPhpMeta'

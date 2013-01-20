@@ -691,15 +691,20 @@ background-position: left center;
 .banner {
     width: 100%;
     height: 100%;
-    background-color: #f5fbfb;
+   /* background-color: #f5fbfb; */
+   /* background-color: #7394b1; */
+    background-color: #f3f6fb;
 }
 
 .banner h1{
     margin-left: 52px;
     padding: 10px;
-    color: #555;
+    /*color: #555;*/
+    /*color: white;*/
+    color: #ced5db;
     font-size:25px;
   /*  text-align: left;*/
+
 }
 
 
