@@ -192,12 +192,21 @@ Ext.define('Rd.controller.cNas', {
                         
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
-                            var w = Ext.widget('winNasAddWizard',{id:'winNasAddWizardId',startScreen: 'selAP'});
+                            var w = Ext.widget('winNasAddWizard',{
+                                id          :'winNasAddWizardId',
+                                startScreen : 'scrnApTree'
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
-                            var w = Ext.widget('winNasAddWizard',{id:'winNasAddWizardId',startScreen: 'selConnectType'});
+                            var w = Ext.widget('winNasAddWizard',{
+                                id          :'winNasAddWizardId',
+                                startScreen : 'scrnConType',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }
@@ -617,16 +626,44 @@ Ext.define('Rd.controller.cNas', {
     noteAdd: function(button){
         var me      = this;
         var grid    = button.up('gridNote');
-        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
-            var w   = Ext.widget('winNoteAdd',
-            {
-                id          : 'winNoteNasAdd'+grid.noteForId,
-                noteForId   : grid.noteForId,
-                noteForGrid : grid.noteForGrid,
-                refreshGrid : grid
-            });
-            me.application.runAction('cDesktop','Add',w);       
-        }
+        //See how the wizard should be displayed:
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){                      
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteNasAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteNasAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid,
+                                startScreen : 'scrnNote',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
     },
     gridNoteClick: function(item,record){
         var me = this;

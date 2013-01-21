@@ -94,6 +94,19 @@ Ext.define('Rd.view.components.winNoteAdd', {
                 }
         ];
 
+        if(me.no_tree == true){
+            var buttons = [
+                {
+                    itemId  : 'btnNoteAddNext',
+                    text    : 'Next',
+                    scale   : 'large',
+                    iconCls : 'b-next',
+                    formBind: true,
+                    margin  : '0 20 40 0'
+                }
+            ];
+        }
+
         var frmNote = Ext.create('Ext.form.Panel',{
             border:     false,
             layout:     'anchor',

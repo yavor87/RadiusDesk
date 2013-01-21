@@ -10,7 +10,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
     requires: [
                 'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu     : '/cake2/rd_cake/access_providers/menu_for_tree.json',
+    urlMenu     : '/cake2/rd_cake/access_providers/menu_for_grid.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],

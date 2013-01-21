@@ -192,11 +192,24 @@ Ext.define('Rd.controller.cRealms', {
                 if(jsonData.success){
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
-                            var w = Ext.widget('winRealmAddWizard',{id:'winRealmAddWizardId'});
+                            var w = Ext.widget('winRealmAddWizard',
+                            {
+                                id          :'winRealmAddWizardId'
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
-                        Ext.widget('winRealmAdd',{});
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
+                            var w   = Ext.widget('winRealmAddWizard',
+                            {
+                                id          : 'winRealmAddWizardId',
+                                startScreen : 'scrnRealmDetail',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
                     }
                 }   
             },
@@ -470,16 +483,45 @@ Ext.define('Rd.controller.cRealms', {
     noteAdd: function(button){
         var me      = this;
         var grid    = button.up('gridNote');
-        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
-            var w   = Ext.widget('winNoteAdd',
-            {
-                id          : 'winNoteRealmsAdd'+grid.noteForId,
-                noteForId   : grid.noteForId,
-                noteForGrid : grid.noteForGrid,
-                refreshGrid : grid
-            });
-            me.application.runAction('cDesktop','Add',w);       
-        }
+
+        //See how the wizard should be displayed:
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){                      
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteRealmsAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteRealmsAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid,
+                                startScreen : 'scrnNote',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
     },
     gridNoteClick: function(item,record){
         var me = this;

@@ -175,12 +175,24 @@ Ext.define('Rd.controller.cAccessProviders', {
                 if(jsonData.success){
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
-                            var w = Ext.widget('winApAddWizard',{id:'winApAddWizardId',noTree: false});
+                            var w = Ext.widget('winApAddWizard',
+                            {
+                                id          :'winApAddWizardId',
+                                no_tree     : false
+
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
-                            var w = Ext.widget('winApAddWizard',{id:'winApAddWizardId',noTree: true, startScreen: 'scrnDetail'});
+                            var w = Ext.widget('winApAddWizard',
+                            {
+                                id          :'winApAddWizardId',
+                                noTree      : true, 
+                                startScreen : 'scrnDetail',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }   
                     }
@@ -518,16 +530,46 @@ Ext.define('Rd.controller.cAccessProviders', {
     noteAdd: function(button){
         var me      = this;
         var grid    = button.up('gridNote');
-        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
-            var w   = Ext.widget('winNoteAdd',
-            {
-                id          : 'winNoteApAdd'+grid.noteForId,
-                noteForId   : grid.noteForId,
-                noteForGrid : grid.noteForGrid,
-                refreshGrid : grid
-            });
-            me.application.runAction('cDesktop','Add',w);       
-        }
+
+         //See how the wizard should be displayed:
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){                      
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteApAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteApAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid,
+                                startScreen : 'scrnNote',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+
     },
     gridNoteClick: function(item,record){
         var me = this;

@@ -1,17 +1,18 @@
 Ext.define('Rd.view.realms.winNasAddWizard', {
-    extend:     'Ext.window.Window',
-    alias :     'widget.winNasAddWizard',
-    closable:   true,
-    draggable:  false,
-    resizable:  false,
-    title:      'Add NAS device',
-    width:      400,
-    height:     400,
-    plain:      true,
-    border:     false,
-    layout:     'card',
-    iconCls:    'add',
-    autoShow:   false,
+    extend      : 'Ext.window.Window',
+    alias       : 'widget.winNasAddWizard',
+    closable    : true,
+    draggable   : false,
+    resizable   : false,
+    title       : 'Add NAS device',
+    width       : 400,
+    height      : 400,
+    plain       : true,
+    border      : false,
+    layout      : 'card',
+    iconCls     : 'add',
+    autoShow    : false,
+    startScreen : 'scrnApTree', //Default start screen
     urlConnTypes: '/cake2/rd_cake/nas/conn_types_available.json',
     defaults: {
             border: false
@@ -50,7 +51,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             success: me.addConnTypes,
             scope: me
         });
-
+        me.getLayout().setActiveItem(me.startScreen);
     },
 
     addConnTypes: function(response){
@@ -115,6 +116,37 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
 
         var me = this;
 
+        var buttons = [
+                {
+                    itemId: 'btnConTypePrev',
+                    text: 'Prev',
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'btnConTypeNext',
+                    text: 'Next',
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+
+        if(me.no_tree){
+            buttons = [
+                {
+                    itemId: 'btnConTypeNext',
+                    text: 'Next',
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+        }
+
         var frmConType = Ext.create('Ext.form.Panel',{
             border:     false,
             layout:     'anchor',
@@ -145,23 +177,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                   //  { boxLabel: 'Dynamic client',       name: 'rb', inputValue: 'dynamic' }
                // ]
             }],
-            buttons: [
-                {
-                    itemId: 'btnConTypePrev',
-                    text: 'Prev',
-                    scale: 'large',
-                    iconCls: 'b-prev',
-                    margin: '0 20 40 0'
-                },
-                {
-                    itemId: 'btnConTypeNext',
-                    text: 'Next',
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    formBind: true,
-                    margin: '0 20 40 0'
-                }
-            ]
+            buttons: buttons
         });
         return frmConType;
     },
@@ -299,6 +315,8 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
     //_______ Direct connection  _______
     mkScrnDirect: function(){
 
+        var me = this;
+
         var frmDirect = Ext.create('Ext.form.Panel',{
             border:     false,
             layout:     'anchor',
@@ -323,7 +341,8 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     itemId  : 'user_id',
                     xtype   : 'textfield',
                     name    : "user_id",
-                    hidden  : true
+                    hidden  : true,
+                    value   : me.user_id
                 },
                 {
                     xtype   : 'textfield',
@@ -335,7 +354,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     itemId      : 'owner',
                     xtype       : 'displayfield',
                     fieldLabel  : 'Owner',
-                    value       : '',
+                    value       : me.owner,
                     labelClsExtra: 'lblRdReq'
                 },
                 {
