@@ -39,7 +39,11 @@ class AppController extends Controller {
     );
 
     //Set this on the controller that will use the _ap_right_check()...
-    protected $base = "Access Providers/Controllers/Your Controller/";
+    protected $base     = "Access Providers/Controllers/Your Controller/";
+
+    //List of parents  (for APs)
+    protected $parents  = array();
+    protected $children = array();
 
     public function beforeFilter() {
 
@@ -122,6 +126,8 @@ class AppController extends Controller {
     }
 
     protected function _test_for_private_parent($item,$user){
+
+        
         //Most tables that has entries which belongs to an Access Provider as the user_id also includes
         // and available_to_siblings flag which if not set; makes the entry private
         // This peice of code will take the current user making the request; and compare it with fields in an entry from a table
@@ -129,8 +135,10 @@ class AppController extends Controller {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return false;
         }
+        
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
+ 
             $user_id = $user['id'];
             $owner_id= $item['user_id'];
             $open    = $item['available_to_siblings'];
@@ -139,7 +147,15 @@ class AppController extends Controller {
             if($owner_id == $user_id){
                 return false;
             }
+
             //Test Parents
+
+            //Check if parents is perhaps empty, then prime it first
+            if(count($this->parents) == 0){
+                $this->parents = $this->User->getPath($user_id,'User.id');
+            }
+
+            //**AP and upward in the tree**
             foreach($this->parents as $i){
                 if($i['User']['id'] == $owner_id){
                     if($open == false){

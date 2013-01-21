@@ -329,6 +329,13 @@ class AccessProvidersController extends AppController {
 
     public function edit(){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
         //We need to unset a few of the values submitted:
         unset($this->request->data['token']);
         unset($this->request->data['password']);
@@ -528,7 +535,7 @@ class AccessProvidersController extends AppController {
 
     //----- Menus ------------------------
 
-    public function menu_for_tree(){
+    public function menu_for_grid(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -617,13 +624,14 @@ class AccessProvidersController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-
-            array_push($document_group,array(
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+                array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
+            }
 
         
             array_push($specific_group,array(
@@ -791,17 +799,18 @@ class AccessProvidersController extends AppController {
 
         //====== AP FILTER =====
         //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
-        if($user['group_name'] == Configure::read('group.ap')){  //AP
-    
+        if($user['group_name'] == Configure::read('group.ap')){  //AP 
             $ap_children    = $this->User->find_access_provider_children($user['id']);
-            $ap_clause      = array();
-            foreach($ap_children as $i){
-                $id = $i['id'];
-                array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
-            }      
-            //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $ap_clause));  
-        }       
+            if($ap_children){   //Only if the AP has any children...
+                $ap_clause      = array();
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
+                }      
+                //Add it as an OR clause
+                array_push($c['conditions'],array('OR' => $ap_clause));  
+            }
+        }      
         //====== END AP FILTER =====
         return $c;
     }
