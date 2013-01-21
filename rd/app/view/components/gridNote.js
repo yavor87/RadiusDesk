@@ -16,7 +16,17 @@ Ext.define('Rd.view.components.gridNote' ,{
     ],
     columns: [
         {xtype: 'rownumberer'},
-        { text: 'Note',   dataIndex: 'note',    tdCls: 'multiLine', flex: 1},
+        { 
+            text        : 'Note',   
+            dataIndex   : 'note',    
+            tdCls       : 'multiLine', 
+            flex        : 1,
+            xtype       :  'templatecolumn', 
+            tpl:        new Ext.XTemplate(
+                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">{note}</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">{note}</div></tpl>"
+                        )
+        },
         { text: 'Owner',  dataIndex: 'owner',   tdCls: 'gridTree', width: 70}
     ],
     initComponent: function(){

@@ -60,9 +60,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
                 }
             ];
         }
-
         me.buttons = buttons;
-
 
         var aCb = Ext.create('Rd.view.components.ajaxCheckbox',{
             'url':      me.urlCheckbox,
@@ -78,13 +76,14 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
             itemId  : 'parent_id',
             xtype   : 'textfield',
             name    : "parent_id",
+            value   : me.user_id,
             hidden  : true
         },   
         {
             itemId      : 'owner',
             xtype       : 'displayfield',
             fieldLabel  : 'Owner',
-            value       : '',
+            value       : me.owner,
             labelClsExtra: 'lblRdReq'
         },
         {

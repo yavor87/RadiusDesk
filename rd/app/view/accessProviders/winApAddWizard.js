@@ -81,7 +81,13 @@ Ext.define('Rd.view.tags.winApAddWizard', {
     //_______ Data for tag  _______
     mkScrnDetail: function(){
         var me          = this;
-        var frmDetail   = Ext.create('Rd.view.accessProviders.frmDetail',{pwdHidden: false,itemId: 'scrnDetail'});
+        var frmDetail   = Ext.create('Rd.view.accessProviders.frmDetail',
+        {
+            pwdHidden   :false,
+            itemId      :'scrnDetail',
+            user_id     : me.user_id,
+            owner       : me.owner
+        });
         return frmDetail;
     }
     

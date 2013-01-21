@@ -465,16 +465,44 @@ Ext.define('Rd.controller.cTags', {
     noteAdd: function(button){
         var me      = this;
         var grid    = button.up('gridNote');
-        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
-            var w   = Ext.widget('winNoteAdd',
-            {
-                id          : 'winNoteTagsAdd'+grid.noteForId,
-                noteForId   : grid.noteForId,
-                noteForGrid : grid.noteForGrid,
-                refreshGrid : grid
-            });
-            me.application.runAction('cDesktop','Add',w);       
-        }
+        //See how the wizard should be displayed:
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){                      
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteTagsAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                            var w   = Ext.widget('winNoteAdd',
+                            {
+                                id          : 'winNoteTagsAdd'+grid.noteForId,
+                                noteForId   : grid.noteForId,
+                                noteForGrid : grid.noteForGrid,
+                                refreshGrid : grid,
+                                startScreen : 'scrnNote',
+                                user_id     : '0',
+                                owner       : 'Logged in user',
+                                no_tree     : true
+                            });
+                            me.application.runAction('cDesktop','Add',w);       
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
     },
     gridNoteClick: function(item,record){
         var me = this;

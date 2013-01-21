@@ -15,25 +15,51 @@ Ext.define('Rd.view.realms.frmDetail', {
         margin: 15
     },
     defaultType: 'textfield',
-    buttons: [
-        {
-            itemId: 'save',
-            text: 'OK',
-            scale: 'large',
-            iconCls: 'b-btn_ok',
-            formBind: true,
-            margin: '0 20 40 0'
-        }
-    ],
-
+    owner:      '',
+    user_id:    '',
+    no_tree:    false,
     initComponent: function() {
         var me = this;
+        var buttons = [
+                {
+                    itemId: 'btnDetailPrev',
+                    text: 'Prev',
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'save',
+                    text: 'OK',
+                    scale: 'large',
+                    iconCls: 'b-btn_ok',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+
+        if(me.no_tree){
+            buttons = [
+                {
+                    itemId: 'save',
+                    text: 'OK',
+                    scale: 'large',
+                    iconCls: 'b-btn_ok',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+        }
+
+        me.buttons = buttons;
+
         me.items = [
         {
             itemId  : 'user_id',
             xtype   : 'textfield',
             name    : "user_id",
-            hidden  : true
+            hidden  : true,
+            value   : me.user_id
         },
         {
             xtype   : 'textfield',
@@ -44,7 +70,7 @@ Ext.define('Rd.view.realms.frmDetail', {
             itemId      : 'owner',
             xtype       : 'displayfield',
             fieldLabel  : 'Owner',
-            value       : '',
+            value       : me.owner,
             labelClsExtra: 'lblRdReq'
         },
         {
@@ -163,10 +189,8 @@ Ext.define('Rd.view.realms.frmDetail', {
                 name        : "lat",
                 allowBlank  : true
             },
-
-
         ]}
-        
+     
         ];
         this.callParent(arguments);
     }

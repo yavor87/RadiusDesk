@@ -12,6 +12,10 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
     layout:     'card',
     iconCls:    'add',
     autoShow:   false,
+    startScreen:'scrnApTree',
+    owner:      '',
+    user_id:    '',
+    no_tree:    false,
     defaults: {
             border: false
     },
@@ -29,15 +33,17 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
         var me = this;
         var scrnApTree       = me.mkScrnApTree();
         var scrnRealmDetail  = me.mkScrnRealmDetail();
-        this.items = [
+        me.items = [
             scrnApTree,
             scrnRealmDetail
         ]; 
-        this.callParent(arguments);
+        me.callParent(arguments);
+        me.getLayout().setActiveItem(me.startScreen);
     },
 
     //____ AccessProviders tree SCREEN ____
     mkScrnApTree: function(){
+        var me = this;
 
         var store = Ext.create('Rd.store.sAccessProvidersTree', {});
 
@@ -78,7 +84,8 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
     },
 
     mkScrnRealmDetail: function(){
-        var frm = Ext.create('Rd.view.realms.frmDetail',{itemId:'scrnRealmDetail'});
+        me = this;
+        var frm = Ext.create('Rd.view.realms.frmDetail',{itemId:'scrnRealmDetail', user_id: me.user_id, owner:me.owner, no_tree: true });
         return frm;
     }
 });
