@@ -835,7 +835,7 @@ class RealmsController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ //Change FIXME
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',     
@@ -844,13 +844,14 @@ class RealmsController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-
-            array_push($document_group,array(
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+                array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
+            }
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),

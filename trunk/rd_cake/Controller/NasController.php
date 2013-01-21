@@ -8,10 +8,6 @@ class NasController extends AppController {
     public $components = array('Aa','RequestHandler');
     protected $base    = "Access Providers/Controllers/Nas/";
 
-    //List of parents and children (for APs)
-    private $parents   = array();
-    private $children  = array();
-
     protected $tmpDir  = 'csvexport';
 
 //------------------------------------------------------------------------
@@ -580,57 +576,6 @@ class NasController extends AppController {
 
     }
 
-//------------------ EXPERIMENTAL WORK --------------------------
-
-    public function display_realms_and_users($id = 0){
-
-        if(isset($this->request->query['id'])){
-            $id = $this->request->query['id'];
-        }
-
-        $items = array();
-
-        if($id == 0){ //the root node
-            $q = $this->{$this->modelClass}->find('all', array(
-                'contain' => array('User' => array('fields' => 'User.id'))
-            ));
-
-            foreach($q as $i){
-                //We will precede the id with 'grp_'
-                $total_users = count($i['User']);
-
-                $i[$this->modelClass]['qtip'] = $total_users." users<br>4 online";
-                $i[$this->modelClass]['text'] = $i[$this->modelClass]['name'];
-               // $i[$this->modelClass]['id']   = 'grp_'.$i[$this->modelClass]['id'];
-              //  $i[$this->modelClass]['leaf'] = true;
-                $total_users = count($i['User']);
-                array_push($items,$i[$this->modelClass]);
-            }
-
-        }else{
-            $q = $this->{$this->modelClass}->find('first', array(
-                'conditions'    => array('Realm.id' => $id),
-                'contain'       => array('User')
-            ));
-            foreach($q['User'] as $i){
-
-                array_push($items, array('id' => $i['id'],'text' => $i['username'], 'leaf'=> true));
-            }
-            $count = 10;
-            while($count < 20000){
-                array_push($items, array('id' => $count,'text' => "Number $count", 'leaf'=> true));
-                $count++;
-            }
-        }
-
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-
-//------------------ END EXPERIMENTAL WORK ------------------------------
 
     //______ EXT JS UI functions ___________
 
@@ -749,7 +694,7 @@ class NasController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ //Change FIXME
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',     
@@ -758,13 +703,14 @@ class NasController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-
-            array_push($document_group,array(
+            ($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+                array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
+            }
 
             //Tags
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
@@ -1001,7 +947,7 @@ class NasController extends AppController {
                     array_push($tree_array,array('Na.user_id' => $i_id));
                 }
             }
-            //** ALL the AP's children
+            //** ALL the AP's children FIXME : This is seriously flawed! look how it should be done with Access Providers!!!
             $this->children   = $this->User->children($user_id,false,'User.id');
             foreach($this->children as $i){
                 $i_id = $i['User']['id'];
