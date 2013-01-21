@@ -135,8 +135,8 @@ class User extends AppModel {
         $this->contain('Group');
         $parentAndChildren = $this->find('threaded', array(
             'conditions' => array(
-                'User.lft >'    => $parent['User']['lft'], 
-                'User.rght <'   => $parent['User']['rght'],
+                'User.lft >='    => $parent['User']['lft'], 
+                'User.rght <='   => $parent['User']['rght'],
                 'Group.name'    => $ap_name
             )
         ));
@@ -156,5 +156,4 @@ class User extends AppModel {
             }
         }
     }
-
 }
