@@ -7,6 +7,9 @@ Ext.define('Rd.view.i18n.gridPhpPhrases' ,{
     'stateEvents':['groupclick','columnhide'],
     border: false,
     multiSelect: true,
+    viewConfig: {
+        preserveScrollOnRefresh: true,
+    },
     requires: ['Rd.view.components.vCmbLanguages'],
     columns: [
         {xtype: 'rownumberer'},
