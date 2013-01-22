@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.vCmbPhraseKeys', {
     extend: 'Ext.form.ComboBox',
     alias : 'widget.cmbPhraseKeys',
-    fieldLabel: 'Choose a key',
+    fieldLabel: i18n('sChoose_a_key'),
     labelSeparator: '',
     store: 'sI18nPhraseKeys',
     queryMode: 'local',

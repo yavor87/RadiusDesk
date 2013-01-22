@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Edit Languages',
+    title:      i18n('sEdit_Languages'),
     width:      380,
     height:     380,
     plain:      true,
@@ -41,7 +41,7 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Select a language to edit",
+            html: i18n("sSelect_a_language_to_edit"),
             width: '100%'
         });
 
@@ -70,7 +70,7 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
             buttons: [
                     {
                         itemId: 'btnLanguageEditNext',
-                        text:   'Next',
+                        text:   i18n('sNext'),
                         scale:  'large',
                         formBind:true,
                         margin: '0 20 40 0',
@@ -103,7 +103,7 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
 
@@ -127,11 +127,11 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
             items: [
                 {
                     name: 'name',
-                    fieldLabel: 'Language name',
+                    fieldLabel: i18n('sLanguage'),
                     itemId: 'inpNewCountry',
                     allowBlank: false,
-                    emptyText: 'language name',
-                    blankText:"Specify a valid name for the language",
+                    emptyText: i18n('sLanguage'),
+                    blankText: i18n("sSpecify_a_valid_name_please"),
                     textValid: true, 
                     validator: function(){
                         return this.textValid;  
@@ -139,11 +139,11 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
                 },
                 {
                     name: 'iso_code',
-                    fieldLabel: 'ISO code',
+                    fieldLabel: i18n('sISO_code'),
                     itemId: 'inpNewIso',
                     allowBlank: false,
-                    emptyText: 'eg pt or de',
-                    blankText:"Specify a valid iso language code",
+                    emptyText: i18n('seg_pt_or_de'),
+                    blankText: i18n("sSpecify_a_valid_iso_language_code"),
                     textValid: true,
                     maskRe : /[a-z]/i,
                     minLength : 2, 
@@ -157,14 +157,14 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
             buttons: [
                     {
                         itemId:     'btnLanguageEditDoPrev',
-                        text:       'Prev',
+                        text:       i18n('sPrev'),
                         scale:      'large',
                         iconCls:    'b-prev',
                         margin:     '0 20 40 0'
                     },
                     {
                         itemId:     'btnLanguageEditDoNext',
-                        text:       'Next',
+                        text:       i18n('sNext'),
                         scale:      'large',
                         formBind:   true,
                         iconCls:    'b-next',

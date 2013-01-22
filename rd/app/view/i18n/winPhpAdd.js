@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.winPhpAdd', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPhpAdd',
-    title : 'Add Msgid',
+    title : i18n('sAdd_Msgid'),
     layout: 'fit',
     autoShow: true,
     width: 300,
@@ -29,26 +29,26 @@ Ext.define('Rd.view.i18n.winPhpAdd', {
                 items: [
                     {
                         xtype: 'textfield',
-                        fieldLabel: 'Msgid',
+                        fieldLabel: i18n('sMsgid'),
                         name : "msgid",
                         allowBlank:false,
-                        blankText:"Enter Message ID"
+                        blankText: i18n('sSpecify_a_valid_name_please')
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: 'Msgstr',
+                        fieldLabel: i18n('sMsgstr'),
                         name : "msgstr",
                         allowBlank:true
                     },
                     {
                         xtype     : 'textfield',
                         name      : "comment",
-                        fieldLabel: 'Optional Comment'
+                        fieldLabel: i18n('sOptional_Comment')
                     }],
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-btn_ok',
                         formBind: true,

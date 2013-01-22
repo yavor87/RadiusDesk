@@ -13,7 +13,7 @@ Ext.define('Rd.library.lTaskBar', {
      * @cfg {String} startBtnText
      * The text for the Start Button.
      */
-    startBtnText: 'Menu',
+    startBtnText: i18n('sMenu'),
 
     application: null,
 

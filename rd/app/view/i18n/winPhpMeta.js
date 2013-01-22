@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.winPhpMeta', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPhpMeta',
-    title : 'Specify Meta data',
+    title : i18n('sSpecify_Meta_data'),
     layout: 'fit',
     autoShow: true,
     width: 400,
@@ -35,69 +35,69 @@ Ext.define('Rd.view.i18n.winPhpMeta', {
                         fieldLabel: 'Project-Id-Version',
                         name : "Project-Id-Version",
                         allowBlank:false,
-                        blankText:"Enter Project-Id-Version"
+                        blankText: i18n("sEnter")+" Enter Project-Id-Version"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'POT-Creation-Date',
                         name : "POT-Creation-Date",
                         allowBlank:false,
-                        blankText:"Enter POT-Creation-Date"
+                        blankText: i18n("sEnter")+" POT-Creation-Date"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'PO-Revision-Date',
                         name : "PO-Revision-Date",
                         allowBlank:false,
-                        blankText:"Enter PO-Revision-Date"
+                        blankText: i18n("sEnter")+" PO-Revision-Date"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'Last-Translator',
                         name : "Last-Translator",
                         allowBlank:false,
-                        blankText:"Enter Last-Translator"
+                        blankText: i18n("sEnter")+" Last-Translator"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'Language-Team',
                         name : "Language-Team",
                         allowBlank:false,
-                        blankText:"Enter Language-Team"
+                        blankText: i18n("sEnter")+" Language-Team"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'MIME-Version',
                         name : "MIME-Version",
                         allowBlank:false,
-                        blankText:"Enter MIME-Version"
+                        blankText: i18n("sEnter")+"  MIME-Version"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'Content-Type',
                         name : "Content-Type",
                         allowBlank:false,
-                        blankText:"Enter Content-Type"
+                        blankText: i18n("sEnter")+" Content-Type"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'Content-Transfer-Encoding',
                         name : "Content-Transfer-Encoding",
                         allowBlank:false,
-                        blankText:"Enter Content-Transfer-Encoding"
+                        blankText: i18n("sEnter")+" Content-Transfer-Encoding"
                     },
                     {
                         xtype: 'textfield',
                         fieldLabel: 'Plural-Forms',
                         name : "Plural-Forms",
                         allowBlank:false,
-                        blankText:"Enter Plural-Forms"
+                        blankText: i18n("sEnter")+' Plural-Forms'
                     }
                     ],
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-btn_ok',
                         formBind: true,

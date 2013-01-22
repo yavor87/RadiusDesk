@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.winPhpEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPhpEdit',
-    title : 'Edit Msgid',
+    title : i18n('sEdit_Msgid'),
     layout: 'fit',
     autoShow: true,
     width: 300,
@@ -36,20 +36,20 @@ Ext.define('Rd.view.i18n.winPhpEdit', {
                     },
                     {
                         xtype: 'displayfield',
-                        fieldLabel: 'Previous value',
+                        fieldLabel: i18n('sPrevious_value'),
                         value: me.old_msgid
                     },
                     {
                         xtype: 'textfield',
-                        fieldLabel: 'Msgid',
+                        fieldLabel: i18n('sMsgid'),
                         name : "msgid",
                         allowBlank:false,
-                        blankText:"Enter Message ID"
+                        blankText : i18n('sSpecify_a_valid_name_please'),
                     }],
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('OK'),
                         scale: 'large',
                         iconCls: 'b-btn_ok',
                         formBind: true,
