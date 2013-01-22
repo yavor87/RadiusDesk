@@ -6,6 +6,7 @@ class AcosRightsController extends AppController {
     public $name       = 'AcosRights';
     public $components = array('Acl','Aa');
     public $aco_ap     = 'Access Providers';
+    protected $base    = "Access Providers/Controllers/AcosRights/";   //This is required for Aa component  
     
     //-------- BASIC CRUD -------------------------------
     public function index(){
@@ -54,9 +55,11 @@ class AcosRightsController extends AppController {
     public function index_ap(){
         //Return the default rights of the Access Provider group which is under the 'Access Providers' branch of the tree
 
-        if(!$this->Aa->admin_check($this)){   //Only for admin users!
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
-        } 
+        }
 
         $id = null;
         if(isset($this->request->query['node'])){
@@ -179,7 +182,9 @@ class AcosRightsController extends AppController {
 
     public function edit_ap(){
 
-        if(!$this->Aa->admin_check($this)){   //Only for admin users!
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
 

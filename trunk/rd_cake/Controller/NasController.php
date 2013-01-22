@@ -703,7 +703,7 @@ class NasController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-            ($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',     
