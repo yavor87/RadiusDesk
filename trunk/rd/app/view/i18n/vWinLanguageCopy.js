@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinLanguageCopy', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Copy phrases from another language',
+    title:      i18n('sCopy_phrases_from_language'),
     width:      380,
     height:     380,
     plain:      true,
@@ -35,7 +35,7 @@ Ext.define('Rd.view.i18n.vWinLanguageCopy', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Choose an existing language to copy the phrases from",
+            html: i18n("sChoose_an_existing_language_to_copy_the_phrases_from"),
             width: '100%'
         });
 
@@ -57,12 +57,12 @@ Ext.define('Rd.view.i18n.vWinLanguageCopy', {
             },
             defaultType: 'textfield',
             items: [
-                {xtype: 'cmbLanguages', 'fieldLabel' : 'Available languages', 'allowBlank': false }
+                {xtype: 'cmbLanguages', 'fieldLabel' : i18n('sAvailable_languages'), 'allowBlank': false }
             ],
             buttons: [
                     {
                         itemId: 'btnLanguageCopyNext',
-                        text:   'Next',
+                        text:   i18n('sNext'),
                         scale:  'large',
                         formBind:true,
                         iconCls:'b-next'

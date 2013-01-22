@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinKeyAdd', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Add Key',
+    title:      i18n('sAdd_Key'),
     width:      380,
     height:     380,
     plain:      true,
@@ -40,7 +40,7 @@ Ext.define('Rd.view.i18n.vWinKeyAdd', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
 
@@ -64,11 +64,11 @@ Ext.define('Rd.view.i18n.vWinKeyAdd', {
             items: [
                 {
                     name: 'name',
-                    fieldLabel: 'Key name',
+                    fieldLabel: i18n('sKey_name'),
                     itemId: 'inpNewKey',
                     allowBlank: false,
-                    emptyText: 'key name',
-                    blankText:"Specify a valid name for the key",
+                    emptyText: i18n('sKey_name'),
+                    blankText: i18n('sSpecify_a_valid_name_for_the_key'),
                     textValid: true, 
                     validator: function(){
                         return this.textValid;  
@@ -78,17 +78,18 @@ Ext.define('Rd.view.i18n.vWinKeyAdd', {
                     xtype     : 'textareafield',
                     grow      : true,
                     name      : 'comment',
-                    fieldLabel: 'Comment',
+                    fieldLabel: i18n('sComment'),
                     anchor    : '100%'
                 }
             ],
             buttons: [
                     {
                         itemId: 'btnNewKeyNext',
-                        text:   'Next',
+                        text:   i18n('sNext'),
                         scale:  'large',
                         formBind:true,
-                        iconCls:'b-next'
+                        iconCls:'b-next',
+                        margin: '0 20 40 0'
                     }
                 ]
         });

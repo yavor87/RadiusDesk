@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cI18n', {
         if(!win){
             win = desktop.createWindow({
                 id: 'i18nWin',
-                title:'i18n Manager',
+                title:i18n('si18n_Manager'),
                 width:800,
                 height:400,
                 iconCls: 'translate',
@@ -20,14 +20,14 @@ Ext.define('Rd.controller.cI18n', {
                 stateId: 'i18nWin',
                 tools: [{
                     type:'help',
-                    tooltip: 'Get Help',
+                    tooltip: i18n('sGet_Help'),
     
                 } ],
                 items: [
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'Translation management',
+                        heading: i18n('sTranslation_management'),
                         image:  'resources/images/48x48/i18n.png'
                     },
                     {'xtype' : 'i18nP',region  : 'center',}
@@ -40,7 +40,8 @@ Ext.define('Rd.controller.cI18n', {
     views:  ['components.pnlBanner', 'i18n.vPanI18n',       'i18n.vWinLanguageAdd',     'i18n.vWinKeyAdd',      'i18n.vWinCountryDel',
              'i18n.vWinLanguageDel','i18n.vWinKeyEdit',         'i18n.vWinLanguageEdit','i18n.vWinCountryEdit',
              'i18n.vWinLanguageCopy','i18n.gridPhpPhrases',     'i18n.gridJavascriptPhrases', 'i18n.winPhpAdd', 
-             'i18n.winPhpEdit',     'i18n.winPhpComment',       'i18n.winPhpCopy',      'i18n.winPhpMeta'
+             'i18n.winPhpEdit',     'i18n.winPhpComment',       'i18n.winPhpCopy',      'i18n.winPhpMeta',
+             'components.winHelp'
             ],
     stores: ['sI18nJsPhrases','sLanguages','sCountries','sJustLanguages','sI18nPhraseKeys','sI18nPhpPhrases'],
     models: ['mI18nMeta'],
@@ -56,7 +57,8 @@ Ext.define('Rd.controller.cI18n', {
         urlPhpEditMsgid : '/cake2/rd_cake/php_phrases/update_msgid.json',
         urlPhpComment   : '/cake2/rd_cake/php_phrases/comment.json',
         urlPhpCopy      : '/cake2/rd_cake/php_phrases/copy.json',
-        urlPhpMeta      : '/cake2/rd_cake/php_phrases/save_meta.json'
+        urlPhpMeta      : '/cake2/rd_cake/php_phrases/save_meta.json',
+        urlHelp         : 'http://sourceforge.net/p/radiusdesk/wiki/i18n/'
         
     },
     refs: [
@@ -64,14 +66,6 @@ Ext.define('Rd.controller.cI18n', {
         { ref: 'i18nW',             selector: '',   xtype: 'i18nW',             autoCreate: true},
         { ref: 'i18nP',             selector: '',   xtype: 'i18nP',             autoCreate: true},
         { ref: 'jsGrid',            selector: '#JsPhrases',  xtype: 'grid',     autoCreate: true},
-        { ref: 'addLanguageW',      selector: '',   xtype: 'addLanguageW',      autoCreate: true},
-        { ref: 'addKeyW',           selector: '',   xtype: 'addKeyW',           autoCreate: true},
-        { ref: 'delCountryW',       selector: '',   xtype: 'delCountryW',       autoCreate: true},
-        { ref: 'delLanguageW',      selector: '',   xtype: 'delLanguageW',      autoCreate: true},
-        { ref: 'editKeyW',          selector: '',   xtype: 'editKeyW',          autoCreate: true},
-        { ref: 'vWinLanguageEdit',  selector: '',   xtype: 'vWinLanguageEdit',  autoCreate: true},
-        { ref: 'vWinCountryEdit',   selector: '',   xtype: 'vWinCountryEdit',   autoCreate: true},
-        { ref: 'vWinLanguageCopy',  selector: '',   xtype: 'vWinLanguageCopy',  autoCreate: true},
         { ref: 'phpGrid',           selector: '#PhpPhrases', xtype: ''  }
     ],
     selCountry : null,
@@ -226,8 +220,27 @@ Ext.define('Rd.controller.cI18n', {
             },
             'winPhpMeta #save':{
                 click:  me.phpMetaSubmit
+            },
+            '#i18nWin tool[type=help]': {
+                click: me.help
             }
         });
+    },
+    help:   function(){
+        var me  = this;
+        var win = me.application.runAction('cDesktop','AlreadyExist','winHelpId');
+        var title = i18n('sOnline_help_for_Translation_Manager');
+        if(!win){
+            var w = Ext.widget('winHelp',{
+                id          : 'winHelpId',
+                title       : title,
+                srcUrl      : me.urlHelp
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }else{
+            win.setSrc(me.urlHelp);
+            win.setTitle(title);
+        }
     },
     jsGridReload:     function(){
         var me = this;
@@ -238,39 +251,52 @@ Ext.define('Rd.controller.cI18n', {
 
     newLanguageWin: function(){
         var me = this;
-        me.getAddLanguageW().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','addLanguageWId')){
+            var w = Ext.widget('addLanguageW',{
+                id          :'addLanguageWId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     newKeyWin: function(){
         var me = this;
-        me.getAddKeyW().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','addKeyWId')){
+            var w = Ext.widget('addKeyW',{
+                id          :'addKeyWId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnIntroNext: function(b){
         var me = this;
         var form = b.up('form');
+        var w  = b.up('addLanguageW');
         //Determine if they want a new language
         if(form.down("#chkNewCountry").getValue()){
-            me.getAddLanguageW().getLayout().setActiveItem('scrnNewCountry');
+            w.getLayout().setActiveItem('scrnNewCountry');
         }else{
             //See if they did select an existing country
             me.selCountry = form.down("cmbCountries").getValue();
             if(me.selCountry == null){
                  Ext.ux.Toaster.msg(
-                        'Select a country',
-                        'You are required to select a country',
+                        i18n('sSelect_a_country'),
+                        i18n('sYou_are_required_to_select_a_country'),
                         Ext.ux.Constants.clsError,
                         Ext.ux.Constants.msgError
                     );
             }else{
-                me.getAddLanguageW().getLayout().setActiveItem('scrnNewLanguage');
+                w.getLayout().setActiveItem('scrnNewLanguage');
             }
         }
     },
     btnNewCountryPrev: function(b){
         var me = this;
-        me.getAddLanguageW().getLayout().setActiveItem('scrnIntro');
+        var w  = b.up('addLanguageW');
+        w.getLayout().setActiveItem('scrnIntro');
     },
     btnNewCountryNext: function(b){
         var me = this;
+        var w  = b.up('addLanguageW');
         
         //submit the form
         var form = b.up('form');
@@ -281,13 +307,13 @@ Ext.define('Rd.controller.cI18n', {
                
                 me.selCountry = o.result.id;
                 Ext.ux.Toaster.msg(
-                        'Country added',
-                        'New country added fine',
+                        i18n('sCountry_added'),
+                        i18n('sNew_country_added_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
                 me.getStore('sCountries').load(); //Reload since there is now a new one
-                me.getAddLanguageW().getLayout().setActiveItem('scrnNewLanguage');
+                w.getLayout().setActiveItem('scrnNewLanguage');
             },
             failure: Ext.ux.formFail
 
@@ -296,10 +322,12 @@ Ext.define('Rd.controller.cI18n', {
 
     btnNewLanguagePrev: function(b){
         var me = this;
-        me.getAddLanguageW().getLayout().setActiveItem('scrnIntro');
+        var w  = b.up('addLanguageW');
+        w.getLayout().setActiveItem('scrnIntro');
     },
     btnNewLanguageNext: function(b){
         var me = this;
+        var win = b.up('addLanguageW');
         //submit the form
         var form = b.up('form');
         form.submit({
@@ -307,16 +335,16 @@ Ext.define('Rd.controller.cI18n', {
             params: {
                 country_id: me.selCountry
             },
-            waitMsg: 'Sending the info...',
+            waitMsg: i18n('sSending_the_info')+'...',
             success: function(fp, o) {
                 Ext.ux.Toaster.msg(
-                        'Language added',
-                        'New language added fine',
+                        i18n('sItem_added'),
+                        i18n('sNew_item_added_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
                 me.completeReload();
-                me.getAddLanguageW().close();
+                win.close();
             }
        }); 
     },
@@ -334,18 +362,19 @@ Ext.define('Rd.controller.cI18n', {
     btnNewKeyNext: function(b){
         var me = this;
         var form = b.up('form');
+        var win  = b.up('addKeyW');
         form.submit({
             url: me.urlKeyAdd,
             waitMsg: 'Sending the info...',
             success: function(fp, o) {
                 Ext.ux.Toaster.msg(
-                        'Key added',
-                        'New Key added fine',
+                        i18n('sItem_added'),
+                        i18n('sNew_item_added_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
                 me.jsGridReload(); //Reload since there is now a new one
-                me.getAddKeyW().close();
+                win.close();
             },
             failure: Ext.ux.formFail
        }); 
@@ -361,7 +390,7 @@ Ext.define('Rd.controller.cI18n', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     me.getJsGrid().getStore().remove(me.getJsGrid().getSelectionModel().getSelection());
                     me.getJsGrid().getStore().sync({
@@ -389,17 +418,26 @@ Ext.define('Rd.controller.cI18n', {
     },
     languageDel: function(){
         var me = this;
-        console.log("del language");
-        me.getDelLanguageW().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','delLanguageWId')){
+            var w = Ext.widget('delLanguageW',{
+                id          :'delLanguageWId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     delCountry: function(){
         var me = this;
-        console.log("del country");
-        me.getDelCountryW().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','delCountryWId')){
+            var w = Ext.widget('delCountryW',{
+                id          :'delCountryWId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnLanguageDelNext: function(b){
-        var me = this;
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+        var me  = this;
+        var win = b.up('delLanguageW');
+        Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
             if(val== 'yes'){
                 var form = b.up('form');
                 form.submit({
@@ -413,7 +451,7 @@ Ext.define('Rd.controller.cI18n', {
                                 Ext.ux.Constants.msgInfo
                             );
                         me.completeReload();
-                        me.getDelLanguageW().close();
+                        win.close();
                     }
                 });
             }
@@ -421,7 +459,8 @@ Ext.define('Rd.controller.cI18n', {
     },
     btnCountryDelNext: function(b){
         var me = this;
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+        var win = b.up('delCountryW');
+        Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
             if(val== 'yes'){
                 var form = b.up('form');
                 form.submit({
@@ -435,7 +474,7 @@ Ext.define('Rd.controller.cI18n', {
                             Ext.ux.Constants.msgInfo
                         );
                         me.completeReload();
-                        me.getDelCountryW().close();
+                        win.close();
                     }
                 });
             }
@@ -443,11 +482,17 @@ Ext.define('Rd.controller.cI18n', {
     }, //Key Edit
     editKey: function(){
         var me = this;
-        me.getEditKeyW().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','editKeyWId')){
+            var w = Ext.widget('editKeyW',{
+                id          :'editKeyWId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnEditKeyDoPrev: function(b){
         var me = this;
-        me.getEditKeyW().getLayout().setActiveItem('scrnEditKey');
+        var w = b.up('editKeyW');
+        w.getLayout().setActiveItem('scrnEditKey');
     },
     btnEditKeyNext: function(b){
         var me = this;
@@ -460,7 +505,7 @@ Ext.define('Rd.controller.cI18n', {
         var scrnDo  = w.down('#scrnEditKeyDo');
         var nextFrm = scrnDo.down('form');
         nextFrm.loadRecord(r);
-        me.getEditKeyW().getLayout().setActiveItem('scrnEditKeyDo');
+        w.getLayout().setActiveItem('scrnEditKeyDo');
     },
     btnEditKeyDoNext: function(b){
         var me      = this;
@@ -474,7 +519,12 @@ Ext.define('Rd.controller.cI18n', {
     }, //Language edit
     editLanguage: function(){
         var me = this;
-        me.getVWinLanguageEdit().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','vWinLanguageEditId')){
+            var w = Ext.widget('vWinLanguageEdit',{
+                id          :'vWinLanguageEditId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnLanguageEditNext: function(b){
         var me = this;
@@ -486,11 +536,12 @@ Ext.define('Rd.controller.cI18n', {
         var scrnDo  = w.down('#scrnLanguageEditDo');
         var nextFrm = scrnDo.down('form');
         nextFrm.loadRecord(r);
-        me.getVWinLanguageEdit().getLayout().setActiveItem('scrnLanguageEditDo');
+        w.getLayout().setActiveItem('scrnLanguageEditDo');
     },
      btnLanguageEditDoPrev: function(b){
         var me = this;
-        me.getVWinLanguageEdit().getLayout().setActiveItem('scrnLanguageEdit');
+        var w       = b.up('vWinLanguageEdit');
+        w.getLayout().setActiveItem('scrnLanguageEdit');
     },
     btnLanguageEditDoNext: function(b){
         var me      = this;
@@ -504,7 +555,12 @@ Ext.define('Rd.controller.cI18n', {
     },
     countryEdit: function(){
         var me = this;
-        me.getVWinCountryEdit().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','vWinCountryEditId')){
+            var w = Ext.widget('vWinCountryEdit',{
+                id          :'vWinCountryEditId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnCountryEditNext: function(b){
         var me = this;
@@ -516,11 +572,12 @@ Ext.define('Rd.controller.cI18n', {
         var scrnDo  = w.down('#scrnCountryEditDo');
         var nextFrm = scrnDo.down('form');
         nextFrm.loadRecord(r);
-        me.getVWinCountryEdit().getLayout().setActiveItem('scrnCountryEditDo');
+        w.getLayout().setActiveItem('scrnCountryEditDo');
     },
     btnCountryEditDoPrev: function(b){
         var me = this;
-        me.getVWinCountryEdit().getLayout().setActiveItem('scrnCountryEdit');
+        var w  = b.up('vWinCountryEdit');
+        w.getLayout().setActiveItem('scrnCountryEdit');
     },
     btnCountryEditDoNext: function(b){
         //submit the form
@@ -535,7 +592,7 @@ Ext.define('Rd.controller.cI18n', {
             success: function(fp, o) {
                 me.selCountry = o.result.id;
                 Ext.ux.Toaster.msg(
-                        'Country updated',
+                        'Country Select updated',
                         'Country updated added fine',
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
@@ -547,7 +604,12 @@ Ext.define('Rd.controller.cI18n', {
     },
     languageCopy: function(){
         var me = this;
-        me.getVWinLanguageCopy().show();
+        if(!me.application.runAction('cDesktop','AlreadyExist','vWinLanguageCopyId')){
+            var w = Ext.widget('vWinLanguageCopy',{
+                id          :'vWinLanguageCopyId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
     },
     btnLanguageCopyNext: function(b){
 
@@ -625,8 +687,8 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         if(me.selPhpLanguage == null){
             Ext.ux.Toaster.msg(
-                        'Select a language',
-                        'Select a language to add the msgid to',
+                        i18n('sSelect_something'),
+                        i18n('sSelect_something_to_work_on'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -646,8 +708,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Item added',
-                    'Item added fine',
+                    i18n('sItem_added'),
+                    i18n('sNew_item_added_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -661,13 +723,13 @@ Ext.define('Rd.controller.cI18n', {
         //Find out if there was something selected
         if(me.getPhpGrid().getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
-                'Select please',
-                'Select something to delete',
+                i18n('sSelect_something'),
+                i18n('sSelect_something_to_work_on'),
                 Ext.ux.Constants.clsWarn,
                 Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.Msg.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.Msg.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     //Because the id of the record is not tied to the msgid, we have to get each msgid and delete that (the msgid is the unique thing)
                     var selection   = me.getPhpGrid().getSelectionModel().getSelection();
@@ -716,8 +778,8 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         if(me.getPhpGrid().getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
-                'Select something',
-                'Select an item to edit',
+                i18n('sSelect_something'),
+                i18n('sSelect_something_to_work_on'),
                 Ext.ux.Constants.clsWarn,
                 Ext.ux.Constants.msgWarn
             );
@@ -725,8 +787,8 @@ Ext.define('Rd.controller.cI18n', {
 
             if(me.getPhpGrid().getSelectionModel().getCount() < 1){
                 Ext.ux.Toaster.msg(
-                    'Select one only',
-                    'Selection limited to one',
+                    i18n('sSelect_one_only'),
+                    i18n('sSelection_limited_to_one'),
                     Ext.ux.Constants.clsWarn,
                     Ext.ux.Constants.msgWarn
                 );
@@ -760,16 +822,16 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         if(me.getPhpGrid().getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
-                'Select something',
-                'Select an item to comment on',
+                i18n('sSelect_something'),
+                i18n('sSelect_something_to_work_on'),
                 Ext.ux.Constants.clsWarn,
                 Ext.ux.Constants.msgWarn
             );
         }else{
             if(me.getPhpGrid().getSelectionModel().getCount() < 1){
                 Ext.ux.Toaster.msg(
-                    'Select one only',
-                    'Selection limited to one',
+                    i18n('sSelect_one_only'),
+                    i18n('sSelection_limited_to_one'),
                     Ext.ux.Constants.clsWarn,
                     Ext.ux.Constants.msgWarn
                 );
@@ -790,8 +852,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Comment added',
-                    'Comment added fine',
+                    i18n('sItem_added'),
+                    i18n('sNew_item_added_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -826,8 +888,8 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         if(me.selPhpLanguage == null){
             Ext.ux.Toaster.msg(
-                        'Select a language',
-                        'Select a language to edit its meta info',
+                        i18n('sSelect_something'),
+                        i18n('sSelect_something_to_work_on'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );

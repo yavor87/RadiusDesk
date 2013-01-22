@@ -284,6 +284,10 @@
       background-image:url(../images/16x16/note.png) !important;
 }
 
+.help {
+      background-image:url(../images/16x16/help.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;

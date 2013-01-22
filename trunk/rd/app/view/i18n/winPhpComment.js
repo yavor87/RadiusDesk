@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.winPhpComment', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPhpComment',
-    title : 'Add comment to msgid',
+    title : i18n('sAdd_comment_to_msgid'),
     layout: 'fit',
     autoShow: true,
     width: 300,
@@ -36,7 +36,7 @@ Ext.define('Rd.view.i18n.winPhpComment', {
                     },
                     {
                         xtype     : 'checkbox',      
-                        boxLabel  : 'Remove existing comments',
+                        boxLabel  : i18n('sRemove_existing_comments'),
                         name      : 'remove_existing',
                         inputValue: 'remove',
                         checked   : true
@@ -44,14 +44,14 @@ Ext.define('Rd.view.i18n.winPhpComment', {
                     {
                         xtype     : 'textfield',
                         name      : "comment",
-                        allowBlank:false,
-                        blankText :"Enter Comment",
-                        fieldLabel: 'Comment'
+                        allowBlank: false,
+                        blankText : i18n('sSpecify_a_valid_name_please'),
+                        fieldLabel: i18n('sComment')
                     }],
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-btn_ok',
                         formBind: true,

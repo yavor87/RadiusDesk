@@ -73,8 +73,8 @@ Ext.define('Rd.controller.cDesktop', {
                 toolConfig: {
                     width: 100,
                     items: [
-                        {   text:'Logout',      iconCls:'exit',     handler: me.onLogout,   scope: me   },'-',
-                        {   text:'Settings',    iconCls:'settings', handler: me.onLogout,   scope: me   }
+                        {   text:i18n('sLogout'),      iconCls:'exit',     handler: me.onLogout,   scope: me   },'-',
+                        {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onLogout,   scope: me   }
                     ]
                 }
             }
@@ -123,8 +123,8 @@ Ext.define('Rd.controller.cDesktop', {
         }
 
         ret.items.push(
-                { text: 'Tile', handler: me.tileWindows, scope: me, minWindows: 1 },
-                { text: 'Cascade', handler: me.cascadeWindows, scope: me, minWindows: 1 })
+                { text: i18n('sTile'), handler: me.tileWindows, scope: me, minWindows: 1 },
+                { text: i18n('sCascade'), handler: me.cascadeWindows, scope: me, minWindows: 1 })
 
         return ret;
     },
@@ -134,11 +134,11 @@ Ext.define('Rd.controller.cDesktop', {
         return {
             defaultAlign: 'br-tr',
             items: [
-                { text: 'Restore', handler: me.onWindowMenuRestore, scope: me },
-                { text: 'Minimize', handler: me.onWindowMenuMinimize, scope: me },
-                { text: 'Maximize', handler: me.onWindowMenuMaximize, scope: me },
+                { text: i18n('sRestore'), handler: me.onWindowMenuRestore, scope: me },
+                { text: i18n('sMinimize'), handler: me.onWindowMenuMinimize, scope: me },
+                { text: i18n('sMaximize'), handler: me.onWindowMenuMaximize, scope: me },
                 '-',
-                { text: 'Close', handler: me.onWindowMenuClose, scope: me }
+                { text: i18n('sClose'), handler: me.onWindowMenuClose, scope: me }
             ],
             listeners: {
                 beforeshow: me.onWindowMenuBeforeShow,

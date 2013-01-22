@@ -4,9 +4,9 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Add Language',
+    title:      i18n('sAdd_Language'),
     width:      380,
-    height:     380,
+    height:     420,
     plain:      true,
     border:     false,
     layout:     'card',
@@ -48,7 +48,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Select an existing country to add a language to. Alternatively choose to create a new country.",
+            html: i18n("sSelect_an_existing_country_to_add_a_language_to_fs")+" "+i18n('sAlternatively_choose_to_create_a_new_country_fs'),
             width: '100%'
         });
 
@@ -81,7 +81,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
                     layout: 'vbox',
                     items: [
                         {
-                            boxLabel  : 'Create new country',
+                            boxLabel  : i18n('sCreate_new_country'),
                             name      : 'chkNewCountry',
                             inputValue: '1',
                             itemId    : 'chkNewCountry',
@@ -93,7 +93,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
             buttons: [
                     {
                         itemId: 'btnIntroNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'
@@ -127,7 +127,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
 
@@ -153,11 +153,11 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
             items: [
                 {
                     name: 'name',
-                    fieldLabel: 'Country name',
+                    fieldLabel: i18n('sCountry_name'),
                     itemId: 'inpNewCountry',
                     allowBlank: false,
                     emptyText: 'country name',
-                    blankText:"Specify a valid name for the country",
+                    blankText: i18n("sSpecify_a_valid_name_please"),
                     textValid: true, //start with it as valid to allow the blankText to show
                     validator: function(){
                         return this.textValid;  //this.text.Valid will return either true or the error message which is supplied by the 'change' listener 
@@ -165,11 +165,11 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
                 },
                 {
                     name: 'iso_code',
-                    fieldLabel: 'ISO code',
+                    fieldLabel: i18n('sISO_code'),
                     itemId: 'inpNewIso',
                     allowBlank: false,
-                    emptyText: 'eg US or ZA',
-                    blankText:"Specify a valid iso country code",
+                    emptyText: i18n('seg_ZA_or_DE'),
+                    blankText: i18n("sSpecify_a_valid_iso_country_code"),
                     maskRe : /[a-z]/i,
                     minLength : 2, 
                     maxLength : 2,
@@ -182,24 +182,26 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
                 {
                     xtype: 'filefield',
                     name: 'icon',
-                    fieldLabel: 'Flag icon',
+                    fieldLabel: i18n('sFlag_icon'),
                     allowBlank: false,
-                    buttonText: 'Select Icon...'
+                    buttonText: i18n('sSelect_Icon')+'...'
                 }
             ],
             buttons: [
                      {
                         itemId:     'btnNewCountryPrev',
-                        text:       'Prev',
+                        text:       i18n('sPrev'),
                         scale:      'large',
-                        iconCls:    'b-prev'
+                        iconCls:    'b-prev',
+                        margin: '0 20 40 0'
                     },
                      {
                         itemId:     'btnNewCountryNext',
-                        text:       'Next',
+                        text:       i18n('sNext'),
                         formBind:   true,
                         scale:      'large',
-                        iconCls:    'b-next'
+                        iconCls:    'b-next',
+                        margin: '0 20 40 0'
                     }
                 ]
         });
@@ -228,7 +230,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
 
@@ -254,11 +256,11 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
             items: [
                 {
                     name: 'name',
-                    fieldLabel: 'Language name',
+                    fieldLabel: i18n('sLanguage'),
                     itemId: 'inpNewCountry',
                     allowBlank: false,
-                    emptyText: 'language name',
-                    blankText:"Specify a valid name for the language",
+                    emptyText: i18n('sLanguage'),
+                    blankText: i18n("sSpecify_a_valid_name_please"),
                     textValid: true, 
                     validator: function(){
                         return this.textValid;  
@@ -266,11 +268,11 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
                 },
                 {
                     name: 'iso_code',
-                    fieldLabel: 'ISO code',
+                    fieldLabel: i18n('sISO_code'),
                     itemId: 'inpNewIso',
                     allowBlank: false,
-                    emptyText: 'eg pt or de',
-                    blankText:"Specify a valid iso language code",
+                    emptyText: i18n('seg_pt_or_de'),
+                    blankText: i18n("sSpecify_a_valid_iso_language_code"),
                     maskRe : /[a-z]/i,
                     minLength : 2, 
                     maxLength : 2,
@@ -284,13 +286,13 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
             buttons: [
                      {
                         itemId:     'btnNewLanguagePrev',
-                        text:       'Prev',
+                        text:       i18n('sPrev'),
                         scale:      'large',
                         iconCls:    'b-prev'
                     },
                      {
                         itemId:     'btnNewLanguageNext',
-                        text:       'Next',
+                        text:       i18n('sNext'),
                         formBind:   true,
                         scale:      'large',
                         iconCls:    'b-next'

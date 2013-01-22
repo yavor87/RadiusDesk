@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinI18n', {
     width: 600,
     height: 400,
     layout: 'fit',
-    title: 'i18n Manager',
+    title: i18n('si18n_Manager'),
     stateful: true,
     stateId: 'stateWin',
     icon: 'resources/images/16x16/i18n.png',

@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Edit Key',
+    title:      i18n('sEdit_Key'),
     width:      380,
     height:     380,
     plain:      true,
@@ -41,7 +41,7 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Select a key to edit",
+            html: i18n("sSelect_a_key_to_edit"),
             width: '100%'
         });
 
@@ -70,7 +70,7 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
             buttons: [
                     {
                         itemId: 'btnEditKeyNext',
-                        text:   'Next',
+                        text:   i18n('sNext'),
                         scale:  'large',
                         formBind:true,
                         margin: '0 20 40 0',
@@ -103,7 +103,7 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
 
@@ -128,11 +128,11 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
                 {
                     name: 'name',
                     id: 'name',
-                    fieldLabel: 'Key name',
+                    fieldLabel: i18n('sKey_name'),
                     itemId: 'inpNewKey',
                     allowBlank: false,
-                    emptyText: 'key name',
-                    blankText:"Specify a valid name for the key",
+                    emptyText: i18n('sKey_name'),
+                    blankText: i18n("sSpecify_a_valid_name_please"),
                     textValid: true, 
                     validator: function(){
                         return this.textValid;  
@@ -143,21 +143,21 @@ Ext.define('Rd.view.i18n.vWinKeyEdit', {
                     grow      : true,
                     name      : 'comment',
                     id        : 'comment',
-                    fieldLabel: 'Comment',
+                    fieldLabel: i18n('sComment'),
                     anchor    : '100%'
                 }
             ],
             buttons: [
                     {
                         itemId:     'btnEditKeyDoPrev',
-                        text:       'Prev',
+                        text:       i18n('sPrev'),
                         scale:      'large',
                         iconCls:    'b-prev',
                         margin:     '0 20 40 0'
                     },
                     {
                         itemId:     'btnEditKeyDoNext',
-                        text:       'Next',
+                        text:       i18n('sNext'),
                         scale:      'large',
                         formBind:   true,
                         iconCls:    'b-next',

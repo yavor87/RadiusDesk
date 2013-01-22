@@ -19,8 +19,8 @@ Ext.define('Rd.store.sI18nJsPhrases', {
             store.sync({
                 success: function(batch,options){
                     Ext.ux.Toaster.msg(
-                        'Updated database',
-                        'Database has been updated',
+                        i18n('sUpdated_database'),
+                        i18n('sDatabase_has_been_updated'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );   

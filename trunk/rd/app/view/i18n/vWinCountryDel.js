@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinCountryDel', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Delete country',
+    title:      i18n('sDelete_country'),
     width:      380,
     height:     300,
     plain:      true,
@@ -19,7 +19,7 @@ Ext.define('Rd.view.i18n.vWinCountryDel', {
         {   xtype: 'panel',
             border: false,
             baseCls: 'regMsg',
-            html: "Select the country to delete. Make sure you know what you are doing",
+            html: i18n('sSelect_the_country_to_delete_fs_Make_sure_you_know_what_you_are_doing'),
             width: '100%'
         },
         {   
@@ -45,7 +45,7 @@ Ext.define('Rd.view.i18n.vWinCountryDel', {
             buttons: [
                     {
                         itemId: 'btnCountryDelNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0',

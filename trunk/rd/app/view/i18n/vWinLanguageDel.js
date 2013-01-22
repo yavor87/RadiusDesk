@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinLanguageDel', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Delete language',
+    title:      i18n('sDelete_language'),
     width:      380,
     height:     300,
     plain:      true,
@@ -19,7 +19,7 @@ Ext.define('Rd.view.i18n.vWinLanguageDel', {
         {   xtype: 'panel',
             border: false,
             baseCls: 'regMsg',
-            html: "Select the language to delete. Make sure you know what you are doing",
+            html: i18n("sSelect_the_language_to_delete_fs")+' '+i18n("sMake_sure_you_know_what_you_are_doing_fs"),
             width: '100%'
         },
         {   
@@ -45,7 +45,7 @@ Ext.define('Rd.view.i18n.vWinLanguageDel', {
             buttons: [
                     {
                         itemId: 'btnLanguageDelNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0',

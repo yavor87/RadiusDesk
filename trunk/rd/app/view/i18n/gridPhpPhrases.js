@@ -37,6 +37,6 @@ Ext.define('Rd.view.i18n.gridPhpPhrases' ,{
          
     ],
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+        {   xtype: 'component', itemId: 'count',  tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ]
 });

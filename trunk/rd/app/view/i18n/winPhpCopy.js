@@ -1,7 +1,7 @@
 Ext.define('Rd.view.i18n.winPhpCopy', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPhpCopy',
-    title : 'Copy from another language',
+    title : i18n('sCopy_from_another_language'),
     layout: 'fit',
     autoShow: true,
     width: 300,
@@ -27,11 +27,11 @@ Ext.define('Rd.view.i18n.winPhpCopy', {
                 },
                 defaultType: 'textfield',
                 items: [
-                    { xtype: 'cmbLanguages', width: 350, fieldLabel: 'Source',      itemId: 'source',       name: 'source', allowBlank: false },
-                    { xtype: 'cmbLanguages', width: 350, fieldLabel: 'Destination', itemId: 'destination',  name: 'destination',allowBlank: false},
+                    { xtype: 'cmbLanguages', width: 350, fieldLabel: i18n('sSource'),      itemId: 'source',       name: 'source', allowBlank: false },
+                    { xtype: 'cmbLanguages', width: 350, fieldLabel: i18n('sDestination'), itemId: 'destination',  name: 'destination',allowBlank: false},
                     {
                         xtype     : 'checkbox',      
-                        boxLabel  : 'Maintain existing translations',
+                        boxLabel  : i18n('sMaintain_existing_translations'),
                         name      : 'maintain_existing',
                         inputValue: 'remove',
                         checked   : true
@@ -39,7 +39,7 @@ Ext.define('Rd.view.i18n.winPhpCopy', {
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-btn_ok',
                         formBind: true,

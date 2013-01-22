@@ -36,33 +36,33 @@ Ext.define('Rd.view.i18n.gridJavascriptPhrases' ,{
             { xtype: 'splitbutton',     iconCls: 'b-add',       scale: 'large', itemId: 'add',      tooltip:    i18n('sAdd'),
                 menu: {
                     items: [
-                        { text: 'Key',      iconCls: 'key16',       itemId: 'mnuNewKey'},
-                        { text: 'Language of country', iconCls: 'language16',itemId: 'mnuLanguageNew'}   
+                        { text: i18n('sKey'),      iconCls: 'key16',       itemId: 'mnuNewKey'},
+                        { text: i18n('sLanguage_of_country'), iconCls: 'language16',itemId: 'mnuLanguageNew'}   
                     ]
                 }
             },  
             { xtype: 'splitbutton',     iconCls: 'b-delete',    scale: 'large', itemId: 'delete',   tooltip:    i18n('sDelete'),
                 menu: {
                     items: [
-                        { text: 'Key',      iconCls: 'key16',       itemId: 'mnuDelKey'},
-                        { text: 'Country',  iconCls: 'country16',   itemId: 'mnuDelCountry'},
-                        { text: 'Language', iconCls: 'language16',  itemId: 'mnuLanguageDel'}  
+                        { text: i18n('sKey'),       iconCls: 'key16',       itemId: 'mnuDelKey'},
+                        { text: i18n('sCountry'),    iconCls: 'country16',   itemId: 'mnuDelCountry'},
+                        { text: i18n('sLanguage'),   iconCls: 'language16',  itemId: 'mnuLanguageDel'}  
                     ]
                 }
             },
             { xtype: 'splitbutton',     iconCls: 'b-edit',      scale: 'large', itemId: 'edit',     tooltip:    i18n('sEdit'),
                 menu: {
                     items: [
-                        { text: 'Key',      iconCls: 'key16',       itemId: 'mnuEditKey'},
-                        { text: 'Country',  iconCls: 'country16',   itemId: 'mnuCountryEdit'},
-                        { text: 'Language', iconCls: 'language16',  itemId: 'mnuLanguageEdit'},
-                        { text: 'Copy phrases from language', iconCls: 'copy16',  itemId: 'mnuLanguageCopy'} 
+                        { text: i18n('sKey'),       iconCls: 'key16',       itemId: 'mnuEditKey'},
+                        { text: i18n('sCountry'),    iconCls: 'country16',   itemId: 'mnuCountryEdit'},
+                        { text: i18n('sLanguage'),   iconCls: 'language16',  itemId: 'mnuLanguageEdit'},
+                        { text: i18n('sCopy_phrases_from_language'), iconCls: 'copy16',  itemId: 'mnuLanguageCopy'} 
                     ]
                 }
             }
         ]}
     ],
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ]
 });

@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Edit Countries',
+    title:      i18n('sEdit_Countries'),
     width:      380,
     height:     380,
     plain:      true,
@@ -34,7 +34,7 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Select a country to edit",
+            html: i18n("sSelect_a_country_to_edit"),
             width: '100%'
         });
         var pnlFrm = Ext.create('Ext.form.Panel',{
@@ -61,7 +61,7 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
             buttons: [
                     {
                         itemId: 'btnCountryEditNext',
-                        text:   'Next',
+                        text:   i18n('sNext'),
                         scale:  'large',
                         formBind:true,
                         margin: '0 20 40 0',
@@ -85,7 +85,7 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
         var pnlMsg = Ext.create('Ext.container.Container',{
             border: false,
             baseCls: 'regMsg',
-            html: "Supply the following detail please",
+            html: i18n("sSupply_the_following_detail_please"),
             width: '100%'
         });
         var pnlFrm = Ext.create('Ext.form.Panel',{
@@ -107,19 +107,19 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
             items: [
                 {
                     name: 'name',
-                    fieldLabel: 'Country name',
+                    fieldLabel: i18n('sCountry_name'),
                     itemId: 'inpNewCountry',
                     allowBlank: false,
-                    emptyText: 'country name',
-                    blankText:"Specify a valid name for the country"
+                    emptyText: i18n('sCountry_name'),
+                    blankText: i18n('sSpecify_a_valid_name_please')
                 },
                 {
                     name: 'iso_code',
-                    fieldLabel: 'ISO code',
+                    fieldLabel: i18n('sISO_code'),
                     itemId: 'inpNewIso',
                     allowBlank: false,
-                    emptyText: 'eg ZA or DE',
-                    blankText:"Specify a valid iso country code",
+                    emptyText: i18n('seg_ZA_or_DE'),
+                    blankText: i18n('sSpecify_a_valid_iso_country_code'),
                     maskRe : /[a-z]/i,
                     minLength : 2, 
                     maxLength : 2,
@@ -128,22 +128,22 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
                 {
                     xtype: 'filefield',
                     name: 'icon',
-                    fieldLabel: 'Flag icon',
+                    fieldLabel: i18n('sFlag_icon'),
                     allowBlank: false,
-                    buttonText: 'Select Icon...'
+                    buttonText: i18n('sSelect_Icon')+'...'
                 }
             ],
             buttons: [
                     {
                         itemId:     'btnCountryEditDoPrev',
-                        text:       'Prev',
+                        text:       i18n('sPrev'),
                         scale:      'large',
                         iconCls:    'b-prev',
                         margin:     '0 20 40 0'
                     },
                     {
                         itemId:     'btnCountryEditDoNext',
-                        text:       'Next',
+                        text:       i18n('sNext'),
                         scale:      'large',
                         formBind:   true,
                         iconCls:    'b-next',
