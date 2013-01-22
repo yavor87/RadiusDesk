@@ -33,7 +33,7 @@ Ext.define('Rd.store.sI18nJsPhrases', {
                         Ext.ux.Constants.msgWarn
                     );
                 }
-            });
+            }); 
         },
         scope: this
     },
