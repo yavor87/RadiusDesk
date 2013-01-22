@@ -27,8 +27,8 @@ Ext.define('Rd.store.sI18nJsPhrases', {
                 },
                 failure: function(batch,options){
                     Ext.ux.Toaster.msg(
-                        'Problems updating the database',
-                        'Database could not be updated',
+                        i18n('sProblems_updating_the_database'),
+                        i18n('sDatabase_could_not_be_updated'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                     );

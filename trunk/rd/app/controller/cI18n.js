@@ -384,8 +384,8 @@ Ext.define('Rd.controller.cI18n', {
         //Find out if there was something selected
         if(me.getJsGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select a key',
-                        'You are required to select a key to delete',
+                        i18n('sSelect_a_key'),
+                        i18n('sYou_are_required_to_select_a_key_to_delete'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -396,8 +396,8 @@ Ext.define('Rd.controller.cI18n', {
                     me.getJsGrid().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Key Deleted',
-                                'Deletion went fine',
+                                i18n('sKey_Deleted'),
+                                i18n('sDeletion_went_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             ); 
@@ -634,8 +634,8 @@ Ext.define('Rd.controller.cI18n', {
         if(me.selLanguage == c_id){
 
              Ext.ux.Toaster.msg(
-                        'Fruitless action',
-                        'Refusing this action since source and destination is the same',
+                        i18n('sFruitless_action'),
+                        i18n('sRefusing_this_action_since_source_and_destination_is_the_same'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -652,8 +652,8 @@ Ext.define('Rd.controller.cI18n', {
             waitMsg: 'Sending the info...',
             success: function(fp, o) {
                 Ext.ux.Toaster.msg(
-                        'Key added',
-                        'New Key added fine',
+                        i18n('sKey_added'),
+                        i18n('sNew_Key_added_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
@@ -755,15 +755,15 @@ Ext.define('Rd.controller.cI18n', {
                             //Set the phrases
                             if(jsonData.success){   
                                 Ext.ux.Toaster.msg(
-                                    'Item(s) removed',
-                                    'Item deleted fine',
+                                    i18n('sItem_br_s_br_removed'),
+                                    i18n('sItem_deleted_fine'),
                                     Ext.ux.Constants.clsInfo,
                                     Ext.ux.Constants.msgInfo
                                 );
                             }else{
                                 Ext.ux.Toaster.msg(
-                                    'Problem deleting item(s)',
-                                    'Items could not be deleted',
+                                    i18n('sProblem_deleting'),
+                                    i18n('sItems_could_not_be_deleted'),
                                     Ext.ux.Constants.clsWarn,
                                     Ext.ux.Constants.msgWarn
                                 );
@@ -809,8 +809,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Item updated',
-                    'Item updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -875,8 +875,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Language copied',
-                    'Language copied fine',
+                    i18n('sLanguage_copied'),
+                    i18n('sLanguage_copied_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -919,8 +919,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Language copied',
-                    'Language copied fine',
+                    i18n('sMeta_data_updated'),
+                    i18n('sMeta_data_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
