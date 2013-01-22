@@ -50,10 +50,24 @@ class PhraseValuesController extends AppController {
     }
 
     function add_language(){
-        if ($this->PhraseValue->Language->save($this->request->data)) {
+
+        //See if we do not already have this language present
+        $l_name = $this->request->data['name'];
+        $l_iso  = $this->request->data['iso_code'];
+        $q_r = $this->PhraseValue->Language->find('first',array('Language.name' => $l_name, 'Language.iso_code' => $l_iso));
+
+        $new_lang_id = false;
+        if($q_r){
+           $new_lang_id = $q_r['Language']['id']; 
+        }else{
+            if ($this->PhraseValue->Language->save($this->request->data)) {
+                $new_lang_id = $this->PhraseValue->Language->id;
+            }
+        }
+
+        if ($new_lang_id != false) {
 
             //Now we need to add phrases for this
-            $new_lang_id = $this->PhraseValue->Language->id;
             $country_id  = $this->data['country_id'];
 
             //Get the country's name

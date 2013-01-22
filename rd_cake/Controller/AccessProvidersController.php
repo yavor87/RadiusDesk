@@ -600,7 +600,6 @@ class AccessProvidersController extends AppController {
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -610,8 +609,7 @@ class AccessProvidersController extends AppController {
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',    
                     'scale'     => 'large', 
-                    'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'itemId'    => 'edit',    
                     'tooltip'   => __('Edit')));
             }
 
