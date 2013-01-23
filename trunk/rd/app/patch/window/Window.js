@@ -10,7 +10,7 @@ Ext.define('Rd.patch.window.Window', {
 
         //only fire tofront and toback events if the current window was not already to front
         if (me != activeWindow){
-          //  console.log(me.self.getName() + ' created');
+            console.log(me.self.getName() + ' moved to front');
             me.fireEvent('toFront');
         }
         if (activeWindow){

@@ -693,7 +693,12 @@ Ext.define('Rd.controller.cI18n', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.widget('winPhpAdd',{});
+            if(!me.application.runAction('cDesktop','AlreadyExist','winPhpAddId')){
+                var w = Ext.widget('winPhpAdd',{
+                    id          :'winPhpAddId'
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }
         }
     },
 
@@ -794,7 +799,13 @@ Ext.define('Rd.controller.cI18n', {
                 );
             }else{
                 var old_msgid = me.phpSelectedRecord.get('msgid');
-                Ext.widget('winPhpEdit',{'old_msgid': old_msgid});
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPhpEditId')){
+                    var w = Ext.widget('winPhpEdit',{
+                        id          :'winPhpEditId',
+                        'old_msgid' : old_msgid
+                    });
+                    me.application.runAction('cDesktop','Add',w);         
+                }
             }
         }
     },
@@ -837,7 +848,13 @@ Ext.define('Rd.controller.cI18n', {
                 );
             }else{
                 var msgid = me.phpSelectedRecord.get('msgid');
-                Ext.widget('winPhpComment',{'msgid': msgid});
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPhpCommentId')){
+                    var w = Ext.widget('winPhpComment',{
+                        id          :'winPhpCommentId',
+                        'msgid'     : msgid
+                    });
+                    me.application.runAction('cDesktop','Add',w);         
+                }
             }
         }
     },
@@ -861,8 +878,14 @@ Ext.define('Rd.controller.cI18n', {
             failure: Ext.ux.formFail
         });
     },
-    phpCopy: function(){   
-        Ext.widget('winPhpCopy');
+    phpCopy: function(){ 
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winPhpCopyId')){
+            var w = Ext.widget('winPhpCopy',{
+                id          :'winPhpCopyId',
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        } 
     },
     phpCopySubmit: function(button){
         var me       = this;
@@ -901,7 +924,13 @@ Ext.define('Rd.controller.cI18n', {
                 failure: Ext.ux.formFail,
                 success: function(record, operation) {
                     //do something if the load succeeded
-                    var win = Ext.widget('winPhpMeta');
+                    var win = me.application.runAction('cDesktop','AlreadyExist','winPhpMetaId');
+                    if(!win){
+                         win = Ext.widget('winPhpMeta',{
+                            id          :'winPhpMetaId',
+                        });
+                        me.application.runAction('cDesktop','Add',win);         
+                    } 
                     form = win.down('form');
                     form.loadRecord(record);
                 }
@@ -909,7 +938,7 @@ Ext.define('Rd.controller.cI18n', {
         }
     },
     phpMetaSubmit: function(button){
-        var me       = this;
+        var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
         form.submit({
