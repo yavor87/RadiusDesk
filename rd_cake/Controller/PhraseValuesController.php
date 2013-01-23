@@ -54,7 +54,7 @@ class PhraseValuesController extends AppController {
         //See if we do not already have this language present
         $l_name = $this->request->data['name'];
         $l_iso  = $this->request->data['iso_code'];
-        $q_r = $this->PhraseValue->Language->find('first',array('Language.name' => $l_name, 'Language.iso_code' => $l_iso));
+        $q_r = $this->PhraseValue->Language->find('first',array('conditions' => array('Language.name' => $l_name, 'Language.iso_code' => $l_iso)));
 
         $new_lang_id = false;
         if($q_r){
