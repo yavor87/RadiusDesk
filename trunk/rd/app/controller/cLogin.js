@@ -21,7 +21,7 @@ Ext.define('Rd.controller.cLogin', {
                 click: me.login
             },
             'pnlLogin #cmbLanguage': {
-                change: me.onLanguageChange
+                select: me.onLanguageSelect
             },
             '#inpPassword': {
                 specialkey: function(field, e) {
@@ -84,10 +84,9 @@ Ext.define('Rd.controller.cLogin', {
         Ext.util.Cookies.clear("Token");
         me.actionIndex();
     },
-    onLanguageChange: function(combo,newValue,oldValue){
-        if(oldValue === undefined){
-            return;
-        }
+    onLanguageSelect: function(combo, records){
+        var sr = records[0];
+
         Ext.MessageBox.show({
            title: i18n('sNew_language_selected'),
            msg: i18n('sChanging_language_please_wait')+'...',
@@ -102,8 +101,10 @@ Ext.define('Rd.controller.cLogin', {
         //We do this to allow the display of the message and then reloading else it leave the user confused
         setTimeout(function(){
             Ext.MessageBox.hide();
-            Ext.state.Manager.set('rdLanguage',combo.getValue());
+            Ext.state.Manager.set('rdLanguage',sr.getId());
+            Ext.state.Manager.set('rdLanguageRtl',sr.get('rtl'));
+            console.log(Ext.state.Manager.get('rdLanguageRtl'));
             location.reload();
-        }, 1000);   
+        }, 1000);  
     }
 });
