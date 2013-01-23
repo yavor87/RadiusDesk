@@ -68,7 +68,7 @@ class PhraseValue extends AppModel {
     function list_languages(){
         $q = $this->find('all',
                 array('fields' => 
-                    array('DISTINCT PhraseValue.language_id, PhraseValue.country_id','Country.icon_file')
+                    array('DISTINCT PhraseValue.language_id, PhraseValue.country_id','Country.icon_file','Language.rtl')
                 )
             );
         $languages = array();
@@ -82,6 +82,7 @@ class PhraseValue extends AppModel {
                         'country'   => $country, 
                         'language'  => $language,
                         'text'      => "$country -> $language",
+                        'rtl'       => $i['Language']['rtl'],
                         'icon_file' => $icon_file)
             );   
         }
