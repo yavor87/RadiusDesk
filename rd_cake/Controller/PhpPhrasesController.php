@@ -92,7 +92,8 @@ class PhpPhrasesController extends AppController {
         $look_for = "msgid \"$old_msgid\"";
         //Find the msgid with the following value:
         foreach($lines as $line_num => $line){
-            if(preg_match("/^$look_for$/", $line)){
+            $line = rtrim($line);
+            if($line == $look_for){ 
                 break;
             }
         }
@@ -120,11 +121,12 @@ class PhpPhrasesController extends AppController {
         $msgstr = $this->request->data['msgstr'];
         $lines  = $this->_get_po_file_contents(true);
    
-        $look_for = "msgid \"$msgid\"";
+        $look_for = 'msgid "'.$msgid.'"';
 
         //Find the msgid with the following value:
         foreach($lines as $line_num => $line){
-            if(preg_match("/^$look_for$/", $line)){
+            $line = rtrim($line);
+            if($line == $look_for){ //Use this instead of preg_match since "funny characters cause trouble e.g. ( )
                 break;
             }
         }
@@ -148,7 +150,6 @@ class PhpPhrasesController extends AppController {
         }
 
         file_put_contents($this->_get_file_name(),$lines);
-
         $this->set(array(
             'items' => array(),
             'success' => true,
@@ -405,7 +406,8 @@ class PhpPhrasesController extends AppController {
         $look_for = "msgid \"$msgid\"";
         //Find the msgid with the following value:
         foreach($lines as $line_num => $line){
-            if(preg_match("/^$look_for$/", $line)){
+            $line = rtrim($line);
+            if($line == $look_for){ 
                 break;
             }
         }
@@ -459,7 +461,8 @@ class PhpPhrasesController extends AppController {
 
         //Find the msgid with the following value:
         foreach($lines as $line_num => $line){
-            if(preg_match("/^$look_for$/", $line)){
+            $line = rtrim($line);
+            if($line == $look_for){ 
                 break;
             }
         }
