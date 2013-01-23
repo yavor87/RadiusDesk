@@ -27,21 +27,13 @@ var Element = Ext.dom.Element,
 Ext.onReady(function () {
 
     //RADIUSdesk add on
-    var l = Ext.util.Cookies.get("ext-rdLanguage");
-    if(l != null){
-        if(l != "s:18_13"){ //Not rtl language keep as is
-            var styleSheet,
-            len = document.styleSheets.length,
-            i = 0;
-            for(; i < len; i += 1) {
-                styleSheet = document.styleSheets.item(i);
-                if (styleSheet.href && styleSheet.href.indexOf('ext-mirror.css') > -1) {
-                    styleSheet.disabled = true;
-                }
-            }   
-            return;
-        }
-    }else{
+    var rtl         = Ext.util.Cookies.get("ext-rdLanguageRtl");
+    var rtl_flag    = false;
+    if(rtl == 'b:1'){   //trigger on 'b:1'
+        rtl_flag = true;
+    }
+
+    if(!rtl_flag){   //Left to right; disable stylesheet
         var styleSheet,
         len = document.styleSheets.length,
         i = 0;

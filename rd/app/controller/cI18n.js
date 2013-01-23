@@ -549,6 +549,9 @@ Ext.define('Rd.controller.cI18n', {
         var form    = b.up('form');
         var record  = form.getRecord();
         var values  = form.getValues();
+        if(values.rtl == undefined){    //We had to add this else the POST action is not triggered when unchecking the checkbox
+            values.rtl = false;
+        }
         record.set(values);
         me.completeReload();
         w.close();

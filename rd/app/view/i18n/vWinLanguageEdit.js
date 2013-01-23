@@ -152,6 +152,13 @@ Ext.define('Rd.view.i18n.vWinLanguageEdit', {
                     validator: function(){
                         return this.textValid;  
                     }
+                },
+                {
+                    xtype     : 'checkbox',      
+                    boxLabel  : i18n('sRight_to_left'),
+                    name      : 'rtl',
+                    inputValue: 'rtl',
+                    checked   : false
                 }
             ],
             buttons: [
