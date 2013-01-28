@@ -110,6 +110,26 @@ class RealmsController extends AppController {
             $a_to_s      = $this->request->query['available_to_siblings'];  
         }
 
+        //By default nas_id not included
+        $nas_id = false;
+        if(isset($this->request->query['nas_id'])){
+            $nas_id      = $this->request->query['nas_id'];  
+        }
+
+        //========== CLEAR FIRST CHECK =======
+        //By default clear_flag is not included
+        $clear_flag = false;
+        if(isset($this->request->query['clear_flag'])){
+            if($this->request->query['clear_flag'] == 'true'){
+                $clear_flag = true;
+            }
+        }
+
+        if($clear_flag){    //If we first need to remove previous associations!   
+            $this->Realm->NaRealm->deleteAll(array('NaRealm.na_id' => $nas_id),false);
+        }
+        //========== END CLEAR FIRST CHECK =======
+
         $items = array();
 
         //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
@@ -120,24 +140,36 @@ class RealmsController extends AppController {
             $q_r        = $this->User->getPath($owner_id, array('id'));
             foreach($q_r as $i){
                 $user_id = $i['User']['id'];
-                $this->Realm->contain();
+                $this->Realm->contain('NaRealm.na_id');
                 $q = $this->Realm->find('all',
                     array(  'conditions'    => array('Realm.available_to_siblings' => true,'Realm.user_id' => $user_id),
                             'fields'        => array('Realm.id','Realm.name')
                     ));
                 foreach($q as $j){
-                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                    $selected = false;
+                    foreach($j['NaRealm'] as $nr){
+                        if($nr['na_id'] == $nas_id){
+                            $selected = true;
+                        }
+                    }
+                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
                 }
 
                 //When it got down to the owner; also get the private realms
                 if($user_id == $owner_id){
-
+                    $this->Realm->contain('NaRealm.na_id');
                     $q = $this->Realm->find('all',
                     array(  'conditions'    => array('Realm.available_to_siblings' => false,'Realm.user_id' => $user_id),
                             'fields'        => array('Realm.id','Realm.name')
                     ));
                     foreach($q as $j){
-                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                        $selected = false;
+                        foreach($j['NaRealm'] as $nr){
+                            if($nr['na_id'] == $nas_id){
+                                $selected = true;
+                            }
+                        }
+                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
                     }
                 }
             }
@@ -147,12 +179,22 @@ class RealmsController extends AppController {
         if($a_to_s == 'true'){
 
             //First find all the realms beloning to the owner:
+            $this->Realm->contain('NaRealm.na_id');
             $q = $this->Realm->find('all',
                 array(  'conditions'    => array('Realm.user_id' => $owner_id),
                         'fields'        => array('Realm.id','Realm.name')
                 ));
             foreach($q as $j){
-                array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                $selected = false;
+                //Check if the nas is not already assigned to this realm
+                if($nas_id){
+                    foreach($j['NaRealm'] as $nr){
+                        if($nr['na_id'] == $nas_id){
+                            $selected = true;
+                        }
+                    }
+                }
+                array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
             }
             
             //Now get all the realms of the siblings of the owner
@@ -161,18 +203,26 @@ class RealmsController extends AppController {
             $q_r        = $this->User->children($owner_id,false, array('id'));
             foreach($q_r as $i){
                 $user_id = $i['User']['id'];
-                $this->Realm->contain();
+                $this->Realm->contain('NaRealm.na_id');
                 $q = $this->Realm->find('all',
                     array(  'conditions'    => array('Realm.user_id' => $user_id),
                             'fields'        => array('Realm.id','Realm.name')
                     ));
                 foreach($q as $j){
-                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => false));                
+                    $selected = false;
+                    //Check if the nas is not already assigned to this realm
+                    if($nas_id){
+                        foreach($j['NaRealm'] as $nr){
+                            if($nr['na_id'] == $nas_id){
+                                $selected = true;
+                            }
+                        }
+                    }   
+                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
                 }
             }
         }
        
-
         $this->set(array(
             'items'     => $items,
             'success'   => true,
@@ -185,6 +235,52 @@ class RealmsController extends AppController {
             'items'     => array(),
             'success'   => true,
             '_serialize' => array('items','success')
+        ));
+    }
+
+    public function update_na_realm(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if(isset($this->request->query['nas_id'])){
+            $nas_id     = $this->request->query['nas_id'];
+	        if(isset($this->data['id'])){   //Single item select
+                $realm_id   = $this->data['id'];
+                if($this->data['selected']){
+                    $this->Realm->NaRealm->create();
+                    $d['NaRealm']['na_id']      = $nas_id;
+                    $d['NaRealm']['realm_id']   = $realm_id;
+                    $this->Realm->NaRealm->save($d);
+                }else{
+                    $this->Realm->NaRealm->deleteAll(array('NaRealm.na_id' => $nas_id,'NaRealm.realm_id' => $realm_id), false);        
+                }
+            }else{                          //Assume multiple item select
+                foreach($this->data as $d){
+                    if(isset($d['id'])){   //Single item select
+                        $realm_id   = $d['id'];
+                        if($d['selected']){
+                            $this->Realm->NaRealm->create();
+                            $d['NaRealm']['na_id']      = $nas_id;
+                            $d['NaRealm']['realm_id']   = $realm_id;
+                            $this->Realm->NaRealm->save($d);
+                        }else{
+                            $this->Realm->NaRealm->deleteAll(array('NaRealm.na_id' => $nas_id,'NaRealm.realm_id' => $realm_id), false);        
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
         ));
     }
 
@@ -253,9 +349,7 @@ class RealmsController extends AppController {
                 $this->Acl->deny(
                 array('model' => 'User', 'foreign_key' => $ap_id), 
                 array('model' => 'Realm','foreign_key' => $id), 'delete');
-            } 
-  
-    
+            }  
         }
 
         $this->set(array(
