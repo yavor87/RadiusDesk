@@ -313,6 +313,10 @@
     background-image:url(../images/32x32/reload.png);
 }
 
+.b-reload_time {
+    background-image:url(../images/32x32/reload_time.png);
+}
+
 .b-add {
     background-image:url(../images/32x32/add.png);
 }
