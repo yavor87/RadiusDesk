@@ -6,6 +6,9 @@ Ext.define('Rd.view.realms.gridNas' ,{
     multiSelect: true,
     stateId: 'StateGridNas',
     stateEvents:['groupclick','columnhide'],
+    viewConfig: {
+        preserveScrollOnRefresh: true,
+    },
     border: false,
     requires: [
         'Rd.view.components.ajaxToolbar'

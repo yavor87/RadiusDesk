@@ -3,8 +3,8 @@ Ext.define('Rd.store.sNas', {
     model: 'Rd.model.mNas',
     //To make it load AJAXly from the server specify the follown 3 attributes
     buffered: true,
-    leadingBufferZone: 150, 
-    pageSize: 50,
+    leadingBufferZone: 25, 
+    pageSize: 25,
     //To force server side sorting:
     remoteSort: true,
     proxy: {

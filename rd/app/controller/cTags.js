@@ -83,6 +83,9 @@ Ext.define('Rd.controller.cTags', {
             'gridTags #csv'  : {
                 click:      me.csvExport
             },
+            'gridTags #test'  : {
+                click:      me.test
+            },
             'gridTags'   : {
                 select:      me.select
             },
@@ -608,5 +611,23 @@ Ext.define('Rd.controller.cTags', {
                 }
             });
         }
+    },
+
+    test : function(){
+        var me = this;
+        console.log("Add dummy");
+
+        var record = new Rd.model.mTag({
+            id: Ext.id(),
+            name: 'addRecord',
+            owner: 'koos',
+            available_to_siblings: true,
+            notes: true,
+            update: true,
+            delete: true
+        });
+        me.getGrid().getStore().add(record);
+        me.getGrid().getStore()._realTotalCount++;
+
     }
 });

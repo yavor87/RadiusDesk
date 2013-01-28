@@ -3,6 +3,7 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
     alias : 'widget.gridRealmsForNasOwner',
     border: false,
     requires:   ['Rd.view.components.advCheckColumn'],
+    realFlag : false, 
     columns: [
         {xtype: 'rownumberer'},
         { text: 'Name',    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
@@ -25,21 +26,32 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
             }
         }
     ],
-    tbar: [ 
-        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},'->',  
-        { xtype: 'tbtext', text: 'Select one or more realms', cls: 'lblWizard' },
-             
-    ],
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
     initComponent: function(){
 
         //We have to create this treeview's own store since it is unique to the AP
-        var me = this;
+        var me          = this;
+        var urlUpdate   = '/cake2/rd_cake/realms/dummy_edit.json';
 
-        console.log("eeeeeee");
+        if(me.realFlag){
+            urlUpdate  = '/cake2/rd_cake/realms/update_na_realm.json';
+            me.tbar = [ 
+                { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
+                {xtype: 'checkboxfield',boxLabel  : 'Make available to sub-providers', boxLabelCls : 'lblRd',itemId: 'chkAvailSub'},
+                '->',  
+                { xtype: 'tbtext', text: 'Select one or more realms', cls: 'lblWizard' },         
+            ];
+        }else{
+            me.tbar = [ 
+                { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},'->',  
+                { xtype: 'tbtext', text: 'Select one or more realms', cls: 'lblWizard' },         
+            ];
+        }
 
+
+        
         //Create a store specific to this Owner
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mRealmForNasOwner',
@@ -54,7 +66,7 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
                     messageProperty: 'message'
                 },
                 api: {
-                    update  : '/cake2/rd_cake/realms/dummy_edit.json'
+                    update: urlUpdate
                 }
             },
             listeners: {

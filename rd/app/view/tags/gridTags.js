@@ -10,6 +10,9 @@ Ext.define('Rd.view.realms.gridTags' ,{
     requires: [
         'Rd.view.components.ajaxToolbar'
     ],
+    viewConfig: {
+        loadMask:false
+    },
     urlMenu: '/cake2/rd_cake/tags/menu_for_grid.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }

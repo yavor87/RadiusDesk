@@ -43,14 +43,16 @@ Ext.define('Rd.controller.cNas', {
 
     views:  [
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
-        'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd'
+        'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas', 'nas.frmNasBasic',
+        'nas.pnlRealmsForNasOwner'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
-        urlEdit:            '/cake2/rd_cake/nas/edit.json',
+        urlEditPanelCfg:    '/cake2/rd_cake/nas/edit_panel_cfg.json',
+        urlEditBasic:       '/cake2/rd_cake/nas/edit.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/nas/export_csv',
@@ -71,10 +73,13 @@ Ext.define('Rd.controller.cNas', {
             'gridNas #reload': {
                 click:      me.reload
             },
-            'gridNas #add'   : {
+            'gridNas #add'  : {
                 click:      me.add
             },  
-            'gridNas #note'   : {
+            'gridNas #edit' : {
+                click:      me.edit
+            }, 
+            'gridNas #note' : {
                 click:      me.note
             },
             'gridNas #csv'  : {
@@ -82,6 +87,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #tag'   : {
                 click:      me.tag
+            },
+            'gridNas #reload menuitem[group=refresh]'   : {
+                click:      me.reloadOptionClick
             },
             'gridNas'       : {
                 select:      me.select
@@ -163,13 +171,31 @@ Ext.define('Rd.controller.cNas', {
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
+            },
+            'frmNasBasic #save':    {
+                click: me.frmNasBasicSave
+            },
+            'frmNasBasic #monitorType': {
+                change: me.monitorTypeChange
+            },
+            'pnlRealmsForNasOwner #chkAvailForAll' :{
+                change:     me.chkAvailForAllChangeTab
+            },
+            'pnlRealmsForNasOwner gridRealmsForNasOwner #reload' :{
+                click:      me.gridRealmsForNasOwnerReload
+            },
+            'pnlRealmsForNasOwner #chkAvailSub':{
+                change:     me.chkAvailSubTab
             }
         });
     },
     reload: function(){
         var me =this;
+        if(me.getGridNas() == undefined){   //Thw window is closed; exit
+            clearInterval(me.autoReload);
+            return;
+        }
         me.getStore('sNas').load();
-        //me.getStore('sNas').filter('connection_type','openvpn');
     },
     maskHide: function(){
         var me = this;
@@ -391,7 +417,21 @@ Ext.define('Rd.controller.cNas', {
         }else{
             grid.show();
         }
-
+    },
+    chkAvailForAllChangeTab: function(chk){
+        var me      = this;
+        var pnl     = chk.up('panel');
+        var grid    = pnl.down("gridRealmsForNasOwner");
+        if(chk.getValue() == true){
+            grid.hide();
+            
+        }else{
+            grid.show();
+        }
+        //Clear the grid:
+        grid.getStore().getProxy().setExtraParam('clear_flag',true);
+        grid.getStore().load();
+        grid.getStore().getProxy().setExtraParam('clear_flag',false);
     },
     gridRealmsForNasOwnerReload: function(button){
         var me      = this;
@@ -769,5 +809,144 @@ Ext.define('Rd.controller.cNas', {
                 }
             });
         }
+    },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        
+
+        if(n == 'mnuRefreshCancel'){
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+
+        me.autoReload = setInterval(function(){        
+            me.reload();
+        },  interval);  
+    },
+
+    //______ EDIT _______
+
+     edit: function(button){
+        var me      = this;
+        var grid    = button.up('gridNas');
+
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        'Select an item',
+                        'First select an item to edit',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            var selected    =  grid.getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(grid.getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = grid.up('tabpanel');
+                var nas_id      = sr.getId();
+                var nas_tab_id  = 'nasTab_'+nas_id;
+                var nt          = tp.down('#'+nas_tab_id);
+                if(nt){
+                    tp.setActiveTab(nas_tab_id); //Set focus on  Tab
+                    return;
+                }
+
+                var nas_tab_name = sr.get('nasname');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     nas_tab_name,
+                    itemId:     nas_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlNas',nas_id: nas_id, url: me.urlEditPanelCfg, record: sr}
+                });
+                tp.setActiveTab(nas_tab_id); //Set focus on Add Tab
+            });
+        }
+    },
+
+    frmNasBasicSave : function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var pnl_n   = button.up('pnlNas');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditBasic,
+            params: {'id' : pnl_n.nas_id },
+            success: function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    'Item updated',
+                    'Item updated fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+
+    monitorTypeChange : function(cmb){
+        var me = this;
+        var fs = cmb.up('fieldset');
+        var pi = fs.down('#ping_interval');
+        var da = fs.down('#heartbeat_dead_after');
+        var val = cmb.getValue();
+
+        if(val == 'off'){
+            pi.setVisible(false);
+            da.setVisible(false);
+        }
+
+        if(val == 'ping'){
+            pi.setVisible(true);
+            da.setVisible(false);
+        }
+
+        if(val == 'heartbeat'){
+            pi.setVisible(false);
+            da.setVisible(true);
+        }
+        
+    },
+
+    gridRealmsForNasOwnerReload: function(button){
+        var me  = this;
+        grid    = button.up('gridRealmsForNasOwner');
+        grid.getStore().reload();
+    },
+    chkAvailSubTab: function(chk){
+        var me      = this;
+        var grid    = chk.up('gridRealmsForNasOwner');
+        if(chk.getValue() == true){
+            grid.getStore().getProxy().setExtraParam('available_to_siblings',true);
+        }else{
+            grid.getStore().getProxy().setExtraParam('available_to_siblings',false);
+        }
+        //Clear the grid:
+        grid.getStore().getProxy().setExtraParam('clear_flag',true);
+        grid.getStore().load();
+        grid.getStore().getProxy().setExtraParam('clear_flag',false);
     }
+
+    //_____ DELETE ______
+
 });
