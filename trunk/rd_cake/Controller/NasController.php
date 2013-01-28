@@ -178,7 +178,26 @@ class NasController extends AppController {
                 'id'                    => $i['Na']['id'], 
                 'nasname'               => $i['Na']['nasname'],
                 'shortname'             => $i['Na']['shortname'],
+                'secret'                => $i['Na']['secret'],
+                'type'                  => $i['Na']['type'],
+                'ports'                 => $i['Na']['ports'],
+                'community'             => $i['Na']['community'],
+                'server'                => $i['Na']['server'],
+                'description'           => $i['Na']['description'],
+                'connection_type'       => $i['Na']['connection_type'],
+                'record_auth'           => $i['Na']['record_auth'],
+                'dynamic_attribute'     => $i['Na']['dynamic_attribute'],
+                'dynamic_value'         => $i['Na']['dynamic_value'],
+                'monitor'               => $i['Na']['monitor'],
+                'ping_interval'         => $i['Na']['ping_interval'],
+                'heartbeat_dead_after'  => $i['Na']['heartbeat_dead_after'],
+                'session_auto_close'    => $i['Na']['session_auto_close'],
+                'session_dead_time'     => $i['Na']['session_dead_time'],
+                'on_public_maps'        => $i['Na']['on_public_maps'],
+                'lat'                   => $i['Na']['lat'],
+                'lon'                   => $i['Na']['lon'],
                 'owner'                 => $owner_tree, 
+                'user_id'               => $i['Na']['user_id'],
                 'available_to_siblings' => $i['Na']['available_to_siblings'],
                 'notes'                 => $notes_flag,
                 'realms'                => $realms,
@@ -358,29 +377,38 @@ class NasController extends AppController {
         ));
     }
 
+    public function edit_panel_cfg(){
+
+        $items = array(
+            array( 'title'  => __('Detail'), 'layout' => 'hbox', 'items' => array('xtype' => 'frmNasBasic', 'height' => '100%', 'width' => 500)),
+            array( 'title'  => __('Realms'),'xtype' => 'pnlRealmsForNasOwner'),
+            array( 'title'  => __('Photo')),
+            array( 'title'  => __('Availability')),
+            array( 'title'  => __('Map info'))
+        );
+
+        $this->set(array(
+                'items'     => $items,
+                'success'   => true,
+                '_serialize' => array('items','success')
+        ));
+
+    }
+
     public function edit() {
 
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];  
-
-        //We will not modify user_id
-        unset($this->request->data['user_id']);
-
-		if ($this->Realm->save($this->request->data)) {
+       if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
         }else{
              $this->set(array(
-                'success' => false,
-                '_serialize' => array('success')
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not update item')),
+                '_serialize' => array('errors','success','message')
             ));
-
         }
 	}
 
@@ -632,8 +660,21 @@ class NasController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
 
             $menu = array(
-                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">Reload every:</b>',
+                                  //  array( 'text'   => _('Cancel auto reload'),   'itemId' => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true ),
+                                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                   
+                                )
+                            )
+                    ),
+                   // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))

@@ -562,6 +562,7 @@ class TagsController extends AppController {
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'test',      'tooltip'=> __('Gooi hom')),
                 ))
                 
             );
