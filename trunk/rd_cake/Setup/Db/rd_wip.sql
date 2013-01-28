@@ -236,7 +236,6 @@ CREATE TABLE `na_notes` (
 
 LOCK TABLES `na_notes` WRITE;
 /*!40000 ALTER TABLE `na_notes` DISABLE KEYS */;
-INSERT INTO `na_notes` VALUES (23,11,28,'2013-01-15 10:17:44','2013-01-15 10:17:44'),(25,11,39,'2013-01-18 21:05:33','2013-01-18 21:05:33'),(26,6,40,'2013-01-18 21:28:26','2013-01-18 21:28:26'),(27,6,41,'2013-01-18 21:29:43','2013-01-18 21:29:43'),(28,6,42,'2013-01-18 21:30:39','2013-01-18 21:30:39'),(29,12,44,'2013-01-21 06:33:28','2013-01-21 06:33:28');
 /*!40000 ALTER TABLE `na_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +253,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +262,7 @@ CREATE TABLE `na_realms` (
 
 LOCK TABLES `na_realms` WRITE;
 /*!40000 ALTER TABLE `na_realms` DISABLE KEYS */;
-INSERT INTO `na_realms` VALUES (1,10,23,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(2,10,13,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(3,10,11,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(4,11,22,'2013-01-10 22:57:39','2013-01-10 22:57:39'),(5,11,23,'2013-01-10 22:57:39','2013-01-10 22:57:39'),(6,12,23,'2013-01-21 05:50:18','2013-01-21 05:50:18'),(7,12,13,'2013-01-21 05:50:18','2013-01-21 05:50:18');
+INSERT INTO `na_realms` VALUES (26,1,24,'2013-01-28 13:33:39','2013-01-28 13:33:39'),(27,1,13,'2013-01-28 13:33:40','2013-01-28 13:33:40'),(28,1,11,'2013-01-28 13:33:41','2013-01-28 13:33:41');
 /*!40000 ALTER TABLE `na_realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,7 +289,6 @@ CREATE TABLE `na_tags` (
 
 LOCK TABLES `na_tags` WRITE;
 /*!40000 ALTER TABLE `na_tags` DISABLE KEYS */;
-INSERT INTO `na_tags` VALUES (1,6,16,'2013-01-10 10:03:46','2013-01-10 10:03:46'),(2,10,15,'2013-01-10 22:38:20','2013-01-10 22:38:20'),(3,4,13,'2013-01-11 06:47:09','2013-01-11 06:47:09'),(4,12,14,'2013-01-21 06:07:13','2013-01-21 06:07:13');
 /*!40000 ALTER TABLE `na_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -313,11 +311,11 @@ CREATE TABLE `nas` (
   `description` varchar(200) DEFAULT 'RADIUS Client',
   `connection_type` enum('direct','openvpn','pptp','dynamic') DEFAULT 'direct',
   `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
-  `monitor` tinyint(1) NOT NULL DEFAULT '0',
   `record_auth` tinyint(1) NOT NULL DEFAULT '0',
   `dynamic_attribute` varchar(50) NOT NULL DEFAULT '',
   `dynamic_value` varchar(50) NOT NULL DEFAULT '',
-  `heartbeat_id` varchar(50) NOT NULL DEFAULT '',
+  `monitor` enum('off','ping','heartbeat') DEFAULT 'off',
+  `ping_interval` int(5) NOT NULL DEFAULT '600',
   `heartbeat_dead_after` int(5) NOT NULL DEFAULT '600',
   `session_auto_close` tinyint(1) NOT NULL DEFAULT '0',
   `session_dead_time` int(5) NOT NULL DEFAULT '3600',
@@ -330,7 +328,7 @@ CREATE TABLE `nas` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nasname` (`nasname`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,7 +337,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (2,'','jkjkj','other',NULL,'jkjkj',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Called-Station-Id','jkjkljkj','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:39:57','2013-01-09 13:39:57'),(3,'','kkk','other',NULL,'kkk',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','kkkkkkkkk','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 13:46:19','2013-01-09 13:46:19'),(4,'dynamic-1','vvvv','other',NULL,'vvvv',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','bbbbbbbbbb','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:00:09','2013-01-09 14:00:09'),(8,'dynamic-2','99','other',NULL,'00',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','0000','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:11:05','2013-01-09 14:11:05'),(6,'dynamic-3','e','other',NULL,'z',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','z','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:01:22','2013-01-09 14:01:22'),(7,'dynamic-4','zzz','other',NULL,'zz',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','eeeeeeeee','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:09:51','2013-01-09 14:09:51'),(9,'10.8.1.9','bb','other',NULL,'bbb',NULL,NULL,'RADIUS Client','openvpn',0,0,0,'','','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-09 14:28:50','2013-01-09 14:28:50'),(10,'Gooi','Hom','other',NULL,'Pappie',NULL,NULL,'RADIUS Client','direct',0,0,0,'','','',600,0,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-10 20:53:34','2013-01-10 20:53:34'),(11,'dynamic-5','gaan','other',NULL,'bars',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'Mikrotik-Realm','hjkhjkh','',600,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-01-10 22:57:39','2013-01-10 22:57:39'),(12,'123','kjkjkjkj','other',NULL,'jkjkjkj',NULL,NULL,'RADIUS Client','direct',0,0,0,'','','',600,0,3600,0,NULL,NULL,'logo.jpg',60,'2013-01-21 05:50:18','2013-01-21 05:50:18');
+INSERT INTO `nas` VALUES (1,'127.0.0.1','Localhost','other',NULL,'testing123','','','RADIUS Client','direct',0,1,'','','heartbeat',600,582,1,3603,1,NULL,NULL,'logo.jpg',58,'2013-01-28 05:50:39','2013-01-28 06:10:05'),(2,'dynamic-1','VeryHeavy','other',NULL,'VeryHeavy','','','RADIUS Client','dynamic',1,1,'Mikrotik-Realm','Very-Humble','heartbeat',600,600,1,3600,0,NULL,NULL,'logo.jpg',58,'2013-01-28 08:54:40','2013-01-28 09:13:48');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -605,7 +603,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES (13,'RootPrivate',0,44,'2013-01-07 08:19:15','2013-01-20 20:59:14'),(14,'RootPublic',1,44,'2013-01-07 08:20:13','2013-01-07 08:20:13'),(15,'Gooi',1,58,'2013-01-07 10:29:34','2013-01-07 10:29:34'),(16,'Home',1,58,'2013-01-07 10:29:50','2013-01-20 20:59:25'),(17,'Gooi hom pappie',1,61,'2013-01-17 14:28:42','2013-01-17 14:28:42');
+INSERT INTO `tags` VALUES (13,'RootPrivate',0,44,'2013-01-07 08:19:15','2013-01-20 20:59:14'),(14,'RootPublic',1,44,'2013-01-07 08:20:13','2013-01-07 08:20:13'),(15,'Gooi',1,58,'2013-01-07 10:29:34','2013-01-07 10:29:34'),(16,'Homes',0,58,'2013-01-07 10:29:50','2013-01-24 15:10:24'),(17,'Gooi hom pappie',1,61,'2013-01-17 14:28:42','2013-01-17 14:28:42');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -688,4 +686,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-24  0:13:32
+-- Dump completed on 2013-01-28 13:38:17
