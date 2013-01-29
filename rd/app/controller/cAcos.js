@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cAcos', {
         if(!win){
             win = desktop.createWindow({
                 id: 'acosWin',
-                title:'Rights manager',
+                title: i18n('sRights_manager'),
                 width:800,
                 height:400,
                 iconCls: 'rights',
@@ -22,7 +22,7 @@ Ext.define('Rd.controller.cAcos', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'Rights management',
+                        heading: i18n('sRights_management'),
                         image:  'resources/images/48x48/rights.png'
                     },
                     {
@@ -30,9 +30,9 @@ Ext.define('Rd.controller.cAcos', {
                     xtype   : 'tabpanel',
                     layout  : 'fit',
                     items   : [
-                            { 'title' : 'Access Controll Objects','xtype':'treeAco'},
-                            { 'title' : 'Access Provider Rights','xtype':'treeApRights'},  
-                            { 'title' : 'Permanent User Rights'},
+                            { 'title' : i18n('sAccess_Controll_Objects'),'xtype':'treeAco'},
+                            { 'title' : i18n('sAccess_Provider_Rights'),'xtype':'treeApRights'},  
+                            { 'title' : i18n('sPermanent_User_Rights')},
                         ]
                 }]
             });
@@ -120,8 +120,8 @@ Ext.define('Rd.controller.cAcos', {
         if(sel_count == 0){
             me.maskHide();
             Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node of the tree under which to add an ACO entry',
+                        i18n('sSelect_a_node'),
+                        i18n('sFirst_select_a_node_of_the_tree_under_which_to_add_an_ACO_entry'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -129,8 +129,8 @@ Ext.define('Rd.controller.cAcos', {
             if(sel_count > 1){
                 me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -159,8 +159,8 @@ Ext.define('Rd.controller.cAcos', {
                 win.close();
                 me.getTreeAco().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Node added',
-                    'New Node added fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -176,8 +176,8 @@ Ext.define('Rd.controller.cAcos', {
         if(sel_count == 0){
             me.maskHide();
             Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node to edit',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -185,8 +185,8 @@ Ext.define('Rd.controller.cAcos', {
             if(sel_count > 1){
                 me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -196,8 +196,8 @@ Ext.define('Rd.controller.cAcos', {
                 if(me.acoSelectedRecord.getId() == 0){
                     me.maskHide();
                     Ext.ux.Toaster.msg(
-                        'Root node selected',
-                        'You can not edit the root node',
+                        i18n('sRoot_node_selected'),
+                        i18n('sYou_can_not_edit_the_root_node'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                     );
@@ -225,8 +225,8 @@ Ext.define('Rd.controller.cAcos', {
                 win.close();
                 me.getTreeAco().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Item updated',
-                    'Item updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -240,9 +240,14 @@ Ext.define('Rd.controller.cAcos', {
         var me      = this;     
         //Find out if there was something selected
         if(me.getTreeAco().getSelectionModel().getCount() == 0){
-            Ext.Msg.alert('Select please', 'Select a node to delete');
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
         }else{
-            Ext.Msg.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
 
                     Ext.each(me.getTreeAco().getSelectionModel().getSelection(), function(item){
@@ -252,16 +257,16 @@ Ext.define('Rd.controller.cAcos', {
                     me.getTreeAco().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Node Deleted',
-                                'Deletion went fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             ); 
                         },
                         failure: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                'Problems deleting node',
-                                'There were some problems experienced during the deleting of the node',
+                             Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
@@ -282,8 +287,8 @@ Ext.define('Rd.controller.cAcos', {
         var sel_count = me.getTreeAco().getSelectionModel().getCount();
         if(sel_count == 0){
             Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node to expand',
+                        i18n('sSelect_a_node'),
+                        i18n('sFirst_select_a_node_to_expand'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -297,20 +302,13 @@ Ext.define('Rd.controller.cAcos', {
         me.getTreeApRights().getStore().sync({
             success: function(batch,options){
                 Ext.ux.Toaster.msg(
-                    'Right Changed',
-                    'Right changed OK',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 ); 
             },
-            failure: function(batch,options){
-                Ext.ux.Toaster.msg(
-                    'Problems changing right',
-                    'There were some problems experienced during changing of the right',
-                    Ext.ux.Constants.clsWarn,
-                    Ext.ux.Constants.msgWarn
-                );
-            }
+            failure: Ext.ux.formFail
         });
     },
     apRightsGridClick:  function(grid, record, item, index, event){
@@ -327,8 +325,8 @@ Ext.define('Rd.controller.cAcos', {
         var sel_count = me.getTreeApRights().getSelectionModel().getCount();
         if(sel_count == 0){
             Ext.ux.Toaster.msg(
-                        'Select a node',
-                        'First select a node to expand',
+                        i18n('sSelect_a_node'),
+                        i18n('sFirst_select_a_node_to_expand'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );

@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cNas', {
         if(!win){
             win = desktop.createWindow({
                 id: 'nasWin',
-                title:'NAS Device manager',
+                title:i18n('sNAS_Device_manager'),
                 width:800,
                 height:400,
                 iconCls: 'nas',
@@ -22,7 +22,7 @@ Ext.define('Rd.controller.cNas', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'NAS devices',
+                        heading: i18n('sNAS_devices'),
                         image:  'resources/images/48x48/nas.png'
                     },
                     {
@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cNas', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
-                        items   : { 'title' : 'NAS devices', xtype: 'gridNas'}
+                        items   : { 'title' : i18n('sNAS_devices'), xtype: 'gridNas'}
                     }
                 ]
             });
@@ -230,7 +230,7 @@ Ext.define('Rd.controller.cNas', {
                                 id          :'winNasAddWizardId',
                                 startScreen : 'scrnConType',
                                 user_id     : '0',
-                                owner       : 'Logged in user',
+                                owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
                             me.application.runAction('cDesktop','Add',w);         
@@ -253,8 +253,8 @@ Ext.define('Rd.controller.cNas', {
             win.getLayout().setActiveItem('scrnConType');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -367,8 +367,8 @@ Ext.define('Rd.controller.cNas', {
         if(extra_params.avail_for_all == undefined){
             if(select_flag != true){
                 Ext.ux.Toaster.msg(
-                        'Select at least one realm',
-                        'Select one or meore realms',
+                        i18n('sSelect_at_least_one_realm'),
+                        i18n('sSelect_one_or_more_realms'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -399,8 +399,8 @@ Ext.define('Rd.controller.cNas', {
                 win.close();
                 me.getGridNas().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'New NAS Device Created',
-                    'NAS Device created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -446,8 +446,8 @@ Ext.define('Rd.controller.cNas', {
         if(me.getGridNas().getSelectionModel().getCount() == 0){
             me.maskHide(); 
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to tag',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_tag'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -468,8 +468,8 @@ Ext.define('Rd.controller.cNas', {
 
         if(cmb.getValue() == null){
             Ext.ux.Toaster.msg(
-                        'Select a tag',
-                        'Select a tag please',
+                        i18n('sSelect_a_tag'),
+                        i18n('sSelect_a_tag_please'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -492,8 +492,8 @@ Ext.define('Rd.controller.cNas', {
                 win.close();
                 me.getGridNas().getStore().load();
                 Ext.ux.Toaster.msg(
-                    'Tags modified',
-                    'Tags modified fine',
+                    i18n('sTags_modified'),
+                    i18n('sTags_modified_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -586,8 +586,8 @@ Ext.define('Rd.controller.cNas', {
 
         if(!c_found){
             Ext.ux.Toaster.msg(
-                        'Select one or more',
-                        'Select one or more columns please',
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -626,8 +626,8 @@ Ext.define('Rd.controller.cNas', {
         if(sel_count == 0){
             me.maskHide();
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -635,8 +635,8 @@ Ext.define('Rd.controller.cNas', {
             if(sel_count > 1){
                  me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -694,7 +694,7 @@ Ext.define('Rd.controller.cNas', {
                                 refreshGrid : grid,
                                 startScreen : 'scrnNote',
                                 user_id     : '0',
-                                owner       : 'Logged in user',
+                                owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
                             me.application.runAction('cDesktop','Add',w);       
@@ -733,8 +733,8 @@ Ext.define('Rd.controller.cNas', {
             win.getLayout().setActiveItem('scrnNote');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -761,8 +761,8 @@ Ext.define('Rd.controller.cNas', {
                 win.refreshGrid.getStore().load();
                 me.reload();
                 Ext.ux.Toaster.msg(
-                    'New Note Created',
-                    'Note created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -776,20 +776,20 @@ Ext.define('Rd.controller.cNas', {
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to delete',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     grid.getStore().remove(grid.getSelectionModel().getSelection());
                     grid.getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Item Deleted',
-                                'Item deleted fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -798,7 +798,7 @@ Ext.define('Rd.controller.cNas', {
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting item',
+                                i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
@@ -814,11 +814,10 @@ Ext.define('Rd.controller.cNas', {
         var me      = this;
         var n       = menu_item.getItemId();
         var b       = menu_item.up('button'); 
-        var interval= 30; //default
+        var interval= 30000; //default
         clearInterval(me.autoReload);   //Always clear
         b.setIconCls('b-reload_time');
         
-
         if(n == 'mnuRefreshCancel'){
             b.setIconCls('b-reload');
             return;
@@ -846,8 +845,8 @@ Ext.define('Rd.controller.cNas', {
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to edit',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -894,8 +893,8 @@ Ext.define('Rd.controller.cNas', {
             success: function(form, action) {
                 me.reload();
                 Ext.ux.Toaster.msg(
-                    'Item updated',
-                    'Item updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
