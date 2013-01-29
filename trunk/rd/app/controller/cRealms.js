@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cRealms', {
         if(!win){
             win = desktop.createWindow({
                 id: 'realmsWin',
-                title:'Realms manager',
+                title:i18n('sRealms_manager'),
                 width:800,
                 height:400,
                 iconCls: 'realms',
@@ -22,7 +22,7 @@ Ext.define('Rd.controller.cRealms', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'Realms',
+                        heading:i18n('sRealms'),
                         image:  'resources/images/48x48/realm.png'
                     },
                     {
@@ -30,7 +30,7 @@ Ext.define('Rd.controller.cRealms', {
                         xtype   : 'tabpanel',
                         layout  : 'fit',
                         items: [
-                            { 'title' : 'Realms', 'xtype':'gridRealms'},
+                            { 'title' : i18n('sRealms'), 'xtype':'gridRealms'},
                             // { 'title' : 'Advanced realms'}
                         ],
                         margins : '0 0 0 0',
@@ -205,7 +205,7 @@ Ext.define('Rd.controller.cRealms', {
                                 id          : 'winRealmAddWizardId',
                                 startScreen : 'scrnRealmDetail',
                                 user_id     : '0',
-                                owner       : 'Logged in user',
+                                owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
                             me.application.runAction('cDesktop','Add',w);       
@@ -228,8 +228,8 @@ Ext.define('Rd.controller.cRealms', {
             win.getLayout().setActiveItem('scrnRealmDetail');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -251,8 +251,8 @@ Ext.define('Rd.controller.cRealms', {
                 win.close();
                 me.getStore('sRealms').load();
                 Ext.ux.Toaster.msg(
-                    'New Realm Created',
-                    'Realm created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -265,20 +265,20 @@ Ext.define('Rd.controller.cRealms', {
         //Find out if there was something selected
         if(me.getGridRealms().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to delete',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     me.getGridRealms().getStore().remove(me.getGridRealms().getSelectionModel().getSelection());
                     me.getGridRealms().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Item Deleted',
-                                'Item deleted fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -286,7 +286,7 @@ Ext.define('Rd.controller.cRealms', {
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting item',
+                                i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
@@ -306,8 +306,8 @@ Ext.define('Rd.controller.cRealms', {
         if(me.getGridRealms().getSelectionModel().getCount() == 0){
              me.maskHide();
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to edit',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -351,8 +351,8 @@ Ext.define('Rd.controller.cRealms', {
             success: function(form, action) {
                 me.getStore('sRealms').load();
                 Ext.ux.Toaster.msg(
-                    'Item updated',
-                    'Item updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -403,8 +403,8 @@ Ext.define('Rd.controller.cRealms', {
 
         if(!c_found){
             Ext.ux.Toaster.msg(
-                        'Select one or more',
-                        'Select one or more columns please',
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -443,8 +443,8 @@ Ext.define('Rd.controller.cRealms', {
         if(sel_count == 0){
             me.maskHide();
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -452,8 +452,8 @@ Ext.define('Rd.controller.cRealms', {
             if(sel_count > 1){
                 me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -512,7 +512,7 @@ Ext.define('Rd.controller.cRealms', {
                                 refreshGrid : grid,
                                 startScreen : 'scrnNote',
                                 user_id     : '0',
-                                owner       : 'Logged in user',
+                                owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
                             me.application.runAction('cDesktop','Add',w);       
@@ -551,8 +551,8 @@ Ext.define('Rd.controller.cRealms', {
             win.getLayout().setActiveItem('scrnNote');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -579,8 +579,8 @@ Ext.define('Rd.controller.cRealms', {
                 win.refreshGrid.getStore().load();
                 me.reload();
                 Ext.ux.Toaster.msg(
-                    'New Note Created',
-                    'Note created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -594,20 +594,20 @@ Ext.define('Rd.controller.cRealms', {
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to delete',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     grid.getStore().remove(grid.getSelectionModel().getSelection());
                     grid.getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Item Deleted',
-                                'Item deleted fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -616,7 +616,7 @@ Ext.define('Rd.controller.cRealms', {
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting item',
+                                i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn

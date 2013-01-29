@@ -302,7 +302,7 @@ Ext.define('Rd.controller.cI18n', {
         var form = b.up('form');
         form.submit({
             url: me.urlCountryAdd,
-            waitMsg: 'Sending the info...', //FIXME This is a BUG IN 4.1 does not remove the mask (added a override.js to fix)
+            waitMsg: i18n('sSending_the_info')+'...', //FIXME This is a BUG IN 4.1 does not remove the mask (added a override.js to fix)
             success: function(fp, o) {
                
                 me.selCountry = o.result.id;
@@ -365,7 +365,7 @@ Ext.define('Rd.controller.cI18n', {
         var win  = b.up('addKeyW');
         form.submit({
             url: me.urlKeyAdd,
-            waitMsg: 'Sending the info...',
+            waitMsg: i18n('sSending_the_info')+'...',
             success: function(fp, o) {
                 Ext.ux.Toaster.msg(
                         i18n('sItem_added'),
@@ -396,16 +396,16 @@ Ext.define('Rd.controller.cI18n', {
                     me.getJsGrid().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                i18n('sKey_Deleted'),
-                                i18n('sDeletion_went_fine'),
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             ); 
                         },
                         failure: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting key',
-                                'There were some problems experienced during the deleting of the key',
+                                i18n('sProblems_deleting_key'),
+                                i18n('sThere_were_some_problems_experienced_during_the_deleting_of_the_key'),
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
@@ -442,11 +442,11 @@ Ext.define('Rd.controller.cI18n', {
                 var form = b.up('form');
                 form.submit({
                     url: me.urlLanguageDel,
-                    waitMsg: 'Sending the info...',
+                    waitMsg: i18n('sSending_the_info')+'...',
                     success: function(fp, o) {
                         Ext.ux.Toaster.msg(
-                                'Language removed',
-                                'Language removed fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -465,11 +465,11 @@ Ext.define('Rd.controller.cI18n', {
                 var form = b.up('form');
                 form.submit({
                     url: me.urlCountryDel,
-                    waitMsg: 'Sending the info...',
+                    waitMsg: i18n('sSending_the_info')+'...',
                     success: function(fp, o) {
                         Ext.ux.Toaster.msg(
-                            'Country removed',
-                            'Country removed fine',
+                            i18n('sItem_deleted'),
+                            i18n('sItem_deleted_fine'),
                             Ext.ux.Constants.clsInfo,
                             Ext.ux.Constants.msgInfo
                         );
@@ -591,12 +591,12 @@ Ext.define('Rd.controller.cI18n', {
         var c_id    = cmb.getValue();
         form.submit({
             url: me.urlCountryAdd+'/'+c_id,
-            waitMsg: 'Sending the info...',
+            waitMsg: i18n('sSending_the_info')+'...',
             success: function(fp, o) {
                 me.selCountry = o.result.id;
                 Ext.ux.Toaster.msg(
-                        'Country Select updated',
-                        'Country updated added fine',
+                        i18n('sItem_updated'),
+                        i18n('sItem_updated_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
@@ -626,8 +626,8 @@ Ext.define('Rd.controller.cI18n', {
         if(me.selLanguage == null){
 
             Ext.ux.Toaster.msg(
-                        'No target language',
-                        'First select a language that you want to use as destination',
+                        i18n('sNo_target_language'),
+                        i18n('sFirst_select_a_language_that_you_want_to_use_as_destination'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -652,7 +652,7 @@ Ext.define('Rd.controller.cI18n', {
                 source_id       : c_id,
                 destination_id  : me.selLanguage
             },
-            waitMsg: 'Sending the info...',
+            waitMsg: i18n('sSending_the_info')+'...',
             success: function(fp, o) {
                 Ext.ux.Toaster.msg(
                         i18n('sKey_added'),
@@ -805,7 +805,7 @@ Ext.define('Rd.controller.cI18n', {
                 if(!me.application.runAction('cDesktop','AlreadyExist','winPhpEditId')){
                     var w = Ext.widget('winPhpEdit',{
                         id          :'winPhpEditId',
-                        'old_msgid' : old_msgid
+                        old_msgid   : old_msgid
                     });
                     me.application.runAction('cDesktop','Add',w);         
                 }
@@ -951,8 +951,8 @@ Ext.define('Rd.controller.cI18n', {
                 win.close();
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    i18n('sMeta_data_updated'),
-                    i18n('sMeta_data_updated_fine'),
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );

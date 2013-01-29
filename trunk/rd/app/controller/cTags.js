@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cTags', {
         if(!win){
             win = desktop.createWindow({
                 id: 'tagsWin',
-                title:'Tags manager',
+                title: i18n('sTags_manager'),
                 width:800,
                 height:400,
                 iconCls: 'tags',
@@ -22,7 +22,7 @@ Ext.define('Rd.controller.cTags', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:'NAS device tags',
+                        heading: i18n('sNAS_device_tags'),
                         image:  'resources/images/48x48/tags.png'
                     },
                     {
@@ -57,7 +57,7 @@ Ext.define('Rd.controller.cTags', {
         {  ref: 'grid',  selector:   'gridTags'}       
     ],
     init: function() {
-        me = this;
+        var me = this;
         if (me.inited) {
             return;
         }
@@ -67,7 +67,7 @@ Ext.define('Rd.controller.cTags', {
         me.control({
             'gridTags #reload': {
                 click:      me.reload
-            },
+            }, 
             'gridTags #add'   : {
                 click:      me.add
             },
@@ -82,9 +82,6 @@ Ext.define('Rd.controller.cTags', {
             },
             'gridTags #csv'  : {
                 click:      me.csvExport
-            },
-            'gridTags #test'  : {
-                click:      me.test
             },
             'gridTags'   : {
                 select:      me.select
@@ -193,8 +190,8 @@ Ext.define('Rd.controller.cTags', {
             win.getLayout().setActiveItem('scrnData');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -215,8 +212,8 @@ Ext.define('Rd.controller.cTags', {
                 win.close();
                 me.getStore('sTags').load();
                 Ext.ux.Toaster.msg(
-                    'New Tag Created',
-                    'Tag created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -258,20 +255,20 @@ Ext.define('Rd.controller.cTags', {
         //Find out if there was something selected
         if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to delete',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
                     me.getGrid().getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Item Deleted',
-                                'Item deleted fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -279,7 +276,7 @@ Ext.define('Rd.controller.cTags', {
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting item',
+                                i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
@@ -300,8 +297,8 @@ Ext.define('Rd.controller.cTags', {
         if(selCount == 0){
             me.maskHide();
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to edit',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -309,8 +306,8 @@ Ext.define('Rd.controller.cTags', {
             if(selCount > 1){
                 me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -336,8 +333,8 @@ Ext.define('Rd.controller.cTags', {
                 win.close();
                 me.getStore('sTags').load();
                 Ext.ux.Toaster.msg(
-                    'Item updated',
-                    'Item updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -388,8 +385,8 @@ Ext.define('Rd.controller.cTags', {
 
         if(!c_found){
             Ext.ux.Toaster.msg(
-                        'Select one or more',
-                        'Select one or more columns please',
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -428,8 +425,8 @@ Ext.define('Rd.controller.cTags', {
         if(sel_count == 0){
             me.maskHide();
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -437,8 +434,8 @@ Ext.define('Rd.controller.cTags', {
             if(sel_count > 1){
                 me.maskHide();
                 Ext.ux.Toaster.msg(
-                        'Limit the selection',
-                        'Selection limited to one',
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                 );
@@ -496,7 +493,7 @@ Ext.define('Rd.controller.cTags', {
                                 refreshGrid : grid,
                                 startScreen : 'scrnNote',
                                 user_id     : '0',
-                                owner       : 'Logged in user',
+                                owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
                             me.application.runAction('cDesktop','Add',w);       
@@ -535,8 +532,8 @@ Ext.define('Rd.controller.cTags', {
             win.getLayout().setActiveItem('scrnNote');
         }else{
             Ext.ux.Toaster.msg(
-                        'Select a owner',
-                        'First select an Access Provider who will be the owner',
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
@@ -563,8 +560,8 @@ Ext.define('Rd.controller.cTags', {
                 win.refreshGrid.getStore().load();
                 me.reload();
                 Ext.ux.Toaster.msg(
-                    'New Note Created',
-                    'Note created fine',
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -578,20 +575,20 @@ Ext.define('Rd.controller.cTags', {
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
-                        'Select an item',
-                        'First select an item to delete',
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     grid.getStore().remove(grid.getSelectionModel().getSelection());
                     grid.getStore().sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Item Deleted',
-                                'Item deleted fine',
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
@@ -600,7 +597,7 @@ Ext.define('Rd.controller.cTags', {
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
-                                'Problems deleting item',
+                                i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
@@ -611,23 +608,5 @@ Ext.define('Rd.controller.cTags', {
                 }
             });
         }
-    },
-
-    test : function(){
-        var me = this;
-        console.log("Add dummy");
-
-        var record = new Rd.model.mTag({
-            id: Ext.id(),
-            name: 'addRecord',
-            owner: 'koos',
-            available_to_siblings: true,
-            notes: true,
-            update: true,
-            delete: true
-        });
-        me.getGrid().getStore().add(record);
-        me.getGrid().getStore()._realTotalCount++;
-
     }
 });
