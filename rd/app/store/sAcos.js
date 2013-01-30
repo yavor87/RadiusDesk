@@ -17,14 +17,14 @@ Ext.define('Rd.store.sAcos', {
                 destroy : '/cake2/rd_cake/acos_rights/delete.json'
             }
     },
-    root: {alias: 'Access control objects (ACOs)',leaf: false, id:'0', iconCls: 'root', expanded: false},
+    root: {alias: i18n('sAccess_control_objects_br_ACOs_br'),leaf: false, id:'0', iconCls: 'root', expanded: false},
     folderSort: true,
     clearOnLoad: true,
     listeners: {
         load: function( store, records, a,successful,b) {
             if(!successful){
                 Ext.ux.Toaster.msg(
-                        'Error encountered',
+                        i18n('sError_encountered'),
                         store.getProxy().getReader().rawData.message.message,
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn

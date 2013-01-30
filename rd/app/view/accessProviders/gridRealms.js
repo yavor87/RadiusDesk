@@ -9,10 +9,10 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
     ap_id:  null,
     columns: [
         {xtype: 'rownumberer'},
-        { text: 'Realm',    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
+        { text: i18n('sRealm'),    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
         {
             xtype: 'advCheckColumn',
-            text: 'Create',
+            text: i18n('sCreate'),
             dataIndex: 'create',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -30,7 +30,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
         },
         {
             xtype: 'advCheckColumn',
-            text: 'Read',
+            text: i18n('sRead'),
             dataIndex: 'read',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -49,7 +49,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
         },
         {
             xtype: 'advCheckColumn',
-            text: 'Update',
+            text: i18n('sUpdate'),
             dataIndex: 'update',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -68,7 +68,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
         },
         {
             xtype: 'advCheckColumn',
-            text: 'Delete',
+            text: i18n('sDelete'),
             dataIndex: 'delete',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -89,7 +89,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
         { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')}      
     ],
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
     initComponent: function(){
 
@@ -131,20 +131,19 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     }   
                 },
                 update: function(store, records, success, options) {
-                    console.log("AP Right pappie");
                     store.sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Updated right',
-                                'Right has been updated',
+                                i18n('sUpdated_right'),
+                                i18n('sRight_has_been_updated'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );   
                         },
                         failure: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                'Problems updating the right',
-                                'Right could not be updated',
+                                i18n('sProblems_updating_the_right'),
+                                i18n('sRight_could_not_be_updated'),
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );

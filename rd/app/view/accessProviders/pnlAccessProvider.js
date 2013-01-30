@@ -8,7 +8,7 @@ Ext.define('Rd.view.desktop.pnlAccessProvider', {
         var me = this;
         me.items = [
         {   
-            title:  'Detail',
+            title:  i18n('sDetail'),
             layout: 'hbox',
             items:  { 
                 xtype:  'frmAccessProviderDetail',
@@ -17,20 +17,20 @@ Ext.define('Rd.view.desktop.pnlAccessProvider', {
                 } 
         },
         { 
-            title   : 'Realms',
+            title   : i18n('sRealms'),
             xtype   : 'gridApRealms', 
             ap_id   : me.ap_id
         },
         {
-            title   : 'Rights',
+            title   : i18n('sRights'),
             xtype   : 'treeApUserRights', 
             ap_id   : me.ap_id
         },
         { 
-            title   : 'Activity'
+            title   : i18n('sActivity')
         },
         { 
-            title   : 'Notes'
+            title   : i18n('sNotes')
         }
     ]; 
 

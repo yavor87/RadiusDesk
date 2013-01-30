@@ -33,14 +33,14 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         var buttons = [
                 {
                     itemId: 'btnDetailPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'save',
-                    text: 'OK',
+                    text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
                     formBind: true,
@@ -52,7 +52,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
             var buttons = [
                 {
                     itemId: 'save',
-                    text: 'OK',
+                    text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
                     formBind: true,
@@ -64,7 +64,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
 
         var aCb = Ext.create('Rd.view.components.ajaxCheckbox',{
             'url':      me.urlCheckbox,
-            boxLabel  : 'Record all acivity',
+            boxLabel  : i18n('sRecord_all_acivity'),
             name      : 'monitor',
             inputValue: 'monitor',
             checked   : true,
@@ -82,7 +82,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         {
             itemId      : 'owner',
             xtype       : 'displayfield',
-            fieldLabel  : 'Owner',
+            fieldLabel  : i18n('sOwner'),
             value       : me.owner,
             labelClsExtra: 'lblRdReq'
         },
@@ -93,26 +93,26 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         },
         {
             xtype: 'textfield',
-            fieldLabel: 'Username',
+            fieldLabel: i18n('sUsername'),
             name : "username",
             allowBlank:false,
-            blankText:"Enter Message ID",
+            blankText: i18n("sEnter_a_value"),
             labelClsExtra: 'lblRdReq'
         },
         {
             xtype: 'textfield',
-            fieldLabel: 'Password',
+            fieldLabel: i18n('sPassword'),
            // inputType: 'password',
             name : "password",
             allowBlank:pwdBlankAllow,
-            blankText:"Enter a password",
+            blankText: i18n("sEnter_a_value"),
             labelClsExtra: 'lblRdReq',
             hidden: me.pwdHidden
         }, 
-        { xtype: 'cmbLanguages', width: 350, fieldLabel: 'Language',  name: 'language', allowBlank: false,labelClsExtra: 'lblRdReq' },
+        { xtype: 'cmbLanguages', width: 350, fieldLabel: i18n('sLanguage'),  name: 'language', allowBlank: false,labelClsExtra: 'lblRdReq' },
         {
             xtype     : 'checkbox',      
-            boxLabel  : 'Activate',
+            boxLabel  : i18n('sActivate'),
             name      : 'active',
             inputValue: 'active',
             checked   : true,
@@ -121,7 +121,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
         aCb, //Ajax checkbox - state depends on the rights of the AP and their own record activity setting
         {
             xtype:'fieldset',
-            title: 'Optional Info',
+            title: i18n('sOptional_Info'),
             collapsible: true,
             border: false,
             collapsed: true,
@@ -131,25 +131,25 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
             items: [
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Name',
+                    fieldLabel: i18n('sName'),
                     name : "name",
                     allowBlank:true
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Surname',
+                    fieldLabel: i18n('sSurname'),
                     name : "surname",
                     allowBlank:true
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Phone',
+                    fieldLabel: i18n('sPhone'),
                     name : "phone",
                     allowBlank:true
                 },
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'email',
+                    fieldLabel: i18n('s_email'),
                     name : "email",
                     allowBlank:true
                 },
@@ -157,7 +157,7 @@ Ext.define('Rd.view.accessProviders.frmDetail', {
                     xtype     : 'textareafield',
                     grow      : true,
                     name      : 'address',
-                    fieldLabel: 'Address',
+                    fieldLabel: i18n('sAddress'),
                     anchor    : '100%'
                 }
             ]

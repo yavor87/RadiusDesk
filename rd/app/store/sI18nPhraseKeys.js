@@ -15,16 +15,16 @@ Ext.define('Rd.store.sI18nPhraseKeys', {
             store.sync({
                 success: function(batch,options){
                     Ext.ux.Toaster.msg(
-                        'Updated database',
-                        'Database has been updated',
+                        i18n('sUpdated_database'),
+                        i18n('sDatabase_has_been_updated'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );   
                 },
                 failure: function(batch,options){
                     Ext.ux.Toaster.msg(
-                        'Problems updating the database',
-                        'Database could not be updated',
+                        i18n('sProblems_updating_the_database'),
+                        i18n('Database could not be updated'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
                     );

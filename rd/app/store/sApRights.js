@@ -17,14 +17,14 @@ Ext.define('Rd.store.sApRights', {
                 update  : '/cake2/rd_cake/acos_rights/edit_ap.json'
             }
     },
-    root: {alias: 'Default Access Provider Rights',leaf: false, id:'0', iconCls: 'root', expanded: false},
+    root: {alias: i18n('sDefault_Access_Provider_Rights'),leaf: false, id:'0', iconCls: 'root', expanded: false},
     folderSort: true,
     clearOnLoad: true,
     listeners: {
         load: function( store, records, a,successful,b) {
             if(!successful){
                 Ext.ux.Toaster.msg(
-                        'Error encountered',
+                        i18n('sError_encountered'),
                         store.getProxy().getReader().rawData.message.message,
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn

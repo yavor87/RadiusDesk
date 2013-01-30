@@ -10,7 +10,7 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
     ap_id:  null,
     columns: [{
             xtype: 'treecolumn', //this is so we know which column will show the tree
-            text: 'Name',
+            text: i18n('sName'),
             flex: 1,
             sortable: true,
             dataIndex: 'alias',
@@ -18,7 +18,7 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
         },
         {
             xtype: 'advCheckColumn',
-            text: 'Allow',
+            text: i18n('sAllow'),
             dataIndex: 'allowed',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -44,12 +44,12 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
             xtype:  'templatecolumn', 
             width:  '120px',
             tpl:    new Ext.XTemplate(
-                        "<tpl if='group_right == \"yes\"'><div class=\"hasRight\">Yes</div></tpl>",
-                        "<tpl if='group_right == \"no\"'><div class=\"noRight\">No</div></tpl>"
+                        "<tpl if='group_right == \"yes\"'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='group_right == \"no\"'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                     )
         },
         {
-            text: 'Comment',
+            text: i18n('sComment'),
             flex: 2,
             dataIndex: 'comment',
             sortable: false,
@@ -57,8 +57,8 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
         }
     ],
     tbar: [      
-        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload', tooltip: 'Reload'},              
-        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: 'Expand'},
+        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload', tooltip: i18n('sReload')},              
+        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: i18n('sExpand')},
         { xtype: 'tbfill'}
     ],
     initComponent: function(){
@@ -86,14 +86,14 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
                     update  : '/cake2/rd_cake/acos_rights/edit_ap.json'
                 }
             },
-            root: {alias: 'Access Provider Rights',leaf: false, id:'0', iconCls: 'root', expanded: false},
+            root: {alias: i18n('sAccess_Provider_Rights'),leaf: false, id:'0', iconCls: 'root', expanded: false},
             folderSort: true,
             clearOnLoad: true,
             listeners: {
                 load: function( store, records, a,successful,b) {
                     if(!successful){
                         Ext.ux.Toaster.msg(
-                                'Error encountered',
+                                i18n('sError_encountered'),
                                 store.getProxy().getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn

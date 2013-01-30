@@ -1,7 +1,7 @@
 Ext.define('Rd.view.components.vCmbLanguages', {
     extend: 'Ext.form.ComboBox',
     alias : 'widget.cmbLanguage',
-    fieldLabel: 'Choose a language',
+    fieldLabel: i18n('sChoose_a_language'),
     labelSeparator: '',
     store: 'sLanguages',
     queryMode: 'local',

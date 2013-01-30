@@ -17,7 +17,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
     buttons: [
         {
             itemId  : 'save',
-            text    : 'OK',
+            text    : i18n('sOK'),
             scale   : 'large',
             iconCls : 'b-btn_ok',
             formBind: true,
@@ -31,15 +31,15 @@ Ext.define('Rd.view.nas.frmNasBasic', {
         var monitor_types = Ext.create('Ext.data.Store', {
             fields: ['id', 'text'],
             data : [
-                {"id":"off",        "text":"Off"},
-                {"id":"ping",       "text":"Ping"},
-                {"id":"heartbeat",  "text":"Heartbeat"}
+                {"id":"off",        "text": i18n("sOff")},
+                {"id":"ping",       "text": i18n("sPing")},
+                {"id":"heartbeat",  "text": i18n("sHeartbeat")}
             ]
         });
 
         // Create the combo box, attached to the states data store
         var cmbMt = Ext.create('Ext.form.ComboBox', {
-            fieldLabel      : 'Monitor method',
+            fieldLabel      : i18n('sMonitor_method'),
             store           : monitor_types ,
             itemId          : 'monitorType',
             name            : 'monitor',
@@ -52,7 +52,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
         me.items = [
         {
             xtype:'fieldset',
-            title: 'Required info',
+            title: i18n('sRequired_info'),
             collapsible: false,
             border: true,
             collapsed: false,
@@ -64,33 +64,33 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                 {
                     itemId      : 'nasname',
                     xtype       : 'textfield',
-                    fieldLabel  : 'IP Address',
+                    fieldLabel  : i18n('sIP_Address'),
                     name        : "nasname",
                     allowBlank  : false,
-                    blankText   : "Enter the IP Address of device",
+                    blankText   : i18n("sSupply_a_value"),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Name',
+                    fieldLabel  : i18n('sName'),
                     name        : "shortname",
                     allowBlank  : false,
-                    blankText   : "Supply a descriptive name",
+                    blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Secret',
+                    fieldLabel  : i18n('sSecret'),
                     name        : "secret",
                     allowBlank  : false,
-                    blankText   : "Supply the shared secret",
+                    blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 }
             ]
         },
         {
             xtype:'fieldset',
-            title: 'Optional info',
+            title: i18n('sOptional_Info'),
             collapsible: false,
             border: true,
             margin: me.marginSize,
@@ -102,25 +102,25 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                  {
                     itemId      : 'type',
                     xtype       : 'textfield',
-                    fieldLabel  : 'Type',
+                    fieldLabel  : i18n('sType'),
                     name        : "type",
                     labelClsExtra: 'lblRd'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Ports',
+                    fieldLabel  : i18n('sPorts'),
                     name        : "ports",
                     labelClsExtra: 'lblRd'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Community',
+                    fieldLabel  : i18n('sCommunity'),
                     name        : "community",
                     labelClsExtra: 'lblRd'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Server',
+                    fieldLabel  : i18n('sServer'),
                     name        : "server",
                     labelClsExtra: 'lblRd'
                 },
@@ -128,7 +128,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                     xtype       : 'textareafield',
                     grow        : true,
                     name        : 'description',
-                    fieldLabel  : 'Description',
+                    fieldLabel  : i18n('sDescription'),
                     anchor      : '100%',
                     labelClsExtra: 'lblRd'
                 }
@@ -137,7 +137,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
         },
         {
             xtype:'fieldset',
-            title: 'Monitor settings',
+            title: i18n('sMonitor_settings'),
             collapsible: false,
             border: true,
             margin: me.marginSize,
@@ -152,7 +152,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                     anchor: '100%',
                     name: 'heartbeat_dead_after',
                     itemId: 'heartbeat_dead_after',
-                    fieldLabel: 'Heartbeat is dead after',
+                    fieldLabel: i18n('sHeartbeat_is_dead_after'),
                     value: 300,
                     maxValue: 21600,
                     minValue: 300,
@@ -163,7 +163,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                     anchor: '100%',
                     name: 'ping_interval',
                     itemId: 'ping_interval',
-                    fieldLabel: 'Ping interval',
+                    fieldLabel: i18n('sPing_interval'),
                     value: 300,
                     maxValue: 21600,
                     minValue: 300,
@@ -173,7 +173,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
         },
         {
             xtype:'fieldset',
-            title: 'Maps info',
+            title: i18n('sMaps_info'),
             collapsible: false,
             border: true,
             margin: me.marginSize,
@@ -184,19 +184,19 @@ Ext.define('Rd.view.nas.frmNasBasic', {
             items: [
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Longitude',
+                    fieldLabel  : i18n('sLongitude'),
                     name        : "lon",
                     labelClsExtra: 'lblRd'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Latitude',
+                    fieldLabel  : i18n('sLatitude'),
                     name        : "lat",
                     labelClsExtra: 'lblRd'
                 },
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Dispaly on public maps',
+                    boxLabel    : i18n('sDispaly_on_public_maps'),
                     name        : 'on_public_maps',
                     inputValue  : 'on_public_maps',
                     checked     : false,
@@ -207,7 +207,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
         },
         {
             xtype:'fieldset',
-            title: 'Enhancements',
+            title: i18n('sEnhancements'),
             collapsible: false,
             border: true,
             margin: me.marginSize,
@@ -218,7 +218,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
             items: [
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Record authentication requests',
+                    boxLabel    : i18n('sRecord_authentication_requests'),
                     name        : 'record_auth',
                     inputValue  : 'record_auth',
                     checked     : false,
@@ -227,7 +227,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                 },
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Auto-close stale sessions',
+                    boxLabel    : i18n('sAuto_close_stale_sessions'),
                     name        : 'session_auto_close',
                     inputValue  : 'session_auto_close',
                     checked     : false,
@@ -238,7 +238,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                     xtype: 'numberfield',
                     anchor: '100%',
                     name: 'session_dead_time',
-                    fieldLabel: 'Auto-close activation time',
+                    fieldLabel: i18n('sAuto_close_activation_time'),
                     value: 300,
                     maxValue: 21600,
                     minValue: 300,

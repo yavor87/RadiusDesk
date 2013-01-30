@@ -11,7 +11,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
     ],
     urlMenu: '/cake2/rd_cake/realms/menu_for_grid.json',
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
     initComponent: function(){
         var me      = this;
@@ -25,20 +25,20 @@ Ext.define('Rd.view.realms.gridRealms' ,{
 
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: 'Owner',    dataIndex: 'owner',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: 'Name',     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: 'Phone',    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: 'Fax',      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: 'Cell',     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: 'email',    dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: 'Url',      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('sOwner'),    dataIndex: 'owner',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sName'),     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sPhone'),    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('sFax'),      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('semail'),    dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('sUrl'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { 
-                text:   'Available to sub-providers',
+                text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  
                 xtype:  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">Yes</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">No</div></tpl>"
+                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">"+i18n('sYes')+"</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">"+i18n('sNo')+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
                     filter  : {
@@ -46,12 +46,12 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 }
             },
             { 
-                text    : 'Notes',
+                text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
-                                "<tpl if='notes == true'><div class=\"note\">Existing Notes</div></tpl>"
+                                "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
                 dataIndex: 'notes'
             }

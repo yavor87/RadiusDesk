@@ -1,7 +1,7 @@
 Ext.define('Rd.view.tags.winTagManage', {
     extend: 'Ext.window.Window',
     alias : 'widget.winTagManage',
-    title : 'Add or remove tags',
+    title : i18n('sAdd_or_remove_tags'),
     layout: 'fit',
     autoShow: false,
     width:    350,
@@ -28,22 +28,22 @@ Ext.define('Rd.view.tags.winTagManage', {
                 },
                 defaultType: 'textfield',
                 tbar: [
-                    { xtype: 'tbtext', text: 'Select an action and a tag', cls: 'lblWizard' }
+                    { xtype: 'tbtext', text: i18n('sSelect_an_action_and_a_tag'), cls: 'lblWizard' }
                 ],
                 items: [
                     {
                         xtype       : 'radiogroup',
-                        fieldLabel  : 'Action',
+                        fieldLabel  : i18n('sAction'),
                         columns: 1,
                         vertical: true,
                         items: [
-                            { boxLabel: 'Add',      name: 'rb',     inputValue: 'add', checked: true },
-                            { boxLabel: 'Remove',   name: 'rb',     inputValue: 'remove'}
+                            { boxLabel: i18n('sAdd'),      name: 'rb',     inputValue: 'add', checked: true },
+                            { boxLabel: i18n('sRemove'),   name: 'rb',     inputValue: 'remove'}
                         ]
                     },
                     {
                         xtype: 'combo',
-                        fieldLabel: 'Tags',
+                        fieldLabel: i18n('sTags'),
                         store: 'sTags',
                         queryMode: 'local',
                         editable: false,
@@ -56,7 +56,7 @@ Ext.define('Rd.view.tags.winTagManage', {
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
                         formBind: true,

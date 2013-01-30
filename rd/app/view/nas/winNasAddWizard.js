@@ -4,7 +4,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
     closable    : true,
     draggable   : false,
     resizable   : false,
-    title       : 'Add NAS device',
+    title       : i18n('sAdd_NAS_device'),
     width       : 400,
     height      : 400,
     plain       : true,
@@ -85,12 +85,12 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             stripeRows: true,
             border: false,
             tbar: [
-                { xtype: 'tbtext', text: 'Select the device owner', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSelect_the_device_owner'), cls: 'lblWizard' }
             ],
             columns: [
                 {
                     xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: 'Owner',
+                    text: i18n('sOwner'),
                     sortable: true,
                     flex: 1,
                     dataIndex: 'username',
@@ -100,7 +100,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             buttons: [
                     {
                         itemId: 'btnTreeNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'
@@ -119,14 +119,14 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         var buttons = [
                 {
                     itemId: 'btnConTypePrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnConTypeNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -138,7 +138,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             buttons = [
                 {
                     itemId: 'btnConTypeNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -163,11 +163,11 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Choose a connection type', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sChoose_a_connection_type'), cls: 'lblWizard' }
             ],
             items:[{
                 xtype: 'radiogroup',
-                fieldLabel: 'Connection type',
+                fieldLabel: i18n('sConnection_type'),
                 columns: 1,
                 vertical: true,
                // items: [
@@ -202,38 +202,37 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Credentials for OpenVPN tunnel', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sCredentials_for_OpenVPN_tunnel'), cls: 'lblWizard' }
             ],
             items:[
                 {
                     itemId      : 'vpn_username',
                     xtype       : 'textfield',
-                    fieldLabel  : 'Username',
+                    fieldLabel  : i18n('sUsername'),
                     name        : 'vpn_username',
                     allowBlank  : false,
-                    blankText   : 'Required OpenVPN username',
+                    blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     itemId      : 'vpn_password',
                     xtype       : 'textfield',
-                    fieldLabel  : 'Password',
+                    fieldLabel  : i18n('sPassword'),
                     name        : 'vpn_password',
-                    blankText   : 'Supply an optional password',
                     labelClsExtra: 'lblRd'
                 } 
             ],
             buttons: [
                 {
                     itemId: 'btnOpenvpnPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnOpenvpnNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -264,12 +263,12 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Unique AVP combination', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sUnique_AVP_combination'), cls: 'lblWizard' }
             ],
             items:[
                 {
                     xtype: 'combo',
-                    fieldLabel: 'Attribute',
+                    fieldLabel: i18n('sAttribute'),
                     labelSeparator: '',
                     store: 'sDynamicAttributes',
                     queryMode: 'local',
@@ -284,24 +283,24 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 {
                     itemId      : 'dynamic_value',
                     xtype       : 'textfield',
-                    fieldLabel  : 'Value',
+                    fieldLabel  : i18n('sValue'),
                     name        : 'dynamic_value',
                     allowBlank  : false,
-                    blankText   : 'Value to identify the NAS with',
+                    blankText   : i18n('sValue_to_identify_the_NAS_with'),
                     labelClsExtra: 'lblRdReq'
                 } 
             ],
             buttons: [
                 {
                     itemId: 'btnDynamicPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnDynamicNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -334,7 +333,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Supply the following', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
             ],
             items:[
                 {
@@ -353,45 +352,45 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 {
                     itemId      : 'owner',
                     xtype       : 'displayfield',
-                    fieldLabel  : 'Owner',
+                    fieldLabel  : i18n('sOwner'),
                     value       : me.owner,
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     itemId      : 'connectionType',
                     xtype       : 'displayfield',
-                    fieldLabel  : 'Connection',
+                    fieldLabel  : i18n('sConnection'),
                     value       : '',
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     itemId      : 'nasname',
                     xtype       : 'textfield',
-                    fieldLabel  : 'IP Address',
+                    fieldLabel  : i18n('sIP_Address'),
                     name        : "nasname",
                     allowBlank  : false,
-                    blankText   : "Enter the IP Address of device",
+                    blankText   : i18n("sSupply_a_value"),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Name',
+                    fieldLabel  : i18n('sName'),
                     name        : "shortname",
                     allowBlank  : false,
-                    blankText   : "Supply a descriptive name",
+                    blankText   : i18n("sSupply_a_value"),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Secret',
+                    fieldLabel  : i18n('sSecret'),
                     name        : "secret",
                     allowBlank  : false,
-                    blankText   : "Supply the shared secret",
+                    blankText   : i18n("sSupply_a_value"),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Make available to sub-providers',
+                    boxLabel    : i18n('sMake_available_to_sub_providers'),
                     name        : 'available_to_siblings',
                     inputValue  : 'available_to_siblings',
                     itemId      : 'a_to_s',
@@ -402,14 +401,14 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             buttons: [
                 {
                     itemId: 'btnDirectPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnDirectNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -429,18 +428,18 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
             items: grid,
             layout:     'fit',
             itemId:     'scrnRealmsForNasOwner',
-            tbar: [{xtype: 'checkboxfield',boxLabel  : 'Make available to any realm', boxLabelCls : 'lblRd',itemId: 'chkAvailForAll'}],
+            tbar: [{xtype: 'checkboxfield',boxLabel  : i18n('sMake_available_to_any_realm'), boxLabelCls : 'lblRd',itemId: 'chkAvailForAll'}],
             buttons: [
                 {
                     itemId: 'btnRealmsForNasOwnerPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnRealmsForNasOwnerNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,

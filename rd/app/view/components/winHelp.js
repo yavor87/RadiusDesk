@@ -1,7 +1,7 @@
 Ext.define('Rd.view.components.winHelp', {
     extend: 'Ext.window.Window',
     alias : 'widget.winHelp',
-    title : 'Online help',
+    title : i18n('sOnline_help'),
     layout: 'fit',
     autoShow: false,
     width:    600,

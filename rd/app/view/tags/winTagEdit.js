@@ -1,7 +1,7 @@
 Ext.define('Rd.view.tags.winTagEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winTagEdit',
-    title : 'Edit tag for NAS device',
+    title : i18n('sEdit_tag_for_NAS_device'),
     layout: 'fit',
     autoShow: false,
     width:    400,
@@ -28,7 +28,7 @@ Ext.define('Rd.view.tags.winTagEdit', {
                 },
                 defaultType: 'textfield',
                 tbar: [
-                    { xtype: 'tbtext', text: 'Supply the following', cls: 'lblWizard' }
+                    { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
                 ],
                 items: [
                     {
@@ -38,15 +38,15 @@ Ext.define('Rd.view.tags.winTagEdit', {
                     },
                     {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Name',
+                        fieldLabel  : i18n('sName'),
                         name        : "name",
                         allowBlank  : false,
-                        blankText   : "Enter a name for the tag",
+                        blankText   : i18n('sSupply_a_value'),
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
-                        boxLabel    : 'Make available to sub-providers',
+                        boxLabel    : i18n('sMake_available_to_sub_providers'),
                         name        : 'available_to_siblings',
                         inputValue  : 'available_to_siblings',
                         itemId      : 'a_to_s',
@@ -56,7 +56,7 @@ Ext.define('Rd.view.tags.winTagEdit', {
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'

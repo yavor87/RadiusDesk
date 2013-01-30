@@ -5,7 +5,7 @@ Ext.define('Rd.view.acos.winAcoAdd', {
     draggable   :  false,
     resizable   :  false,
     border      : false,
-    title       : 'Add ACO object',
+    title       : i18n('sAdd_ACO_object'),
     layout      : 'fit',
     autoShow    : false,
     width       : 350,
@@ -39,27 +39,27 @@ Ext.define('Rd.view.acos.winAcoAdd', {
                     },
                     {
                         xtype       : 'displayfield',
-                        fieldLabel  : 'Parent node',
+                        fieldLabel  : i18n('sParent_node'),
                         value       : me.parentDisplay,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Alias',
+                        fieldLabel  : i18n('sAlias'),
                         name        : "alias",
                         allowBlank  :false,
-                        blankText   :"Enter Alias",
+                        blankText   : i18n('sEnter_a_value'),
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype     : 'textareafield',
                         grow      : true,
                         name      : "comment",
-                        fieldLabel: 'Optional Description'
+                        fieldLabel: i18n('sOptional_Description')
                     }],
                  buttons : [
                     {
-                        text    : 'Save',
+                        text    : i18n('sSave'),
                         scale   : 'large',
                         action  : 'save',
                         itemId  : 'save',

@@ -10,7 +10,7 @@ Ext.define('Rd.view.acos.treeApRights' ,{
     border: false,
     columns: [{
             xtype: 'treecolumn', //this is so we know which column will show the tree
-            text: 'Name',
+            text: i18n('sName'),
             flex: 1,
             sortable: true,
             dataIndex: 'alias',
@@ -18,7 +18,7 @@ Ext.define('Rd.view.acos.treeApRights' ,{
         },
         {
             xtype: 'advCheckColumn',
-            text: 'Allow',
+            text: i18n('sAllow'),
             dataIndex: 'allowed',
             renderer: function(value, meta, record) {
                 var cssPrefix = Ext.baseCSSPrefix,
@@ -40,7 +40,7 @@ Ext.define('Rd.view.acos.treeApRights' ,{
             }
         },
         {
-            text: 'Comment',
+            text: i18n('sComment'),
             flex: 2,
             dataIndex: 'comment',
             sortable: false,
@@ -48,8 +48,8 @@ Ext.define('Rd.view.acos.treeApRights' ,{
         }
     ],
     tbar: [      
-        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload', tooltip: 'Reload'},              
-        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: 'Expand'},
+        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip: i18n('sReload')},              
+        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand',   tooltip: i18n('sExpand')},
         { xtype: 'tbfill'}
     ]
 });

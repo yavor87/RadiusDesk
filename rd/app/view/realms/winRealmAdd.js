@@ -4,7 +4,7 @@ Ext.define('Rd.view.i18n.winRealmAdd', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Add realm',
+    title:      i18n('sAdd_realm'),
     width:      380,
     height:     380,
     plain:      true,

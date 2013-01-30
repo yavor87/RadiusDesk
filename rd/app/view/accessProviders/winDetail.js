@@ -1,7 +1,7 @@
 Ext.define('Rd.view.accessProviders.winDetail', {
     extend: 'Ext.window.Window',
     alias : 'widget.winAccessProviderDetail',
-    title : 'New Access Provider',
+    title : i18n('sNew_Access_Provider'),
     layout: 'fit',
     autoShow: true,
     width: 400,

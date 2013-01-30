@@ -70,11 +70,11 @@ Ext.define('Rd.view.realms.gridNas' ,{
         
         me.columns = [
             {xtype: 'rownumberer'},
-            { text: 'Owner',        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: 'IP Address',   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: 'Name',         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sOwner'),        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sIP_Address'),   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sName'),         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
             { 
-                text        : 'Connection type', 
+                text        : i18n('sConnection_type'), 
                 dataIndex   : 'connection_type',        
                 tdCls       :  'gridTree', 
                 flex        : 1,
@@ -86,12 +86,12 @@ Ext.define('Rd.view.realms.gridNas' ,{
                                 }
             },
             { 
-                text    : 'Available to sub-providers',
+                text    : i18n('sAvailable_to_sub_providers'),
                 flex    : 1,  
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
-                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">Yes</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">No</div></tpl>"
+                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">"+i18n('sYes')+"</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">"+i18n('sNo')+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
                 filter  : {
@@ -99,7 +99,7 @@ Ext.define('Rd.view.realms.gridNas' ,{
                           }
             },
             { 
-                text:   'Realms',
+                text:   i18n('sRealms'),
                 sortable: false,
                 flex: 1,  
                 xtype:  'templatecolumn', 
@@ -118,7 +118,7 @@ Ext.define('Rd.view.realms.gridNas' ,{
                         }
             },  
             { 
-                text:   'Tags',
+                text:   i18n('sTags'),
                 sortable: false,
                 flex: 1,  
                 xtype:  'templatecolumn', 
@@ -137,12 +137,12 @@ Ext.define('Rd.view.realms.gridNas' ,{
                         }
             },
             { 
-                text    : 'Notes',
+                text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
-                            "<tpl if='notes == true'><div class=\"note\">Existing Notes</div></tpl>"
+                            "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                         ),
                 dataIndex: 'notes'
             }     

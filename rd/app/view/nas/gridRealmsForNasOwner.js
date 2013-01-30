@@ -6,7 +6,7 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
     realFlag : false, 
     columns: [
         {xtype: 'rownumberer'},
-        { text: 'Name',    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
+        { text: i18n('sName'),    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
         {
             xtype: 'advCheckColumn',
             text: 'Include',
@@ -27,7 +27,7 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
         }
     ],
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: 'Result count: {count}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+        {   xtype: 'component', itemId: 'count',   tpl:  i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
     initComponent: function(){
 
@@ -39,14 +39,14 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
             urlUpdate  = '/cake2/rd_cake/realms/update_na_realm.json';
             me.tbar = [ 
                 { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
-                {xtype: 'checkboxfield',boxLabel  : 'Make available to sub-providers', boxLabelCls : 'lblRd',itemId: 'chkAvailSub'},
+                {xtype: 'checkboxfield',boxLabel  : i18n('sMake_available_to_sub_providers'), boxLabelCls : 'lblRd',itemId: 'chkAvailSub'},
                 '->',  
-                { xtype: 'tbtext', text: 'Select one or more realms', cls: 'lblWizard' },         
+                { xtype: 'tbtext', text: i18n('sSelect_one_or_more_realms'), cls: 'lblWizard' },         
             ];
         }else{
             me.tbar = [ 
                 { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},'->',  
-                { xtype: 'tbtext', text: 'Select one or more realms', cls: 'lblWizard' },         
+                { xtype: 'tbtext', text: i18n('sSelect_one_or_more_realms'), cls: 'lblWizard' },         
             ];
         }
 
@@ -73,7 +73,7 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
                 load: function(store, records, successful) {      
                     if(!successful){
                         Ext.ux.Toaster.msg(
-                            'Error encountered',
+                            i18n('sError_encountered'),
                             store.getProxy().getReader().rawData.message.message,
                             Ext.ux.Constants.clsWarn,
                             Ext.ux.Constants.msgWarn
