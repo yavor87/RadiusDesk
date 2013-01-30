@@ -1,7 +1,7 @@
 Ext.define('Rd.view.components.winCsvColumnSelect', {
     extend: 'Ext.window.Window',
     alias : 'widget.winCsvColumnSelect',
-    title : 'CSV export',
+    title : i18n('sCSV_export'),
     layout: 'fit',
     autoShow: false,
     width:    350,
@@ -28,12 +28,12 @@ Ext.define('Rd.view.components.winCsvColumnSelect', {
                 },
                 defaultType: 'textfield',
                 tbar: [
-                    { xtype: 'tbtext', text: 'Select columns to include in CSV list', cls: 'lblWizard' }
+                    { xtype: 'tbtext', text: i18n('sSelect_columns_to_include_in_CSV_list'), cls: 'lblWizard' }
                 ],
                 items: [
                     {
                         xtype       : 'fieldcontainer',
-                        fieldLabel  : 'Columns',
+                        fieldLabel  : i18n('sColumns'),
                         defaultType : 'checkboxfield',
                         items:      me.columns
                     }
@@ -41,7 +41,7 @@ Ext.define('Rd.view.components.winCsvColumnSelect', {
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'OK',
+                        text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
                         formBind: true,

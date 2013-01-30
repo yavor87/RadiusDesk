@@ -330,7 +330,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to do that?', function(val){
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
                     me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
                     me.getGrid().getStore().sync({

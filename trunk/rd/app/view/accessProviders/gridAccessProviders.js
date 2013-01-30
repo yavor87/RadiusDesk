@@ -27,7 +27,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
         me.columns  = [
             {xtype: 'rownumberer'},
             {
-                text        : 'Owner',
+                text        : i18n('sOwner'),
                 sortable    : true,
                 flex        : 1,
                 dataIndex   : 'owner',
@@ -35,7 +35,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 filter      : {type: 'string'}
             },
             {
-                text        : 'Username',
+                text        : i18n('sUsername'),
                 sortable    : true,
                 flex        : 1,
                 dataIndex   : 'username',
@@ -43,57 +43,57 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 filter      : {type: 'string'}
             },
             {
-                text        : 'Name',
+                text        : i18n('sName'),
                 dataIndex   : 'name',
                 tdCls       : 'gridTree',
                 filter      : {type: 'string'}
             },
             {
-                text        : 'Surname',
+                text        : i18n('sSurname'),
                 dataIndex   : 'surname',
                 tdCls       : 'gridTree',
                 filter      : {type: 'string'}
             },
             {
-                text        : 'Phone',
+                text        : i18n('sPhone'),
                 dataIndex   : 'phone',
                 tdCls       : 'gridTree',
                 filter      : {type: 'string'}
             },
             {
-                text        : 'email',
+                text        : i18n('s_email'),
                 flex        : 1,
                 dataIndex   : 'email',
                 tdCls       : 'gridTree',
                 filter      : {type: 'string'}
             },
             { 
-                text        : 'Monitor',  
+                text        : i18n('sMonitor'),  
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='monitor == true'><div class=\"hasRight\">Yes</div></tpl>",
-                                "<tpl if='monitor == false'><div class=\"noRight\">No</div></tpl>"
+                                "<tpl if='monitor == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='monitor == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'monitor',
                 filter      : {type: 'boolean'}
             },
             { 
-                text        : 'Active',  
+                text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='active == true'><div class=\"hasRight\">Yes</div></tpl>",
-                                "<tpl if='active == false'><div class=\"noRight\">No</div></tpl>"
+                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
                 filter      : { type: 'boolean'}
             },
              { 
-                text    : 'Notes',
+                text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
-                                "<tpl if='notes == true'><div class=\"note\">Existing Notes</div></tpl>"
+                                "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
                 dataIndex: 'notes'
             }      

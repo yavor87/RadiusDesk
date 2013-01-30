@@ -23,14 +23,14 @@ Ext.define('Rd.view.realms.frmDetail', {
         var buttons = [
                 {
                     itemId: 'btnDetailPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'save',
-                    text: 'OK',
+                    text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
                     formBind: true,
@@ -42,7 +42,7 @@ Ext.define('Rd.view.realms.frmDetail', {
             buttons = [
                 {
                     itemId: 'save',
-                    text: 'OK',
+                    text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
                     formBind: true,
@@ -69,21 +69,21 @@ Ext.define('Rd.view.realms.frmDetail', {
         {
             itemId      : 'owner',
             xtype       : 'displayfield',
-            fieldLabel  : 'Owner',
+            fieldLabel  : i18n('sOwner'),
             value       : me.owner,
             labelClsExtra: 'lblRdReq'
         },
         {
             xtype       : 'textfield',
-            fieldLabel  : 'Name',
+            fieldLabel  : i18n('sName'),
             name        : "name",
             allowBlank  : false,
-            blankText   : "Enter a name",
+            blankText   : i18n("sSupply_a_value"),
             labelClsExtra: 'lblRdReq'
         },
         {
             xtype       : 'checkbox',      
-            boxLabel    : 'Make available to sub-providers',
+            boxLabel    : i18n('sMake_available_to_sub_providers'),
             name        : 'available_to_siblings',
             inputValue  : 'available_to_siblings',
             checked     : false,
@@ -91,7 +91,7 @@ Ext.define('Rd.view.realms.frmDetail', {
         },
         {
             xtype:'fieldset',
-            title: 'Optional Info',
+            title: i18n('sOptional_Info'),
             collapsible: true,
             border: false,
             collapsed: true,
@@ -101,37 +101,37 @@ Ext.define('Rd.view.realms.frmDetail', {
             items: [
             {
                 xtype       : 'displayfield',
-                fieldLabel  : 'Contact detail',
+                fieldLabel  : i18n('sContact_detail'),
                 labelClsExtra: 'lblRdGrouping'
        
             },          
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Phone',
+                fieldLabel  : i18n('sPhone'),
                 name        : "phone",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Fax',
+                fieldLabel  : i18n('sFax'),
                 name        : "fax",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Cell',
+                fieldLabel  : i18n('sCell'),
                 name        : "cell",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'email',
+                fieldLabel  : i18n('s_email'),
                 name        : "email",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'URL',
+                fieldLabel  : i18n('sURL'),
                 name        : "url",
                 allowBlank  : true
             },
@@ -142,50 +142,50 @@ Ext.define('Rd.view.realms.frmDetail', {
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Street Number',
+                fieldLabel  : i18n('sStreet_Number'),
                 name        : "street_no",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Street',
+                fieldLabel  : i18n('sStreet'),
                 name        : "street",
                 allowBlank  : true,
                 margin: 15
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Town / Suburb',
+                fieldLabel  : i18n('sTown_fs_Suburb'),
                 name        : "town_suburb",
                 allowBlank  : true,
                 margin: 15
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'City',
+                fieldLabel  : i18n('sCity'),
                 name        : "city",
                 allowBlank  : true
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Country',
+                fieldLabel  : i18n('sCountry'),
                 name        : "country",
                 allowBlank  : true
             },
             {
                 xtype       : 'displayfield',
-                fieldLabel  : 'Location',
+                fieldLabel  : i18n('sLocation'),
                 labelClsExtra: 'lblRdGrouping'
             },
             {
                 xtype       : 'textfield',
-                fieldLabel  : 'Longitude',
+                fieldLabel  : i18n('sLongitude'),
                 name        : "lon",
                 allowBlank  : true
             },
             {   
                 xtype       : 'textfield',
-                fieldLabel  : 'Latitude',
+                fieldLabel  : i18n('sLatitude'),
                 name        : "lat",
                 allowBlank  : true
             },

@@ -21,48 +21,48 @@ Ext.define('Rd.view.accessProviders.treeAccessProviders' ,{
     columns: [
         {
             xtype: 'treecolumn', //this is so we know which column will show the tree
-            text: 'Access Provider hierarchy',
+            text: i18n('sAccess_Provider_hierarchy'),
             sortable: true,
             flex: 1,
             dataIndex: 'username',
             tdCls: 'gridTree'
         },
         {
-            text: 'Name',
+            text: i18n('sName'),
             dataIndex: 'name',
             tdCls: 'gridTree'
         },
         {
-            text: 'Surname',
+            text: i18n('sSurname'),
             dataIndex: 'surname',
             tdCls: 'gridTree'
         },
         {
-            text: 'Phone',
+            text: i18n('sPhone'),
             dataIndex: 'phone',
             tdCls: 'gridTree'
         },
         {
-            text: 'email',
+            text: i18n('s_email'),
             flex: 1,
             dataIndex: 'email',
             tdCls: 'gridTree'
         },
 
         { 
-            text:   'Monitor',  
+            text:   i18n('sMonitor'),  
             xtype:  'templatecolumn', 
             tpl:    new Ext.XTemplate(
-                        "<tpl if='monitor == true'><div class=\"hasRight\">Yes</div></tpl>",
-                        "<tpl if='monitor == false'><div class=\"noRight\">No</div></tpl>"
+                        "<tpl if='monitor == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='monitor == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                     )
         },
         { 
             text:   'Active',  
             xtype:  'templatecolumn', 
             tpl:    new Ext.XTemplate(
-                        "<tpl if='active == true'><div class=\"hasRight\">Yes</div></tpl>",
-                        "<tpl if='active == false'><div class=\"noRight\">No</div></tpl>"
+                        "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                     )
         }
 

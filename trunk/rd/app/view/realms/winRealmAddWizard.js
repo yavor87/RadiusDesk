@@ -4,7 +4,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'Add realm',
+    title:      i18n('sAdd_realm'),
     width:      380,
     height:     380,
     plain:      true,
@@ -58,12 +58,12 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
             stripeRows: true,
             border: false,
             tbar: [
-                { xtype: 'tbtext', text: 'Select an owner for the realm', cls: 'lblRd' }
+                { xtype: 'tbtext', text: i18n('sSelect_an_owner_for_the_realm'), cls: 'lblRd' }
             ],
             columns: [
                 {
                     xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: 'Owner',
+                    text: i18n('sOwner'),
                     sortable: true,
                     flex: 1,
                     dataIndex: 'username',
@@ -73,7 +73,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
             buttons: [
                     {
                         itemId: 'btnTreeNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'

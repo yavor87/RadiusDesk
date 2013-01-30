@@ -16,7 +16,7 @@ Ext.define('Rd.store.sI18nPhpPhrases', {
         load: function(store, records, successful) {
             if(!successful){
                 Ext.ux.Toaster.msg(
-                        'Error encountered',
+                        i18n('sError_encountered'),
                         store.getProxy().getReader().rawData.message.message,
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn

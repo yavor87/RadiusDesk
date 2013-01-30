@@ -12,12 +12,12 @@ Ext.define('Rd.store.sAccessProvidersTree', {
                 messageProperty: 'message'
             }
     },
-    root: {username: 'Logged in user',leaf: false, id:'0', iconCls: 'admin', expanded: false,monitor: 'na', active: 'na'},
+    root: {username: i18n('sLogged_in_user'),leaf: false, id:'0', iconCls: 'admin', expanded: false,monitor: 'na', active: 'na'},
     listeners: {
         load: function( store, records, a,successful,b) {
             if(!successful){
                 Ext.ux.Toaster.msg(
-                        'Error encountered',
+                        i18n('sError_encountered'),
                         store.getProxy().getReader().rawData.message.message,
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn

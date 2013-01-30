@@ -4,7 +4,7 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'New tag for NAS devices',
+    title:      i18n('sNew_tag_for_NAS_devices'),
     width:      400,
     height:     400,
     plain:      true,
@@ -52,12 +52,12 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
             stripeRows: true,
             border: false,
             tbar: [
-                { xtype: 'tbtext', text: 'Select the tag owner', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSelect_the_tag_owner'), cls: 'lblWizard' }
             ],
             columns: [
                 {
                     xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: 'Owner',
+                    text: i18n('sOwner'),
                     sortable: true,
                     flex: 1,
                     dataIndex: 'username',
@@ -67,7 +67,7 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
             buttons: [
                     {
                         itemId: 'btnTreeNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'
@@ -85,14 +85,14 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
         var buttons = [
                 {
                     itemId: 'btnDataPrev',
-                    text: 'Prev',
+                    text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
                     margin: '0 20 40 0'
                 },
                 {
                     itemId: 'btnDataNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -104,7 +104,7 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
             var buttons = [
                 {
                     itemId: 'btnDataNext',
-                    text: 'Next',
+                    text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
                     formBind: true,
@@ -130,7 +130,7 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Supply the following', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
             ],
             items:[
                 {
@@ -148,21 +148,21 @@ Ext.define('Rd.view.tags.winTagAddWizard', {
                 {
                     itemId      : 'owner',
                     xtype       : 'displayfield',
-                    fieldLabel  : 'Owner',
+                    fieldLabel  : i18n('sOwner'),
                     value       : me.owner,
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'textfield',
-                    fieldLabel  : 'Name',
+                    fieldLabel  : i18n('sName'),
                     name        : "name",
                     allowBlank  : false,
-                    blankText   : "Enter a name for the tag",
+                    blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Also show to sub-providers',
+                    boxLabel    : i18n('sAlso_show_to_sub_providers'),
                     name        : 'available_to_siblings',
                     inputValue  : 'available_to_siblings',
                     itemId      : 'a_to_s',

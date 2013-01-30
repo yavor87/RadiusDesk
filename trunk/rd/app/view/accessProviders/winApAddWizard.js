@@ -4,7 +4,7 @@ Ext.define('Rd.view.tags.winApAddWizard', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'New Access Provider',
+    title:      i18n('sNew_Access_Provider'),
     width:      400,
     height:     400,
     plain:      true,
@@ -53,12 +53,12 @@ Ext.define('Rd.view.tags.winApAddWizard', {
             stripeRows: true,
             border: false,
             tbar: [
-                { xtype: 'tbtext', text: 'Select the Parent Access provider', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSelect_the_Parent_Access_provider'), cls: 'lblWizard' }
             ],
             columns: [
                 {
                     xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: 'Owner',
+                    text: i18n('sOwner'),
                     sortable: true,
                     flex: 1,
                     dataIndex: 'username',
@@ -68,7 +68,7 @@ Ext.define('Rd.view.tags.winApAddWizard', {
             buttons: [
                     {
                         itemId: 'btnTreeNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'

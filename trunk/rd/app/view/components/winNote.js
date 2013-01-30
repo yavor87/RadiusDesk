@@ -1,7 +1,7 @@
 Ext.define('Rd.view.components.winNote', {
     extend: 'Ext.window.Window',
     alias : 'widget.winNote',
-    title : 'Note management',
+    title : i18n('sNote_management'),
     layout: 'fit',
     autoShow: false,
     width:    400,
@@ -16,7 +16,7 @@ Ext.define('Rd.view.components.winNote', {
     initComponent: function() {
         var me      = this;
         me.items    = {xtype : 'gridNote',noteForId: me.noteForId, noteForGrid: me.noteForGrid}
-        me.title    = "Note management: "+ me.noteForName;
+        me.title    = i18n('sNote_management')+": "+ me.noteForName;
         this.callParent(arguments);
     }
 });

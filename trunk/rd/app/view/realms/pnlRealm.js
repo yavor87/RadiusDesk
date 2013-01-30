@@ -11,7 +11,7 @@ Ext.define('Rd.view.desktop.pnlRealm', {
         var me = this;
         me.items = [
             {   
-                title:  'Detail',
+                title:  i18n('sDetail'),
                 layout: 'hbox',
                 bodyStyle: {backgroundColor : '#e5e6ef'},
                 border: false,
@@ -23,10 +23,10 @@ Ext.define('Rd.view.desktop.pnlRealm', {
                     } 
             },
             { 
-                title   : 'Logo'
+                title   : i18n('sLogo')
             },
             { 
-                title   : 'Notes'
+                title   : i18n('sNotes')
             }
         ]; 
         me.callParent(arguments);

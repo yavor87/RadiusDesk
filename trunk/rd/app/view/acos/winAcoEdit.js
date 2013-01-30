@@ -1,7 +1,7 @@
 Ext.define('Rd.view.acos.winAcoEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winAcoEdit',
-    title : 'Edit ACO object',
+    title : i18n('sEdit_ACO_object'),
     closable    :  true,
     draggable   :  false,
     resizable   :  false,
@@ -40,22 +40,22 @@ Ext.define('Rd.view.acos.winAcoEdit', {
                     },
                     {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Alias',
+                        fieldLabel  : i18n('sAlias'),
                         name        : "alias",
                         allowBlank  :false,
-                        blankText   :"Enter Alias",
+                        blankText   : i18n('sEnter_a_value'),
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype     : 'textareafield',
                         grow      : true,
                         name      : "comment",
-                        fieldLabel: 'Optional Description'
+                        fieldLabel: i18n('sOptional_Description')
                     }],
                 buttons: [
                     {
                         itemId: 'save',
-                        text: 'Save',
+                        text    : i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'

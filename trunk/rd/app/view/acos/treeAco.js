@@ -9,14 +9,14 @@ Ext.define('Rd.view.acos.treeAco' ,{
     border: false,
     columns: [{
             xtype: 'treecolumn', //this is so we know which column will show the tree
-            text: 'Name',
+            text: i18n('sName'),
             flex: 1,
             sortable: true,
             dataIndex: 'alias',
             tdCls: 'gridTree'
         },
         {
-            text: 'Comment',
+            text: i18n('sComment'),
             flex: 2,
             dataIndex: 'comment',
             sortable: false,
@@ -24,11 +24,11 @@ Ext.define('Rd.view.acos.treeAco' ,{
         }
     ],
     tbar: [      
-        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload'},              
-        { xtype: 'button',  iconCls: 'b-add',       scale: 'large', itemId: 'add'},
-        { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete'},
-        { xtype: 'button',  iconCls: 'b-edit',      scale: 'large', itemId: 'edit'},
-        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: 'Expand'},
+        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',tooltip: i18n('sReload')},              
+        { xtype: 'button',  iconCls: 'b-add',       scale: 'large', itemId: 'add',tooltip: i18n('sAdd')},
+        { xtype: 'button',  iconCls: 'b-delete',    scale: 'large', itemId: 'delete',tooltip: i18n('sDelete')},
+        { xtype: 'button',  iconCls: 'b-edit',      scale: 'large', itemId: 'edit',tooltip: i18n('sEdit')},
+        { xtype: 'button',  iconCls: 'b-expand',    scale: 'large', itemId: 'expand', tooltip: i18n('sExpand')},
         { xtype: 'tbfill'}
     ],
     initComponent: function(){

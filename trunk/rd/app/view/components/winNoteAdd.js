@@ -4,7 +4,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
     closable    : true,
     draggable   : false,
     resizable   : false,
-    title       : 'Add Note',
+    title       : i18n('sAdd_Note'),
     width       : 350,
     height      : 350,
     plain       : true,
@@ -47,12 +47,12 @@ Ext.define('Rd.view.components.winNoteAdd', {
             stripeRows: true,
             border: false,
             tbar: [
-                { xtype: 'tbtext', text: 'Select the note\'s owner', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSelect_the_owner'), cls: 'lblWizard' }
             ],
             columns: [
                 {
                     xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: 'Owner',
+                    text: i18n('sOwner'),
                     sortable: true,
                     flex: 1,
                     dataIndex: 'username',
@@ -62,7 +62,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
             buttons: [
                     {
                         itemId: 'btnNoteTreeNext',
-                        text: 'Next',
+                        text: i18n('sNext'),
                         scale: 'large',
                         iconCls: 'b-next',
                         margin: '0 20 40 0'
@@ -79,14 +79,14 @@ Ext.define('Rd.view.components.winNoteAdd', {
         var buttons = [
                 {
                     itemId  : 'btnNoteAddPrev',
-                    text    : 'Prev',
+                    text    : i18n('sPrev'),
                     scale   : 'large',
                     iconCls : 'b-prev',
                     margin  : '0 20 40 0'
                 },
                 {
                     itemId  : 'btnNoteAddNext',
-                    text    : 'Next',
+                    text    : i18n('sNext'),
                     scale   : 'large',
                     iconCls : 'b-next',
                     formBind: true,
@@ -98,7 +98,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
             var buttons = [
                 {
                     itemId  : 'btnNoteAddNext',
-                    text    : 'Next',
+                    text    : i18n('sNext'),
                     scale   : 'large',
                     iconCls : 'b-next',
                     formBind: true,
@@ -134,7 +134,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
                 {
                     itemId      : 'owner',
                     xtype       : 'displayfield',
-                    fieldLabel  : 'Owner',
+                    fieldLabel  : i18n('sOwner'),
                     value       : me.owner,
                     labelClsExtra: 'lblRdReq'
                 },
@@ -142,14 +142,14 @@ Ext.define('Rd.view.components.winNoteAdd', {
                     xtype       : 'textareafield',
                     grow        : true,
                     name        : 'note',
-                    fieldLabel  : 'Note',
+                    fieldLabel  : i18n('sNote'),
                     anchor      : '100%',
                     allowBlank  :false,
                     labelClsExtra: 'lblRdReq'
                 },
                 {
                     xtype       : 'checkbox',      
-                    boxLabel    : 'Make available to sub-providers',
+                    boxLabel    : i18n('sMake_available_to_sub_providers'),
                     name        : 'available_to_siblings',
                     inputValue  : 'available_to_siblings',
                     itemId      : 'a_to_s',
