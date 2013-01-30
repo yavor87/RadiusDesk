@@ -137,7 +137,7 @@ Ext.define('Rd.view.realms.frmDetail', {
             },
             {
                 xtype       : 'displayfield',
-                fieldLabel  : 'Address',
+                fieldLabel  : i18n('sAddress'),
                 labelClsExtra: 'lblRdGrouping'
             },
             {

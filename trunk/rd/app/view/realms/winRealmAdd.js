@@ -1,4 +1,4 @@
-Ext.define('Rd.view.i18n.winRealmAdd', {
+Ext.define('Rd.view.realms.winRealmAdd', {
     extend:     'Ext.window.Window',
     alias :     'widget.winRealmAdd',
     closable:   true,

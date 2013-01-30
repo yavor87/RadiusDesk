@@ -6,7 +6,7 @@ Ext.define('Rd.view.tags.winTagEdit', {
     autoShow: false,
     width:    400,
     height:   400,
-    iconCls: 'add',
+    iconCls: 'edit',
     initComponent: function() {
         var me = this;
         this.items = [
