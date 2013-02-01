@@ -280,7 +280,7 @@ CREATE TABLE `na_tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,6 +289,7 @@ CREATE TABLE `na_tags` (
 
 LOCK TABLES `na_tags` WRITE;
 /*!40000 ALTER TABLE `na_tags` DISABLE KEYS */;
+INSERT INTO `na_tags` VALUES (5,2,16,'2013-01-31 07:29:07','2013-01-31 07:29:07'),(6,2,17,'2013-01-31 07:29:23','2013-01-31 07:29:23');
 /*!40000 ALTER TABLE `na_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -686,4 +687,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-30 16:38:15
+-- Dump completed on 2013-02-01 12:12:05
