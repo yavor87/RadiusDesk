@@ -19,6 +19,10 @@ $config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 
 $config['openvpn']['ccd_dir_location']  = '/etc/openvpn/ccd/';
 $config['openvpn']['ip_half']           = '10.8.';
 
+//Dictionary files to include for profiles...
+$config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
+$config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
+
 
 //Define the configured dynamic attributes
 $config['dynamic_attributes'][0]     = array('name' => 'Called-Station-Id',  'id' => 'Called-Station-Id',   'active' => true);
