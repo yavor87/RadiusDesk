@@ -1,36 +1,38 @@
-Ext.define('Rd.controller.cTags', {
+Ext.define('Rd.controller.cTemplates', {
     extend: 'Ext.app.Controller',
     actionIndex: function(){
 
         var me = this;
         var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('tagsWin');
+        var win = desktop.getWindow('templatesWin');
         if(!win){
             win = desktop.createWindow({
-                id: 'tagsWin',
-                title: i18n('sTags_manager'),
+                id: 'templatesWin',
+                title: i18n('sProfile_template_manager'),
                 width:800,
                 height:400,
-                iconCls: 'tags',
+                iconCls: 'copy',
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'tagsWin',
+                stateId: 'templatesWin',
                 items: [
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading: i18n('sNAS_device_tags'),
-                        image:  'resources/images/48x48/tags.png'
+                        heading: i18n('sProfile_template_manager'),
+                        image:  'resources/images/48x48/templates.png'
                     },
                     {
                         region  : 'center',
+                        xtype   : 'tabpanel',
                         layout  : 'fit',
-                        xtype   : 'gridTags',
+                        xtype   : 'tabpanel',
                         margins : '0 0 0 0',
-                        border  : true
+                        border  : true,
+                        items   : { 'title' : i18n('sTemplates'), xtype: 'gridTemplates'}
                     }
                 ]
             });
@@ -40,21 +42,22 @@ Ext.define('Rd.controller.cTags', {
     },
 
     views:  [
-        'components.pnlBanner',             'tags.gridTags',        'tags.winTagAddWizard',     'tags.winTagEdit',
-        'components.winCsvColumnSelect',    'components.winNote',   'components.winNoteAdd'
+        'components.pnlBanner',             'templates.gridTemplates',  'templates.winTemplateAddWizard',
+        'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd',
+        'templates.gridTemplate',           'components.cmbVendor',     'components.cmbAttribute'
     ],
-    stores: ['sTags',   'sAccessProvidersTree'],
-    models: ['mTag',    'mAccessProviderTree'],
+    stores: ['sTemplates', 'sAccessProvidersTree', 'sAttributes', 'sVendors'],
+    models: ['mTemplate',  'mAccessProviderTree', 'mAttribute', 'mVendor',  'mTemplateEdit' ],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/tags/add.json',
-        urlEdit:            '/cake2/rd_cake/tags/edit.json',
+        urlAdd:             '/cake2/rd_cake/templates/add.json',
+        urlEdit:            '/cake2/rd_cake/templates/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/tags/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/tags/note_add.json'
+        urlExportCsv:       '/cake2/rd_cake/templates/export_csv',
+        urlNoteAdd:         '/cake2/rd_cake/templates/note_add.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridTags'}       
+        {  ref: 'grid',  selector:   'gridTemplates'}       
     ],
     init: function() {
         var me = this;
@@ -63,82 +66,82 @@ Ext.define('Rd.controller.cTags', {
         }
         me.inited = true;
 
-        me.getStore('sTags').addListener('load',me.onStoreTagsLoaded, me);
+        me.getStore('sTemplates').addListener('load',me.onStoreTemplatesLoaded, me);
         me.control({
-            'gridTags #reload': {
+            'gridTemplates #reload': {
                 click:      me.reload
             }, 
-            'gridTags #add'   : {
+            'gridTemplates #add'   : {
                 click:      me.add
             },
-            'gridTags #delete'   : {
+            'gridTemplates #delete'   : {
                 click:      me.del
             },
-            'gridTags #edit'   : {
+            'gridTemplates #edit'   : {
                 click:      me.edit
             },
-            'gridTags #note'   : {
+            'gridTemplates #note'   : {
                 click:      me.note
             },
-            'gridTags #csv'  : {
+            'gridTemplates #csv'  : {
                 click:      me.csvExport
             },
-            'gridTags'   : {
+            'gridTemplates'   : {
                 select:      me.select
             },
-            'winTagAddWizard' :{
+            'winTemplateAddWizard' :{
                 toFront: me.maskHide
             },
-            'winTagAddWizard #btnTreeNext' : {
+            'winTemplateAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
-            'winTagAddWizard #btnDataPrev' : {
+            'winTemplateAddWizard #btnDataPrev' : {
                 click:  me.btnDataPrev
             },
-            'winTagAddWizard #btnDataNext' : {
+            'winTemplateAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            'winTagEdit' :{
-                toFront: me.maskHide
-            },
-            'winTagEdit #save' : {
-                click:  me.editSubmit
-            },
-            '#winCsvColumnSelectTags':{
+            '#winCsvColumnSelectTemplates':{
                 toFront:       me.maskHide
             },
-            '#winCsvColumnSelectTags #save': {
+            '#winCsvColumnSelectTemplates #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=tags] #reload' : {
+            'gridNote[noteForGrid=templates] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote[noteForGrid=tags] #add' : {
+            'gridNote[noteForGrid=templates] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote[noteForGrid=tags] #delete' : {
+            'gridNote[noteForGrid=templates] #delete' : {
                 click:  me.noteDelete
             },
-            'gridNote[noteForGrid=tags]' : {
+            'gridNote[noteForGrid=templates]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNote[noteForGrid=tags]':{
+            'winNote[noteForGrid=templates]':{
                 toFront:       me.maskHide
             },
-            'winNoteAdd[noteForGrid=tags] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=templates] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=tags] #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=templates] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=tags] #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=templates] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
-            }
+            },
+            'gridTemplate  #cmbVendor': {
+                change:      me.cmbVendorChange
+            },
+            'gridTemplate  #add': {
+                click:      me.attrAdd
+            },
         });
     },
     reload: function(){
         var me =this;
-        me.getStore('sTags').load();
+        me.getStore('sTemplates').load();
     },
     maskHide:   function(){
         var me =this;
@@ -160,14 +163,14 @@ Ext.define('Rd.controller.cTags', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
-                            var w = Ext.widget('winTagAddWizard',{id:'winTagAddWizardId'});
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winTemplateAddWizardId')){
+                            var w = Ext.widget('winTemplateAddWizard',{id:'winTemplateAddWizardId'});
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
-                            var w = Ext.widget('winTagAddWizard',
-                                {id:'winTagAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winTemplateAddWizardId')){
+                            var w = Ext.widget('winTemplateAddWizard',
+                                {id:'winTemplateAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
                             me.application.runAction('cDesktop','Add',w);         
                         }
@@ -184,7 +187,7 @@ Ext.define('Rd.controller.cTags', {
         //Get selection:
         var sr = tree.getSelectionModel().getLastSelected();
         if(sr){    
-            var win = button.up('winTagAddWizard');
+            var win = button.up('winTemplateAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
             win.getLayout().setActiveItem('scrnData');
@@ -199,7 +202,7 @@ Ext.define('Rd.controller.cTags', {
     },
     btnDataPrev:  function(button){
         var me      = this;
-        var win     = button.up('winTagAddWizard');
+        var win     = button.up('winTemplateAddWizard');
         win.getLayout().setActiveItem('scrnApTree');
     },
     btnDataNext:  function(button){
@@ -211,7 +214,7 @@ Ext.define('Rd.controller.cTags', {
             url: me.urlAdd,
             success: function(form, action) {
                 win.close();
-                me.getStore('sTags').load();
+                me.getStore('sTemplates').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
@@ -273,7 +276,7 @@ Ext.define('Rd.controller.cTags', {
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStoreTagsLoaded();   //Update the count   
+                            me.onStoreTemplatesLoaded();   //Update the count   
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
@@ -290,63 +293,58 @@ Ext.define('Rd.controller.cTags', {
         }
     },
 
-    edit: function(button){
-        var me      = this; 
-        me.getGrid().mask.show();    
-        //Find out if there was something selected
-        var selCount = me.getGrid().getSelectionModel().getCount();
-        if(selCount == 0){
-            me.maskHide();
-             Ext.ux.Toaster.msg(
+    edit:   function(){
+        console.log("Edit node");  
+        var me = this;
+        //See if there are anything selected... if not, inform the user
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
+            me.maskHide(); 
         }else{
-            if(selCount > 1){
-                me.maskHide();
-                Ext.ux.Toaster.msg(
-                        i18n('sLimit_the_selection'),
-                        i18n('sSelection_limited_to_one'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-            }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winTagEditId')){
-                    var w = Ext.widget('winTagEdit',{id:'winTagEditId'});
-                    me.application.runAction('cDesktop','Add',w);
-                    var sr      = me.getGrid().getSelectionModel().getLastSelected();
-                    w.down('form').loadRecord(sr);         
+
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var tmpl_id     = sr.getId();
+                var tmpl_tab_id = 'tmplTab_'+tmpl_id;
+                var nt          = tp.down('#'+tmpl_tab_id);
+                if(nt){
+                    tp.setActiveTab(tmpl_tab_id); //Set focus on  Tab
+                    return;
                 }
-            }
+
+                var tmpl_tab_name = sr.get('name');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     tmpl_tab_name,
+                    itemId:     tmpl_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'gridTemplate',tmpl_id: tmpl_id}
+                });
+                tp.setActiveTab(tmpl_tab_id); //Set focus on Add Tab
+                //Load the record:
+               // var nt  = tp.down('#'+tmpl_tab_id);
+               // var f   = nt.down('form');
+              //  f.loadRecord(sr);    //Load the record
+                //Get the parent node
+               // f.down("#owner").setValue(sr.get('owner'));
+            });
         }
     },
-
-    editSubmit: function(button){
+    onStoreTemplatesLoaded: function() {
         var me      = this;
-        var win     = button.up('window');
-        var form    = button.up('form');
-        form.submit({
-            clientValidation: true,
-            url: me.urlEdit,
-            success: function(form, action) {
-                win.close();
-                me.getStore('sTags').load();
-                Ext.ux.Toaster.msg(
-                    i18n('sItem_updated'),
-                    i18n('sItem_updated_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
-    },
-
-    onStoreTagsLoaded: function() {
-        var me      = this;
-        var count   = me.getStore('sTags').getTotalCount();
+        var count   = me.getStore('sTemplates').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
     csvExport: function(button,format) {
@@ -361,8 +359,8 @@ Ext.define('Rd.controller.cTags', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectTags')){
-            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectTags',columns: col_list});
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectTemplates')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectTemplates',columns: col_list});
             me.application.runAction('cDesktop','Add',w);         
         }
     },
@@ -445,12 +443,12 @@ Ext.define('Rd.controller.cTags', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTags'+sr.getId())){
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplates'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
-                            id          : 'winNoteTags'+sr.getId(),
+                            id          : 'winNoteTemplates'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'tags',
+                            noteForGrid : 'templates',
                             noteForName : sr.get('name')
                         });
                     me.application.runAction('cDesktop','Add',w);       
@@ -474,10 +472,10 @@ Ext.define('Rd.controller.cTags', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplatesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteTagsAdd'+grid.noteForId,
+                                id          : 'winNoteTemplatesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
@@ -485,10 +483,10 @@ Ext.define('Rd.controller.cTags', {
                             me.application.runAction('cDesktop','Add',w);       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplatesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteTagsAdd'+grid.noteForId,
+                                id          : 'winNoteTemplatesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid,
@@ -609,5 +607,23 @@ Ext.define('Rd.controller.cTags', {
                 }
             });
         }
+    },
+    cmbVendorChange: function(cmb){
+        var me = this;
+        console.log("Combo thing changed");
+        var value   = cmb.getValue();
+        var grid    = cmb.up('gridTemplate');
+        var attr    = grid.down('cmbAttribute');
+        //Cause this to result in a reload of the Attribute combo
+        attr.getStore().getProxy().setExtraParam('vendor',value);
+        attr.getStore().load();   
+    },
+    attrAdd: function(b){
+        console.log("Add to specific template");
+        var grid = b.up('gridTemplate');
+        grid.getStore().add(Ext.create('Rd.model.mTemplateEdit',{attribute: 'koos', dirty: true}));
+        grid.getStore().sync();
+
     }
+
 });
