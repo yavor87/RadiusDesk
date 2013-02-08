@@ -127,6 +127,14 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles',  'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array('text' => __('Profile Templates') ,   'iconCls' => 'copy',        'itemId' => 'cTemplates'),
+                        array('text' => __('Profiles') ,            'iconCls' => 'profiles',    'itemId' => 'cProfiles'),
+                    )
+                )
+            ),
             array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
             array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
         );
