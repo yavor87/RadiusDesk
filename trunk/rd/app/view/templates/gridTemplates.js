@@ -1,19 +1,19 @@
-Ext.define('Rd.view.tags.gridTags' ,{
+Ext.define('Rd.view.templates.gridTemplates' ,{
     extend:'Ext.grid.Panel',
-    alias : 'widget.gridTags',
+    alias : 'widget.gridTemplates',
     multiSelect: true,
-    store : 'sTags',
+    store : 'sTemplates',
     stateful: true,
-    stateId: 'StateGridTags',
+    stateId: 'StateGridTemplates',
     stateEvents:['groupclick','columnhide'],
     border: false,
     requires: [
         'Rd.view.components.ajaxToolbar'
     ],
     viewConfig: {
-        loadMask:false
+        loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/tags/menu_for_grid.json',
+    urlMenu: '/cake2/rd_cake/templates/menu_for_grid.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
@@ -31,6 +31,8 @@ Ext.define('Rd.view.tags.gridTags' ,{
             {xtype: 'rownumberer'},
             { text: i18n('sOwner'),        dataIndex: 'owner', tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sName'),         dataIndex: 'name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sCheck_attribute_count'),  dataIndex: 'check_attribute_count',  tdCls: 'gridTree', flex: 1},
+            { text: i18n('sReply_attribute_count'),  dataIndex: 'reply_attribute_count',  tdCls: 'gridTree', flex: 1},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  
@@ -50,11 +52,7 @@ Ext.define('Rd.view.tags.gridTags' ,{
                 width   : 130,
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
-                                "<tpl if='notes == true'><div class=\"note\">"+
-
-
-
-i18n("sExisting_Notes")+"</div></tpl>"
+                                "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
                 dataIndex: 'notes'
             }      
