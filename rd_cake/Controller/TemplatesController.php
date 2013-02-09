@@ -10,48 +10,130 @@ class TemplatesController extends AppController {
 
 //------------------------------------------------------------------------
 
-    public function exp(){
-
-        //$r = $this->Freeradius->getVendors();
-       // print_r($r);
-
-        $a  = $this->Freeradius->getAttributes('Mikrotik');
-        print_r($a);
-        exit;
-
-    }
-
     public function index_tmpl(){
-
-        //___ FINAL PART ___
+    //Returns a list of vendor attributes based on the tmpl_id query attribute.
+        $items = array();
+        if(isset($this->request->query['tmpl_id'])){
+            $tmpl_id = $this->request->query['tmpl_id'];
+            $q_r = $this->Template->TemplateAttribute->find('all',array('conditions' => array('TemplateAttribute.template_id' => $tmpl_id)));
+            foreach($q_r as $i){
+                array_push($items, array(
+                    'id'            => $i['TemplateAttribute']['id'],
+                    'template_id'   => $i['TemplateAttribute']['template_id'],
+                    'attribute'     => $i['TemplateAttribute']['attribute'],
+                    'type'          => $i['TemplateAttribute']['type'],
+                    'tooltip'       => $i['TemplateAttribute']['tooltip'],
+                    'unit'          => $i['TemplateAttribute']['unit'],
+                ));
+            }
+            
+        }
         $this->set(array(
-            'items' => array(),
+            'items' => $items,
             'success' => true,
             '_serialize' => array('items','success')
         ));
+    }
 
+    public function add_tmpl(){
+
+        if(isset($this->request->query['tmpl_id'])){
+            $items = array();
+            $this->request->data['template_id'] = $this->request->query['tmpl_id']; //Add the template id
+
+            $this->{$this->modelClass}->TemplateAttribute->create();
+            if ($this->{$this->modelClass}->TemplateAttribute->save($this->request->data)) {
+
+                $id = $this->{$this->modelClass}->TemplateAttribute->id; //Return the record with id included
+
+                $this->request->data['id'] = $id;
+                $items = array();
+                array_push($items,$this->request->data);
+                $this->set(array(
+                    'items'         => $items,
+                    'success'       => true,
+                    '_serialize'    => array('items','success')
+                ));
+            } else {
+                $message = 'Error';
+                $this->set(array(
+                    'errors'    => $this->{$this->modelClass}->TemplateAttribute->validationErrors,
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not create item')),
+                    '_serialize' => array('errors','success','message')
+                ));
+            }
+        }
+    }
+
+    public function edit_tmpl(){
+
+        if ($this->{$this->modelClass}->TemplateAttribute->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'errors'    => $this->{$this->modelClass}->TemplateAttribute->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not update item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+
+    public function delete_tmpl(){
+
+        $fail_flag = true;
+        if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item       = $this->{$this->modelClass}->TemplateAttribute->findById($this->data['id']);         
+            $this->{$this->modelClass}->TemplateAttribute->id = $this->data['id'];
+            $this->{$this->modelClass}->TemplateAttribute->delete();
+            $fail_flag = false;
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                $item       = $this->{$this->modelClass}->TemplateAttribute->findById($d['id']);
+                $this->{$this->modelClass}->TemplateAttribute->id = $d['id'];
+                $this->{$this->modelClass}->TemplateAttribute->delete();
+                $fail_flag = false;
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
     }
 
     public function vendors(){
-
-
+    //Gives a list of Vendors from the dictionaries including a fev special ones that is not defined but used to group the attributes
         $v = $this->Freeradius->getVendors();
         $items = array();
         foreach($v as $i){
 
             array_push($items, array('id' => $i, 'name' => $i));
         }
-        //___ FINAL PART ___
         $this->set(array(
             'items' => $items,
             'success' => true,
             '_serialize' => array('items','success')
         ));
-
     }
 
     public function attributes(){
-
+    //Gives the attributes based on the name of the 'vendor' query attribute
         $items = array();
         if(isset($this->request->query['vendor'])){
             $a  = $this->Freeradius->getAttributes($this->request->query['vendor']);
@@ -59,7 +141,6 @@ class TemplatesController extends AppController {
                 array_push($items, array('id' => $i, 'name' => $i));
             }
         }
-        //___ FINAL PART ___
         $this->set(array(
             'items' => $items,
             'success' => true,
@@ -311,7 +392,7 @@ class TemplatesController extends AppController {
         $user_id    = $user['id'];
 
         //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
 
