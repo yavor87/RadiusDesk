@@ -1,17 +1,17 @@
-Ext.define('Rd.controller.cTemplates', {
+Ext.define('Rd.controller.cProfiles', {
     extend: 'Ext.app.Controller',
     actionIndex: function(){
 
         var me = this;
         var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('templatesWin');
+        var win = desktop.getWindow('profilesWin');
         if(!win){
             win = desktop.createWindow({
-                id: 'templatesWin',
-                title: i18n('sProfile_template_manager'),
+                id: 'profilesWin',
+                title: i18n('sProfiles_manager'),
                 width:800,
                 height:400,
-                iconCls: 'copy',
+                iconCls: 'profiles',
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
@@ -22,8 +22,8 @@ Ext.define('Rd.controller.cTemplates', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading: i18n('sProfile_template_manager'),
-                        image:  'resources/images/48x48/templates.png'
+                        heading: i18n('sProfiles_manager'),
+                        image:  'resources/images/48x48/profiles.png'
                     },
                     {
                         region  : 'center',
@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cTemplates', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
-                        items   : { 'title' : i18n('sTemplates'), xtype: 'gridTemplates'}
+                        items   : { 'title' : i18n('sProfiles'), xtype: 'gridTemplates'}
                     }
                 ]
             });
