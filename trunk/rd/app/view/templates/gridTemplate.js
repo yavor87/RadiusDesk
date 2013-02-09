@@ -1,6 +1,7 @@
 Ext.define('Rd.view.templates.gridTemplate' ,{
     extend:'Ext.grid.Panel',
     alias : 'widget.gridTemplate',
+    multiSelect: true,
     stateful: true,
     stateId: 'StateGridTemplate',
     stateEvents:['groupclick','columnhide'],
@@ -21,11 +22,18 @@ Ext.define('Rd.view.templates.gridTemplate' ,{
                 triggerAction: 'all',
                 selectOnTab: true,
                 store: [
-                    ['check','Check'],
-                    ['reply','Reply']
+                    ['Check',i18n('sCheck')],
+                    ['Reply',i18n('sReply')]
                 ],
                 lazyRender: true,
                 listClass: 'x-combo-list-small'
+            },
+            renderer: function(value){
+                if(value == "Check"){
+                    return i18n('sCheck');
+                }else{
+                    return i18n('sReply');
+                }
             }
         },
         {
@@ -53,8 +61,8 @@ Ext.define('Rd.view.templates.gridTemplate' ,{
             {   xtype: 'button',  iconCls: 'b-delete', scale: 'large', itemId: 'delete',    tooltip:    i18n('sDelete')}
         ]}, 
         { xtype: 'buttongroup', title: i18n('sSelection'),items : [
-            {   xtype: 'cmbVendor'     , itemId:'cmbVendor' },
-            {   xtype: 'cmbAttribute'  , itemId:'cmbAttribute' },
+            {   xtype: 'cmbVendor'     , itemId:'cmbVendor',    emptyText: i18n('sSelect_a_vendor') },
+            {   xtype: 'cmbAttribute'  , itemId:'cmbAttribute', emptyText: i18n('sSelect_an_attribute') },
             {   xtype: 'button',  iconCls: 'b-add',    scale: 'large', itemId: 'add',       tooltip:    i18n('sAdd')}
         ]}        
     ],
@@ -75,8 +83,7 @@ Ext.define('Rd.view.templates.gridTemplate' ,{
             proxy: {
                 type        : 'ajax',
                 format      : 'json',
-                batchActions: false, 
-                url         : '/cake2/rd_cake/templates/index_tmpl.json',
+                batchActions: true,
                 extraParams : { 'tmpl_id' : me.tmpl_id },
                 reader      : {
                     type        : 'json',
@@ -84,8 +91,10 @@ Ext.define('Rd.view.templates.gridTemplate' ,{
                     messageProperty: 'message'
                 },
                 api         : {
+                    create      : '/cake2/rd_cake/templates/add_tmpl.json',
                     read        : '/cake2/rd_cake/templates/index_tmpl.json',
-                    update      : '/cake2/rd_cake/templates/edit_tmpl.json'
+                    update      : '/cake2/rd_cake/templates/edit_tmpl.json',
+                    destroy     : '/cake2/rd_cake/templates/delete_tmpl.json'
                 }
             },
             listeners: {
@@ -107,8 +116,8 @@ Ext.define('Rd.view.templates.gridTemplate' ,{
                     store.sync({
                         success: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                i18n('sUpdated_right'),
-                                i18n('sRight_has_been_updated'),
+                                i18n('sUpdated_item'),
+                                i18n('sItem_has_been_updated'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );   
