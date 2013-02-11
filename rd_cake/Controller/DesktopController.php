@@ -130,7 +130,7 @@ class DesktopController extends AppController {
             array(  'text'  => __('Profiles'),  'iconCls' => 'profiles',  'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('Profile Templates') ,   'iconCls' => 'copy',        'itemId' => 'cTemplates'),
+                        array('text' => __('Profile Components') ,  'iconCls' => 'components',  'itemId' => 'cProfileComponents'),
                         array('text' => __('Profiles') ,            'iconCls' => 'profiles',    'itemId' => 'cProfiles'),
                     )
                 )
