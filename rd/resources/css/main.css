@@ -288,6 +288,10 @@
       background-image:url(../images/16x16/help.png) !important;
 }
 
+.components {
+      background-image:url(../images/16x16/components.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;
