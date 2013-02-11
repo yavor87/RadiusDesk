@@ -3,7 +3,7 @@ Ext.define('Rd.store.sAttributes', {
     model: 'Rd.model.mAttribute',
     proxy: {
             'type'  :'ajax',
-            'url'   : '/cake2/rd_cake/templates/attributes.json',
+            'url'   : '/cake2/rd_cake/profile_components/attributes.json',
             format  : 'json',
             reader: {
                 type: 'json',

@@ -3,7 +3,7 @@ Ext.define('Rd.store.sVendors', {
     model: 'Rd.model.mVendor',
     proxy: {
             'type'  :'ajax',
-            'url'   : '/cake2/rd_cake/templates/vendors.json',
+            'url'   : '/cake2/rd_cake/profile_components/vendors.json',
             format  : 'json',
             reader: {
                 type: 'json',
