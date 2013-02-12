@@ -17,7 +17,7 @@ Ext.define('Rd.controller.cProfiles', {
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'templatesWin',
+                stateId: 'profilesWin',
                 items: [
                     {
                         region: 'north',
@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cProfiles', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
-                        items   : { 'title' : i18n('sProfiles'), xtype: 'gridTemplates'}
+                        items   : { 'title' : i18n('sProfiles'), xtype: 'gridProfiles'}
                     }
                 ]
             });
@@ -42,22 +42,23 @@ Ext.define('Rd.controller.cProfiles', {
     },
 
     views:  [
-        'components.pnlBanner',             'templates.gridTemplates',  'templates.winTemplateAddWizard',
+        'components.pnlBanner',             'profiles.gridProfiles',    'profiles.winProfileAddWizard',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd',
-        'templates.gridTemplate',           'components.cmbVendor',     'components.cmbAttribute'
+        'profiles.winComponentManage'
     ],
-    stores: ['sTemplates', 'sAccessProvidersTree', 'sAttributes', 'sVendors'],
-    models: ['mTemplate',  'mAccessProviderTree', 'mAttribute', 'mVendor',  'mTemplateEdit' ],
+    stores: ['sProfiles', 'sAccessProvidersTree', 'sProfileComponents'],
+    models: ['mProfile',  'mAccessProviderTree'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/templates/add.json',
-        urlEdit:            '/cake2/rd_cake/templates/edit.json',
+        urlAdd:             '/cake2/rd_cake/profiles/add.json',
+        urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/templates/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/templates/note_add.json'
+        urlExportCsv:       '/cake2/rd_cake/profiles/export_csv',
+        urlNoteAdd:         '/cake2/rd_cake/profiles/note_add.json',
+        urlManageComponents:'/cake2/rd_cake/profiles/manage_components.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridTemplates'}       
+        {  ref: 'grid',  selector:   'gridProfiles'}       
     ],
     init: function() {
         var me = this;
@@ -66,88 +67,82 @@ Ext.define('Rd.controller.cProfiles', {
         }
         me.inited = true;
 
-        me.getStore('sTemplates').addListener('load',me.onStoreTemplatesLoaded, me);
+        me.getStore('sProfiles').addListener('load',me.onStoreProfilesLoaded, me);
         me.control({
-            'gridTemplates #reload': {
+            'gridProfiles #reload': {
                 click:      me.reload
             }, 
-            'gridTemplates #add'   : {
+            'gridProfiles #add'   : {
                 click:      me.add
             },
-            'gridTemplates #delete'   : {
+            'gridProfiles #delete'   : {
                 click:      me.del
             },
-            'gridTemplates #edit'   : {
+            'gridProfiles #edit'   : {
                 click:      me.edit
             },
-            'gridTemplates #note'   : {
+            'gridProfiles #note'   : {
                 click:      me.note
             },
-            'gridTemplates #csv'  : {
+            'gridProfiles #csv'  : {
                 click:      me.csvExport
             },
-            'gridTemplates'   : {
+            'gridProfiles'   : {
                 select:      me.select
             },
-            'winTemplateAddWizard' :{
+            'winProfileAddWizard' :{
                 toFront: me.maskHide
             },
-            'winTemplateAddWizard #btnTreeNext' : {
+            'winProfileAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
-            'winTemplateAddWizard #btnDataPrev' : {
+            'winProfileAddWizard #btnDataPrev' : {
                 click:  me.btnDataPrev
             },
-            'winTemplateAddWizard #btnDataNext' : {
+            'winProfileAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            '#winCsvColumnSelectTemplates':{
+            '#winCsvColumnSelectProfiles':{
                 toFront:       me.maskHide
             },
-            '#winCsvColumnSelectTemplates #save': {
+            '#winCsvColumnSelectProfiles #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=templates] #reload' : {
+            'gridNote[noteForGrid=profiles] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote[noteForGrid=templates] #add' : {
+            'gridNote[noteForGrid=profiles] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote[noteForGrid=templates] #delete' : {
+            'gridNote[noteForGrid=profiles] #delete' : {
                 click:  me.noteDelete
             },
-            'gridNote[noteForGrid=templates]' : {
+            'gridNote[noteForGrid=profiles]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNote[noteForGrid=templates]':{
+            'winNote[noteForGrid=profiles]':{
                 toFront:       me.maskHide
             },
-            'winNoteAdd[noteForGrid=templates] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=profiles] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=templates] #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=profiles] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=templates] #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=profiles] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
-            'gridTemplate  #cmbVendor': {
-                change:      me.cmbVendorChange
+            'winComponentManage #save' : {
+                click:  me.btnComponentManageSave
             },
-            'gridTemplate  #add': {
-                click:      me.attrAdd
-            },
-            'gridTemplate  #reload': {
-                click:      me.attrReload
-            },
-            'gridTemplate  #delete': {
-                click:      me.attrDelete
-            },
+            'winComponentManage radiogroup' : {
+                change: me.radioComponentManage
+            }
         });
     },
     reload: function(){
         var me =this;
-        me.getStore('sTemplates').load();
+        me.getStore('sProfiles').load();
     },
     maskHide:   function(){
         var me =this;
@@ -169,14 +164,14 @@ Ext.define('Rd.controller.cProfiles', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTemplateAddWizardId')){
-                            var w = Ext.widget('winTemplateAddWizard',{id:'winTemplateAddWizardId'});
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                            var w = Ext.widget('winProfileAddWizard',{id:'winProfileAddWizardId'});
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTemplateAddWizardId')){
-                            var w = Ext.widget('winTemplateAddWizard',
-                                {id:'winTemplateAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                            var w = Ext.widget('winProfileAddWizard',
+                                {id:'winProfileAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
                             me.application.runAction('cDesktop','Add',w);         
                         }
@@ -193,7 +188,7 @@ Ext.define('Rd.controller.cProfiles', {
         //Get selection:
         var sr = tree.getSelectionModel().getLastSelected();
         if(sr){    
-            var win = button.up('winTemplateAddWizard');
+            var win = button.up('winProfileAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
             win.getLayout().setActiveItem('scrnData');
@@ -208,7 +203,7 @@ Ext.define('Rd.controller.cProfiles', {
     },
     btnDataPrev:  function(button){
         var me      = this;
-        var win     = button.up('winTemplateAddWizard');
+        var win     = button.up('winProfileAddWizard');
         win.getLayout().setActiveItem('scrnApTree');
     },
     btnDataNext:  function(button){
@@ -220,7 +215,7 @@ Ext.define('Rd.controller.cProfiles', {
             url: me.urlAdd,
             success: function(form, action) {
                 win.close();
-                me.getStore('sTemplates').load();
+                me.getStore('sProfiles').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
@@ -282,7 +277,7 @@ Ext.define('Rd.controller.cProfiles', {
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStoreTemplatesLoaded();   //Update the count   
+                            me.onStoreProfilesLoaded();   //Update the count   
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
@@ -299,58 +294,97 @@ Ext.define('Rd.controller.cProfiles', {
         }
     },
 
-    edit:   function(){
-        console.log("Edit node");  
-        var me = this;
-        //See if there are anything selected... if not, inform the user
-        var sel_count = me.getGrid().getSelectionModel().getCount();
-        if(sel_count == 0){
-            Ext.ux.Toaster.msg(
+    edit: function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+            me.maskHide(); 
+             Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
-            me.maskHide(); 
         }else{
-
-            var selected    =  me.getGrid().getSelectionModel().getSelection();
-            var count       = selected.length;         
-            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
-
-                //Check if the node is not already open; else open the node:
-                var tp          = me.getGrid().up('tabpanel');
-                var tmpl_id     = sr.getId();
-                var tmpl_tab_id = 'tmplTab_'+tmpl_id;
-                var nt          = tp.down('#'+tmpl_tab_id);
-                if(nt){
-                    tp.setActiveTab(tmpl_tab_id); //Set focus on  Tab
-                    return;
-                }
-
-                var tmpl_tab_name = sr.get('name');
-                //Tab not there - add one
-                tp.add({ 
-                    title :     tmpl_tab_name,
-                    itemId:     tmpl_tab_id,
-                    closable:   true,
-                    iconCls:    'edit', 
-                    layout:     'fit', 
-                    items:      {'xtype' : 'gridTemplate',tmpl_id: tmpl_id}
-                });
-                tp.setActiveTab(tmpl_tab_id); //Set focus on Add Tab
-                //Load the record:
-               // var nt  = tp.down('#'+tmpl_tab_id);
-               // var f   = nt.down('form');
-              //  f.loadRecord(sr);    //Load the record
-                //Get the parent node
-               // f.down("#owner").setValue(sr.get('owner'));
-            });
+            if(!me.application.runAction('cDesktop','AlreadyExist','winComponentManageId')){
+                var w = Ext.widget('winComponentManage',{id:'winComponentManageId'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
         }
     },
-    onStoreTemplatesLoaded: function() {
+
+    radioComponentManage: function(rbg){
         var me      = this;
-        var count   = me.getStore('sTemplates').getTotalCount();
+        var form    = rbg.up('form');
+        var cmb     = form.down('combo');
+        var prior   = form.down('numberfield');
+
+        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
+            cmb.setVisible(true);
+            cmb.setDisabled(false);
+        }else{
+            cmb.setVisible(false);
+            cmb.setDisabled(true);
+        }
+
+        if(rbg.getValue().rb == 'add'){
+            prior.setVisible(true);
+            prior.setDisabled(false);
+        }else{
+            prior.setVisible(false);
+            prior.setDisabled(true);
+        }
+    },
+
+    btnComponentManageSave: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        var cmb     = form.down('combo');
+        var rbg     = form.down('radiogroup');
+
+        //For these two we need to have a value selected
+        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
+            if(cmb.getValue() == null){
+                Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sSelect_a_component_to_add_or_remove'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+                 return;
+            } 
+        }
+
+        var extra_params    = {};
+        var s               = me.getGrid().getSelectionModel().getSelection();
+        Ext.Array.each(s,function(record){
+            var r_id = record.getId();
+            extra_params[r_id] = r_id;
+        });
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation: true,
+            url: me.urlManageComponents,
+            params: extra_params,
+            success: function(form, action) {
+                win.close();
+                me.getGrid().getStore().load();
+                Ext.ux.Toaster.msg(
+                    i18n('sProfiles_modified'),
+                    i18n('sProfiles_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    onStoreProfilesLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sProfiles').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
     csvExport: function(button,format) {
@@ -365,8 +399,8 @@ Ext.define('Rd.controller.cProfiles', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectTemplates')){
-            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectTemplates',columns: col_list});
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectProfiles')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectProfiles',columns: col_list});
             me.application.runAction('cDesktop','Add',w);         
         }
     },
@@ -449,12 +483,12 @@ Ext.define('Rd.controller.cProfiles', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplates'+sr.getId())){
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfiles'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
-                            id          : 'winNoteTemplates'+sr.getId(),
+                            id          : 'winNoteProfiles'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'templates',
+                            noteForGrid : 'profiles',
                             noteForName : sr.get('name')
                         });
                     me.application.runAction('cDesktop','Add',w);       
@@ -478,10 +512,10 @@ Ext.define('Rd.controller.cProfiles', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplatesAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteTemplatesAdd'+grid.noteForId,
+                                id          : 'winNoteProfilesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
@@ -489,10 +523,10 @@ Ext.define('Rd.controller.cProfiles', {
                             me.application.runAction('cDesktop','Add',w);       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTemplatesAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteTemplatesAdd'+grid.noteForId,
+                                id          : 'winNoteProfilesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid,
@@ -613,95 +647,5 @@ Ext.define('Rd.controller.cProfiles', {
                 }
             });
         }
-    },
-    cmbVendorChange: function(cmb){
-        var me = this;
-        console.log("Combo thing changed");
-        var value   = cmb.getValue();
-        var grid    = cmb.up('gridTemplate');
-        var attr    = grid.down('cmbAttribute');
-        //Cause this to result in a reload of the Attribute combo
-        attr.getStore().getProxy().setExtraParam('vendor',value);
-        attr.getStore().load();   
-    },
-    attrAdd: function(b){
-        var me = this;
-        console.log("Add to specific template");
-        var grid    = b.up('gridTemplate');
-        var attr    = grid.down('cmbAttribute');
-        var a_val   = attr.getValue();
-        if(a_val == null){
-             Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }else{
-
-            //We do not do double's
-            var f = grid.getStore().find('attribute',a_val);
-            if(f == -1){
-                grid.getStore().add(Ext.create('Rd.model.mTemplateEdit',
-                    {
-                        attribute       : a_val,
-                        tooltip         : '=='+i18n("sTooltip_text_goes_here")+"==",
-                        type            : 'check',
-                        unit            : 'text_string'
-                    }
-                ));
-                grid.getStore().sync();
-            }
-        }
-    },
-
-    attrReload: function(b){
-        var me = this;
-        var grid = b.up('gridTemplate');
-        grid.getStore().load();
-    },
-    attrDelete: function(button){
-
-        var me      = this;
-        var grid    = button.up('gridTemplate');
-        //Find out if there was something selected
-        if(grid.getSelectionModel().getCount() == 0){
-             Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }else{
-            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
-                if(val== 'yes'){
-                    grid.getStore().remove(grid.getSelectionModel().getSelection());
-                    grid.getStore().sync({
-                        success: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sItem_deleted'),
-                                i18n('sItem_deleted_fine'),
-                                Ext.ux.Constants.clsInfo,
-                                Ext.ux.Constants.msgInfo
-                            );
-                           // grid.getStore().load();   //Update the count
-                            me.reload();   
-                        },
-                        failure: function(batch,options,c,d){
-                            Ext.ux.Toaster.msg(
-                                i18n('sProblems_deleting_item'),
-                                batch.proxy.getReader().rawData.message.message,
-                                Ext.ux.Constants.clsWarn,
-                                Ext.ux.Constants.msgWarn
-                            );
-                            grid.getStore().load(); //Reload from server since the sync was not good
-                        }
-                    });
-                }
-            });
-        }
     }
-
-
-
 });
