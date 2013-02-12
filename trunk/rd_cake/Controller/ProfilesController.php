@@ -3,88 +3,16 @@ App::uses('AppController', 'Controller');
 
 class ProfilesController extends AppController {
 
-    public $name       = 'Profiles';
-    public $components = array('Aa');
-    protected $base    = "Access Providers/Controllers/Profiles/";
+    public $name        = 'Profiles';
+    public $components  = array('Aa');
+    protected $base     = "Access Providers/Controllers/Profiles/";
+    protected $itemNote = 'ProfileNote';
 
 //------------------------------------------------------------------------
-
-    public function export_csv(){
-
-        $this->autoRender   = false;
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        //Build query
-        $user_id    = $user['id'];
-        $c          = $this->_build_common_query($user);
-        $q_r        = $this->{$this->modelClass}->find('all',$c);
-
-        //Create file
-        $this->ensureTmp();     
-        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
-        $fp             = fopen($tmpFilename, 'w');
-
-        //Headings
-        $heading_line   = array();
-        if(isset($this->request->query['columns'])){
-            $columns = json_decode($this->request->query['columns']);
-            foreach($columns as $c){
-                array_push($heading_line,$c->name);
-            }
-        }
-        fputcsv($fp, $heading_line,';','"');
-
-        //Results
-        $this->User = ClassRegistry::init('User');
-        foreach($q_r as $i){
-
-            $columns    = array();
-            $csv_line   = array();
-            if(isset($this->request->query['columns'])){
-                $columns = json_decode($this->request->query['columns']);
-                foreach($columns as $c){
-                    //Realms
-                    $column_name = $c->name;
-                    if($column_name == 'notes'){
-                        $notes   = '';
-                        foreach($i['TemplateNote'] as $n){
-                            if(!$this->_test_for_private_parent($n['Note'],$user)){
-                                $notes = $notes.'['.$n['Note']['note'].']';    
-                            }
-                        }
-                        array_push($csv_line,$notes);
-                    }elseif($column_name =='owner'){
-                        $owner_id       = $i['Tag']['user_id'];
-                        $owner_tree     = $this->_find_parents($owner_id);
-                        array_push($csv_line,$owner_tree); 
-                    }else{
-                        array_push($csv_line,$i['Tag']["$column_name"]);  
-                    }
-                }
-                fputcsv($fp, $csv_line,';','"');
-            }
-        }
-        //Return results
-        fclose($fp);
-        $data = file_get_contents( $tmpFilename );
-        $this->cleanupTmp( $tmpFilename );
-        $this->RequestHandler->respondAs('csv');
-        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
-        $this->response->body($data);
-    }
-
 
 
     //____ BASIC CRUD Manager ________
     public function index(){
-
-        //Display a list of nas tags with their owners
-        //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -119,22 +47,31 @@ class ProfilesController extends AppController {
         foreach($q_r as $i){
             //Create notes flag
             $notes_flag  = false;
-            foreach($i['TagNote'] as $nn){
+            foreach($i['ProfileNote'] as $nn){
                 if(!$this->_test_for_private_parent($nn['Note'],$user)){
                     $notes_flag = true;
                     break;
                 }
             }
 
-            $owner_id       = $i['Tag']['user_id'];
+            $owner_id       = $i['Profile']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
 
+            //Add the components (already from the highest priority
+            $components = array();
+            foreach($i['Radusergroup'] as $cmp){
+
+                array_push($components,$cmp);
+
+            }
+
             array_push($items,array(
-                'id'                    => $i['Tag']['id'], 
-                'name'                  => $i['Tag']['name'],
+                'id'                    => $i['Profile']['id'], 
+                'name'                  => $i['Profile']['name'],
                 'owner'                 => $owner_tree, 
-                'available_to_siblings' => $i['Tag']['available_to_siblings'],
+                'available_to_siblings' => $i['Profile']['available_to_siblings'],
+                'profile_components'    => $components,
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']
@@ -150,9 +87,9 @@ class ProfilesController extends AppController {
         ));
     }
 
-    //____ BASIC CRUD Tags Manager ________
+    //____ BASIC CRUD Manager ________
     public function index_for_filter(){
-    //Display a list of nas tags with their owners
+    //Display a list of items with their owners
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
        //__ Authentication + Authorization __
@@ -167,13 +104,13 @@ class ProfilesController extends AppController {
         $items = array();
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
 
-            $this->Tag->contain();
-            $q_r = $this->Tag->find('all');
+            $this->Profile->contain();
+            $q_r = $this->Profile->find('all');
 
             foreach($q_r as $i){   
                 array_push($items,array(
-                    'id'            => $i['Tag']['name'], 
-                    'text'          => $i['Tag']['name']
+                    'id'            => $i['Profile']['name'], 
+                    'text'          => $i['Profile']['name']
                 ));
             }
         }
@@ -186,7 +123,7 @@ class ProfilesController extends AppController {
             //2.) all those he created himself (if any) (this he can manage, depending on his right)
             //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
        
-            $q_r = $this->Tag->find('all');
+            $q_r = $this->Profile->find('all');
 
             //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
             $this->User = ClassRegistry::init('User');
@@ -194,8 +131,8 @@ class ProfilesController extends AppController {
 
             foreach($q_r as $i){
                 $add_flag   = false;
-                $owner_id   = $i['Tag']['user_id'];
-                $a_t_s      = $i['Tag']['available_to_siblings'];
+                $owner_id   = $i['Profile']['user_id'];
+                $a_t_s      = $i['Profile']['available_to_siblings'];
                 $add_flag   = false;
                 
                 //Filter for parents and children
@@ -224,8 +161,8 @@ class ProfilesController extends AppController {
                     $owner_tree = $this->_find_parents($owner_id);                      
                     //Add to return items
                     array_push($items,array(
-                        'id'            => $i['Tag']['name'], 
-                        'text'          => $i['Tag']['name']
+                        'id'            => $i['Profile']['name'], 
+                        'text'          => $i['Profile']['name']
                     ));
                 }
             }
@@ -279,7 +216,7 @@ class ProfilesController extends AppController {
 	}
 
 
-    public function edit() {
+    public function manage_components() {
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -287,28 +224,65 @@ class ProfilesController extends AppController {
             return;
         }
 
-        //We will not modify user_id
-        unset($this->request->data['user_id']);
+          //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id        = $user['id'];
 
-        if(isset($this->request->data['available_to_siblings'])){
-            $this->request->data['available_to_siblings'] = 1;
-        }else{
-            $this->request->data['available_to_siblings'] = 0;
+        $rb             = $this->request->data['rb']; 
+
+        if(($rb == 'add')||($rb == 'remove')){
+            $component_id   = $this->request->data['component_id'];
+            $this->ProfileComponent = ClassRegistry::init('ProfileComponent');
+            $q_r    = $this->ProfileComponent->findById($component_id);
+            $component_name = $q_r['ProfileComponent']['name'];
         }
 
-		if ($this->Tag->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        }else{
-             $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not update item')),
-                '_serialize' => array('errors','success','message')
-            ));
+        foreach(array_keys($this->request->data) as $key){
+            if(preg_match('/^\d+/',$key)){
+
+                if($rb == 'sub'){
+                    $this->Profile->id = $key;
+                    $this->Profile->saveField('available_to_siblings', 1);
+                }
+
+                if($rb == 'no_sub'){
+                    $this->Profile->id = $key;
+                    $this->Profile->saveField('available_to_siblings', 0);
+                }
+
+                if($rb == 'remove'){
+                    $q_r            = $this->Profile->findById($key);
+                    $profile_name   = $q_r['Profile']['name'];
+                    $this->{$this->modelClass}->Radusergroup->deleteAll(
+                        array('Radusergroup.username' => $profile_name,'Radusergroup.groupname' => $component_name), false
+                    );
+                }
+               
+                if($rb == 'add'){
+                    $q_r            = $this->Profile->findById($key);
+                    $profile_name   = $q_r['Profile']['name'];
+                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
+                        array('Radusergroup.username' => $profile_name,'Radusergroup.groupname' => $component_name), false
+                    );
+                    $d = array();
+                    $d['username']  = $profile_name;
+                    $d['groupname'] = $component_name;
+                    $d['priority']  = $this->request->data['priority'];
+                    $this->{$this->modelClass}->Radusergroup->create();
+                    $this->{$this->modelClass}->Radusergroup->save($d);
+                }     
+                //-------------
+            }
         }
+
+        $this->set(array(
+            'success'       => true,
+            '_serialize'    => array('success')
+        ));
+       
 	}
 
     public function delete($id = null) {
@@ -331,7 +305,7 @@ class ProfilesController extends AppController {
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['Tag']['user_id'];
+            $owner_id   = $item['Profile']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
@@ -348,7 +322,7 @@ class ProfilesController extends AppController {
             foreach($this->data as $d){
 
                 $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['Tag']['user_id'];
+                $owner_id   = $item['Profile']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
@@ -390,11 +364,11 @@ class ProfilesController extends AppController {
 
         $items = array();
         if(isset($this->request->query['for_id'])){
-            $tag_id = $this->request->query['for_id'];
-            $q_r    = $this->Tag->TagNote->find('all', 
+            $pc_id = $this->request->query['for_id'];
+            $q_r    = $this->{$this->modelClass}->{$this->itemNote}->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('TagNote.tag_id' => $tag_id)
+                    'conditions'    => array('ProfileNote.profile_id' => $pc_id)
                 )
             );
             $this->User = ClassRegistry::init('User');
@@ -445,14 +419,14 @@ class ProfilesController extends AppController {
 
         $success    = false;
         $msg        = array('message' => __('Could not create note'));
-        $this->Tag->TagNote->Note->create(); 
+        $this->{$this->modelClass}->{$this->itemNote}->Note->create(); 
         //print_r($this->request->data);
-        if ($this->Tag->TagNote->Note->save($this->request->data)) {
+        if ($this->{$this->modelClass}->{$this->itemNote}->Note->save($this->request->data)) {
             $d                      = array();
-            $d['TagNote']['tag_id']   = $this->request->data['for_id'];
-            $d['TagNote']['note_id'] = $this->Tag->TagNote->Note->id;
-            $this->Tag->TagNote->create();
-            if ($this->Tag->TagNote->save($d)) {
+            $d['ProfileNote']['profile_id']   = $this->request->data['for_id'];
+            $d['ProfileNote']['note_id'] = $this->{$this->modelClass}->ProfileNote->Note->id;
+            $this->{$this->modelClass}->{$this->itemNote}->create();
+            if ($this->{$this->modelClass}->{$this->itemNote}->save($d)) {
                 $success = true;
             }
         }
@@ -490,35 +464,35 @@ class ProfilesController extends AppController {
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->Tag->TagNote->Note->findById($this->data['id']);
+            $item       = $this->{$this->modelClass}->{$this->itemNote}->Note->findById($this->data['id']);
             $owner_id   = $item['Note']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->Tag->TagNote->Note->id = $this->data['id'];
-                    $this->Tag->TagNote->Note->delete($this->data['id'],true);
+                    $this->{$this->modelClass}->{$this->itemNote}->Note->id = $this->data['id'];
+                    $this->{$this->modelClass}->{$this->itemNote}->Note->delete($this->data['id'],true);
                 }else{
                     $fail_flag = true;
                 }
             }else{
-                $this->Tag->TagNote->Note->id = $this->data['id'];
-                $this->Tag->TagNote->Note->delete($this->data['id'],true);
+                $this->{$this->modelClass}->ProfileNote->Note->id = $this->data['id'];
+                $this->{$this->modelClass}->ProfileNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->Tag->TagNote->Note->findById($d['id']);
+                $item       = $this->{$this->modelClass}->{$this->itemNote}->Note->findById($d['id']);
                 $owner_id   = $item['Note']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->Tag->TagNote->Note->id = $d['id'];
-                        $this->Tag->TagNote->Note->delete($d['id'],true);
+                        $this->{$this->modelClass}->{$this->itemNote}->Note->id = $d['id'];
+                        $this->{$this->modelClass}->{$this->itemNote}->Note->delete($d['id'],true);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
-                    $this->Tag->TagNote->Note->id = $d['id'];
-                    $this->Tag->TagNote->Note->delete($d['id'],true);
+                    $this->{$this->modelClass}->{$this->itemNote}->Note->id = $d['id'];
+                    $this->{$this->modelClass}->{$this->itemNote}->Note->delete($d['id'],true);
                 }
    
             }
@@ -537,6 +511,7 @@ class ProfilesController extends AppController {
             ));
         }
     }
+
 
     //----- Menus ------------------------
     public function menu_for_grid(){
@@ -689,13 +664,14 @@ class ProfilesController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'TagNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
-                            'User'
+                            'ProfileNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'User',
+                            'Radusergroup'
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'Tag.name';
+        $sort   = 'Profile.name';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
@@ -733,7 +709,7 @@ class ProfilesController extends AppController {
         //====== END REQUEST FILTER =====
 
         //====== AP FILTER =====
-        //If the user is an AP; we need to add an extra clause to only show the Tags which he is allowed to see.
+        //If the user is an AP; we need to add an extra clause to only show the Profiles which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
             $this->User = ClassRegistry::init('User');
@@ -747,7 +723,7 @@ class ProfilesController extends AppController {
                 if($i_id != $user_id){ //upstream
                     array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
                 }else{
-                    array_push($tree_array,array('Tag.user_id' => $i_id));
+                    array_push($tree_array,array('Profile.user_id' => $i_id));
                 }
             }
             //** ALL the AP's children
