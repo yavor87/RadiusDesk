@@ -5,7 +5,7 @@ class ProfileComponentsController extends AppController {
     public $name        = 'ProfileComponents';
     public $components  = array('Aa','Freeradius');
     protected $base     = "Access Providers/Controllers/ProfileComponents/";
-    protected $itemNote = 'ProfileComponentsNote';
+    protected $itemNote = 'ProfileComponentNote';
 
     public function vendors(){
     //Gives a list of Vendors from the dictionaries including a few special ones that is not defined but used to group the attributes
@@ -38,7 +38,6 @@ class ProfileComponentsController extends AppController {
     }
 
     //____ BASCI CRUD for Component Attributes ____
-
     public function index_comp(){
     //Returns a list of vendor attributes based on the tmpl_id query attribute.
         $items = array();
@@ -349,8 +348,8 @@ class ProfileComponentsController extends AppController {
                 'name'                  => $i['ProfileComponent']['name'],
                 'owner'                 => $owner_tree, 
                 'available_to_siblings' => $i['ProfileComponent']['available_to_siblings'],
-              //  'reply_attribute_count' => $attribute_count['reply_count'], 
-               // 'check_attribute_count' => $attribute_count['check_count'],
+                'reply_attribute_count' => count($i['Radgroupreply']), 
+                'check_attribute_count' => count($i['Radgroupcheck']),
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']
