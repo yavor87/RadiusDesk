@@ -6,6 +6,7 @@ class NasController extends AppController {
 
     public $name       = 'Nas';
     public $components = array('Aa','RequestHandler');
+    public $uses       = array('Na','User');
     protected $base    = "Access Providers/Controllers/Nas/";
 
     protected $tmpDir  = 'csvexport';
@@ -43,7 +44,6 @@ class NasController extends AppController {
         fputcsv($fp, $heading_line,';','"');
 
         //Results
-        $this->User = ClassRegistry::init('User');
         foreach($q_r as $i){
 
             $columns    = array();
@@ -98,9 +98,9 @@ class NasController extends AppController {
         $this->response->body($data);
     }
 
-    //____ BASIC CRUD Realm Manager ________
+    //____ BASIC CRUD  Manager ________
     public function index(){
-        //Display a list of realms with their owners
+        //Display a list of items with their owners
         //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
         //__ Authentication + Authorization __
@@ -110,7 +110,7 @@ class NasController extends AppController {
         }
         $user_id    = $user['id'];
 
-        $c = $this->_build_common_query($user);  
+        $c = $this->_build_common_query($user); 
 
         //===== PAGING (MUST BE LAST) ======
         $limit  = 50;   //Defaults
@@ -131,8 +131,6 @@ class NasController extends AppController {
         $q_r    = $this->Na->find('all',$c_page);
 
         $items = array();
-        $this->User = ClassRegistry::init('User');
-
         foreach($q_r as $i){
 
             $realms     = array();
@@ -414,6 +412,7 @@ class NasController extends AppController {
 
 
     public function delete($id = null) {
+    //FIXME This is seriously wrong! it is going to delete wrong stuff!
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -462,7 +461,6 @@ class NasController extends AppController {
                     'conditions'    => array('NaNote.na_id' => $na_id)
                 )
             );
-            $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
                 if(!$this->_test_for_private_parent($i['Note'],$user)){
                     $owner_id   = $i['Note']['user_id'];
@@ -548,7 +546,6 @@ class NasController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -974,7 +971,6 @@ class NasController extends AppController {
         //If the user is an AP; we need to add an extra clause to only show the NAS devices which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
-            $this->User = ClassRegistry::init('User');
             $user_id    = $user['id'];
 
             //**AP and upward in the tree**
@@ -988,12 +984,14 @@ class NasController extends AppController {
                     array_push($tree_array,array('Na.user_id' => $i_id));
                 }
             }
-            //** ALL the AP's children FIXME : This is seriously flawed! look how it should be done with Access Providers!!!
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array('Na.user_id' => $i_id));
-            }      
+            //** ALL the AP's children
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                }       
+            }    
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $tree_array));  
         }       

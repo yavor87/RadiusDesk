@@ -4,6 +4,7 @@ App::uses('AppController', 'Controller');
 class PermanentUsersController extends AppController {
 
     public $name       = 'PermanentUsers';
+    public $uses       = array('User');
     public $components = array('Aa');
 
 
@@ -30,22 +31,28 @@ class PermanentUsersController extends AppController {
     //-------- BASIC CRUD -------------------------------
 
     public function index(){
-        //-- Required query attributes: token; realm_id; 
-        //-- also LIMIT: limit, page, start (optional - use sane defaults)
-        //-- FILTER <- This will need fine tunning!!!!
-        //-- AND SORT ORDER <- This will need fine tunning!!!!
+       // $this->User->contain();
+       // $q_r = $this->User->find('all');
+      //  print_r($q_r);
+       // $this->User->recover(); //This is a (potential) ugly hack since the left and right values is not calculated correct due to the Acl
 
-        //-- Request Validity check --
-        $realm_id = 9;
+        $total = 10;
+        $i     = 1;
 
-        if(!$this->Aa->aa_check($this,$realm_id)){
-            return;
+        while($i < $total){
+            $this->{$this->modelClass}->create();
+            $d['User']['username'] = 'user__cp_'.$i;
+            $d['User']['password'] = 'user_cp_'.$i;
+            $d['User']['group_id'] = 10;
+            $d['User']['parent_id']= 80;
+            $d['User']['active']   = 1;
+            $d['User']['token']    = '';
+            $this->{$this->modelClass}->save($d);
+            $this->{$this->modelClass}->id = null;
+            $i++;
         } 
-        
-        //We load the Realm model instead of the users model...
-        $this->loadModel('Realm');
-      //  exit;
 
+        exit;
     }
 
     public function add(){

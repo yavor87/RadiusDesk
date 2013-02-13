@@ -5,6 +5,7 @@ class ProfilesController extends AppController {
 
     public $name        = 'Profiles';
     public $components  = array('Aa');
+    public $uses        = array('Profile','User');
     protected $base     = "Access Providers/Controllers/Profiles/";
     protected $itemNote = 'ProfileNote';
 
@@ -42,7 +43,6 @@ class ProfilesController extends AppController {
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
         $items      = array();
-        $this->User = ClassRegistry::init('User');
 
         foreach($q_r as $i){
             //Create notes flag
@@ -126,7 +126,6 @@ class ProfilesController extends AppController {
             $q_r = $this->Profile->find('all');
 
             //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $this->User = ClassRegistry::init('User');
             $ap_child_count = $this->User->childCount($user_id);
 
             foreach($q_r as $i){
@@ -297,44 +296,56 @@ class ProfilesController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['Profile']['user_id'];
+            $item           = $this->{$this->modelClass}->findById($this->data['id']);
+            $owner_id       = $item['Profile']['user_id'];
+            $profile_name   = $item['Profile']['name'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete();
+                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
+                        array('Radusergroup.username' => $profile_name), false
+                    );
                 }else{
                     $fail_flag = true;
                 }
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
                 $this->{$this->modelClass}->delete();
+                $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
+                    array('Radusergroup.username' => $profile_name), false
+                );
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['Profile']['user_id'];
+                $item           = $this->{$this->modelClass}->findById($d['id']);
+                $owner_id       = $item['Profile']['user_id'];
+                $profile_name   = $item['Profile']['name'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete();
+                        $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
+                            array('Radusergroup.username' => $profile_name), false
+                        );
                     }else{
                         $fail_flag = true;
                     }
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
                     $this->{$this->modelClass}->delete();
+                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
+                        array('Radusergroup.username' => $profile_name), false
+                    );
                 }
-   
             }
         }
 
@@ -371,7 +382,6 @@ class ProfilesController extends AppController {
                     'conditions'    => array('ProfileNote.profile_id' => $pc_id)
                 )
             );
-            $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
                 if(!$this->_test_for_private_parent($i['Note'],$user)){
                     $owner_id   = $i['Note']['user_id'];
@@ -457,7 +467,6 @@ class ProfilesController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -712,7 +721,6 @@ class ProfilesController extends AppController {
         //If the user is an AP; we need to add an extra clause to only show the Profiles which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
-            $this->User = ClassRegistry::init('User');
             $user_id    = $user['id'];
 
             //**AP and upward in the tree**
@@ -727,11 +735,13 @@ class ProfilesController extends AppController {
                 }
             }
             //** ALL the AP's children
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
-            }      
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                }       
+            }       
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $tree_array));  
         }       
