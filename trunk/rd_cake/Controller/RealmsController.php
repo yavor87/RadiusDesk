@@ -15,7 +15,9 @@ class RealmsController extends AppController {
 
     public $name       = 'Realms';
     public $components = array('Aa');
+    public $uses       = array('Realm','User');
     protected $base    = "Access Providers/Controllers/Realms/";
+    
 
 
 //------------------------------------------------------------------------
@@ -45,7 +47,6 @@ class RealmsController extends AppController {
 
         if(isset($this->request->query['ap_id'])){
             $ap_id      = $this->request->query['ap_id'];
-            $this->User = ClassRegistry::init('User');
             $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root
             $items      = array();
             foreach($q_r as $i){
@@ -134,8 +135,6 @@ class RealmsController extends AppController {
 
         //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
         if($a_to_s == 'false'){
-
-            $this->User = ClassRegistry::init('User');
             $this->User->contain();
             $q_r        = $this->User->getPath($owner_id, array('id'));
             foreach($q_r as $i){
@@ -198,29 +197,29 @@ class RealmsController extends AppController {
             }
             
             //Now get all the realms of the siblings of the owner
-            $this->User = ClassRegistry::init('User');
-            $this->User->contain();
-            $q_r        = $this->User->children($owner_id,false, array('id'));
-            foreach($q_r as $i){
-                $user_id = $i['User']['id'];
-                $this->Realm->contain('NaRealm.na_id');
-                $q = $this->Realm->find('all',
-                    array(  'conditions'    => array('Realm.user_id' => $user_id),
-                            'fields'        => array('Realm.id','Realm.name')
-                    ));
-                foreach($q as $j){
-                    $selected = false;
-                    //Check if the nas is not already assigned to this realm
-                    if($nas_id){
-                        foreach($j['NaRealm'] as $nr){
-                            if($nr['na_id'] == $nas_id){
-                                $selected = true;
+            $ap_children    = $this->User->find_access_provider_children($owner_id);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $user_id = $i['id'];
+                    $this->Realm->contain('NaRealm.na_id');
+                    $q = $this->Realm->find('all',
+                        array(  'conditions'    => array('Realm.user_id' => $user_id),
+                                'fields'        => array('Realm.id','Realm.name')
+                        ));
+                    foreach($q as $j){
+                        $selected = false;
+                        //Check if the nas is not already assigned to this realm
+                        if($nas_id){
+                            foreach($j['NaRealm'] as $nr){
+                                if($nr['na_id'] == $nas_id){
+                                    $selected = true;
+                                }
                             }
-                        }
-                    }   
-                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
-                }
-            }
+                        }   
+                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                    }
+                }       
+            }    
         }
        
         $this->set(array(
@@ -395,7 +394,6 @@ class RealmsController extends AppController {
         fputcsv($fp, $heading_line,';','"');
 
         //Results
-        $this->User = ClassRegistry::init('User');
         foreach($q_r as $i){
 
             $columns    = array();
@@ -444,8 +442,8 @@ class RealmsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
-       
-        $c = $this->_build_common_query($user); 
+      
+        $c = $this->_build_common_query($user);
 
         //===== PAGING (MUST BE LAST) ======
         $limit  = 50;   //Defaults
@@ -466,7 +464,6 @@ class RealmsController extends AppController {
         $q_r                = $this->{$this->modelClass}->find('all',$c_page);
 
         $items              = array();
-        $this->User         = ClassRegistry::init('User');
 
         foreach($q_r as $i){
             //Create notes flag
@@ -509,7 +506,8 @@ class RealmsController extends AppController {
         $this->set(array(
             'items' => $items,
             'success' => true,
-            '_serialize' => array('items','success')
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
         ));
     }
 
@@ -538,7 +536,6 @@ class RealmsController extends AppController {
             $q_r = $this->Realm->find('all');
 
             //Init before the loop
-            $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
                 $name   = $i['Realm']['name'];
                 array_push($items,array(
@@ -560,7 +557,6 @@ class RealmsController extends AppController {
             $q_r = $this->Realm->find('all');
 
             //Loop through this list. Only if $user_id is a sibling of $owner_id we will add it to the list
-            $this->User = ClassRegistry::init('User');
             $ap_child_count = $this->User->childCount($user_id);
 
             foreach($q_r as $i){        
@@ -654,6 +650,13 @@ class RealmsController extends AppController {
         //We will not modify user_id
         unset($this->request->data['user_id']);
 
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
 		if ($this->Realm->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -681,12 +684,12 @@ class RealmsController extends AppController {
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
             $this->Realm->id = $this->data['id'];
-            $this->Realm->delete();
+            $this->Realm->delete($this->Realm->id,true);
       
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
                 $this->Realm->id = $d['id'];
-                $this->Realm->delete();
+                $this->Realm->delete($this->Realm->id,true);
             }
         }
 
@@ -715,7 +718,6 @@ class RealmsController extends AppController {
                     'conditions'    => array('RealmNote.realm_id' => $realm_id)
                 )
             );
-            $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
                 if(!$this->_test_for_private_parent($i['Note'],$user)){
                     $owner_id   = $i['Note']['user_id'];
@@ -801,7 +803,6 @@ class RealmsController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -1049,6 +1050,7 @@ class RealmsController extends AppController {
         }
         //====== END REQUEST FILTER =====
 
+
         //====== AP FILTER =====
         //If the user is an AP; we need to add an extra clause to only show the Realms which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
@@ -1068,15 +1070,18 @@ class RealmsController extends AppController {
                 }
             }
             //** ALL the AP's children
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
-            }      
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                }       
+            }
             //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $tree_array));  
+            array_push($c['conditions'],array('OR' => $ap_clause));   
         }       
-        //====== END AP FILTER =====      
+        //====== END AP FILTER =====
+
         return $c;
     }
 

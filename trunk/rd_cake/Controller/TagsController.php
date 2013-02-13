@@ -5,6 +5,7 @@ class TagsController extends AppController {
 
     public $name       = 'Tags';
     public $components = array('Aa');
+    public $uses       = array('Tag','User');
     protected $base    = "Access Providers/Controllers/Tags/";
 
 //------------------------------------------------------------------------
@@ -40,7 +41,6 @@ class TagsController extends AppController {
         fputcsv($fp, $heading_line,';','"');
 
         //Results
-        $this->User = ClassRegistry::init('User');
         foreach($q_r as $i){
 
             $columns    = array();
@@ -114,7 +114,6 @@ class TagsController extends AppController {
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
         $items      = array();
-        $this->User = ClassRegistry::init('User');
 
         foreach($q_r as $i){
             //Create notes flag
@@ -189,7 +188,6 @@ class TagsController extends AppController {
             $q_r = $this->Tag->find('all');
 
             //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $this->User = ClassRegistry::init('User');
             $ap_child_count = $this->User->childCount($user_id);
 
             foreach($q_r as $i){
@@ -323,7 +321,6 @@ class TagsController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -397,7 +394,6 @@ class TagsController extends AppController {
                     'conditions'    => array('TagNote.tag_id' => $tag_id)
                 )
             );
-            $this->User = ClassRegistry::init('User');
             foreach($q_r as $i){
                 if(!$this->_test_for_private_parent($i['Note'],$user)){
                     $owner_id   = $i['Note']['user_id'];
@@ -483,7 +479,6 @@ class TagsController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -736,7 +731,6 @@ class TagsController extends AppController {
         //If the user is an AP; we need to add an extra clause to only show the Tags which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
-            $this->User = ClassRegistry::init('User');
             $user_id    = $user['id'];
 
             //**AP and upward in the tree**
@@ -751,11 +745,13 @@ class TagsController extends AppController {
                 }
             }
             //** ALL the AP's children
-            $this->children   = $this->User->children($user_id,false,'User.id');
-            foreach($this->children as $i){
-                $i_id = $i['User']['id'];
-                array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
-            }      
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                }       
+            }   
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $tree_array));  
         }       
