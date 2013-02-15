@@ -88,7 +88,9 @@ class User extends AppModel {
         'Na',
         'Tag',
         'Realm',
-        'UserNote'
+        'UserNote' => array(
+            'dependent'     => true   
+        )
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');

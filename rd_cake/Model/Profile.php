@@ -13,14 +13,17 @@ class Profile extends AppModel {
 	);
 
     public $hasMany = array(
-        'ProfileNote',
-        'Radusergroup' => array(
+        'ProfileNote'   => array(
+            'dependent'     => true   
+        ),
+        'Radusergroup'  => array(
             'className'     => 'Radusergroup',
             'foreignKey'	=> false,
             'finderQuery'   => 'SELECT Radusergroup.* FROM radusergroup AS Radusergroup, profiles WHERE profiles.name=Radusergroup.username AND profiles.id={$__cakeID__$} ORDER BY Radusergroup.priority ASC',
             'dependent'     => true
         )
     );
+
 /*
     public $validate = array(
         'name' => array(
