@@ -460,14 +460,14 @@ class ProfileComponentsController extends AppController {
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
-                    $this->{$this->modelClass}->delete();
+                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
                     $this->_delete_clean_up_component($name);
                 }else{
                     $fail_flag = true;
                 }
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
-                $this->{$this->modelClass}->delete();
+                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
                 $this->_delete_clean_up_component($name);
             }
    
@@ -480,14 +480,14 @@ class ProfileComponentsController extends AppController {
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
-                        $this->{$this->modelClass}->delete();
+                        $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
                         $this->_delete_clean_up_component($name);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
-                    $this->{$this->modelClass}->delete();
+                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
                     $this->_delete_clean_up_component($name);
                 }
    
