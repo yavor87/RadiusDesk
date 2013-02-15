@@ -14,7 +14,9 @@ class ProfileComponent extends AppModel {
 	);
 
     public $hasMany = array(
-        'ProfileComponentNote',
+        'ProfileComponentNote'  => array(
+            'dependent'     => true   
+        ),
         'Radgroupcheck' => array(
             'className'     => 'Radgroupcheck',
             'foreignKey'	=> false,

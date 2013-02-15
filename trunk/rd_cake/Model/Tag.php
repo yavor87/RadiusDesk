@@ -32,6 +32,8 @@ class Tag extends AppModel {
 
     public $hasMany = array(
         'NaTag',
-        'TagNote'
+        'TagNote'   => array(
+            'dependent'     => true   
+        )
     );
 }

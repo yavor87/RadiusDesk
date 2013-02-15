@@ -44,7 +44,9 @@ class Na extends AppModel {
     public $hasMany = array(
         'NaRealm',
         'NaTag',
-        'NaNote',
+        'NaNote'    => array(
+            'dependent'     => true   
+        ),
         'OpenvpnClient'
     );
 }
