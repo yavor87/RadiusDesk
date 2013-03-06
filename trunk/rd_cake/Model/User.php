@@ -159,7 +159,13 @@ class User extends AppModel {
             }
         }
 
-
+        //cap type (Rd-Cap-Type this will dertermine if we enforce a counter or not) 
+        if(array_key_exists('cap',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['cap'] != ''){      
+                $this->_add_radcheck_item($username,'Rd-Cap-Type',$this->data['User']['cap']);
+            }
+        }  
+        
         //enabled or disabled (Rd-Account-Disabled)
         if(array_key_exists('active',$this->data['User'])){ //It may be missing; you never know...
             if($this->data['User']['active'] != ''){
@@ -170,7 +176,43 @@ class User extends AppModel {
                 }
                 $this->_add_radcheck_item($username,'Rd-Account-Disabled',$dis);
             }
+        }
+
+        //Activation date (Rd-Account-Activation-Time)
+        if(array_key_exists('from_date',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['from_date'] != ''){       
+                $expiration = $this->_radius_format_date($this->data['User']['from_date']);
+                $this->_add_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
+            }
         }  
+
+        //Expiration date (Expiration)
+        if(array_key_exists('to_date',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['to_date'] != ''){       
+                $expiration = $this->_radius_format_date($this->data['User']['to_date']);
+                $this->_add_radcheck_item($username,'Expiration',$expiration);
+            }
+        }
+
+        //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth)
+        if(!array_key_exists('track_auth',$this->data['User'])){ //It may be missing; you never know...     
+            $this->_add_radcheck_item($username,'Rd-Not-Track-Auth',1);
+        }
+
+        //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
+        if(!array_key_exists('track_acct',$this->data['User'])){ //It may be missing; you never know...
+            $this->_add_radcheck_item($username,'Rd-Not-Track-Acct',1);
+        }  
+    }
+
+    private function _radius_format_date($d){
+        //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
+        $arr_date   = explode('/',$d);
+        $month      = intval($arr_date[0]);
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[1]);
+        $year       = intval($arr_date[2]);
+        return "$day ".$m_arr[($month-1)]." $year";
     }
 
     private function _add_radcheck_item($username,$item,$value,$op = ":="){
