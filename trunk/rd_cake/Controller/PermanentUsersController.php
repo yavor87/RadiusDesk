@@ -31,33 +31,92 @@ class PermanentUsersController extends AppController {
     //-------- BASIC CRUD -------------------------------
 
     public function index(){
-       // $this->User->contain();
-       // $q_r = $this->User->find('all');
-      //  print_r($q_r);
-       // $this->User->recover(); //This is a (potential) ugly hack since the left and right values is not calculated correct due to the Acl
-/*
-        $total = 10;
-        $i     = 1;
+        //-- Required query attributes: token;
+        //-- Optional query attribute: sel_language (for i18n error messages)
+        //-- also LIMIT: limit, page, start (optional - use sane defaults)
+        //-- FILTER <- This will need fine tunning!!!!
+        //-- AND SORT ORDER <- This will need fine tunning!!!!
 
-        while($i < $total){
-            $this->{$this->modelClass}->create();
-            $d['User']['username'] = 'user__cp_'.$i;
-            $d['User']['password'] = 'user_cp_'.$i;
-            $d['User']['group_id'] = 10;
-            $d['User']['parent_id']= 80;
-            $d['User']['active']   = 1;
-            $d['User']['token']    = '';
-            $this->{$this->modelClass}->save($d);
-            $this->{$this->modelClass}->id = null;
-            $i++;
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
         }
-*/
-         //___ FINAL PART ___
+        $user_id    = $user['id'];
+        $c = $this->_build_common_query($user); 
+
+        //===== PAGING (MUST BE LAST) ======
+        $limit  = 50;   //Defaults
+        $page   = 1;
+        $offset = 0;
+        if(isset($this->request->query['limit'])){
+            $limit  = $this->request->query['limit'];
+            $page   = $this->request->query['page'];
+            $offset = $this->request->query['start'];
+        }
+
+        $c_page             = $c;
+        $c_page['page']     = $page;
+        $c_page['limit']    = $limit;
+        $c_page['offset']   = $offset;
+
+        $total  = $this->{$this->modelClass}->find('count'  , $c);       
+        $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
+
+        $items  = array();
+        foreach($q_r as $i){ 
+
+            
+
+            $owner_id       = $i['Owner']['id'];
+            $owner_tree     = $this->_find_parents($owner_id);
+
+            //Create notes flag
+            $notes_flag  = false;
+            foreach($i['UserNote'] as $un){
+                if(!$this->_test_for_private_parent($un['Note'],$user)){
+                    $notes_flag = true;
+                    break;
+                }
+            }
+
+            //Find the realm and profile names
+            $realm  = 'not defined';
+            $profile= 'not defined';
+            foreach($i['Radcheck'] as $rc){
+
+                if($rc['attribute'] == 'User-Profile'){
+                    $profile = $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Rd-Realm'){
+                    $realm = $rc['value'];
+                }
+
+            }
+
+            array_push($items,
+                array(
+                    'id'        => $i['User']['id'], 
+                    'owner'     => $owner_tree,
+                    'username'  => $i['User']['username'],
+                    'name'      => $i['User']['name'],
+                    'surname'   => $i['User']['surname'], 
+                    'phone'     => $i['User']['phone'], 
+                    'email'     => $i['User']['email'],
+                    'realm'     => $realm,
+                    'profile'   => $profile,
+                    'active'    => $i['User']['active'], 
+                    'monitor'   => $i['User']['monitor'],
+                    'notes'     => $notes_flag
+                )
+            );
+        }                
         $this->set(array(
-            'items' => array(),
-            'success' => true,
-            'totalCount' => 0,
-            '_serialize' => array('items','success','totalCount')
+            'items'         => $items,
+            'success'       => true,
+            'totalCount'    => $total,
+            '_serialize'    => array('items','success','totalCount')
         ));
     }
 
@@ -94,7 +153,7 @@ class PermanentUsersController extends AppController {
 
 
         //Two fields should be tested for first:
-        if(array_key_exists('activate',$this->request->data)){
+        if(array_key_exists('active',$this->request->data)){
             $this->request->data['active'] = 1;
         }
 
@@ -298,5 +357,122 @@ class PermanentUsersController extends AppController {
     //______ END EXT JS UI functions ________
 
 
+     function _build_common_query($user){
+
+        //Empty to start with
+        $c                  = array();
+        $c['joins']         = array(); 
+        $c['conditions']    = array();
+
+        //What should we include....
+        $c['contain']   = array(
+                            'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'Owner'     => array('Owner.username'),
+                            'Group',
+                            'Radcheck'       
+                        );
+
+        //===== SORT =====
+        //Default values for sort and dir
+        $sort   = 'User.username';
+        $dir    = 'DESC';
+
+        if(isset($this->request->query['sort'])){
+            if($this->request->query['sort'] == 'owner'){
+                $sort = 'User.username';
+            }else{
+                $sort = $this->modelClass.'.'.$this->request->query['sort'];
+            }
+            $dir  = $this->request->query['dir'];
+        } 
+        $c['order'] = array("$sort $dir");
+        //==== END SORT ===
+
+
+        //====== REQUEST FILTER =====
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            foreach($filter as $f){
+                //Strings
+                if($f->type == 'string'){
+                    if($f->field == 'realm'){
+
+                        //Join it dynamically
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck.username = User.username')
+                        )); 
+                        //Add a search clause
+                        array_push($c['conditions'],array(
+                            'Radcheck.attribute'  => 'Rd-Realm',
+                            "Radcheck.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }
+
+                    if($f->field == 'owner'){
+                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                      //  $col = $this->modelClass.'.'.$f->field;
+                      //  array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
+                }
+                //Bools
+                if($f->type == 'boolean'){
+                     $col = $this->modelClass.'.'.$f->field;
+                     array_push($c['conditions'],array("$col" => $f->value));
+                }
+            }
+        }
+    
+        //== ONLY Permanent Users ==
+        $p_user_name = Configure::read('group.user');
+        array_push($c['conditions'],array('Group.name' => $p_user_name ));
+
+        //====== END REQUEST FILTER =====
+
+        //====== AP FILTER =====
+        //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
+        if($user['group_name'] == Configure::read('group.ap')){  //AP 
+            $ap_children    = $this->User->find_access_provider_children($user['id']);
+            if($ap_children){   //Only if the AP has any children...
+                $ap_clause      = array();
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
+                }      
+                //Add it as an OR clause
+                array_push($c['conditions'],array('OR' => $ap_clause));  
+            }
+        }      
+        //====== END AP FILTER =====
+        return $c;
+    }
+
+    private function _find_parents($id){
+
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($id);
+        $path_string= '';
+        if($q_r){
+
+            foreach($q_r as $line_num => $i){
+                $username       = $i['User']['username'];
+                if($line_num == 0){
+                    $path_string    = $username;
+                }else{
+                    $path_string    = $path_string.' -> '.$username;
+                }
+            }
+            if($line_num > 0){
+                return $username." (".$path_string.")";
+            }else{
+                return $username;
+            }
+        }else{
+            return __("orphaned");
+        }
+    }
 
 }
