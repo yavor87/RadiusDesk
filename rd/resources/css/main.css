@@ -82,6 +82,14 @@
 /* ========== FIXME From here onwards we need to cleanup some stuff ============== */
 
 /*-- Label experiment --*/
+.lblRdCheck {
+    color: #2F4078; 
+    font-size:16px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
 .lblRdReq {
     color: #2F4078; 
     font-size:16px;
@@ -400,6 +408,18 @@
 
 .b-note {
     background-image:url(../images/32x32/note.png);
+}
+
+.b-disable {
+    background-image:url(../images/32x32/disable.png);
+}
+
+.b-message {
+    background-image:url(../images/32x32/message.png);
+}
+
+.b-test {
+    background-image:url(../images/32x32/test.png);
 }
 
 .language16 {
