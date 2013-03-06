@@ -247,7 +247,7 @@ class AccessProvidersController extends AppController {
 
 
         //Two fields should be tested for first:
-        if(array_key_exists('activate',$this->request->data)){
+        if(array_key_exists('active',$this->request->data)){
             $this->request->data['active'] = 1;
         }
 
