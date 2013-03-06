@@ -1,0 +1,12 @@
+nas
+notes
+profile_components
+profiles
+realms
+tags
+*templates (remove)
+user_notes
+
+*categories (check if can remove)
+
+users has a field 'parent_id' to refer to the id of another user.
