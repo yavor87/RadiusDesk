@@ -18,7 +18,7 @@ Ext.define('Rd.view.components.cmbCap', {
             fields: ['id', 'text'],
             data : [
                 {"id":"hard",       "text": i18n("sHard")},
-                {"id":"ping",       "text": i18n("sSoft")}
+                {"id":"soft",       "text": i18n("sSoft")}
             ]
         });
         me.store = s;

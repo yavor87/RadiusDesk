@@ -105,6 +105,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'winPermanentUserAddWizard #always_active' : {
                 change:  me.chkAlwaysActiveChange
             },
+            'winPermanentUserAddWizard #to_date' : {
+                change:  me.toDateChange
+            },
+            'winPermanentUserAddWizard #from_date' : {
+                change:  me.fromDateChange
+            },
             '#winCsvColumnSelectPermanentUsers':{
              //   toFront:       me.maskHide
             },
@@ -234,8 +240,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
             console.log(cap);
             if(cap){
                 cmbCap.setVisible(true);
+                cmbCap.setDisabled(false);
             }else{
                 cmbCap.setVisible(false);
+                cmbCap.setDisabled(true);
             }
         }
     },
@@ -248,10 +256,42 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var value   = chk.getValue();
         if(value){
             to.setVisible(false);
+            to.setDisabled(true);
             from.setVisible(false);
+            from.setDisabled(true);
         }else{
             to.setVisible(true);
+            to.setDisabled(false);
             from.setVisible(true);
+            from.setDisabled(false);
+        }
+    },
+
+    toDateChange: function(d,newValue,oldValue){
+        var me = this;
+        var form = d.up('form');   
+        var from_date = form.down('#from_date');
+        if(newValue <= from_date.getValue()){
+            Ext.ux.Toaster.msg(
+                        i18n('sEnd_date_wrong'),
+                        i18n('sThe_end_date_should_be_after_the_start_date'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+
+    fromDateChange: function(d,newValue, oldValue){
+        var me = this;
+        var form = d.up('form');
+        var to_date = form.down('#to_date');
+        if(newValue >= to_date.getValue()){
+            Ext.ux.Toaster.msg(
+                        i18n('sStart_date_wrong'),
+                        i18n('sThe_start_date_should_be_before_the_end_date'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
         }
     }
 });
