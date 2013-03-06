@@ -19,15 +19,15 @@ class User extends AppModel {
  */
 	public $validate = array(
 		'username' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This name is already taken'
+            )
+        ),
 		'password' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
@@ -90,6 +90,12 @@ class User extends AppModel {
         'Realm',
         'UserNote' => array(
             'dependent'     => true   
+        ),
+        'Radcheck' => array(
+            'className'     => 'Radcheck',
+            'foreignKey'	=> false,
+            'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, users WHERE users.username=Radcheck.username AND users.id={$__cakeID__$}',
+            'dependent'     => true
         )
     );
 
@@ -104,11 +110,80 @@ class User extends AppModel {
         }
 
         if(isset($this->data['User']['password'])){
+            $this->clearPwd = $this->data['User']['password']; //Keep a copy of the original one
             $this->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
         }
         return true;
     }
 
+    public function afterSave($created){
+
+        if($created){
+            $group_name  = Configure::read('group.user');
+            $q_r        = $this->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
+            $group_id   = $q_r['Group']['id'];
+            //Check if this is a permanent user
+            if($this->data['User']['group_id'] == $group_id){
+                $this->_add_radius_user();
+            }
+        }
+    }
+
+    private function _add_radius_user(){
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radcheck->create();
+
+        //The username with it's password (Cleartext-Password)
+        $username                   = $this->data['User']['username'];
+        $this->_add_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
+
+        //Realm (Rd-Realm)
+        if(array_key_exists('realm_id',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['realm_id'] != ''){
+                $q_r = ClassRegistry::init('Realm')->findById($this->data['User']['realm_id']);
+                $realm_name = $q_r['Realm']['name'];
+                $this->_add_radcheck_item($username,'Rd-Realm',$realm_name);
+            }
+        }
+
+        //Auth Type (Rd-Auth-Type) = sql by default
+
+        //$this->_add_radcheck_item($username,'Rd-Auth-Type','sql');
+
+        //Profile name (User-Profile)
+        if(array_key_exists('profile_id',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['profile_id'] != ''){
+                $q_r = ClassRegistry::init('Profile')->findById($this->data['User']['profile_id']);
+                $profile_name = $q_r['Profile']['name'];
+                $this->_add_radcheck_item($username,'User-Profile',$profile_name);
+            }
+        }
+
+
+        //enabled or disabled (Rd-Account-Disabled)
+        if(array_key_exists('active',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['active'] != ''){
+                if($this->data['User']['active'] == 1){ //Reverse the logic...
+                    $dis = 0;
+                }else{
+                    $dis = 1;
+                }
+                $this->_add_radcheck_item($username,'Rd-Account-Disabled',$dis);
+            }
+        }  
+    }
+
+    private function _add_radcheck_item($username,$item,$value,$op = ":="){
+
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radcheck->create();
+        $d['Radcheck']['username']  = $username;
+        $d['Radcheck']['op']        = $op;
+        $d['Radcheck']['attribute'] = $item;
+        $d['Radcheck']['value']     = $value;
+        $this->Radcheck->save($d);
+        $this->Radcheck->id         = null;
+    }
 
     //This function is required for the Acl behaviour....
     public function parentNode() {
