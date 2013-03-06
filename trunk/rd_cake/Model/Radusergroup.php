@@ -11,5 +11,16 @@ class Radusergroup extends AppModel {
             'foreignKey'   => 'username'
         )
     );
+
+    public $hasMany = array(
+        'Radgroupcheck'  => array(
+            'className'     => 'Radgroupcheck',
+            'foreignKey'	=> false,
+            'finderQuery'   => 'SELECT Radgroupcheck.groupname FROM radgroupcheck AS Radgroupcheck, radusergroup WHERE radusergroup.groupname=Radgroupcheck.groupname AND radusergroup.id={$__cakeID__$} AND Radgroupcheck.attribute="Rd-Reset-Type" ORDER BY Radgroupcheck.attribute ASC',
+            'dependent'     => true
+        )
+    );
+
+
 }
 ?>
