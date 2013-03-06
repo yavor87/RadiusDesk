@@ -1,0 +1,313 @@
+Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
+    extend:     'Ext.window.Window',
+    alias :     'widget.winPermanentUserAddWizard',
+    closable:   true,
+    draggable:  false,
+    resizable:  false,
+    title:      i18n('sNew_permanent_user'),
+    width:      400,
+    height:     500,
+    plain:      true,
+    border:     false,
+    layout:     'card',
+    iconCls:    'add',
+    autoShow:   false,
+    defaults: {
+            border: false
+    },
+    no_tree: false, //If the user has no children we don't bother giving them a branchless tree
+    user_id: '',
+    owner: '',
+    startScreen: 'scrnApTree', //Default start screen
+    requires: [
+        'Ext.layout.container.Card',
+        'Ext.form.Panel',
+        'Ext.form.field.Text',
+        'Ext.form.FieldContainer',
+        'Ext.form.field.Radio'
+    ],
+    initComponent: function() {
+        var me = this;
+        var scrnApTree      = me.mkScrnApTree();
+        var scrnData        = me.mkScrnData();
+        me.items = [
+            scrnApTree,
+            scrnData
+        ];  
+        this.callParent(arguments);
+        me.getLayout().setActiveItem(me.startScreen);
+    },
+
+    //____ AccessProviders tree SCREEN ____
+    mkScrnApTree: function(){
+
+        //A form which allows the user to select
+        var pnlTree = Ext.create('Ext.tree.Panel',{
+            itemId: 'scrnApTree',
+            useArrows: true,
+            store: 'sAccessProvidersTree',
+            rootVisible: true,
+            rowLines: true,
+            layout: 'fit',
+            stripeRows: true,
+            border: false,
+            tbar: [
+                { xtype: 'tbtext', text: i18n('sSelect_the_owner'), cls: 'lblWizard' }
+            ],
+            columns: [
+                {
+                    xtype: 'treecolumn', //this is so we know which column will show the tree
+                    text: i18n('sOwner'),
+                    sortable: true,
+                    flex: 1,
+                    dataIndex: 'username',
+                    tdCls: 'gridTree'
+                }
+            ],
+            buttons: [
+                    {
+                        itemId: 'btnTreeNext',
+                        text: i18n('sNext'),
+                        scale: 'large',
+                        iconCls: 'b-next',
+                        margin: '0 20 40 0'
+                    }
+                ]
+        });
+        return pnlTree;
+    },
+
+    //_______ Data for permanent user  _______
+    mkScrnData: function(){
+
+
+        var me      = this;
+        var buttons = [
+                {
+                    itemId: 'btnDataPrev',
+                    text: i18n('sPrev'),
+                    scale: 'large',
+                    iconCls: 'b-prev',
+                    margin: '0 20 40 0'
+                },
+                {
+                    itemId: 'btnDataNext',
+                    text: i18n('sNext'),
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+
+        if(me.no_tree == true){
+            var buttons = [
+                {
+                    itemId: 'btnDataNext',
+                    text: i18n('sNext'),
+                    scale: 'large',
+                    iconCls: 'b-next',
+                    formBind: true,
+                    margin: '0 20 40 0'
+                }
+            ];
+        }
+
+        var frmData = Ext.create('Ext.form.Panel',{
+            border:     false,
+            layout:     'fit',
+            itemId:     'scrnData',
+            autoScroll: true,
+            fieldDefaults: {
+                msgTarget: 'under',
+                labelClsExtra: 'lblRd',
+                labelAlign: 'left',
+                labelSeparator: '',
+                margin: 15
+            },
+            defaultType: 'textfield',
+            tbar: [
+                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+            ],
+            items:[
+                {
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    xtype   : 'tabpanel',
+                    margins : '0 0 0 0',
+                    plain   : true,
+                    tabPosition: 'bottom',
+                    border  : false,
+                    items   : [
+                        { 
+                            'title'     : i18n('sBasic_info'), 
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items       : [
+                                {
+                                    itemId  : 'parent_id',
+                                    xtype   : 'textfield',
+                                    name    : "parent_id",
+                                    hidden  : true
+                                },
+                                {
+                                    itemId      : 'owner',
+                                    xtype       : 'displayfield',
+                                    fieldLabel  : i18n('sOwner'),
+                                    value       : me.owner,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sUsername'),
+                                    name        : "username",
+                                    allowBlank  : false,
+                                    blankText   : i18n('sSupply_a_value'),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sPassword'),
+                                    name        : "password",
+                                    allowBlank  : false,
+                                    blankText   : i18n('sSupply_a_value'),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'cmbRealm',
+                                    allowBlank  : false,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'cmbProfile',
+                                    allowBlank  : false,
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'profile'
+                                },
+                                {
+                                    xtype       : 'cmbCap',
+                                    allowBlank  : false,
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'cap',
+                                    hidden      : true
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sPersonal_info'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items: [
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: i18n('sName'),
+                                    name : "name",
+                                    allowBlank:true
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: i18n('sSurname'),
+                                    name : "surname",
+                                    allowBlank:true
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: i18n('sPhone'),
+                                    name : "phone",
+                                    allowBlank:true
+                                },
+                                {
+                                    xtype: 'textfield',
+                                    fieldLabel: i18n('s_email'),
+                                    name : "email",
+                                    allowBlank:true
+                                },
+                                {
+                                    xtype     : 'textareafield',
+                                    grow      : true,
+                                    name      : 'address',
+                                    fieldLabel: i18n('sAddress'),
+                                    anchor    : '100%'
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sActivate_and_Expire'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items       : [
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sActivate'),
+                                    name        : 'active',
+                                    inputValue  : 'active',
+                                    checked     : true,
+                                    boxLabelCls : 'lblRdCheck'
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sForever'),
+                                    name        : 'always_active',
+                                    inputValue  : 'always_active',
+                                    itemId      : 'always_active',
+                                    checked     : true,
+                                    boxLabelCls : 'lblRdCheck'
+                                },
+                                {
+                                    xtype: 'datefield',
+                                    fieldLabel: i18n('sFrom'),
+                                    name: 'from_date',
+                                    itemId      : 'from_date',
+                                    minValue: new Date(),  // limited to the current date or after
+                                    hidden      : true
+                                },
+                                {
+                                    xtype: 'datefield',
+                                    fieldLabel: i18n('sTo'),
+                                    name: 'to_date',
+                                    itemId      : 'to_date',
+                                    minValue: new Date(),  // limited to the current date or after
+                                    hidden      : true
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sTracking'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items       : [
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sRADIUS_authentication'),
+                                    name        : 'track_auth',
+                                    inputValue  : 'active',
+                                    checked     : true,
+                                    boxLabelCls : 'lblRdCheck'
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sRADIUS_accounting'),
+                                    name        : 'track_acct',
+                                    inputValue  : 'track_acct',
+                                    checked     : true,
+                                    boxLabelCls : 'lblRdCheck'
+                                }
+                            ]   
+                        }
+                    ]
+                }
+                
+            ],
+            buttons: buttons
+        });
+        return frmData;
+    }   
+});
