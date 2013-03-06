@@ -82,6 +82,12 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
 
 
         var me      = this;
+
+        //Set default values for from and to:
+        var dtFrom  = new Date();
+        var dtTo    = new Date();
+        dtTo.setYear(dtTo.getFullYear() + 1);
+
         var buttons = [
                 {
                     itemId: 'btnDataPrev',
@@ -191,7 +197,8 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
                                     itemId      : 'cap',
-                                    hidden      : true
+                                    hidden      : true,
+                                    value       : 'hard'
                                 }
                             ]
                         },
@@ -265,7 +272,9 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     name: 'from_date',
                                     itemId      : 'from_date',
                                     minValue: new Date(),  // limited to the current date or after
-                                    hidden      : true
+                                    hidden      : true,
+                                    disabled    : true,
+                                    value       : dtFrom
                                 },
                                 {
                                     xtype: 'datefield',
@@ -273,7 +282,9 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     name: 'to_date',
                                     itemId      : 'to_date',
                                     minValue: new Date(),  // limited to the current date or after
-                                    hidden      : true
+                                    hidden      : true,
+                                    disabled    : true,
+                                    value       : dtTo
                                 }
                             ]
                         },
@@ -288,7 +299,7 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     xtype       : 'checkbox',      
                                     boxLabel    : i18n('sRADIUS_authentication'),
                                     name        : 'track_auth',
-                                    inputValue  : 'active',
+                                    inputValue  : 'track_auth',
                                     checked     : true,
                                     boxLabelCls : 'lblRdCheck'
                                 },
