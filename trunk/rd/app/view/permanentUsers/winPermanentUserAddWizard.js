@@ -19,12 +19,12 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
     user_id: '',
     owner: '',
     startScreen: 'scrnApTree', //Default start screen
+    selLanguage: null,
     requires: [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Ext.form.FieldContainer',
-        'Ext.form.field.Radio'
+        'Rd.view.components.vCmbLanguages'
     ],
     initComponent: function() {
         var me = this;
@@ -33,9 +33,10 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
         me.items = [
             scrnApTree,
             scrnData
-        ];  
-        this.callParent(arguments);
-        me.getLayout().setActiveItem(me.startScreen);
+        ];
+        console.log(me.selLanguage); 
+        me.callParent(arguments);
+        me.getLayout().setActiveItem(me.startScreen);  
     },
 
     //____ AccessProviders tree SCREEN ____
@@ -220,6 +221,15 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     fieldLabel: i18n('sSurname'),
                                     name : "surname",
                                     allowBlank:true
+                                },
+                                { 
+                                    xtype       : 'cmbLanguages', 
+                                    width       : 350, 
+                                    fieldLabel  : i18n('sLanguage'),  
+                                    name        : 'language',
+                                    value       : me.selLanguage,
+                                    allowBlank  : false,
+                                    labelClsExtra: 'lblRd' 
                                 },
                                 {
                                     xtype: 'textfield',

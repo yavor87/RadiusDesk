@@ -44,7 +44,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap'
     ],
-    stores: ['sAccessProvidersTree',    'sPermanentUsers', 'sRealms',   'sProfiles' ],
+    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms',   'sProfiles' ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile' ],
     selectedRecord: null,
      config: {
@@ -167,14 +167,21 @@ Ext.define('Rd.controller.cPermanentUsers', {
                         
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
-                            var w = Ext.widget('winPermanentUserAddWizard',{id:'winPermanentUserAddWizardId'});
+                            var w = Ext.widget('winPermanentUserAddWizard',{
+                                id:'winPermanentUserAddWizardId', selLanguage : me.application.getSelLanguage()
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
-                            var w = Ext.widget('winPermanentUserAddWizard',
-                                {id:'winPermanentUserAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
-                            );
+                            var w = Ext.widget('winPermanentUserAddWizard',{
+                                id:'winPermanentUserAddWizardId',
+                                startScreen: 'scrnData',
+                                user_id:'0',
+                                owner: i18n('sLogged_in_user'), 
+                                no_tree: true,
+                                selLanguage : me.application.getSelLanguage()
+                            });
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }

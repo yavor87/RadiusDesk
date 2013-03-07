@@ -178,8 +178,8 @@ Ext.define('Rd.controller.cAccessProviders', {
                             var w = Ext.widget('winApAddWizard',
                             {
                                 id          :'winApAddWizardId',
-                                no_tree     : false
-
+                                no_tree     : false,
+                                selLanguage : me.application.getSelLanguage()
                             });
                             me.application.runAction('cDesktop','Add',w);         
                         }
@@ -188,7 +188,8 @@ Ext.define('Rd.controller.cAccessProviders', {
                             var w = Ext.widget('winApAddWizard',
                             {
                                 id          :'winApAddWizardId',
-                                noTree      : true, 
+                                noTree      : true,
+                                selLanguage : me.application.getSelLanguage(),
                                 startScreen : 'scrnDetail',
                                 user_id     : '0',
                                 owner       : i18n('sLogged_in_user'),
