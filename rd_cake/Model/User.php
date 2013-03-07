@@ -73,10 +73,6 @@ class User extends AppModel {
             'className'     => 'Language',
 			'foreignKey'    => 'language_id'
         ),
-        'Realm' => array(
-            'className'     => 'Realm',
-			'foreignKey'    => 'realm_id'
-        ),
         'Owner' => array(
             'className'     => 'User',
             'foreignKey'    => 'parent_id'
