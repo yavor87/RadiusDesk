@@ -7,7 +7,7 @@ Ext.define('Rd.model.mPermanentUser', {
          {name: 'auth_type',    type: 'string'  },
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },
-         {name: 'active',       type: 'string'  },
+         {name: 'active',       type: 'bool'    },
          {name: 'activate'},
          {name: 'expire'},
          'data_usage',

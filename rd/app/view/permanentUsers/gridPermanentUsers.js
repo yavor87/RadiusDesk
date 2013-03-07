@@ -34,7 +34,16 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
             { text: i18n('sAuth_type'),    dataIndex: 'auth_type',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sProfile'),      dataIndex: 'profile',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sActive'),       dataIndex: 'active',     tdCls: 'gridTree', flex: 1,filter  : {type: 'boolean'}},
+            { 
+                text        : i18n('sActive'),  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                            ),
+                dataIndex   : 'active',
+                filter      : { type: 'boolean'}
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
