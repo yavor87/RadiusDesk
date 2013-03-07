@@ -104,6 +104,7 @@ class PermanentUsersController extends AppController {
                     'surname'   => $i['User']['surname'], 
                     'phone'     => $i['User']['phone'], 
                     'email'     => $i['User']['email'],
+                    'auth_type' => $i['User']['auth_type'],
                     'realm'     => $realm,
                     'profile'   => $profile,
                     'active'    => $i['User']['active'], 
@@ -364,6 +365,14 @@ class PermanentUsersController extends AppController {
         $c['joins']         = array(); 
         $c['conditions']    = array();
 
+        //Join the Radcheck table:
+        array_push($c['joins'],array(
+            'table'         => 'radcheck',
+                'alias'         => 'Radcheck',
+                'type'          => 'LEFT',
+                'conditions'    => array('Radcheck.username = User.username')
+        )); 
+
         //What should we include....
         $c['contain']   = array(
                             'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
@@ -380,11 +389,14 @@ class PermanentUsersController extends AppController {
         if(isset($this->request->query['sort'])){
             if($this->request->query['sort'] == 'owner'){
                 $sort = 'User.username';
+            }elseif(($this->request->query['sort'] == 'profile')||($this->request->query['sort'] == 'realm')){
+                $sort = 'Radcheck.value';
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
             $dir  = $this->request->query['dir'];
         } 
+
         $c['order'] = array("$sort $dir");
         //==== END SORT ===
 
@@ -395,27 +407,24 @@ class PermanentUsersController extends AppController {
             foreach($filter as $f){
                 //Strings
                 if($f->type == 'string'){
-                    if($f->field == 'realm'){
 
-                        //Join it dynamically
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck.username = User.username')
-                        )); 
+                    if($f->field == 'realm'){
                         //Add a search clause
                         array_push($c['conditions'],array(
                             'Radcheck.attribute'  => 'Rd-Realm',
                             "Radcheck.value LIKE" => '%'.$f->value.'%'
                         ));
-                    }
-
-                    if($f->field == 'owner'){
+                    }elseif($f->field == 'profile'){                       
+                        //Add a search clause
+                        array_push($c['conditions'],array(
+                            'Radcheck.attribute'  => 'User-Profile',
+                            "Radcheck.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'owner'){
                         array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
                     }else{
-                      //  $col = $this->modelClass.'.'.$f->field;
-                      //  array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
                     }
                 }
                 //Bools
