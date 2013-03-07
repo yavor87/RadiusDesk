@@ -42,19 +42,6 @@ class Realm extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'User' => array(
-			'className' => 'User',
-			'foreignKey' => 'realm_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
         'NaRealm'   =>array(
             'dependent' => false   
         ),
@@ -69,6 +56,7 @@ class Realm extends AppModel {
 			'foreignKey'    => 'user_id'
         )
 	);
+
 
     function parentNode() {
        // return null;
