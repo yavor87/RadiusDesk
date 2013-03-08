@@ -2,12 +2,10 @@ Ext.define('Rd.model.mPermanentUser', {
     extend: 'Ext.data.Model',
     fields: [
          {name: 'id',           type: 'int'     },
-         {name: 'username',     type: 'string'  },
          {name: 'owner',        type: 'string'  },
-         {name: 'auth_type',    type: 'string'  },
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },
-         'name','surname', 'phone', 'email', 'address',
+         'name', 'description','vendor_id',
          {name: 'active',       type: 'bool'    },
          {name: 'activate'},
          {name: 'expire'},

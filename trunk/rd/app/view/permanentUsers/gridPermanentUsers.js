@@ -34,6 +34,45 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
             { text: i18n('sAuth_type'),    dataIndex: 'auth_type',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sProfile'),      dataIndex: 'profile',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            {
+                text        : i18n('sName'),
+                flex        : 1,
+                dataIndex   : 'name',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('sSurname'),
+                flex        : 1,
+                dataIndex   : 'surname',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('sPhone'),
+                dataIndex   : 'phone',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('s_email'),
+                flex        : 1,
+                dataIndex   : 'email',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('sAddress'),
+                flex        : 1,
+                dataIndex   : 'address',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
             { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 

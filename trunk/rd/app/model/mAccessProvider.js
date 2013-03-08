@@ -3,7 +3,7 @@ Ext.define('Rd.model.mAccessProvider', {
     fields: [
          {name: 'id',       type: 'int'     },
          {name: 'username', type: 'string'  },
-         'name','surname', 'phone', 'email', 'monitor', 'active','language'
+         'name','surname', 'phone', 'email', 'address', 'monitor', 'active','language'
         ],
     idProperty: 'id',
     //This is a funny - since a model is not traditionally associated with a tree view we have to create a 'dummy proxy'

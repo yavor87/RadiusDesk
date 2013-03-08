@@ -300,6 +300,10 @@
       background-image:url(../images/16x16/components.png) !important;
 }
 
+.devices {
+      background-image:url(../images/16x16/devices.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;
