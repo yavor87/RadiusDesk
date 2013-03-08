@@ -1,36 +1,15 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class PermanentUsersController extends AppController {
+class DevicesController extends AppController {
 
-    public $name       = 'PermanentUsers';
-    public $uses       = array('User');
+    public $name       = 'Device';
     public $components = array('Aa');
-
-
-    //--- FROM THE OLD ---
-    /* json_index json_add json_del json_view json_edit 
-        // json_prepaid_list json_tabs json_send_message csv json_change_profile 
-        // json_private_attributes json_add_private json_del_private json_edit_private
-        // json_test_auth json_disable json_usage json_kick json_notify_detail json_notify_save
-        // json_view_activity json_del_activity json_password 
-        // json_actions json_actions_for_user_private json_actions_for_user_profile json_actions_for_user_activity
-    */
-
-    //-- NOTES on users:
-    //-- Each user belongs to (A) group (group_id) = Permanent Users. (B) a realm (realm_id) (C) a creator (user_id)
-    //-- (D) Profile ID (profile_id) (E) a Language ID (language_id) (F) an Auth Method id (auth_method_id)
-
-    //-- Each user will have a token which should be used in the URL to do Ajax calls
-
-    //-- NOTES on rights:
-    //-- Most controller actions will require a token in the query string to determine who originated the request
-    //-- The rights of that person will then be checked and also against who it is attempting to be done.
 
 
     //-------- BASIC CRUD -------------------------------
 
-
+/*
      public function export_csv(){
 
         $this->autoRender   = false;
@@ -113,7 +92,7 @@ class PermanentUsersController extends AppController {
         $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
         $this->response->body($data);
     }
-
+*/
 
     public function index(){
         //-- Required query attributes: token;
@@ -121,7 +100,7 @@ class PermanentUsersController extends AppController {
         //-- also LIMIT: limit, page, start (optional - use sane defaults)
         //-- FILTER <- This will need fine tunning!!!!
         //-- AND SORT ORDER <- This will need fine tunning!!!!
-
+/*
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
@@ -198,15 +177,16 @@ class PermanentUsersController extends AppController {
                     'notes'     => $notes_flag
                 )
             );
-        }                
+        } 
+*/               
         $this->set(array(
-            'items'         => $items,
+            'items'         => array(),
             'success'       => true,
-            'totalCount'    => $total,
+            'totalCount'    => 0,
             '_serialize'    => array('items','success','totalCount')
         ));
     }
-
+/*
     public function add(){
 
         $user = $this->Aa->user_for_token($this);
@@ -513,7 +493,7 @@ class PermanentUsersController extends AppController {
 
     }
 
-
+*/
     //--------- END BASIC CRUD ---------------------------
 
     //----- Menus ------------------------
@@ -555,9 +535,7 @@ class PermanentUsersController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
                     array('xtype' => 'button', 'iconCls' => 'b-disable', 'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable')),
-                    array('xtype' => 'button', 'iconCls' => 'b-message', 'scale' => 'large', 'itemId' => 'send_message', 'tooltip'=> __('Send massage')),
                     array('xtype' => 'button', 'iconCls' => 'b-test',    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
                 )) 
             );

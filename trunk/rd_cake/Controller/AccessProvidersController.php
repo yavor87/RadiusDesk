@@ -154,6 +154,7 @@ class AccessProvidersController extends AppController {
                     'surname'   => $i['User']['surname'], 
                     'phone'     => $i['User']['phone'], 
                     'email'     => $i['User']['email'],
+                    'address'   => $i['User']['address'],
                     'active'    => $i['User']['active'], 
                     'monitor'   => $i['User']['monitor'],
                     'notes'     => $notes_flag

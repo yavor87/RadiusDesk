@@ -136,6 +136,7 @@ class DesktopController extends AppController {
                 )
             ),
             array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers'),
+            array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices'),
             array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
             array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
         );
