@@ -76,8 +76,7 @@ class User extends AppModel {
         'Owner' => array(
             'className'     => 'User',
             'foreignKey'    => 'parent_id'
-        )
-        
+        )    
 	);
 
     public $hasMany = array(
@@ -92,7 +91,13 @@ class User extends AppModel {
             'foreignKey'	=> false,
             'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, users WHERE users.username=Radcheck.username AND users.id={$__cakeID__$}',
             'dependent'     => true
-        )
+        ),
+        'Radreply' => array(
+            'className'     => 'Radreply',
+            'foreignKey'	=> false,
+            'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, users WHERE users.username=Radreply.username AND users.id={$__cakeID__$}',
+            'dependent'     => true
+        ),
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
