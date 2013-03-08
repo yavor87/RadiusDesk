@@ -1,16 +1,16 @@
-Ext.define('Rd.controller.cPermanentUsers', {
+Ext.define('Rd.controller.cDevices', {
     extend: 'Ext.app.Controller',
     actionIndex: function(){
         var me = this;
         var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('permanentUsersWin');
+        var win = desktop.getWindow('devicesWin');
         if(!win){
             win = desktop.createWindow({
-                id: 'permanentUsersWin',
-                title: i18n('sPermanent_Users'),
+                id: 'devicesWin',
+                title: i18n('sBYOD_manager'),
                 width:800,
                 height:400,
-                iconCls: 'users',
+                iconCls: 'devices',
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
@@ -21,8 +21,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading: i18n('sPermanent_Users'),
-                        image:  'resources/images/48x48/users.png'
+                        heading: i18n('sBYOD_manager'),
+                        image:  'resources/images/48x48/byod.png'
                     },
                     {
                         region  : 'center',
@@ -31,7 +31,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
-                        items   : { 'title' : i18n('sPermanent_Users'), xtype: 'gridPermanentUsers'}
+                        items   : [
+                            { 'title' : i18n('sRegistered_devices'), xtype: 'gridDevices'},
+                            { 'title' : i18n('sUnclaimed_devices')}
+                        ]
                     }
                 ]
             });
@@ -41,22 +44,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
 
     views:  [
-       'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
+       'components.pnlBanner',  'devices.gridDevices',
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect'
     ],
-    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms',   'sProfiles' ],
-    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile' ],
+    stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices'  ],
+    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice'   ],
     selectedRecord: null,
      config: {
-        urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
+        urlAdd:             '/cake2/rd_cake/devices/add.json',
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json'
+        urlExportCsv:       '/cake2/rd_cake/devices/export_csv',
+        urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridPermanentUsers'}       
+        {  ref: 'grid',  selector:   'gridDevices'}       
     ],
     init: function() {
         var me = this;
@@ -64,7 +67,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             return;
         }
         me.inited = true;
-
+/*
         me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
         me.control({
            'gridPermanentUsers #reload': {
@@ -143,7 +146,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 click: me.btnNoteAddNext
             }
         });
+*/
     },
+/*
     reload: function(){
         var me =this;
         me.getStore('sPermanentUsers').load();
@@ -306,7 +311,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     select: function(grid,record){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
-/*
+
         //Dynamically update the top toolbar
         tb = me.getGrid().down('toolbar[dock=top]');
 
@@ -331,7 +336,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 tb.down('#delete').setDisabled(true);
             }
         }
-*/
+
     },
 
     del:   function(){
@@ -638,5 +643,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             });
         }
     },
+*/
 
 });
