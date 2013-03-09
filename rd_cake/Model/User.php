@@ -131,9 +131,6 @@ class User extends AppModel {
     }
 
     private function _add_radius_user(){
-        $this->Radcheck = ClassRegistry::init('Radcheck');
-        $this->Radcheck->create();
-
         //The username with it's password (Cleartext-Password)
         $username                   = $this->data['User']['username'];
         $this->_add_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
