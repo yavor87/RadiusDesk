@@ -6,7 +6,7 @@ class PermanentUsersController extends AppController {
     public $name       = 'PermanentUsers';
     public $uses       = array('User');
     public $components = array('Aa');
-
+    protected $base    = "Access Providers/Controllers/PermanentUsers/";
 
     //--- FROM THE OLD ---
     /* json_index json_add json_del json_view json_edit 

@@ -3,9 +3,10 @@ App::uses('AppController', 'Controller');
 
 class DevicesController extends AppController {
 
-    public $name       = 'Device';
+    public $name       = 'Devices';
     public $components = array('Aa');
-
+    public $uses       = array('Device','User');
+    protected $base    = "Access Providers/Controllers/Devices/"; //Required for AP Rights
 
     //-------- BASIC CRUD -------------------------------
 
@@ -100,7 +101,7 @@ class DevicesController extends AppController {
         //-- also LIMIT: limit, page, start (optional - use sane defaults)
         //-- FILTER <- This will need fine tunning!!!!
         //-- AND SORT ORDER <- This will need fine tunning!!!!
-/*
+
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
@@ -128,10 +129,8 @@ class DevicesController extends AppController {
         $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
 
         $items  = array();
-        foreach($q_r as $i){ 
-
-            
-
+        foreach($q_r as $i){
+/*
             $owner_id       = $i['Owner']['id'];
             $owner_tree     = $this->_find_parents($owner_id);
 
@@ -143,50 +142,42 @@ class DevicesController extends AppController {
                     break;
                 }
             }
-
+*/
             //Find the realm and profile names
             $realm  = 'not defined';
             $profile= 'not defined';
-            foreach($i['Radcheck'] as $rc){
 
+            foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
                     $profile = $rc['value'];
                 }
-
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
                 }
-
             }
 
             array_push($items,
                 array(
-                    'id'        => $i['User']['id'], 
-                    'owner'     => $owner_tree,
-                    'username'  => $i['User']['username'],
-                    'name'      => $i['User']['name'],
-                    'surname'   => $i['User']['surname'], 
-                    'phone'     => $i['User']['phone'], 
-                    'email'     => $i['User']['email'],
-                    'address'   => $i['User']['address'],
-                    'auth_type' => $i['User']['auth_type'],
-                    'realm'     => $realm,
-                    'profile'   => $profile,
-                    'active'    => $i['User']['active'], 
-                    'monitor'   => $i['User']['monitor'],
-                    'notes'     => $notes_flag
+                    'id'            => $i['Device']['id'], 
+                    'user'          => $i['User']['username'],
+                    'name'          => $i['Device']['name'],
+                    'description'   => $i['Device']['description'], 
+                    'realm'         => $realm,
+                    'profile'       => $profile,
+                    'active'        => $i['Device']['active'], 
+                   // 'notes'     => $notes_flag
                 )
             );
-        } 
-*/               
+        }
+        
         $this->set(array(
-            'items'         => array(),
+            'items'         => $items,
             'success'       => true,
-            'totalCount'    => 0,
+            'totalCount'    => $total,
             '_serialize'    => array('items','success','totalCount')
         ));
     }
-/*
+
     public function add(){
 
         $user = $this->Aa->user_for_token($this);
@@ -195,43 +186,13 @@ class DevicesController extends AppController {
         }
 
         $this->request['active']       = 0;
-        $this->request['monitor']      = 0;     
-
-
+   
         //Two fields should be tested for first:
         if(array_key_exists('active',$this->request->data)){
             $this->request->data['active'] = 1;
         }
 
-        if(array_key_exists('monior',$this->request->data)){
-            $this->request->data['monitor'] = 1;
-        }
-
-        if($this->request->data['parent_id'] == '0'){ //This is the holder of the token
-            $this->request->data['parent_id'] = $user['id'];
-        }
-
-        if(!array_key_exists('language',$this->request->data)){
-            $this->request->data['language'] = Configure::read('language.default');
-        }
-
-        //Get the language and country
-        $country_language   = explode( '_', $this->request->data['language'] );
-
-        $country            = $country_language[0];
-        $language           = $country_language[1];
-
-        $this->request->data['language_id'] = $language;
-        $this->request->data['country_id']  = $country;
-
-        //Get the group ID for AP's
-        $group_name = Configure::read('group.user');
-        $q_r        = ClassRegistry::init('Group')->find('first',array('conditions' =>array('Group.name' => $group_name)));
-        $group_id   = $q_r['Group']['id'];
-        $this->request->data['group_id'] = $group_id;
-
-        //Zero the token to generate a new one for this user:
-        $this->request->data['token'] = '';
+        //FIXME we should probably check if the AP this user rule.....
 
         //The rest of the attributes should be same as the form..
         $this->{$this->modelClass}->create();
@@ -250,7 +211,7 @@ class DevicesController extends AppController {
             ));
         }
     }
-
+/*
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -645,15 +606,15 @@ class DevicesController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
-                            'Owner'     => array('Owner.username'),
-                            'Group',
-                            'Radcheck'       
+                            'User',     
+                            'Radcheck',
+                           // 'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                               
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'User.username';
+        $sort   = 'Device.name';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
@@ -678,38 +639,7 @@ class DevicesController extends AppController {
                 //Strings
                 if($f->type == 'string'){
 
-                    if($f->field == 'realm'){
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck.username = User.username')
-                        )); 
-                        array_push($c['conditions'],array(
-                            'Radcheck.attribute'  => 'Rd-Realm',
-                            "Radcheck.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'profile'){                       
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck.username = User.username')
-                        ));
-                        array_push($c['conditions'],array(
-                            'Radcheck.attribute'  => 'User-Profile',
-                            "Radcheck.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'owner'){
-                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
-                    }else{
-                        $col = $this->modelClass.'.'.$f->field;
-                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
-                    }
+                   
                 }
                 //Bools
                 if($f->type == 'boolean'){
@@ -718,10 +648,6 @@ class DevicesController extends AppController {
                 }
             }
         }
-    
-        //== ONLY Permanent Users ==
-        $p_user_name = Configure::read('group.user');
-        array_push($c['conditions'],array('Group.name' => $p_user_name ));
 
         //====== END REQUEST FILTER =====
 
@@ -733,7 +659,7 @@ class DevicesController extends AppController {
                 $ap_clause      = array();
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
+                    array_push($ap_clause,array('User.parent_id' => $id));
                 }      
                 //Add it as an OR clause
                 array_push($c['conditions'],array('OR' => $ap_clause));  
