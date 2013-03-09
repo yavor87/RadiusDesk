@@ -355,7 +355,7 @@ class PermanentUsersController extends AppController {
 
     }
 
-     public function note_index(){
+    public function note_index(){
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -803,6 +803,20 @@ class PermanentUsersController extends AppController {
         //FIXME : ALSO Radacct and Radpostauth
 
     }
+
+    private function _is_sibling_of($parent_id,$user_id){
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($user_id);
+        foreach($q_r as $i){
+            $id = $i['User']['id'];
+            if($id == $parent_id){
+                return true;
+            }
+        }
+        //No match
+        return false;
+    }
+
 
 
 }
