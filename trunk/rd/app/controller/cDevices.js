@@ -16,7 +16,7 @@ Ext.define('Rd.controller.cDevices', {
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'permanentUsersWin',
+                stateId: 'devicesWin',
                 items: [
                     {
                         region: 'north',
@@ -78,16 +78,16 @@ Ext.define('Rd.controller.cDevices', {
                 click:      me.add
             },
             'gridDevices #delete'   : {
-              //  click:      me.del
+                click:      me.del
             },
             'gridDevices #edit'   : {
               //  click:      me.edit
             },
             'gridDevices #note'   : {
-              //  click:      me.note
+                click:      me.note
             },
             'gridDevices #csv'  : {
-              //  click:      me.csvExport
+                click:      me.csvExport
             },
             'gridDevices'   : {
               //  select:      me.select
@@ -112,34 +112,34 @@ Ext.define('Rd.controller.cDevices', {
                 change:  me.fromDateChange
             },
             '#winCsvColumnSelectDevices':{
-               // toFront:       me.maskHide
+                toFront:       me.maskHide
             },
             '#winCsvColumnSelectDevices #save': {
-               // click:  me.csvExportSubmit
+                click:  me.csvExportSubmit
             },
             'gridNote[noteForGrid=devices] #reload' : {
-              //  click:  me.noteReload
+                click:  me.noteReload
             },
             'gridNote[noteForGrid=devices] #add' : {
-                //click:  me.noteAdd
+                click:  me.noteAdd
             },
             'gridNote[noteForGrid=devices] #delete' : {
-               // click:  me.noteDelete
+                click:  me.noteDelete
             },
-            'gridNote[noteForGrid=permanentUsers]' : {
-               // itemclick: me.gridNoteClick
+            'gridNote[noteForGrid=devices]' : {
+                itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=devices]':{
-               // toFront:       me.maskHide
+                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteTreeNext' : {
-               // click:  me.btnNoteTreeNext
+                click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteAddPrev'  : {   
-               // click: me.btnNoteAddPrev
+                click: me.btnNoteAddPrev
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteAddNext'  : {   
-               // click: me.btnNoteAddNext
+                click: me.btnNoteAddNext
             }
         });
 
@@ -275,7 +275,7 @@ Ext.define('Rd.controller.cDevices', {
             }
         }
     },
-/*
+
     del:   function(){
         var me      = this;     
         //Find out if there was something selected
@@ -298,7 +298,7 @@ Ext.define('Rd.controller.cDevices', {
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStorePermanentUsersLoaded();   //Update the count   
+                            me.onStoreDevicesLoaded();   //Update the count   
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
@@ -314,13 +314,12 @@ Ext.define('Rd.controller.cDevices', {
             });
         }
     },
-*/
     onStoreDevicesLoaded: function() {
         var me      = this;
         var count   = me.getStore('sDevices').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
-/*
+
     csvExport: function(button,format) {
         var me          = this;
         me.getGrid().mask.show(); 
@@ -333,8 +332,8 @@ Ext.define('Rd.controller.cDevices', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectPermanentUsers')){
-            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectPermanentUsers',columns: col_list});
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectDevices')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectDevices',columns: col_list});
             me.application.runAction('cDesktop','Add',w);         
         }
     },
@@ -416,13 +415,13 @@ Ext.define('Rd.controller.cDevices', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsers'+sr.getId())){
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevices'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
-                            id          : 'winNotePermananetUsers'+sr.getId(),
+                            id          : 'winNoteDevices'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'permanentUsers',
-                            noteForName : sr.get('username')
+                            noteForGrid : 'devices',
+                            noteForName : sr.get('name')
                         });
                     me.application.runAction('cDesktop','Add',w);       
                 }
@@ -445,10 +444,10 @@ Ext.define('Rd.controller.cDevices', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsersAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevicesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNotePermananetUsersAdd'+grid.noteForId,
+                                id          : 'winNoteDevicesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
@@ -456,10 +455,10 @@ Ext.define('Rd.controller.cDevices', {
                             me.application.runAction('cDesktop','Add',w);       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsersAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevicesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNotePermananetUsersAdd'+grid.noteForId,
+                                id          : 'winNoteDevicesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid,
@@ -580,7 +579,6 @@ Ext.define('Rd.controller.cDevices', {
                 }
             });
         }
-    },
-*/
+    }
 
 });
