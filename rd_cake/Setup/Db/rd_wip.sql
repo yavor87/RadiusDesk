@@ -61,7 +61,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3242 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3243 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,6 +160,33 @@ INSERT INTO `countries` VALUES (4,'United Kingdom','GB','/cake2/rd_cake/webroot/
 UNLOCK TABLES;
 
 --
+-- Table structure for table `device_notes`
+--
+
+DROP TABLE IF EXISTS `device_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `device_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `device_notes`
+--
+
+LOCK TABLES `device_notes` WRITE;
+/*!40000 ALTER TABLE `device_notes` DISABLE KEYS */;
+INSERT INTO `device_notes` VALUES (22,13,66,'2013-03-09 20:20:35','2013-03-09 20:20:35');
+/*!40000 ALTER TABLE `device_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `devices`
 --
 
@@ -175,7 +202,7 @@ CREATE TABLE `devices` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +211,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (8,'10','tien',1,157,'2013-03-09 17:13:57','2013-03-09 17:13:57'),(9,'11','tien',1,157,'2013-03-09 17:22:06','2013-03-09 17:22:06'),(10,'1','1',1,157,'2013-03-09 17:25:28','2013-03-09 17:25:28');
+INSERT INTO `devices` VALUES (13,'zz','zz',1,153,'2013-03-09 19:59:08','2013-03-09 19:59:08');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,7 +413,7 @@ CREATE TABLE `notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,7 +422,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (28,'Coool Dude!',0,44,'2013-01-15 10:17:44','2013-01-15 10:17:44'),(30,'Laat lees',0,58,'2013-01-16 08:06:51','2013-01-16 08:06:51'),(32,'Slaat hom pappies',0,44,'2013-01-16 08:43:01','2013-01-16 08:43:01'),(35,'Blib blib blib',0,44,'2013-01-16 12:55:25','2013-01-16 12:55:25'),(36,'blib blip blib',0,58,'2013-01-16 12:55:48','2013-01-16 12:55:48'),(37,'Man ons vorder met sooibrand',1,60,'2013-01-18 07:57:12','2013-01-18 07:57:12'),(38,'Wild pappie',0,44,'2013-01-18 08:06:44','2013-01-18 08:06:44'),(39,'Slaat hom pappie!',1,44,'2013-01-18 21:05:33','2013-01-18 21:05:33'),(40,'This device is mega cool!',0,44,'2013-01-18 21:28:26','2013-01-18 21:28:26'),(41,'Dude, you think the device is cool, you should see the back-end program. It goes by the name of RADIUSdesk.\n\nAre you familiar with it?',0,58,'2013-01-18 21:29:43','2013-01-18 21:29:43'),(42,'Yes, that sounds familiar',0,44,'2013-01-18 21:30:39','2013-01-18 21:30:39'),(43,'Nee brrrrraaaa!!!',0,60,'2013-01-21 05:28:33','2013-01-21 05:28:33'),(44,'Geen notes at this stage pappie',0,60,'2013-01-21 06:33:28','2013-01-21 06:33:28'),(45,'Die dude is dom',1,60,'2013-01-21 08:05:05','2013-01-21 08:05:05'),(46,'This is a note on this template',1,58,'2013-02-08 06:07:59','2013-02-08 06:07:59'),(47,'You don\'t say ;-)',0,58,'2013-02-08 06:08:47','2013-02-08 06:08:47'),(49,'rrrrrrrrr',1,58,'2013-02-12 10:30:49','2013-02-12 10:30:49'),(50,'Skop gat pappie!',0,80,'2013-02-13 13:53:46','2013-02-13 13:53:46'),(51,'maak my mal',0,44,'2013-02-15 15:43:08','2013-02-15 15:43:08'),(52,'maak my mal',0,44,'2013-02-15 15:45:43','2013-02-15 15:45:43'),(53,'soos \'n krekker',0,44,'2013-02-15 16:17:05','2013-02-15 16:17:05'),(54,'eenn',0,44,'2013-02-15 16:19:55','2013-02-15 16:19:55'),(55,'twon',0,44,'2013-02-15 16:25:27','2013-02-15 16:25:27'),(58,'soos pofslang',0,44,'2013-02-15 16:46:55','2013-02-15 16:46:55'),(59,'en wally',0,44,'2013-02-15 16:52:19','2013-02-15 16:52:19'),(60,'en johan',0,44,'2013-02-15 16:54:09','2013-02-15 16:54:09'),(61,'en Renier',0,44,'2013-02-15 16:55:56','2013-02-15 16:55:56'),(62,'a zoid',0,44,'2013-02-15 16:57:06','2013-02-15 16:57:06'),(63,'soos grond',0,44,'2013-02-15 16:58:37','2013-02-15 16:58:37'),(64,'Koos is wild pappie',0,44,'2013-03-08 10:29:59','2013-03-08 10:29:59');
+INSERT INTO `notes` VALUES (28,'Coool Dude!',0,44,'2013-01-15 10:17:44','2013-01-15 10:17:44'),(30,'Laat lees',0,58,'2013-01-16 08:06:51','2013-01-16 08:06:51'),(32,'Slaat hom pappies',0,44,'2013-01-16 08:43:01','2013-01-16 08:43:01'),(35,'Blib blib blib',0,44,'2013-01-16 12:55:25','2013-01-16 12:55:25'),(36,'blib blip blib',0,58,'2013-01-16 12:55:48','2013-01-16 12:55:48'),(37,'Man ons vorder met sooibrand',1,60,'2013-01-18 07:57:12','2013-01-18 07:57:12'),(38,'Wild pappie',0,44,'2013-01-18 08:06:44','2013-01-18 08:06:44'),(39,'Slaat hom pappie!',1,44,'2013-01-18 21:05:33','2013-01-18 21:05:33'),(40,'This device is mega cool!',0,44,'2013-01-18 21:28:26','2013-01-18 21:28:26'),(41,'Dude, you think the device is cool, you should see the back-end program. It goes by the name of RADIUSdesk.\n\nAre you familiar with it?',0,58,'2013-01-18 21:29:43','2013-01-18 21:29:43'),(42,'Yes, that sounds familiar',0,44,'2013-01-18 21:30:39','2013-01-18 21:30:39'),(43,'Nee brrrrraaaa!!!',0,60,'2013-01-21 05:28:33','2013-01-21 05:28:33'),(44,'Geen notes at this stage pappie',0,60,'2013-01-21 06:33:28','2013-01-21 06:33:28'),(45,'Die dude is dom',1,60,'2013-01-21 08:05:05','2013-01-21 08:05:05'),(46,'This is a note on this template',1,58,'2013-02-08 06:07:59','2013-02-08 06:07:59'),(47,'You don\'t say ;-)',0,58,'2013-02-08 06:08:47','2013-02-08 06:08:47'),(49,'rrrrrrrrr',1,58,'2013-02-12 10:30:49','2013-02-12 10:30:49'),(50,'Skop gat pappie!',0,80,'2013-02-13 13:53:46','2013-02-13 13:53:46'),(51,'maak my mal',0,44,'2013-02-15 15:43:08','2013-02-15 15:43:08'),(52,'maak my mal',0,44,'2013-02-15 15:45:43','2013-02-15 15:45:43'),(53,'soos \'n krekker',0,44,'2013-02-15 16:17:05','2013-02-15 16:17:05'),(54,'eenn',0,44,'2013-02-15 16:19:55','2013-02-15 16:19:55'),(55,'twon',0,44,'2013-02-15 16:25:27','2013-02-15 16:25:27'),(58,'soos pofslang',0,44,'2013-02-15 16:46:55','2013-02-15 16:46:55'),(59,'en wally',0,44,'2013-02-15 16:52:19','2013-02-15 16:52:19'),(60,'en johan',0,44,'2013-02-15 16:54:09','2013-02-15 16:54:09'),(61,'en Renier',0,44,'2013-02-15 16:55:56','2013-02-15 16:55:56'),(62,'a zoid',0,44,'2013-02-15 16:57:06','2013-02-15 16:57:06'),(63,'soos grond',0,44,'2013-02-15 16:58:37','2013-02-15 16:58:37'),(64,'Koos is wild pappie',0,44,'2013-03-08 10:29:59','2013-03-08 10:29:59'),(66,'Gooi hom pappie!',0,44,'2013-03-09 20:20:35','2013-03-09 20:20:35');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -665,7 +692,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -674,7 +701,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (80,'koos','Cleartext-Password',':=','oog'),(81,'koos','Rd-Realm',':=','realm_for_dp'),(82,'koos','User-Profile',':=','Krillie'),(83,'koos','Rd-Account-Disabled',':=','0'),(84,'koos','Rd-Not-Track-Auth',':=','0'),(102,'piet','Cleartext-Password',':=','piet'),(103,'piet','Rd-Realm',':=','realm_for_dp'),(104,'piet','User-Profile',':=','Profile-A'),(105,'piet','Rd-Cap-Type',':=','hard'),(106,'piet','Rd-Account-Disabled',':=','0'),(122,'10','Rd-User-Type',':=','device'),(123,'10','User-Profile',':=','Krillie'),(124,'10','Rd-Cap-Type',':=','hard'),(125,'10','Rd-Account-Disabled',':=','0'),(126,'11','Rd-User-Type',':=','device'),(127,'11','Rd-Device-Owner',':=','piet'),(128,'11','User-Profile',':=','Krillie'),(129,'11','Rd-Cap-Type',':=','hard'),(130,'11','Rd-Account-Disabled',':=','0'),(131,'1','Rd-User-Type',':=','device'),(132,'1','Rd-Realm',':=','realm_for_dp'),(133,'1','Rd-Device-Owner',':=','piet'),(134,'1','User-Profile',':=','Krillie'),(135,'1','Rd-Cap-Type',':=','hard'),(136,'1','Rd-Account-Disabled',':=','0');
+INSERT INTO `radcheck` VALUES (80,'koos','Cleartext-Password',':=','oog'),(81,'koos','Rd-Realm',':=','realm_for_dp'),(82,'koos','User-Profile',':=','Krillie'),(83,'koos','Rd-Account-Disabled',':=','0'),(84,'koos','Rd-Not-Track-Auth',':=','0'),(152,'zz','Rd-User-Type',':=','device'),(153,'zz','Rd-Realm',':=','realm_for_dp'),(154,'zz','Rd-Device-Owner',':=','koos'),(155,'zz','User-Profile',':=','Krillie'),(156,'zz','Rd-Cap-Type',':=','hard'),(157,'zz','Rd-Account-Disabled',':=','0');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1086,7 +1113,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1095,7 +1122,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','','sql',1,0,4,8,4,NULL,1,18,'2012-12-10 13:14:13','2013-03-09 12:21:23'),(67,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','511b6b00-3c40-4446-93be-043e03662c24','','','','','','sql',1,1,4,9,4,44,2,15,'2013-02-13 12:29:20','2013-03-09 12:21:23'),(68,'bp','e5334c5a65adb2d141f723c9bb426445f743fb7c','511b6e68-8334-4b50-8892-043e03662c24','','','','','','sql',1,1,4,9,4,67,3,8,'2013-02-13 12:43:52','2013-03-09 12:21:23'),(69,'bp1','07fd854446daad77f79a8388534d2b904e4f05c6','511b6e8a-079c-49ae-bb8f-044103662c24','','','','','','sql',1,1,4,9,4,67,9,10,'2013-02-13 12:44:26','2013-03-09 12:21:23'),(79,'bp2','a231ed186f0a685415965223371b497cdf19f236','511b6ea8-46c4-4192-aaba-043f03662c24','','','','','','sql',1,1,4,9,4,67,11,12,'2013-02-13 12:44:56','2013-03-09 12:21:23'),(80,'cp','127ba535b6d230a05476d1c333d156d478ae6d66','511b6fdf-8c48-4c1b-9711-043e03662c24','','','','','','sql',1,1,4,9,4,68,4,7,'2013-02-13 12:50:07','2013-03-09 12:21:23'),(90,'dp','ec0fa9843ef09c888b620b3094f5d20b4c08e96a','511b819d-2c1c-4094-993b-043e03662c24','','','','','','sql',1,1,4,9,4,80,5,6,'2013-02-13 14:05:49','2013-03-09 12:21:23'),(153,'koos','f739bf02a5455c04822ef697a842e9f1f54c8987','51373cdf-0da8-409d-a86b-7ea303662c24','','','','','','sql',1,0,4,10,4,44,16,17,'2013-03-06 14:55:59','2013-03-09 12:21:23'),(157,'piet','87ab51f17576de2902f096dc7044bd526e506827','513b0926-a218-436b-b52d-7ea103662c24','','','','','','sql',1,0,4,10,4,67,13,14,'2013-03-09 12:04:22','2013-03-09 12:21:23');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','','sql',1,0,4,8,4,NULL,1,18,'2012-12-10 13:14:13','2013-03-09 19:42:56'),(67,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','511b6b00-3c40-4446-93be-043e03662c24','','','','','','sql',1,1,4,9,4,44,2,15,'2013-02-13 12:29:20','2013-03-09 19:42:56'),(68,'bp','e5334c5a65adb2d141f723c9bb426445f743fb7c','511b6e68-8334-4b50-8892-043e03662c24','','','','','','sql',1,1,4,9,4,67,3,8,'2013-02-13 12:43:52','2013-03-09 19:42:56'),(69,'bp1','07fd854446daad77f79a8388534d2b904e4f05c6','511b6e8a-079c-49ae-bb8f-044103662c24','','','','','','sql',1,1,4,9,4,67,9,10,'2013-02-13 12:44:26','2013-03-09 19:42:56'),(79,'bp2','a231ed186f0a685415965223371b497cdf19f236','511b6ea8-46c4-4192-aaba-043f03662c24','','','','','','sql',1,1,4,9,4,67,11,12,'2013-02-13 12:44:56','2013-03-09 19:42:57'),(80,'cp','127ba535b6d230a05476d1c333d156d478ae6d66','511b6fdf-8c48-4c1b-9711-043e03662c24','','','','','','sql',1,1,4,9,4,68,4,7,'2013-02-13 12:50:07','2013-03-09 19:42:56'),(90,'dp','ec0fa9843ef09c888b620b3094f5d20b4c08e96a','511b819d-2c1c-4094-993b-043e03662c24','','','','','','sql',1,1,4,9,4,80,5,6,'2013-02-13 14:05:49','2013-03-09 19:42:56'),(153,'koos','f739bf02a5455c04822ef697a842e9f1f54c8987','51373cdf-0da8-409d-a86b-7ea303662c24','','','','','','sql',1,0,4,10,4,44,16,17,'2013-03-06 14:55:59','2013-03-09 19:42:57'),(157,'piet','87ab51f17576de2902f096dc7044bd526e506827','513b0926-a218-436b-b52d-7ea103662c24','','','','','','sql',1,0,4,10,4,67,13,14,'2013-03-09 12:04:22','2013-03-09 19:42:57');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1108,4 +1135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-09 18:01:41
+-- Dump completed on 2013-03-09 21:01:58
