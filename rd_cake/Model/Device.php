@@ -40,7 +40,7 @@ class Device extends AppModel {
         'Radreply' => array(
             'className'     => 'Radreply',
             'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, devices WHERE devicess.name=Radreply.username AND devices.id={$__cakeID__$}',
+            'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, devices WHERE devices.name=Radreply.username AND devices.id={$__cakeID__$}',
             'dependent'     => true
         ),
     );
