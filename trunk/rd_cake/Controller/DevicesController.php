@@ -10,7 +10,7 @@ class DevicesController extends AppController {
 
     //-------- BASIC CRUD -------------------------------
 
-/*
+
      public function export_csv(){
 
         $this->autoRender   = false;
@@ -51,16 +51,15 @@ class DevicesController extends AppController {
                     $column_name = $c->name;
                     if($column_name == 'notes'){
                         $notes   = '';
-                        foreach($i['UserNote'] as $n){
+                        foreach($i['DeviceNote'] as $n){
                             if(!$this->_test_for_private_parent($n['Note'],$user)){
                                 $notes = $notes.'['.$n['Note']['note'].']';    
                             }
                         }
                         array_push($csv_line,$notes);
-                    }elseif($column_name =='owner'){
-                        $owner_id       = $i['User']['parent_id'];
-                        $owner_tree     = $this->_find_parents($owner_id);
-                        array_push($csv_line,$owner_tree); 
+                    }elseif($column_name =='user'){
+                        $owner       = $i['User']['username'];
+                        array_push($csv_line,$owner); 
                     }elseif($column_name =='realm'){
                         $realm = 'n/a';
                         foreach($i['Radcheck'] as $rc){       
@@ -78,7 +77,7 @@ class DevicesController extends AppController {
                         }
                         array_push($csv_line,$profile); 
                     }else{
-                        array_push($csv_line,$i['User']["$column_name"]);  
+                        array_push($csv_line,$i['Device']["$column_name"]);  
                     }
                 }
                 fputcsv($fp, $csv_line,';','"');
@@ -93,7 +92,6 @@ class DevicesController extends AppController {
         $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
         $this->response->body($data);
     }
-*/
 
     public function index(){
         //-- Required query attributes: token;
@@ -130,19 +128,16 @@ class DevicesController extends AppController {
 
         $items  = array();
         foreach($q_r as $i){
-/*
-            $owner_id       = $i['Owner']['id'];
-            $owner_tree     = $this->_find_parents($owner_id);
 
             //Create notes flag
             $notes_flag  = false;
-            foreach($i['UserNote'] as $un){
+            foreach($i['DeviceNote'] as $un){
                 if(!$this->_test_for_private_parent($un['Note'],$user)){
                     $notes_flag = true;
                     break;
                 }
             }
-*/
+
             //Find the realm and profile names
             $realm  = 'not defined';
             $profile= 'not defined';
@@ -165,7 +160,7 @@ class DevicesController extends AppController {
                     'realm'         => $realm,
                     'profile'       => $profile,
                     'active'        => $i['Device']['active'], 
-                   // 'notes'     => $notes_flag
+                    'notes'         => $notes_flag
                 )
             );
         }
@@ -211,7 +206,7 @@ class DevicesController extends AppController {
             ));
         }
     }
-/*
+
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -228,47 +223,43 @@ class DevicesController extends AppController {
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
-
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:
+            $this->{$this->modelClass}->contain('User');
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['User']['parent_id'];
-            $username   = $item['User']['username'];
-            if($owner_id != $user_id){
-                if($this->_is_sibling_of($user_id,$owner_id)== true){
+            $ap_id      = $item['User']['parent_id'];
+            $username   = $item['Device']['name'];
+            if($ap_id != $user_id){
+                if($this->_is_sibling_of($user_id,$ap_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                    $this->_delete_clean_up_user($username);
+                    $this->_delete_clean_up_device($username);
                 }else{
                     $fail_flag = true;
                 }
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
                 $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                $this->_delete_clean_up_user($username);
+                $this->_delete_clean_up_device($username);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
                 $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['User']['parent_id'];
-                $username   = $item['User']['username'];
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                $ap_id      = $item['User']['parent_id'];
+                $username   = $item['Device']['name'];
+                if($ap_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$ap_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
-                        $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                        $this->_delete_clean_up_user($username);
+                        $this->_delete_clean_up_device($username);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                    $this->_delete_clean_up_user($username);
+                    $this->_delete_clean_up_device($username);
                 }
             }
         }
@@ -296,7 +287,8 @@ class DevicesController extends AppController {
 
     }
 
-     public function note_index(){
+
+    public function note_index(){
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -307,24 +299,25 @@ class DevicesController extends AppController {
 
         $items = array();
         if(isset($this->request->query['for_id'])){
-            $u_id   = $this->request->query['for_id'];
-            $q_r    = $this->User->UserNote->find('all', 
+            $device_id = $this->request->query['for_id'];
+            $q_r    = $this->Device->DeviceNote->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('UserNote.user_id' => $u_id)
+                    'conditions'    => array('DeviceNote.device_id' => $device_id)
                 )
             );
             foreach($q_r as $i){
                 if(!$this->_test_for_private_parent($i['Note'],$user)){
                     $owner_id   = $i['Note']['user_id'];
                     $owner      = $this->_find_parents($owner_id);
+                    $afs        = $this->_get_action_flags($owner_id,$user);
                     array_push($items,
                         array(
                             'id'        => $i['Note']['id'], 
                             'note'      => $i['Note']['note'], 
                             'available_to_siblings' => $i['Note']['available_to_siblings'],
                             'owner'     => $owner,
-                            'delete'    => true
+                            'delete'    => $afs['delete']
                         )
                     );
                 }
@@ -360,14 +353,14 @@ class DevicesController extends AppController {
 
         $success    = false;
         $msg        = array('message' => __('Could not create note'));
-        $this->User->UserNote->Note->create(); 
+        $this->Device->DeviceNote->Note->create(); 
         //print_r($this->request->data);
-        if ($this->User->UserNote->Note->save($this->request->data)) {
-            $d                          = array();
-            $d['UserNote']['user_id']   = $this->request->data['for_id'];
-            $d['UserNote']['note_id']   = $this->User->UserNote->Note->id;
-            $this->User->UserNote->create();
-            if ($this->User->UserNote->save($d)) {
+        if ($this->Device->DeviceNote->Note->save($this->request->data)) {
+            $d                      = array();
+            $d['DeviceNote']['device_id']   = $this->request->data['for_id'];
+            $d['DeviceNote']['note_id']     = $this->Device->DeviceNote->Note->id;
+            $this->Device->DeviceNote->create();
+            if ($this->Device->DeviceNote->save($d)) {
                 $success = true;
             }
         }
@@ -398,44 +391,43 @@ class DevicesController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->User->UserNote->Note->findById($this->data['id']);
+            $item       = $this->Device->DeviceNote->Note->findById($this->data['id']);
             $owner_id   = $item['Note']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->User->UserNote->Note->id = $this->data['id'];
-                    $this->User->UserNote->Note->delete($this->data['id'],true);
+                    $this->Device->DeviceNote->Note->id = $this->data['id'];
+                    $this->Device->DeviceNote->Note->delete($this->data['id'],true);
                 }else{
                     $fail_flag = true;
                 }
             }else{
-                $this->User->UserNote->Note->id = $this->data['id'];
-                $this->User->UserNote->Note->delete($this->data['id'],true);
+                $this->Device->DeviceNote->Note->id = $this->data['id'];
+                $this->Device->DeviceNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->User->UserNote->Note->findById($d['id']);
+                $item       = $this->Device->DeviceNote->Note->findById($d['id']);
                 $owner_id   = $item['Note']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->User->UserNote->Note->id = $d['id'];
-                        $this->User->UserNote->Note->delete($d['id'],true);
+                        $this->Device->DeviceNote->Note->id = $d['id'];
+                        $this->Device->DeviceNote->Note->delete($d['id'],true);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
-                    $this->User->UserNote->Note->id = $d['id'];
-                    $this->User->UserNote->Note->delete($d['id'],true);
+                    $this->Device->DeviceNote->Note->id = $d['id'];
+                    $this->Device->DeviceNote->Note->delete($d['id'],true);
                 }
- 
+   
             }
         }
 
@@ -451,10 +443,8 @@ class DevicesController extends AppController {
                 '_serialize' => array('success')
             ));
         }
-
     }
 
-*/
     //--------- END BASIC CRUD ---------------------------
 
     //----- Menus ------------------------
@@ -608,7 +598,7 @@ class DevicesController extends AppController {
         $c['contain']   = array(
                             'User',     
                             'Radcheck',
-                           // 'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'DeviceNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                                
                         );
 
@@ -694,7 +684,7 @@ class DevicesController extends AppController {
         }
     }
 
-    private function _delete_clean_up_user($username){
+    private function _delete_clean_up_device($username){
 
         $this->{$this->modelClass}->Radcheck->deleteAll(   //Delete a previous one
             array('Radcheck.username' => $username), false
@@ -703,10 +693,50 @@ class DevicesController extends AppController {
         $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
             array('Radreply.username' => $username), false
         );
-
         //FIXME : ALSO Radacct and Radpostauth
-
     }
+
+    private function _is_sibling_of($parent_id,$user_id){
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($user_id);
+        foreach($q_r as $i){
+            $id = $i['User']['id'];
+            if($id == $parent_id){
+                return true;
+            }
+        }
+        //No match
+        return false;
+    }
+
+     private function _get_action_flags($owner_id,$user){
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return array('update' => true, 'delete' => true);
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $user_id = $user['id'];
+
+            //test for self
+            if($owner_id == $user_id){
+                return array('update' => true, 'delete' => true );
+            }
+            //Test for Parents
+            foreach($this->parents as $i){
+                if($i['User']['id'] == $owner_id){
+                    return array('update' => false, 'delete' => false );
+                }
+            }
+
+            //Test for Children
+            foreach($this->children as $i){
+                if($i['User']['id'] == $owner_id){
+                    return array('update' => true, 'delete' => true);
+                }
+            }  
+        }
+    }
+
 
 
 }
