@@ -44,9 +44,9 @@ Ext.define('Rd.controller.cDevices', {
     },
 
     views:  [
-       'components.pnlBanner',  'devices.gridDevices',
-       'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
-       'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect'
+       'components.pnlBanner',          'devices.gridDevices',    'devices.winDeviceAddWizard',
+       'components.cmbPermanentUser',   'components.cmbProfile',  'components.cmbCap',
+       'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect'
     ],
     stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices'  ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice'   ],
@@ -67,158 +67,101 @@ Ext.define('Rd.controller.cDevices', {
             return;
         }
         me.inited = true;
-/*
-        me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
+
+        me.getStore('sDevices').addListener('load',me.onStoreDevicesLoaded, me);
+
         me.control({
-           'gridPermanentUsers #reload': {
+           'gridDevices #reload': {
                 click:      me.reload
             }, 
-            'gridPermanentUsers #add'   : {
+            'gridDevices #add'   : {
                 click:      me.add
             },
-            'gridPermanentUsers #delete'   : {
-                click:      me.del
+            'gridDevices #delete'   : {
+              //  click:      me.del
             },
-            'gridPermanentUsers #edit'   : {
+            'gridDevices #edit'   : {
               //  click:      me.edit
             },
-            'gridPermanentUsers #note'   : {
-                click:      me.note
+            'gridDevices #note'   : {
+              //  click:      me.note
             },
-            'gridPermanentUsers #csv'  : {
-                click:      me.csvExport
+            'gridDevices #csv'  : {
+              //  click:      me.csvExport
             },
-            'gridPermanentUsers'   : {
-                select:      me.select
+            'gridDevices'   : {
+              //  select:      me.select
             },
-            'winPermanentUserAddWizard' :{
+            'winDeviceAddWizard' :{
                 toFront: me.maskHide
             },
-            'winPermanentUserAddWizard #btnTreeNext' : {
-                click:  me.btnTreeNext
-            },
-            'winPermanentUserAddWizard #btnDataPrev' : {
-                click:  me.btnDataPrev
-            },
-            'winPermanentUserAddWizard #btnDataNext' : {
+
+            'winDeviceAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            'winPermanentUserAddWizard #profile' : {
+            'winDeviceAddWizard #profile' : {
                 change:  me.cmbProfileChange
             },
-            'winPermanentUserAddWizard #always_active' : {
+            'winDeviceAddWizard #always_active' : {
                 change:  me.chkAlwaysActiveChange
             },
-            'winPermanentUserAddWizard #to_date' : {
+            'winDeviceAddWizard #to_date' : {
                 change:  me.toDateChange
             },
-            'winPermanentUserAddWizard #from_date' : {
+            'winDeviceAddWizard #from_date' : {
                 change:  me.fromDateChange
             },
-            '#winCsvColumnSelectPermanentUsers':{
-                toFront:       me.maskHide
+            '#winCsvColumnSelectDevices':{
+               // toFront:       me.maskHide
             },
-            '#winCsvColumnSelectPermanentUsers #save': {
-                click:  me.csvExportSubmit
+            '#winCsvColumnSelectDevices #save': {
+               // click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=permanentUsers] #reload' : {
-                click:  me.noteReload
+            'gridNote[noteForGrid=devices] #reload' : {
+              //  click:  me.noteReload
             },
-            'gridNote[noteForGrid=permanentUsers] #add' : {
-                click:  me.noteAdd
+            'gridNote[noteForGrid=devices] #add' : {
+                //click:  me.noteAdd
             },
-            'gridNote[noteForGrid=permanentUsers] #delete' : {
-                click:  me.noteDelete
+            'gridNote[noteForGrid=devices] #delete' : {
+               // click:  me.noteDelete
             },
             'gridNote[noteForGrid=permanentUsers]' : {
-                itemclick: me.gridNoteClick
+               // itemclick: me.gridNoteClick
             },
-            'winNote[noteForGrid=permanentUsers]':{
-                toFront:       me.maskHide
+            'winNote[noteForGrid=devices]':{
+               // toFront:       me.maskHide
             },
-            'winNoteAdd[noteForGrid=permanentUsers] #btnNoteTreeNext' : {
-                click:  me.btnNoteTreeNext
+            'winNoteAdd[noteForGrid=devices] #btnNoteTreeNext' : {
+               // click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=permanentUsers] #btnNoteAddPrev'  : {   
-                click: me.btnNoteAddPrev
+            'winNoteAdd[noteForGrid=devices] #btnNoteAddPrev'  : {   
+               // click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=permanentUsers] #btnNoteAddNext'  : {   
-                click: me.btnNoteAddNext
+            'winNoteAdd[noteForGrid=devices] #btnNoteAddNext'  : {   
+               // click: me.btnNoteAddNext
             }
         });
-*/
+
     },
-/*
+
     reload: function(){
         var me =this;
-        me.getStore('sPermanentUsers').load();
+        me.getStore('sDevices').load();
     },
     maskHide:   function(){
         var me =this;
         me.getGrid().mask.hide();
     },
+
     add: function(button){  
         var me = this;
-        me.getGrid().mask.show();
-        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
-        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
-        //simply show the nas connection typer selection 
-        //if it does have, we will show the tree to select an access provider.
-        Ext.Ajax.request({
-            url: me.urlApChildCheck,
-            method: 'GET',
-            success: function(response){
-                var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){
-                        
-                    if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
-                            var w = Ext.widget('winPermanentUserAddWizard',{
-                                id:'winPermanentUserAddWizardId', selLanguage : me.application.getSelLanguage()
-                            });
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
-                    }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
-                            var w = Ext.widget('winPermanentUserAddWizard',{
-                                id:'winPermanentUserAddWizardId',
-                                startScreen: 'scrnData',
-                                user_id:'0',
-                                owner: i18n('sLogged_in_user'), 
-                                no_tree: true,
-                                selLanguage : me.application.getSelLanguage()
-                            });
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
-                    }
-                }   
-            },
-            scope: me
-        });
-    },
-    btnTreeNext: function(button){
-        var me = this;
-        var tree = button.up('treepanel');
-        //Get selection:
-        var sr = tree.getSelectionModel().getLastSelected();
-        if(sr){    
-            var win = button.up('winPermanentUserAddWizard');
-            win.down('#owner').setValue(sr.get('username'));
-            win.down('#parent_id').setValue(sr.getId());
-            win.getLayout().setActiveItem('scrnData');
-        }else{
-            Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_owner'),
-                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }
-    },
-    btnDataPrev:  function(button){
-        var me      = this;
-        var win     = button.up('winPermanentUserAddWizard');
-        win.getLayout().setActiveItem('scrnApTree');
+        if(!me.application.runAction('cDesktop','AlreadyExist','winDeviceAddWizardId')){
+            var w = Ext.widget('winDeviceAddWizard',{
+                id:'winDeviceAddWizardId', selLanguage : me.application.getSelLanguage()
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }  
     },
     btnDataNext:  function(button){
         var me      = this;
@@ -229,7 +172,7 @@ Ext.define('Rd.controller.cDevices', {
             url: me.urlAdd,
             success: function(form, action) {
                 win.close();
-                me.getStore('sPermanentUsers').load();
+                me.getStore('sDevices').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
@@ -240,7 +183,6 @@ Ext.define('Rd.controller.cDevices', {
             failure: Ext.ux.formFail
         });
     },
-
     cmbProfileChange:   function(cmb){
         var me      = this;
         var form    = cmb.up('form');
@@ -260,7 +202,6 @@ Ext.define('Rd.controller.cDevices', {
             }
         }
     },
-
     chkAlwaysActiveChange: function(chk){
         var me      = this;
         var form    = chk.up('form');
@@ -279,7 +220,6 @@ Ext.define('Rd.controller.cDevices', {
             from.setDisabled(false);
         }
     },
-
     toDateChange: function(d,newValue,oldValue){
         var me = this;
         var form = d.up('form');   
@@ -293,7 +233,6 @@ Ext.define('Rd.controller.cDevices', {
             );
         }
     },
-
     fromDateChange: function(d,newValue, oldValue){
         var me = this;
         var form = d.up('form');
@@ -307,7 +246,6 @@ Ext.define('Rd.controller.cDevices', {
             );
         }
     },
-
     select: function(grid,record){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
@@ -336,9 +274,8 @@ Ext.define('Rd.controller.cDevices', {
                 tb.down('#delete').setDisabled(true);
             }
         }
-
     },
-
+/*
     del:   function(){
         var me      = this;     
         //Find out if there was something selected
@@ -377,12 +314,13 @@ Ext.define('Rd.controller.cDevices', {
             });
         }
     },
-    onStorePermanentUsersLoaded: function() {
+*/
+    onStoreDevicesLoaded: function() {
         var me      = this;
-        var count   = me.getStore('sPermanentUsers').getTotalCount();
+        var count   = me.getStore('sDevices').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
-
+/*
     csvExport: function(button,format) {
         var me          = this;
         me.getGrid().mask.show(); 
