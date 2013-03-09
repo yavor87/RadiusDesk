@@ -1,8 +1,8 @@
-Ext.define('Rd.model.mPermanentUser', {
+Ext.define('Rd.model.mDevice', {
     extend: 'Ext.data.Model',
     fields: [
          {name: 'id',           type: 'int'     },
-         {name: 'owner',        type: 'string'  },
+         {name: 'user',         type: 'string'  },
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },
          'name', 'description','vendor_id',

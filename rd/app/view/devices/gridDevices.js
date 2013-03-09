@@ -29,10 +29,10 @@ Ext.define('Rd.view.devices.gridDevices' ,{
 
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: i18n('sOwner'),         dataIndex: 'owner',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sOwner'),         dataIndex: 'user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sMAC_address'),   dataIndex: 'name',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sVendor'),        dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+           // { text: i18n('sVendor'),        dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { 
