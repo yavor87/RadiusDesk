@@ -304,6 +304,10 @@
       background-image:url(../images/16x16/devices.png) !important;
 }
 
+.activity {
+      background-image:url(../images/16x16/activity.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;
@@ -426,6 +430,10 @@
     background-image:url(../images/32x32/test.png);
 }
 
+.b-save {
+    background-image:url(../images/32x32/save.png);
+}
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }
@@ -480,8 +488,6 @@ td.grdEditable div {
     color: #008700; 
     font-size:16px;
 }
-
-
 
 .b-btn_connect {
     background-image:url(../images/32x32/ok.png);

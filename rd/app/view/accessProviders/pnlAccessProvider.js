@@ -13,7 +13,8 @@ Ext.define('Rd.view.desktop.pnlAccessProvider', {
             items:  { 
                 xtype:  'frmAccessProviderDetail',
                 height: '100%', 
-                width:  400
+                width:  400,
+                frame   : true
                 } 
         },
         { 

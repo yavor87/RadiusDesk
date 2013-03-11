@@ -43,7 +43,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
     views:  [
        'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
-       'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect'
+       'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
+       'permanentUsers.pnlPermanentUser'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms',   'sProfiles' ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile' ],
@@ -77,7 +78,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 click:      me.del
             },
             'gridPermanentUsers #edit'   : {
-              //  click:      me.edit
+                click:      me.edit
             },
             'gridPermanentUsers #note'   : {
                 click:      me.note
@@ -332,6 +333,55 @@ Ext.define('Rd.controller.cPermanentUsers', {
             }
         }
 */
+    },
+
+      edit:   function(){
+        console.log("Edit node");  
+        var me = this;
+        //See if there are anything selected... if not, inform the user
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var pu_id       = sr.getId();
+                var pu_tab_id   = 'puTab_'+pu_id;
+                var nt          = tp.down('#'+pu_tab_id);
+                if(nt){
+                    tp.setActiveTab(pu_tab_id); //Set focus on  Tab
+                    return;
+                }
+
+                var pu_tab_name = sr.get('username');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     pu_tab_name,
+                    itemId:     pu_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id}
+                });
+                tp.setActiveTab(pu_tab_id); //Set focus on Add Tab
+                //Load the record:
+                var nt  = tp.down('#'+pu_tab_id);
+               // var f   = nt.down('form');
+               // f.loadRecord(sr);    //Load the record
+                //Get the parent node
+              //  f.down("#owner").setValue(sr.get('owner'));
+            });
+        }
     },
 
     del:   function(){

@@ -140,3 +140,15 @@ Ext.ux.formFail = function(form,action){
 
 
 //<-- Form Fail message
+
+//-- Format to a readable unit --->
+Ext.ux.bytesToHuman = function (fileSizeInBytes) {
+    var i = -1;
+    var byteUnits = [' kb', ' Mb', ' Gb', ' Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
+    do {
+        fileSizeInBytes = fileSizeInBytes / 1024;
+        i++;
+    } while (fileSizeInBytes > 1024);
+
+    return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+};

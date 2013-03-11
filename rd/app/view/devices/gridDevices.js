@@ -15,7 +15,7 @@ Ext.define('Rd.view.devices.gridDevices' ,{
     },
     urlMenu: '/cake2/rd_cake/devices/menu_for_grid.json',
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }  
     ],
     initComponent: function(){
         var me      = this;
