@@ -98,7 +98,7 @@ class DesktopController extends AppController {
             'token'         =>  $q_r['User']['token'],
             'menu'          =>  $menu,
             'user'          =>  array('id' => $id, 'username' => $username,'group' => $group,'cls' => $cls),
-            'urlWallpaper'  =>  'resources/images/wallpapers/1.jpg',
+            'urlWallpaper'  =>  'resources/images/wallpapers/9.jpg',
             'shortcuts'     =>  array() 
         );
     }
