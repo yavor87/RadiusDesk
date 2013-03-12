@@ -44,12 +44,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
-       'permanentUsers.pnlPermanentUser'
+       'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths'
     ],
-    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms',   'sProfiles' ],
-    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile' ],
+    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles' ],
+    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile', 'mRadacct', 'mRadpostauth' ],
     selectedRecord: null,
-     config: {
+    config: {
         urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
@@ -142,6 +142,18 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'winNoteAdd[noteForGrid=permanentUsers] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
+            },
+            'pnlPermanentUser gridUserRadpostauths #reload' :{
+                click:      me.gridUserRadpostauthsReload
+            },
+            'pnlPermanentUser gridUserRadpostauths' : {
+                activate:      me.onUserRadpostauthsActivate
+            },
+            'pnlPermanentUser gridUserRadaccts #reload' :{
+                click:      me.gridUserRadacctsReload
+            },
+            'pnlPermanentUser gridUserRadaccts' : {
+                activate:      me.onUserRadacctsActivate
             }
         });
     },
@@ -371,7 +383,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     closable:   true,
                     iconCls:    'edit', 
                     layout:     'fit', 
-                    items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id}
+                    items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id, pu_name: pu_tab_name}
                 });
                 tp.setActiveTab(pu_tab_id); //Set focus on Add Tab
                 //Load the record:
@@ -688,5 +700,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
             });
         }
     },
-
+    onUserRadpostauthsActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    gridUserRadpostauthsReload: function(button){
+        var me  = this;
+        var g = button.up('gridUserRadpostauths');
+        g.getStore().reload();
+    },
+    onUserRadacctsActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    gridUserRadacctsReload: function(button){
+        var me  = this;
+        var g = button.up('gridUserRadaccts');
+        g.getStore().reload();
+    }
 });
