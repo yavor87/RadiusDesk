@@ -2,7 +2,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.pnlPermanentUser',
     border: false,
-    ap_id: null,
+    pu_id: null,
+    pu_name: null,
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:
@@ -165,10 +166,16 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             }
         },
         { 
-            title   :   i18n('sAuthentication_data'),
+            title   : i18n('sAuthentication_data'),
+            layout  : 'fit',
+            xtype   : 'gridUserRadpostauths',  
+            username: me.pu_name
         },
         { 
-            title   :   i18n('sAccounting_data'),
+            title   : i18n('sAccounting_data'), 
+            layout  : 'fit',
+            xtype   : 'gridUserRadaccts',
+            username: me.pu_name
         }
     ]; 
 

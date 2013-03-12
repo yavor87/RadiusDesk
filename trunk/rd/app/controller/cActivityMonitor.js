@@ -33,7 +33,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                         border  : true,
                         items   : [
                             { 'title' : i18n('sAccounting_data'), xtype: 'gridRadaccts'},
-                            { 'title' : i18n('sAuthentication_data')},
+                            { 'title' : i18n('sAuthentication_data'), xtype: 'gridRadpostauths'},
                             { 'title' : i18n('sDetailed_info')}
                         ]
                     }
@@ -45,17 +45,18 @@ Ext.define('Rd.controller.cActivityMonitor', {
     },
 
     views:  [
-       'components.pnlBanner',  'activityMonitor.gridRadaccts'
+       'components.pnlBanner',  'activityMonitor.gridRadaccts', 'activityMonitor.gridRadpostauths'
     ],
-    stores: [ 'sRadaccts'   ],
-    models: [ 'mRadacct'    ],
+    stores: [ 'sRadaccts',  'sRadpostauths'  ],
+    models: [ 'mRadacct',   'mRadpostauth'   ],
     selectedRecord: null,
     config: {
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridRadaccts'}       
+        {  ref: 'grid',                 selector:   'gridRadaccts'} ,
+        {  ref: 'gridRadpostauths',     selector:   'gridRadpostauths'}       
     ],
     init: function() {
         var me = this;
@@ -64,20 +65,41 @@ Ext.define('Rd.controller.cActivityMonitor', {
         }
         me.inited = true;
 
-        me.getStore('sRadaccts').addListener('load',me.onStoreRadacctsLoaded, me);
-
+        me.getStore('sRadaccts').addListener('load',        me.onStoreRadacctsLoaded,       me);
+        me.getStore('sRadpostauths').addListener('load',    me.onStoreRadpostauthsLoaded,   me);
         me.control({
-           'gridRadaccts #reload': {
+            'gridRadaccts #reload': {
+                click:      me.reload
+            },
+            'gridRadaccts #connected': {
                 click:      me.reload
             },
             'gridRadaccts'   : {
               //  select:      me.select
+            },
+            'gridRadaccts'   : {
+                activate:      me.onRadacctsActivate
+            },
+            'gridRadpostauths #reload': {
+                click:      me.reloadPostAuths
+            },
+            'gridRadpostauths'   : {
+                activate:      me.onRadpostauthsActivate
             }
+            
         });
 
     },
     reload: function(){
         var me =this;
+        //Determine what we need to show....
+        var only_connected = me.getGrid().down('#connected');
+        if(only_connected == null){
+            only_connected = true; //Default only active
+        }else{
+            only_connected = only_connected.pressed; //Default only active
+        }
+        me.getStore('sRadaccts').getProxy().extraParams = {only_connected: only_connected};
         me.getStore('sRadaccts').load();
     },
     maskHide:   function(){
@@ -92,5 +114,27 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var totalInOut  = Ext.ux.bytesToHuman(me.getStore('sRadaccts').getProxy().getReader().rawData.totalInOut);
         me.getGrid().down('#count').update({count: count});
         me.getGrid().down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
+    },
+    onRadacctsActivate: function(){
+        var me = this;
+        me.reload();
+    },
+    //Post auths related
+    reloadPostAuths: function(){
+        var me =this;
+        me.getStore('sRadpostauths').load();
+    },
+    onRadpostauthsActivate: function(){
+        var me = this;
+        me.reloadPostAuths();
+    },
+    onStoreRadpostauthsLoaded: function() {
+        var me          = this;
+        var count       = me.getStore('sRadpostauths').getTotalCount();
+        me.getGridRadpostauths().down('#count').update({count: count});
+    },
+    onUserRadpostauthsActivate: function(){
+        var me = this;
+        console.log("Post auths pappie....");
     }
 });

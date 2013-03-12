@@ -928,8 +928,8 @@ Ext.define('Rd.controller.cNas', {
     },
 
     gridRealmsForNasOwnerReload: function(button){
-        var me  = this;
-        grid    = button.up('gridRealmsForNasOwner');
+        var me      = this;
+        var grid    = button.up('gridRealmsForNasOwner');
         grid.getStore().reload();
     },
     chkAvailSubTab: function(chk){

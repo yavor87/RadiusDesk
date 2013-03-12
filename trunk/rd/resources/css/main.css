@@ -434,6 +434,10 @@
     background-image:url(../images/32x32/save.png);
 }
 
+.b-connect {
+    background-image:url(../images/32x32/connect.png);
+}
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }

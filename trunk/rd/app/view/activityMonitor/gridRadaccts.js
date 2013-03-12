@@ -36,8 +36,21 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
             { text: i18n('sIP_Address'),    dataIndex: 'nasipaddress',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sNAS_port_id'),   dataIndex: 'nasportid',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sNAS_port_type'), dataIndex: 'nasporttype',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sStart_time'),    dataIndex: 'acctstarttime', tdCls: 'gridTree', flex: 1,filter: {type: 'date'}},
-            { text: i18n('sStop_time'),     dataIndex: 'acctstoptime',  tdCls: 'gridTree', flex: 1,filter: {type: 'date'}},
+            { text: i18n('sStart_time'),    dataIndex: 'acctstarttime', tdCls: 'gridTree', flex: 1,filter: {type: 'date',dateFormat: 'Y-m-d'}},
+            { 
+                text        : i18n('sStop_time'),   
+                dataIndex   : 'acctstoptime',  
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='acctstoptime == null'><div class=\"hasRight\">"+i18n("sActive")+"</div>",
+                                '<tpl else>',
+                                '{acctstoptime}',
+                                '</tpl>'
+                            )
+            }
         ];
 
         //Create a mask and assign is as a property to the window
