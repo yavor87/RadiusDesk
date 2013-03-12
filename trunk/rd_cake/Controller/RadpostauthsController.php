@@ -1,11 +1,11 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class RadacctsController extends AppController {
+class RadpostauthsController extends AppController {
 
-    public $name       = 'Radaccts';
+    public $name       = 'Radpostauths';
     public $components = array('Aa');
-    protected $base    = "Access Providers/Controllers/Radaccts/";
+    protected $base    = "Access Providers/Controllers/Radpostauths/";
 
     //--- FROM THE OLD ---
     /* json_index json_add json_del json_view json_edit 
@@ -59,38 +59,21 @@ class RadacctsController extends AppController {
         $c_page             = $c;
         $c_page['page']     = $page;
         $c_page['limit']    = $limit;
-        $c_page['offset']   = $offset;
-
-        
+        $c_page['offset']   = $offset;       
 
         $total  = $this->{$this->modelClass}->find('count'  , $c); 
-
-        //Get some totals to display
-        $c['fields']        = array(
-                                'sum(Radacct.acctinputoctets)  as total_in',
-                                'sum(Radacct.acctoutputoctets) as total_out',
-                                'sum(Radacct.acctoutputoctets)+ sum(Radacct.acctinputoctets) as total',
-                            );
-        $this->{$this->modelClass}->contain();
-        $t_q  = $this->{$this->modelClass}->find('first'  , $c);
-        $q_r  = $this->{$this->modelClass}->find('all'    , $c_page);
+        $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
         
         $items  = array();
         foreach($q_r as $i){ 
             array_push($items,
                 array(
-                    'id'                => $i['Radacct']['radacctid'], 
-                    'radacctid'         => $i['Radacct']['radacctid'],
-                    'acctsessionid'     => $i['Radacct']['acctsessionid'],
-                    'acctuniqueid'      => $i['Radacct']['acctuniqueid'],
-                    'username'          => $i['Radacct']['username'],
-                    'groupname'         => $i['Radacct']['groupname'],
-                    'realm'             => $i['Radacct']['realm'],
-                    'nasipaddress'      => $i['Radacct']['nasipaddress'],
-                    'nasportid'         => $i['Radacct']['nasportid'],
-                    'nasporttype'       => $i['Radacct']['nasporttype'],
-                    'acctstarttime'     => $i['Radacct']['acctstarttime'],
-                    'acctstoptime'      => $i['Radacct']['acctstoptime']
+                    'id'                => $i['Radpostauth']['id'], 
+                    'username'          => $i['Radpostauth']['username'],
+                    'pass'              => $i['Radpostauth']['pass'],
+                    'reply'             => $i['Radpostauth']['reply'],
+                    'nasname'           => $i['Radpostauth']['nasname'],
+                    'authdate'          => $i['Radpostauth']['authdate']
                 )
             );
         }                
@@ -98,10 +81,7 @@ class RadacctsController extends AppController {
             'items'         => $items,
             'success'       => true,
             'totalCount'    => $total,
-            'totalIn'       => $t_q[0]['total_in'],
-            'totalOut'      => $t_q[0]['total_out'],
-            'totalInOut'    => $t_q[0]['total'],
-            '_serialize'    => array('items','success','totalCount','totalIn','totalOut','totalInOut')
+            '_serialize'    => array('items','success','totalCount')
         ));
     }
 
@@ -398,7 +378,7 @@ class RadacctsController extends AppController {
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'Radacct.username';
+        $sort   = $this->modelClass.'.authdate';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
@@ -418,13 +398,6 @@ class RadacctsController extends AppController {
 
         $c['order'] = array("$sort $dir");
         //==== END SORT ===
-
-        //====== Only_connectd filter ==========
-        if(isset($this->request->query['only_connected'])){
-            if($this->request->query['only_connected'] == 'true'){
-                array_push($c['conditions'],array($this->modelClass.".acctstoptime" => null));
-            }
-        }
 
         //======= For a specified username filter *Usually on the edit of user / device / voucher ======
         if(isset($this->request->query['username'])){
