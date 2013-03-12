@@ -655,6 +655,80 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+    function menu_for_accounting_data(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype' =>  'button',  'iconCls' => 'b-reload','scale'=> 'large', 'itemId' => 'reload',   'tooltip'    => _('Reload')),
+                        array(
+                            'xtype'         => 'button', 
+                            'iconCls'       => 'b-connect',     
+                            'scale'         => 'large',
+                            'itemId'        => 'connected',
+                            'enableToggle'  => true,
+                            'pressed'       => true,    
+                            'tooltip'       => __('Show only currently connected')
+                        )     
+                ))
+               
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+
+
+    }
+
+     function menu_for_authentication_data(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype' =>  'button',  'iconCls' => 'b-reload','scale'=> 'large', 'itemId' => 'reload',   'tooltip'    => _('Reload')),
+                        array(
+                            'xtype'         => 'button', 
+                            'iconCls'       => 'b-connect',     
+                            'scale'         => 'large',
+                            'itemId'        => 'connected',
+                            'enableToggle'  => true,
+                            'pressed'       => true,    
+                            'tooltip'       => __('Show only currently connected')
+                        )     
+                ))
+               
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
     //______ END EXT JS UI functions ________
 
 
