@@ -5,6 +5,7 @@ class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
     public $components = array('Aa');
+    public $uses       = array('Radacct','User');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
     //--- FROM THE OLD ---
@@ -180,56 +181,18 @@ class RadacctsController extends AppController {
             return;
         }
 
-        $user_id    = $user['id'];
-        $fail_flag = false;
-
-	    if(isset($this->data['id'])){   //Single item delete
-            $message = "Single item ".$this->data['id'];
-
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['User']['parent_id'];
-            $username   = $item['User']['username'];
-            if($owner_id != $user_id){
-                if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->{$this->modelClass}->id = $this->data['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                    $this->_delete_clean_up_user($username);
-                }else{
-                    $fail_flag = true;
-                }
-            }else{
-                $this->{$this->modelClass}->id = $this->data['id'];
-                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                $this->_delete_clean_up_user($username);
-            }
-   
+        //FIXME We need to find a creative wat to determine if the Access Provider can delete this accounting data!!!
+	    if(isset($this->data['id'])){   //Single item delete             
+            $this->{$this->modelClass}->id = $this->data['id'];
+            $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
         }else{                          //Assume multiple item delete
-            foreach($this->data as $d){
-
-                $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['User']['parent_id'];
-                $username   = $item['User']['username'];
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->{$this->modelClass}->id = $d['id'];
-                        $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
-                        $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                        $this->_delete_clean_up_user($username);
-                    }else{
-                        $fail_flag = true;
-                    }
-                }else{
-                    $this->{$this->modelClass}->id = $d['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
-                    $this->_delete_clean_up_user($username);
-                }
-            }
+            foreach($this->data as $d){   
+                $this->{$this->modelClass}->id = $d['id'];
+                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
+            }         
         }
 
+        $fail_flag = false;
         if($fail_flag == true){
             $this->set(array(
                 'success'   => false,

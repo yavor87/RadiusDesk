@@ -195,6 +195,11 @@ class PermanentUsersController extends AppController {
                     'profile'   => $profile,
                     'active'    => $i['User']['active'], 
                     'monitor'   => $i['User']['monitor'],
+                    'last_accept_time'      => $i['User']['last_accept_time'],
+                    'last_accept_nas'       => $i['User']['last_accept_nas'],
+                    'last_reject_time'      => $i['User']['last_reject_time'],
+                    'last_reject_nas'       => $i['User']['last_reject_nas'],
+                    'last_reject_message'   => $i['User']['last_reject_message'],
                     'notes'     => $notes_flag
                 )
             );
@@ -351,8 +356,183 @@ class PermanentUsersController extends AppController {
 
     }
 
-    public function view(){
+    public function view_basic_info(){
 
+        //We need the user_id;
+        //We supply the profile_id; realm_id; cap; always_active; from_date; to_date
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+
+        $items = array();
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['user_id'])){
+
+            $profile        = false;
+            $realm          = false;
+            $always_active  = true;
+            $to_date        = false;
+            $from_date      = false;
+            $cap            = false;
+
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
+
+            foreach($q_r['Radcheck'] as $rc){
+
+                if($rc['attribute'] == 'Rd-Realm'){
+                  $realm =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'User-Profile'){
+                  $profile =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Rd-Account-Activation-Time'){
+                  $from_date =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Expiration'){
+                  $to_date =  $rc['value'];
+                }
+                
+                if($rc['attribute'] == 'Rd-Cap-Type'){
+                  $cap =  $rc['value'];
+                }
+            }
+        
+            //Now we do the rest....
+            if($profile){
+                $q_r = $this->User = ClassRegistry::init('Profile')->findByName($profile);
+                $items['profile_id'] = intval($q_r['Profile']['id']);
+            }
+
+            if($realm){
+                $q_r = $this->User = ClassRegistry::init('Realm')->findByName($realm);
+                $items['realm_id'] = intval($q_r['Realm']['id']);
+            }
+
+            if($cap){
+                $items['cap'] = $cap;
+            }
+
+            if(($from_date)&&($to_date)){
+                $items['always_active'] = false;
+                $items['from_date']     = $from_date;
+                $items['to_date']       = $to_date;
+            }else{
+                $items['always_active'] = true;
+            }
+        }
+               // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function view_personal_info(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['user_id'])){
+
+            $this->{$this->modelClass}->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
+           // print_r($q_r);
+            if($q_r){
+                $language = $q_r['User']['country_id'].'_'.$q_r['User']['language_id'];
+                $items['language']  = $language;
+                $items['name']      = $q_r['User']['name'];
+                $items['surname']   = $q_r['User']['surname'];
+                $items['phone']     = $q_r['User']['surname'];
+                $items['address']   = $q_r['User']['address'];
+                $items['email']     = $q_r['User']['email'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+
+    }
+
+    public function view_private_attributes(){
+
+    }
+
+    public function view_tracking(){
+
+         //We need the user_id;
+        //We supply the track_auth, track_acct
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $items = array();
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['user_id'])){
+
+            $acct           = true;
+            $auth           = true;
+
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
+
+            foreach($q_r['Radcheck'] as $rc){
+
+                if($rc['attribute'] == 'Rd-Not-Track-Acct'){
+                    if($rc['value'] == 1){
+                        $acct = false;
+                    }
+                }
+
+                if($rc['attribute'] == 'Rd-Not-Track-Auth'){
+                  if($rc['value'] == 1){
+                        $auth = false;
+                  }
+                } 
+            }
+            $items['track_auth'] = $auth;
+            $items['track_acct'] = $acct;
+            
+        }
+               // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function change_password(){
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success',)
+        ));
     }
 
     public function note_index(){
@@ -669,18 +849,9 @@ class PermanentUsersController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'button',  'iconCls' => 'b-reload','scale'=> 'large', 'itemId' => 'reload',   'tooltip'    => _('Reload')),
-                        array(
-                            'xtype'         => 'button', 
-                            'iconCls'       => 'b-connect',     
-                            'scale'         => 'large',
-                            'itemId'        => 'connected',
-                            'enableToggle'  => true,
-                            'pressed'       => true,    
-                            'tooltip'       => __('Show only currently connected')
-                        )     
-                ))
-               
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
             );
         }
 
@@ -707,18 +878,9 @@ class PermanentUsersController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'button',  'iconCls' => 'b-reload','scale'=> 'large', 'itemId' => 'reload',   'tooltip'    => _('Reload')),
-                        array(
-                            'xtype'         => 'button', 
-                            'iconCls'       => 'b-connect',     
-                            'scale'         => 'large',
-                            'itemId'        => 'connected',
-                            'enableToggle'  => true,
-                            'pressed'       => true,    
-                            'tooltip'       => __('Show only currently connected')
-                        )     
-                ))
-               
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
             );
         }
 
