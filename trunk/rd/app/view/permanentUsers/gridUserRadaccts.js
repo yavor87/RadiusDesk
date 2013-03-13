@@ -73,7 +73,7 @@ Ext.define('Rd.view.permanentUsers.gridUserRadaccts' ,{
                     totalProperty: 'totalCount' //Required for dynamic paging
                 },
                 api: {
-                   // destroy  : '/cake2/rd_cake/devices/delete.json'
+                    destroy  : '/cake2/rd_cake/radaccts/delete.json'
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },

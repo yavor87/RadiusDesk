@@ -44,7 +44,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
-       'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths'
+       'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
+        'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles' ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile', 'mRadacct', 'mRadpostauth' ],
@@ -54,7 +55,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json'
+        urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json',
+        urlViewBasic:       '/cake2/rd_cake/permanent_users/view_basic_info.json',
+        urlViewPersonal:    '/cake2/rd_cake/permanent_users/view_personal_info.json',
+        urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridPermanentUsers'}       
@@ -68,8 +72,17 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
         me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
         me.control({
-           'gridPermanentUsers #reload': {
+            '#permanentUsersWin'    : {
+                beforeshow:      me.winClose
+            },
+            '#permanentUsersWin'    : {
+                destroy:      me.winClose
+            },
+            'gridPermanentUsers #reload': {
                 click:      me.reload
+            },
+            'gridPermanentUsers #reload menuitem[group=refresh]'   : {
+                click:      me.reloadOptionClick
             }, 
             'gridPermanentUsers #add'   : {
                 click:      me.add
@@ -85,6 +98,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'gridPermanentUsers #csv'  : {
                 click:      me.csvExport
+            },
+            'gridPermanentUsers #password'  : {
+                click:      me.changePassword
+            },
+            'gridPermanentUsers #enable_disable' : {
+                click:      me.enableDisable
             },
             'gridPermanentUsers'   : {
                 select:      me.select
@@ -146,14 +165,41 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'pnlPermanentUser gridUserRadpostauths #reload' :{
                 click:      me.gridUserRadpostauthsReload
             },
+            'pnlPermanentUser gridUserRadpostauths #delete' :{
+                click:      me.genericDelete
+            },
             'pnlPermanentUser gridUserRadpostauths' : {
                 activate:      me.onUserRadpostauthsActivate
             },
             'pnlPermanentUser gridUserRadaccts #reload' :{
                 click:      me.gridUserRadacctsReload
             },
+            'pnlPermanentUser gridUserRadaccts #delete' :{
+                click:      me.genericDelete
+            },
             'pnlPermanentUser gridUserRadaccts' : {
                 activate:      me.onUserRadacctsActivate
+            },
+            'pnlPermanentUser #profile' : {
+                change:  me.cmbProfileChange
+            },
+            'pnlPermanentUser #always_active' : {
+                change:  me.chkAlwaysActiveChange
+            },
+            'pnlPermanentUser #to_date' : {
+                change:  me.toDateChange
+            },
+            'pnlPermanentUser #from_date' : {
+                change:  me.fromDateChange
+            },
+            'pnlPermanentUser #tabBasicInfo' : {
+                activate: me.onTabBasicInfoActive
+            },
+            'pnlPermanentUser #tabPersonalInfo' : {
+                activate: me.onTabPersonalInfoActive
+            },
+            'pnlPermanentUser #tabTracking' : {
+                activate: me.onTabTrackingActive
             }
         });
     },
@@ -700,6 +746,72 @@ Ext.define('Rd.controller.cPermanentUsers', {
             });
         }
     },
+    changePassword: function(){
+        var me = this;
+        console.log("Changing password");
+         //Find out if there was something selected
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            me.maskHide();
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                me.maskHide();
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr = me.getGrid().getSelectionModel().getLastSelected(); 
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPermananetUserPassword'+sr.getId())){
+                    var w = Ext.widget('winPermanentUserPassword',
+                        {
+                            id          : 'winPermanentUsersPassword'+sr.getId(),
+                            user_id     : sr.getId(),
+                            username    : sr.get('username')
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    changePasswordSubmit: function(){
+        var me = this;
+
+
+    },
+    enableDisable: function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+            me.maskHide(); 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
+        }
+    },
+    enableDisableSubmit:function(){
+
+
+    },
     onUserRadpostauthsActivate: function(g){
         var me = this;
         g.getStore().load();
@@ -717,5 +829,97 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me  = this;
         var g = button.up('gridUserRadaccts');
         g.getStore().reload();
+    },
+    genericDelete:   function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        console.log("Generic delete clicked...");    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        
+        if(n == 'mnuRefreshCancel'){
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReload = setInterval(function(){        
+            me.reload();
+        },  interval);  
+    },
+    onTabBasicInfoActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the user's id
+        var user_id = t.up('pnlPermanentUser').pu_id;
+        form.load({url:me.urlViewBasic, method:'GET',params:{user_id:user_id}});
+    },
+    onTabPersonalInfoActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the user's id
+        var user_id = t.up('pnlPermanentUser').pu_id;
+        form.load({url:me.urlViewPersonal, method:'GET',params:{user_id:user_id}});
+    },
+     onTabTrackingActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the user's id
+        var user_id = t.up('pnlPermanentUser').pu_id;
+        form.load({url:me.urlViewTracking, method:'GET',params:{user_id:user_id}});
+    },
+    winClose:   function(){
+        var me = this;
+        console.log("Clear interval");
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
     }
 });

@@ -4,6 +4,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
     border: false,
     pu_id: null,
     pu_name: null,
+    pu_record: null, //We will supply each instance with a reference to the selected record.
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:
@@ -13,6 +14,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         me.items = [
         {   
             title:  i18n('sBasic_info'),
+            itemId : 'tabBasicInfo',
             layout: 'hbox',
             items:  { 
                 xtype   :  'form',
@@ -95,6 +97,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         { 
             title   : i18n('sPersonal_info'),
             layout: 'hbox',
+            itemId: 'tabPersonalInfo',
             items:  { 
                 xtype   :  'form',
                 height  : '100%', 
@@ -164,6 +167,65 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                     }
                 ]
             }
+        },  
+        { 
+            title   : i18n('sDevices'),
+        },
+        { 
+            title   : i18n('sPrivate_attributes'),
+           // layout  : 'fit',
+           // xtype   : 'gridUserRadpostauths',  
+           // username: me.pu_name
+        },
+        { 
+            title   : i18n('sTracking'),
+            itemId: 'tabTracking',
+            layout: 'hbox',
+            items:  { 
+                xtype   :  'form',
+                height  : '100%', 
+                width   :  400,
+                autoScroll:true,
+                layout  : 'anchor',
+                frame   : true,
+                defaults    : {
+                    anchor: '100%'
+                },
+                fieldDefaults: {
+                    msgTarget: 'under',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'left',
+                    labelSeparator: '',
+                    margin: 15
+                },
+                items       : [
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : i18n('sRADIUS_authentication'),
+                        name        : 'track_auth',
+                        inputValue  : 'track_auth',
+                        checked     : true,
+                        boxLabelCls : 'lblRdCheck'
+                    },
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : i18n('sRADIUS_accounting'),
+                        name        : 'track_acct',
+                        inputValue  : 'track_acct',
+                        checked     : true,
+                        boxLabelCls : 'lblRdCheck'
+                    }                
+                ],
+                buttons: [
+                    {
+                        itemId: 'btnPuTrackingSave',
+                        text: i18n('sSave'),
+                        scale: 'large',
+                        iconCls: 'b-save',
+                        margin: '0 20 40 0'
+                    }
+                ]
+            }
         },
         { 
             title   : i18n('sAuthentication_data'),
@@ -176,7 +238,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             layout  : 'fit',
             xtype   : 'gridUserRadaccts',
             username: me.pu_name
-        }
+        },
+        
     ]; 
 
 
