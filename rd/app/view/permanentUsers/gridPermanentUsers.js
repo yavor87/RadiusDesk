@@ -83,6 +83,46 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'active',
                 filter      : { type: 'boolean'}
             },
+            {
+                text        : i18n('sLast_accept_time'),
+                flex        : 1,
+                dataIndex   : 'last_accept_time',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'date'}
+            },
+            {
+                text        : i18n('sLast_accept_nas'),
+                flex        : 1,
+                dataIndex   : 'last_accept_nas',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('sLast_reject_time'),
+                flex        : 1,
+                dataIndex   : 'last_reject_time',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'date'}
+            },
+            {
+                text        : i18n('sLast_reject_nas'),
+                flex        : 1,
+                dataIndex   : 'last_reject_nas',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
+            {
+                text        : i18n('sLast_reject_message'),
+                flex        : 1,
+                dataIndex   : 'last_reject_message',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'}
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,

@@ -110,7 +110,8 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                     name        : "name",
                                     allowBlank  : false,
                                     blankText   : i18n('sSupply_a_value'),
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    vtype       : 'MacAddress'
                                 },
                                 {
                                     xtype       : 'textfield',
