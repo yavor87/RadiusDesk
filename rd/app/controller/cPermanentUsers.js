@@ -45,10 +45,13 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
        'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
-        'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable'
+        'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
+       'components.cmbVendor',   'components.cmbAttribute'
     ],
-    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles' ],
-    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile', 'mRadacct', 'mRadpostauth' ],
+    stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
+    models: [
+        'mAccessProviderTree',     'mPermanentUser',    'mRealm',       'mProfile', 
+        'mRadacct',                 'mRadpostauth',     'mAttribute',   'mVendor',  'mPrivateAttribute' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
@@ -61,6 +64,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         urlViewPersonal:    '/cake2/rd_cake/permanent_users/view_personal_info.json',
         urlEditPersonal:    '/cake2/rd_cake/permanent_users/edit_personal_info.json',
         urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json',
+        urlEditTracking:    '/cake2/rd_cake/permanent_users/edit_tracking.json',
         urlEnableDisable:   '/cake2/rd_cake/permanent_users/enable_disable.json',
         urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json'
     },
@@ -184,6 +188,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'pnlPermanentUser gridUserRadaccts' : {
                 activate:      me.onUserRadacctsActivate
             },
+            'pnlPermanentUser gridUserPrivate' : {
+                activate:      me.onUserPrivateActivate
+            },
             'pnlPermanentUser #profile' : {
                 change:  me.cmbProfileChange
             },
@@ -210,6 +217,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser #tabTracking' : {
                 activate: me.onTabTrackingActive
+            },
+            'pnlPermanentUser #tabTracking #save' : {
+                click: me.saveTracking
             },
             'winEnableDisable #save': {
                 click: me.enableDisableSubmit
@@ -891,6 +901,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me = this;
         g.getStore().load();
     },
+    onUserPrivateActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
     gridUserRadacctsReload: function(button){
         var me  = this;
         var g = button.up('gridUserRadaccts');
@@ -971,10 +985,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
         var me      = this;
         var form    = button.up('form');
+        var user_id = button.up('pnlPermanentUser').pu_id;
         //Checks passed fine...      
         form.submit({
             clientValidation    : true,
             url                 : me.urlEditBasic,
+            params              : {id: user_id},
             success             : function(form, action) {
                 me.reload();
                 Ext.ux.Toaster.msg(
@@ -1022,6 +1038,28 @@ Ext.define('Rd.controller.cPermanentUsers', {
         //get the user's id
         var user_id = t.up('pnlPermanentUser').pu_id;
         form.load({url:me.urlViewTracking, method:'GET',params:{user_id:user_id}});
+    },
+    saveTracking:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var user_id = button.up('pnlPermanentUser').pu_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditTracking,
+            params              : {id: user_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     winClose:   function(){
         var me = this;

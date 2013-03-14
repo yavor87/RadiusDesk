@@ -10,6 +10,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         //Set default values for from and to:
         var dtFrom  = new Date();
         var dtTo    = new Date();
+        dtTo.setYear(dtTo.getFullYear() + 1);
 
         me.items = [
         {   
@@ -173,9 +174,9 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         },
         { 
             title   : i18n('sPrivate_attributes'),
-           // layout  : 'fit',
-           // xtype   : 'gridUserRadpostauths',  
-           // username: me.pu_name
+            layout  : 'fit',
+            xtype   : 'gridUserPrivate',  
+            username: me.pu_name
         },
         { 
             title   : i18n('sTracking'),
@@ -218,7 +219,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                 ],
                 buttons: [
                     {
-                        itemId: 'btnPuTrackingSave',
+                        itemId: 'save',
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',
