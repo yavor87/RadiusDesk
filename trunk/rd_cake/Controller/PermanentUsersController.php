@@ -448,7 +448,51 @@ class PermanentUsersController extends AppController {
         }
         $user_id    = $user['id'];
         //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->data['id'])){
+            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
+            $username   = $q_r['User']['username'];
 
+            if(isset($this->request->data['profile_id'])){
+                $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
+                $profile_name = $q_r['Profile']['name'];
+                $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
+            }
+
+            if(isset($this->request->data['realm_id'])){
+                $q_r = ClassRegistry::init('Realm')->findById($this->data['realm_id']);
+                $realm_name = $q_r['Realm']['name'];
+                $this->_replace_radcheck_item($username,'Rd-Realm',$realm_name);
+            }
+
+            if(isset($this->request->data['to_date'])){
+                $expiration = $this->_radius_format_date($this->request->data['to_date']);
+                $this->_replace_radcheck_item($username,'Expiration',$expiration);
+            }
+
+            if(isset($this->request->data['from_date'])){
+                $expiration = $this->_radius_format_date($this->request->data['from_date']);
+                $this->_replace_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
+            }
+
+            
+            if(isset($this->request->data['always_active'])){ //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Account-Activation-Time'), false
+                );
+
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Expiration'), false
+                );
+            }
+            
+            if(isset($this->request->data['cap'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type',$this->request->data['cap']);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type'), false
+                );
+            }
+        }
 
         $this->set(array(
             'success' => true,
@@ -476,7 +520,7 @@ class PermanentUsersController extends AppController {
                 $items['language']  = $language;
                 $items['name']      = $q_r['User']['name'];
                 $items['surname']   = $q_r['User']['surname'];
-                $items['phone']     = $q_r['User']['surname'];
+                $items['phone']     = $q_r['User']['phone'];
                 $items['address']   = $q_r['User']['address'];
                 $items['email']     = $q_r['User']['email'];
             }
@@ -575,6 +619,46 @@ class PermanentUsersController extends AppController {
             'data'   => $items, //For the form to load we use data instead of the standard items as for grids
             'success' => true,
             '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_tracking(){
+
+          //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->data['id'])){
+            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
+            $username   = $q_r['User']['username'];
+           
+            //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth) 
+            if(!isset($this->request->data['track_auth'])){
+                $this->_replace_radcheck_item($username,'Rd-Not-Track-Auth',1);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Auth'), false
+                );
+            }
+
+            //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
+            if(!isset($this->request->data['track_acct'])){
+                $this->_replace_radcheck_item($username,'Rd-Not-Track-Acct',1);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Acct'), false
+                );
+            }
+
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
         ));
     }
 
@@ -1173,6 +1257,31 @@ class PermanentUsersController extends AppController {
         //No match
         return false;
     }
+
+    private function _replace_radcheck_item($username,$item,$value,$op = ":="){
+        $rc = ClassRegistry::init('Radcheck');
+        $rc->deleteAll(
+            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
+        );
+        $rc->create();
+        $d['Radcheck']['username']  = $username;
+        $d['Radcheck']['op']        = $op;
+        $d['Radcheck']['attribute'] = $item;
+        $d['Radcheck']['value']     = $value;
+        $rc->save($d);
+        $rc->id         = null;
+    }
+
+    private function _radius_format_date($d){
+        //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
+        $arr_date   = explode('/',$d);
+        $month      = intval($arr_date[0]);
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[1]);
+        $year       = intval($arr_date[2]);
+        return "$day ".$m_arr[($month-1)]." $year";
+    }
+
 
 
 
