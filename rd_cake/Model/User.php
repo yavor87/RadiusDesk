@@ -127,13 +127,52 @@ class User extends AppModel {
             if($this->data['User']['group_id'] == $group_id){
                 $this->_add_radius_user();
             }
+        }else{
+            if(array_key_exists('group_id',$this->data['User'])){
+               
+                $group_name  = Configure::read('group.user');
+                $q_r        = $this->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
+                $group_id   = $q_r['Group']['id'];
+                //Check if this is a permanent user
+                if($this->data['User']['group_id'] == $group_id){
+                    $this->_update_radius_user();
+                }
+            }
         }
+    }
+
+    private function _update_radius_user(){
+
+        $user_id    = $this->data['User']['id']; //The user's ID should always be present!
+        //Get the username
+        $q_r        = $this->findById($user_id);
+        $username   = $q_r['User']['username'];
+
+        //enabled or disabled (Rd-Account-Disabled)
+        if(array_key_exists('active',$this->data['User'])){ //It may be missing; you never know...
+          //  if($this->data['User']['active'] != null){ //TODO Figure out why it takes a zero (0) as '' or null??? //So we had to leave this out to allow for disabling
+                if($this->data['User']['active'] == 1){ //Reverse the logic...
+                    $dis = 0;
+                }else{
+                    $dis = 1;
+                }
+                
+                $this->_replace_radcheck_item($username,'Rd-Account-Disabled',$dis);
+          //  }
+        }
+
+        //Password (Cleartext-Password)
+        if(array_key_exists('password',$this->data['User'])){ //Usually used to change the password               
+            $this->_replace_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
+        }
+
     }
 
     private function _add_radius_user(){
         //The username with it's password (Cleartext-Password)
         $username                   = $this->data['User']['username'];
         $this->_add_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
+        $this->_add_radcheck_item($username,'Rd-User-Type','user');
 
         //Realm (Rd-Realm)
         if(array_key_exists('realm_id',$this->data['User'])){ //It may be missing; you never know...
@@ -216,6 +255,21 @@ class User extends AppModel {
     private function _add_radcheck_item($username,$item,$value,$op = ":="){
 
         $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radcheck->create();
+        $d['Radcheck']['username']  = $username;
+        $d['Radcheck']['op']        = $op;
+        $d['Radcheck']['attribute'] = $item;
+        $d['Radcheck']['value']     = $value;
+        $this->Radcheck->save($d);
+        $this->Radcheck->id         = null;
+    }
+
+     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
+
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radcheck->deleteAll(
+            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
+        );
         $this->Radcheck->create();
         $d['Radcheck']['username']  = $username;
         $d['Radcheck']['op']        = $op;
