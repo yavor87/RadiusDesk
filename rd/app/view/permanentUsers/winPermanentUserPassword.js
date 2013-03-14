@@ -45,6 +45,7 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserPassword', {
                         text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
+                        formBind: true,
                         margin: '0 20 40 0'
                     }
                 ]

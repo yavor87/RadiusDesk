@@ -57,8 +57,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
         urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json',
         urlViewBasic:       '/cake2/rd_cake/permanent_users/view_basic_info.json',
+        urlEditBasic:       '/cake2/rd_cake/permanent_users/edit_basic_info.json',
         urlViewPersonal:    '/cake2/rd_cake/permanent_users/view_personal_info.json',
-        urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json'
+        urlEditPersonal:    '/cake2/rd_cake/permanent_users/edit_personal_info.json',
+        urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json',
+        urlEnableDisable:   '/cake2/rd_cake/permanent_users/enable_disable.json',
+        urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridPermanentUsers'}       
@@ -195,11 +199,23 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'pnlPermanentUser #tabBasicInfo' : {
                 activate: me.onTabBasicInfoActive
             },
+            'pnlPermanentUser #tabBasicInfo #save' : {
+                click: me.saveBasicInfo
+            },
             'pnlPermanentUser #tabPersonalInfo' : {
                 activate: me.onTabPersonalInfoActive
             },
+            'pnlPermanentUser #tabPersonalInfo #save' : {
+                click: me.savePersonalInfo
+            },
             'pnlPermanentUser #tabTracking' : {
                 activate: me.onTabTrackingActive
+            },
+            'winEnableDisable #save': {
+                click: me.enableDisableSubmit
+            },
+            'winPermanentUserPassword #save': {
+                click: me.changePasswordSubmit
             }
         });
     },
@@ -772,22 +788,45 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected(); 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPermananetUserPassword'+sr.getId())){
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUsersPassword'+sr.getId())){
                     var w = Ext.widget('winPermanentUserPassword',
                         {
                             id          : 'winPermanentUsersPassword'+sr.getId(),
                             user_id     : sr.getId(),
-                            username    : sr.get('username')
+                            username    : sr.get('username'),
+                            title       : i18n('sChange_password for')+' '+sr.get('username')
                         });
                     me.application.runAction('cDesktop','Add',w);       
                 }
             }    
         }
     },
-    changePasswordSubmit: function(){
-        var me = this;
+    changePasswordSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
 
+        var extra_params        = {};
+        var sr                  = me.getGrid().getSelectionModel().getLastSelected();
+        extra_params['user_id'] = sr.getId();
 
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlChangePassword,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sPassword_changed'),
+                    i18n('sPassword_changed_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     enableDisable: function(button){
         var me      = this;
@@ -808,9 +847,36 @@ Ext.define('Rd.controller.cPermanentUsers', {
             }    
         }
     },
-    enableDisableSubmit:function(){
+    enableDisableSubmit:function(button){
 
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
 
+        var extra_params    = {};
+        var s               = me.getGrid().getSelectionModel().getSelection();
+        Ext.Array.each(s,function(record){
+            var r_id = record.getId();
+            extra_params[r_id] = r_id;
+        });
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEnableDisable,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     onUserRadpostauthsActivate: function(g){
         var me = this;
@@ -901,12 +967,54 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var user_id = t.up('pnlPermanentUser').pu_id;
         form.load({url:me.urlViewBasic, method:'GET',params:{user_id:user_id}});
     },
+    saveBasicInfo:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditBasic,
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
     onTabPersonalInfoActive: function(t){
         var me      = this;
         var form    = t.down('form');
         //get the user's id
         var user_id = t.up('pnlPermanentUser').pu_id;
         form.load({url:me.urlViewPersonal, method:'GET',params:{user_id:user_id}});
+    },
+    savePersonalInfo:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var user_id = button.up('pnlPermanentUser').pu_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditPersonal,
+            params              : {id: user_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
      onTabTrackingActive: function(t){
         var me      = this;
