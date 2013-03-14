@@ -85,7 +85,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                 ],
                 buttons: [
                     {
-                        itemId: 'btnPuBasicSave',
+                        itemId: 'save',
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',
@@ -159,7 +159,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                 ],
                 buttons: [
                     {
-                        itemId: 'btnPuPersonalSave',
+                        itemId: 'save',
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',
