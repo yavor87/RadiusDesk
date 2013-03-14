@@ -439,6 +439,23 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+    public function edit_basic_info(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        //TODO Check if the owner of this user is in the chain of the APs
+
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
     public function view_personal_info(){
 
         //__ Authentication + Authorization __
@@ -471,6 +488,40 @@ class PermanentUsersController extends AppController {
             '_serialize' => array('success','data')
         ));
 
+    }
+
+    public function edit_personal_info(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        //TODO Check if the owner of this user is in the chain of the APs
+
+        unset($this->request->data['token']);
+        //Get the language and country
+        $country_language   = explode( '_', $this->request->data['language'] );
+
+        $country            = $country_language[0];
+        $language           = $country_language[1];
+
+        $this->request->data['language_id'] = $language;
+        $this->request->data['country_id']  = $country;
+
+        if ($this->User->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+
+        }else{
+             $this->set(array(
+                'success' => false,
+                '_serialize' => array('success')
+            ));
+        }
     }
 
     public function view_private_attributes(){
@@ -529,11 +580,81 @@ class PermanentUsersController extends AppController {
 
     public function change_password(){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //For this action to sucees on the User model we need: 
+        // id; group_id; password; token should be empty ('')
+        $success = false;
+
+        if(isset($this->request->data['user_id'])){
+
+            $d           = array();
+            //We need to give the group_id to trigger the radcheck modifications.
+            $group_name  = Configure::read('group.user');
+            $q_r         = $this->{$this->modelClass}->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
+            $group_id    = $q_r['Group']['id'];
+
+            $d['User']['id']        = $this->request->data['user_id'];
+            $d['User']['group_id']  = $group_id;  
+            $d['User']['password']  = $this->request->data['password'];
+            $d['User']['token']     = '';
+            $this->{$this->modelClass}->id  = $this->request->data['user_id'];
+            $this->{$this->modelClass}->save($d);
+            $success               = true;  
+        }
+
+        $this->set(array(
+            'success' => $success,
+            '_serialize' => array('success',)
+        ));
+    }
+
+    public function enable_disable(){
+        
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $rb     = $this->request->data['rb'];
+        $d      = array();
+        //For this action to sucees on the User model we need: 
+        // id; group_id; active
+
+
+        if($rb == 'enable'){
+            $d['User']['active'] = 1;
+        }else{
+            $d['User']['active'] = 0;
+        }
+
+        //We need to give the group_id to trigger the radcheck modifications.
+        $group_name  = Configure::read('group.user');
+        $q_r         = $this->{$this->modelClass}->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
+        $group_id    = $q_r['Group']['id'];
+
+        $d['User']['group_id'] = $group_id;
+
+        foreach(array_keys($this->request->data) as $key){
+            if(preg_match('/^\d+/',$key)){
+                $d['User']['id']                = $key;
+                $this->{$this->modelClass}->id  = $key;
+                $this->{$this->modelClass}->save($d);   
+            }
+        }
         $this->set(array(
             'success' => true,
             '_serialize' => array('success',)
         ));
     }
+
 
     public function note_index(){
 
@@ -737,7 +858,7 @@ class PermanentUsersController extends AppController {
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
                     array('xtype' => 'button', 'iconCls' => 'b-disable', 'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable')),
-                    array('xtype' => 'button', 'iconCls' => 'b-message', 'scale' => 'large', 'itemId' => 'send_message', 'tooltip'=> __('Send massage')),
+                 //   array('xtype' => 'button', 'iconCls' => 'b-message', 'scale' => 'large', 'itemId' => 'send_message', 'tooltip'=> __('Send massage')),
                     array('xtype' => 'button', 'iconCls' => 'b-test',    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
                 )) 
             );
