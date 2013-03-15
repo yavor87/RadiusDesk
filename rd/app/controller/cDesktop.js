@@ -4,11 +4,11 @@ These places will be marked with //@@ comments
 
 Ext.define('Rd.controller.cDesktop', {
     extend: 'Ext.app.Controller',
-    views: ['desktop.pnlDesktop'],
+    views: ['desktop.pnlDesktop','desktop.winDesktopSettings'],
     config: {
         urlWallpaper: 'resources/images/wallpapers/2.jpg'
     },
-    models: ['mDesktopShortcut'],
+    models: ['mDesktopShortcut', 'mWallpaper'],
     uses: [
         'Ext.util.MixedCollection',
         'Ext.menu.Menu',
@@ -16,9 +16,11 @@ Ext.define('Rd.controller.cDesktop', {
         'Ext.window.Window',
         'Rd.library.lTaskBar'
     ],
-    stores: ['sDesktopShortcuts'],  //This must be pulled from the back-end
+    stores: ['sDesktopShortcuts', 'sWallpapers'],  //This must be pulled from the back-end
     refs: [
-        {   ref: 'vp',  selector: '',   xtype: 'vp',    autoCreate: true}
+        {   ref: 'vp',  selector: '',   xtype: 'vp',    autoCreate: true},
+        {   ref: 'pnlDesktop', selector: 'pnlDesktop', xtype: 'pnlDesktop' }
+
     ],
     //Stuff specific to the Desktop which was moved to the Desktop controller...
     activeWindowCls:    'ux-desktop-active-win',
@@ -46,6 +48,9 @@ Ext.define('Rd.controller.cDesktop', {
             },
             'pnlStartMenu menuitem': {
                 'click': me.onMenuItem
+            },
+            '#tabWallpaper dataview': {
+                'select' : me.onSelectWallpaper
             }
         });
     },
@@ -74,7 +79,7 @@ Ext.define('Rd.controller.cDesktop', {
                     width: 100,
                     items: [
                         {   text:i18n('sLogout'),      iconCls:'exit',     handler: me.onLogout,   scope: me   },'-',
-                        {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onLogout,   scope: me   }
+                        {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onSettings, scope: me   }
                     ]
                 }
             }
@@ -225,10 +230,11 @@ Ext.define('Rd.controller.cDesktop', {
 
     //------------------------------------------------------
     // Dynamic (re)configuration methods
-
+/*
     getWallpaper: function () {
         return this.wallpaper.wallpaper;
     },
+*/
 
     setTickSize: function(xTickSize, yTickSize) {
         var me = this,
@@ -243,11 +249,12 @@ Ext.define('Rd.controller.cDesktop', {
             resizer.heightIncrement = yt;
         });
     },
-
+/*
     setWallpaper: function (wallpaper, stretch) {
         this.wallpaper.setWallpaper(wallpaper, stretch);
         return this;
     },
+*/
 
     //------------------------------------------------------
     // Window management methods
@@ -491,6 +498,17 @@ Ext.define('Rd.controller.cDesktop', {
         me.getVp().removeAll(true);
         me.application.runAction('cLogin','Exit');
     },
+    onSettings: function(b){
+        var me = this;
+        console.log("Showing settings....");
+        if(!me.application.runAction('cDesktop','AlreadyExist','winDesktopSettingsId')){
+            var w = Ext.widget('winDesktopSettings',{
+                id  :'winDesktopSettingsId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
+       // me.setWallpaper('resources/images/wallpapers/7.jpg');
+    },
     onMenuItem: function(memuItem){
         var me      = this;
         var itemId  = memuItem.getItemId();
@@ -510,5 +528,28 @@ Ext.define('Rd.controller.cDesktop', {
                 win.close();
             })
         }
+    },
+
+    setWallpaper: function (wallpaper) {
+        var me = this;
+        var dt = me.getPnlDesktop();
+        var wp = dt.down("compWallpaper");
+        var imgEl;
+        if (wp.rendered) {
+            imgEl = wp.el.dom.firstChild;
+            imgEl.src = wallpaper;
+            Ext.fly(imgEl).setStyle({
+                width: '100%',
+               height: '100%'
+            }).show();
+        }
+    },
+
+    onSelectWallpaper: function(a, record, c){
+        var me = this;
+        console.log(record.get('img'));
+        var wp = record.get('r_dir')+record.get('file');
+        me.setWallpaper(wp);
     }
+
 });
