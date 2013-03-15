@@ -72,6 +72,43 @@ class DesktopController extends AppController {
         }
     }
 
+    public function list_wallpapers(){
+
+
+        $items = array();
+
+        //List all the wallpapres in the wallpaper directory:
+        $wp_document_root   = "/var/www";
+        $r_wp_dir           = "/rd/resources/images/wallpapers/";
+        $wp_dir             = "$wp_document_root"."$r_wp_dir";
+
+        $id = 1;
+
+        if ($handle = opendir($wp_dir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $regexp = "/^[0-9a-zA-z\.]+\.(gif|jpg|png|jpeg)$/"; //Match only images
+                    if(preg_match($regexp, $entry)){
+                      //  echo "$entry\n";
+                        array_push($items, array(
+                            'id'    => $id,
+                            'file'  => $entry,
+                            'r_dir' => $r_wp_dir,
+                            'img'   => "/cake2/rd_cake/webroot/files/image.php/image-name.jpg?width=200&height=200&image=".$r_wp_dir.$entry
+                        ));
+                        $id++;
+                    }     
+                }
+            }
+            closedir($handle);
+        }
+        $this->set(array(
+            'items'          => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
 
     private function _get_user_detail($username){
 
