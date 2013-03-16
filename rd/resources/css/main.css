@@ -760,6 +760,17 @@ background-position: left center;
     font-size:12px;
 }
 
+/*Wallpaper selection */
+.thumb-wrap {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.thumb-wrap img {
+    cursor:pointer;
+}
+
 
 
 

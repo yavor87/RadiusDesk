@@ -13,7 +13,7 @@ Ext.define('Rd.view.permanentUsers.winDesktopSettings', {
         //Create the view for the wallpapers:
         var imageTpl = new Ext.XTemplate(
             '<tpl for=".">',
-                '<div style="margin-bottom: 10px;" class="thumb-wrap">',
+                '<div class="thumb-wrap">',
                     '<img src="{img}" />',
                     '<br/><span>{file}</span>',
                 '</div>',

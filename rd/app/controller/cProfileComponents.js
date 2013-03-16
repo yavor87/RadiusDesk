@@ -324,7 +324,7 @@ Ext.define('Rd.controller.cProfileComponents', {
                 var comp_tab_id = 'compTab_'+comp_id;
                 var nt          = tp.down('#'+comp_tab_id);
                 if(nt){
-                    tp.setActiveTab(tmpl_tab_id); //Set focus on  Tab
+                    tp.setActiveTab(comp_tab_id); //Set focus on  Tab
                     return;
                 }
 

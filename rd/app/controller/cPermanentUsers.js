@@ -46,12 +46,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
        'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
         'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
-       'components.cmbVendor',   'components.cmbAttribute'
+       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: [
         'mAccessProviderTree',     'mPermanentUser',    'mRealm',       'mProfile', 
-        'mRadacct',                 'mRadpostauth',     'mAttribute',   'mVendor',  'mPrivateAttribute' ],
+        'mRadacct',                 'mRadpostauth',     'mAttribute',   'mVendor',  'mPrivateAttribute', 'mDevice' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
@@ -226,7 +226,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'winPermanentUserPassword #save': {
                 click: me.changePasswordSubmit
-            }
+            },
+            'gridUserPrivate' : {
+                beforeedit:     me.onBeforeEditUserPrivate
+            },
+            'gridUserPrivate  #cmbVendor': {
+                change:      me.cmbVendorChange
+            },
+            'gridUserPrivate  #add': {
+                click:      me.attrAdd
+            },
+            'gridUserPrivate  #reload': {
+                click:      me.attrReload
+            },
+            'gridUserPrivate  #delete': {
+                click:      me.attrDelete
+            },
         });
     },
     reload: function(){
@@ -1066,6 +1081,99 @@ Ext.define('Rd.controller.cPermanentUsers', {
         console.log("Clear interval");
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
+        }
+    },
+    onBeforeEditUserPrivate: function(g,e){
+        var me = this;
+        return e.record.get('edit');
+    },
+    cmbVendorChange: function(cmb){
+        var me = this;
+        console.log("Combo thing changed");
+        var value   = cmb.getValue();
+        var grid    = cmb.up('gridUserPrivate');
+        var attr    = grid.down('cmbAttribute');
+        //Cause this to result in a reload of the Attribute combo
+        attr.getStore().getProxy().setExtraParam('vendor',value);
+        attr.getStore().load();   
+    },
+    attrAdd: function(b){
+        var me = this;
+        console.log("Add to specific template");
+        var grid    = b.up('gridUserPrivate');
+        var attr    = grid.down('cmbAttribute');
+        var a_val   = attr.getValue();
+        if(a_val == null){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            //We do not do double's
+            var f = grid.getStore().find('attribute',a_val);
+            if(f == -1){
+                grid.getStore().add(Ext.create('Rd.model.mPrivateAttribute',
+                    {
+                        type            : 'check',
+                        attribute       : a_val,
+                        op              : ':=',
+                        value           : i18n('sReplace_this_value'),
+                        delete          : true,
+                        edit            : true
+                    }
+                ));
+                grid.getStore().sync();
+            }
+        }
+    },
+
+    attrReload: function(b){
+        var me = this;
+        var grid = b.up('gridUserPrivate');
+        grid.getStore().load();
+    },
+    attrDelete: function(button){
+
+        var me      = this;
+        var grid    = button.up('gridUserPrivate');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                           // grid.getStore().load();   //Update the count
+                            me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
         }
     }
 });
