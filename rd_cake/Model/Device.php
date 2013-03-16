@@ -48,6 +48,26 @@ class Device extends AppModel {
     public function afterSave($created){
         if($created){
             $this->_add_radius_user();
+        }else{
+            $this->_update_radius_user();
+        }
+    }
+
+    private function _update_radius_user(){
+
+        $device_id  = $this->data['Device']['id']; //The user's ID should always be present!
+        //Get the username
+        $q_r        = $this->findById($device_id);
+        $name       = $q_r['Device']['name'];
+
+        //enabled or disabled (Rd-Account-Disabled)
+        if(array_key_exists('active',$this->data['Device'])){ //It may be missing; you never know...    
+                if($this->data['Device']['active'] == 1){ //Reverse the logic...
+                    $dis = 0;
+                }else{
+                    $dis = 1;
+                }
+                $this->_replace_radcheck_item($name,'Rd-Account-Disabled',$dis);
         }
     }
 
@@ -152,5 +172,21 @@ class Device extends AppModel {
         $this->Radcheck->save($d);
         $this->Radcheck->id         = null;
     }
+
+    private function _replace_radcheck_item($username,$item,$value,$op = ":="){
+
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radcheck->deleteAll(
+            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
+        );
+        $this->Radcheck->create();
+        $d['Radcheck']['username']  = $username;
+        $d['Radcheck']['op']        = $op;
+        $d['Radcheck']['attribute'] = $item;
+        $d['Radcheck']['value']     = $value;
+        $this->Radcheck->save($d);
+        $this->Radcheck->id         = null;
+    }
+
 
 }
