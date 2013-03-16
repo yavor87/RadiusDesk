@@ -473,12 +473,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id, pu_name: pu_tab_name}
                 });
                 tp.setActiveTab(pu_tab_id); //Set focus on Add Tab
-                //Load the record:
-                var nt  = tp.down('#'+pu_tab_id);
-               // var f   = nt.down('form');
-               // f.loadRecord(sr);    //Load the record
-                //Get the parent node
-              //  f.down("#owner").setValue(sr.get('owner'));
             });
         }
     },
