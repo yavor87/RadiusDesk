@@ -61,7 +61,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3244 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3248 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `aros` (
 
 LOCK TABLES `aros` WRITE;
 /*!40000 ALTER TABLE `aros` DISABLE KEYS */;
-INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,18),(3117,NULL,'Group',10,NULL,19,182),(3118,3115,'User',44,NULL,2,3),(3151,3116,'User',67,NULL,6,7),(3152,3116,'User',68,NULL,8,9),(3153,3116,'User',69,NULL,10,11),(3154,3117,'User',70,NULL,20,21),(3155,3117,'User',71,NULL,22,23),(3156,3117,'User',72,NULL,24,25),(3157,3117,'User',73,NULL,26,27),(3158,3117,'User',74,NULL,28,29),(3159,3117,'User',75,NULL,30,31),(3160,3117,'User',76,NULL,32,33),(3161,3117,'User',77,NULL,34,35),(3162,3117,'User',78,NULL,36,37),(3163,3116,'User',79,NULL,12,13),(3164,3116,'User',80,NULL,14,15),(3165,3117,'User',81,NULL,38,39),(3166,3117,'User',82,NULL,40,41),(3167,3117,'User',83,NULL,42,43),(3168,3117,'User',84,NULL,44,45),(3169,3117,'User',85,NULL,46,47),(3170,3117,'User',86,NULL,48,49),(3171,3117,'User',87,NULL,50,51),(3172,3117,'User',88,NULL,52,53),(3173,3117,'User',89,NULL,54,55),(3174,3116,'User',90,NULL,16,17),(3175,3117,'User',91,NULL,56,57),(3176,3117,'User',92,NULL,58,59),(3177,3117,'User',93,NULL,60,61),(3178,3117,'User',94,NULL,62,63),(3179,3117,'User',95,NULL,64,65),(3180,3117,'User',96,NULL,66,67),(3181,3117,'User',97,NULL,68,69),(3182,3117,'User',98,NULL,70,71),(3183,3117,'User',99,NULL,72,73),(3184,3117,'User',100,NULL,74,75),(3185,3117,'User',101,NULL,76,77),(3186,3117,'User',102,NULL,78,79),(3187,3117,'User',103,NULL,80,81),(3188,3117,'User',104,NULL,82,83),(3189,3117,'User',105,NULL,84,85),(3190,3117,'User',106,NULL,86,87),(3191,3117,'User',107,NULL,88,89),(3192,3117,'User',108,NULL,90,91),(3193,3117,'User',109,NULL,92,93),(3194,3117,'User',110,NULL,94,95),(3195,3117,'User',111,NULL,96,97),(3196,3117,'User',112,NULL,98,99),(3197,3117,'User',113,NULL,100,101),(3198,3117,'User',114,NULL,102,103),(3199,3117,'User',115,NULL,104,105),(3200,3117,'User',116,NULL,106,107),(3201,3117,'User',117,NULL,108,109),(3202,3117,'User',118,NULL,110,111),(3203,3117,'User',119,NULL,112,113),(3204,3117,'User',120,NULL,114,115),(3205,3117,'User',121,NULL,116,117),(3206,3117,'User',122,NULL,118,119),(3207,3117,'User',123,NULL,120,121),(3208,3117,'User',124,NULL,122,123),(3209,3117,'User',125,NULL,124,125),(3210,3117,'User',126,NULL,126,127),(3211,3117,'User',127,NULL,128,129),(3212,3117,'User',128,NULL,130,131),(3213,3117,'User',129,NULL,132,133),(3214,3117,'User',130,NULL,134,135),(3215,3117,'User',131,NULL,136,137),(3216,3117,'User',132,NULL,138,139),(3217,3117,'User',133,NULL,140,141),(3218,3117,'User',134,NULL,142,143),(3219,3117,'User',135,NULL,144,145),(3220,3117,'User',136,NULL,146,147),(3221,3117,'User',137,NULL,148,149),(3222,3117,'User',138,NULL,150,151),(3223,3117,'User',139,NULL,152,153),(3224,3117,'User',140,NULL,154,155),(3225,3117,'User',141,NULL,156,157),(3226,3117,'User',142,NULL,158,159),(3227,3117,'User',143,NULL,160,161),(3228,3117,'User',144,NULL,162,163),(3229,3117,'User',145,NULL,164,165),(3230,3117,'User',146,NULL,166,167),(3231,3117,'User',147,NULL,168,169),(3232,3117,'User',148,NULL,170,171),(3233,3117,'User',149,NULL,172,173),(3234,3117,'User',150,NULL,174,175),(3235,3117,'User',151,NULL,176,177),(3236,3117,'User',152,NULL,178,179),(3243,3117,'User',159,NULL,180,181);
+INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,18),(3117,NULL,'Group',10,NULL,19,184),(3118,3115,'User',44,NULL,2,3),(3151,3116,'User',67,NULL,6,7),(3152,3116,'User',68,NULL,8,9),(3153,3116,'User',69,NULL,10,11),(3154,3117,'User',70,NULL,20,21),(3155,3117,'User',71,NULL,22,23),(3156,3117,'User',72,NULL,24,25),(3157,3117,'User',73,NULL,26,27),(3158,3117,'User',74,NULL,28,29),(3159,3117,'User',75,NULL,30,31),(3160,3117,'User',76,NULL,32,33),(3161,3117,'User',77,NULL,34,35),(3162,3117,'User',78,NULL,36,37),(3163,3116,'User',79,NULL,12,13),(3164,3116,'User',80,NULL,14,15),(3165,3117,'User',81,NULL,38,39),(3166,3117,'User',82,NULL,40,41),(3167,3117,'User',83,NULL,42,43),(3168,3117,'User',84,NULL,44,45),(3169,3117,'User',85,NULL,46,47),(3170,3117,'User',86,NULL,48,49),(3171,3117,'User',87,NULL,50,51),(3172,3117,'User',88,NULL,52,53),(3173,3117,'User',89,NULL,54,55),(3174,3116,'User',90,NULL,16,17),(3175,3117,'User',91,NULL,56,57),(3176,3117,'User',92,NULL,58,59),(3177,3117,'User',93,NULL,60,61),(3178,3117,'User',94,NULL,62,63),(3179,3117,'User',95,NULL,64,65),(3180,3117,'User',96,NULL,66,67),(3181,3117,'User',97,NULL,68,69),(3182,3117,'User',98,NULL,70,71),(3183,3117,'User',99,NULL,72,73),(3184,3117,'User',100,NULL,74,75),(3185,3117,'User',101,NULL,76,77),(3186,3117,'User',102,NULL,78,79),(3187,3117,'User',103,NULL,80,81),(3188,3117,'User',104,NULL,82,83),(3189,3117,'User',105,NULL,84,85),(3190,3117,'User',106,NULL,86,87),(3191,3117,'User',107,NULL,88,89),(3192,3117,'User',108,NULL,90,91),(3193,3117,'User',109,NULL,92,93),(3194,3117,'User',110,NULL,94,95),(3195,3117,'User',111,NULL,96,97),(3196,3117,'User',112,NULL,98,99),(3197,3117,'User',113,NULL,100,101),(3198,3117,'User',114,NULL,102,103),(3199,3117,'User',115,NULL,104,105),(3200,3117,'User',116,NULL,106,107),(3201,3117,'User',117,NULL,108,109),(3202,3117,'User',118,NULL,110,111),(3203,3117,'User',119,NULL,112,113),(3204,3117,'User',120,NULL,114,115),(3205,3117,'User',121,NULL,116,117),(3206,3117,'User',122,NULL,118,119),(3207,3117,'User',123,NULL,120,121),(3208,3117,'User',124,NULL,122,123),(3209,3117,'User',125,NULL,124,125),(3210,3117,'User',126,NULL,126,127),(3211,3117,'User',127,NULL,128,129),(3212,3117,'User',128,NULL,130,131),(3213,3117,'User',129,NULL,132,133),(3214,3117,'User',130,NULL,134,135),(3215,3117,'User',131,NULL,136,137),(3216,3117,'User',132,NULL,138,139),(3217,3117,'User',133,NULL,140,141),(3218,3117,'User',134,NULL,142,143),(3219,3117,'User',135,NULL,144,145),(3220,3117,'User',136,NULL,146,147),(3221,3117,'User',137,NULL,148,149),(3222,3117,'User',138,NULL,150,151),(3223,3117,'User',139,NULL,152,153),(3224,3117,'User',140,NULL,154,155),(3225,3117,'User',141,NULL,156,157),(3226,3117,'User',142,NULL,158,159),(3227,3117,'User',143,NULL,160,161),(3228,3117,'User',144,NULL,162,163),(3229,3117,'User',145,NULL,164,165),(3230,3117,'User',146,NULL,166,167),(3231,3117,'User',147,NULL,168,169),(3232,3117,'User',148,NULL,170,171),(3233,3117,'User',149,NULL,172,173),(3234,3117,'User',150,NULL,174,175),(3235,3117,'User',151,NULL,176,177),(3236,3117,'User',152,NULL,178,179),(3244,NULL,'User',160,NULL,185,186),(3243,3117,'User',159,NULL,180,181),(3246,3117,'User',162,NULL,182,183),(3247,NULL,'User',163,NULL,187,188);
 /*!40000 ALTER TABLE `aros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,11 +198,16 @@ CREATE TABLE `devices` (
   `name` varchar(128) NOT NULL,
   `description` varchar(255) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
+  `last_accept_time` datetime DEFAULT NULL,
+  `last_reject_time` datetime DEFAULT NULL,
+  `last_accept_nas` varchar(128) DEFAULT NULL,
+  `last_reject_nas` varchar(128) DEFAULT NULL,
+  `last_reject_message` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +216,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (13,'zz','zz',1,153,'2013-03-09 19:59:08','2013-03-09 19:59:08');
+INSERT INTO `devices` VALUES (13,'zz','zz',1,NULL,NULL,NULL,NULL,NULL,153,'2013-03-09 19:59:08','2013-03-09 19:59:08'),(15,'aa:aa:aa:aa:aa:aa','Test device',1,NULL,NULL,NULL,NULL,NULL,159,'2013-03-16 05:34:13','2013-03-16 05:34:13'),(16,'E4:11:5B:29:67:2B','Td2',1,'2013-03-16 14:38:02','2013-03-16 14:32:07','127.0.1.1','127.0.1.1','N/A',159,'2013-03-16 13:21:12','2013-03-16 13:21:12');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -554,7 +559,7 @@ CREATE TABLE `profile_components` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -563,7 +568,7 @@ CREATE TABLE `profile_components` (
 
 LOCK TABLES `profile_components` WRITE;
 /*!40000 ALTER TABLE `profile_components` DISABLE KEYS */;
-INSERT INTO `profile_components` VALUES (33,'m',0,44,'2013-02-16 22:01:03','2013-02-16 22:01:03'),(34,'chilli',0,44,'2013-03-06 12:04:18','2013-03-06 12:04:18'),(35,'test',1,44,'2013-03-06 20:37:31','2013-03-06 20:37:31'),(36,'chilli-promo',0,44,'2013-03-07 12:42:11','2013-03-07 12:42:11');
+INSERT INTO `profile_components` VALUES (33,'m',0,44,'2013-02-16 22:01:03','2013-02-16 22:01:03'),(34,'chilli',0,44,'2013-03-06 12:04:18','2013-03-06 12:04:18'),(35,'test',1,44,'2013-03-06 20:37:31','2013-03-06 20:37:31'),(36,'chilli-promo',0,44,'2013-03-07 12:42:11','2013-03-07 12:42:11'),(37,'20MegData',0,44,'2013-03-16 04:54:11','2013-03-16 04:54:11'),(38,'10MegData',0,44,'2013-03-16 05:27:57','2013-03-16 05:27:57');
 /*!40000 ALTER TABLE `profile_components` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -609,7 +614,7 @@ CREATE TABLE `profiles` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -618,7 +623,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,'Profile-A',0,44,'2013-03-04 06:27:05','2013-03-04 06:27:05'),(2,'Krillie',0,44,'2013-03-06 12:05:29','2013-03-06 12:05:29');
+INSERT INTO `profiles` VALUES (1,'Profile-A',0,44,'2013-03-04 06:27:05','2013-03-04 06:27:05'),(2,'Krillie',0,44,'2013-03-06 12:05:29','2013-03-06 12:05:29'),(3,'Device',0,44,'2013-03-16 05:30:07','2013-03-16 05:30:07'),(4,'Owner',0,44,'2013-03-16 05:30:27','2013-03-16 05:30:27');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -692,7 +697,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=268 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -701,7 +706,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (152,'zz','Rd-User-Type',':=','device'),(154,'zz','Rd-Device-Owner',':=','koos'),(155,'zz','User-Profile',':=','Krillie'),(156,'zz','Rd-Cap-Type',':=','hard'),(158,'rviljoen','Cleartext-Password',':=','rviljoen'),(159,'rviljoen','Rd-Realm',':=','realm_for_dp'),(160,'rviljoen','User-Profile',':=','Krillie'),(161,'rviljoen','Rd-Cap-Type',':=','hard'),(162,'rviljoen','Rd-Account-Disabled',':=','0'),(163,'rviljoen','Rd-User-Type',':=','user');
+INSERT INTO `radcheck` VALUES (152,'zz','Rd-User-Type',':=','device'),(154,'zz','Rd-Device-Owner',':=','koos'),(155,'zz','User-Profile',':=','Krillie'),(156,'zz','Rd-Cap-Type',':=','hard'),(158,'rviljoen','Cleartext-Password',':=','rviljoen'),(163,'rviljoen','Rd-User-Type',':=','user'),(180,'rviljoen','Rd-Account-Disabled',':=','0'),(182,'koos','Rd-User-Type',':=','user'),(183,'koos','Rd-Realm',':=','realm_for_dp'),(184,'koos','User-Profile',':=','Krillie'),(185,'koos','Rd-Cap-Type',':=','hard'),(188,'koos','Rd-Account-Disabled',':=','0'),(189,'koos','Cleartext-Password',':=','gooihom'),(244,'aa:aa:aa:aa:aa:aa','Rd-User-Type',':=','device'),(245,'aa:aa:aa:aa:aa:aa','Rd-Realm',':=','realm_for_dp'),(246,'aa:aa:aa:aa:aa:aa','Rd-Device-Owner',':=','rviljoen'),(247,'aa:aa:aa:aa:aa:aa','User-Profile',':=','Device'),(248,'aa:aa:aa:aa:aa:aa','Rd-Cap-Type',':=','hard'),(249,'aa:aa:aa:aa:aa:aa','Rd-Account-Disabled',':=','0'),(250,'E4:11:5B:29:67:2B','Rd-User-Type',':=','device'),(251,'E4:11:5B:29:67:2B','Rd-Realm',':=','realm_for_dp'),(252,'E4:11:5B:29:67:2B','Rd-Device-Owner',':=','rviljoen'),(253,'E4:11:5B:29:67:2B','User-Profile',':=','Device'),(254,'E4:11:5B:29:67:2B','Rd-Cap-Type',':=','hard'),(255,'E4:11:5B:29:67:2B','Rd-Account-Disabled',':=','0'),(265,'rviljoen','User-Profile',':=','Owner'),(266,'rviljoen','Rd-Realm',':=','realm_for_dp'),(267,'rviljoen','Rd-Cap-Type',':=','hard');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -723,7 +728,7 @@ CREATE TABLE `radgroupcheck` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `groupname` (`groupname`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -732,7 +737,7 @@ CREATE TABLE `radgroupcheck` (
 
 LOCK TABLES `radgroupcheck` WRITE;
 /*!40000 ALTER TABLE `radgroupcheck` DISABLE KEYS */;
-INSERT INTO `radgroupcheck` VALUES (2,'m','Rd-Reset-Type',':=','never','Never reset counter','2013-03-06 05:36:01','2013-03-06 05:36:22'),(3,'chilli','ChilliSpot-Version',':=','2','dummy thing','2013-03-06 12:04:47','2013-03-06 12:04:59'),(4,'chilli','Rd-Total-Bytes',':=','9126805504','Data cappie','2013-03-07 12:22:20','2013-03-07 12:22:43'),(5,'chilli','Rd-Reset-Type',':=','monthly','When should it reset','2013-03-07 12:23:02','2013-03-07 12:23:31'),(6,'chilli','Rd-Cap-Type',':=','hard','Type of cap hard or soft','2013-03-07 12:37:24','2013-03-07 12:40:49'),(7,'chilli-promo','Rd-Total-Bytes',':=','9126805511','','2013-03-07 12:43:31','2013-03-07 12:44:30'),(8,'chilli-promo','Rd-Cap-Type',':=','hard','','2013-03-07 12:43:39','2013-03-07 12:44:01'),(9,'chilli-promo','Rd-Reset-Type',':=','never','','2013-03-07 12:43:45','2013-03-07 12:43:52');
+INSERT INTO `radgroupcheck` VALUES (2,'m','Rd-Reset-Type',':=','never','Never reset counter','2013-03-06 05:36:01','2013-03-06 05:36:22'),(3,'chilli','ChilliSpot-Version',':=','2','dummy thing','2013-03-06 12:04:47','2013-03-06 12:04:59'),(4,'chilli','Rd-Total-Bytes',':=','9126805504','Data cappie','2013-03-07 12:22:20','2013-03-07 12:22:43'),(5,'chilli','Rd-Reset-Type',':=','monthly','When should it reset','2013-03-07 12:23:02','2013-03-07 12:23:31'),(6,'chilli','Rd-Cap-Type',':=','hard','Type of cap hard or soft','2013-03-07 12:37:24','2013-03-07 12:40:49'),(7,'chilli-promo','Rd-Total-Bytes',':=','9126805511','','2013-03-07 12:43:31','2013-03-07 12:44:30'),(8,'chilli-promo','Rd-Cap-Type',':=','hard','','2013-03-07 12:43:39','2013-03-07 12:44:01'),(9,'chilli-promo','Rd-Reset-Type',':=','never','','2013-03-07 12:43:45','2013-03-07 12:43:52'),(10,'20MegData','Rd-Total-Bytes',':=','20000000','','2013-03-16 04:55:04','2013-03-16 05:09:49'),(12,'20MegData','Rd-Reset-Type',':=','never','','2013-03-16 04:55:25','2013-03-16 05:05:29'),(13,'10MegData','Rd-Total-Bytes',':=','10000000','','2013-03-16 05:28:33','2013-03-16 05:29:12'),(15,'10MegData','Rd-Reset-Type',':=','never','','2013-03-16 05:28:48','2013-03-16 05:28:58');
 /*!40000 ALTER TABLE `radgroupcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -782,7 +787,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -791,7 +796,7 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
-INSERT INTO `radpostauth` VALUES (2,'rviljoen','gif','Access-Reject','127.0.1.1','2013-03-12 12:36:21'),(3,'rviljoen','gif','Access-Reject','127.0.1.1','2013-03-12 12:36:21'),(4,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(5,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(6,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(7,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(8,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(9,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(10,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(11,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(12,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(13,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(14,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(15,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(16,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(17,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(18,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(19,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(20,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(21,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(22,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(23,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(24,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(25,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(26,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(27,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(28,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(29,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(30,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(31,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(32,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(33,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(34,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(35,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(36,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(37,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(38,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(39,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(40,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(41,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(42,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(43,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(44,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(45,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(46,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(47,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(48,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(49,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(50,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(51,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(53,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:23'),(54,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:25'),(55,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:26'),(56,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:48:37'),(57,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:49:07'),(58,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 13:03:51'),(59,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 13:03:52');
+INSERT INTO `radpostauth` VALUES (2,'rviljoen','gif','Access-Reject','127.0.1.1','2013-03-12 12:36:21'),(3,'rviljoen','gif','Access-Reject','127.0.1.1','2013-03-12 12:36:21'),(4,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(5,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(6,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(7,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(8,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(9,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(10,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(11,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(12,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(13,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(14,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(15,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(16,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(17,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(18,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(19,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(20,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(21,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(22,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(23,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(24,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(25,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(26,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(27,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(28,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(29,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(30,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(31,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(32,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(33,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(34,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(35,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(36,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(37,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(38,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(39,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(40,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(41,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(42,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(43,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(44,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(45,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(46,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(47,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(48,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(49,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(50,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(51,'rviljoen','oog','Access-Accept','127.0.1.1','2013-03-12 12:36:21'),(53,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:23'),(54,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:25'),(55,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:13:26'),(56,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:48:37'),(57,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 12:49:07'),(58,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 13:03:51'),(59,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-13 13:03:52'),(60,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-14 04:38:50'),(61,'koos','lekkerlekker','Access-Accept','127.0.1.1','2013-03-14 06:55:48'),(62,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 03:46:43'),(63,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 03:46:47'),(64,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 03:46:48'),(65,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:00:23'),(66,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:02:03'),(67,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:05:44'),(68,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:06:31'),(69,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:07:02'),(70,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:07:47'),(71,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:08:34'),(72,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 05:10:05'),(73,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 05:10:22'),(74,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 05:10:23'),(75,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 05:10:37'),(76,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 05:24:51'),(77,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 10:42:23'),(78,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 11:33:19'),(79,'aa:aa:aa:aa:aa:aa','koos','Access-Accept','127.0.1.1','2013-03-16 11:33:33'),(80,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:34:45'),(81,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 11:45:09'),(82,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 11:45:18'),(83,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:22'),(84,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:24'),(85,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:25'),(86,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:26'),(87,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:28'),(88,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:29'),(89,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:30'),(90,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:32'),(91,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:33'),(92,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:34'),(93,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:36'),(94,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:37'),(95,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:38'),(96,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:40'),(97,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:42'),(98,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:43'),(99,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:44'),(100,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:50:46'),(101,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:51:44'),(102,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:51:47'),(103,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 11:54:51'),(104,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 11:54:54'),(105,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 11:56:09'),(106,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:56:20'),(107,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:59:55'),(108,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:59:56'),(109,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 11:59:58'),(110,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:00:03'),(111,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:04:53'),(112,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:04:55'),(113,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:04:56'),(114,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:04:59'),(115,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:05:07'),(116,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:05:23'),(117,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:06:06'),(118,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:06:21'),(119,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:08:43'),(120,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:10:30'),(121,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:10:32'),(122,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:10:51'),(123,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:44'),(124,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:45'),(125,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:46'),(126,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:47'),(127,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:49'),(128,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:13:50'),(129,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:15:04'),(130,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:15:05'),(131,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:15:06'),(132,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:32:06'),(133,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:35:33'),(134,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:36:24'),(135,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:36:55'),(136,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:37:01'),(137,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:37:51'),(138,'rviljoen','rviljoen','Access-Accept','127.0.1.1','2013-03-16 12:37:54'),(139,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:37:58'),(140,'E4:11:5B:29:67:2B','koos','Access-Accept','127.0.1.1','2013-03-16 12:38:02');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -810,7 +815,7 @@ CREATE TABLE `radreply` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -837,7 +842,7 @@ CREATE TABLE `radusergroup` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -846,7 +851,7 @@ CREATE TABLE `radusergroup` (
 
 LOCK TABLES `radusergroup` WRITE;
 /*!40000 ALTER TABLE `radusergroup` DISABLE KEYS */;
-INSERT INTO `radusergroup` VALUES (1,'Profile-A','m',100),(2,'Krillie','chilli',100);
+INSERT INTO `radusergroup` VALUES (1,'Profile-A','m',100),(2,'Krillie','chilli',100),(5,'Owner','10MegData',100),(6,'Device','20MegData',100);
 /*!40000 ALTER TABLE `radusergroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1118,7 +1123,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1127,7 +1132,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,16,'2012-12-10 13:14:13','2013-03-12 08:44:12'),(67,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','511b6b00-3c40-4446-93be-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,13,'2013-02-13 12:29:20','2013-03-12 08:44:12'),(68,'bp','e5334c5a65adb2d141f723c9bb426445f743fb7c','511b6e68-8334-4b50-8892-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,3,8,'2013-02-13 12:43:52','2013-03-12 08:44:12'),(69,'bp1','07fd854446daad77f79a8388534d2b904e4f05c6','511b6e8a-079c-49ae-bb8f-044103662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,9,10,'2013-02-13 12:44:26','2013-03-12 08:44:12'),(79,'bp2','a231ed186f0a685415965223371b497cdf19f236','511b6ea8-46c4-4192-aaba-043f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,11,12,'2013-02-13 12:44:56','2013-03-12 08:44:12'),(80,'cp','127ba535b6d230a05476d1c333d156d478ae6d66','511b6fdf-8c48-4c1b-9711-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,68,4,7,'2013-02-13 12:50:07','2013-03-12 08:44:12'),(90,'dp','ec0fa9843ef09c888b620b3094f5d20b4c08e96a','511b819d-2c1c-4094-993b-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,80,5,6,'2013-02-13 14:05:49','2013-03-12 08:44:12'),(159,'rviljoen','f0fe3454c17b15bcd222188023ecb9fcf1d96b51','513ecf14-00ec-41b5-ac1e-1f8403662c24','Renier','Viljoen','619 Graniet Street\nSilverton\nPretoria','123456789','rviljoen@gmail.com','sql',1,0,'2013-03-13 15:03:52','2013-03-13 14:18:55','127.0.1.1','127.0.1.1','N/A',4,10,4,44,14,15,'2013-03-12 08:45:40','2013-03-13 12:11:41');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','50c5c405-06f0-418b-8d34-6a9d03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,18,'2012-12-10 13:14:13','2013-03-14 08:20:47'),(67,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','511b6b00-3c40-4446-93be-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,13,'2013-02-13 12:29:20','2013-03-14 08:20:47'),(68,'bp','e5334c5a65adb2d141f723c9bb426445f743fb7c','511b6e68-8334-4b50-8892-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,3,8,'2013-02-13 12:43:52','2013-03-14 08:20:47'),(69,'bp1','07fd854446daad77f79a8388534d2b904e4f05c6','511b6e8a-079c-49ae-bb8f-044103662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,9,10,'2013-02-13 12:44:26','2013-03-14 08:20:47'),(79,'bp2','a231ed186f0a685415965223371b497cdf19f236','511b6ea8-46c4-4192-aaba-043f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,67,11,12,'2013-02-13 12:44:56','2013-03-14 08:20:47'),(80,'cp','127ba535b6d230a05476d1c333d156d478ae6d66','511b6fdf-8c48-4c1b-9711-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,68,4,7,'2013-02-13 12:50:07','2013-03-14 08:20:47'),(90,'dp','ec0fa9843ef09c888b620b3094f5d20b4c08e96a','511b819d-2c1c-4094-993b-043e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,80,5,6,'2013-02-13 14:05:49','2013-03-14 08:20:47'),(159,'rviljoen','f0fe3454c17b15bcd222188023ecb9fcf1d96b51','513ecf14-00ec-41b5-ac1e-1f8403662c24','Renier','Viljoen','619 Graniet Street\nSilverton\nPretoria','','rviljoen@gmail.com','sql',1,0,'2013-03-16 14:37:54','2013-03-16 12:41:30','127.0.1.1','127.0.1.1','User rviljoen account disabled',4,10,4,44,14,15,'2013-03-12 08:45:40','2013-03-15 19:33:56'),(162,'koos','f266f65e86b70b942a38a9f0418948b4632bf733','514175b0-3f70-4cda-b2d9-043603662c24','','Botha','','','','sql',1,0,'2013-03-14 08:55:48','2013-03-16 05:35:35','127.0.1.1','127.0.1.1','N/A',4,10,4,44,16,17,'2013-03-14 08:21:22','2013-03-14 13:39:57');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1140,4 +1145,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-13 21:26:48
+-- Dump completed on 2013-03-16 14:41:58
