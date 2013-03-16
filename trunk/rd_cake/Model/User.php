@@ -264,7 +264,7 @@ class User extends AppModel {
         $this->Radcheck->id         = null;
     }
 
-     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
+    private function _replace_radcheck_item($username,$item,$value,$op = ":="){
 
         $this->Radcheck = ClassRegistry::init('Radcheck');
         $this->Radcheck->deleteAll(
