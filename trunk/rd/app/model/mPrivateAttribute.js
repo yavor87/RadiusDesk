@@ -5,6 +5,8 @@ Ext.define('Rd.model.mPrivateAttribute', {
         {name: 'type',         type: 'string'  },
         {name: 'attribute',    type: 'string'  },
         {name: 'op',           type: 'string'  },
-        {name: 'value',        type: 'string'  }
+        {name: 'value',        type: 'string'  },
+        {name: 'edit',         type: 'bool'    },
+        {name: 'delete',       type: 'bool'    }
         ]
 });

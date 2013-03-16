@@ -550,6 +550,12 @@ Ext.define('Rd.controller.cDesktop', {
         console.log(record.get('img'));
         var wp = record.get('r_dir')+record.get('file');
         me.setWallpaper(wp);
+        Ext.ux.Toaster.msg(
+                        i18n('sWalpaper_changed'),
+                        i18n('sWalpaper_changed_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+            );
     }
 
 });

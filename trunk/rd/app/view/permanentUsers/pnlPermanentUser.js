@@ -171,6 +171,9 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         },  
         { 
             title   : i18n('sDevices'),
+            layout  : 'fit',
+            xtype   : 'gridUserDevices',  
+            user_id : me.pu_id
         },
         { 
             title   : i18n('sPrivate_attributes'),

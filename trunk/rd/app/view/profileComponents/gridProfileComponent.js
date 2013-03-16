@@ -7,62 +7,6 @@ Ext.define('Rd.view.profileComponents.gridProfileComponent' ,{
     stateEvents:['groupclick','columnhide'],
     border: false,
     comp_id:  null,
-    columns: [
-        {xtype: 'rownumberer'},
-        {
-            header: i18n('sType'),
-            dataIndex: 'type',
-            width: 130,
-            tdCls: 'grdEditable',
-            editor: {
-                xtype: 'combobox',
-                typeAhead: true,
-                triggerAction: 'all',
-                selectOnTab: true,
-                store: [
-                    ['check','Check'],
-                    ['reply','Reply']
-                ],
-                lazyRender: true,
-                listClass: 'x-combo-list-small'
-            },
-            renderer: function(value){
-                if(value == "check"){
-                    return i18n('sCheck');
-                }else{
-                    return i18n('sReply');
-                }
-            }
-        },
-        { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1},
-        {
-            header: i18n('sOperator'),
-            dataIndex: 'op',
-            width: 100,
-            tdCls: 'grdEditable',
-            editor: {
-                allowBlank: false,
-                xtype: 'combobox',
-                typeAhead: true,
-                triggerAction: 'all',
-                selectOnTab: true,
-                store: [
-                    ['=' ,  '=' ],
-                    [':=',  ':='],
-                    ['+=',  '+='],
-                    ['==',  '=='],
-                    ['-=',  '-='],
-                    ['<=',  '<='],
-                    ['>=',  '>='],
-                    ['!*',  '!*']
-                ],
-                lazyRender: true,
-                listClass: 'x-combo-list-small'
-            }
-        },
-        { text: i18n('sValue'),        dataIndex: 'value',     tdCls: 'grdEditable', flex: 1,editor: { xtype: 'textfield',    allowBlank: false}},
-        { text: i18n('sComment'),      dataIndex: 'comment',   tdCls: 'grdEditable', flex: 1,editor: { xtype: 'textfield',  allowBlank: true}}
-    ],
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 
             {   xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
@@ -77,14 +21,15 @@ Ext.define('Rd.view.profileComponents.gridProfileComponent' ,{
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ],
     initComponent: function(){
 
         var me = this;
+
+        //Very important to avoid weird behaviour:
+        me.plugins = [Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1
+        })];
+
         //Create a store specific to this Access Provider
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mProfileComponentEdit',
@@ -145,6 +90,62 @@ Ext.define('Rd.view.profileComponents.gridProfileComponent' ,{
             autoLoad: true    
         });
 
+        me.columns = [
+            {xtype: 'rownumberer'},
+            {
+                header: i18n('sType'),
+                dataIndex: 'type',
+                width: 130,
+                tdCls: 'grdEditable',
+                editor: {
+                    xtype: 'combobox',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    selectOnTab: true,
+                    store: [
+                        ['check','Check'],
+                        ['reply','Reply']
+                    ],
+                    lazyRender: true,
+                    listClass: 'x-combo-list-small'
+                },
+                renderer: function(value){
+                    if(value == "check"){
+                        return i18n('sCheck');
+                    }else{
+                        return i18n('sReply');
+                    }
+                }
+            },
+            { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1},
+            {
+                header: i18n('sOperator'),
+                dataIndex: 'op',
+                width: 100,
+                tdCls: 'grdEditable',
+                editor: {
+                    allowBlank: false,
+                    xtype: 'combobox',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    selectOnTab: true,
+                    store: [
+                        ['=' ,  '=' ],
+                        [':=',  ':='],
+                        ['+=',  '+='],
+                        ['==',  '=='],
+                        ['-=',  '-='],
+                        ['<=',  '<='],
+                        ['>=',  '>='],
+                        ['!*',  '!*']
+                    ],
+                    lazyRender: true,
+                    listClass: 'x-combo-list-small'
+                }   
+            },
+            { text: i18n('sValue'),        dataIndex: 'value',     tdCls: 'grdEditable', flex: 1,editor: { xtype: 'textfield',    allowBlank: false}},
+            { text: i18n('sComment'),      dataIndex: 'comment',   tdCls: 'grdEditable', flex: 1,editor: { xtype: 'textfield',  allowBlank: true}}
+        ];
         me.callParent(arguments);
     }
 });
