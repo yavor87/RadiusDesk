@@ -568,8 +568,298 @@ class PermanentUsersController extends AppController {
         }
     }
 
-    public function view_private_attributes(){
+    public function private_attr_index(){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+
+        $read_only_attributes = array(
+            'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
+            'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
+            'Rd-Cap-Type', 'Rd-Realm', 'Cleartext-Password'
+        );
+
+       // $exclude_attribues = array(
+       //     'Cleartext-Password'
+       // )
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $q_r = ClassRegistry::init('Radcheck')->find('all',array('conditions' => array('Radcheck.username' => $username)));
+            foreach($q_r as $i){
+                $edit_flag      = true;
+                $delete_flag    = true;
+                if(in_array($i['Radcheck']['attribute'],$read_only_attributes)){
+                    $edit_flag      = false;
+                    $delete_flag    = false;
+                }     
+
+                array_push($items,array(
+                    'id'        => 'chk_'.$i['Radcheck']['id'],
+                    'type'      => 'check', 
+                    'attribute' => $i['Radcheck']['attribute'],
+                    'op'        => $i['Radcheck']['op'],
+                    'value'     => $i['Radcheck']['value'],
+                    'edit'      => $edit_flag,
+                    'delete'    => $delete_flag
+                ));
+            }
+
+            $q_r = ClassRegistry::init('Radreply')->find('all',array('conditions' => array('Radreply.username' => $username)));
+            foreach($q_r as $i){
+                $edit_flag      = true;
+                $delete_flag    = true;
+                if(in_array($i['Radreply']['attribute'],$read_only_attributes)){
+                    $edit_flag      = false;
+                    $delete_flag    = false;
+                }     
+
+                array_push($items,array(
+                    'id'        => 'rpl_'.$i['Radreply']['id'],
+                    'type'      => 'reply', 
+                    'attribute' => $i['Radreply']['attribute'],
+                    'op'        => $i['Radreply']['op'],
+                    'value'     => $i['Radreply']['value'],
+                    'edit'      => $edit_flag,
+                    'delete'    => $delete_flag
+                ));
+            }
+        }
+
+        $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    public function private_attr_add(){
+
+         if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $this->request->data['username'] = $username;
+
+            //CHECK
+            if($this->request->data['type'] == 'check'){
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->create();
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //REPLY
+            if($this->request->data['type'] == 'reply'){
+                $rr = ClassRegistry::init('Radreply');
+                $rr->create();
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+        }
+    }
+
+   public function private_attr_edit(){
+
+         if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $this->request->data['username'] = $username;
+
+            //Check if the type check was not changed
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='check')){ //check Type remained the same
+                //Get the id for this one
+                $type_id            = explode( '_', $this->data['id']);
+                $this->request->data['id']   = $type_id[1];
+                $rc = ClassRegistry::init('Radcheck');
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                }else{
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //Check if the type reply was not changed
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->data['type']=='reply')){ //reply Type remained the same
+                //Get the id for this one
+                $type_id            = explode( '_', $this->request->data['id']);
+                $this->request->data['id']   = $type_id[1];
+                $rr = ClassRegistry::init('Radreply');
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //____ Attribute Type changes ______
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='reply')){
+                //Delete the check; add a reply
+                $type_id            = explode( '_', $this->request->data['id']);
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->id = $type_id[1];
+                $rc->delete();
+
+                //Create
+                $rr = ClassRegistry::init('Radreply');
+                $rr->create();
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->request->data['type']=='check')){
+
+                //Delete the check; add a reply
+                $type_id            = explode( '_', $this->request->data['id']);
+                $rr = ClassRegistry::init('Radreply');
+                $rr->id = $type_id[1];
+                $rr->delete();
+
+                //Create
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->create();
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+        }
+    }
+
+    public function private_attr_delete(){
+
+        $fail_flag = true;
+
+        $rc = ClassRegistry::init('Radcheck');
+        $rr = ClassRegistry::init('Radreply');
+
+        if(isset($this->data['id'])){   //Single item delete
+            $type_id            = explode( '_', $this->request->data['id']);
+            if(preg_match("/^chk_/",$this->request->data['id'])){
+                $rc->id = $type_id[1];
+                $rc->delete();
+            }
+
+            if(preg_match("/^rpl_/",$this->request->data['id'])){   
+                $rr->id = $type_id[1];
+                $rr->delete();
+            }
+            
+            $fail_flag = false;
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                $type_id            = explode( '_', $d['id']);
+                if(preg_match("/^chk_/",$d['id'])){
+                    $rc->id = $type_id[1];
+                    $rc->delete();
+                }
+                if(preg_match("/^rpl_/",$d['id'])){   
+                    $rr->id = $type_id[1];
+                    $rr->delete();
+                }          
+                $fail_flag = false;  
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
     }
 
     public function view_tracking(){
