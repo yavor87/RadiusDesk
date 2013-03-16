@@ -1,0 +1,165 @@
+Ext.define('Rd.view.devices.pnlDevice', {
+    extend: 'Ext.tab.Panel',
+    alias: 'widget.pnlDevice',
+    border: false,
+    d_id: null,
+    d_name: null,
+    initComponent: function(){
+        var me      = this;
+        //Set default values for from and to:
+        var dtFrom  = new Date();
+        var dtTo    = new Date();
+        dtTo.setYear(dtTo.getFullYear() + 1);
+
+        me.items = [
+        {   
+            title:  i18n('sBasic_info'),
+            itemId : 'tabBasicInfo',
+            layout: 'hbox',
+            items:  { 
+                xtype   :  'form',
+                height  : '100%', 
+                width   :  400,
+                layout  : 'anchor',
+                autoScroll:true,
+                frame   : true,
+                defaults    : {
+                    anchor: '100%'
+                },
+                fieldDefaults: {
+                    msgTarget: 'under',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'left',
+                    labelSeparator: '',
+                    margin: 15
+                },
+                items       : [               
+                    {
+                        xtype       : 'cmbProfile',
+                        allowBlank  : false,
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'profile'
+                    },
+                    {
+                        xtype       : 'cmbCap',
+                        allowBlank  : false,
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'cap',
+                        hidden      : true,
+                        value       : 'hard'
+                    },
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : i18n('sAlways_active'),
+                        name        : 'always_active',
+                        inputValue  : 'always_active',
+                        itemId      : 'always_active',
+                        checked     : true,
+                        boxLabelCls : 'lblRdCheck'
+                    },
+                    {
+                        xtype       : 'datefield',
+                        fieldLabel  : i18n('sFrom'),
+                        name        : 'from_date',
+                        itemId      : 'from_date',
+                        minValue    : new Date(),  // limited to the current date or after
+                        hidden      : true,
+                        disabled    : true,
+                        value       : dtFrom
+                    },
+                    {
+                        xtype       : 'datefield',
+                        fieldLabel  : i18n('sTo'),
+                        name        : 'to_date',
+                        itemId      : 'to_date',
+                        minValue    : new Date(),  // limited to the current date or after
+                        hidden      : true,
+                        disabled    : true,
+                        value       : dtTo
+                    }
+                ],
+                buttons: [
+                    {
+                        itemId: 'save',
+                        text: i18n('sSave'),
+                        scale: 'large',
+                        iconCls: 'b-save',
+                        margin: '0 20 40 0'
+                    }
+                ]
+            }  
+        },
+        { 
+            title   : i18n('sPrivate_attributes'),
+            layout  : 'fit',
+          //  xtype   : 'gridDevicePrivate',  
+            username: me.d_name
+        },
+        { 
+            title   : i18n('sTracking'),
+            itemId: 'tabTracking',
+            layout: 'hbox',
+            items:  { 
+                xtype   :  'form',
+                height  : '100%', 
+                width   :  400,
+                autoScroll:true,
+                layout  : 'anchor',
+                frame   : true,
+                defaults    : {
+                    anchor: '100%'
+                },
+                fieldDefaults: {
+                    msgTarget: 'under',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'left',
+                    labelSeparator: '',
+                    margin: 15
+                },
+                items       : [
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : i18n('sRADIUS_authentication'),
+                        name        : 'track_auth',
+                        inputValue  : 'track_auth',
+                        checked     : true,
+                        boxLabelCls : 'lblRdCheck'
+                    },
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : i18n('sRADIUS_accounting'),
+                        name        : 'track_acct',
+                        inputValue  : 'track_acct',
+                        checked     : true,
+                        boxLabelCls : 'lblRdCheck'
+                    }                
+                ],
+                buttons: [
+                    {
+                        itemId: 'save',
+                        text: i18n('sSave'),
+                        scale: 'large',
+                        iconCls: 'b-save',
+                        margin: '0 20 40 0'
+                    }
+                ]
+            }
+        },
+        { 
+            title   : i18n('sAuthentication_data'),
+            layout  : 'fit',
+          //  xtype   : 'gridUserRadpostauths',  
+            cs_id   : me.d_name
+        },
+        { 
+            title   : i18n('sAccounting_data'), 
+            layout  : 'fit',
+          //  xtype   : 'gridUserRadaccts',
+            cs_id   : me.d_name
+        }  
+    ]; 
+
+
+        me.callParent(arguments);
+    }
+});

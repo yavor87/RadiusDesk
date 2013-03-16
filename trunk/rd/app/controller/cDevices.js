@@ -46,7 +46,8 @@ Ext.define('Rd.controller.cDevices', {
     views:  [
        'components.pnlBanner',          'devices.gridDevices',    'devices.winDeviceAddWizard',
        'components.cmbPermanentUser',   'components.cmbProfile',  'components.cmbCap',
-       'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect'
+       'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect',
+       'components.winEnableDisable',   'devices.pnlDevice'
     ],
     stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices'  ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice'   ],
@@ -56,7 +57,8 @@ Ext.define('Rd.controller.cDevices', {
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/devices/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json'
+        urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json',
+        urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json',
     },
     refs: [
         {  ref: 'grid',  selector:   'gridDevices'}       
@@ -81,13 +83,16 @@ Ext.define('Rd.controller.cDevices', {
                 click:      me.del
             },
             'gridDevices #edit'   : {
-              //  click:      me.edit
+                click:      me.edit
             },
             'gridDevices #note'   : {
                 click:      me.note
             },
             'gridDevices #csv'  : {
                 click:      me.csvExport
+            },
+            'gridDevices #enable_disable' : {
+                click:      me.enableDisable
             },
             'gridDevices'   : {
               //  select:      me.select
@@ -140,6 +145,9 @@ Ext.define('Rd.controller.cDevices', {
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
+            },
+            'winEnableDisable #save': {
+                click: me.enableDisableSubmit
             }
         });
 
@@ -319,7 +327,48 @@ Ext.define('Rd.controller.cDevices', {
         var count   = me.getStore('sDevices').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
+    edit:   function(){
+        console.log("Edit device");  
+        var me = this;
+        //See if there are anything selected... if not, inform the user
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
 
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var d_id        = sr.getId();
+                var d_tab_id    = 'dTab_'+d_id;
+                var nt          = tp.down('#'+d_tab_id);
+                if(nt){
+                    tp.setActiveTab(d_tab_id); //Set focus on  Tab
+                    return;
+                }
+
+                var d_tab_name = sr.get('name');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     d_tab_name,
+                    itemId:     d_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlDevice',d_id: d_id, d_name: d_tab_name}
+                });
+                tp.setActiveTab(d_tab_id); //Set focus on Add Tab             
+            });
+        }
+    },
     csvExport: function(button,format) {
         var me          = this;
         me.getGrid().mask.show(); 
@@ -579,6 +628,56 @@ Ext.define('Rd.controller.cDevices', {
                 }
             });
         }
-    }
+    },
+    enableDisable: function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+            me.maskHide(); 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
+        }
+    },
+    enableDisableSubmit:function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var extra_params    = {};
+        var s               = me.getGrid().getSelectionModel().getSelection();
+        Ext.Array.each(s,function(record){
+            var r_id = record.getId();
+            extra_params[r_id] = r_id;
+        });
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEnableDisable,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
 
 });
