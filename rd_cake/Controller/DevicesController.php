@@ -159,7 +159,12 @@ class DevicesController extends AppController {
                     'description'   => $i['Device']['description'], 
                     'realm'         => $realm,
                     'profile'       => $profile,
-                    'active'        => $i['Device']['active'], 
+                    'active'        => $i['Device']['active'],
+                    'last_accept_time'      => $i['Device']['last_accept_time'],
+                    'last_accept_nas'       => $i['Device']['last_accept_nas'],
+                    'last_reject_time'      => $i['Device']['last_reject_time'],
+                    'last_reject_nas'       => $i['Device']['last_reject_nas'],
+                    'last_reject_message'   => $i['Device']['last_reject_message'],
                     'notes'         => $notes_flag
                 )
             );
@@ -446,6 +451,41 @@ class DevicesController extends AppController {
     }
 
     //--------- END BASIC CRUD ---------------------------
+
+    public function enable_disable(){
+        
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $rb     = $this->request->data['rb'];
+        $d      = array();
+        //For this action to sucees on the User model we need: 
+        // id; group_id; active
+
+
+        if($rb == 'enable'){
+            $d['Device']['active'] = 1;
+        }else{
+            $d['Device']['active'] = 0;
+        }
+
+        foreach(array_keys($this->request->data) as $key){
+            if(preg_match('/^\d+/',$key)){
+                $d['Device']['id']              = $key;
+                $this->{$this->modelClass}->id  = $key;
+                $this->{$this->modelClass}->save($d);   
+            }
+        }
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success',)
+        ));
+    }
+
 
     //----- Menus ------------------------
     public function menu_for_grid(){
