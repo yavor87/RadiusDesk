@@ -3,7 +3,7 @@ Ext.define('Rd.view.components.cmbPermanentUser', {
     alias : 'widget.cmbPermanentUser',
     fieldLabel: i18n('sOwner'),
     labelSeparator: '',
-    store: 'sPermanentUsers',
+  //  store: 'sPermanentUsers',
     forceSelection: true,
     queryMode: 'remote',
     valueField: 'id',
@@ -14,6 +14,31 @@ Ext.define('Rd.view.components.cmbPermanentUser', {
     name: 'user_id',
     labelClsExtra: 'lblRd',
     initComponent: function() {
+        var me= this;
+        var s = Ext.create('Ext.data.Store', {
+            model: 'Rd.model.mPermanentUser',
+            //To make it load AJAXly from the server specify the follown 3 attributes
+            buffered: true,
+            leadingBufferZone: 150, 
+            pageSize: 50,
+            //To force server side sorting:
+            remoteSort: true,
+            proxy: {
+                type    : 'ajax',
+                format  : 'json',
+                batchActions: true, 
+                url     : '/cake2/rd_cake/permanent_users/index.json',
+                reader: {
+                    type: 'json',
+                    root: 'items',
+                    messageProperty: 'message',
+                    totalProperty: 'totalCount' //Required for dynamic paging
+                },
+                simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
+            },
+            autoLoad: false
+        });
+        me.store = s;
         this.callParent(arguments);
     }
 });

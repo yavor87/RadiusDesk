@@ -55,7 +55,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
-      //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json',
@@ -115,6 +114,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'gridPermanentUsers'   : {
                 select:      me.select
+            },
+            'gridPermanentUsers'    : {
+                activate:      me.gridActivate
             },
             'winPermanentUserAddWizard' :{
                 toFront: me.maskHide
@@ -177,7 +179,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 click:      me.genericDelete
             },
             'pnlPermanentUser gridUserRadpostauths' : {
-                activate:      me.onUserRadpostauthsActivate
+                activate:      me.gridActivate
             },
             'pnlPermanentUser gridUserRadaccts #reload' :{
                 click:      me.gridUserRadacctsReload
@@ -186,10 +188,16 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 click:      me.genericDelete
             },
             'pnlPermanentUser gridUserRadaccts' : {
-                activate:      me.onUserRadacctsActivate
+                activate:      me.gridActivate
+            },
+            'pnlPermanentUser gridUserDevices' : {
+                activate:      me.gridActivate
+            },
+            'pnlPermanentUser gridUserDevices #reload' :{
+                click:      me.gridUserDevicesReload
             },
             'pnlPermanentUser gridUserPrivate' : {
-                activate:      me.onUserPrivateActivate
+                activate:      me.gridActivate
             },
             'pnlPermanentUser #profile' : {
                 change:  me.cmbProfileChange
@@ -241,7 +249,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'gridUserPrivate  #delete': {
                 click:      me.attrDelete
-            },
+            }
         });
     },
     reload: function(){
@@ -251,6 +259,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
     maskHide:   function(){
         var me =this;
         me.getGrid().mask.hide();
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     add: function(button){  
         var me = this;
@@ -896,22 +908,15 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             failure             : Ext.ux.formFail
         });
-    },
-    onUserRadpostauthsActivate: function(g){
-        var me = this;
-        g.getStore().load();
-    },
+    },  
     gridUserRadpostauthsReload: function(button){
         var me  = this;
         var g = button.up('gridUserRadpostauths');
         g.getStore().reload();
     },
-    onUserRadacctsActivate: function(g){
-        var me = this;
-        g.getStore().load();
-    },
-    onUserPrivateActivate: function(g){
-        var me = this;
+    gridUserDevicesReload: function(button){
+        var me  = this;
+        var g = button.up('gridUserDevices');
         g.getStore().load();
     },
     gridUserRadacctsReload: function(button){
@@ -1041,7 +1046,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             failure             : Ext.ux.formFail
         });
     },
-     onTabTrackingActive: function(t){
+    onTabTrackingActive: function(t){
         var me      = this;
         var form    = t.down('form');
         //get the user's id

@@ -33,7 +33,21 @@ Ext.define('Rd.view.devices.pnlDevice', {
                     labelSeparator: '',
                     margin: 15
                 },
-                items       : [               
+                items       : [
+                    {
+                        xtype       : 'textfield',
+                        fieldLabel  : i18n('sDescription'),
+                        name        : "description",
+                        allowBlank  : false,
+                        blankText   : i18n('sSupply_a_value'),
+                        labelClsExtra: 'lblRdReq'
+                    },
+                    {
+                        xtype       : 'cmbPermanentUser',
+                        allowBlank  : false,
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'owner'
+                    },             
                     {
                         xtype       : 'cmbProfile',
                         allowBlank  : false,
@@ -92,7 +106,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
         { 
             title   : i18n('sPrivate_attributes'),
             layout  : 'fit',
-          //  xtype   : 'gridDevicePrivate',  
+            xtype   : 'gridDevicePrivate',  
             username: me.d_name
         },
         { 
@@ -148,14 +162,14 @@ Ext.define('Rd.view.devices.pnlDevice', {
         { 
             title   : i18n('sAuthentication_data'),
             layout  : 'fit',
-          //  xtype   : 'gridUserRadpostauths',  
-            cs_id   : me.d_name
+            xtype   : 'gridDeviceRadpostauths',  
+            username: me.d_name
         },
         { 
             title   : i18n('sAccounting_data'), 
             layout  : 'fit',
-          //  xtype   : 'gridUserRadaccts',
-            cs_id   : me.d_name
+            xtype   : 'gridDeviceRadaccts',
+            username: me.d_name
         }  
     ]; 
 
