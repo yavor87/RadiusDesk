@@ -47,17 +47,24 @@ Ext.define('Rd.controller.cDevices', {
        'components.pnlBanner',          'devices.gridDevices',    'devices.winDeviceAddWizard',
        'components.cmbPermanentUser',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect',
-       'components.winEnableDisable',   'devices.pnlDevice'
+       'components.winEnableDisable',   'devices.pnlDevice',      'devices.gridDeviceRadaccts', 
+       'devices.gridDeviceRadpostauths','devices.gridDevicePrivate',
+       'components.cmbVendor',          'components.cmbAttribute'
     ],
-    stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices'  ],
-    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice'   ],
+    stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices', 'sAttributes', 'sVendors'  ],
+    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice',   
+             'mRadacct',                'mRadpostauth',    'mAttribute','mVendor',      'mPrivateAttribute'
+    ],
     selectedRecord: null,
      config: {
         urlAdd:             '/cake2/rd_cake/devices/add.json',
-      //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/devices/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json',
+        urlViewBasic:       '/cake2/rd_cake/devices/view_basic_info.json',
+        urlEditBasic:       '/cake2/rd_cake/devices/edit_basic_info.json',
+        urlViewTracking:    '/cake2/rd_cake/devices/view_tracking.json',
+        urlEditTracking:    '/cake2/rd_cake/devices/edit_tracking.json',
         urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json',
     },
     refs: [
@@ -148,6 +155,66 @@ Ext.define('Rd.controller.cDevices', {
             },
             'winEnableDisable #save': {
                 click: me.enableDisableSubmit
+            },
+            'pnlDevice gridUserRadpostauths #reload' :{
+                click:      me.gridDeviceRadpostauthsReload
+            },
+            'pnlDevice gridDeviceRadpostauths #delete' :{
+                click:      me.genericDelete
+            },
+            'pnlDevice gridDevicePrivate' : {
+                activate:      me.onDeviceActivate
+            },
+            'pnlDevice gridDeviceRadpostauths' : {
+                activate:      me.onDeviceRadpostauthsActivate
+            },
+            'pnlDevice gridDeviceRadaccts #reload' :{
+                click:      me.gridDeviceRadacctsReload
+            },
+            'pnlDevice gridDeviceRadaccts #delete' :{
+                click:      me.genericDelete
+            },
+            'pnlDevice gridDeviceRadaccts' : {
+                activate:      me.onDeviceRadacctsActivate
+            },
+            'pnlDevice #profile' : {
+                change:  me.cmbProfileChange
+            },
+            'pnlDevice #always_active' : {
+                change:  me.chkAlwaysActiveChange
+            },
+            'pnlDevice #to_date' : {
+                change:  me.toDateChange
+            },
+            'pnlDevice #from_date' : {
+                change:  me.fromDateChange
+            },
+            'pnlDevice #tabBasicInfo' : {
+                activate: me.onTabBasicInfoActive
+            },
+            'pnlDevice #tabBasicInfo #save' : {
+                click: me.saveBasicInfo
+            },
+            'pnlDevice #tabTracking' : {
+                activate: me.onTabTrackingActive
+            },
+            'pnlDevice #tabTracking #save' : {
+                click: me.saveTracking
+            },
+            'gridDevicePrivate' : {
+                beforeedit:     me.onBeforeEditDevicePrivate
+            },
+            'gridDevicePrivate  #cmbVendor': {
+                change:      me.cmbVendorChange
+            },
+            'gridDevicePrivate  #add': {
+                click:      me.attrAdd
+            },
+            'gridDevicePrivate  #reload': {
+                click:      me.attrReload
+            },
+            'gridDevicePrivate  #delete': {
+                click:      me.attrDelete
             }
         });
 
@@ -679,5 +746,228 @@ Ext.define('Rd.controller.cDevices', {
             failure             : Ext.ux.formFail
         });
     },
+    onTabBasicInfoActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the user's id
+        var device_id = t.up('pnlDevice').d_id;
+        form.load({url:me.urlViewBasic, method:'GET',params:{device_id:device_id}});
+    },
+    saveBasicInfo:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var device_id = button.up('pnlDevice').d_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditBasic,
+            params              : {id: device_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+    onTabTrackingActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the user's id
+        var device_id = t.up('pnlDevice').d_id;
+        form.load({url:me.urlViewTracking, method:'GET',params:{device_id:device_id}});
+    },
+    saveTracking:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var device_id = button.up('pnlDevice').d_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditTracking,
+            params              : {id: device_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+    onDeviceActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    onDeviceRadpostauthsActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    gridDeviceRadpostauthsReload: function(button){
+        var me  = this;
+        var g = button.up('gridDeviceRadpostauths');
+        g.getStore().reload();
+    },
+    onDeviceRadacctsActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    onDevicePrivateActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
+    gridDeviceRadacctsReload: function(button){
+        var me  = this;
+        var g = button.up('gridDeviceRadaccts');
+        g.getStore().reload();
+    },
+    genericDelete:   function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        console.log("Generic delete clicked...");    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    winClose:   function(){
+        var me = this;
+        console.log("Clear interval");
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+    },
+    onBeforeEditDevicePrivate: function(g,e){
+        var me = this;
+        return e.record.get('edit');
+    },
+    cmbVendorChange: function(cmb){
+        var me = this;
+        console.log("Combo thing changed");
+        var value   = cmb.getValue();
+        var grid    = cmb.up('gridDevicePrivate');
+        var attr    = grid.down('cmbAttribute');
+        //Cause this to result in a reload of the Attribute combo
+        attr.getStore().getProxy().setExtraParam('vendor',value);
+        attr.getStore().load();   
+    },
+    attrAdd: function(b){
+        var me = this;
+        console.log("Add to specific template");
+        var grid    = b.up('gridDevicePrivate');
+        var attr    = grid.down('cmbAttribute');
+        var a_val   = attr.getValue();
+        if(a_val == null){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            //We do not do double's
+            var f = grid.getStore().find('attribute',a_val);
+            if(f == -1){
+                grid.getStore().add(Ext.create('Rd.model.mPrivateAttribute',
+                    {
+                        type            : 'check',
+                        attribute       : a_val,
+                        op              : ':=',
+                        value           : i18n('sReplace_this_value'),
+                        delete          : true,
+                        edit            : true
+                    }
+                ));
+                grid.getStore().sync();
+            }
+        }
+    },
+    attrReload: function(b){
+        var me = this;
+        var grid = b.up('gridDevicePrivate');
+        grid.getStore().load();
+    },
+    attrDelete: function(button){
+
+        var me      = this;
+        var grid    = button.up('gridDevicePrivate');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                           // grid.getStore().load();   //Update the count
+                            me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    }
 
 });

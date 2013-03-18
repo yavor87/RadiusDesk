@@ -92,6 +92,9 @@ Ext.define('Rd.controller.cAccessProviders', {
             'gridAccessProviders #password': {
                 click:      me.password
             },
+            'gridAccessProviders'       : {
+                activate:      me.gridActivate
+            },
             'winApAddWizard':{
                 toFront:       me.maskHide
             },
@@ -162,6 +165,10 @@ Ext.define('Rd.controller.cAccessProviders', {
     maskHide:   function(){
         var me =this;
         me.getGrid().mask.hide();
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     add:    function(){
         var me = this;

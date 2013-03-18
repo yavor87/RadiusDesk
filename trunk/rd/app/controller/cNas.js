@@ -94,6 +94,9 @@ Ext.define('Rd.controller.cNas', {
             'gridNas'       : {
                 select:      me.select
             },
+            'gridNas'       : {
+                activate:      me.gridActivate
+            },
             'winNasAddWizard' :{
                 toFront: me.maskHide
             },
@@ -201,6 +204,10 @@ Ext.define('Rd.controller.cNas', {
         var me = this;
         console.log('hide');
         me.getGridNas().mask.hide();
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     add: function(button){
         var me = this;

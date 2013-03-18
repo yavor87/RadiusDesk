@@ -78,13 +78,13 @@ Ext.define('Rd.controller.cActivityMonitor', {
               //  select:      me.select
             },
             'gridRadaccts'   : {
-                activate:      me.onRadacctsActivate
+                activate:      me.gridActivate
             },
             'gridRadpostauths #reload': {
                 click:      me.reloadPostAuths
             },
             'gridRadpostauths'   : {
-                activate:      me.onRadpostauthsActivate
+                activate:      me.gridActivate
             }
             
         });
@@ -115,18 +115,14 @@ Ext.define('Rd.controller.cActivityMonitor', {
         me.getGrid().down('#count').update({count: count});
         me.getGrid().down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
     },
-    onRadacctsActivate: function(){
+    gridActivate: function(g){
         var me = this;
-        me.reload();
+        g.getStore().load();
     },
     //Post auths related
     reloadPostAuths: function(){
         var me =this;
         me.getStore('sRadpostauths').load();
-    },
-    onRadpostauthsActivate: function(){
-        var me = this;
-        me.reloadPostAuths();
     },
     onStoreRadpostauthsLoaded: function() {
         var me          = this;
