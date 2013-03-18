@@ -344,7 +344,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     Ext.ux.Constants.msgInfo
                 );
             },
-            failure: Ext.ux.formFail
+            //Focus on the first tab as this is the most likely cause of error 
+            failure: function(form,action){
+                var tp = win.down('tabpanel');
+                tp.setActiveTab(0);
+                Ext.ux.formFail(form,action)
+            }
         });
     },
 
@@ -825,7 +830,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                             id          : 'winPermanentUsersPassword'+sr.getId(),
                             user_id     : sr.getId(),
                             username    : sr.get('username'),
-                            title       : i18n('sChange_password for')+' '+sr.get('username')
+                            title       : i18n('sChange_password_for')+' '+sr.get('username')
                         });
                     me.application.runAction('cDesktop','Add',w);       
                 }

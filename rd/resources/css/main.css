@@ -5,7 +5,7 @@
     left:35%;
     top:10px;
     width:300px;
-    z-index:20000;
+    z-index:2147483647;
 }
 
 #msg-div .msg {

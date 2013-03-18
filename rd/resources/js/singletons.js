@@ -143,6 +143,10 @@ Ext.ux.formFail = function(form,action){
 
 //-- Format to a readable unit --->
 Ext.ux.bytesToHuman = function (fileSizeInBytes) {
+
+    if((fileSizeInBytes == 0)||(fileSizeInBytes == null)){
+        return '0 kb';
+    }
     var i = -1;
     var byteUnits = [' kb', ' Mb', ' Gb', ' Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
     do {
