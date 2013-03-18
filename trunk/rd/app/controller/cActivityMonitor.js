@@ -78,7 +78,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
               //  select:      me.select
             },
             'gridRadaccts'   : {
-                activate:      me.gridActivate
+                activate:      me.reload
             },
             'gridRadpostauths #reload': {
                 click:      me.reloadPostAuths
