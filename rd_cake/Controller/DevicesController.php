@@ -288,6 +288,551 @@ class DevicesController extends AppController {
 
     }
 
+
+     public function view_basic_info(){
+
+        //We need the device_id;
+        //We supply the profile_id; realm_id; cap; always_active; from_date; to_date
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+
+        $items = array();
+
+        //TODO Check if the owner of this device is in the chain of the APs
+        if(isset($this->request->query['device_id'])){
+
+            $profile        = false;
+            $realm          = false;
+            $always_active  = true;
+            $to_date        = false;
+            $from_date      = false;
+            $cap            = false;
+            $owner          = false;
+            $description    = false;
+
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['device_id']);
+
+            $items['description'] = $q_r['Device']['description'];
+
+            foreach($q_r['Radcheck'] as $rc){
+
+                if($rc['attribute'] == 'Rd-Realm'){
+                  $realm =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'User-Profile'){
+                  $profile =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Rd-Account-Activation-Time'){
+                  $from_date =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Expiration'){
+                  $to_date =  $rc['value'];
+                }
+                
+                if($rc['attribute'] == 'Rd-Cap-Type'){
+                  $cap =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Rd-Device-Owner'){
+                  $owner =  $rc['value'];
+                }
+            }
+        
+            //Now we do the rest....
+            if($profile){
+                $q_r = $this->User = ClassRegistry::init('Profile')->findByName($profile);
+                $items['profile_id'] = intval($q_r['Profile']['id']);
+            }
+
+
+            if($owner){
+                $q_r = $this->User = ClassRegistry::init('User')->findByUsername($owner);
+                $items['user_id'] = intval($q_r['User']['id']);
+            }
+
+
+            if($cap){
+                $items['cap'] = $cap;
+            }
+
+            if(($from_date)&&($to_date)){
+                $items['always_active'] = false;
+                $items['from_date']     = $this->_extjs_format_radius_date($from_date);
+                $items['to_date']       = $this->_extjs_format_radius_date($to_date);
+            }else{
+                $items['always_active'] = true;
+            }
+        }
+               // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_basic_info(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $this->{$this->modelClass}->save($this->request->data);
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->data['id'])){
+            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
+            $username   = $q_r['Device']['name'];
+
+            if(isset($this->request->data['profile_id'])){
+                $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
+                $profile_name = $q_r['Profile']['name'];
+                $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
+            }
+
+            if(isset($this->request->data['user_id'])){
+                $u = ClassRegistry::init('User');
+                $u->contain();
+                $q_r = $u->findById($this->data['user_id']);
+                $owner_name = $q_r['User']['username'];
+                $this->_replace_radcheck_item($username,'Rd-Device-Owner',$owner_name);
+            }
+
+            if(isset($this->request->data['to_date'])){
+                $expiration = $this->_radius_format_date($this->request->data['to_date']);
+                $this->_replace_radcheck_item($username,'Expiration',$expiration);
+            }
+
+            if(isset($this->request->data['from_date'])){
+                $expiration = $this->_radius_format_date($this->request->data['from_date']);
+                $this->_replace_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
+            }
+
+            
+            if(isset($this->request->data['always_active'])){ //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Account-Activation-Time'), false
+                );
+
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Expiration'), false
+                );
+            }
+            
+            if(isset($this->request->data['cap'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type',$this->request->data['cap']);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type'), false
+                );
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+    public function private_attr_index(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+
+        $read_only_attributes = array(
+            'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
+            'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
+            'Rd-Cap-Type', 'Rd-Realm', 'Cleartext-Password'
+        );
+
+       // $exclude_attribues = array(
+       //     'Cleartext-Password'
+       // )
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $q_r = ClassRegistry::init('Radcheck')->find('all',array('conditions' => array('Radcheck.username' => $username)));
+            foreach($q_r as $i){
+                $edit_flag      = true;
+                $delete_flag    = true;
+                if(in_array($i['Radcheck']['attribute'],$read_only_attributes)){
+                    $edit_flag      = false;
+                    $delete_flag    = false;
+                }     
+
+                array_push($items,array(
+                    'id'        => 'chk_'.$i['Radcheck']['id'],
+                    'type'      => 'check', 
+                    'attribute' => $i['Radcheck']['attribute'],
+                    'op'        => $i['Radcheck']['op'],
+                    'value'     => $i['Radcheck']['value'],
+                    'edit'      => $edit_flag,
+                    'delete'    => $delete_flag
+                ));
+            }
+
+            $q_r = ClassRegistry::init('Radreply')->find('all',array('conditions' => array('Radreply.username' => $username)));
+            foreach($q_r as $i){
+                $edit_flag      = true;
+                $delete_flag    = true;
+                if(in_array($i['Radreply']['attribute'],$read_only_attributes)){
+                    $edit_flag      = false;
+                    $delete_flag    = false;
+                }     
+
+                array_push($items,array(
+                    'id'        => 'rpl_'.$i['Radreply']['id'],
+                    'type'      => 'reply', 
+                    'attribute' => $i['Radreply']['attribute'],
+                    'op'        => $i['Radreply']['op'],
+                    'value'     => $i['Radreply']['value'],
+                    'edit'      => $edit_flag,
+                    'delete'    => $delete_flag
+                ));
+            }
+        }
+
+        $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    public function private_attr_add(){
+
+         if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $this->request->data['username'] = $username;
+
+            //CHECK
+            if($this->request->data['type'] == 'check'){
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->create();
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //REPLY
+            if($this->request->data['type'] == 'reply'){
+                $rr = ClassRegistry::init('Radreply');
+                $rr->create();
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+        }
+    }
+
+   public function private_attr_edit(){
+
+         if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $this->request->data['username'] = $username;
+
+            //Check if the type check was not changed
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='check')){ //check Type remained the same
+                //Get the id for this one
+                $type_id            = explode( '_', $this->data['id']);
+                $this->request->data['id']   = $type_id[1];
+                $rc = ClassRegistry::init('Radcheck');
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                }else{
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //Check if the type reply was not changed
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->data['type']=='reply')){ //reply Type remained the same
+                //Get the id for this one
+                $type_id            = explode( '_', $this->request->data['id']);
+                $this->request->data['id']   = $type_id[1];
+                $rr = ClassRegistry::init('Radreply');
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            //____ Attribute Type changes ______
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='reply')){
+                //Delete the check; add a reply
+                $type_id            = explode( '_', $this->request->data['id']);
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->id = $type_id[1];
+                $rc->delete();
+
+                //Create
+                $rr = ClassRegistry::init('Radreply');
+                $rr->create();
+                if ($rr->save($this->request->data)) {
+                    $id = 'rpl_'.$rr->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rr->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->request->data['type']=='check')){
+
+                //Delete the check; add a reply
+                $type_id            = explode( '_', $this->request->data['id']);
+                $rr = ClassRegistry::init('Radreply');
+                $rr->id = $type_id[1];
+                $rr->delete();
+
+                //Create
+                $rc = ClassRegistry::init('Radcheck');
+                $rc->create();
+                if ($rc->save($this->request->data)) {
+                    $id = 'chk_'.$rc->id;
+                    $this->request->data['id'] = $id;
+                    $this->set(array(
+                        'items'     => $this->request->data,
+                        'success'   => true,
+                        '_serialize' => array('success','items')
+                    ));
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $rc->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not update item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                }
+            }
+        }
+    }
+
+    public function private_attr_delete(){
+
+        $fail_flag = true;
+
+        $rc = ClassRegistry::init('Radcheck');
+        $rr = ClassRegistry::init('Radreply');
+
+        if(isset($this->data['id'])){   //Single item delete
+            $type_id            = explode( '_', $this->request->data['id']);
+            if(preg_match("/^chk_/",$this->request->data['id'])){
+                $rc->id = $type_id[1];
+                $rc->delete();
+            }
+
+            if(preg_match("/^rpl_/",$this->request->data['id'])){   
+                $rr->id = $type_id[1];
+                $rr->delete();
+            }
+            
+            $fail_flag = false;
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                $type_id            = explode( '_', $d['id']);
+                if(preg_match("/^chk_/",$d['id'])){
+                    $rc->id = $type_id[1];
+                    $rc->delete();
+                }
+                if(preg_match("/^rpl_/",$d['id'])){   
+                    $rr->id = $type_id[1];
+                    $rr->delete();
+                }          
+                $fail_flag = false;  
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
+    public function view_tracking(){
+
+         //We need the user_id;
+        //We supply the track_auth, track_acct
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $items = array();
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['device_id'])){
+
+            $acct           = true;
+            $auth           = true;
+
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['device_id']);
+
+            foreach($q_r['Radcheck'] as $rc){
+
+                if($rc['attribute'] == 'Rd-Not-Track-Acct'){
+                    if($rc['value'] == 1){
+                        $acct = false;
+                    }
+                }
+
+                if($rc['attribute'] == 'Rd-Not-Track-Auth'){
+                  if($rc['value'] == 1){
+                        $auth = false;
+                  }
+                } 
+            }
+            $items['track_auth'] = $auth;
+            $items['track_acct'] = $acct;
+            
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_tracking(){
+
+          //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->data['id'])){
+            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
+            $username   = $q_r['Device']['name'];
+           
+            //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth) 
+            if(!isset($this->request->data['track_auth'])){
+                $this->_replace_radcheck_item($username,'Rd-Not-Track-Auth',1);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Auth'), false
+                );
+            }
+
+            //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
+            if(!isset($this->request->data['track_acct'])){
+                $this->_replace_radcheck_item($username,'Rd-Not-Track-Acct',1);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Acct'), false
+                );
+            }
+
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+
+
     public function view(){
 
     }
@@ -624,6 +1169,65 @@ class DevicesController extends AppController {
         ));
     }
 
+
+     function menu_for_accounting_data(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+
+
+    }
+
+     function menu_for_authentication_data(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+
+
     //______ END EXT JS UI functions ________
 
 
@@ -660,6 +1264,12 @@ class DevicesController extends AppController {
 
         $c['order'] = array("$sort $dir");
         //==== END SORT ===
+
+        //======= For a specified owner filter *Usually on the edit permanent user ======
+        if(isset($this->request->query['user_id'])){
+            $u_id = $this->request->query['user_id'];
+            array_push($c['conditions'],array($this->modelClass.".user_id" => $u_id));
+        }
 
 
         //====== REQUEST FILTER =====
@@ -777,6 +1387,46 @@ class DevicesController extends AppController {
         }
     }
 
+    private function _replace_radcheck_item($username,$item,$value,$op = ":="){
+        $rc = ClassRegistry::init('Radcheck');
+        $rc->deleteAll(
+            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
+        );
+        $rc->create();
+        $d['Radcheck']['username']  = $username;
+        $d['Radcheck']['op']        = $op;
+        $d['Radcheck']['attribute'] = $item;
+        $d['Radcheck']['value']     = $value;
+        $rc->save($d);
+        $rc->id         = null;
+    }
 
+    private function _radius_format_date($d){
+        //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
+        $arr_date   = explode('/',$d);
+        $month      = intval($arr_date[0]);
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[1]);
+        $year       = intval($arr_date[2]);
+        return "$day ".$m_arr[($month-1)]." $year";
+    }
+
+    private function _extjs_format_radius_date($d){
+        //Format will be day month year 20 Mar 2013 and need to be month/date/year eg 03/06/2013 
+        $arr_date   = explode(' ',$d);
+        $month      = $arr_date[1];
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[0]);
+        $year       = intval($arr_date[2]);
+
+        $month_count = 1;
+        foreach($m_arr as $m){
+            if($month == $m){
+                break;
+            }
+            $month_count ++;
+        }
+        return "$month_count/$day/$year";
+    }
 
 }

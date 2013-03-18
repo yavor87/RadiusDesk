@@ -424,8 +424,8 @@ class PermanentUsersController extends AppController {
 
             if(($from_date)&&($to_date)){
                 $items['always_active'] = false;
-                $items['from_date']     = $from_date;
-                $items['to_date']       = $to_date;
+                $items['from_date']     = $this->_extjs_format_radius_date($from_date);
+                $items['to_date']       = $this->_extjs_format_radius_date($to_date);
             }else{
                 $items['always_active'] = true;
             }
@@ -903,7 +903,6 @@ class PermanentUsersController extends AppController {
             $items['track_acct'] = $acct;
             
         }
-               // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
 
         $this->set(array(
             'data'   => $items, //For the form to load we use data instead of the standard items as for grids
@@ -1386,6 +1385,33 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+    function menu_for_user_devices(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')), 
+                )) 
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+
+    }
+
     //______ END EXT JS UI functions ________
 
 
@@ -1572,6 +1598,23 @@ class PermanentUsersController extends AppController {
         return "$day ".$m_arr[($month-1)]." $year";
     }
 
+    private function _extjs_format_radius_date($d){
+        //Format will be day month year 20 Mar 2013 and need to be month/date/year eg 03/06/2013 
+        $arr_date   = explode(' ',$d);
+        $month      = $arr_date[1];
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[0]);
+        $year       = intval($arr_date[2]);
+
+        $month_count = 1;
+        foreach($m_arr as $m){
+            if($month == $m){
+                break;
+            }
+            $month_count ++;
+        }
+        return "$month_count/$day/$year";
+    }
 
 
 
