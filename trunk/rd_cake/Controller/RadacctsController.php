@@ -91,7 +91,22 @@ class RadacctsController extends AppController {
                     'nasportid'         => $i['Radacct']['nasportid'],
                     'nasporttype'       => $i['Radacct']['nasporttype'],
                     'acctstarttime'     => $i['Radacct']['acctstarttime'],
-                    'acctstoptime'      => $i['Radacct']['acctstoptime']
+                    'acctstoptime'      => $i['Radacct']['acctstoptime'],
+                    'acctsessiontime'   => $i['Radacct']['acctsessiontime'],
+                    'acctauthentic'     => $i['Radacct']['acctauthentic'],
+                    'connectinfo_start' => $i['Radacct']['connectinfo_start'],
+                    'connectinfo_stop'  => $i['Radacct']['connectinfo_stop'],
+                    'acctinputoctets'   => $i['Radacct']['acctinputoctets'],
+                    'acctoutputoctets'  => $i['Radacct']['acctoutputoctets'],
+                    'calledstationid'   => $i['Radacct']['calledstationid'],
+                    'callingstationid'  => $i['Radacct']['callingstationid'],
+                    'acctterminatecause'=> $i['Radacct']['acctterminatecause'],
+                    'servicetype'       => $i['Radacct']['servicetype'],
+                    'framedprotocol'    => $i['Radacct']['framedprotocol'],
+                    'framedipaddress'   => $i['Radacct']['framedipaddress'],
+                    'acctstartdelay'    => $i['Radacct']['acctstartdelay'],
+                    'acctstopdelay'     => $i['Radacct']['acctstopdelay'],
+                    'xascendsessionsvrkey' => $i['Radacct']['xascendsessionsvrkey']
                 )
             );
         }                
@@ -389,11 +404,18 @@ class RadacctsController extends AppController {
             }
         }
 
-        //======= For a specified username filter *Usually on the edit of user / device / voucher ======
+        //======= For a specified username filter *Usually on the edit of user / voucher ======
         if(isset($this->request->query['username'])){
             $un = $this->request->query['username'];
             array_push($c['conditions'],array($this->modelClass.".username" => $un));
         }
+
+        //======= For a specified callingstationid filter *Usually on the edit of device ======
+        if(isset($this->request->query['callingstationid'])){
+            $cs_id = $this->request->query['callingstationid'];
+            array_push($c['conditions'],array($this->modelClass.".callingstationid" => $cs_id));
+        }
+
 
 
         //====== REQUEST FILTER =====
