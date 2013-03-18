@@ -104,6 +104,9 @@ Ext.define('Rd.controller.cDevices', {
             'gridDevices'   : {
               //  select:      me.select
             },
+            'gridDevices'   : {
+                activate:      me.gridActivate
+            },
             'winDeviceAddWizard' :{
                 toFront: me.maskHide
             },
@@ -228,7 +231,10 @@ Ext.define('Rd.controller.cDevices', {
         var me =this;
         me.getGrid().mask.hide();
     },
-
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
+    },
     add: function(button){  
         var me = this;
         if(!me.application.runAction('cDesktop','AlreadyExist','winDeviceAddWizardId')){
@@ -704,7 +710,7 @@ Ext.define('Rd.controller.cDevices', {
             me.maskHide(); 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item_to_edit'),
+                        i18n('sFirst_select_an_item_to_modify'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );

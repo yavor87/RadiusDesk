@@ -160,7 +160,7 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sForever'),
+                                    boxLabel    : i18n('sAlways_active'),
                                     name        : 'always_active',
                                     inputValue  : 'always_active',
                                     itemId      : 'always_active',
