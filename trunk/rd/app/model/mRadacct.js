@@ -11,7 +11,7 @@ Ext.define('Rd.model.mRadacct', {
         'nasipaddress',
         'nasportid',
         'nasporttype',
-        'acctstarttime',
+        {name:'acctstarttime', type: 'date', dateFormat: 'Y-m-d H:i:s'},
         'acctstoptime',
         'acctsessiontime',
         'acctauthentic',

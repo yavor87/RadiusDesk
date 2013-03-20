@@ -39,7 +39,7 @@ Ext.define('Rd.view.components.cmbRealm', {
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },
-            autoLoad: false
+            autoLoad: true
         });
         me.store = s;
         this.callParent(arguments);

@@ -42,6 +42,8 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                 dataIndex   : 'acctstarttime', 
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                xtype       : 'datecolumn',   
+                format      :'Y-m-d H:i:s',
                 filter      : {type: 'date',dateFormat: 'Y-m-d'}
             },
             { 
@@ -50,15 +52,27 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},
-                xtype       : 'templatecolumn', 
-                tpl         : new Ext.XTemplate(
-                                "<tpl if='acctstoptime == null'><div class=\"hasRight\">"+i18n("sActive")+"</div>",
-                                '<tpl else>',
-                                '{acctstoptime}',
-                                '</tpl>'
-                            )
+                renderer    : function(value,metaData, record){
+                    if(value == null){
+                        //This is mega cool way to do it using Ext.Date.format      
+                        var start     = record.get('acctstarttime').getTime();
+                        var now       = new Date().getTime();
+                        var online    = new Date((now-start));
+                        return "<div class=\"hasRight\">"+i18n("sActive")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
+                    }else{
+                        return value;
+                    }              
+                }
             },
-            { text: i18n('sSession_time'), dataIndex: 'acctsessiontime', tdCls: 'gridTree', flex: 1,filter: {type: 'string'}}, //Format
+            {   text: i18n('sSession_time'), dataIndex: 'acctsessiontime', tdCls: 'gridTree', flex: 1,filter: {type: 'string'},
+                renderer    : function(value){
+                    if(value == 0){
+                        return value; 
+                    }
+                    var online    = new Date((value * 1000));
+                    return Ext.Date.format(online, 'z:H:i:s');              
+                }
+            }, //Format
             { text: i18n('sAccount_authentic'), dataIndex: 'acctauthentic',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true},
             { text: i18n('sConnect_info_start'), dataIndex: 'connectinfo_start',tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, hidden: true},
             { text: i18n('sConnect_info_stop'), dataIndex: 'connectinfo_stop',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, hidden: true},
