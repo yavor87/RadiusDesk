@@ -77,11 +77,20 @@ class RadacctsController extends AppController {
         $q_r  = $this->{$this->modelClass}->find('all'    , $c_page);
         
         $items  = array();
-        foreach($q_r as $i){ 
+        foreach($q_r as $i){
+            $user_type = 'unknown'; 
+            //Find device type
+            if(count($i['Radcheck']) > 0){
+                foreach($i['Radcheck'] as $rc){
+                    if($rc['attribute'] == 'Rd-User-Type'){
+                        $user_type = $rc['value'];   
+                    }
+                }
+            }
+
             array_push($items,
                 array(
                     'id'                => $i['Radacct']['radacctid'], 
-                    'radacctid'         => $i['Radacct']['radacctid'],
                     'acctsessionid'     => $i['Radacct']['acctsessionid'],
                     'acctuniqueid'      => $i['Radacct']['acctuniqueid'],
                     'username'          => $i['Radacct']['username'],
@@ -106,7 +115,8 @@ class RadacctsController extends AppController {
                     'framedipaddress'   => $i['Radacct']['framedipaddress'],
                     'acctstartdelay'    => $i['Radacct']['acctstartdelay'],
                     'acctstopdelay'     => $i['Radacct']['acctstopdelay'],
-                    'xascendsessionsvrkey' => $i['Radacct']['xascendsessionsvrkey']
+                    'xascendsessionsvrkey' => $i['Radacct']['xascendsessionsvrkey'],
+                    'user_type'         => $user_type
                 )
             );
         }                
@@ -371,7 +381,7 @@ class RadacctsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                        //    'Radcheck'     
+                            'Radcheck'   
                         );
 
         //===== SORT =====
@@ -446,6 +456,22 @@ class RadacctsController extends AppController {
                     }
                     if($f->comparison == 'gt'){
                         array_push($c['conditions'],array("DATE($col) >" => $f->value));
+                    }
+                }
+                //Lists
+                if($f->type == 'list'){
+                    if($f->field == 'user_type'){
+                        $list_array = array();
+                        foreach($f->value as $filter_list){
+                            array_push($list_array,array("Radcheck.attribute" => "Rd-User-Type", "Radcheck.value" => $filter_list));
+                        }
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('(Radcheck.username = Radacct.callingstationid) OR (Radcheck.username = Radacct.username)')
+                        )); 
+                        array_push($c['conditions'],array('OR' => $list_array));
                     }
                 }
             }
