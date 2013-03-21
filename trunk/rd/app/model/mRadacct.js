@@ -2,7 +2,6 @@ Ext.define('Rd.model.mRadacct', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'id',           type: 'int'     },
-        'radacctid',
         'acctsessionid',
         'acctuniqueid',
         'username',
@@ -27,6 +26,7 @@ Ext.define('Rd.model.mRadacct', {
         'framedipaddress',
         'acctstartdelay',
         'acctstopdelay',
-        'xascendsessionsvrkey'
+        'xascendsessionsvrkey',
+        'user_type'
         ]
 });

@@ -34,7 +34,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                         items   : [
                             { 'title' : i18n('sAccounting_data'),       xtype: 'gridRadaccts'},
                             { 'title' : i18n('sAuthentication_data'),   xtype: 'gridRadpostauths'},
-                            { 'title' : i18n('sDetailed_info'),         xtype: 'pnlRadius'}
+                            { 'title' : i18n('sFreeRADIUS_info'),         xtype: 'pnlRadius'}
                         ]
                     }
                 ]
