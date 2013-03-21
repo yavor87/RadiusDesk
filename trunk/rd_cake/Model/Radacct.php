@@ -11,7 +11,7 @@ class Radacct extends AppModel {
         'Radcheck' => array(
             'className'     => 'Radcheck',
             'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, radacct WHERE radacct.username=Radcheck.username AND radacct.radacctid={$__cakeID__$}',
+            'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, radacct WHERE (radacct.username=Radcheck.username OR radacct.callingstationid=Radcheck.username) AND radacct.radacctid={$__cakeID__$}',
             'dependent'     => true
         )
     );
