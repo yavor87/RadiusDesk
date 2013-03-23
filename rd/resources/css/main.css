@@ -438,6 +438,15 @@
     background-image:url(../images/32x32/connect.png);
 }
 
+.b-kick {
+    background-image:url(../images/32x32/kick.png);
+}
+
+.b-close {
+    background-image:url(../images/32x32/close.png);
+}
+
+
 .language16 {
     background-image:url(../images/16x16/language.png);
 }

@@ -46,7 +46,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
 
     views:  [
        'components.pnlBanner',  'activityMonitor.gridRadaccts', 'activityMonitor.gridRadpostauths', 'components.cmbNas',
-        'activityMonitor.pnlRadius'
+        'activityMonitor.pnlRadius',    'components.winCsvColumnSelect'
     ],
     stores: [ 'sRadaccts',  'sRadpostauths'  ],
     models: [ 'mRadacct',   'mRadpostauth', 'mNas' ],
@@ -54,11 +54,13 @@ Ext.define('Rd.controller.cActivityMonitor', {
     specific_nas : undefined,
     config: {
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
+        urlExportCsvAcct:     '/cake2/rd_cake/radaccts/export_csv',
+        urlExportCsvAuth:     '/cake2/rd_cake/radpostauths/export_csv',
         
     },
     refs: [
         {  ref: 'grid',                 selector:   'gridRadaccts'} ,
-        {  ref: 'gridRadpostauths',     selector:   'gridRadpostauths'}       
+        {  ref: 'gridRadpostauths',     selector:   'gridRadpostauths'}      
     ],
     init: function() {
         var me = this;
@@ -82,6 +84,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
             'gridRadaccts #connected': {
                 click:      me.reload
             },
+            'gridRadaccts #csv'  : {
+                click:      me.csvExportAcct
+            },
             'gridRadaccts'   : {
               //  select:      me.select
             },
@@ -97,6 +102,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
             'gridRadpostauths #reload menuitem[group=refresh]'   : {
                 click:      me.authReloadOptionClick
             },
+            'gridRadpostauths #csv'  : {
+                click:      me.csvExportAuth
+            },
             'pnlRadius #reload': {
                 click:      me.radiusReload
             },
@@ -108,7 +116,13 @@ Ext.define('Rd.controller.cActivityMonitor', {
             },
             'pnlRadius  cmbNas': {
                 change:         me.cmbNasChange
-            }
+            },
+            '#winCsvColumnSelectAcct #save': {
+                click:  me.csvExportSubmitAcct
+            },
+            '#winCsvColumnSelectAuth #save': {
+                click:  me.csvExportSubmitAuth
+            },
             
         });
 
@@ -280,4 +294,140 @@ Ext.define('Rd.controller.cActivityMonitor', {
            me.specific_nas = value;
         }
     },
+    csvExportAcct: function(button,format) {
+        var me          = this;
+        var columns     = me.getGrid().columns;
+        var col_list    = [];
+        Ext.Array.each(columns, function(item,index){
+            if(item.dataIndex != ''){
+                var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
+                col_list[index] = chk;
+            }
+        }); 
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAcct')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAcct',columns: col_list});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    csvExportSubmitAcct: function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var chkList = form.query('checkbox');
+        var c_found = false;
+        var columns = [];
+        var c_count = 0;
+        Ext.Array.each(chkList,function(item){
+            if(item.getValue()){ //Only selected items
+                c_found = true;
+                columns[c_count] = {'name': item.getName()};
+                c_count = c_count +1; //For next one
+            }
+        },me);
+
+        if(!c_found){
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{     
+            //next we need to find the filter values:
+            var filters     = [];
+            var f_count     = 0;
+            var f_found     = false;
+            var filter_json ='';
+            me.getGrid().filters.filters.each(function(item) {
+                if (item.active) {
+                    f_found         = true;
+                    var ser_item    = item.serialize();
+                    ser_item.field  = item.dataIndex;
+                    filters[f_count]= ser_item;
+                    f_count         = f_count + 1;
+                }
+            });   
+            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.extraParams);
+            var append_url      = "?"+extra_params+'&'+col_json;
+            if(f_found){
+                filter_json = "filter="+Ext.JSON.encode(filters);
+                append_url  = append_url+'&'+filter_json;
+            }
+            window.open(me.urlExportCsvAcct+append_url);
+            win.close();
+        }
+    },
+
+    csvExportAuth: function(button,format) {
+        var me          = this;
+        var columns     = me.getGridRadpostauths().columns;
+        var col_list    = [];
+        Ext.Array.each(columns, function(item,index){
+            if(item.dataIndex != ''){
+                var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
+                col_list[index] = chk;
+            }
+        }); 
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAuth')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAuth',columns: col_list});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    csvExportSubmitAuth: function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var chkList = form.query('checkbox');
+        var c_found = false;
+        var columns = [];
+        var c_count = 0;
+        Ext.Array.each(chkList,function(item){
+            if(item.getValue()){ //Only selected items
+                c_found = true;
+                columns[c_count] = {'name': item.getName()};
+                c_count = c_count +1; //For next one
+            }
+        },me);
+
+        if(!c_found){
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{     
+            //next we need to find the filter values:
+            var filters     = [];
+            var f_count     = 0;
+            var f_found     = false;
+            var filter_json ='';
+            me.getGrid().filters.filters.each(function(item) {
+                if (item.active) {
+                    f_found         = true;
+                    var ser_item    = item.serialize();
+                    ser_item.field  = item.dataIndex;
+                    filters[f_count]= ser_item;
+                    f_count         = f_count + 1;
+                }
+            });   
+            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.extraParams);
+            var append_url      = "?"+extra_params+'&'+col_json;
+            if(f_found){
+                filter_json = "filter="+Ext.JSON.encode(filters);
+                append_url  = append_url+'&'+filter_json;
+            }
+            window.open(me.urlExportCsvAuth+append_url);
+            win.close();
+        }
+    }
+
 });
