@@ -29,6 +29,59 @@ class RadpostauthsController extends AppController {
 
     //-------- BASIC CRUD -------------------------------
 
+    public function export_csv(){
+
+        $this->autoRender   = false;
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //Build query
+        $user_id    = $user['id'];
+        $c          = $this->_build_common_query($user);
+        $q_r        = $this->{$this->modelClass}->find('all',$c);
+
+        //Create file
+        $this->ensureTmp();     
+        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
+        $fp             = fopen($tmpFilename, 'w');
+
+        //Headings
+        $heading_line   = array();
+        if(isset($this->request->query['columns'])){
+            $columns = json_decode($this->request->query['columns']);
+            foreach($columns as $c){             
+                array_push($heading_line,$c->name);
+            }
+        }
+        fputcsv($fp, $heading_line,';','"');
+
+        //Results
+        foreach($q_r as $i){
+
+            $columns    = array();
+            $csv_line   = array();
+            if(isset($this->request->query['columns'])){
+                $columns = json_decode($this->request->query['columns']);
+                foreach($columns as $c){
+                    $column_name = $c->name;     
+                    array_push($csv_line,$i['Radpostauth']["$column_name"]); 
+                }
+                fputcsv($fp, $csv_line,';','"');
+            }
+        }
+        //Return results
+        fclose($fp);
+        $data = file_get_contents( $tmpFilename );
+        $this->cleanupTmp( $tmpFilename );
+        $this->RequestHandler->respondAs('csv');
+        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
+        $this->response->body($data);
+    }
+
 
   
     public function index(){
@@ -71,6 +124,7 @@ class RadpostauthsController extends AppController {
                     'id'                => $i['Radpostauth']['id'], 
                     'username'          => $i['Radpostauth']['username'],
                     'pass'              => $i['Radpostauth']['pass'],
+                    'realm'             => $i['Radpostauth']['realm'],
                     'reply'             => $i['Radpostauth']['reply'],
                     'nasname'           => $i['Radpostauth']['nasname'],
                     'authdate'          => $i['Radpostauth']['authdate']
@@ -216,17 +270,11 @@ class RadpostauthsController extends AppController {
                                    
                                 )
                             )
-                    ),
-                    array(
-                            'xtype'         => 'button', 
-                            'iconCls'       => 'b-connect',     
-                            'scale'         => 'large',
-                            'itemId'        => 'connected',
-                            'enableToggle'  => true,
-                            'pressed'       => true,    
-                            'tooltip'       => __('Show only currently connected')
-                    )     
-                ))
+                    ) 
+                )),
+                array('xtype' => 'buttongroup', 'width'=> 75 ,'title' => __('Document'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                )),
                
             );
         }
