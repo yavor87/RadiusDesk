@@ -31,6 +31,7 @@ Ext.define('Rd.view.activityMonitor.gridRadpostauths' ,{
             {xtype: 'rownumberer'},
             { text: i18n('sUsername'),      dataIndex: 'username',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sPassword'),      dataIndex: 'pass',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sRealm'),         dataIndex: 'realm',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { 
                 text            : i18n('sReply'),         
                 dataIndex       : 'reply',         
