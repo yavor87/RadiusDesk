@@ -122,6 +122,8 @@ class NasController extends AppController {
             $offset = $this->request->query['start'];
         }
 
+      //  print_r($c);
+
         $c_page             = $c;
         $c_page['page']     = $page;
         $c_page['limit']    = $limit;
@@ -343,6 +345,35 @@ class NasController extends AppController {
 
 	}
 
+    public function add_direct(){
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+    public function add_open_vpn(){
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+    public function add_dynamic(){
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+    public function add_pptp(){
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+
     public function manage_tags(){
 
         //__ Authentication + Authorization __
@@ -426,13 +457,13 @@ class NasController extends AppController {
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = __("Single item")." ".$this->data['id'];
-            $this->Realm->id = $this->data['id'];
-            $this->Realm->delete();
+            $this->{$this->modelClass}->id = $this->data['id'];
+            $this->{$this->modelClass}->delete();
       
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
-                $this->Realm->id = $d['id'];
-                $this->Realm->delete();
+                $this->{$this->modelClass}->id = $d['id'];
+                $this->{$this->modelClass}->delete();
             }
         }
 
