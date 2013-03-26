@@ -31,7 +31,6 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
     ],
     initComponent: function(){
 
-        //We have to create this treeview's own store since it is unique to the AP
         var me          = this;
         var urlUpdate   = '/cake2/rd_cake/realms/dummy_edit.json';
 
@@ -39,19 +38,19 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
             urlUpdate  = '/cake2/rd_cake/realms/update_na_realm.json';
             me.tbar = [ 
                 { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
-                {xtype: 'checkboxfield',boxLabel  : i18n('sMake_available_to_sub_providers'), boxLabelCls : 'lblRd',itemId: 'chkAvailSub'},
-                '->',  
-                { xtype: 'tbtext', text: i18n('sSelect_one_or_more_realms'), cls: 'lblWizard' },         
+                { xtype: 'tbseparator' },
+                {xtype: 'checkboxfield',boxLabel  : i18n('sMake_available_to_sub_providers'), boxLabelCls : 'lblRdCheck',
+                    itemId      : 'chkAvailSub',
+                    name        : 'available_to_siblings',
+                    inputValue  : true
+                }       
             ];
         }else{
             me.tbar = [ 
-                { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},'->',  
-                { xtype: 'tbtext', text: i18n('sSelect_one_or_more_realms'), cls: 'lblWizard' },         
+                { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')}      
             ];
         }
-
-
-        
+ 
         //Create a store specific to this Owner
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mRealmForNasOwner',
