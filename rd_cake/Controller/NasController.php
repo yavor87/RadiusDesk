@@ -346,24 +346,232 @@ class NasController extends AppController {
 	}
 
     public function add_direct(){
-        $this->set(array(
+
+         //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $conn_type = 'direct';
+        $this->request->data['connection_type'] = $conn_type;
+
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        //Then we add the rest.....
+        $this->{$this->modelClass}->create();
+        //print_r($this->request->data);
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+            //Available to all does not add any na_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }   
+            $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
-        ));
+            ));
+        } else {
+            $first_error = reset($this->{$this->modelClass}->validationErrors);
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
     }
 
     public function add_open_vpn(){
-        $this->set(array(
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $conn_type = 'openvpn';
+        $this->request->data['connection_type'] = $conn_type;
+
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        //If this attribute is not present it will fail empty check
+        if(!isset($this->request->data['nasname'])){
+            $this->request->data['nasname'] = ''; //Make it empty if not present
+        }
+
+        //First we create the OpenVPN entry....
+        $d = array();
+        $d['OpenvpnClient']['username'] = $this->request->data['username'];
+        $d['OpenvpnClient']['password'] = $this->request->data['password'];
+        $this->Na->OpenvpnClient->create();
+        if(!$this->Na->OpenvpnClient->save($d)){
+            $first_error = reset($this->Na->OpenvpnClient->validationErrors);
+            $this->set(array(
+                'errors'    => $this->Na->OpenvpnClient->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create OpenVPN Client <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+            return;
+        }else{
+            //Derive the nasname (ip address) from the new OpenvpnClient entry
+            $qr = $this->Na->OpenvpnClient->findById($this->Na->OpenvpnClient->id);
+            //IP Address =
+            $nasname = Configure::read('openvpn.ip_half').$qr['OpenvpnClient']['subnet'].'.'.$qr['OpenvpnClient']['peer1'];
+            $this->request->data['nasname'] = $nasname;
+        }
+
+        //Then we add the rest.....
+        $this->{$this->modelClass}->create();
+        //print_r($this->request->data);
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+            //Available to all does not add any na_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }
+
+            //Save the new ID to the OpenvpnClient....
+            $this->Na->OpenvpnClient->saveField('na_id', $this->{$this->modelClass}->id);
+          
+            $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
-        ));
+            ));
+        } else {
+            //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
+            $this->Na->OpenvpnClient->delete();
+            $first_error = reset($this->{$this->modelClass}->validationErrors);
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
     }
 
     public function add_dynamic(){
-        $this->set(array(
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $conn_type = 'dynamic';
+        $this->request->data['connection_type'] = $conn_type;
+
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        //If this attribute is not present it will fail empty check
+        if(!isset($this->request->data['nasname'])){
+            $this->request->data['nasname'] = ''; //Make it empty if not present
+        }
+
+        $qr = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => 'dynamic-%'), 'order' => 'Na.nasname DESC'));
+        if($qr == ''){
+            $this->request->data['nasname'] = 'dynamic-1';
+        }else{
+            $last_id = $qr['Na']['nasname'];
+            $last_nr = preg_replace('/^dynamic-/', "", $last_id);
+            //See if there are not any holes:
+            $start_id = 1;
+            $hole_flag = false;
+            while($start_id < $last_nr){
+                $nn = 'dynamic-'.$start_id;
+                $count = $this->Na->find('count', array('conditions' => array('Na.nasname' => $nn))); //This name is missing; we can take it
+                if($count == 0){
+                    $this->request->data['nasname'] = $nn; 
+                    $hole_flag = true;
+                    break;
+                }
+                $start_id++;
+            }
+            if(!$hole_flag){ //There was no gap; take the next number
+                $this->request->data['nasname'] = 'dynamic-'.($last_nr+1);
+            }     
+        }
+
+        //Then we add the rest.....
+        $this->{$this->modelClass}->create();
+        //print_r($this->request->data);
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+            //Available to all does not add any na_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }   
+            $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
-        ));
+            ));
+        } else {
+            $first_error = reset($this->{$this->modelClass}->validationErrors);
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
     }
 
     public function add_pptp(){
