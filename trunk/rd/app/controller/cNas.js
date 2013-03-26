@@ -124,6 +124,12 @@ Ext.define('Rd.controller.cNas', {
             'winNasAddWizard #btnOpenvpnNext' : {
                 click: me.btnOpenvpnNext
             },
+            'winNasAddWizard #btnPptpPrev' : {
+                click: me.btnPptpPrev
+            },
+            'winNasAddWizard #btnPptpNext' : {
+                click: me.btnPptpNext
+            },
             'winNasAddWizard #btnDynamicPrev' : {
                 click: me.btnDynamicPrev
             },
@@ -312,6 +318,13 @@ Ext.define('Rd.controller.cNas', {
             scrn.down('#user_id').setValue(me.user_id);
             win.getLayout().setActiveItem('scrnDynamic'); 
         }
+
+        if(rbg.getValue().rb == 'pptp'){
+            var scrn = win.down('#scrnPptp');
+            scrn.down('#owner').setValue(me.username);
+            scrn.down('#user_id').setValue(me.user_id);
+            win.getLayout().setActiveItem('scrnPptp'); 
+        }
     },
     //__OPEN VPN___
     btnOpenvpnPrev: function(button){
@@ -322,8 +335,6 @@ Ext.define('Rd.controller.cNas', {
     //__OPEN VPN___
     btnOpenvpnNext: function(button){
         var me      = this;
-        //We need to submit to the add_openvpn ...
-        console.log("OpenVPN submit");
         me.addSubmit(button,me.urlAddOpenVpn);
     },
     //__DYNAMIC___
@@ -335,9 +346,19 @@ Ext.define('Rd.controller.cNas', {
     //__DYNAMIC___
     btnDynamicNext: function(button){
         var me      = this;
-        //We need to submit to the add_dynamic ...
-        console.log("Dynamic submit");
         me.addSubmit(button,me.urlAddDynamic);
+    },
+    //__PPTP___
+    btnPptpPrev: function(button){
+        var me      = this;
+        var win     = button.up('winNasAddWizard');
+        win.getLayout().setActiveItem('scrnConType');
+    },
+    //__PPTP___
+    btnPptpNext: function(button){
+        var me      = this;
+        console.log("Pptp submit");
+        me.addSubmit(button,me.urlAddPptp);
     },
     //___DIRECT___
     btnDirectPrev:  function(button){
@@ -403,6 +424,7 @@ Ext.define('Rd.controller.cNas', {
         var me = this;
         var win     = button.up('winNasAddWizard');
         var form    = button.up('form');
+        var tp      = form.down('tabpanel');
         var grid    = form.down('gridRealmsForNasOwner');
         var extra_params ={};   //Get the extra params to submit with form
         var select_flag  = false;
@@ -449,7 +471,15 @@ Ext.define('Rd.controller.cNas', {
                     Ext.ux.Constants.msgInfo
                 );
             },
-            failure: Ext.ux.formFail
+            //Focus on the first tab as this is the most likely cause of error 
+            failure: function(form,action,b,c){
+                if(action.result.errors.username != undefined){ //This will be for OpenVPN and pptp
+                    tp.setActiveTab(0);
+                }else{
+                    tp.setActiveTab('tabNas');
+                }
+                Ext.ux.formFail(form,action)
+            }
         });
     },
 
