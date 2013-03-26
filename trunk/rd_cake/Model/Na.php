@@ -49,4 +49,28 @@ class Na extends AppModel {
         ),
         'OpenvpnClient'
     );
+
+    //Get the note ID before we delete it
+    public function beforeDelete(){
+        if($this->id){
+            $class_name     = $this->name;
+            $q_r            = $this->findById($this->id);
+            if($q_r[$class_name]['connection_type'] == 'openvpn'){ //Open VPN needs special treatment when deleting
+                $this->openvpn_id    = $q_r[$class_name]['id'];
+            }
+        }
+        return true;
+    }
+
+    public function afterDelete(){
+        if($this->openvpn_id){
+            $vpn = ClassRegistry::init('OpenvpnClient');
+            $vpn->contain();
+            $q_r = $vpn->find('first',array('conditions' => array('OpenvpnClient.na_id' => $this->openvpn_id)));
+            if($q_r){ //DeleteAll does not trigger the before and after delete callbacks!
+                 $vpn->id = $q_r['OpenvpnClient']['id'];
+                 $vpn->delete($q_r['OpenvpnClient']['id']);
+            }
+        }
+    }
 }
