@@ -5,8 +5,8 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
     draggable   : false,
     resizable   : false,
     title       : i18n('sAdd_NAS_device'),
-    width       : 400,
-    height      : 400,
+    width       : 500,
+    height      : 450,
     plain       : true,
     border      : false,
     layout      : 'card',
@@ -32,15 +32,14 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
         var scrnOpenvpn     = me.mkScrnOpenvpn();
         var scrnDynamic     = me.mkScrnDynamic();
         var scrnDirect      = me.mkScrnDirect();
-        var scrnRealmsForNasOwner = me.scrnRealmsForNasOwner();
+      //  var scrnRealmsForNasOwner = me.scrnRealmsForNasOwner();
 
         this.items = [
             scrnApTree,
             scrnConType,
             scrnOpenvpn,
             scrnDynamic,
-            scrnDirect,
-            scrnRealmsForNasOwner
+            scrnDirect
         ]; 
         this.callParent(arguments);
 
@@ -185,44 +184,22 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
     //______ OpenVPN username and optional password) _____
     mkScrnOpenvpn: function(){
 
-        var frmOpenvpn = Ext.create('Ext.form.Panel',{
+        var me      = this;
+        var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
-            layout:     'anchor',
+            layout:     'fit',
             itemId:     'scrnOpenvpn',
             autoScroll: true,
-            defaults: {
-                anchor: '100%'
-            },
             fieldDefaults: {
                 msgTarget: 'under',
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
                 labelSeparator: '',
+                labelWidth: 150,
                 margin: 15
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sCredentials_for_OpenVPN_tunnel'), cls: 'lblWizard' }
-            ],
-            items:[
-                {
-                    itemId      : 'vpn_username',
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sUsername'),
-                    name        : 'vpn_username',
-                    allowBlank  : false,
-                    blankText   : i18n('sSupply_a_value'),
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    itemId      : 'vpn_password',
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sPassword'),
-                    name        : 'vpn_password',
-                    labelClsExtra: 'lblRd'
-                } 
-            ],
-            buttons: [
+            buttons : [
                 {
                     itemId: 'btnOpenvpnPrev',
                     text: i18n('sPrev'),
@@ -238,57 +215,249 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                     formBind: true,
                     margin: '0 20 40 0'
                 }
+            ],
+            items:[
+                {
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    xtype   : 'tabpanel',
+                    margins : '0 0 0 0',
+                    plain   : true,
+                    tabPosition: 'bottom',
+                    border  : false,
+                    items   : [
+                        { 
+                            'title'     : i18n('sOpenVPN'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            tbar: [
+                                { xtype: 'tbtext', text: i18n('sOpenVPN_credentials'), cls: 'lblWizard' }
+                            ],
+                            items:[
+                                {
+                                    itemId      : 'vpn_username',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sUsername'),
+                                    name        : 'vpn_username',
+                                    allowBlank  : false,
+                                    blankText   : i18n('sSupply_a_value'),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'vpn_password',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sPassword'),
+                                    name        : 'vpn_password',
+                                    labelClsExtra: 'lblRd'
+                                } 
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sNAS'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            tbar: [
+                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+                            ],
+                            items:[
+                                {
+                                    itemId  : 'user_id',
+                                    xtype   : 'textfield',
+                                    name    : "user_id",
+                                    hidden  : true,
+                                    value   : me.user_id
+                                },
+                                {
+                                    itemId      : 'owner',
+                                    xtype       : 'displayfield',
+                                    fieldLabel  : i18n('sOwner'),
+                                    value       : me.owner,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'nasname',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sIP_Address'),
+                                    name        : "nasname",
+                                    allowBlank  : false,
+                                    value       : i18n("sSet_by_server"),
+                                    disabled    : true,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sName'),
+                                    name        : "shortname",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sSecret'),
+                                    name        : "secret",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sRealms'),
+                            itemId  : 'tabRealms', 
+                            tbar: [{
+                                xtype       : 'checkboxfield',
+                                boxLabel    : i18n('sMake_available_to_any_realm'), 
+                                boxLabelCls : 'lblRdCheck',
+                                itemId      : 'chkAvailForAll',
+                                name        : 'available_to_all',
+                                inputValue  : true,
+                            }],
+                            layout: 'fit',
+                            items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
+                        }
+                    ]
+                }    
             ]
         });
-        return frmOpenvpn;
+        return frmData;
     },
 
     //______ Dynamic Clients Attribute selection and value _____
     mkScrnDynamic: function(){
 
-        var frmDynamic = Ext.create('Ext.form.Panel',{
+         var me      = this;
+        var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
-            layout:     'anchor',
+            layout:     'fit',
             itemId:     'scrnDynamic',
             autoScroll: true,
-            defaults: {
-                anchor: '100%'
-            },
             fieldDefaults: {
                 msgTarget: 'under',
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
                 labelSeparator: '',
+                labelWidth: 150,
                 margin: 15
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sUnique_AVP_combination'), cls: 'lblWizard' }
-            ],
             items:[
                 {
-                    xtype: 'combo',
-                    fieldLabel: i18n('sAttribute'),
-                    labelSeparator: '',
-                    store: 'sDynamicAttributes',
-                    queryMode: 'local',
-                    valueField: 'id',
-                    displayField: 'name',
-                    allowBlank: false,
-                    editable: false,
-                    mode: 'local',
-                    itemId: 'dynamic_attribute',
-                    name: 'dynamic_attribute'
-                },
-                {
-                    itemId      : 'dynamic_value',
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sValue'),
-                    name        : 'dynamic_value',
-                    allowBlank  : false,
-                    blankText   : i18n('sValue_to_identify_the_NAS_with'),
-                    labelClsExtra: 'lblRdReq'
-                } 
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    xtype   : 'tabpanel',
+                    margins : '0 0 0 0',
+                    plain   : true,
+                    tabPosition: 'bottom',
+                    border  : false,
+                    items   : [
+                        { 
+                            'title'     : i18n('sDynamic_AVP_detail'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            tbar: [
+                                { xtype: 'tbtext', text: i18n('sUnique_AVP_combination'), cls: 'lblWizard' }
+                            ],
+                            items:[
+                                {
+                                    xtype: 'combo',
+                                    fieldLabel: i18n('sAttribute'),
+                                    labelSeparator: '',
+                                    store: 'sDynamicAttributes',
+                                    queryMode: 'local',
+                                    valueField: 'id',
+                                    displayField: 'name',
+                                    allowBlank: false,
+                                    editable: false,
+                                    mode: 'local',
+                                    itemId: 'dynamic_attribute',
+                                    name: 'dynamic_attribute'
+                                },
+                                {
+                                    itemId      : 'dynamic_value',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sValue'),
+                                    name        : 'dynamic_value',
+                                    allowBlank  : false,
+                                    blankText   : i18n('sValue_to_identify_the_NAS_with'),
+                                    labelClsExtra: 'lblRdReq'
+                                } 
+                            ],
+                        },
+                        { 
+                            'title' : i18n('sNAS'),
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            tbar: [
+                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+                            ],
+                            items:[
+                                {
+                                    itemId  : 'user_id',
+                                    xtype   : 'textfield',
+                                    name    : "user_id",
+                                    hidden  : true,
+                                    value   : me.user_id
+                                },
+                                {
+                                    itemId      : 'owner',
+                                    xtype       : 'displayfield',
+                                    fieldLabel  : i18n('sOwner'),
+                                    value       : me.owner,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'nasname',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sIP_Address'),
+                                    name        : "nasname",
+                                    allowBlank  : false,
+                                    value       : i18n("sSet_by_server"),
+                                    disabled    : true,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sName'),
+                                    name        : "shortname",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sSecret'),
+                                    name        : "secret",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sRealms'),
+                            itemId  : 'tabRealms',
+                            tbar: [{
+                                xtype       : 'checkboxfield',
+                                boxLabel    : i18n('sMake_available_to_any_realm'), 
+                                boxLabelCls : 'lblRdCheck',
+                                itemId      : 'chkAvailForAll',
+                                name        : 'available_to_all',
+                                inputValue  : true,
+                            }],
+                            layout: 'fit',
+                            items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
+                        }
+                    ]
+                }    
             ],
             buttons: [
                 {
@@ -308,95 +477,104 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 }
             ]
         });
-        return frmDynamic;
+        return frmData;
     },
 
     //_______ Direct connection  _______
     mkScrnDirect: function(){
 
-        var me = this;
-
-        var frmDirect = Ext.create('Ext.form.Panel',{
+        var me      = this;
+        var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
-            layout:     'anchor',
+            layout:     'fit',
             itemId:     'scrnDirect',
             autoScroll: true,
-            defaults: {
-                anchor: '100%'
-            },
             fieldDefaults: {
                 msgTarget: 'under',
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
                 labelSeparator: '',
+                labelWidth: 150,
                 margin: 15
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[
                 {
-                    itemId  : 'user_id',
-                    xtype   : 'textfield',
-                    name    : "user_id",
-                    hidden  : true,
-                    value   : me.user_id
-                },
-                {
-                    xtype   : 'textfield',
-                    itemId  : 'connection_type',
-                    name    : "connection_type",
-                    hidden  : true
-                }, 
-                {
-                    itemId      : 'owner',
-                    xtype       : 'displayfield',
-                    fieldLabel  : i18n('sOwner'),
-                    value       : me.owner,
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    itemId      : 'connectionType',
-                    xtype       : 'displayfield',
-                    fieldLabel  : i18n('sConnection'),
-                    value       : '',
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    itemId      : 'nasname',
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sIP_Address'),
-                    name        : "nasname",
-                    allowBlank  : false,
-                    blankText   : i18n("sSupply_a_value"),
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sName'),
-                    name        : "shortname",
-                    allowBlank  : false,
-                    blankText   : i18n("sSupply_a_value"),
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sSecret'),
-                    name        : "secret",
-                    allowBlank  : false,
-                    blankText   : i18n("sSupply_a_value"),
-                    labelClsExtra: 'lblRdReq'
-                },
-                {
-                    xtype       : 'checkbox',      
-                    boxLabel    : i18n('sMake_available_to_sub_providers'),
-                    name        : 'available_to_siblings',
-                    inputValue  : 'available_to_siblings',
-                    itemId      : 'a_to_s',
-                    checked     : false,
-                    boxLabelCls : 'lblRdReq'
-                }
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    xtype   : 'tabpanel',
+                    margins : '0 0 0 0',
+                    plain   : true,
+                    tabPosition: 'bottom',
+                    border  : false,
+                    items   : [
+                        { 
+                            'title' : i18n('sNAS'),
+                            'layout'    : 'anchor',
+                            tbar: [
+                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+                            ],
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items:[
+                                {
+                                    itemId  : 'user_id',
+                                    xtype   : 'textfield',
+                                    name    : "user_id",
+                                    hidden  : true,
+                                    value   : me.user_id
+                                },
+                                {
+                                    itemId      : 'owner',
+                                    xtype       : 'displayfield',
+                                    fieldLabel  : i18n('sOwner'),
+                                    value       : me.owner,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'nasname',
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sIP_Address'),
+                                    name        : "nasname",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sName'),
+                                    name        : "shortname",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : i18n('sSecret'),
+                                    name        : "secret",
+                                    allowBlank  : false,
+                                    blankText   : i18n("sSupply_a_value"),
+                                    labelClsExtra: 'lblRdReq'
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : i18n('sRealms'),
+                            itemId  : 'tabRealms',
+                            tbar: [{
+                                xtype       : 'checkboxfield',
+                                boxLabel    : i18n('sMake_available_to_any_realm'), 
+                                boxLabelCls : 'lblRdCheck',
+                                itemId      : 'chkAvailForAll',
+                                name        : 'available_to_all',
+                                inputValue  : true,
+                            }],
+                            layout: 'fit',
+                            items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
+                        }
+                    ]
+                }    
             ],
             buttons: [
                 {
@@ -416,40 +594,6 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                 }
             ]
         });
-        return frmDirect;
-    },
-
-    //____ Grid with availabble realms
-    scrnRealmsForNasOwner : function(){
-
-        var me = this;
-        var grid = Ext.create('Rd.view.nas.gridRealmsForNasOwner',{});
-        var pnlRealmsForNasOwner = Ext.create('Ext.form.Panel',{   
-            items: grid,
-            layout:     'fit',
-            itemId:     'scrnRealmsForNasOwner',
-            tbar: [{xtype: 'checkboxfield',boxLabel  : i18n('sMake_available_to_any_realm'), boxLabelCls : 'lblRd',itemId: 'chkAvailForAll'}],
-            buttons: [
-                {
-                    itemId: 'btnRealmsForNasOwnerPrev',
-                    text: i18n('sPrev'),
-                    scale: 'large',
-                    iconCls: 'b-prev',
-                    margin: '0 20 40 0'
-                },
-                {
-                    itemId: 'btnRealmsForNasOwnerNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    formBind: true,
-                    margin: '0 20 40 0'
-                }
-            ]
-        });
-        
-        return pnlRealmsForNasOwner;
-    }
-    
-    
+        return frmData;
+    }   
 });

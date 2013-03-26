@@ -1,5 +1,7 @@
 Ext.define('Rd.controller.cNas', {
     extend: 'Ext.app.Controller',
+    owner   : undefined,
+    user_id : undefined,
     actionIndex: function(){
 
         var me = this;
@@ -46,11 +48,15 @@ Ext.define('Rd.controller.cNas', {
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas', 'nas.frmNasBasic',
         'nas.pnlRealmsForNasOwner'
     ],
-    stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree'],
-    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree'],
+    stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags'],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
+        urlAddDirect:       '/cake2/rd_cake/nas/add_direct.json',
+        urlAddOpenVpn:      '/cake2/rd_cake/nas/add_open_vpn.json',
+        urlAddDynamic:      '/cake2/rd_cake/nas/add_dynamic.json',
+        urlAddPptp:         '/cake2/rd_cake/nas/add_pptp.json',
         urlEditPanelCfg:    '/cake2/rd_cake/nas/edit_panel_cfg.json',
         urlEditBasic:       '/cake2/rd_cake/nas/edit.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
@@ -75,7 +81,10 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #add'  : {
                 click:      me.add
-            },  
+            },
+            'gridNas #delete'   : {
+                click:      me.del
+            }, 
             'gridNas #edit' : {
                 click:      me.edit
             }, 
@@ -98,7 +107,7 @@ Ext.define('Rd.controller.cNas', {
                 activate:      me.gridActivate
             },
             'winNasAddWizard' :{
-                toFront: me.maskHide
+          ////      toFront: me.maskHide
             },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -127,26 +136,26 @@ Ext.define('Rd.controller.cNas', {
             'winNasAddWizard #btnDirectNext' : {
                 click:  me.btnDirectNext
             },
-            'winNasAddWizard #btnRealmsForNasOwnerPrev' : {
-                click:  me.btnRealmsForNasOwnerPrev
-            },
-            'winNasAddWizard #btnRealmsForNasOwnerNext' : {
-                click:  me.btnRealmsForNasOwnerNext
-            },
-            '#scrnRealmsForNasOwner gridRealmsForNasOwner #reload': {
+            'winNasAddWizard gridRealmsForNasOwner #reload': {
                 click:      me.gridRealmsForNasOwnerReload
             },
-            '#scrnRealmsForNasOwner #chkAvailForAll': {
+            'winNasAddWizard #tabRealms': {
+                activate:      me.gridRealmsForNasOwnerActivate
+            }, 
+            'winNasAddWizard #tabRealms #chkAvailForAll': {
                 change:     me.chkAvailForAllChange
             },
+            'winNasAddWizard gridRealmsForNasOwner #chkAvailSub':     {
+                change:     me.gridRealmsForNasOwnerChkAvailSub
+            },
             'winTagManage' : {
-                toFront:       me.maskHide
+          ////      toFront:       me.maskHide
             },
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
             },
             '#winCsvColumnSelectNas':{
-                toFront:       me.maskHide
+            ////    toFront:       me.maskHide
             },
             '#winCsvColumnSelectNas #save': {
                 click:  me.csvExportSubmit
@@ -164,7 +173,7 @@ Ext.define('Rd.controller.cNas', {
                 itemclick: me.gridNoteClick
             },
             'winNote[noteForGrid=nas]':{
-                toFront:       me.maskHide
+         ////       toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -199,11 +208,12 @@ Ext.define('Rd.controller.cNas', {
             return;
         }
         me.getStore('sNas').load();
+     ////   me.maskHide();
     },
     maskHide: function(){
         var me = this;
         console.log('hide');
-        me.getGridNas().mask.hide();
+      //  me.getGridNas().mask.hide();
     },
     gridActivate: function(g){
         var me = this;
@@ -211,7 +221,7 @@ Ext.define('Rd.controller.cNas', {
     },
     add: function(button){
         var me = this;
-        me.getGridNas().mask.show();
+       //// me.getGridNas().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -248,15 +258,16 @@ Ext.define('Rd.controller.cNas', {
             scope: me
         });
     },
+    //After the use selected an owner they can continiue
     btnTreeNext: function(button){
         var me = this;
         var tree = button.up('treepanel');
         //Get selection:
         var sr = tree.getSelectionModel().getLastSelected();
-        if(sr){    
-            var win = button.up('winNasAddWizard');
-            win.down('#owner').setValue(sr.get('username'));
-            win.down('#user_id').setValue(sr.getId());
+        if(sr){ 
+            var win     = button.up('winNasAddWizard');   
+            me.username = sr.get('username');
+            me.user_id  = sr.getId();
             win.getLayout().setActiveItem('scrnConType');
         }else{
             Ext.ux.Toaster.msg(
@@ -267,11 +278,13 @@ Ext.define('Rd.controller.cNas', {
             );
         }
     },
+    //Back to the owner selection
     btnConTypePrev: function(button){
         var me = this;
         var win = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnApTree');
     },
+    //Here we see whic connection type they choose
     btnConTypeNext: function(button){
         var me      = this;
         var win     = button.up('winNasAddWizard');
@@ -280,140 +293,64 @@ Ext.define('Rd.controller.cNas', {
         var rbg     = form.down('radiogroup');
 
         if(rbg.getValue().rb == 'direct'){
-            rb = rbg.down('radio[inputValue="direct"]')
-            win.down('#connectionType').setValue(rb.boxLabel);
-            win.down('#connection_type').setValue('direct');
+            var scrn = win.down('#scrnDirect');
+            scrn.down('#owner').setValue(me.username);
+            scrn.down('#user_id').setValue(me.user_id);
             win.getLayout().setActiveItem('scrnDirect'); 
         }
 
         if(rbg.getValue().rb == 'openvpn'){
-            rb = rbg.down('radio[inputValue="openvpn"]')
-            win.down('#connectionType').setValue(rb.boxLabel);
-            win.down('#connection_type').setValue('openvpn');
-            win.down('#nasname').setValue('Assigned by server');
-            win.down('#nasname').setDisabled(true);
+            var scrn = win.down('#scrnOpenvpn');
+            scrn.down('#owner').setValue(me.username);
+            scrn.down('#user_id').setValue(me.user_id);
             win.getLayout().setActiveItem('scrnOpenvpn'); 
         }
 
-         if(rbg.getValue().rb == 'dynamic'){
-            rb = rbg.down('radio[inputValue="dynamic"]')
-            win.down('#connectionType').setValue(rb.boxLabel);
-            win.down('#connection_type').setValue('dynamic');
-            win.down('#nasname').setValue('Assigned by server');
-            win.down('#nasname').setDisabled(true);
+        if(rbg.getValue().rb == 'dynamic'){
+            var scrn = win.down('#scrnDynamic');
+            scrn.down('#owner').setValue(me.username);
+            scrn.down('#user_id').setValue(me.user_id);
             win.getLayout().setActiveItem('scrnDynamic'); 
         }
     },
+    //__OPEN VPN___
     btnOpenvpnPrev: function(button){
         var me      = this;
         var win     = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnConType');
     },
+    //__OPEN VPN___
     btnOpenvpnNext: function(button){
         var me      = this;
-        var win     = button.up('winNasAddWizard');
-        win.getLayout().setActiveItem('scrnDirect');
+        //We need to submit to the add_openvpn ...
+        console.log("OpenVPN submit");
+        me.addSubmit(button,me.urlAddOpenVpn);
     },
+    //__DYNAMIC___
     btnDynamicPrev: function(button){
         var me      = this;
         var win     = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnConType');
     },
+    //__DYNAMIC___
     btnDynamicNext: function(button){
         var me      = this;
-        var win     = button.up('winNasAddWizard');
-        win.getLayout().setActiveItem('scrnDirect');
+        //We need to submit to the add_dynamic ...
+        console.log("Dynamic submit");
+        me.addSubmit(button,me.urlAddDynamic);
     },
+    //___DIRECT___
     btnDirectPrev:  function(button){
         var me      = this;
         var win     = button.up('winNasAddWizard');
         win.getLayout().setActiveItem('scrnConType');
     },
+    //___DIRECT___
     btnDirectNext:  function(button){
         var me      = this;
-        var win     = button.up('winNasAddWizard');
-        //This part can be quite involved since the grid has to be fed some extraParams and reloaded 
-        //since the owner and available_to_sub_providers will influence it
-        var owner_id = win.down('#user_id').getValue();
-        var a_to_s   = win.down('#a_to_s').getValue();
-
-        var grid    = win.down('gridRealmsForNasOwner');
-        grid.getStore().getProxy().setExtraParam('owner_id',owner_id);
-        grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
-        grid.getStore().load();
-
-        win.getLayout().setActiveItem('scrnRealmsForNasOwner');
-    },
-    btnRealmsForNasOwnerPrev:  function(button){
-        var me      = this;
-        var win     = button.up('winNasAddWizard');
-        win.getLayout().setActiveItem('scrnDirect');
-    },
-    btnRealmsForNasOwnerNext: function(button){
-        var me      = this;
-        var win     = button.up('winNasAddWizard');
-        var grid    = win.down('gridRealmsForNasOwner');
-        var form    = win.down('#scrnDirect');
-        var extra_params ={};   //Get the extra params to submit with form
-        var select_flag = false;
-
-        //See if 'Make available to any realm' is selected...
-        var chk = win.down('#chkAvailForAll');
-        if(chk.getValue() == true){
-            extra_params.avail_for_all = true;
-        }else{
-            grid.getStore().each(function(record){
-                if(record.get('selected') == true){
-                    select_flag = true;
-                    extra_params[record.getId()] = record.get('selected');
-                }
-            }, me);
-        }
-
-        //If they did not select avail_for_all and NOT selected ANY realm, refuse to continue
-        if(extra_params.avail_for_all == undefined){
-            if(select_flag != true){
-                Ext.ux.Toaster.msg(
-                        i18n('sSelect_at_least_one_realm'),
-                        i18n('sSelect_one_or_more_realms'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-                return;
-            }
-        }
-
-        //Check if it was not a direct connection... then get other attributes
-        var rbg = win.down('radiogroup');
-        if(rbg.getValue().rb == 'openvpn'){
-            extra_params.vpn_username = win.down('#vpn_username').getValue();
-            extra_params.vpn_password = win.down('#vpn_password').getValue();
-        }
-
-        //Check if it was not a direct connection... then get other attributes
-        var rbg = win.down('radiogroup');
-        if(rbg.getValue().rb == 'dynamic'){
-            extra_params.dynamic_attribute  = win.down('#dynamic_attribute').getValue();
-            extra_params.dynamic_value      = win.down('#dynamic_value').getValue();
-        }
-
-        //Checks passed fine...      
-        form.submit({
-            clientValidation: true,
-            url: me.urlAdd,
-            params: extra_params,
-            success: function(form, action) {
-                win.close();
-                me.getGridNas().getStore().load();
-                Ext.ux.Toaster.msg(
-                    i18n('sNew_item_created'),
-                    i18n('sItem_created_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
+        //We need to submit to the add_direct ...
+        console.log("Direct submit");
+        me.addSubmit(button,me.urlAddDirect);
     },
     chkAvailForAllChange: function(chk){
         var me      = this;
@@ -445,13 +382,85 @@ Ext.define('Rd.controller.cNas', {
         var grid    = button.up('gridRealmsForNasOwner');
         grid.getStore().load();
     },
+    gridRealmsForNasOwnerActivate: function(tab){
+        var me      = this;
+        var a_to_s  = tab.down('#chkAvailSub').getValue();
+        var grid    = tab.down('gridRealmsForNasOwner');
+        grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
+        grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
+        grid.getStore().load();
+    },
+    gridRealmsForNasOwnerChkAvailSub: function(chk){
+        var me      = this;
+        var a_to_s  = chk.getValue();
+        var grid    = chk.up('gridRealmsForNasOwner');
+        grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
+        grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
+        grid.getStore().load();
+    },
+
+    addSubmit: function(button, url){
+        var me = this;
+        var win     = button.up('winNasAddWizard');
+        var form    = button.up('form');
+        var grid    = form.down('gridRealmsForNasOwner');
+        var extra_params ={};   //Get the extra params to submit with form
+        var select_flag  = false;
+
+        var chk = form.down('#chkAvailForAll');
+        if(chk.getValue() == true){
+            extra_params.avail_for_all = true;
+        }else{
+            grid.getStore().each(function(record){
+                if(record.get('selected') == true){
+                    select_flag = true;
+                    extra_params[record.getId()] = record.get('selected');
+                }
+            }, me);
+        }
+
+        //If they did not select avail_for_all and NOT selected ANY realm, refuse to continue
+        if(extra_params.avail_for_all == undefined){
+            if(select_flag != true){
+                var tp = form.down('tabpanel');
+                tp.setActiveTab('tabRealms');
+                Ext.ux.Toaster.msg(
+                        i18n('sSelect_at_least_one_realm'),
+                        i18n('sSelect_one_or_more_realms'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );  
+                return;
+            }
+        }
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation: true,
+            url: url,
+            params: extra_params,
+            success: function(form, action) {
+                win.close();
+                me.getGridNas().getStore().load();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+
+    //_____ END ADD _______
 
     tag: function(button){
         var me      = this;
-        me.getGridNas().mask.show();     
+      ////  me.getGridNas().mask.show();     
         //Find out if there was something selected
         if(me.getGridNas().getSelectionModel().getCount() == 0){
-            me.maskHide(); 
+         ////   me.maskHide(); 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_tag'),
@@ -558,7 +567,7 @@ Ext.define('Rd.controller.cNas', {
 
     csvExport: function(button,format) {
         var me          = this;
-        me.getGridNas().mask.show();
+    ////    me.getGridNas().mask.show();
         var columns     = me.getGridNas().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -627,11 +636,11 @@ Ext.define('Rd.controller.cNas', {
 
     note: function(button,format) {
         var me      = this;  
-        me.getGridNas().mask.show();   
+    ////    me.getGridNas().mask.show();   
         //Find out if there was something selected
         var sel_count = me.getGridNas().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
+       ////     me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -640,7 +649,7 @@ Ext.define('Rd.controller.cNas', {
             );
         }else{
             if(sel_count > 1){
-                 me.maskHide();
+            ////     me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -934,11 +943,7 @@ Ext.define('Rd.controller.cNas', {
         
     },
 
-    gridRealmsForNasOwnerReload: function(button){
-        var me      = this;
-        var grid    = button.up('gridRealmsForNasOwner');
-        grid.getStore().reload();
-    },
+    
     chkAvailSubTab: function(chk){
         var me      = this;
         var grid    = chk.up('gridRealmsForNasOwner');
@@ -951,8 +956,46 @@ Ext.define('Rd.controller.cNas', {
         grid.getStore().getProxy().setExtraParam('clear_flag',true);
         grid.getStore().load();
         grid.getStore().getProxy().setExtraParam('clear_flag',false);
-    }
+    },
 
     //_____ DELETE ______
-
+    del:   function(button){
+        var me      = this;  
+        var grid    = button.up('gridNas');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.reload(); //Reload from server since the sync was not good  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.reload(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    }
 });
