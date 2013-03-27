@@ -19,6 +19,11 @@ $config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 
 $config['openvpn']['ccd_dir_location']  = '/etc/openvpn/ccd/';
 $config['openvpn']['ip_half']           = '10.8.';
 
+//Define pptp specific settings
+$config['pptp']['start_ip']                        = '10.20.30.2';
+$config['pptp']['server_ip']                       = '10.20.30.1';
+$config['pptp']['chap_secrets']                    = '/etc/ppp/chap-secrets';
+
 //Dictionary files to include for profiles...
 $config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
 $config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
