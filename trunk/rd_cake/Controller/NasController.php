@@ -575,10 +575,91 @@ class NasController extends AppController {
     }
 
     public function add_pptp(){
-        $this->set(array(
+          //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $conn_type = 'pptp';
+        $this->request->data['connection_type'] = $conn_type;
+
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        //If this attribute is not present it will fail empty check
+        if(!isset($this->request->data['nasname'])){
+            $this->request->data['nasname'] = ''; //Make it empty if not present
+        }
+
+        //First we create the OpenVPN entry....
+        $d = array();
+        $d['PptpClient']['username'] = $this->request->data['username'];
+        $d['PptpClient']['password'] = $this->request->data['password'];
+        $this->{$this->modelClass}->PptpClient->create();
+        if(!$this->{$this->modelClass}->PptpClient->save($d)){
+            $first_error = reset($this->{$this->modelClass}->PptpClient->validationErrors);
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->PptpClient->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create OpenVPN Client <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+            return;
+        }else{
+            //Derive the nasname (ip address) from the new PptpClient entry
+            $qr = $this->{$this->modelClass}->PptpClient->findById($this->Na->PptpClient->id);
+            //IP Address =
+            $nasname = $qr['PptpClient']['ip'];
+            $this->request->data['nasname'] = $nasname;
+        }
+
+        //Then we add the rest.....
+        $this->{$this->modelClass}->create();
+        //print_r($this->request->data);
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+            //Available to all does not add any na_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }
+
+            //Save the new ID to the PptpClient....
+            $this->{$this->modelClass}->PptpClient->saveField('na_id', $this->{$this->modelClass}->id);
+          
+            $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
-        ));
+            ));
+        } else {
+            //If it was an PptpClient we need to remove the created pptpclient entry since there was a failure
+            $this->{$this->modelClass}->PptpClient->delete();
+            $first_error = reset($this->{$this->modelClass}->validationErrors);
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
     }
 
 
@@ -616,13 +697,34 @@ class NasController extends AppController {
 
     public function edit_panel_cfg(){
 
-        $items = array(
-            array( 'title'  => __('Detail'), 'layout' => 'hbox', 'items' => array('xtype' => 'frmNasBasic', 'height' => '100%', 'width' => 500)),
-            array( 'title'  => __('Realms'),'xtype' => 'pnlRealmsForNasOwner'),
-            array( 'title'  => __('Photo')),
-            array( 'title'  => __('Availability')),
-            array( 'title'  => __('Map info'))
-        );
+        $items = array();
+
+        //Determine which tabs will be displayed (based on the connection type)
+        if(isset($this->request->query['nas_id'])){
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['nas_id']);
+            if($q_r){
+                $conn_type = $q_r['Na']['connection_type'];
+                if($conn_type == 'openvpn'){
+                    array_push($items,array( 'title'  => __('OpenVPN credentials'), 'itemId' => 'tabOpenVpn', 'xtype' => 'pnlNasOpenVpn'));
+                }
+                if($conn_type == 'pptp'){
+                    array_push($items,array( 'title'  => __('PPTP credentials'),    'itemId' => 'tabPptp'));
+                }
+                if($conn_type == 'dynamic'){
+                    array_push($items,array( 'title'  => __('Unique AVP combination'), 'itemId' => 'tabDynamic'));
+                }
+            }
+        }
+
+        //This will be with all of them
+       /// array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'layout' => 'hbox', 
+       ///     'items' => array('xtype' => 'frmNasBasic', 'height' => '100%', 'width' => 500)
+       /// ));
+         array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'xtype' => 'pnlNasNas'));
+        array_push($items,array( 'title'  => __('Realms'),'itemId' => 'tabRealms', 'layout' => 'fit', 'border' => false, 'xtype' => 'pnlRealmsForNasOwner'));
+      //  array_push($items,array( 'title'  => __('Photo')));
+      //  array_push($items,array( 'title'  => __('Availability')));
+       // array_push($items,array( 'title'  => __('Map info')));
 
         $this->set(array(
                 'items'     => $items,
