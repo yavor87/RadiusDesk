@@ -7,6 +7,16 @@ Ext.require([
     'Ext.state.*'
 ]);
 
+//Declare some constants
+Ext.namespace('Rd').config = {
+    //buttonMargin    : '0 20 40 0',
+    buttonMargin    : '10 15 10 15',
+    fieldMargin     : 15,
+    labelWidth      : 150,
+    maxWidth        : 400,
+};
+
+
 Ext.application({
     //Patch like a profesional: http://flexblog.faratasystems.com/2012/02/27/the-best-way-to-organize-your-ext-js-overrides
     requires: ['Rd.patch.ExtJS411aPatch'],
