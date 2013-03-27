@@ -6,6 +6,8 @@ Ext.define('Rd.view.nas.pnlNas', {
     url     : null,
     initComponent: function(){
         var me = this;
+
+        //Make the second tab active to triger tha activate
         Ext.Ajax.request({
             url     : me.url+'?nas_id='+me.nas_id,
             method  : 'GET',
@@ -21,19 +23,19 @@ Ext.define('Rd.view.nas.pnlNas', {
         if(jsonData.success){
             me.add(jsonData.items); //Add the items
             me.setActiveTab(0);
-            var form = me.down('frmNasBasic');
-            form.loadRecord(me.record);    //Load the record
-            var con_type = me.record.get('connection_type');
-            if(con_type != 'direct'){
-                form.down('#nasname').setDisabled(true);    //Anything not direct is not editable
-            }
+          //  var form = me.down('frmNasBasic');
+          //  form.loadRecord(me.record);    //Load the record
+         //   var con_type = me.record.get('connection_type');
+        //    if(con_type != 'direct'){
+        //        form.down('#nasname').setDisabled(true);    //Anything not direct is not editable
+        //    }
 
             //Configure the settings for the realms
-            var gridR    = me.down('gridRealmsForNasOwner');
-            gridR.getStore().getProxy().setExtraParam('nas_id',me.nas_id);
-            gridR.getStore().getProxy().setExtraParam('owner_id',me.record.get('user_id'));
-            gridR.getStore().getProxy().setExtraParam('available_to_siblings',me.record.get('available_to_siblings'));
-            gridR.getStore().load();
+         //   var gridR    = me.down('gridRealmsForNasOwner');
+         //   gridR.getStore().getProxy().setExtraParam('nas_id',me.nas_id);
+         //   gridR.getStore().getProxy().setExtraParam('owner_id',me.record.get('user_id'));
+         //   gridR.getStore().getProxy().setExtraParam('available_to_siblings',me.record.get('available_to_siblings'));
+        //    gridR.getStore().load();
         }
     }
 });

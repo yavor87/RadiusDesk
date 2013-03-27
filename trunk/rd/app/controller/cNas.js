@@ -46,7 +46,7 @@ Ext.define('Rd.controller.cNas', {
     views:  [
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas', 'nas.frmNasBasic',
-        'nas.pnlRealmsForNasOwner'
+        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag'],
@@ -204,6 +204,23 @@ Ext.define('Rd.controller.cNas', {
             },
             'pnlRealmsForNasOwner #chkAvailSub':{
                 change:     me.chkAvailSubTab
+            },
+            //Daa the Edit componet's events
+            'pnlNas #tabOpenVpn': {
+                beforerender:   me.tabOpenVpnRender,
+                activate:       me.tabOpenVpnActivate
+            },
+            'pnlNas #tabPptp': {
+                activate:   me.tabPptpActivate
+            },
+            'pnlNas #tabDynamic': {
+                activate:   me.tabDynamicActivate
+            },
+            'pnlNas #tabNas': {
+                activate:   me.tabNasActivate
+            },
+            'pnlNas #tabRealms': {
+                activate:   me.tabRealmsActivate
             }
         });
     },
@@ -926,6 +943,34 @@ Ext.define('Rd.controller.cNas', {
             });
         }
     },
+
+    //__EDIT RELATED EVENTS
+    tabOpenVpnRender : function(tab){
+        var me = this;
+        console.log("Tab OpenVPN render....");
+        return true;
+    },
+    tabOpenVpnActivate : function(tab){
+        var me = this;
+        console.log("Tab OpenVPN....");
+    },
+    tabPptpActivate : function(tab){
+        var me = this;
+        console.log("Tab Pptp....");
+    },
+    tabDynamicActivate : function(tab){
+        var me = this;
+        console.log("Tab Dynamic....");
+    },
+    tabNasActivate : function(tab){
+        var me = this;
+        console.log("Tab NAS....");
+    },
+    tabRealmsActivate : function(tab){
+        var me = this;
+        console.log("Tab Realms....");
+    },
+
 
     frmNasBasicSave : function(button){
         var me      = this;
