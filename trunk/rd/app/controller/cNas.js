@@ -46,7 +46,7 @@ Ext.define('Rd.controller.cNas', {
     views:  [
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas', 'nas.frmNasBasic',
-        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas'
+        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag'],
@@ -62,7 +62,15 @@ Ext.define('Rd.controller.cNas', {
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/nas/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/nas/note_add.json'
+        urlNoteAdd:         '/cake2/rd_cake/nas/note_add.json',
+        urlViewOpenVpn:     '/cake2/rd_cake/nas/view_openvpn.json',
+        urlEditOpenVpn:     '/cake2/rd_cake/nas/edit_openvpn.json',
+        urlViewDynamic:     '/cake2/rd_cake/nas/view_dynamic.json',
+        urlEditDynamic:     '/cake2/rd_cake/nas/edit_dynamic.json',
+        urlViewPptp:        '/cake2/rd_cake/nas/view_pptp.json',
+        urlEditPptp:        '/cake2/rd_cake/nas/edit_pptp.json',
+        urlViewNas:         '/cake2/rd_cake/nas/view_nas.json',
+        urlEditNas:         '/cake2/rd_cake/nas/edit_nas.json',
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'}       
@@ -210,14 +218,26 @@ Ext.define('Rd.controller.cNas', {
                 beforerender:   me.tabOpenVpnRender,
                 activate:       me.tabOpenVpnActivate
             },
+            'pnlNas #tabOpenVpn #save': {
+                click:          me.saveOpenVpn,
+            },
             'pnlNas #tabPptp': {
-                activate:   me.tabPptpActivate
+                beforerender:   me.tabPptpActivate,
+                activate:       me.tabPptpActivate
+            },
+            'pnlNas #tabPptp #save': {
+                click:          me.savePptp,
             },
             'pnlNas #tabDynamic': {
-                activate:   me.tabDynamicActivate
+                beforerender:   me.tabDynamicActivate,
+                activate:       me.tabDynamicActivate
+            },
+            'pnlNas #tabDynamic #save': {
+                click:          me.saveDynamic,
             },
             'pnlNas #tabNas': {
-                activate:   me.tabNasActivate
+                beforerender:   me.tabNasActivate,
+                activate:       me.tabNasActivate
             },
             'pnlNas #tabRealms': {
                 activate:   me.tabRealmsActivate
@@ -946,25 +966,100 @@ Ext.define('Rd.controller.cNas', {
 
     //__EDIT RELATED EVENTS
     tabOpenVpnRender : function(tab){
-        var me = this;
-        console.log("Tab OpenVPN render....");
-        return true;
+        var me      = this;
+        var form    = tab.down('form');
+        var nas_id  = tab.up('pnlNas').nas_id;
+        form.load({url:me.urlViewOpenVpn, method:'GET',params:{nas_id:nas_id}});
     },
     tabOpenVpnActivate : function(tab){
-        var me = this;
-        console.log("Tab OpenVPN....");
+        var me      = this;
+        var form    = tab.down('form');
+        var nas_id  = tab.up('pnlNas').nas_id;
+        form.load({url:me.urlViewOpenVpn, method:'GET',params:{nas_id:nas_id}});
+    },
+    saveOpenVpn:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var nas_id  = button.up('pnlNas').nas_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditOpenVpn,
+            params              : {nas_id: nas_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     tabPptpActivate : function(tab){
         var me = this;
-        console.log("Tab Pptp....");
+        var form    = tab.down('form');
+        var nas_id  = tab.up('pnlNas').nas_id;
+        form.load({url:me.urlViewPptp, method:'GET',params:{nas_id:nas_id}});
+    },
+    savePptp:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var nas_id  = button.up('pnlNas').nas_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditPptp,
+            params              : {nas_id: nas_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     tabDynamicActivate : function(tab){
         var me = this;
-        console.log("Tab Dynamic....");
+        var form    = tab.down('form');
+        var nas_id  = tab.up('pnlNas').nas_id;
+        form.load({url:me.urlViewDynamic, method:'GET',params:{nas_id:nas_id}});
+    },
+    saveDynamic:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var nas_id  = button.up('pnlNas').nas_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditDynamic,
+            params              : {id: nas_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
     },
     tabNasActivate : function(tab){
         var me = this;
-        console.log("Tab NAS....");
+        var form    = tab.down('form');
+        var nas_id  = tab.up('pnlNas').nas_id;
+        form.load({url:me.urlViewNas, method:'GET',params:{nas_id:nas_id}});
     },
     tabRealmsActivate : function(tab){
         var me = this;

@@ -5,6 +5,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
     nas_id  : null,
     url     : null,
     layout: 'hbox',
+    bodyStyle: {backgroundColor : Rd.config.panelGrey },
     initComponent: function(){
         var me = this;
 

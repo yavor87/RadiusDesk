@@ -543,7 +543,7 @@ Ext.define('Rd.view.realms.winNasAddWizard', {
                                     blankText   : i18n('sValue_to_identify_the_NAS_with'),
                                     labelClsExtra: 'lblRdReq'
                                 } 
-                            ],
+                            ]
                         },
                         { 
                             'title'     : i18n('sNAS'),
