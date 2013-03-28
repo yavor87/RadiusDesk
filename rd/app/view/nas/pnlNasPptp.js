@@ -1,6 +1,6 @@
-Ext.define('Rd.view.nas.pnlNasOpenVpn', {
+Ext.define('Rd.view.nas.pnlNasPptp', {
     extend  : 'Ext.panel.Panel',
-    alias   : 'widget.pnlNasOpenVpn',
+    alias   : 'widget.pnlNasPptp',
     border  : false,
     nas_id  : null,
     url     : null,
@@ -29,7 +29,7 @@ Ext.define('Rd.view.nas.pnlNasOpenVpn', {
                 labelWidth: Rd.config.labelWidth,
             },
             tbar: [
-                { xtype: 'tbtext', text: i18n('sOpenVPN_credentials'), cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sPPTP_credentials'), cls: 'lblWizard' }
             ],
             items       : [
                  {
@@ -46,7 +46,9 @@ Ext.define('Rd.view.nas.pnlNasOpenVpn', {
                     xtype       : 'textfield',
                     fieldLabel  : i18n('sPassword'),
                     name        : 'password',
-                    labelClsExtra: 'lblRd'
+                    allowBlank  : false,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRdReq'
                 }                
             ],
             buttons: [

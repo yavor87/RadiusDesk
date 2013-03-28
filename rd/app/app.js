@@ -14,6 +14,7 @@ Ext.namespace('Rd').config = {
     fieldMargin     : 15,
     labelWidth      : 150,
     maxWidth        : 400,
+    panelGrey       : '#e5e6ef'
 };
 
 

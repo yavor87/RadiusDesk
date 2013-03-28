@@ -1,6 +1,6 @@
-Ext.define('Rd.view.nas.pnlNasOpenVpn', {
+Ext.define('Rd.view.nas.pnlNasDynamic', {
     extend  : 'Ext.panel.Panel',
-    alias   : 'widget.pnlNasOpenVpn',
+    alias   : 'widget.pnlNasDynamic',
     border  : false,
     nas_id  : null,
     url     : null,
@@ -29,25 +29,32 @@ Ext.define('Rd.view.nas.pnlNasOpenVpn', {
                 labelWidth: Rd.config.labelWidth,
             },
             tbar: [
-                { xtype: 'tbtext', text: i18n('sOpenVPN_credentials'), cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sUnique_AVP_combination'), cls: 'lblWizard' }
             ],
-            items       : [
-                 {
-                    itemId      : 'username',
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sUsername'),
-                    name        : 'username',
-                    allowBlank  : false,
-                    blankText   : i18n('sSupply_a_value'),
-                    labelClsExtra: 'lblRdReq'
+            items:[
+                {
+                    xtype: 'combo',
+                    fieldLabel: i18n('sAttribute'),
+                    labelSeparator: '',
+                    store: 'sDynamicAttributes',
+                    queryMode: 'local',
+                    valueField: 'id',
+                    displayField: 'name',
+                    allowBlank: false,
+                    editable: false,
+                    mode: 'local',
+                    itemId: 'dynamic_attribute',
+                    name: 'dynamic_attribute'
                 },
                 {
-                    itemId      : 'password',
+                    itemId      : 'dynamic_value',
                     xtype       : 'textfield',
-                    fieldLabel  : i18n('sPassword'),
-                    name        : 'password',
-                    labelClsExtra: 'lblRd'
-                }                
+                    fieldLabel  : i18n('sValue'),
+                    name        : 'dynamic_value',
+                    allowBlank  : false,
+                    blankText   : i18n('sValue_to_identify_the_NAS_with'),
+                    labelClsExtra: 'lblRdReq'
+                } 
             ],
             buttons: [
                 {
