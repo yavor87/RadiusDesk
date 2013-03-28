@@ -662,6 +662,217 @@ class NasController extends AppController {
         }
     }
 
+    public function view_openvpn(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->OpenvpnClient->find('first',
+                array('conditions' => array('OpenvpnClient.na_id' => $this->request->query['nas_id']))
+            );
+
+            if($q_r){
+                $items['username'] = $q_r['OpenvpnClient']['username'];
+                $items['password'] = $q_r['OpenvpnClient']['password'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_openvpn(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        //TODO Check if the owner ...
+
+        if(isset($this->request->data['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->OpenvpnClient->find('first',
+                array('conditions' => array('OpenvpnClient.na_id' => $this->request->data['nas_id']))
+            );
+
+            if($q_r){
+                $id = $q_r['OpenvpnClient']['id'];
+                $this->request->data['id']      = $id;
+                $this->request->data['subnet']  = $q_r['OpenvpnClient']['subnet'];
+                $this->request->data['peer1']   = $q_r['OpenvpnClient']['peer1'];
+                $this->request->data['peer2']   = $q_r['OpenvpnClient']['peer2'];  
+            }
+
+            if(!$this->Na->OpenvpnClient->save($this->request->data)){
+                $first_error = reset($this->Na->OpenvpnClient->validationErrors);
+                $this->set(array(
+                    'errors'    => $this->Na->OpenvpnClient->validationErrors,
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not update OpenVPN detail').' <br>'.$first_error[0]),
+                    '_serialize' => array('errors','success','message')
+                ));
+                return;
+            }else{
+                    $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
+    }
+
+    public function view_pptp(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->PptpClient->find('first',
+                array('conditions' => array('PptpClient.na_id' => $this->request->query['nas_id']))
+            );
+
+            if($q_r){
+                $items['username'] = $q_r['PptpClient']['username'];
+                $items['password'] = $q_r['PptpClient']['password'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_pptp(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        //TODO Check if the owner ...
+
+        if(isset($this->request->data['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->PptpClient->find('first',
+                array('conditions' => array('PptpClient.na_id' => $this->request->data['nas_id']))
+            );
+
+            if($q_r){
+                $id = $q_r['PptpClient']['id'];
+                $this->request->data['id']      = $id;
+                $this->request->data['ip']      = $q_r['PptpClient']['ip'];
+            }
+
+            if(!$this->Na->PptpClient->save($this->request->data)){
+                $first_error = reset($this->Na->PptpClient->validationErrors);
+                $this->set(array(
+                    'errors'    => $this->Na->PptpClient->validationErrors,
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not update PPTP detail').' <br>'.$first_error[0]),
+                    '_serialize' => array('errors','success','message')
+                ));
+                return;
+            }else{
+                    $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
+    }
+
+
+    public function view_dynamic(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['nas_id']);
+
+            if($q_r){
+                $items['dynamic_attribute'] = $q_r['Na']['dynamic_attribute'];
+                $items['dynamic_value']     = $q_r['Na']['dynamic_value'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function edit_dynamic(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+
+        }else{
+             $this->set(array(
+                'success' => false,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
+    public function view_nas(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['nas_id'])){
+
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['nas_id']);
+
+            if($q_r){
+                $items = $q_r['Na'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
 
     public function manage_tags(){
 
@@ -705,13 +916,13 @@ class NasController extends AppController {
             if($q_r){
                 $conn_type = $q_r['Na']['connection_type'];
                 if($conn_type == 'openvpn'){
-                    array_push($items,array( 'title'  => __('OpenVPN credentials'), 'itemId' => 'tabOpenVpn', 'xtype' => 'pnlNasOpenVpn'));
+                    array_push($items,array( 'title'  => __('OpenVPN'), 'itemId' => 'tabOpenVpn', 'xtype' => 'pnlNasOpenVpn'));
                 }
                 if($conn_type == 'pptp'){
-                    array_push($items,array( 'title'  => __('PPTP credentials'),    'itemId' => 'tabPptp'));
+                    array_push($items,array( 'title'  => __('PPTP'),    'itemId' => 'tabPptp', 'xtype' => 'pnlNasPptp'));
                 }
                 if($conn_type == 'dynamic'){
-                    array_push($items,array( 'title'  => __('Unique AVP combination'), 'itemId' => 'tabDynamic'));
+                    array_push($items,array( 'title'  => __('Dynamic AVP detail'), 'itemId' => 'tabDynamic', 'xtype' => 'pnlNasDynamic' ));
                 }
             }
         }
