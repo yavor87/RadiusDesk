@@ -60,7 +60,11 @@ class PptpClient extends AppModel {
             $qr = $this->findById($this->data['PptpClient']['id']);
             $username = $qr['PptpClient']['username'];
             if($username != $new_username){
-                //Name changed, remove old file
+                //Name changed, remove old entry
+               // $this->id = $this->data['PptpClient']['id'];
+                $this->_removeFromChapSecrets();
+                //Add new one
+                $this->_addToChapSecrets();
                 
             }
         }else{
