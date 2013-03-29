@@ -68,7 +68,41 @@ class MonitorTask extends Shell {
 
     private function _do_heartbeat_tests(){
         $this->out('<info>Monitor::Heartbeat::Starting</info>');
+        $this->Na->contain('NaState');
+        $q_r = $this->Na->find('all',array('conditions' => array('Na.monitor' => 'heartbeat')));
+       // print_r($q_r);
+        foreach($q_r as $i){
+            $id             = $i['Na']['id'];
+            $ip             = $i['Na']['nasname'];
+            $last_contact   = $i['Na']['last_contact'];
+            $lc_seconds     = strtotime($last_contact);
+            $dead_after     = $i['Na']['heartbeat_dead_after'];
 
+            if($last_contact == null){ //First time
+                $state = 0;
+            }else{ //Follow ups....
+                $time_now = time();
+                if($time_now > ($lc_seconds+$dead_after)){
+                    $this->out("<warning>Monitor::Heartbeat::Marking $ip as dead</warning>");
+                    $state = 0;
+                }else{
+                    $this->out("<warning>Monitor::Heartbeat::$ip still alive</warning>");
+                    $state = 1;
+                }
+     
+                $last_state = 0;
+                if(!empty($i['NaState'])){
+                    $last_state = $i['NaState'][0]['state'];
+                }
+
+                if($last_state != $state){
+                    $d['NaState']['id']        = '';
+                    $d['NaState']['na_id']     = $id;
+                    $d['NaState']['state']     = $state;
+                    $this->Na->NaState->save($d);
+                } 
+            }  
+        }
     }
 
     private function _test_device($last_state, $nasname,$id){
