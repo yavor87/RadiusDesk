@@ -48,7 +48,13 @@ class Na extends AppModel {
             'dependent'     => true   
         ),
         'OpenvpnClient',
-        'PptpClient'
+        'PptpClient',
+        //We are only interested in the last entry
+        'NaState'   => array(
+                        'limit'     => 1,
+                        'className' => 'NaState',
+                        'order'     => 'NaState.created DESC'
+                    ),
     );
 
     //Get the note ID before we delete it
