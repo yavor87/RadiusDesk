@@ -210,6 +210,15 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                     },
                                     {
                                         xtype       : 'checkbox',      
+                                        boxLabel    : i18n('sIgnore_accounting_requests'),
+                                        name        : 'ignore_acct',
+                                        inputValue  : 'ignore_acct',
+                                        checked     : false,
+                                        boxLabelCls : 'lblRdCheck',
+                                        margin: Rd.config.fieldMargin,
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
                                         boxLabel    : i18n('sAuto_close_stale_sessions'),
                                         name        : 'session_auto_close',
                                         inputValue  : 'session_auto_close',
