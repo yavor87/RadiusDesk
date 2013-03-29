@@ -874,6 +874,32 @@ class NasController extends AppController {
         ));
     }
 
+    public function edit_nas(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if($this->request->data['monitor'] == 'off'){   //Clear the last contact when off
+            $this->request->data['last_contact'] = null;
+        }
+
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+
+        }else{
+             $this->set(array(
+                'success' => false,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
     public function manage_tags(){
 
         //__ Authentication + Authorization __
@@ -909,6 +935,7 @@ class NasController extends AppController {
     public function edit_panel_cfg(){
 
         $items = array();
+        $nn_disabled = true;
 
         //Determine which tabs will be displayed (based on the connection type)
         if(isset($this->request->query['nas_id'])){
@@ -924,6 +951,9 @@ class NasController extends AppController {
                 if($conn_type == 'dynamic'){
                     array_push($items,array( 'title'  => __('Dynamic AVP detail'), 'itemId' => 'tabDynamic', 'xtype' => 'pnlNasDynamic' ));
                 }
+                if($conn_type == 'direct'){
+                    $nn_disabled = false;
+                }
             }
         }
 
@@ -931,7 +961,7 @@ class NasController extends AppController {
        /// array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'layout' => 'hbox', 
        ///     'items' => array('xtype' => 'frmNasBasic', 'height' => '100%', 'width' => 500)
        /// ));
-         array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'xtype' => 'pnlNasNas'));
+         array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'xtype' => 'pnlNasNas', 'nn_disabled' => $nn_disabled));
         array_push($items,array( 'title'  => __('Realms'),'itemId' => 'tabRealms', 'layout' => 'fit', 'border' => false, 'xtype' => 'pnlRealmsForNasOwner'));
       //  array_push($items,array( 'title'  => __('Photo')));
       //  array_push($items,array( 'title'  => __('Availability')));
@@ -1177,10 +1207,28 @@ class NasController extends AppController {
     }
 
     //------ List of configured dynamic attributes types ------
-    //This is displayed as a select to choose from when the user adds a NAS of connection type 
+    //This is displayed as a select to choose from when the user adds a NAS of connection type dynamic
     public function dynamic_attributes(){
         $items = array();
         $ct = Configure::read('dynamic_attributes');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    //------ List of configured nas types  ------
+    //This is displayed as a select to choose from when the user specifies the NAS detail 
+    public function nas_types(){
+        $items = array();
+        $ct = Configure::read('nas_types');
         foreach($ct as $i){
             if($i['active']){
                 array_push($items, $i);
