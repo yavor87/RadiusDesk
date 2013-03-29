@@ -33,5 +33,12 @@ $config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dict
 $config['dynamic_attributes'][0]     = array('name' => 'Called-Station-Id',  'id' => 'Called-Station-Id',   'active' => true);
 $config['dynamic_attributes'][1]     = array('name' => 'Mikrotik-Realm',     'id' => 'Mikrotik-Realm',      'active' => true);
 
+//Define nas types
+$config['nas_types'][0]     = array('name' => 'Other',              'id' => 'other',                'active' => true);
+$config['nas_types'][1]     = array('name' => 'CoovaChilli',        'id' => 'CoovaChilli',          'active' => true);
+$config['nas_types'][0]     = array('name' => 'Mikrotik',           'id' => 'Mikrotik',             'active' => true);
+
+
+
 
 ?>
