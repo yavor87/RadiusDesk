@@ -5,6 +5,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
     nas_id  : null,
     url     : null,
     layout: 'hbox',
+    nn_disabled: true,
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
     initComponent: function(){
         var me = this;
@@ -67,6 +68,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         xtype       : 'textfield',
                                         fieldLabel  : i18n('sIP_Address'),
                                         name        : "nasname",
+                                        disabled    : me.nn_disabled, 
                                         allowBlank  : false,
                                         blankText   : i18n("sSupply_a_value"),
                                         labelClsExtra: 'lblRdReq'
@@ -96,13 +98,10 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                     anchor  : '100%'
                                 },
                                 items: [
-                                     {
-                                        itemId      : 'type',
-                                        xtype       : 'textfield',
-                                        fieldLabel  : i18n('sType'),
-                                        name        : "type",
-                                        labelClsExtra: 'lblRd'
+                                   { 
+                                        xtype        : 'cmbNasTypes'
                                     },
+
                                     {
                                         xtype       : 'textfield',
                                         fieldLabel  : i18n('sPorts'),
@@ -236,6 +235,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                 buttons: [
                     {
                         itemId: 'save',
+                        formBind: true,
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',

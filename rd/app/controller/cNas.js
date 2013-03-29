@@ -45,11 +45,12 @@ Ext.define('Rd.controller.cNas', {
 
     views:  [
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
-        'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas', 'nas.frmNasBasic',
-        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic'
+        'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
+        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic',
+        'nas.cmbNasTypes'
     ],
-    stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags'],
-    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag'],
+    stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -58,7 +59,6 @@ Ext.define('Rd.controller.cNas', {
         urlAddDynamic:      '/cake2/rd_cake/nas/add_dynamic.json',
         urlAddPptp:         '/cake2/rd_cake/nas/add_pptp.json',
         urlEditPanelCfg:    '/cake2/rd_cake/nas/edit_panel_cfg.json',
-        urlEditBasic:       '/cake2/rd_cake/nas/edit.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/nas/export_csv',
@@ -198,10 +198,10 @@ Ext.define('Rd.controller.cNas', {
             'winNoteAdd[noteForGrid=nas] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
-            'frmNasBasic #save':    {
-                click: me.frmNasBasicSave
+            'pnlNasNas #save':    {
+                click: me.pnlNasNasSave
             },
-            'frmNasBasic #monitorType': {
+            'pnlNasNas #monitorType': {
                 change: me.monitorTypeChange
             },
             'pnlRealmsForNasOwner #chkAvailForAll' :{
@@ -1067,14 +1067,14 @@ Ext.define('Rd.controller.cNas', {
     },
 
 
-    frmNasBasicSave : function(button){
+    pnlNasNasSave : function(button){
         var me      = this;
         var form    = button.up('form');
         var pnl_n   = button.up('pnlNas');
 
         form.submit({
             clientValidation: true,
-            url: me.urlEditBasic,
+            url: me.urlEditNas,
             params: {'id' : pnl_n.nas_id },
             success: function(form, action) {
                 me.reload();
@@ -1091,9 +1091,9 @@ Ext.define('Rd.controller.cNas', {
 
     monitorTypeChange : function(cmb){
         var me = this;
-        var fs = cmb.up('fieldset');
-        var pi = fs.down('#ping_interval');
-        var da = fs.down('#heartbeat_dead_after');
+        var form = cmb.up('form');
+        var pi = form.down('#ping_interval');
+        var da = form.down('#heartbeat_dead_after');
         var val = cmb.getValue();
 
         if(val == 'off'){
@@ -1109,11 +1109,8 @@ Ext.define('Rd.controller.cNas', {
         if(val == 'heartbeat'){
             pi.setVisible(false);
             da.setVisible(true);
-        }
-        
+        }   
     },
-
-    
     chkAvailSubTab: function(chk){
         var me      = this;
         var grid    = chk.up('gridRealmsForNasOwner');
