@@ -881,6 +881,30 @@ class NasController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+     
+
+        if(array_key_exists('on_public_maps',$this->request->data)){
+            $this->request->data['on_public_maps'] = 1;
+        }else{
+            $this->request->data['on_public_maps']      = 0;
+        }
+
+        if(array_key_exists('session_auto_close',$this->request->data)){
+            $this->request->data['session_auto_close'] = 1;
+        }else{
+            $this->request->data['session_auto_close']  = 0;
+        }
+        if(array_key_exists('record_auth',$this->request->data)){
+            $this->request->data['record_auth'] = 1;
+        }else{
+            $this->request->data['record_auth']         = 0;
+        }
+        if(array_key_exists('ignore_acct',$this->request->data)){
+            $this->request->data['ignore_acct'] = 1;
+        }else{
+            $this->request->data['ignore_acct']         = 0; 
+        }
+
 
         if($this->request->data['monitor'] == 'off'){   //Clear the last contact when off
             $this->request->data['last_contact'] = null;
