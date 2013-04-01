@@ -1407,6 +1407,128 @@ class NasController extends AppController {
         ));
     }
 
+
+     public function menu_for_maps(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                   // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                )) 
+            );
+        }
+
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
+
+            //Add
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',      
+                    'tooltip'   => __('Add')));
+            }
+            //Delete
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-delete',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'delete',
+                    'disabled'  => true,   
+                    'tooltip'   => __('Delete')));
+            }
+
+            //Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,     
+                    'tooltip'   => __('Edit')));
+            }
+
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+                array_push($document_group,array(
+                        'xtype'     => 'button', 
+                        'iconCls'   => 'b-note',     
+                        'scale'     => 'large', 
+                        'itemId'    => 'note',      
+                        'tooltip'   => __('Add Notes')));
+            }
+
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+                array_push($document_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-csv',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'csv',      
+                    'tooltip'   => __('Export CSV')));
+            }
+
+            //Tags
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
+                array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-meta_edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'tag',
+                    'disabled'  => true,     
+                    'tooltip'=> __('Manage tags')));
+            }
+
+            array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-map',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'map',      
+                    'tooltip'   => __('Maps')));
+
+           // array_push($menu,array('xtype' => 'tbfill'));
+
+            $menu = array(
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('Nas'),        'items' => $specific_group)
+                    );
+        }
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+
+
     //______ END EXT JS UI functions ________
 
     private function _find_parents($id){
