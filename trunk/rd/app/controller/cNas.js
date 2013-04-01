@@ -709,29 +709,50 @@ Ext.define('Rd.controller.cNas', {
     dragStart: function(record,map_panel,sel_marker){
         var me = this;
         me.lastMovedMarker  = sel_marker;
-        console.log(me.lastMovedMarker);
         me.lastOrigPosition = sel_marker.getPosition();
         me.editWindow = map_panel.editwindow;
+        if(!me.editWindow.eventBound){
+            google.maps.event.addListener(map_panel.editwindow, 'content_changed',function(){me.contentChanged();});
+        }
     },
     dragEnd: function(record,map_panel,sel_marker){
         var me = this;
         var l_l = sel_marker.getPosition();
-
-        var b_c = document.createElement('button');
-        b_c.innerHTML = "Cancel";
-        b_c.onclick = function(){
-            me.btnMapCancel();
-        };
-
-        if(!map_panel.editwindow.populated){
-            map_panel.editwindow.setContent(b_c);
-            map_panel.editwindow.populated = true
+        
+      //  if(!map_panel.editwindow.eventBound){ 
+      //      console.log("Bind events");   
+      //      Ext.get("mapCancel").onclick = function(){
+       //         me.btnMapCancel();
+       //     };
+      //      map_panel.editwindow.eventBound = true;
+      //  }
+        map_panel.editwindow.open(map_panel.gmap, sel_marker);
+        if(!map_panel.editwindow.contentAdded){
+            var t = '<div class="mapDiv">'+
+                '<h1>Action Required</h1>New position<br><br><br>'+
+                '<a id="mapSave" href="#" class="mapBtn">Save</a>'+
+                '<a id="mapCancel" href="#" class="mapBtn">Cancel</a>'+
+                '<a id="mapDelete" href="#" class="mapBtn">Delete</a>'+
+            '</div>';
+            map_panel.editwindow.setContent(t);
+            map_panel.editwindow.contentAdded = true
         }
-        map_panel.editwindow.open(map_panel.gmap, sel_marker); 
         console.log("marker ended dragged "+l_l.lng()+"lat "+l_l.lat());
+    },
+    contentChanged: function(a,b){
+        var me = this;
+        console.log("Gontent changed");
+        if(!me.editWindow.eventBound){ 
+            console.log("Bind events");   
+            Ext.get("mapCancel").onclick = function(){
+                me.btnMapCancel();
+            };
+            me.editWindow.eventBound = true;
+        }  
     },
     btnMapCancel: function(){
         var me = this;
+        console.log("Cancel clicked")
         me.editWindow.close();
         me.lastMovedMarker.setPosition(me.lastOrigPosition);
     },

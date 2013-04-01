@@ -18,10 +18,11 @@ Ext.define('Rd.view.components.pnlGMap', {
             content: document.createElement('div')
         });
 
+        
         me.editwindow = new google.maps.InfoWindow({
-            content: ''
         });
-        me.editwindow.populated = false;
+        me.editwindow.eventBound    = false;
+        me.editwindow.contentAdded  = false;
 
         me.callParent(arguments);
     },

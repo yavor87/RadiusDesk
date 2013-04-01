@@ -312,6 +312,20 @@
       background-image:url(../images/16x16/unknown.png) !important;
 }
 
+.mapDiv {
+    height: 100px;
+    width:  100px;
+    margin: 10px;
+}
+
+.mapBtn {
+    margin: 5px;
+    padding: 5px;
+    border-style:solid;
+    border-width:1px;
+    border-color:gray;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;
