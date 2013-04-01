@@ -23,5 +23,15 @@ Ext.define('Rd.store.sNas', {
             },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
+  /*  listeners: {
+        load: function(store, records, success, options) {
+            var me = options.scope;
+            Ext.each(records, function(record) {
+               // this.addMarker(record.data);
+                console.log(record.data);
+            }, me)
+        },
+        scope: this
+    }, */
     autoLoad: false
 });
