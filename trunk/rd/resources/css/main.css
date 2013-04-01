@@ -308,6 +308,10 @@
       background-image:url(../images/16x16/activity.png) !important;
 }
 
+.map {
+      background-image:url(../images/16x16/unknown.png) !important;
+}
+
 .ux-filtered-column .x-column-header-inner {
     background-image:url(../images/16x16/filter.png) !important;
     background-repeat:no-repeat;

@@ -46,8 +46,8 @@ Ext.define('Rd.controller.cNas', {
     views:  [
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
-        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic',
-        'nas.cmbNasTypes'
+        'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
+        'nas.cmbNasTypes', 'components.pnlGMap'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
@@ -104,6 +104,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #tag'   : {
                 click:      me.tag
+            },
+            'gridNas #map'   : {
+                click:      me.mapLoadApi
             },
             'gridNas #reload menuitem[group=refresh]'   : {
                 click:      me.reloadOptionClick
@@ -241,6 +244,11 @@ Ext.define('Rd.controller.cNas', {
             },
             'pnlNas #tabRealms': {
                 activate:   me.tabRealmsActivate
+            },
+            '#btnMapCancel': {
+                onclick: function(){
+                    console.log("RRRRRRRRRRRR");
+                }
             }
         });
     },
@@ -626,12 +634,107 @@ Ext.define('Rd.controller.cNas', {
         } 
     },
 
-    onStoreNasLoaded: function() {
+    onStoreNasLoaded: function(store, records, success, options) {
         var me      = this;
         var count   = me.getStore('sNas').getTotalCount();
         me.getGridNas().down('#count').update({count: count});
-    },
+        //WIP for MAP
+/*
+{
+                        lat: 42.339641,
+                        lng: -71.094224,
+                        title: 'Boston Museum of Fine Arts',
+                        draggable: true,
+                        listeners: {
+                            click: function(e){
+                                Ext.Msg.alert('It\'s fine', 'and it\'s art.');
+                            }
+                        }
+                    }
+*/
 
+        //See if the maps tab exists
+        var tab_panel = me.getGridNas().up('tabpanel');
+        var map_tab   = tab_panel.down('#mapTab');
+        if(map_tab != null){
+            console.log("Map! Do markers!");
+            var map_panel = map_tab.down('gmappanel');
+            //Clear all the previous ones:
+            map_panel.clearMarkers();
+            Ext.each(records, function(record) {
+                var lat = record.get('lat');
+                var lng = record.get('lon');
+                //Check if valid lat and lng
+                if((lat != null)&(lng != null)){ 
+                    var ip = record.get('nasname');
+                    var n  = record.get('shortname');
+                    var sel_marker = map_panel.addMarker({
+                        lat: lat, 
+                        lng: lng,
+                        icon: "resources/images/map_markers/green-dot.png",
+                        draggable: true, 
+                        title: ip,
+                        listeners: {
+                            click: function(e,f){
+                                me.markerClick(record,map_panel,sel_marker);   
+                            },
+                            dragend: function(){
+                                me.dragEnd(record,map_panel,sel_marker);
+                            },
+                            dragstart: function(){
+                                me.dragStart(record,map_panel,sel_marker);
+                            }
+                        }
+                    })
+                }
+            }, me);
+
+        }else{
+            console.log("No Map, no marker")
+        }
+    },
+    markerClick: function(record,map_panel,sel_marker){
+        var me = this;
+
+        var ip = record.get('nasname');
+        var n  = record.get('shortname');
+
+        var s_info = "<h1>"+i18n("sDevice_info")+"</h1>"+
+        i18n("sIP_Address")+":  "+ip+" <br>"+
+        i18n("sName")+":  "+n+" <br>"+
+        '<button type="button" id="btnMapCancel">Click Me!</button>';
+        map_panel.infowindow.setContent(s_info);
+        map_panel.infowindow.open(map_panel.gmap, sel_marker); 
+    },
+    dragStart: function(record,map_panel,sel_marker){
+        var me = this;
+        me.lastMovedMarker  = sel_marker;
+        console.log(me.lastMovedMarker);
+        me.lastOrigPosition = sel_marker.getPosition();
+        me.editWindow = map_panel.editwindow;
+    },
+    dragEnd: function(record,map_panel,sel_marker){
+        var me = this;
+        var l_l = sel_marker.getPosition();
+
+        var b_c = document.createElement('button');
+        b_c.innerHTML = "Cancel";
+        b_c.onclick = function(){
+            me.btnMapCancel();
+        };
+
+        if(!map_panel.editwindow.populated){
+            map_panel.editwindow.setContent(b_c);
+            map_panel.editwindow.populated = true
+        }
+        map_panel.editwindow.open(map_panel.gmap, sel_marker); 
+        console.log("marker ended dragged "+l_l.lng()+"lat "+l_l.lat());
+    },
+    btnMapCancel: function(){
+        var me = this;
+        me.editWindow.close();
+        me.lastMovedMarker.setPosition(me.lastOrigPosition);
+    },
     csvExport: function(button,format) {
         var me          = this;
     ////    me.getGridNas().mask.show();
@@ -1164,5 +1267,62 @@ Ext.define('Rd.controller.cNas', {
                 }
             });
         }
+    },
+
+    //____ MAP ____
+    mapLoadApi:   function(button){
+        var me          = this;
+        
+
+        Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
+                google.load("maps", "3", {
+                    other_params:"sensor=false",
+                    callback : function(){
+                    // Google Maps are loaded. Place your code here
+                        me.mapCreatePanel(button);
+                }
+            });
+        },Ext.emptyFn,null,false);
+
+
+/*       
+ 
+*/
+    },
+
+    mapCreatePanel : function(button){
+
+        var me = this
+        var grid        = button.up('gridNas');
+        //Check if the node is not already open; else open the node:
+        var tp          = grid.up('tabpanel');
+        var map_tab_id  = 'mapTab';
+        var nt          = tp.down('#'+map_tab_id);
+        if(nt){
+            tp.setActiveTab(map_tab_id); //Set focus on  Tab
+            return;
+        }
+
+        var map_tab_name = i18n("sGoogle_Maps");
+        //Tab not there - add one
+        tp.add({ 
+            title :     map_tab_name,
+            itemId:     map_tab_id,
+            closable:   true,
+            iconCls:    'map', 
+            layout:     'fit', 
+            items:      {
+                    xtype: 'pnlGMap',
+                    store:  me.getStore('sNas'),
+                    center: {
+                        geoCodeAddr: '4 Yawkey Way, Boston, MA, 02215-3409, USA',
+                       // marker: {title: 'Fenway Park',draggable: true}
+                    },
+                    markers: []
+                }
+        });
+        tp.setActiveTab(map_tab_id); //Set focus on Add Tab
     }
+    
+
 });

@@ -170,15 +170,23 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                 },
                                 items: [
                                     {
-                                        xtype       : 'textfield',
+                                        xtype       : 'numberfield',
+                                        name        : 'lon',  
                                         fieldLabel  : i18n('sLongitude'),
-                                        name        : "lon",
+                                        value       : 0,
+                                        maxValue    : 180,
+                                        minValue    : -180,
+                                        decimalPrecision: 9,
                                         labelClsExtra: 'lblRd'
                                     },
                                     {
-                                        xtype       : 'textfield',
+                                        xtype       : 'numberfield',
+                                        name        : 'lat',  
                                         fieldLabel  : i18n('sLatitude'),
-                                        name        : "lat",
+                                        value       : 0,
+                                        maxValue    : 90,
+                                        minValue    : -90,
+                                        decimalPrecision: 9,
                                         labelClsExtra: 'lblRd'
                                     },
                                     {
