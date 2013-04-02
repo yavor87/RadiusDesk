@@ -176,7 +176,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         value       : 0,
                                         maxValue    : 180,
                                         minValue    : -180,
-                                        decimalPrecision: 9,
+                                        decimalPrecision: 14,
                                         labelClsExtra: 'lblRd'
                                     },
                                     {
@@ -186,7 +186,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         value       : 0,
                                         maxValue    : 90,
                                         minValue    : -90,
-                                        decimalPrecision: 9,
+                                        decimalPrecision: 14,
                                         labelClsExtra: 'lblRd'
                                     },
                                     {

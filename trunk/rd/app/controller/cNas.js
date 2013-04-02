@@ -71,6 +71,8 @@ Ext.define('Rd.controller.cNas', {
         urlEditPptp:        '/cake2/rd_cake/nas/edit_pptp.json',
         urlViewNas:         '/cake2/rd_cake/nas/view_nas.json',
         urlEditNas:         '/cake2/rd_cake/nas/edit_nas.json',
+        urlMapDelete:       '/cake2/rd_cake/nas/delete_map.json',
+        urlMapSave:          '/cake2/rd_cake/nas/edit_map.json',
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'}       
@@ -245,10 +247,19 @@ Ext.define('Rd.controller.cNas', {
             'pnlNas #tabRealms': {
                 activate:   me.tabRealmsActivate
             },
-            '#btnMapCancel': {
-                onclick: function(){
+            '#pnlMapsEdit': {
+                focus: function(){
                     console.log("RRRRRRRRRRRR");
                 }
+            },
+            '#pnlMapsEdit #cancel': {
+                click: me.btnMapCancel
+            },
+            '#pnlMapsEdit #delete': {
+                click: me.btnMapDelete
+            },
+            '#pnlMapsEdit #save': {
+                click: me.btnMapSave
             }
         });
     },
@@ -711,50 +722,72 @@ Ext.define('Rd.controller.cNas', {
         me.lastMovedMarker  = sel_marker;
         me.lastOrigPosition = sel_marker.getPosition();
         me.editWindow = map_panel.editwindow;
-        if(!me.editWindow.eventBound){
-            google.maps.event.addListener(map_panel.editwindow, 'content_changed',function(){me.contentChanged();});
-        }
     },
     dragEnd: function(record,map_panel,sel_marker){
         var me = this;
         var l_l = sel_marker.getPosition();
-        
-      //  if(!map_panel.editwindow.eventBound){ 
-      //      console.log("Bind events");   
-      //      Ext.get("mapCancel").onclick = function(){
-       //         me.btnMapCancel();
-       //     };
-      //      map_panel.editwindow.eventBound = true;
-      //  }
+        map_panel.new_lng = l_l.lng();
+        map_panel.new_lat = l_l.lat();
         map_panel.editwindow.open(map_panel.gmap, sel_marker);
-        if(!map_panel.editwindow.contentAdded){
-            var t = '<div class="mapDiv">'+
-                '<h1>Action Required</h1>New position<br><br><br>'+
-                '<a id="mapSave" href="#" class="mapBtn">Save</a>'+
-                '<a id="mapCancel" href="#" class="mapBtn">Cancel</a>'+
-                '<a id="mapDelete" href="#" class="mapBtn">Delete</a>'+
-            '</div>';
-            map_panel.editwindow.setContent(t);
-            map_panel.editwindow.contentAdded = true
-        }
         console.log("marker ended dragged "+l_l.lng()+"lat "+l_l.lat());
+        me.lastLng    = l_l.lng();
+        me.lastLat    = l_l.lat();
+        me.lastDragId = record.getId();
     },
-    contentChanged: function(a,b){
+    btnMapCancel: function(button){
         var me = this;
-        console.log("Gontent changed");
-        if(!me.editWindow.eventBound){ 
-            console.log("Bind events");   
-            Ext.get("mapCancel").onclick = function(){
-                me.btnMapCancel();
-            };
-            me.editWindow.eventBound = true;
-        }  
-    },
-    btnMapCancel: function(){
-        var me = this;
-        console.log("Cancel clicked")
         me.editWindow.close();
         me.lastMovedMarker.setPosition(me.lastOrigPosition);
+    },
+    btnMapDelete: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlMapDelete,
+            method: 'GET',
+            params: {
+                id: me.lastDragId
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    me.reload();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_deleted'),
+                        i18n('sItem_deleted_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
+    },
+    btnMapSave: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlMapSave,
+            method: 'GET',
+            params: {
+                id: me.lastDragId,
+                lat: me.lastLat,
+                lon: me.lastLng
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    me.reload();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_updated'),
+                        i18n('sItem_updated_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
     },
     csvExport: function(button,format) {
         var me          = this;
