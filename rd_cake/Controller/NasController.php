@@ -924,6 +924,49 @@ class NasController extends AppController {
         }
     }
 
+
+    public function delete_map(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['id'])){
+            $this->Na->id = $this->request->query['id'];
+            $this->Na->saveField('lat', null);
+            $this->Na->saveField('lon', null);
+        }
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+   public function edit_map(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['id'])){
+            $this->Na->id = $this->request->query['id'];
+            $this->Na->saveField('lat', $this->request->query['lat']);
+            $this->Na->saveField('lon', $this->request->query['lon']);
+        }
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
     public function manage_tags(){
 
         //__ Authentication + Authorization __
