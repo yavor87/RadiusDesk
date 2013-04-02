@@ -924,6 +924,58 @@ class NasController extends AppController {
         }
     }
 
+    public function view_photo(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+
+        if(isset($this->request->query['id'])){
+            $this->Na->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['id']);
+            if($q_r){
+                $items['photo_file_name'] = $q_r['Na']['photo_file_name'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function upload_photo($id = null){
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->layout = 'ext_file_upload';
+
+        $path_parts     = pathinfo($_FILES['photo']['name']);
+        $unique         = time();
+        $dest           = IMAGES."nas/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/nas/".$unique.'.'.$path_parts['extension'];
+
+        //Now add....
+        $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
+       
+        $this->{$this->modelClass}->id = $this->request->data['id'];
+       // $this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension']);
+        if($this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension'])){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $this->{$this->modelClass}->id;
+            $json_return['success']             = true;
+            $json_return['photo_file_name']     = $unique.'.'.$path_parts['extension'];
+        }else{
+            $json_return['errors']      = $this->{$this->modelClass}->validationErrors;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+        }
+        $this->set('json_return',$json_return);
+    }
 
     public function delete_map(){
 
@@ -1030,9 +1082,8 @@ class NasController extends AppController {
        /// ));
          array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'xtype' => 'pnlNasNas', 'nn_disabled' => $nn_disabled));
         array_push($items,array( 'title'  => __('Realms'),'itemId' => 'tabRealms', 'layout' => 'fit', 'border' => false, 'xtype' => 'pnlRealmsForNasOwner'));
-      //  array_push($items,array( 'title'  => __('Photo')));
+         array_push($items,array( 'title'  => __('Photo'),'itemId' => 'tabPhoto', 'xtype' => 'pnlNasPhoto'));
       //  array_push($items,array( 'title'  => __('Availability')));
-       // array_push($items,array( 'title'  => __('Map info')));
 
         $this->set(array(
                 'items'     => $items,
