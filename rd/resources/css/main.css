@@ -318,9 +318,23 @@
     margin: 0px;
 }
 
+.map_I_Div {
+    height: 200px;
+    width:  300px;
+    margin: 0px;
+}
+
 .divMapAction {
     margin: 10px;
     padding: 5px;
+}
+
+.lblMap {
+    width: 100px;
+    float: left;
+    text-align: left;
+    color: #676d76;
+    font-size:14px;
 }
 
 .ux-filtered-column .x-column-header-inner {

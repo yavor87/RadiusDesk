@@ -2,7 +2,8 @@ Ext.define('Rd.view.components.pnlGMap', {
     extend:'Ext.ux.GMapPanel',
     alias :'widget.pnlGMap',
     requires: [
-        'Rd.view.components.ajaxToolbar'
+        'Rd.view.components.ajaxToolbar',
+        'Rd.view.components.cmpImg'
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_maps.json',
     markers     : [],
@@ -20,12 +21,58 @@ Ext.define('Rd.view.components.pnlGMap', {
         //Create a shadow item:
         me.shadow = new google.maps.MarkerImage('resources/images/map_markers/shadow.png', null, null, new google.maps.Point(10, 34));
 
-        //create a blank info window
+        //___Info infowindow___
+        var i_div =  document.createElement('div');
+        i_div.id  = 'clean_I_Div';  
+        i_div.className = i_div.className + "map_I_Div";
+        var i_pnl;
+
         me.infowindow = new google.maps.InfoWindow({
-            content: document.createElement('div')
+            content: i_div
         });
         me.infoWindows.push(me.infowindow);
 
+        google.maps.event.addListener(me.infowindow, 'domready', function(){
+            console.log("info dom ready");
+            var c= me.infowindow.getContent();     
+            if (c.id == 'clean_I_Div'){ //Only load the first time!
+                c.id = 'filled_I_Div';
+                var tpl = new Ext.Template([
+                   "<div class='divMapAction'>",
+                        "<label class='lblMap'>"+i18n("sName")+"  </label><label class='lblRd'> {sortname}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sIP_Address")+"  </label><label class='lblRd'> {nasname}</label><br>",
+                    "</div>"
+                    ]
+                );               
+                var p = Ext.create('Ext.tab.Panel', {
+                    itemId: 'pnlMapsInfo',
+                    width: 300,
+                    height: 200,
+                    activeTab: 0,
+                    items: [
+                        {
+                            title: 'Info',
+                            itemId: 'tabMapInfo',
+                            bodyPadding: 10,
+                            tpl : tpl
+                        },
+                        {
+                            title: 'Photo',
+                            itemId: 'tabMapPhoto',
+                            items: [
+                                {'xtype' : 'cmpImg'}
+                            ]
+                        }
+                    ],
+                    renderTo : c
+                });
+            
+            }else{
+
+            }
+        });
+
+        //___Edit infowindow___
         var e_div =  document.createElement('div');
         e_div.id  = 'cleanDiv';  
         e_div.className = e_div.className + "mapDiv";
@@ -42,9 +89,9 @@ Ext.define('Rd.view.components.pnlGMap', {
                 c.id = 'filledDiv';
                 var tpl = new Ext.Template([
                     "<div class='divMapAction'>",
-                        "<span class='lblRd'>"+i18n("sNew_position")+"</span><br><br>",
-                        "<span class='lblRdReq'>"+i18n("sLongitude")+"  </span><span class='lblRd'> {lng}</span><br>",
-                        "<span class='lblRdReq'>"+ i18n("sLatitude")+"  </span><span class='lblRd'> {lat}</span><br>",
+                        "<label class='lblMap'>"+i18n("sNew_position")+"</label><br><br>",
+                        "<label class='lblMap'>"+ i18n("sLatitude")+"  </label><label class='lblRd'> {lat}</label><br>",
+                        "<label class='lblMap'>"+i18n("sLongitude")+"  </label><label class='lblRd'> {lng}</label><br>",
                     "</div>"
                     ]
                 );
@@ -106,6 +153,7 @@ Ext.define('Rd.view.components.pnlGMap', {
             }
         });
 
+        //___Add infowindow___
         me.addwindow = new google.maps.InfoWindow({
             content: "<div class='lblRdReq'>"+
                         i18n("sAction_required")+

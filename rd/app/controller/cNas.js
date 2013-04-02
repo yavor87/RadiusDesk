@@ -47,7 +47,7 @@ Ext.define('Rd.controller.cNas', {
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
-        'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd'
+        'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
@@ -72,7 +72,10 @@ Ext.define('Rd.controller.cNas', {
         urlViewNas:         '/cake2/rd_cake/nas/view_nas.json',
         urlEditNas:         '/cake2/rd_cake/nas/edit_nas.json',
         urlMapDelete:       '/cake2/rd_cake/nas/delete_map.json',
-        urlMapSave:          '/cake2/rd_cake/nas/edit_map.json',
+        urlMapSave:         '/cake2/rd_cake/nas/edit_map.json',
+        urlViewPhoto:       '/cake2/rd_cake/nas/view_photo.json',
+        urlPhotoBase:       '/cake2/rd_cake/img/nas/',
+        urlUploadPhoto:     '/cake2/rd_cake/nas/upload_photo/',
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'}       
@@ -277,7 +280,17 @@ Ext.define('Rd.controller.cNas', {
             },
             '#pnlMapsEdit #save': {
                 click: me.btnMapSave
-            }
+            },
+            'pnlNas #tabPhoto': {
+                activate:       me.tabPhotoActivate
+            },
+            'pnlNas #tabPhoto #save': {
+                click:       me.photoSave
+            },
+            'pnlNas #tabPhoto #cancel': {
+                click:       me.photoCancel
+            },
+            
         });
     },
     reload: function(){
@@ -723,15 +736,9 @@ Ext.define('Rd.controller.cNas', {
     },
     markerClick: function(record,map_panel,sel_marker){
         var me = this;
-
         var ip = record.get('nasname');
         var n  = record.get('shortname');
 
-        var s_info = "<h1>"+i18n("sDevice_info")+"</h1>"+
-        i18n("sIP_Address")+":  "+ip+" <br>"+
-        i18n("sName")+":  "+n+" <br>"+
-        '<button type="button" id="btnMapCancel">Click Me!</button>';
-        map_panel.infowindow.setContent(s_info);
         map_panel.infowindow.open(map_panel.gmap, sel_marker); 
     },
     dragStart: function(record,map_panel,sel_marker){
@@ -1337,6 +1344,56 @@ Ext.define('Rd.controller.cNas', {
         grid.getStore().getProxy().setExtraParam('clear_flag',true);
         grid.getStore().load();
         grid.getStore().getProxy().setExtraParam('clear_flag',false);
+    },
+    tabPhotoActivate: function(tab){
+        var me      = this;
+        var pnl_n   = tab.up('pnlNas');
+        Ext.Ajax.request({
+            url: me.urlViewPhoto,
+            method: 'GET',
+            params: {'id' : pnl_n.nas_id },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    var img = tab.down("cmpImg");
+                    var img_url = me.urlPhotoBase+jsonData.data.photo_file_name;
+                    img.setImage(img_url);
+                }   
+            },
+            scope: me
+        });
+    },
+    photoSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var pnl_n   = form.up('pnlNas');
+        var pnlNphoto = pnl_n.down('pnlNasPhoto');
+        form.submit({
+            clientValidation: true,
+            waitMsg: 'Uploading your photo...',
+            url: me.urlUploadPhoto,
+            params: {'id' : pnl_n.nas_id },
+            success: function(form, action) {              
+                if(action.result.success){ 
+                    var new_img = action.result.photo_file_name;    
+                    var img = pnlNphoto.down("cmpImg");
+                    var img_url = me.urlPhotoBase+new_img;
+                    img.setImage(img_url);
+                } 
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    photoCancel: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        form.getForm().reset();
     },
 
     //_____ DELETE ______
