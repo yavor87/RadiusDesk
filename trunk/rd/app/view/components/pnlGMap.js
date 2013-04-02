@@ -5,27 +5,36 @@ Ext.define('Rd.view.components.pnlGMap', {
         'Rd.view.components.ajaxToolbar'
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_maps.json',
-    markers: [],
-    infoWindows: [],
-    store: undefined,
+    markers     : [],
+    infoWindows : [],
+    infowindow  : undefined,
+    editwindow  : undefined,
+    addwindow   : undefined,
+    shadow      : undefined,
+    store       : undefined,
     initComponent: function(){
 
         var me      = this;
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
 
+        //Create a shadow item:
+        me.shadow = new google.maps.MarkerImage('resources/images/map_markers/shadow.png', null, null, new google.maps.Point(10, 34));
+
         //create a blank info window
         me.infowindow = new google.maps.InfoWindow({
             content: document.createElement('div')
         });
+        me.infoWindows.push(me.infowindow);
 
         var e_div =  document.createElement('div');
         e_div.id  = 'cleanDiv';  
-        e_div.className = e_div.className + " mapDiv";
+        e_div.className = e_div.className + "mapDiv";
         var e_pnl;
 
         me.editwindow = new google.maps.InfoWindow({
             content: e_div
         });
+        me.infoWindows.push(me.editwindow);
 
         google.maps.event.addListener(me.editwindow, 'domready', function(){
             var c= me.editwindow.getContent();     
@@ -96,12 +105,23 @@ Ext.define('Rd.view.components.pnlGMap', {
                e_pnl.update({"lng": me.new_lng,"lat": me.new_lat});
             }
         });
+
+        me.addwindow = new google.maps.InfoWindow({
+            content: "<div class='lblRdReq'>"+
+                        i18n("sAction_required")+
+                     "</div><div class='lblRd'>"+
+                        i18n("sDrag_and_drop_marker_to_required_position")+
+                    "</div>"
+        });
+        me.infoWindows.push(me.addwindow);
         me.callParent(arguments);
     },
     addMarker: function(marker) {
         var me = this;
+       
         marker = Ext.apply({
-            map: me.gmap
+            map     : me.gmap,
+            shadow  : me.shadow 
         }, marker);
         
         if (!marker.position) {
