@@ -47,7 +47,7 @@ Ext.define('Rd.controller.cNas', {
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
-        'nas.cmbNasTypes', 'components.pnlGMap'
+        'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
@@ -247,9 +247,26 @@ Ext.define('Rd.controller.cNas', {
             'pnlNas #tabRealms': {
                 activate:   me.tabRealmsActivate
             },
-            '#pnlMapsEdit': {
-                focus: function(){
-                    console.log("RRRRRRRRRRRR");
+            'pnlGMap #add': {
+                click: me.mapNasAdd
+            },
+            'winMapNasAdd #save': {
+                click: me.mapNasAddSubmit
+            },
+            'pnlGMap #edit': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sEdit_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_save_button_in_the_info_window')
+                    );
+                }
+            },
+            'pnlGMap #delete': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sDelete_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_delete_button_in_the_info_window')
+                    );
                 }
             },
             '#pnlMapsEdit #cancel': {
@@ -789,6 +806,46 @@ Ext.define('Rd.controller.cNas', {
             scope: me
         });
     },
+    mapNasAdd: function(button){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMapNasAddId')){
+            var w = Ext.widget('winMapNasAdd',{id:'winMapNasAddId'});
+            me.application.runAction('cDesktop','Add',w);       
+       }   
+    },
+    mapNasAddSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var nas     = win.down('cmbNas');
+        var id      = nas.getValue();
+        var record  = nas.getStore().getById(id);
+        win.close();
+
+        var tab_panel = me.getGridNas().up('tabpanel');
+        var map_tab   = tab_panel.down('#mapTab');
+        if(map_tab != null){
+            var map_panel = map_tab.down('gmappanel');
+            //We need to get the center of the map:
+            var m_center = map_panel.gmap.getCenter();
+            var sel_marker = map_panel.addMarker({
+                lat: m_center.lat(), 
+                lng: m_center.lng(),
+                icon: "resources/images/map_markers/yellow-dot.png",
+                draggable: true, 
+                title: "New Marker",
+                listeners: {
+                    dragend: function(){
+                        me.dragEnd(record,map_panel,sel_marker);
+                    },
+                    dragstart: function(){
+                        map_panel.addwindow.close();
+                        me.dragStart(record,map_panel,sel_marker);
+                    }
+                }
+            });
+            map_panel.addwindow.open(map_panel.gmap, sel_marker);
+        }
+    },
     csvExport: function(button,format) {
         var me          = this;
     ////    me.getGridNas().mask.show();
@@ -1326,8 +1383,6 @@ Ext.define('Rd.controller.cNas', {
     //____ MAP ____
     mapLoadApi:   function(button){
         var me          = this;
-        
-
         Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
                 google.load("maps", "3", {
                     other_params:"sensor=false",
@@ -1337,11 +1392,6 @@ Ext.define('Rd.controller.cNas', {
                 }
             });
         },Ext.emptyFn,null,false);
-
-
-/*       
- 
-*/
     },
 
     mapCreatePanel : function(button){
