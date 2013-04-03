@@ -2,10 +2,10 @@ Ext.define('Rd.view.components.pnlGMap', {
     extend:'Ext.ux.GMapPanel',
     alias :'widget.pnlGMap',
     requires: [
-        'Rd.view.components.ajaxToolbar',
-        'Rd.view.components.cmpImg'
+        'Rd.view.components.ajaxToolbar'
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_maps.json',
+    urlPhotoBase:   '/cake2/rd_cake/img/nas/',
     markers     : [],
     infoWindows : [],
     infowindow  : undefined,
@@ -24,7 +24,7 @@ Ext.define('Rd.view.components.pnlGMap', {
         //___Info infowindow___
         var i_div =  document.createElement('div');
         i_div.id  = 'clean_I_Div';  
-        i_div.className = i_div.className + "map_I_Div";
+        i_div.className = i_div.className + "mapDiv";
         var i_pnl;
 
         me.infowindow = new google.maps.InfoWindow({
@@ -33,18 +33,34 @@ Ext.define('Rd.view.components.pnlGMap', {
         me.infoWindows.push(me.infowindow);
 
         google.maps.event.addListener(me.infowindow, 'domready', function(){
-            console.log("info dom ready");
+            //Note before firing this event; we would have clicked on a marker
+            //During the click event we assign (in the controller) the clicked record to this instance(me)'s
+            //marker_record property we will then subsequintly use it here
+
             var c= me.infowindow.getContent();     
             if (c.id == 'clean_I_Div'){ //Only load the first time!
                 c.id = 'filled_I_Div';
+                //Get the image for first time load
+                var photo_file_name = me.marker_record.get('photo_file_name');
+                var img_url         = me.urlPhotoBase+photo_file_name;
+
                 var tpl = new Ext.Template([
                    "<div class='divMapAction'>",
-                        "<label class='lblMap'>"+i18n("sName")+"  </label><label class='lblRd'> {sortname}</label><br>",
-                        "<label class='lblMap'>"+ i18n("sIP_Address")+"  </label><label class='lblRd'> {nasname}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sName")+"  </label><label class='lblValue'> {shortname}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sIP_Address")+"  </label><label class='lblValue'> {nasname}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sConnection")+"  </label><label class='lblValue'> {connection_type}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sCurrent_state")+"  </label><label class='lblValue'> {time_in_state}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sDescription")+"  </label><label class='lblValue'> {description}</label><br>",
                     "</div>"
                     ]
-                );               
-                var p = Ext.create('Ext.tab.Panel', {
+                );
+                var tplImg = new Ext.Template([
+                    "<div class='divMapAction'>",
+                        "<img src='{image}' alt='Nas Image'>",
+                    "</div>"
+                ]);
+            
+                i_pnl = Ext.create('Ext.tab.Panel', {
                     itemId: 'pnlMapsInfo',
                     width: 300,
                     height: 200,
@@ -53,23 +69,24 @@ Ext.define('Rd.view.components.pnlGMap', {
                         {
                             title: 'Info',
                             itemId: 'tabMapInfo',
-                            bodyPadding: 10,
-                            tpl : tpl
+                            bodyPadding: 2,
+                            tpl : tpl,
+                            autoScroll: true
                         },
                         {
                             title: 'Photo',
                             itemId: 'tabMapPhoto',
-                            items: [
-                                {'xtype' : 'cmpImg'}
-                            ]
+                            bodyPadding: 2,
+                            tpl : tplImg,
+                            autoScroll: true,
+                            data: {image: img_url}
                         }
                     ],
                     renderTo : c
                 });
-            
-            }else{
-
+                i_pnl.down('#tabMapInfo').update(me.marker_record.data);
             }
+            
         });
 
         //___Edit infowindow___
@@ -90,15 +107,15 @@ Ext.define('Rd.view.components.pnlGMap', {
                 var tpl = new Ext.Template([
                     "<div class='divMapAction'>",
                         "<label class='lblMap'>"+i18n("sNew_position")+"</label><br><br>",
-                        "<label class='lblMap'>"+ i18n("sLatitude")+"  </label><label class='lblRd'> {lat}</label><br>",
-                        "<label class='lblMap'>"+i18n("sLongitude")+"  </label><label class='lblRd'> {lng}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sLatitude")+"  </label><label class='lblValue'> {lat}</label><br>",
+                        "<label class='lblMap'>"+i18n("sLongitude")+"  </label><label class='lblValue'> {lng}</label><br>",
                     "</div>"
                     ]
                 );
                 e_pnl = Ext.create('Ext.panel.Panel', {
                     title: i18n("sAction_required"),
                     itemId: 'pnlMapsEdit',
-                    height: 170,
+                    height: 200,
                     tpl: tpl,
                     bbar: [
                         {
