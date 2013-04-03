@@ -11,7 +11,7 @@ Ext.define('Rd.model.mNas', {
          {name: 'server',       type: 'string'  },
          {name: 'description',  type: 'string'  },
           'connection_type', 'record_auth', 'dynamic_attribute', 'dynamic_value', 'monitor', 'ping_interval',
-          'heartbeat_dead_after', 'session_auto_close', 'session_dead_time', 'on_public_maps','lat','lon',
+          'heartbeat_dead_after', 'session_auto_close', 'session_dead_time', 'on_public_maps','lat','lon','photo_file_name',
          {name: 'owner',        type: 'string'  },
           'user_id',
           'realms', 'tags','connection_type',

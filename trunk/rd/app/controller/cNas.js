@@ -443,7 +443,6 @@ Ext.define('Rd.controller.cNas', {
     //__PPTP___
     btnPptpNext: function(button){
         var me      = this;
-        console.log("Pptp submit");
         me.addSubmit(button,me.urlAddPptp);
     },
     //___DIRECT___
@@ -456,7 +455,6 @@ Ext.define('Rd.controller.cNas', {
     btnDirectNext:  function(button){
         var me      = this;
         //We need to submit to the add_direct ...
-        console.log("Direct submit");
         me.addSubmit(button,me.urlAddDirect);
     },
     chkAvailForAllChange: function(chk){
@@ -698,7 +696,6 @@ Ext.define('Rd.controller.cNas', {
         var tab_panel = me.getGridNas().up('tabpanel');
         var map_tab   = tab_panel.down('#mapTab');
         if(map_tab != null){
-            console.log("Map! Do markers!");
             var map_panel = map_tab.down('gmappanel');
             //Clear all the previous ones:
             map_panel.clearMarkers();
@@ -729,17 +726,24 @@ Ext.define('Rd.controller.cNas', {
                     })
                 }
             }, me);
-
-        }else{
-            console.log("No Map, no marker")
         }
     },
     markerClick: function(record,map_panel,sel_marker){
         var me = this;
         var ip = record.get('nasname');
         var n  = record.get('shortname');
+        map_panel.marker_record = record;
 
-        map_panel.infowindow.open(map_panel.gmap, sel_marker); 
+        //See if the pnlMapsInfo exists
+        //We have to do it here in order to prevent the domready event to fire twice
+        var qr =Ext.ComponentQuery.query('#pnlMapsInfo');
+        if(qr[0]){
+            qr[0].down('#tabMapInfo').update(record.data);
+            var url_path = me.urlPhotoBase+record.get('photo_file_name');
+            qr[0].down('#tabMapPhoto').update({image:url_path});
+            qr[0].doLayout();
+        }
+        map_panel.infowindow.open(map_panel.gmap,sel_marker); 
     },
     dragStart: function(record,map_panel,sel_marker){
         var me = this;
@@ -753,7 +757,6 @@ Ext.define('Rd.controller.cNas', {
         map_panel.new_lng = l_l.lng();
         map_panel.new_lat = l_l.lat();
         map_panel.editwindow.open(map_panel.gmap, sel_marker);
-        console.log("marker ended dragged "+l_l.lng()+"lat "+l_l.lat());
         me.lastLng    = l_l.lng();
         me.lastLat    = l_l.lat();
         me.lastDragId = record.getId();
@@ -1052,8 +1055,6 @@ Ext.define('Rd.controller.cNas', {
     btnNoteAddNext: function(button){
         var me      = this;
         var win     = button.up('winNoteAdd');
-        console.log(win.noteForId);
-        console.log(win.noteForGrid);
         win.refreshGrid.getStore().load();
         var form    = win.down('form');
         form.submit({
