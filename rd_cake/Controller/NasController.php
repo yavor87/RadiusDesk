@@ -196,6 +196,7 @@ class NasController extends AppController {
                 'on_public_maps'        => $i['Na']['on_public_maps'],
                 'lat'                   => $i['Na']['lat'],
                 'lon'                   => $i['Na']['lon'],
+                'photo_file_name'       => $i['Na']['photo_file_name'],
                 'owner'                 => $owner_tree, 
                 'user_id'               => $i['Na']['user_id'],
                 'available_to_siblings' => $i['Na']['available_to_siblings'],
