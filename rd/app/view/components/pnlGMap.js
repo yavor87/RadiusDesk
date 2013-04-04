@@ -13,10 +13,15 @@ Ext.define('Rd.view.components.pnlGMap', {
     addwindow   : undefined,
     shadow      : undefined,
     store       : undefined,
+    centerLatLng: undefined,
     initComponent: function(){
 
         var me      = this;
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
+
+        var cLat  = me.centerLatLng.lat;
+        var cLng  = me.centerLatLng.lng;
+        me.center =    new google.maps.LatLng(cLat,cLng);
 
         //Create a shadow item:
         me.shadow = new google.maps.MarkerImage('resources/images/map_markers/shadow.png', null, null, new google.maps.Point(10, 34));
@@ -36,13 +41,31 @@ Ext.define('Rd.view.components.pnlGMap', {
             //Note before firing this event; we would have clicked on a marker
             //During the click event we assign (in the controller) the clicked record to this instance(me)'s
             //marker_record property we will then subsequintly use it here
-
+            
             var c= me.infowindow.getContent();     
             if (c.id == 'clean_I_Div'){ //Only load the first time!
                 c.id = 'filled_I_Div';
                 //Get the image for first time load
                 var photo_file_name = me.marker_record.get('photo_file_name');
                 var img_url         = me.urlPhotoBase+photo_file_name;
+
+                //Build the data for the template
+                var t_i_s = "N/A";
+                if(me.marker_record.get('status') != 'unknown'){
+                    if(me.marker_record.get('status') == 'up'){
+                        var s = i18n("sUp");
+                    }
+                    if(me.marker_record.get('status') == 'down'){
+                        var s = i18n("sDown");
+                    }
+                    var start     = me.marker_record.get('status_time').getTime();
+                    var now       = new Date().getTime();
+                    var online    = new Date((now-start));
+                    t_i_s         = s+" "+Ext.Date.format(online, 'z:H:i:s');
+                }
+                var d  = Ext.apply({
+                    time_in_state   : t_i_s,
+                }, me.marker_record.data);
 
                 var tpl = new Ext.Template([
                    "<div class='divMapAction'>",
@@ -51,6 +74,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                         "<label class='lblMap'>"+ i18n("sConnection")+"  </label><label class='lblValue'> {connection_type}</label><br>",
                         "<label class='lblMap'>"+ i18n("sCurrent_state")+"  </label><label class='lblValue'> {time_in_state}</label><br>",
                         "<label class='lblMap'>"+ i18n("sDescription")+"  </label><label class='lblValue'> {description}</label><br>",
+                        "<label class='lblMap'>"+ i18n("sPublic")+"  </label><label class='lblValue'> {on_public_maps}</label><br>",
                     "</div>"
                     ]
                 );
@@ -71,7 +95,8 @@ Ext.define('Rd.view.components.pnlGMap', {
                             itemId: 'tabMapInfo',
                             bodyPadding: 2,
                             tpl : tpl,
-                            autoScroll: true
+                            autoScroll: true,
+                            data: d
                         },
                         {
                             title: 'Photo',
@@ -84,9 +109,9 @@ Ext.define('Rd.view.components.pnlGMap', {
                     ],
                     renderTo : c
                 });
-                i_pnl.down('#tabMapInfo').update(me.marker_record.data);
             }
-            
+            i_pnl.doLayout();
+
         });
 
         //___Edit infowindow___
@@ -143,27 +168,6 @@ Ext.define('Rd.view.components.pnlGMap', {
                     renderTo: c
                 });
                 e_pnl.update({"lng": me.new_lng,"lat": me.new_lat});
-
-            /*
-                var p = Ext.create('Ext.tab.Panel', {
-                    width: 300,
-                    height: 200,
-                    activeTab: 0,
-                    items: [
-                        {
-                            title: 'Tab 1',
-                            bodyPadding: 10,
-                            html : 'A simple tab'
-                        },
-                        {
-                            title: 'Tab 2',
-                            html : 'Another one'
-                        }
-                    ],
-                    renderTo : c
-                });
-                p.render();
-            */
             
             }else{
                e_pnl.update({"lng": me.new_lng,"lat": me.new_lat});
