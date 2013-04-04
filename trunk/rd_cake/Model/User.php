@@ -86,6 +86,9 @@ class User extends AppModel {
         'UserNote' => array(
             'dependent'     => true   
         ),
+        'UserSetting' => array(
+            'dependent'     => true   
+        ),
         'Radcheck' => array(
             'className'     => 'Radcheck',
             'foreignKey'	=> false,
