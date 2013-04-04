@@ -38,6 +38,16 @@ $config['nas_types'][0]     = array('name' => 'Other',              'id' => 'oth
 $config['nas_types'][1]     = array('name' => 'CoovaChilli',        'id' => 'CoovaChilli',          'active' => true);
 $config['nas_types'][0]     = array('name' => 'Mikrotik',           'id' => 'Mikrotik',             'active' => true);
 
+//FIXME To incorporate
+$config['paths']['wallpaper_location'] = "/rd/resources/images/wallpapers/";
+
+//Define default settings for the users:
+$config['user_settings']['wallpaper']       = "9.jpg";
+$config['user_settings']['map']['type']     = "ROADMAP";
+$config['user_settings']['map']['zoom']     = 18;
+$config['user_settings']['map']['lng']      = -71.0955740216735;
+$config['user_settings']['map']['lat']      = 42.3379770178396;
+
 
 
 
