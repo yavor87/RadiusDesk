@@ -135,6 +135,20 @@ class NasController extends AppController {
         $items = array();
         foreach($q_r as $i){
 
+            //Status
+            if(empty($i['NaState'])){
+                $status = 'unknown';
+                $status_time = null;
+            }else{
+                if($i['NaState'][0]['state'] == 1){
+                    $status = 'up';
+                    $status_time = $i['NaState'][0]['modified'];
+                }else{
+                    $status = 'down';
+                    $status_time = $i['NaState'][0]['modified'];
+                }
+            }
+
             $realms     = array();
             //Realms
             foreach($i['NaRealm'] as $nr){
@@ -204,6 +218,8 @@ class NasController extends AppController {
                 'realms'                => $realms,
                 'tags'                  => $tags,
                 'connection_type'       => $i['Na']['connection_type'],
+                'status'                => $status,
+                'status_time'           => $status_time,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete'],
                 'manage_tags'           => $action_flags['manage_tags']
@@ -978,6 +994,41 @@ class NasController extends AppController {
         $this->set('json_return',$json_return);
     }
 
+    public function view_map_pref(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+
+        $items['zoom'] = 18;
+        $items['type'] = 'ROADMAP';
+        $items['lat']  = 42.3379770178396;
+        $items['lng']  = -71.0955740216735;
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+     public function edit_map_pref(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
     public function delete_map(){
 
         //__ Authentication + Authorization __
@@ -1519,6 +1570,7 @@ class NasController extends AppController {
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
                    // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-settings','scale' => 'large', 'itemId' => 'preferences', 'tooltip'=> __('Preferences')),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
@@ -1714,7 +1766,8 @@ class NasController extends AppController {
                             'NaRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
                             'NaTag'     => array('Tag.name','Tag.id','Tag.available_to_siblings','Tag.user_id'),
                             'NaNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
-                            'User'
+                            'User',
+                            'NaState'
                         );
 
         //===== SORT =====
