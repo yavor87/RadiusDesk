@@ -6,7 +6,8 @@ Ext.define('Rd.controller.cDesktop', {
     extend: 'Ext.app.Controller',
     views: ['desktop.pnlDesktop','desktop.winDesktopSettings'],
     config: {
-        urlWallpaper: 'resources/images/wallpapers/2.jpg'
+        urlWallpaper                : 'resources/images/wallpapers/2.jpg',
+        urlSaveWallpaperSelection   : '/cake2/rd_cake/desktop/save_wallpaper_selection.json'
     },
     models: ['mDesktopShortcut', 'mWallpaper'],
     uses: [
@@ -550,12 +551,25 @@ Ext.define('Rd.controller.cDesktop', {
         console.log(record.get('img'));
         var wp = record.get('r_dir')+record.get('file');
         me.setWallpaper(wp);
-        Ext.ux.Toaster.msg(
+
+        //Update this user's preferences:
+        Ext.Ajax.request({
+            url: me.urlSaveWallpaperSelection,
+            method: 'GET',
+            params: {wallpaper: wp},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){ 
+                    Ext.ux.Toaster.msg(
                         i18n('sWalpaper_changed'),
                         i18n('sWalpaper_changed_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
-            );
+                    );
+                }   
+            },
+            scope: me
+        });
     }
 
 });
