@@ -6,7 +6,7 @@ Ext.define('Rd.view.tags.winMapNasAdd', {
     autoShow: false,
     width:    350,
     height:   300,
-    iconCls: 'tags',
+    iconCls: 'note',
 
     initComponent: function() {
         var me = this;

@@ -15,6 +15,8 @@ Ext.define('Rd.model.mNas', {
          {name: 'owner',        type: 'string'  },
           'user_id',
           'realms', 'tags','connection_type',
+          'status',
+         {name:'status_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
          {name: 'available_to_siblings',  type: 'bool'},
          {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},

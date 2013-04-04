@@ -47,7 +47,8 @@ Ext.define('Rd.controller.cNas', {
         'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
-        'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto'
+        'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto', 
+        'nas.winMapPreferences'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
@@ -76,9 +77,16 @@ Ext.define('Rd.controller.cNas', {
         urlViewPhoto:       '/cake2/rd_cake/nas/view_photo.json',
         urlPhotoBase:       '/cake2/rd_cake/img/nas/',
         urlUploadPhoto:     '/cake2/rd_cake/nas/upload_photo/',
+        urlGreenMark:       'resources/images/map_markers/green-dot.png',
+        urlRedMark:         'resources/images/map_markers/red-dot.png', 
+        urlBlueMark:        'resources/images/map_markers/blue-dot.png', 
+        urlYellowMark:      'resources/images/map_markers/yellow-dot.png',
+        urlViewMapPref:     '/cake2/rd_cake/nas/view_map_pref.json', 
+        urlEditMapPref:     '/cake2/rd_cake/nas/edit_map_pref.json'
     },
     refs: [
-        {  ref: 'gridNas',  selector:   'gridNas'}       
+        {  ref: 'gridNas',  selector:   'gridNas'},
+        {  ref: 'pnlGMap',  selector:   'pnlGMap'}       
     ],
     init: function() {
         me = this;
@@ -250,6 +258,9 @@ Ext.define('Rd.controller.cNas', {
             'pnlNas #tabRealms': {
                 activate:   me.tabRealmsActivate
             },
+            'pnlGMap #preferences': {
+                click: me.mapPreferences
+            },
             'pnlGMap #add': {
                 click: me.mapNasAdd
             },
@@ -290,7 +301,12 @@ Ext.define('Rd.controller.cNas', {
             'pnlNas #tabPhoto #cancel': {
                 click:       me.photoCancel
             },
-            
+            'winMapPreferences #snapshot': {
+                click:      me.mapPreferencesSnapshot
+            },
+            'winMapPreferences #save': {
+                click:      me.mapPreferencesSave
+            } 
         });
     },
     reload: function(){
@@ -700,16 +716,25 @@ Ext.define('Rd.controller.cNas', {
             //Clear all the previous ones:
             map_panel.clearMarkers();
             Ext.each(records, function(record) {
-                var lat = record.get('lat');
-                var lng = record.get('lon');
+                var lat     = record.get('lat');
+                var lng     = record.get('lon');
+                var status  = record.get('status');
                 //Check if valid lat and lng
-                if((lat != null)&(lng != null)){ 
+                if((lat != null)&(lng != null)){
+                    var icon = me.urlBlueMark;
+                    if(status == 'up'){
+                        icon = me.urlGreenMark;
+                    }
+                    if(status == 'down'){
+                        icon = me.urlRedMark;
+                    }
+
                     var ip = record.get('nasname');
                     var n  = record.get('shortname');
                     var sel_marker = map_panel.addMarker({
                         lat: lat, 
                         lng: lng,
-                        icon: "resources/images/map_markers/green-dot.png",
+                        icon: icon,
                         draggable: true, 
                         title: ip,
                         listeners: {
@@ -738,10 +763,32 @@ Ext.define('Rd.controller.cNas', {
         //We have to do it here in order to prevent the domready event to fire twice
         var qr =Ext.ComponentQuery.query('#pnlMapsInfo');
         if(qr[0]){
-            qr[0].down('#tabMapInfo').update(record.data);
+           // qr[0].down('#tabMapInfo').update(record.data);
+
+            //Status
+            var t_i_s = "N/A";
+            if(record.get('status') != 'unknown'){
+                if(record.get('status') == 'up'){
+                    var s = i18n("sUp");
+                }
+                if(record.get('status') == 'down'){
+                    var s = i18n("sDown");
+                }
+                var start     = record.get('status_time').getTime();
+                var now       = new Date().getTime();
+                var online    = new Date((now-start));
+                t_i_s         = s+" "+Ext.Date.format(online, 'z:H:i:s');
+            }
+
+            var d  = Ext.apply({
+                time_in_state   : t_i_s,
+            }, record.data);
+
+            qr[0].down('#tabMapInfo').update(d);
+
             var url_path = me.urlPhotoBase+record.get('photo_file_name');
             qr[0].down('#tabMapPhoto').update({image:url_path});
-            qr[0].doLayout();
+           // qr[0].doLayout();
         }
         map_panel.infowindow.open(map_panel.gmap,sel_marker); 
     },
@@ -815,6 +862,15 @@ Ext.define('Rd.controller.cNas', {
             },
             scope: me
         });
+    },
+    mapPreferences: function(button){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMapPreferencesId')){
+            var w = Ext.widget('winMapPreferences',{id:'winMapPreferencesId'});
+            me.application.runAction('cDesktop','Add',w);
+            //We need to load this widget's form with the latest data:
+            w.down('form').load({url:me.urlViewMapPref, method:'GET'});
+       }   
     },
     mapNasAdd: function(button){
         var me = this;
@@ -1466,25 +1522,75 @@ Ext.define('Rd.controller.cNas', {
         }
 
         var map_tab_name = i18n("sGoogle_Maps");
-        //Tab not there - add one
-        tp.add({ 
-            title :     map_tab_name,
-            itemId:     map_tab_id,
-            closable:   true,
-            iconCls:    'map', 
-            layout:     'fit', 
-            items:      {
-                    xtype: 'pnlGMap',
-                    store:  me.getStore('sNas'),
-                    center: {
-                        geoCodeAddr: '4 Yawkey Way, Boston, MA, 02215-3409, USA',
-                       // marker: {title: 'Fenway Park',draggable: true}
-                    },
-                    markers: []
-                }
-        });
-        tp.setActiveTab(map_tab_id); //Set focus on Add Tab
-    }
-    
 
+        //We need to fetch the Preferences for this user's Google Maps map
+        Ext.Ajax.request({
+            url: me.urlViewMapPref,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                   console.log(jsonData);
+                    //___Build this tab based on the preferences returned___
+                    tp.add({ 
+                        title :     map_tab_name,
+                        itemId:     map_tab_id,
+                        closable:   true,
+                        iconCls:    'map', 
+                        layout:     'fit', 
+                        items:      {
+                                xtype: 'pnlGMap',
+                                store:  me.getStore('sNas'),
+                                mapOptions: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },
+                                centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},
+                                markers: []
+                            }
+                    });
+                    tp.setActiveTab(map_tab_id); //Set focus on Add Tab
+                    //____________________________________________________
+                }   
+            },
+            scope: me
+        });
+    },
+    mapPreferencesSnapshot: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var pnl     = me.getPnlGMap();
+        var zoom    = pnl.gmap.getZoom();
+        var type    = pnl.gmap.getMapTypeId();
+        var ll      = pnl.gmap.getCenter();
+        var lat     = ll.lat();
+        var lng     = ll.lng();
+
+        form.down('#lat').setValue(lat);
+        form.down('#lng').setValue(lng);
+        form.down('#zoom').setValue(zoom);
+        form.down('#type').setValue(type.toUpperCase());
+        
+        console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
+    },
+
+    mapPreferencesSave: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+       
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditMapPref,
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    }
 });

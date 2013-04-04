@@ -137,6 +137,29 @@ Ext.define('Rd.view.realms.gridNas' ,{
                         }
             },
             { 
+                text        : i18n("sStatus"),   
+                dataIndex   : 'status',  
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                renderer    : function(value,metaData, record){
+                    if(value != 'unknown'){
+                        //This is mega cool way to do it using Ext.Date.format      
+                        var start     = record.get('status_time').getTime();
+                        var now       = new Date().getTime();
+                        var online    = new Date((now-start));
+                        if(value == 'up'){
+                            return "<div class=\"fieldGreen\">"+i18n("sUp")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
+                        }
+                        if(value == 'down'){
+                            return "<div class=\"fieldRed\">"+i18n("sDown")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
+                        }
+
+                    }else{
+                        return "<div class=\"fieldBlue\">"+i18n("sUnknown")+"</div>";
+                    }              
+                }
+            },
+            { 
                 text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
