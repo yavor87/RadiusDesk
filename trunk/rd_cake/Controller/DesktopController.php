@@ -73,10 +73,7 @@ class DesktopController extends AppController {
     }
 
     public function list_wallpapers(){
-
-
         $items = array();
-
         //List all the wallpapres in the wallpaper directory:
         $wp_document_root   = "/var/www";
         $r_wp_dir           = "/rd/resources/images/wallpapers/";
@@ -109,6 +106,35 @@ class DesktopController extends AppController {
         ));
     }
 
+    public function save_wallpaper_selection(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        if(isset($this->request->query['wallpaper'])){
+            $path_parts     = pathinfo($this->request->query['wallpaper']);
+            $this->UserSetting = ClassRegistry::init('UserSetting');
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'wallpaper')));
+            if($q_r){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $path_parts['basename']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'wallpaper';
+                $d['UserSetting']['value']  = $path_parts['basename'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+
+    }
+
 
     private function _get_user_detail($username){
 
@@ -131,11 +157,20 @@ class DesktopController extends AppController {
             $menu= $this->_build_ap_menus($id);  //We DO care for rights here!
         }
 
+        $wp_url = Configure::read('paths.wallpaper_location').Configure::read('user_settings.wallpaper');
+        //Check for personal overrides
+        $this->UserSetting = ClassRegistry::init('UserSetting');
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $id,'UserSetting.name' => 'wallpaper')));
+        if($q_r){
+            $wp_base = $q_r['UserSetting']['value'];
+            $wp_url = Configure::read('paths.wallpaper_location').$wp_base;
+        }
+
         return array(
             'token'         =>  $q_r['User']['token'],
             'menu'          =>  $menu,
             'user'          =>  array('id' => $id, 'username' => $username,'group' => $group,'cls' => $cls),
-            'urlWallpaper'  =>  'resources/images/wallpapers/9.jpg',
+            'urlWallpaper'  =>  $wp_url,
             'shortcuts'     =>  array() 
         );
     }
