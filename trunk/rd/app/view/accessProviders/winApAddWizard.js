@@ -1,4 +1,4 @@
-Ext.define('Rd.view.tags.winApAddWizard', {
+Ext.define('Rd.view.accessProviders.winApAddWizard', {
     extend:     'Ext.window.Window',
     alias :     'widget.winApAddWizard',
     closable:   true,

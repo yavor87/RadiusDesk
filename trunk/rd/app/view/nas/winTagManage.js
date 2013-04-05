@@ -1,4 +1,4 @@
-Ext.define('Rd.view.tags.winTagManage', {
+Ext.define('Rd.view.nas.winTagManage', {
     extend: 'Ext.window.Window',
     alias : 'widget.winTagManage',
     title : i18n('sAdd_or_remove_tags'),

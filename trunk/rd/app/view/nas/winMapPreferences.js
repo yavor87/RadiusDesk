@@ -1,4 +1,4 @@
-Ext.define('Rd.view.tags.winMapPreferences', {
+Ext.define('Rd.view.nas.winMapPreferences', {
     extend: 'Ext.window.Window',
     alias : 'widget.winMapPreferences',
     title : i18n('sPreferences'),

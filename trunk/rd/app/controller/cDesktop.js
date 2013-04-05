@@ -80,7 +80,8 @@ Ext.define('Rd.controller.cDesktop', {
                     width: 100,
                     items: [
                         {   text:i18n('sLogout'),      iconCls:'exit',     handler: me.onLogout,   scope: me   },'-',
-                        {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onSettings, scope: me   }
+                        {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onSettings, scope: me   },
+                        {   text:i18n('sChange_password'), iconCls:'rights', handler: me.onPassword, scope: me   }
                     ]
                 }
             }
@@ -570,6 +571,16 @@ Ext.define('Rd.controller.cDesktop', {
             },
             scope: me
         });
-    }
+    },
+    onPassword: function(b){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winPasswordChangerId')){
+            var w = Ext.widget('winPasswordChanger',{
+                id  :'winPasswordChangerId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
+       // me.setWallpaper('resources/images/wallpapers/7.jpg');
+    },
 
 });

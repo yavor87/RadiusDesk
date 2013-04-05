@@ -1,4 +1,4 @@
-Ext.define('Rd.view.permanentUsers.gridDeviceRadpostauths' ,{
+Ext.define('Rd.view.devices.gridDeviceRadpostauths' ,{
     extend:'Ext.grid.Panel',
     alias : 'widget.gridDeviceRadpostauths',
     multiSelect: true,
