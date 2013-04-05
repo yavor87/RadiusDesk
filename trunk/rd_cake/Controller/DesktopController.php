@@ -132,7 +132,32 @@ class DesktopController extends AppController {
             'success' => true,
             '_serialize' => array('success')
         ));
+    }
 
+    public function change_password(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $d                      = array();
+        $d['User']['id']        = $user_id;
+        $d['User']['password']  = $this->request->data['password'];
+        $d['User']['token']     = '';
+        
+        $this->User             = ClassRegistry::init('User');
+        $this->User->contain();
+        $this->User->id         = $user_id;
+        $this->User->save($d);
+        $q_r                    = $this->User->findById($user_id);
+        $data['token']          = $q_r['User']['token'];
+
+        $this->set(array(
+            'success' => true,
+            'data'    => $data,
+            '_serialize' => array('success','data')
+        ));
     }
 
 
@@ -160,9 +185,9 @@ class DesktopController extends AppController {
         $wp_url = Configure::read('paths.wallpaper_location').Configure::read('user_settings.wallpaper');
         //Check for personal overrides
         $this->UserSetting = ClassRegistry::init('UserSetting');
-        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $id,'UserSetting.name' => 'wallpaper')));
-        if($q_r){
-            $wp_base = $q_r['UserSetting']['value'];
+        $q = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $id,'UserSetting.name' => 'wallpaper')));
+        if($q){
+            $wp_base = $q['UserSetting']['value'];
             $wp_url = Configure::read('paths.wallpaper_location').$wp_base;
         }
 

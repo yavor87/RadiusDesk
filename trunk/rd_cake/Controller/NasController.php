@@ -1003,10 +1003,44 @@ class NasController extends AppController {
         $user_id    = $user['id'];
         $items = array();
 
-        $items['zoom'] = 18;
-        $items['type'] = 'ROADMAP';
-        $items['lat']  = 42.3379770178396;
-        $items['lng']  = -71.0955740216735;
+        $this->UserSetting = ClassRegistry::init('UserSetting');
+
+        $zoom = Configure::read('user_settings.map.zoom');
+        //Check for personal overrides
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_zoom')));
+        if($q_r){
+            $zoom = intval($q_r['UserSetting']['value']);
+        }
+
+        $type = Configure::read('user_settings.map.type');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_type')));
+        if($q_r){
+            $type = $q_r['UserSetting']['value'];
+        }
+
+        $lat = Configure::read('user_settings.map.lat');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_lat')));
+        if($q_r){
+            $lat = $q_r['UserSetting']['value']+0;
+        }
+
+        $lng = Configure::read('user_settings.map.lng');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_lng')));
+        if($q_r){
+            $lng = $q_r['UserSetting']['value']+0;
+        }
+
+
+        $items['zoom'] = $zoom;
+        $items['type'] = $type;
+        $items['lat']  = $lat;
+        $items['lng']  = $lng;
 
         $this->set(array(
             'data'   => $items, //For the form to load we use data instead of the standard items as for grids
@@ -1022,6 +1056,70 @@ class NasController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+
+        $this->UserSetting = ClassRegistry::init('UserSetting');
+
+        if(array_key_exists('zoom',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_zoom')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['zoom']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'map_zoom';
+                $d['UserSetting']['value']  = $this->request->data['zoom'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('type',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_type')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['type']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'map_type';
+                $d['UserSetting']['value']  = $this->request->data['type'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('lat',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_lat')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['lat']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'map_lat';
+                $d['UserSetting']['value']  = $this->request->data['lat'];
+
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('lng',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'map_lng')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['lng']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'map_lng';
+                $d['UserSetting']['value']  = $this->request->data['lng'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
 
         $this->set(array(
             'success' => true,
