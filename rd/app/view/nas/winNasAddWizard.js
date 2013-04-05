@@ -1,4 +1,4 @@
-Ext.define('Rd.view.realms.winNasAddWizard', {
+Ext.define('Rd.view.nas.winNasAddWizard', {
     extend      : 'Ext.window.Window',
     alias       : 'widget.winNasAddWizard',
     closable    : true,

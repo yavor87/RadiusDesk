@@ -1,4 +1,4 @@
-Ext.define('Rd.view.desktop.pnlRealm', {
+Ext.define('Rd.view.realms.pnlRealm', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.pnlRealm',
     border: false,

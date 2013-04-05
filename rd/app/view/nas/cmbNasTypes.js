@@ -1,4 +1,4 @@
-Ext.define('Rd.view.components.cmbNasTypes', {
+Ext.define('Rd.view.nas.cmbNasTypes', {
     extend: 'Ext.form.ComboBox',
     alias : 'widget.cmbNasTypes',
     fieldLabel: i18n('sType'),

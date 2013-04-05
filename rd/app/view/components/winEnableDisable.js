@@ -1,4 +1,4 @@
-Ext.define('Rd.view.profiles.winEnableDisable', {
+Ext.define('Rd.view.components.winEnableDisable', {
     extend: 'Ext.window.Window',
     alias : 'widget.winEnableDisable',
     title : i18n('sEnable_fs_Disable'),

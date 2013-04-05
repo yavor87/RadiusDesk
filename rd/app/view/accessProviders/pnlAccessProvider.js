@@ -1,4 +1,4 @@
-Ext.define('Rd.view.desktop.pnlAccessProvider', {
+Ext.define('Rd.view.accessProviders.pnlAccessProvider', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.pnlAccessProvider',
     border: false,

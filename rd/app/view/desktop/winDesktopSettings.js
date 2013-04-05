@@ -1,4 +1,4 @@
-Ext.define('Rd.view.permanentUsers.winDesktopSettings', {
+Ext.define('Rd.view.desktop.winDesktopSettings', {
     extend: 'Ext.window.Window',
     alias : 'widget.winDesktopSettings',
     title : i18n('sSettings'),

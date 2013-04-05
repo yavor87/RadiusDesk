@@ -1,4 +1,4 @@
-Ext.define('Rd.view.tags.winTagEdit', {
+Ext.define('Rd.view.templates.winTagEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winTagEdit',
     title : i18n('sEdit_tag_for_NAS_device'),

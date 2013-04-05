@@ -1,4 +1,4 @@
-Ext.define('Rd.view.realms.gridNas' ,{
+Ext.define('Rd.view.nas.gridNas' ,{
     extend:'Ext.grid.Panel',
     alias : 'widget.gridNas',
     store : 'sNas',
