@@ -4,10 +4,11 @@ These places will be marked with //@@ comments
 
 Ext.define('Rd.controller.cDesktop', {
     extend: 'Ext.app.Controller',
-    views: ['desktop.pnlDesktop','desktop.winDesktopSettings'],
+    views: ['desktop.pnlDesktop','desktop.winDesktopSettings', 'desktop.winPasswordChanger'],
     config: {
         urlWallpaper                : 'resources/images/wallpapers/2.jpg',
-        urlSaveWallpaperSelection   : '/cake2/rd_cake/desktop/save_wallpaper_selection.json'
+        urlSaveWallpaperSelection   : '/cake2/rd_cake/desktop/save_wallpaper_selection.json',
+        urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json',
     },
     models: ['mDesktopShortcut', 'mWallpaper'],
     uses: [
@@ -52,6 +53,9 @@ Ext.define('Rd.controller.cDesktop', {
             },
             '#tabWallpaper dataview': {
                 'select' : me.onSelectWallpaper
+            },
+            'winPasswordChanger #save': {
+                'click' : me.onChangePassword
             }
         });
     },
@@ -81,7 +85,7 @@ Ext.define('Rd.controller.cDesktop', {
                     items: [
                         {   text:i18n('sLogout'),      iconCls:'exit',     handler: me.onLogout,   scope: me   },'-',
                         {   text:i18n('sSettings'),    iconCls:'settings', handler: me.onSettings, scope: me   },
-                        {   text:i18n('sChange_password'), iconCls:'rights', handler: me.onPassword, scope: me   }
+                        {   text:i18n('sPassword'), iconCls:'rights', handler: me.onPassword, scope: me   }
                     ]
                 }
             }
@@ -582,5 +586,28 @@ Ext.define('Rd.controller.cDesktop', {
         }
        // me.setWallpaper('resources/images/wallpapers/7.jpg');
     },
+    onChangePassword: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlChangePassword,
+            success: function(form, action) {
+                //Important to update the token for the next requests
+                var token = action.result.data.token; 
+                Ext.Ajax.extraParams.token = token; 
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    }
 
 });
