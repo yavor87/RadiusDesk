@@ -5,7 +5,7 @@ Ext.define('Rd.view.desktop.winPasswordChanger', {
     layout: 'fit',
     autoShow: false,
     width:    350,
-    height:   350,
+    height:   250,
     iconCls: 'settings',
 
     initComponent: function() {
@@ -31,15 +31,20 @@ Ext.define('Rd.view.desktop.winPasswordChanger', {
                 items: [
                     {  
                         name        : 'password',
-                        itemId      : 'password',  
+                        itemId      : 'password',
+                        allowBlank  : false,
+                        inputType   : 'password',  
                         fieldLabel  : i18n('sPassword'),
                         labelClsExtra: 'lblRdReq'
                     },
                     {  
                         name        : 'confirm',
-                        itemId      : 'confirm',  
+                        itemId      : 'confirm',
+                        allowBlank  : false,
+                        inputType   : 'password',  
                         fieldLabel  : i18n('sConfirm'),
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+                        vtype       : 'PasswordMatch'
                     }
                 ],
                 buttons: [
@@ -49,7 +54,7 @@ Ext.define('Rd.view.desktop.winPasswordChanger', {
                         scale: 'large',
                         iconCls: 'b-save',
                         formBind: true,
-                        margin: '0 20 40 0'
+                        margin: Rd.config.buttonMargin
                     }
                 ]
             }
