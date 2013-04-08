@@ -1233,7 +1233,7 @@ class NasController extends AppController {
          array_push($items, array( 'title'  => __('NAS'), 'itemId' => 'tabNas', 'xtype' => 'pnlNasNas', 'nn_disabled' => $nn_disabled));
         array_push($items,array( 'title'  => __('Realms'),'itemId' => 'tabRealms', 'layout' => 'fit', 'border' => false, 'xtype' => 'pnlRealmsForNasOwner'));
          array_push($items,array( 'title'  => __('Photo'),'itemId' => 'tabPhoto', 'xtype' => 'pnlNasPhoto'));
-      //  array_push($items,array( 'title'  => __('Availability')));
+         array_push($items,array( 'title'  => __('Availability'), 'itemId' => 'tabAvailability', 'xtype' => 'gridNasAvailability'));
 
         $this->set(array(
                 'items'     => $items,
