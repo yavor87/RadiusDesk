@@ -71,6 +71,9 @@ Ext.define('Rd.controller.cStartup', {
                     var jsonData = Ext.JSON.decode(response.responseText);
                     //Set the phrases
                     if(jsonData.success){ //Token is ok, let us continiue
+
+                        //Apply phrases to the cusom VTypes to include language:
+                        me.application.applyVtypes();
    
                         //Set extra params to token's value
                         //This is the second place of three where we set the extraParams. The token is valid 3rt blace in cLogin.js
