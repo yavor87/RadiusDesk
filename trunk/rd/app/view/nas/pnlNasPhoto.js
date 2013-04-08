@@ -45,7 +45,7 @@ Ext.define('Rd.view.nas.pnlNasPhoto', {
             items       : [
                 {
                     xtype: 'filefield',
-                    id: 'form-file',
+                    itemId: 'form-file',
                     emptyText: 'Select an image',
                     fieldLabel: 'New photo',
                     allowBlank  : false,

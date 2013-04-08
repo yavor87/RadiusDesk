@@ -48,10 +48,10 @@ Ext.define('Rd.controller.cNas', {
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
         'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto', 
-        'nas.winMapPreferences'
+        'nas.winMapPreferences', 'nas.gridNasAvailability'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
-    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType' ],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType', 'mNaState' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -306,7 +306,16 @@ Ext.define('Rd.controller.cNas', {
             },
             'winMapPreferences #save': {
                 click:      me.mapPreferencesSave
-            } 
+            },
+            'pnlNas #tabAvailability': {
+                activate:   me.tabAvailabilityActivate
+            },
+            'gridNasAvailability #reload' :{
+                click:      me.gridNasAvailabilityReload
+            },
+            'gridNasAvailability #delete' :{
+                click:      me.gridNasAvailabilityDelete
+            }
         });
     },
     reload: function(){
@@ -1339,12 +1348,10 @@ Ext.define('Rd.controller.cNas', {
         var nas_id  = tab.up('pnlNas').nas_id;
         form.load({url:me.urlViewNas, method:'GET',params:{nas_id:nas_id}});
     },
-    tabRealmsActivate : function(tab){
-        var me = this;
-        console.log("Tab Realms....");
+    tabAvailabilityActivate : function(tab){
+        var me      = this;
+        tab.getStore().load();
     },
-
-
     pnlNasNasSave : function(button){
         var me      = this;
         var form    = button.up('form');
@@ -1592,5 +1599,54 @@ Ext.define('Rd.controller.cNas', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    gridNasAvailabilityReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridNasAvailability');
+        grid.getStore().load();
+    },
+    tabRealmsActivate : function(tab){
+        var me      = this;
+        var gridR   = tab.down('gridRealmsForNasOwner');
+        gridR.getStore().load();
+    },
+    gridNasAvailabilityDelete:   function(button){
+        var me      = this;  
+        var grid    = button.up('gridNasAvailability');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
     }
 });
