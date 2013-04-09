@@ -92,7 +92,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                 ]
                             },
                             { 
-                                'title'     : i18n('sOptional_Info'),
+                                'title'     : i18n('sOptional_info'),
                                 'layout'    : 'anchor',
                                 defaults    : {
                                     anchor  : '100%'

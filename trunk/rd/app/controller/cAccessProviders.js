@@ -41,10 +41,11 @@ Ext.define('Rd.controller.cAccessProviders', {
         return win;
     },
     views:  [
-        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.frmDetail',
+        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
         'accessProviders.winDetail',            'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
         'components.pnlBanner',                 'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
-        'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd'
+        'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd',
+        'permanentUsers.winPermanentUserPassword','components.winEnableDisable'
     ],
     stores: ['sLanguages',  'sApRights',    'sAccessProvidersGrid',     'sAccessProvidersTree'],
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
@@ -54,7 +55,10 @@ Ext.define('Rd.controller.cAccessProviders', {
         urlEdit         : '/cake2/rd_cake/access_providers/edit.json',
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv    : '/cake2/rd_cake/access_providers/export_csv',
-        urlNoteAdd      : '/cake2/rd_cake/access_providers/note_add.json'
+        urlNoteAdd      : '/cake2/rd_cake/access_providers/note_add.json',
+        urlViewAPDetail : '/cake2/rd_cake/access_providers/view.json',
+        urlEnableDisable: '/cake2/rd_cake/access_providers/enable_disable.json',
+        urlChangePassword:'/cake2/rd_cake/access_providers/change_password.json'
     },
     refs: [
         { ref:  'treeAccessProviders',  selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
@@ -89,14 +93,14 @@ Ext.define('Rd.controller.cAccessProviders', {
             'gridAccessProviders #csv'  : {
                 click:      me.csvExport
             },
-            'gridAccessProviders #password': {
-                click:      me.password
+            'gridAccessProviders #password'  : {
+                click:      me.changePassword
+            },
+            'gridAccessProviders #enable_disable' : {
+                click:      me.enableDisable
             },
             'gridAccessProviders'       : {
                 activate:      me.gridActivate
-            },
-            'winApAddWizard':{
-                toFront:       me.maskHide
             },
             'winApAddWizard #btnTreeNext': {
                 click:      me.btnTreeNext
@@ -110,7 +114,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             'winAccessProviderDetail #save': {
                 click:      me.addSubmit
             },
-            'pnlAccessProvider frmAccessProviderDetail #save': {
+            'pnlAccessProvider pnlAccessProviderDetail #save': {
                 click:      me.editSubmit
             },
             'pnlAccessProvider treeApUserRights #reload': {
@@ -128,9 +132,6 @@ Ext.define('Rd.controller.cAccessProviders', {
             '#winCsvColumnSelectAp #save': {
                 click:  me.csvExportSubmit
             },
-            '#winCsvColumnSelectAp':{
-                toFront:       me.maskHide
-            },
             'gridNote[noteForGrid=access_providers] #reload' : {
                 click:  me.noteReload
             },
@@ -143,9 +144,6 @@ Ext.define('Rd.controller.cAccessProviders', {
             'gridNote[noteForGrid=access_providers]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNote[noteForGrid=access_providers]':{
-                toFront:       me.maskHide
-            },
             'winNoteAdd[noteForGrid=access_providers] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
@@ -154,17 +152,25 @@ Ext.define('Rd.controller.cAccessProviders', {
             },
             'winNoteAdd[noteForGrid=access_providers] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
-            }
-
+            },
+            'pnlAccessProvider #tabDetail': {
+                beforerender:   me.tabDetailActivate,
+                activate:       me.tabDetailActivate
+            },
+            'pnlAccessProvider #tabRealms': {
+               // activate:       me.tabRealmsActivate
+            },
+            'pnlAccessProvider #tabRights': {
+              //  activate:       me.tabRightsActivate
+            },
+            'winPermanentUserPassword #save': {
+                click: me.changePasswordSubmit
+            },
         });;
     },
     reload: function(){
         var me =this;
         me.getGrid().getStore().load();
-    },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
     },
     gridActivate: function(g){
         var me = this;
@@ -172,8 +178,6 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
     add:    function(){
         var me = this;
-        me.getGrid().mask.show(); 
-
         Ext.Ajax.request({
             url: me.urlApChildCheck,
             method: 'GET',
@@ -197,7 +201,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 id          :'winApAddWizardId',
                                 noTree      : true,
                                 selLanguage : me.application.getSelLanguage(),
-                                startScreen : 'scrnDetail',
+                                startScreen : 'scrnData',
                                 user_id     : '0',
                                 owner       : i18n('sLogged_in_user'),
                             });
@@ -218,7 +222,9 @@ Ext.define('Rd.controller.cAccessProviders', {
             var win = button.up('winApAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#parent_id').setValue(sr.getId());
-            win.getLayout().setActiveItem('scrnDetail');
+            win.getLayout().setActiveItem('scrnData');
+            var tp = win.down('tabpanel');  //Reset to zero
+            tp.setActiveTab(0);
         }else{
             Ext.ux.Toaster.msg(
                         i18n('sSelect_an_owner'),
@@ -250,13 +256,17 @@ Ext.define('Rd.controller.cAccessProviders', {
                     Ext.ux.Constants.msgInfo
                 );
             },
-            failure: Ext.ux.formFail
+            //Focus on the first tab as this is the most likely cause of error 
+            failure: function(form,action){
+                var tp = win.down('tabpanel');
+                tp.setActiveTab(0);
+                Ext.ux.formFail(form,action)
+            }
         });
     },
     edit:   function(){
         console.log("Edit node");  
         var me = this;
-        me.getGrid().mask.show();
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
@@ -266,7 +276,6 @@ Ext.define('Rd.controller.cAccessProviders', {
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
-            me.maskHide(); 
         }else{
 
             var selected    =  me.getGrid().getSelectionModel().getSelection();
@@ -294,17 +303,6 @@ Ext.define('Rd.controller.cAccessProviders', {
                     items:      {'xtype' : 'pnlAccessProvider',ap_id: ap_id}
                 });
                 tp.setActiveTab(ap_tab_id); //Set focus on Add Tab
-                //Load the record:
-                var nt  = tp.down('#'+ap_tab_id);
-                var f   = nt.down('form');
-                f.loadRecord(sr);    //Load the record
-                //Get the parent node
-                f.down("#owner").setValue(sr.get('owner'));
-
-                //Take mask down on last one
-                if(index == (count-1)){
-                    me.getGrid().mask.hide(); 
-                }
             });
         }
     },
@@ -316,7 +314,6 @@ Ext.define('Rd.controller.cAccessProviders', {
             clientValidation: true,
             url: me.urlEdit,
             success: function(form, action) {
-                me.reload();
                 Ext.ux.Toaster.msg(
                     i18n('sItem_updated'),
                     i18n('sItem_updated_fine'),
@@ -423,7 +420,6 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        me.getGrid().mask.show();
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -491,12 +487,10 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
 
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();     
+        var me      = this;    
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-             me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -505,7 +499,6 @@ Ext.define('Rd.controller.cAccessProviders', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -683,5 +676,124 @@ Ext.define('Rd.controller.cAccessProviders', {
                 }
             });
         }
-    }
+    },
+    tabDetailActivate : function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        var ap_id  = tab.up('pnlAccessProvider').ap_id;
+        form.load({url:me.urlViewAPDetail, method:'GET',params:{ap_id:ap_id}});
+    },
+    changePassword: function(){
+        var me = this;
+        console.log("Changing password");
+         //Find out if there was something selected
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr = me.getGrid().getSelectionModel().getLastSelected(); 
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUsersPassword'+sr.getId())){
+                    var w = Ext.widget('winPermanentUserPassword',
+                        {
+                            id          : 'winPermanentUsersPassword'+sr.getId(),
+                            user_id     : sr.getId(),
+                            username    : sr.get('username'),
+                            title       : i18n('sChange_password_for')+' '+sr.get('username')
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    changePasswordSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var extra_params        = {};
+        var sr                  = me.getGrid().getSelectionModel().getLastSelected();
+        extra_params['user_id'] = sr.getId();
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlChangePassword,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sPassword_changed'),
+                    i18n('sPassword_changed_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+    enableDisable: function(button){
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
+        }
+    },
+    enableDisableSubmit:function(button){
+
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var extra_params    = {};
+        var s               = me.getGrid().getSelectionModel().getSelection();
+        Ext.Array.each(s,function(record){
+            var r_id = record.getId();
+            extra_params[r_id] = r_id;
+        });
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEnableDisable,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },  
 });
