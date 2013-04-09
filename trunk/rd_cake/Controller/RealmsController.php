@@ -700,6 +700,48 @@ class RealmsController extends AppController {
 	}
 
 
+     public function view(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['realm_id'])){
+            $this->{$this->modelClass}->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['realm_id']);
+            if($q_r){
+                $owner_tree                         = $this->_find_parents($q_r['Realm']['user_id']);
+                $items['id']                        = $q_r['Realm']['id'];
+                $items['name']                      = $q_r['Realm']['name'];
+                $items['available_to_siblings']     = $q_r['Realm']['available_to_siblings'];
+                $items['phone']                     = $q_r['Realm']['phone'];
+                $items['fax']                       = $q_r['Realm']['fax'];
+                $items['cell']                      = $q_r['Realm']['cell'];
+                $items['email']                     = $q_r['Realm']['email'];
+                $items['url']                       = $q_r['Realm']['url'];
+                $items['street_no']                 = $q_r['Realm']['street_no'];
+                $items['street']                    = $q_r['Realm']['street'];
+                $items['town_suburb']               = $q_r['Realm']['town_suburb'];
+                $items['city']                      = $q_r['Realm']['city'];
+                $items['country']                   = $q_r['Realm']['country'];
+                $items['lat']                       = $q_r['Realm']['lat'];
+                $items['lon']                       = $q_r['Realm']['lon'];
+                $items['owner']                     = $owner_tree;
+                $items['icon_file_name']            = $q_r['Realm']['icon_file_name'];
+            }
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
       public function note_index(){
 
         //__ Authentication + Authorization __
