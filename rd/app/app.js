@@ -99,6 +99,15 @@ Ext.application({
                 return true;
             },
             PasswordMatchText: i18n('sPasswords_does_not_match'),
+            Numeric : function(){
+				  var objRegExp  =  /[0-9]/;
+				  return function(strValue){
+					  //check for numeric characters
+					  return objRegExp.test(strValue);
+				  }
+		    }(),
+		    NumericText: 'Only numbers are allowed',
+            NumericMask: /[0-9]/
         });
 
     }
