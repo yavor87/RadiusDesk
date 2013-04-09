@@ -25,8 +25,7 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
-        'Ext.form.field.Radio',
-        'Rd.view.accessProviders.frmDetail'
+        'Ext.form.field.Radio'
     ],
     initComponent: function() {
         var me = this;
@@ -79,7 +78,7 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
         return pnlTree;
     },
 
-    //_______ Data for tag  _______
+    //_______ Data for Access Provider  _______
     mkScrnData: function(){
         var me      = this;
     

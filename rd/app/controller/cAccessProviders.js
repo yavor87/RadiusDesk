@@ -42,10 +42,10 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
     views:  [
         'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
-        'accessProviders.winDetail',            'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
+        'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
         'components.pnlBanner',                 'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
         'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd',
-        'permanentUsers.winPermanentUserPassword','components.winEnableDisable'
+        'permanentUsers.winPermanentUserPassword','components.winEnableDisable',        'components.vCmbLanguages'
     ],
     stores: ['sLanguages',  'sApRights',    'sAccessProvidersGrid',     'sAccessProvidersTree'],
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
@@ -168,7 +168,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             },
             'winEnableDisable #save': {
                 click: me.enableDisableSubmit
-            },
+            }
         });;
     },
     reload: function(){
@@ -267,8 +267,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             }
         });
     },
-    edit:   function(){
-        console.log("Edit node");  
+    edit:   function(){ 
         var me = this;
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getGrid().getSelectionModel().getCount();
@@ -310,7 +309,6 @@ Ext.define('Rd.controller.cAccessProviders', {
         }
     },
     editSubmit: function(button){
-        console.log("Edit submit");
         var me      = this;
         var form    = button.up('form');
         form.submit({
@@ -364,9 +362,6 @@ Ext.define('Rd.controller.cAccessProviders', {
                 }
             });
         }
-    },
-    password: function(){
-        console.log("Change password");
     },
     apRightReload: function(button){
         var me = this;
@@ -618,8 +613,6 @@ Ext.define('Rd.controller.cAccessProviders', {
     btnNoteAddNext: function(button){
         var me      = this;
         var win     = button.up('winNoteAdd');
-        console.log(win.noteForId);
-        console.log(win.noteForGrid);
         win.refreshGrid.getStore().load();
         var form    = win.down('form');
         form.submit({
@@ -688,7 +681,6 @@ Ext.define('Rd.controller.cAccessProviders', {
     },
     changePassword: function(){
         var me = this;
-        console.log("Changing password");
          //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){

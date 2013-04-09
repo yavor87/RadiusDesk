@@ -30,15 +30,15 @@ Ext.define('Rd.view.realms.gridRealms' ,{
             { text: i18n('sPhone'),    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { text: i18n('sFax'),      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: i18n('s_email'),    dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            { text: i18n('s_email'),   dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { text: i18n('sURL'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  
                 xtype:  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">"+i18n('sYes')+"</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">"+i18n('sNo')+"</div></tpl>"
+                            "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\">"+i18n('sYes')+"</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">"+i18n('sNo')+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
                     filter  : {
@@ -59,7 +59,6 @@ Ext.define('Rd.view.realms.gridRealms' ,{
 
         //Create a mask and assign is as a property to the window
         me.mask = new Ext.LoadMask(me, {msg: i18n('sConnecting')+" ...."});   
-
         me.callParent(arguments);
     }
 });
