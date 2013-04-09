@@ -424,6 +424,65 @@ class AccessProvidersController extends AppController {
         }
     }
 
+
+     public function change_password(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $success = false;
+
+        if(isset($this->request->data['user_id'])){
+            $d           = array();
+            $d['User']['id']        = $this->request->data['user_id'];
+            $d['User']['password']  = $this->request->data['password'];
+            $d['User']['token']     = '';
+            $this->{$this->modelClass}->id  = $this->request->data['user_id'];
+            $this->{$this->modelClass}->save($d);
+            $success               = true;  
+        }
+
+        $this->set(array(
+            'success' => $success,
+            '_serialize' => array('success',)
+        ));
+    }
+
+    public function enable_disable(){
+        
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $rb     = $this->request->data['rb'];
+        $d      = array();
+        if($rb == 'enable'){
+            $d['User']['active'] = 1;
+        }else{
+            $d['User']['active'] = 0;
+        }
+
+        foreach(array_keys($this->request->data) as $key){
+            if(preg_match('/^\d+/',$key)){
+                $d['User']['id']                = $key;
+                $this->{$this->modelClass}->id  = $key;
+                $this->{$this->modelClass}->save($d);   
+            }
+        }
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success',)
+        ));
+    }
+
+
      public function note_index(){
 
         //__ Authentication + Authorization __
