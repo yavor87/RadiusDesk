@@ -158,13 +158,16 @@ Ext.define('Rd.controller.cAccessProviders', {
                 activate:       me.tabDetailActivate
             },
             'pnlAccessProvider #tabRealms': {
-               // activate:       me.tabRealmsActivate
+                activate:       me.tabRealmsActivate
             },
             'pnlAccessProvider #tabRights': {
-              //  activate:       me.tabRightsActivate
+                activate:       me.tabRightsActivate
             },
             'winPermanentUserPassword #save': {
                 click: me.changePasswordSubmit
+            },
+            'winEnableDisable #save': {
+                click: me.enableDisableSubmit
             },
         });;
     },
@@ -795,5 +798,13 @@ Ext.define('Rd.controller.cAccessProviders', {
             },
             failure             : Ext.ux.formFail
         });
-    },  
+    }, 
+    tabRealmsActivate:  function(t){
+        var me = this;
+        t.getStore().load();
+    },
+    tabRightsActivate:  function(t){
+        var me = this;
+        t.getStore().load();
+    } 
 });

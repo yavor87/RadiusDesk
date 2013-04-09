@@ -44,8 +44,8 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
             xtype:  'templatecolumn', 
             width:  '120px',
             tpl:    new Ext.XTemplate(
-                        "<tpl if='group_right == \"yes\"'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                        "<tpl if='group_right == \"no\"'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                        "<tpl if='group_right == \"yes\"'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='group_right == \"no\"'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                     )
         },
         {
@@ -69,7 +69,7 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
         //Create a store specific to this Access Provider
         me.store = Ext.create(Ext.data.TreeStore,{
             model: 'Rd.model.mApUserRight',
-            autoLoad: true,
+            autoLoad: false,
             proxy: {
                 type: 'ajax',
                 format  : 'json',
@@ -98,7 +98,6 @@ Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                         );
-                    //console.log(store.getProxy().getReader().rawData.message.message);
                     }  
                 },
                 scope: this
