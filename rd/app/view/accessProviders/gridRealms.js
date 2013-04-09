@@ -152,7 +152,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                 },
                 scope: this
             },
-            autoLoad: true    
+            autoLoad: false    
         });
 
         me.callParent(arguments);

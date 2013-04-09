@@ -53,16 +53,16 @@ Ext.define('Rd.view.accessProviders.treeAccessProviders' ,{
             text:   i18n('sMonitor'),  
             xtype:  'templatecolumn', 
             tpl:    new Ext.XTemplate(
-                        "<tpl if='monitor == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                        "<tpl if='monitor == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                        "<tpl if='monitor == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='monitor == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                     )
         },
         { 
             text:   'Active',  
             xtype:  'templatecolumn', 
             tpl:    new Ext.XTemplate(
-                        "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                        "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                        "<tpl if='active == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
+                        "<tpl if='active == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                     )
         }
 
