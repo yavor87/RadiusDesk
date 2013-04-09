@@ -3,30 +3,19 @@ Ext.define('Rd.view.realms.pnlRealm', {
     alias: 'widget.pnlRealm',
     border: false,
     realm_id: null,
-    requires: [
-        'Rd.view.realms.frmDetail'
-    ],
     initComponent: function(){
-
         var me = this;
         me.items = [
             {   
                 title:  i18n('sDetail'),
-                layout: 'hbox',
-                bodyStyle: {backgroundColor : '#e5e6ef'},
-                border: false,
-                items:  { 
-                    xtype:  'frmRealmDetail',
-                    height: '100%', 
-                    width:  400,
-                    border: true
-                    } 
+                xtype:  'pnlRealmDetail',
+                itemId: 'tabDetail'
+                   
             },
             { 
-                title   : i18n('sLogo')
-            },
-            { 
-                title   : i18n('sNotes')
+                title   : i18n('sLogo'),
+                itemId  : 'tabLogo',
+                xtype   : 'pnlRealmLogo'
             }
         ]; 
         me.callParent(arguments);

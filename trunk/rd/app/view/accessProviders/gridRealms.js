@@ -124,7 +124,6 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                             Ext.ux.Constants.clsWarn,
                             Ext.ux.Constants.msgWarn
                         );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
                     }else{
                         var count   = me.getStore().getTotalCount();
                         me.down('#count').update({count: count});
