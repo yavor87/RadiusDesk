@@ -278,19 +278,22 @@ class AccessProvidersController extends AppController {
         //Zero the token to generate a new one for this user:
         $this->request->data['token'] = '';
 
-
-
         //The rest of the attributes should be same as the form..
-        $this->User->create();
-        $this->User->save($this->request->data);
-
-
-        $this->set(array(
-            'items' => array(),
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-
+        $this->{$this->modelClass}->create();
+        if ($this->{$this->modelClass}->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
     }
 
     //Extjs specific workaround for treestore that has a defined model
@@ -328,6 +331,46 @@ class AccessProvidersController extends AppController {
         ));
     }
 
+
+    public function view(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['ap_id'])){
+            $this->{$this->modelClass}->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['ap_id']);
+            if($q_r){
+                $owner_tree         = $this->_find_parents($q_r['User']['parent_id']);
+                $items['id']        = $q_r['User']['id'];
+                $items['username']  = $q_r['User']['username'];
+                $items['name']      = $q_r['User']['name'];
+                $items['surname']   = $q_r['User']['surname'];
+                $items['phone']     = $q_r['User']['phone'];
+                $items['address']   = $q_r['User']['address'];
+                $items['email']     = $q_r['User']['email'];
+                $items['active']    = $q_r['User']['active'];
+                $items['monitor']   = $q_r['User']['monitor'];
+                $items['owner']     = $owner_tree;
+                $language           = $q_r['User']['country_id'].'_'.$q_r['User']['language_id'];
+                $items['language']  = $language;
+            }
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+
+
+    }
+
     public function edit(){
 
         //__ Authentication + Authorization __
@@ -356,21 +399,28 @@ class AccessProvidersController extends AppController {
             $this->request->data['active'] = 0;
         }
 
+        //Get the language and country
+        $country_language   = explode( '_', $this->request->data['language'] );
 
-        if ($this->User->save($this->request->data)) {
+        $country            = $country_language[0];
+        $language           = $country_language[1];
 
+        $this->request->data['language_id'] = $language;
+        $this->request->data['country_id']  = $country;
+
+        if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
-
-        }else{
-
-             $this->set(array(
-                'success' => false,
-                '_serialize' => array('success')
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
             ));
-
         }
     }
 
@@ -563,10 +613,11 @@ class AccessProvidersController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
-                array('xtype' => 'buttongroup','title' => __('Access Provider'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-expand',  'scale' => 'large', 'itemId' => 'expand',   'tooltip'=> __('Expand')),
-                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change Password'))
-                )) 
+                array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
+                    array('xtype' => 'button', 'iconCls' => 'b-disable', 'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable'))
+               
+                ))
             );
         }
 
