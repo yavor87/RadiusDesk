@@ -667,7 +667,7 @@ Ext.define('Rd.controller.cRealms', {
             params: {'id' : pnl_r.realm_id },
             success: function(form, action) {              
                 if(action.result.success){ 
-                    var new_img = action.result.photo_file_name;    
+                    var new_img = action.result.icon_file_name;    
                     var img_url = me.urlLogoBase+new_img;
                     p_img.update({image:img_url});
                 } 
