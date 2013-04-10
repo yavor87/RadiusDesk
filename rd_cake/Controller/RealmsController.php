@@ -742,6 +742,36 @@ class RealmsController extends AppController {
         ));
     }
 
+    public function upload_logo($id = null){
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->layout = 'ext_file_upload';
+
+        $path_parts     = pathinfo($_FILES['photo']['name']);
+        $unique         = time();
+        $dest           = IMAGES."realms/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/realms/".$unique.'.'.$path_parts['extension'];
+
+        //Now add....
+        $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
+       
+        $this->{$this->modelClass}->id = $this->request->data['id'];
+       // $this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension']);
+        if($this->{$this->modelClass}->saveField('icon_file_name', $unique.'.'.$path_parts['extension'])){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $this->{$this->modelClass}->id;
+            $json_return['success']             = true;
+            $json_return['icon_file_name']      = $unique.'.'.$path_parts['extension'];
+        }else{
+            $json_return['errors']      = $this->{$this->modelClass}->validationErrors;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+        }
+        $this->set('json_return',$json_return);
+    }
+
+
       public function note_index(){
 
         //__ Authentication + Authorization __
