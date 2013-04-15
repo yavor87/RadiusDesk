@@ -75,14 +75,8 @@ Ext.define('Rd.controller.cAcos', {
             'treeAco #expand': {
                 click:      me.acoExpand
             },
-            'winAcoAdd' :{
-                toFront: me.maskHide
-            },
             'winAcoAdd #save':{
                 click:      me.acoAddSubmit
-            },
-            'winAcoEdit' :{
-                toFront: me.maskHide
             },
             'winAcoEdit #save':{
                 click:      me.acoEditSubmit
@@ -108,17 +102,11 @@ Ext.define('Rd.controller.cAcos', {
         var me =this;
         me.getStore('sAcos').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getTreeAco().mask.hide();
-    },
     acoAdd:    function(){
         var me = this;
-        me.getTreeAco().mask.show();
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getTreeAco().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
             Ext.ux.Toaster.msg(
                         i18n('sSelect_a_node'),
                         i18n('sFirst_select_a_node_of_the_tree_under_which_to_add_an_ACO_entry'),
@@ -127,7 +115,6 @@ Ext.define('Rd.controller.cAcos', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -170,11 +157,9 @@ Ext.define('Rd.controller.cAcos', {
     },
     acoEdit:   function(){
         var me = this;
-        me.getTreeAco().mask.show();
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getTreeAco().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
             Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -183,7 +168,6 @@ Ext.define('Rd.controller.cAcos', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -194,7 +178,6 @@ Ext.define('Rd.controller.cAcos', {
 
                 //We are not suppose to edit the root node
                 if(me.acoSelectedRecord.getId() == 0){
-                    me.maskHide();
                     Ext.ux.Toaster.msg(
                         i18n('sRoot_node_selected'),
                         i18n('sYou_can_not_edit_the_root_node'),

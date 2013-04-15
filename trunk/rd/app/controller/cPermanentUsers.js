@@ -118,9 +118,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'gridPermanentUsers'    : {
                 activate:      me.gridActivate
             },
-            'winPermanentUserAddWizard' :{
-                toFront: me.maskHide
-            },
             'winPermanentUserAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -142,9 +139,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'winPermanentUserAddWizard #from_date' : {
                 change:  me.fromDateChange
             },
-            '#winCsvColumnSelectPermanentUsers':{
-                toFront:       me.maskHide
-            },
             '#winCsvColumnSelectPermanentUsers #save': {
                 click:  me.csvExportSubmit
             },
@@ -159,9 +153,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'gridNote[noteForGrid=permanentUsers]' : {
                 itemclick: me.gridNoteClick
-            },
-            'winNote[noteForGrid=permanentUsers]':{
-                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=permanentUsers] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -256,17 +247,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me =this;
         me.getStore('sPermanentUsers').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
-    },
     gridActivate: function(g){
         var me = this;
         g.getStore().load();
     },
     add: function(button){  
         var me = this;
-        me.getGrid().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -540,7 +526,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
     csvExport: function(button,format) {
         var me          = this;
-        me.getGrid().mask.show(); 
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -607,12 +592,11 @@ Ext.define('Rd.controller.cPermanentUsers', {
         }
     },
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();      
+        var me      = this;     
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
+
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -621,7 +605,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
+
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -804,7 +788,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
          //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -813,7 +796,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -868,8 +850,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me      = this;
         var grid    = button.up('grid');
         //Find out if there was something selected
-        if(grid.getSelectionModel().getCount() == 0){
-            me.maskHide(); 
+        if(grid.getSelectionModel().getCount() == 0){ 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_edit'),

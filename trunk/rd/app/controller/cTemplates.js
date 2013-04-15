@@ -89,9 +89,6 @@ Ext.define('Rd.controller.cTemplates', {
             'gridTemplates'   : {
                 select:      me.select
             },
-            'winTemplateAddWizard' :{
-                toFront: me.maskHide
-            },
             'winTemplateAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -100,9 +97,6 @@ Ext.define('Rd.controller.cTemplates', {
             },
             'winTemplateAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
-            },
-            '#winCsvColumnSelectTemplates':{
-                toFront:       me.maskHide
             },
             '#winCsvColumnSelectTemplates #save': {
                 click:  me.csvExportSubmit
@@ -118,9 +112,6 @@ Ext.define('Rd.controller.cTemplates', {
             },
             'gridNote[noteForGrid=templates]' : {
                 itemclick: me.gridNoteClick
-            },
-            'winNote[noteForGrid=templates]':{
-                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=templates] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -149,14 +140,9 @@ Ext.define('Rd.controller.cTemplates', {
         var me =this;
         me.getStore('sTemplates').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
-    },
     add: function(button){
         
         var me = this;
-        me.getGrid().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -310,8 +296,7 @@ Ext.define('Rd.controller.cTemplates', {
                         i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
-            );
-            me.maskHide(); 
+            ); 
         }else{
 
             var selected    =  me.getGrid().getSelectionModel().getSelection();
@@ -354,8 +339,7 @@ Ext.define('Rd.controller.cTemplates', {
         me.getGrid().down('#count').update({count: count});
     },
     csvExport: function(button,format) {
-        var me          = this;
-        me.getGrid().mask.show(); 
+        var me          = this; 
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -423,12 +407,10 @@ Ext.define('Rd.controller.cTemplates', {
     },
 
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();      
+        var me      = this;     
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -437,7 +419,6 @@ Ext.define('Rd.controller.cTemplates', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
