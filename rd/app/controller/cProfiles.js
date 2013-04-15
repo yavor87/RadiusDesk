@@ -90,9 +90,6 @@ Ext.define('Rd.controller.cProfiles', {
             'gridProfiles'   : {
                 select:      me.select
             },
-            'winProfileAddWizard' :{
-                toFront: me.maskHide
-            },
             'winProfileAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -101,9 +98,6 @@ Ext.define('Rd.controller.cProfiles', {
             },
             'winProfileAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
-            },
-            '#winCsvColumnSelectProfiles':{
-                toFront:       me.maskHide
             },
             '#winCsvColumnSelectProfiles #save': {
                 click:  me.csvExportSubmit
@@ -119,9 +113,6 @@ Ext.define('Rd.controller.cProfiles', {
             },
             'gridNote[noteForGrid=profiles]' : {
                 itemclick: me.gridNoteClick
-            },
-            'winNote[noteForGrid=profiles]':{
-                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=profiles] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -144,14 +135,9 @@ Ext.define('Rd.controller.cProfiles', {
         var me =this;
         me.getStore('sProfiles').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
-    },
     add: function(button){
         
         var me = this;
-        me.getGrid().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -299,7 +285,6 @@ Ext.define('Rd.controller.cProfiles', {
         var grid    = button.up('grid');
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
-            me.maskHide(); 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_edit'),
@@ -389,7 +374,6 @@ Ext.define('Rd.controller.cProfiles', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        me.getGrid().mask.show(); 
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -457,12 +441,10 @@ Ext.define('Rd.controller.cProfiles', {
     },
 
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();      
+        var me      = this;    
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -471,7 +453,6 @@ Ext.define('Rd.controller.cProfiles', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),

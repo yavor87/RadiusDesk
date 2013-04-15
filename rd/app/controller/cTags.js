@@ -86,9 +86,6 @@ Ext.define('Rd.controller.cTags', {
             'gridTags'   : {
                 select:      me.select
             },
-            'winTagAddWizard' :{
-                toFront: me.maskHide
-            },
             'winTagAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -98,14 +95,8 @@ Ext.define('Rd.controller.cTags', {
             'winTagAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            'winTagEdit' :{
-                toFront: me.maskHide
-            },
             'winTagEdit #save' : {
                 click:  me.editSubmit
-            },
-            '#winCsvColumnSelectTags':{
-                toFront:       me.maskHide
             },
             '#winCsvColumnSelectTags #save': {
                 click:  me.csvExportSubmit
@@ -122,9 +113,6 @@ Ext.define('Rd.controller.cTags', {
             'gridNote[noteForGrid=tags]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNote[noteForGrid=tags]':{
-                toFront:       me.maskHide
-            },
             'winNoteAdd[noteForGrid=tags] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
@@ -140,14 +128,9 @@ Ext.define('Rd.controller.cTags', {
         var me =this;
         me.getStore('sTags').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
-    },
     add: function(button){
         
         var me = this;
-        me.getGrid().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -291,12 +274,10 @@ Ext.define('Rd.controller.cTags', {
     },
 
     edit: function(button){
-        var me      = this; 
-        me.getGrid().mask.show();    
+        var me      = this;   
         //Find out if there was something selected
         var selCount = me.getGrid().getSelectionModel().getCount();
         if(selCount == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -305,7 +286,6 @@ Ext.define('Rd.controller.cTags', {
             );
         }else{
             if(selCount > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -351,7 +331,6 @@ Ext.define('Rd.controller.cTags', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        me.getGrid().mask.show(); 
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -419,12 +398,10 @@ Ext.define('Rd.controller.cTags', {
     },
 
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();      
+        var me      = this;   
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -433,7 +410,6 @@ Ext.define('Rd.controller.cTags', {
             );
         }else{
             if(sel_count > 1){
-                me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),

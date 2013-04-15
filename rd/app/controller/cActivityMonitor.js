@@ -139,10 +139,6 @@ Ext.define('Rd.controller.cActivityMonitor', {
         me.getStore('sRadaccts').getProxy().extraParams = {only_connected: only_connected};
         me.getStore('sRadaccts').load();
     },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
-    },
     onStoreRadacctsLoaded: function() {
         var me          = this;
         var count       = me.getStore('sRadaccts').getTotalCount();

@@ -107,10 +107,6 @@ Ext.define('Rd.controller.cDevices', {
             'gridDevices'   : {
                 activate:      me.gridActivate
             },
-            'winDeviceAddWizard' :{
-                toFront: me.maskHide
-            },
-
             'winDeviceAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
@@ -126,9 +122,6 @@ Ext.define('Rd.controller.cDevices', {
             'winDeviceAddWizard #from_date' : {
                 change:  me.fromDateChange
             },
-            '#winCsvColumnSelectDevices':{
-                toFront:       me.maskHide
-            },
             '#winCsvColumnSelectDevices #save': {
                 click:  me.csvExportSubmit
             },
@@ -143,9 +136,6 @@ Ext.define('Rd.controller.cDevices', {
             },
             'gridNote[noteForGrid=devices]' : {
                 itemclick: me.gridNoteClick
-            },
-            'winNote[noteForGrid=devices]':{
-                toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -226,10 +216,6 @@ Ext.define('Rd.controller.cDevices', {
     reload: function(){
         var me =this;
         me.getStore('sDevices').load();
-    },
-    maskHide:   function(){
-        var me =this;
-        me.getGrid().mask.hide();
     },
     gridActivate: function(g){
         var me = this;
@@ -444,7 +430,6 @@ Ext.define('Rd.controller.cDevices', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        me.getGrid().mask.show(); 
         var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -511,12 +496,10 @@ Ext.define('Rd.controller.cDevices', {
         }
     },
     note: function(button,format) {
-        var me      = this;
-        me.getGrid().mask.show();      
+        var me      = this;     
         //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
-            me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -524,8 +507,7 @@ Ext.define('Rd.controller.cDevices', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(sel_count > 1){
-                me.maskHide();
+            if(sel_count > 1){);
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -707,7 +689,6 @@ Ext.define('Rd.controller.cDevices', {
         var grid    = button.up('grid');
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
-            me.maskHide(); 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_modify'),

@@ -130,9 +130,6 @@ Ext.define('Rd.controller.cNas', {
             'gridNas'       : {
                 activate:      me.gridActivate
             },
-            'winNasAddWizard' :{
-          ////      toFront: me.maskHide
-            },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
@@ -178,14 +175,8 @@ Ext.define('Rd.controller.cNas', {
             'winNasAddWizard gridRealmsForNasOwner #chkAvailSub':     {
                 change:     me.gridRealmsForNasOwnerChkAvailSub
             },
-            'winTagManage' : {
-          ////      toFront:       me.maskHide
-            },
             'winTagManage #save' : {
                 click:  me.btnTagManageSave
-            },
-            '#winCsvColumnSelectNas':{
-            ////    toFront:       me.maskHide
             },
             '#winCsvColumnSelectNas #save': {
                 click:  me.csvExportSubmit
@@ -201,9 +192,6 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNote[noteForGrid=nas]' : {
                 itemclick: me.gridNoteClick
-            },
-            'winNote[noteForGrid=nas]':{
-         ////       toFront:       me.maskHide
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
@@ -325,12 +313,7 @@ Ext.define('Rd.controller.cNas', {
             return;
         }
         me.getStore('sNas').load();
-     ////   me.maskHide();
-    },
-    maskHide: function(){
-        var me = this;
-        console.log('hide');
-      //  me.getGridNas().mask.hide();
+
     },
     gridActivate: function(g){
         var me = this;
@@ -338,7 +321,6 @@ Ext.define('Rd.controller.cNas', {
     },
     add: function(button){
         var me = this;
-       //// me.getGridNas().mask.show();
         //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
         //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
         //simply show the nas connection typer selection 
@@ -595,11 +577,9 @@ Ext.define('Rd.controller.cNas', {
     //_____ END ADD _______
 
     tag: function(button){
-        var me      = this;
-      ////  me.getGridNas().mask.show();     
+        var me      = this;    
         //Find out if there was something selected
         if(me.getGridNas().getSelectionModel().getCount() == 0){
-         ////   me.maskHide(); 
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_tag'),
@@ -923,7 +903,6 @@ Ext.define('Rd.controller.cNas', {
     },
     csvExport: function(button,format) {
         var me          = this;
-    ////    me.getGridNas().mask.show();
         var columns     = me.getGridNas().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
@@ -991,12 +970,10 @@ Ext.define('Rd.controller.cNas', {
     },
 
     note: function(button,format) {
-        var me      = this;  
-    ////    me.getGridNas().mask.show();   
+        var me      = this;     
         //Find out if there was something selected
         var sel_count = me.getGridNas().getSelectionModel().getCount();
         if(sel_count == 0){
-       ////     me.maskHide();
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -1005,7 +982,6 @@ Ext.define('Rd.controller.cNas', {
             );
         }else{
             if(sel_count > 1){
-            ////     me.maskHide();
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
