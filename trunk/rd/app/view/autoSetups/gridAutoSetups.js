@@ -11,7 +11,7 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
         'Rd.view.components.ajaxToolbar'
     ],
     viewConfig: {
-        loadMask:false
+        loadMask:true
     },
     urlMenu: '/cake2/rd_cake/auto_macs/menu_for_grid.json',
     bbar: [
@@ -29,8 +29,23 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
 
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: i18n('sOwner'),        dataIndex: 'owner', tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sName'),         dataIndex: 'name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sOwner'),         dataIndex: 'owner',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'MAC Address',          dataIndex: 'name',           tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'IP Address',           dataIndex: 'ip_address',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'Mask',                 dataIndex: 'ip_mask',        tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Gateway',              dataIndex: 'ip_gateway',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'DNS 1',                dataIndex: 'ip_dns_1',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'DNS 2',                dataIndex: 'ip_dns_2',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Wifi Active',          dataIndex: 'wifi_active',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Channel',              dataIndex: 'channel',        tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Power',                dataIndex: 'power',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Connect distance',     dataIndex: 'distance',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Secure SSID',          dataIndex: 'ssid_secure',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'RADIUS',               dataIndex: 'radius',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'Secret',               dataIndex: 'secret',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'OpenSSID',             dataIndex: 'ssid_open',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'VPN Server',           dataIndex: 'vpn_server',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Tunnel IP',            dataIndex: 'tunnel_ip',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
