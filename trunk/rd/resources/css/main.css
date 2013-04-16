@@ -312,6 +312,10 @@
       background-image:url(../images/16x16/unknown.png) !important;
 }
 
+.setup {
+      background-image:url(../images/16x16/setup.png) !important;
+}
+
 .mapDiv {
     height: 210px;
     width:  310px;
