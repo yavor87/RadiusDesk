@@ -93,6 +93,7 @@ class AppController extends Controller {
         $l_iso      = $qr['Language']['iso_code'];
         $locale     = "$l_iso".'_'."$c_iso";
         Configure::write('Config.language', "$locale");
+
     }
 
 

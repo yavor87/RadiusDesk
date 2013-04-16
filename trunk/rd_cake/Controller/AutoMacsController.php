@@ -8,6 +8,12 @@ class AutoMacsController extends AppController {
     public $uses       = array('AutoMac','User');
     protected $base    = "Access Providers/Controllers/AutoMacs/";
 
+    protected $setup_items  = array(
+        'ip_address',   'ip_mask',  'ip_gateway',   'ip_dns_1', 'ip_dns_2',
+        'wifi_active',  'channel',  'power',        'distance', 'ssid_secure',  'radius',   'secret',   'ssid_open',
+        'vpn_server',   'tunnel_ip'
+    );
+
     var $scaffold;
 /*
 
@@ -117,6 +123,8 @@ class AutoMacsController extends AppController {
         $total  = $this->{$this->modelClass}->find('count',$c);       
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
+        //print_r($q_r);
+
         $items      = array();
 
         foreach($q_r as $i){
@@ -129,6 +137,68 @@ class AutoMacsController extends AppController {
                 }
             }
 
+            //IP DNS2 optional
+            $ip_dns_2 = '';
+
+            foreach($i['AutoSetup'] as $as_item){
+                $item   = $as_item['description'];
+                $value  = $as_item['value'];
+               
+
+                switch ($item) {
+                    case 'ip_gateway':
+                        $ip_gateway = $value;
+                        break;
+                    case 'ip_address':
+                        $ip_address = $value;
+                        break;
+                    case 'ip_mask':
+                        $ip_mask = $value;
+                        break;
+                    case 'ip_dns_1':
+                        $ip_dns_1 = $value;
+                        break;
+                    case 'ip_dns_2':
+                        $ip_dns_2 = $value;
+                        break;
+                    case 'wifi_active':
+                        if($value == 1){
+                            $wifi_active = true;
+                        }else{
+                            $wifi_active = false;
+                        }
+                        break;
+                    case 'channel':
+                        $channel = $value;
+                        break;
+                    case 'power':
+                        $power = $value;
+                        break;
+                    case 'distance':
+                        $distance = $value;
+                        break;
+                    case 'ssid_secure':
+                        $ssid_secure = $value;
+                        break;
+                    case 'radius':
+                        $radius = $value;
+                        break;
+                    case 'secret':
+                        $secret = $value;
+                        break;
+                    case 'ssid_open':
+                        $ssid_open = $value;
+                        break;
+                    case 'vpn_server':
+                        $vpn_server = $value;
+                        break;
+                    case 'tunnel_ip':
+                        $tunnel_ip = $value;
+                        break;
+                }
+            }
+
+
             $owner_id       = $i['AutoMac']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
@@ -136,10 +206,25 @@ class AutoMacsController extends AppController {
             array_push($items,array(
                 'id'                    => $i['AutoMac']['id'], 
                 'name'                  => $i['AutoMac']['name'],
-                'owner'                 => $owner_tree, 
-                'notes'                 => $notes_flag,
-                'update'                => $action_flags['update'],
-                'delete'                => $action_flags['delete']
+                'owner'                 => $owner_tree,
+                'ip_address'            => $ip_address,
+                'ip_mask'               => $ip_mask,
+                'ip_gateway'            => $ip_gateway,
+                'ip_dns_1'              => $ip_dns_1,
+                'ip_dns_2'              => $ip_dns_2,
+                'wifi_active'           => $wifi_active,
+                'channel'               => intval($channel),
+                'power'                 => intval($power),
+                'distance'              => intval($distance),
+                'ssid_secure'           => $ssid_secure,
+                'radius'                => $radius,
+                'secret'                => $secret,
+                'ssid_open'             => $ssid_open,
+                'vpn_server'            => $vpn_server,
+                'tunnel_ip'             => $tunnel_ip,
+                'last_contact'          => '',
+                'contact_ip'            => '',
+                'notes'                 => $notes_flag
             ));
         }
        
@@ -250,40 +335,13 @@ class AutoMacsController extends AppController {
         $fail_flag = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
-            $message = "Single item ".$this->data['id'];
-
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['Tag']['user_id'];
-            if($owner_id != $user_id){
-                if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->{$this->modelClass}->id = $this->data['id'];
-                    $this->{$this->modelClass}->delete();
-                }else{
-                    $fail_flag = true;
-                }
-            }else{
-                $this->{$this->modelClass}->id = $this->data['id'];
-                $this->{$this->modelClass}->delete();
-            }
+            $this->{$this->modelClass}->id = $this->data['id'];
+            $this->{$this->modelClass}->delete($this->data['id'],true);
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
-
-                $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['Tag']['user_id'];
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->{$this->modelClass}->id = $d['id'];
-                        $this->{$this->modelClass}->delete();
-                    }else{
-                        $fail_flag = true;
-                    }
-                }else{
-                    $this->{$this->modelClass}->id = $d['id'];
-                    $this->{$this->modelClass}->delete();
-                }
-   
+                $this->{$this->modelClass}->id = $d['id'];
+                $this->{$this->modelClass}->delete($d['id'], true);
             }
         }
 
@@ -632,6 +690,8 @@ class AutoMacsController extends AppController {
         $c['joins']         = array(); 
         $c['conditions']    = array();
 
+        $already_joined     = false;
+
         //What should we include....
         $c['contain']   = array(
                             'AutoMacNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
@@ -646,8 +706,22 @@ class AutoMacsController extends AppController {
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
-            if($this->request->query['sort'] == 'owner'){
+            $sort_item = $this->request->query['sort'];
+            if($sort_item == 'owner'){
                 $sort = 'User.username';
+            }elseif(in_array($sort_item,$this->setup_items)){
+                if($already_joined == false){
+                    array_push($c['joins'],array(
+                        'table'         => 'auto_setups',
+                        'alias'         => 'AutoSetup',
+                        'type'          => 'LEFT',
+                        'conditions'    => array('AutoSetup.auto_mac_id = AutoMac.id')
+                    ));
+                    $already_joined = true;
+                }
+                
+                array_push($c['conditions'],array("AutoSetup.description" => $this->request->query['sort']));
+                $sort = "AutoSetup.value";
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
@@ -660,11 +734,28 @@ class AutoMacsController extends AppController {
         //====== REQUEST FILTER =====
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
+            
             foreach($filter as $f){
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
                         array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    }elseif(in_array($f->field,$this->setup_items)){                       
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        if($already_joined == false){
+                            array_push($c['joins'],array(
+                                'table'         => 'auto_setups',
+                                'alias'         => 'AutoSetup',
+                                'type'          => 'LEFT',
+                                'conditions'    => array('AutoSetup.auto_mac_id = AutoMac.id')
+                            ));
+                            $already_joined = true;
+                        }
+                        array_push($c['conditions'],array(
+                            'AutoSetup.description'  => $f->field,
+                            "AutoSetup.value LIKE" => '%'.$f->value.'%'
+                        ));
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
@@ -706,7 +797,8 @@ class AutoMacsController extends AppController {
             }   
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $tree_array));  
-        }       
+        }    
+   
         //====== END AP FILTER =====      
         return $c;
     }
@@ -802,11 +894,12 @@ class AutoMacsController extends AppController {
             $name = $i['AutoGroup']['name'];
             $ag_hash[$name] = $i['AutoGroup']['id'];
         }
+
+        //___ NETWORK___
         $ag_id = $ag_hash['Network'];
 
         //IP is unique; we need to find if there is not perhaps duplicates
         $ip = $this->request->data['ip_address'];
-
         $count = $this->{$this->modelClass}->AutoSetup->find('count', 
                 array('conditions' => array('AutoSetup.description' => 'ip_address','AutoSetup.value' => $ip))
         );
@@ -815,6 +908,34 @@ class AutoMacsController extends AppController {
             return 'ip_address';
         } 
         $this->_add_setting($ag_id,$mac_id,'ip_address', $ip);
+
+        $this->_add_setting($ag_id,$mac_id,'ip_mask',       $this->request->data['ip_mask']);
+        $this->_add_setting($ag_id,$mac_id,'ip_gateway',    $this->request->data['ip_gateway']);
+        $this->_add_setting($ag_id,$mac_id,'ip_dns_1',      $this->request->data['ip_dns_1']);
+        $this->_add_setting($ag_id,$mac_id,'ip_dns_2',      $this->request->data['ip_dns_2']);
+
+        //__ Wireless____
+        $ag_id = $ag_hash['Wireless'];
+
+        if(isset($this->request->data['wifi_active'])){
+            $this->_add_setting($ag_id,$mac_id,'wifi_active',   1);
+        }else{
+            $this->_add_setting($ag_id,$mac_id,'wifi_active',   0);
+        }
+        $this->_add_setting($ag_id,$mac_id,'channel',       $this->request->data['channel']);
+        $this->_add_setting($ag_id,$mac_id,'power',         $this->request->data['power']);
+        $this->_add_setting($ag_id,$mac_id,'distance',      $this->request->data['distance']);
+
+        $this->_add_setting($ag_id,$mac_id,'ssid_secure',   $this->request->data['ssid_secure']);
+        $this->_add_setting($ag_id,$mac_id,'radius',        $this->request->data['radius']);
+        $this->_add_setting($ag_id,$mac_id,'secret',        $this->request->data['secret']);
+        $this->_add_setting($ag_id,$mac_id,'ssid_open',     $this->request->data['ssid_open']);
+
+        //___OpenVPN___
+        $ag_id = $ag_hash['OpenVPN'];
+        $t_ip  = $this->_get_next_avail_tunnel_ip();
+        $this->_add_setting($ag_id,$mac_id,'vpn_server',    $this->request->data['vpn_server']);
+        $this->_add_setting($ag_id,$mac_id,'tunnel_ip',     $t_ip);
 
         //If all went well we can return false
         return false;
