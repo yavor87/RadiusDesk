@@ -27,10 +27,12 @@ Ext.define('Rd.controller.cAutoSetups', {
                     },
                     {
                         region  : 'center',
+                        xtype   : 'tabpanel',
                         layout  : 'fit',
-                        xtype   : 'gridAutoSetups',
+                        xtype   : 'tabpanel',
                         margins : '0 0 0 0',
-                        border  : true
+                        border  : true,
+                        items   : { 'title' : 'Devices', xtype: 'gridAutoSetups'}
                     }
                 ]
             });
@@ -41,7 +43,8 @@ Ext.define('Rd.controller.cAutoSetups', {
 
     views:  [
         'components.pnlBanner',             'autoSetups.gridAutoSetups',    'autoSetups.winAutoSetupAddWizard',
-        'components.winCsvColumnSelect',    'components.winNote',           'components.winNoteAdd'
+        'components.winCsvColumnSelect',    'components.winNote',           'components.winNoteAdd',
+        'autoSetups.pnlAutoSetup',          'autoSetups.pnlAutoSetupSettings'
     ],
     stores: ['sAutoSetups',   'sAccessProvidersTree'],
     models: ['mAutoSetup',    'mAccessProviderTree'],
@@ -83,9 +86,6 @@ Ext.define('Rd.controller.cAutoSetups', {
             },
             'gridAutoSetups #csv'  : {
                 click:      me.csvExport
-            },
-            'gridAutoSetups'   : {
-                select:      me.select
             },
             'winAutoSetupAddWizard form' : {
                 show:  me.btnAddFormRender
@@ -216,35 +216,6 @@ Ext.define('Rd.controller.cAutoSetups', {
             }
         });
     },
-    select: function(grid,record){
-        var me = this;
-        //Adjust the Edit and Delete buttons accordingly...
-
-        //Dynamically update the top toolbar
-        tb = me.getGrid().down('toolbar[dock=top]');
-
-        var edit = record.get('update');
-        if(edit == true){
-            if(tb.down('#edit') != null){
-                tb.down('#edit').setDisabled(false);
-            }
-        }else{
-            if(tb.down('#edit') != null){
-                tb.down('#edit').setDisabled(true);
-            }
-        }
-
-        var del = record.get('delete');
-        if(del == true){
-            if(tb.down('#delete') != null){
-                tb.down('#delete').setDisabled(false);
-            }
-        }else{
-            if(tb.down('#delete') != null){
-                tb.down('#delete').setDisabled(true);
-            }
-        }
-    },
     del:   function(){
         var me      = this;     
         //Find out if there was something selected
@@ -284,33 +255,45 @@ Ext.define('Rd.controller.cAutoSetups', {
         }
     },
 
-    edit: function(button){
-        var me      = this;   
-        //Find out if there was something selected
-        var selCount = me.getGrid().getSelectionModel().getCount();
-        if(selCount == 0){
-             Ext.ux.Toaster.msg(
+    edit:   function(){ 
+        var me = this;
+        //See if there are anything selected... if not, inform the user
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(selCount > 1){
-                Ext.ux.Toaster.msg(
-                        i18n('sLimit_the_selection'),
-                        i18n('sSelection_limited_to_one'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-            }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winAutoSetupEditId')){
-                    var w = Ext.widget('winAutoSetupEdit',{id:'winAutoSetupEditId'});
-                    me.application.runAction('cDesktop','Add',w);
-                    var sr      = me.getGrid().getSelectionModel().getLastSelected();
-                    w.down('form').loadRecord(sr);         
+
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var am_id       = sr.getId();
+                var as_tab_id   = 'asTab_'+am_id;
+                var nt          = tp.down('#'+as_tab_id);
+                if(nt){
+                    tp.setActiveTab(as_tab_id); //Set focus on  Tab
+                    return;
                 }
-            }
+
+                var as_tab_name = sr.get('name');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     as_tab_name,
+                    itemId:     as_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlAutoSetup',am_id: am_id}
+                });
+                tp.setActiveTab(as_tab_id); //Set focus on Add Tab
+            });
         }
     },
 

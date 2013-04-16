@@ -2,8 +2,26 @@ Ext.define('Rd.model.mAutoSetup', {
     extend: 'Ext.data.Model',
     fields: [
          {name: 'id',           type: 'int'     },
-         {name: 'name',         type: 'string'  },
          {name: 'owner',        type: 'string'  },
+         {name: 'name',         type: 'string'  },
+//IP Settings
+         {name: 'ip_address',   type: 'string'  },
+         {name: 'ip_mask',      type: 'string'  },
+         {name: 'ip_gateway',   type: 'string'  },
+         {name: 'ip_dns_1',     type: 'string'  },
+         {name: 'ip_dns_2',     type: 'string'  },
+//Wifi settings
+         {name: 'wifi_active',  type: 'bool'  },
+         {name: 'chanel',       type: 'int'  },
+         {name: 'power',        type: 'int'  },
+         {name: 'distance',     type: 'int'  },
+         {name: 'ssid_secure',  type: 'string'  },
+         {name: 'radius',       type: 'string'  },
+         {name: 'secret',       type: 'string'  },
+         {name: 'ssid_open',    type: 'string'  },
+//OpenVPN
+         {name: 'vpn_server',   type: 'string'  },
+         {name: 'tunnel_ip',    type: 'string'  },
          {name: 'notes',        type: 'bool'}
         ]
 });
