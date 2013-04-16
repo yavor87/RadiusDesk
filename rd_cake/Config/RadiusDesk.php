@@ -49,6 +49,33 @@ $config['user_settings']['map']['lng']      = -71.0955740216735;
 $config['user_settings']['map']['lat']      = 42.3379770178396;
 
 
+//=== EXPERIMENTAL STUFF =====
+//Show experimental menus
+$config['experimental']['active']                   = true;
+
+//IP Settings
+$config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
+$config['experimental']['defaults']['ip_dns_1']     = '192.168.99.99';
+$config['experimental']['defaults']['ip_dns_2']     = '192.168.99.100';
+$config['experimental']['defaults']['ip_dns_2']     = '192.168.99.100';
+
+//Wifi Settings
+$config['experimental']['defaults']['wifi_active']  = true;
+$config['experimental']['defaults']['channel']      = 1;
+$config['experimental']['defaults']['power']        = 10;
+$config['experimental']['defaults']['distance']     = 30;
+
+
+$config['experimental']['defaults']['ssid_secure']  = 'RD Wireless';
+$config['experimental']['defaults']['radius']       = '192.168.99.99';
+$config['experimental']['defaults']['secret']       = 'testing123';
+
+$config['experimental']['defaults']['ssid_open']    = 'RD Guest';
+
+//OpenVPN Settings
+$config['experimental']['defaults']['vpn_server']   = '192.168.99.99';
+
+$config['experimental']['openvpn']['start_ip']      = '10.8.1.2';
 
 
 ?>
