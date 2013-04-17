@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cAutoSetups', {
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
-                        items   : { 'title' : 'Devices', xtype: 'gridAutoSetups'}
+                        items   : { 'title' : 'Access Points', xtype: 'gridAutoSetups'}
                     }
                 ]
             });
@@ -55,7 +55,8 @@ Ext.define('Rd.controller.cAutoSetups', {
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/auto_macs/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/auto_macs/note_add.json',
-        urlASDefaults:      '/cake2/rd_cake/auto_macs/default_values.json'
+        urlASDefaults:      '/cake2/rd_cake/auto_macs/default_values.json',
+        urlViewASDetail:    '/cake2/rd_cake/auto_macs/view.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridAutoSetups'}       
@@ -123,7 +124,14 @@ Ext.define('Rd.controller.cAutoSetups', {
             },
             'winNoteAdd[noteForGrid=autoSetups] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
-            }
+            },
+            'pnlAutoSetup #tabSettings': {
+                beforerender:   me.tabAutoSetupSettingsActivate,
+                activate:       me.tabAutoSetupSettingsActivate
+            },
+            'pnlAutoSetup pnlAutoSetupSettings #save': {
+                click:      me.editSubmit
+            },
         });
     },
     reload: function(){
@@ -299,16 +307,13 @@ Ext.define('Rd.controller.cAutoSetups', {
 
     editSubmit: function(button){
         var me      = this;
-        var win     = button.up('window');
         var form    = button.up('form');
         var tp      = form.down('tabpanel');
         form.submit({
             clientValidation: true,
             url: me.urlEdit,
             success: function(form, action) {
-                win.close();
                 me.getStore('sAutoSetups').load();
-
                 Ext.ux.Toaster.msg(
                     i18n('sItem_updated'),
                     i18n('sItem_updated_fine'),
@@ -321,13 +326,12 @@ Ext.define('Rd.controller.cAutoSetups', {
                 if(action.result.tab != undefined){ //This will be for OpenVPN and pptp
                     tp.setActiveTab(action.result.tab);
                 }else{
-                    tp.setActiveTab('tabRequired');
+                    tp.setActiveTab('tabNetwork');
                 }
                 Ext.ux.formFail(form,action)
             }
         });
     },
-
     onStoreAutoSetupsLoaded: function() {
         var me      = this;
         var count   = me.getStore('sAutoSetups').getTotalCount();
@@ -600,5 +604,11 @@ Ext.define('Rd.controller.cAutoSetups', {
                 }
             });
         }
-    }
+    },
+    tabAutoSetupSettingsActivate : function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        var am_id  = tab.up('pnlAutoSetup').am_id;
+        form.load({url:me.urlViewASDetail, method:'GET',params:{am_id:am_id}});
+    },
 });

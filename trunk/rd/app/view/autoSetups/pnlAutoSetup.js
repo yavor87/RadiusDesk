@@ -14,7 +14,7 @@ Ext.define('Rd.view.autoSetups.pnlAutoSetup', {
             am_id   : me.am_id
         },
         { 
-            title   : 'Device info',
+            title   : 'Access Point info',
             itemId  : 'tabDevice',
             am_id   : me.am_id
         },
