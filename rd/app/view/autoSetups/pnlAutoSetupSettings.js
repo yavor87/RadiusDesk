@@ -35,27 +35,19 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                         border  : false,
                         items   : [
                             { 
-                                'title'     : i18n('sRequired_info'),
+                                'title'     : 'Network info',
                                 'layout'    : 'anchor',
-                                itemId      : 'tabRequired',
+                                itemId      : 'tabNetwork',
+                                autoScroll  : true,
                                 defaults    : {
                                     anchor: '100%'
                                 },
-                               items       : [
+                                items       : [
                                     {
-                                        itemId  : 'parent_id',
-                                        xtype   : 'textfield',
-                                        itemId  : 'user_id',
-                                        name    : 'user_id',
-                                        value   : me.user_id,
-                                        hidden  : true
-                                    },   
-                                    {
-                                        itemId      : 'owner',
-                                        xtype       : 'displayfield',
-                                        fieldLabel  : i18n('sOwner'),
-                                        value       : me.owner,
-                                        labelClsExtra: 'lblRdReq'
+                                        xtype: 'textfield',
+                                        name : "id",
+                                        hidden: true,
+                                        value : me.am_id
                                     },
                                     {
                                         xtype       : 'textfield',
@@ -66,18 +58,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                                         labelClsExtra: 'lblRdReq',
                                         vtype       : 'MacAddress',
                                         fieldStyle  : 'text-transform:uppercase'
-                                    }
-                                ]
-                            },
-                            { 
-                                'title'     : 'Network info',
-                                'layout'    : 'anchor',
-                                itemId      : 'tabNetwork',
-                                autoScroll  : true,
-                                defaults    : {
-                                    anchor: '100%'
-                                },
-                                items       : [
+                                    },
                                     {
                                         itemId      : 'ip_address',
                                         xtype       : 'textfield',
