@@ -296,20 +296,40 @@ class AutoMacsController extends AppController {
             return;
         }
 
-        //We will not modify user_id
-        unset($this->request->data['user_id']);
-
-        if(isset($this->request->data['available_to_siblings'])){
-            $this->request->data['available_to_siblings'] = 1;
+        if(isset($this->request->data['wifi_active'])){
+            $this->request->data['wifi_active'] = 1;
         }else{
-            $this->request->data['available_to_siblings'] = 0;
+            $this->request->data['wifi_active'] = 0;
         }
 
-		if ($this->Tag->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
+        //Get the original MAC if there was a failure:
+        $this->{$this->modelClass}->contain();
+        $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
+        $old_mac    = $q_r['AutoMac']['name'];
+
+		if($this->{$this->modelClass}->save($this->request->data)) { //Update any way for fetch script to get latest after changes
+       
+            $edit_return = $this->_edit_settings();
+
+            if($edit_return ==false){
+                $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }else{
+                    //Since it failed; we need to revert back to the old MAC if it is different
+                    if($old_mac != $this->request->data['name']){
+                        $this->{$this->modelClass}->id = $this->request->data['id'];    
+                        $this->{$this->modelClass}->saveField('name', $old_mac);
+                    }
+                    $this->set(array(
+                    'tab'       => 0,
+                    'errors'    => array($edit_return => 'IP Address already used'),
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not edit item')),
+                    '_serialize' => array('errors','success','message','tab')
+                )); 
+            }
         }else{
              $this->set(array(
                 'errors'    => $this->{$this->modelClass}->validationErrors,
@@ -358,6 +378,50 @@ class AutoMacsController extends AppController {
             ));
         }
 	}
+
+
+    public function view(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+    
+        $items = array();
+
+        if(isset($this->request->query['am_id'])){
+            $this->{$this->modelClass}->contain('AutoSetup');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['am_id']);
+            if($q_r){
+                $items['id']   = $q_r['AutoMac']['id']; 
+                $items['name'] = $q_r['AutoMac']['name'];
+                foreach($q_r['AutoSetup'] as $as){
+                    $item   = $as['description'];
+                    $value  = $as['value'];
+                    if(in_array($item,$this->setup_items)){
+                        if(($item == 'channel')||($item == 'power')||($item == 'distance')){
+                            $value = intval($value);
+                        }
+                        if($item == 'wifi_active'){
+                            if($value == "1"){
+                                $value = true;
+                            }else{
+                                $value = false;
+                            } 
+                        }
+                        $items[$item] = $value;
+                    }
+                }
+            }
+        }
+      
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
 
 
     public function default_values(){
@@ -881,6 +945,41 @@ class AutoMacsController extends AppController {
         }
         $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
         return $next_ip;
+    }
+
+
+    private function _edit_settings(){
+
+        $auto_mac_id = $this->request->data['id'];
+        $this->{$this->modelClass}->AutoSetup->contain();
+
+        //Check for existing entries using this IP
+        $new_ip   = $this->request->data['ip_address'];
+        $ip_count = $this->{$this->modelClass}->AutoSetup->find('count',
+                    array('conditions' => 
+                        array(
+                            'AutoSetup.value'       => $new_ip,
+                            'AutoSetup.description' => 'ip_address',
+                            array('NOT' =>array('AutoSetup.auto_mac_id' => $auto_mac_id )
+                        ))));
+        if($ip_count > 0){
+            //Not allowed! we can not allow this
+            return 'ip_address';
+        }
+
+        //IP passed... loop through a list and modify the entries
+        foreach($this->setup_items as $item){
+            if($item != 'tunnel_ip'){ //Exception list
+                $val = $this->request->data[$item];
+                $q_r    = $this->{$this->modelClass}->AutoSetup->find('first', 
+                        array('conditions' => array('AutoSetup.auto_mac_id' => $auto_mac_id,'AutoSetup.description' => $item)));
+                if($q_r){
+                    $this->{$this->modelClass}->AutoSetup->id = $q_r['AutoSetup']['id'];
+                    $this->{$this->modelClass}->AutoSetup->saveField('value', $val);
+                }
+            }
+        }
+        return false;
     }
 
     private function _add_settings($mac_id){
