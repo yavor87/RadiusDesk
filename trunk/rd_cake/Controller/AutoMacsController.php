@@ -222,8 +222,8 @@ class AutoMacsController extends AppController {
                 'ssid_open'             => $ssid_open,
                 'vpn_server'            => $vpn_server,
                 'tunnel_ip'             => $tunnel_ip,
-                'last_contact'          => '',
-                'contact_ip'            => '',
+                'contact_time'          => $i['AutoMac']['modified'],
+                'contact_ip'            => $i['AutoMac']['contact_ip'],
                 'notes'                 => $notes_flag
             ));
         }
@@ -446,6 +446,51 @@ class AutoMacsController extends AppController {
             '_serialize'=> array('success', 'data')
         ));
     }
+
+     function configuration_for($mac){
+
+        $this->layout = 'ajax';
+
+        //Mac will arrive in form XX-XX-XX-XX-XX-XX we must get it in form XX:XX:XX:XX:XX:XX
+        $mac = preg_replace('/-/', ':', $mac);
+
+        
+        //Update the AutoMac table to show this request
+        $qr = $this->AutoMac->find('first',array('conditions' => array('AutoMac.name' => $mac)));
+        if($qr == ''){
+            $this->set('config_string','');
+            return;
+        }
+
+         
+        if($qr != ''){
+            $request_from = $_SERVER["REMOTE_ADDR"];
+            $d['AutoMac']['id']         = $qr['AutoMac']['id'];
+            $d['AutoMac']['contact_ip'] = $request_from;
+            $this->{$this->modelClass}->save($d);
+            $modified                   = $qr['AutoMac']['modified'];
+            $mac_id                     = $qr['AutoMac']['id'];
+        }
+
+        $fb = '';
+  
+        $fb =   "file_name:\n".
+                "/etc/config/network\n".
+                "file_content:\n".
+                $this->_return_network_settings($mac);
+/*
+        //Get the VPN detail - if required
+        $vpn_string = $this->_return_vpn($mac_id,$modified);
+        $fb = $fb.$vpn_string;
+*/
+        //Get the Wireless detail - if required
+        $wireless_string = $this->_return_wireless($mac_id,$modified);
+        $fb = $fb.$wireless_string;
+
+        $this->set('config_string',$fb);
+
+    }
+
 
 
     public function note_index(){
@@ -1050,4 +1095,112 @@ class AutoMacsController extends AppController {
         $this->{$this->modelClass}->AutoSetup->save($d);
         $this->{$this->modelClass}->AutoSetup->id = false;
     }
+
+    private  function _return_network_settings($mac){
+
+        $qr = $this->{$this->modelClass}->find('first',array('conditions' => array('AutoMac.name' => $mac)));
+        
+        $ip         = '';
+        $gateway    = '';
+        $mask       = '';
+        $dns_1      = '';
+        $dns_2      = '';
+
+        foreach($qr['AutoSetup'] as $setting){
+            ($setting['description'] == 'ip_address')&&($ip = $setting['value']);
+            ($setting['description'] == 'ip_gateway')&&($gateway = $setting['value']);
+            ($setting['description'] == 'ip_mask')&&($mask = $setting['value']);
+            ($setting['description'] == 'ip_dns_1')&&($dns_1 = $setting['value']);
+            ($setting['description'] == 'ip_dns_2')&&($dns_2 = $setting['value']);
+        }
+
+        $network = "\nconfig 'interface' 'loopback'\n".
+                    "option 'ifname' 'lo'\n".
+                    "option 'proto' 'static'\n".
+                    "option 'ipaddr' '127.0.0.1'\n".
+                    "option 'netmask' '255.0.0.0'\n".
+                    "\n".
+                    "config 'interface' 'lan'\n".
+                    "option 'ifname' 'eth0'\n".
+                    "option 'type' 'bridge'\n".
+                    "option 'proto' 'static'\n".
+                    "option 'netmask' '$mask'\n".
+                    "option 'ipaddr' '$ip'\n".
+                    "option 'gateway' '$gateway'\n".
+                    "option 'dns' '$dns_1 $dns_2'\n\n";
+        return $network;
+    }
+
+    function _return_wireless($mac_id){
+
+        $return_string = '';
+
+        //_________ Start off with the /etc/config/wireless file ____________
+        //__ Settings to check on this one:______________________________________
+        //__ 1.) vpn_server _____________________________________________________
+
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'wifi_active','AutoSetup.auto_mac_id' => $mac_id)));
+        $enabled    = $q_r['AutoSetup']['value'];
+        if($enabled == true){
+            $enabled = '#';
+        }else{
+            $enabled = '';
+        }
+
+        //General settings
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'channel','AutoSetup.auto_mac_id' => $mac_id)));
+        $channel    = $q_r['AutoSetup']['value'];
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'power','AutoSetup.auto_mac_id' => $mac_id)));
+        $power      = $q_r['AutoSetup']['value'];
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'distance','AutoSetup.auto_mac_id' => $mac_id)));
+        $distance   = $q_r['AutoSetup']['value'];
+
+        //Secure SSID
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'ssid_secure','AutoSetup.auto_mac_id' => $mac_id)));
+        $secure_ssid= $q_r['AutoSetup']['value'];
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'radius','AutoSetup.auto_mac_id' => $mac_id)));
+        $radius     = $q_r['AutoSetup']['value'];
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'secret','AutoSetup.auto_mac_id' => $mac_id)));
+        $secret     = $q_r['AutoSetup']['value'];
+
+        //Open SSID
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'ssid_open','AutoSetup.auto_mac_id' => $mac_id)));
+        $open_ssid  = $q_r['AutoSetup']['value'];
+
+        //NB add auth options......
+        $wireless =
+                "file_name:\n".
+                "/etc/config/wireless\n".
+                "file_content:\n". 
+                    "\nconfig wifi-device  radio0\n".
+                    "\toption type     mac80211\n".
+                    "\toption phy      phy0\n".
+                    "\toption hwmode   11g\n".
+                    "\toption channel  $channel\n".
+                    "\toption txpower  19\n".
+                    "\toption distance $distance\n\n".
+                    "# REMOVE THIS LINE TO ENABLE WIFI:\n".
+                    $enabled."option disabled 1\n\n".
+                    "config wifi-iface\n".
+                    "\toption device   radio0\n".
+                    "\toption network  lan\n".
+                    "\toption mode ap\n".
+                    "\toption ssid '$secure_ssid'\n".
+                    "\toption encryption wpa2\n".
+                    "\toption auth_server $radius\n".
+                    "\toption auth_secret $secret\n".
+                    "\toption acct_server $radius\n".
+                    "\toption acct_secret $secret\n".
+                    "\toption acct_interval 600\n".
+                    "\toption port 1812\n\n".
+                    "config wifi-iface\n".
+                    "\toption device   radio0\n".
+                    "\toption mode ap\n".
+                    "\toption ssid '$open_ssid'\n\n";
+        $return_string = $return_string."\n".$wireless;
+        return $return_string;
+    }
+
+
+
 }
