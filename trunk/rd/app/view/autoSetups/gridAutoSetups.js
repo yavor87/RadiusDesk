@@ -46,6 +46,12 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
             { text: 'OpenSSID',             dataIndex: 'ssid_open',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'VPN Server',           dataIndex: 'vpn_server',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Tunnel IP',            dataIndex: 'tunnel_ip',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'Contact IP',           dataIndex: 'contact_ip',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'Contact Time',         dataIndex: 'contact_time',   tdCls: 'gridTree', flex: 1,hidden: false,
+                xtype       : 'datecolumn',   
+                format      :'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'}
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
