@@ -76,6 +76,30 @@ $config['experimental']['defaults']['ssid_open']    = 'RD Guest';
 $config['experimental']['defaults']['vpn_server']   = '192.168.99.99';
 
 $config['experimental']['openvpn']['start_ip']      = '10.8.1.2';
+$config['experimental']['openvpn']['ca']            = '-----BEGIN CERTIFICATE-----
+MIIDYDCCAsmgAwIBAgIJAK+7qcW3f0W6MA0GCSqGSIb3DQEBBQUAMH4xCzAJBgNV
+BAYTAlpBMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYDVQQHEwhQcmV0b3JpYTEMMAoG
+A1UEChMDWUZpMRMwEQYDVQQDEwpPcGVuVlBOLUNBMScwJQYJKoZIhvcNAQkBFhhk
+aXJrdmFuZGVyd2FsdEBnbWFpbC5jb20wHhcNMTMwNDE1MDgxOTM1WhcNMjMwNDEz
+MDgxOTM1WjB+MQswCQYDVQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UE
+BxMIUHJldG9yaWExDDAKBgNVBAoTA1lGaTETMBEGA1UEAxMKT3BlblZQTi1DQTEn
+MCUGCSqGSIb3DQEJARYYZGlya3ZhbmRlcndhbHRAZ21haWwuY29tMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQDmfB1FBrjuB5xRYJGjr8fCgoxY9M99nPzMcnBQ
+tFnkc7TjsoPfDTAOgecpmwfPrfxjBvi9Vae+TwiiwiLLMCewvXP47vySRhXIRUVL
+OvEcgapdIGbl26JaHyUrjbsAdrc/Fp5OTmjU5EZ/BciheZJr+ZLUWg/5bkDtI3rH
+g+moPQIDAQABo4HlMIHiMB0GA1UdDgQWBBTf/iG94D0pd+3z5RURkZ+43j43LDCB
+sgYDVR0jBIGqMIGngBTf/iG94D0pd+3z5RURkZ+43j43LKGBg6SBgDB+MQswCQYD
+VQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UEBxMIUHJldG9yaWExDDAK
+BgNVBAoTA1lGaTETMBEGA1UEAxMKT3BlblZQTi1DQTEnMCUGCSqGSIb3DQEJARYY
+ZGlya3ZhbmRlcndhbHRAZ21haWwuY29tggkAr7upxbd/RbowDAYDVR0TBAUwAwEB
+/zANBgkqhkiG9w0BAQUFAAOBgQCLiXXSKSPIAkMVwFq935zb8RIoEu6fVbo9nbwN
+fVIBgZIqpSZT59Ueef/l5zcTabRH7cIZGe6RqBK17I2nSr4s5+Ut4lgdvu7xe3g8
+t72pyVfDVfHr1sSMRGSjVt1SPI13uz3a6hzFVFxBoHWdyhXoGmvidNIm09hwPsJN
+S6UMIw==
+-----END CERTIFICATE-----
+';
+$config['experimental']['openvpn']['mask']          = '10.8.255.255';
+$config['experimental']['openvpn']['broadcast']     = '10.8.0.0';
 
 
 ?>
