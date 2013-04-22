@@ -88,6 +88,12 @@ Ext.define('Rd.controller.cAutoSetups', {
             'gridAutoSetups #csv'  : {
                 click:      me.csvExport
             },
+            'gridAutoSetups'       : {
+                activate:      me.gridActivate
+            },
+            'gridAutoSetups #reload menuitem[group=refresh]'   : {
+                click:      me.reloadOptionClick
+            },
             'winAutoSetupAddWizard form' : {
                 show:  me.btnAddFormRender
             },
@@ -136,7 +142,15 @@ Ext.define('Rd.controller.cAutoSetups', {
     },
     reload: function(){
         var me =this;
+        if(me.getGrid() == undefined){   //Thw window is closed; exit
+            clearInterval(me.autoReload);
+            return;
+        }
         me.getStore('sAutoSetups').load();
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     add: function(button){
         
@@ -337,6 +351,32 @@ Ext.define('Rd.controller.cAutoSetups', {
         var count   = me.getStore('sAutoSetups').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        
+        if(n == 'mnuRefreshCancel'){
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+
+        me.autoReload = setInterval(function(){        
+            me.reload();
+        },  interval);  
+    },
+
     //--- Applet Specifics ---
     btnAddFormRender: function(form){
         var me  = this;

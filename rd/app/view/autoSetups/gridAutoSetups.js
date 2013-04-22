@@ -47,10 +47,17 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
             { text: 'VPN Server',           dataIndex: 'vpn_server',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Tunnel IP',            dataIndex: 'tunnel_ip',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'Contact IP',           dataIndex: 'contact_ip',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
-            { text: 'Contact Time',         dataIndex: 'contact_time',   tdCls: 'gridTree', flex: 1,hidden: false,
+            { text: 'Last contact',         dataIndex: 'last_contact',   tdCls: 'gridTree', flex: 1,hidden: false,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'}
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                renderer    : function(value,metaData, record){
+                    if(value != null){
+                        return "<div class=\"fieldGreen\">"+Ext.Date.format(value, 'Y-m-d H:i:s')+"</div>";
+                    }else{
+                        return "<div class=\"fieldBlue\">Never</div>";
+                    }              
+                }
             },
             { 
                 text    : i18n('sNotes'),
@@ -59,10 +66,7 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
                 xtype   : 'templatecolumn', 
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+
-
-
-
-i18n("sExisting_Notes")+"</div></tpl>"
+                                i18n("sExisting_Notes")+"</div></tpl>"
                 ),
                 dataIndex: 'notes'
             }      

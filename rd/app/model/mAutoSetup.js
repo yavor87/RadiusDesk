@@ -23,7 +23,7 @@ Ext.define('Rd.model.mAutoSetup', {
          {name: 'vpn_server',   type: 'string'  },
          {name: 'tunnel_ip',    type: 'string'  },
          {name: 'contact_ip',   type: 'string'  },
-         {name: 'contact_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+         {name: 'last_contact', type: 'date', dateFormat: 'Y-m-d H:i:s'},
          {name: 'notes',        type: 'bool'}
         ]
 });
