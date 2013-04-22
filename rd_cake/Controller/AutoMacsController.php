@@ -222,7 +222,7 @@ class AutoMacsController extends AppController {
                 'ssid_open'             => $ssid_open,
                 'vpn_server'            => $vpn_server,
                 'tunnel_ip'             => $tunnel_ip,
-                'contact_time'          => $i['AutoMac']['modified'],
+                'last_contact'          => $i['AutoMac']['last_contact'],
                 'contact_ip'            => $i['AutoMac']['contact_ip'],
                 'notes'                 => $notes_flag
             ));
@@ -302,10 +302,17 @@ class AutoMacsController extends AppController {
             $this->request->data['wifi_active'] = 0;
         }
 
+        //Ensure the MAC is UC
+        $this->request->data['name'] = strtoupper($this->request->data['name']);
+
         //Get the original MAC if there was a failure:
         $this->{$this->modelClass}->contain();
         $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
         $old_mac    = $q_r['AutoMac']['name'];
+
+        if($old_mac != $this->request->data['name']){ //MAC changed make clean the last_contact
+            $this->request->data['last_contact'] = null;
+        }
 
 		if($this->{$this->modelClass}->save($this->request->data)) { //Update any way for fetch script to get latest after changes
        
@@ -447,7 +454,11 @@ class AutoMacsController extends AppController {
         ));
     }
 
-     function configuration_for($mac){
+     function configuration_for($mac,$timestamp=0){
+
+       //The AP can send an optional timestamp (unix timestamp) which will be compared.
+       //This will be the timestamp of the date of the last modification to the mac or auto-setup values
+
 
         $this->layout = 'ajax';
 
@@ -467,25 +478,40 @@ class AutoMacsController extends AppController {
             $request_from = $_SERVER["REMOTE_ADDR"];
             $d['AutoMac']['id']         = $qr['AutoMac']['id'];
             $d['AutoMac']['contact_ip'] = $request_from;
+            $d['AutoMac']['last_contact'] = date("Y-m-d H:i:s",time());
+            $d['AutoMac']['modified']   = false; //We are not changing the modified time only updating the last_contact field
             $this->{$this->modelClass}->save($d);
             $modified                   = $qr['AutoMac']['modified'];
             $mac_id                     = $qr['AutoMac']['id'];
         }
 
+        //See if we need to return something:
+        $last_change_stamp = strtotime($qr['AutoMac']['modified']);
+        if(($timestamp != 0)&&($timestamp == $last_change_stamp)){
+            $this->set('config_string','');
+            return;
+        }
+
         $fb = '';
   
         $fb =   "file_name:\n".
-                "/etc/config/network\n".
+                "/etc/config/network.fixed_ip\n".
                 "file_content:\n".
                 $this->_return_network_settings($mac);
-/*
+
         //Get the VPN detail - if required
-        $vpn_string = $this->_return_vpn($mac_id,$modified);
+        $vpn_string = $this->_return_vpn($mac_id);
         $fb = $fb.$vpn_string;
-*/
+
         //Get the Wireless detail - if required
-        $wireless_string = $this->_return_wireless($mac_id,$modified);
+        $wireless_string = $this->_return_wireless($mac_id);
         $fb = $fb.$wireless_string;
+
+        //Add the timestamp
+        $fb =   $fb."\nfile_name:\n".
+                "/etc/autosetup/timestamp\n".
+                "file_content:\n".
+                "$last_change_stamp\n";
 
         $this->set('config_string',$fb);
 
@@ -666,7 +692,23 @@ class AutoMacsController extends AppController {
 
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array( 
+                            'xtype'     =>  'splitbutton',  
+                            'iconCls'   => 'b-reload',   
+                            'scale'     => 'large', 
+                            'itemId'    => 'reload',   
+                            'tooltip'   => _('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">Reload every:</b>',
+                                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                  
+                                )
+                            )
+                    ),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
@@ -1131,7 +1173,7 @@ class AutoMacsController extends AppController {
         return $network;
     }
 
-    function _return_wireless($mac_id){
+    private function _return_wireless($mac_id){
 
         $return_string = '';
 
@@ -1201,6 +1243,80 @@ class AutoMacsController extends AppController {
         return $return_string;
     }
 
+    private function _return_vpn($mac_id){
+
+        $return_string = '';
+
+        //_________ Start off with the /etc/openvpn/my-vpn.conf file ____________
+        //__ Settings to check on this one:______________________________________
+        //__ 1.) vpn_server _____________________________________________________
+
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', 
+                array('conditions' =>array( 'AutoSetup.description' => 'vpn_server','AutoSetup.auto_mac_id' => $mac_id)));
+        $vpn_server     = $q_r['AutoSetup']['value'];
+
+        $my_vpn =
+                "file_name:\n".
+                "/etc/openvpn/my-vpn.conf\n".
+                "file_content:\n". 
+                "client\n".
+                "dev tap0\n".
+                "proto udp\n".
+                "remote $vpn_server 1194\n". 
+                "resolv-retry infinite\n".
+                "nobind\n".
+                "persist-key\n". 
+                "persist-tun\n".
+                "tun-mtu 1500\n".
+                "tun-mtu-extra 32\n". 
+                "mssfix 1450\n".
+                "ca /etc/openvpn/ca.crt\n".
+                "auth none\n".
+                "cipher none\n". 
+                "comp-lzo\n".
+                "auth-user-pass /etc/openvpn/up";
+        $return_string = $return_string."\n".$my_vpn;
+
+        //______ /etc/openvpn/ca.crt  _____
+        
+            $ca =
+                "file_name:\n".
+                "/etc/openvpn/ca.crt\n".
+                "file_content:\n".
+                Configure::read('experimental.openvpn.ca')."\n"; 
+            $return_string = $return_string."\n".$ca;
+
+
+       
+        //______ /etc/openvpn/start.sh  _____
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', 
+                array('conditions' =>array( 'AutoSetup.description' => 'tunnel_ip','AutoSetup.auto_mac_id' => $mac_id)));
+        $tun_ip     = $q_r['AutoSetup']['value'];
+
+        $tun_mask     = Configure::read('experimental.openvpn.mask');
+
+        $tun_broadcast = Configure::read('experimental.openvpn.broadcast');
+
+        if($q_r != ''){
+
+            $tun_detail =
+                "file_name:\n".
+                "/etc/openvpn/start.sh\n".
+                "file_content:\n".
+                "#! /bin/sh\n".
+                "echo 'Start VPN'\n". 
+                "openvpn --rmtun --dev tap0\n". 
+                "openvpn --mktun --dev tap0\n". 
+                "brctl addbr br-vpn\n". 
+                "brctl delif br-lan wlan0-1\n". 
+                "brctl addif br-vpn wlan0-1\n". 
+                "brctl addif br-vpn tap0\n".
+                "ifconfig br-vpn $tun_ip netmask $tun_mask broadcast $tun_broadcast\n"; 
+ 
+            $return_string = $return_string."\n".$tun_detail;
+        }
+        return $return_string;
+    }
 
 
 }
