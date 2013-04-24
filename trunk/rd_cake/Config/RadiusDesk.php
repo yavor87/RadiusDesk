@@ -98,8 +98,8 @@ t72pyVfDVfHr1sSMRGSjVt1SPI13uz3a6hzFVFxBoHWdyhXoGmvidNIm09hwPsJN
 S6UMIw==
 -----END CERTIFICATE-----
 ';
-$config['experimental']['openvpn']['mask']          = '10.8.255.255';
-$config['experimental']['openvpn']['broadcast']     = '10.8.0.0';
+$config['experimental']['openvpn']['mask']          = '255.255.0.0';
+$config['experimental']['openvpn']['broadcast']     = '10.8.255.255';
 
 
 ?>
