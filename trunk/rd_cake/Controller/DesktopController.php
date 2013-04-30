@@ -202,7 +202,9 @@ class DesktopController extends AppController {
 
     private function _build_admin_menus(){
 
-          return array(
+      
+
+        $menus = array(
           //  array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers'),
           //  array(  'text'  => __('Permanent users'),       'iconCls' => 'group'),
           //  array(  'text'  => __('Accounting'),            'iconCls' => 'accounting'),
@@ -236,8 +238,14 @@ class DesktopController extends AppController {
             array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices'),
             array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
             array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
-            array(  'text'  => __('Auto Setup'),            'iconCls' => 'setup',       'itemId' => 'cAutoSetups'),
         );
+
+        //Optional experimental stuff 
+        if(Configure::read('experimental.active') == true){
+            array_push($menus,array(  'text'  => __('Auto Setup'),            'iconCls' => 'setup',       'itemId' => 'cAutoSetups'));
+        }
+
+        return $menus;
     }
 
     private function _build_ap_menus($id){

@@ -10,7 +10,7 @@ class AutoMacsController extends AppController {
 
     protected $setup_items  = array(
         'ip_address',   'ip_mask',  'ip_gateway',   'ip_dns_1', 'ip_dns_2',
-        'wifi_active',  'channel',  'power',        'distance', 'ssid_secure',  'radius',   'secret',   'ssid_open',
+        'wifi_active',  'channel',  'power',        'distance', 'ssid_secure',  'radius',   'secret',   'ssid_open', 'eduroam',
         'vpn_server',   'tunnel_ip'
     );
 
@@ -140,6 +140,9 @@ class AutoMacsController extends AppController {
             //IP DNS2 optional
             $ip_dns_2 = '';
 
+            //EDUROAM = FALSE BY DEFAULT
+            $eduroam = false;
+
             foreach($i['AutoSetup'] as $as_item){
                 $item   = $as_item['description'];
                 $value  = $as_item['value'];
@@ -189,6 +192,13 @@ class AutoMacsController extends AppController {
                     case 'ssid_open':
                         $ssid_open = $value;
                         break;
+                    case 'eduroam':
+                        if($value == 1){
+                            $eduroam = true;
+                        }else{
+                            $eduroam = false;
+                        }
+                        break;
                     case 'vpn_server':
                         $vpn_server = $value;
                         break;
@@ -206,6 +216,7 @@ class AutoMacsController extends AppController {
             array_push($items,array(
                 'id'                    => $i['AutoMac']['id'], 
                 'name'                  => $i['AutoMac']['name'],
+                'dns_name'              => $i['AutoMac']['dns_name'],
                 'owner'                 => $owner_tree,
                 'ip_address'            => $ip_address,
                 'ip_mask'               => $ip_mask,
@@ -220,6 +231,7 @@ class AutoMacsController extends AppController {
                 'radius'                => $radius,
                 'secret'                => $secret,
                 'ssid_open'             => $ssid_open,
+                'eduroam'               => $eduroam,
                 'vpn_server'            => $vpn_server,
                 'tunnel_ip'             => $tunnel_ip,
                 'last_contact'          => $i['AutoMac']['last_contact'],
@@ -300,6 +312,12 @@ class AutoMacsController extends AppController {
             $this->request->data['wifi_active'] = 1;
         }else{
             $this->request->data['wifi_active'] = 0;
+        }
+
+        if(isset($this->request->data['eduroam'])){
+            $this->request->data['eduroam'] = 1;
+        }else{
+            $this->request->data['eduroam'] = 0;
         }
 
         //Ensure the MAC is UC
@@ -403,6 +421,7 @@ class AutoMacsController extends AppController {
             if($q_r){
                 $items['id']   = $q_r['AutoMac']['id']; 
                 $items['name'] = $q_r['AutoMac']['name'];
+                $items['dns_name'] = $q_r['AutoMac']['dns_name'];
                 foreach($q_r['AutoSetup'] as $as){
                     $item   = $as['description'];
                     $value  = $as['value'];
@@ -417,6 +436,14 @@ class AutoMacsController extends AppController {
                                 $value = false;
                             } 
                         }
+                        if($item == 'eduroam'){
+                            if($value == "1"){
+                                $value = true;
+                            }else{
+                                $value = false;
+                            } 
+                        }
+
                         $items[$item] = $value;
                     }
                 }
@@ -483,6 +510,7 @@ class AutoMacsController extends AppController {
             $this->{$this->modelClass}->save($d);
             $modified                   = $qr['AutoMac']['modified'];
             $mac_id                     = $qr['AutoMac']['id'];
+            $dns_name                   = $qr['AutoMac']['dns_name'];
         }
 
         //See if we need to return something:
@@ -506,6 +534,10 @@ class AutoMacsController extends AppController {
         //Get the Wireless detail - if required
         $wireless_string = $this->_return_wireless($mac_id);
         $fb = $fb.$wireless_string;
+
+        //Get the snmpd detail
+        $snmpd_string = $this->_return_snmp($dns_name);
+        $fb = $fb.$snmpd_string;
 
         //Add the timestamp
         $fb =   $fb."\nfile_name:\n".
@@ -1117,6 +1149,12 @@ class AutoMacsController extends AppController {
         $this->_add_setting($ag_id,$mac_id,'secret',        $this->request->data['secret']);
         $this->_add_setting($ag_id,$mac_id,'ssid_open',     $this->request->data['ssid_open']);
 
+        if(isset($this->request->data['eduroam'])){
+            $this->_add_setting($ag_id,$mac_id,'eduroam',   1);
+        }else{
+            $this->_add_setting($ag_id,$mac_id,'eduroam',   0);
+        }
+
         //___OpenVPN___
         $ag_id = $ag_hash['OpenVPN'];
         $t_ip  = $this->_get_next_avail_tunnel_ip();
@@ -1315,6 +1353,88 @@ class AutoMacsController extends AppController {
  
             $return_string = $return_string."\n".$tun_detail;
         }
+        return $return_string;
+    }
+
+    private function _return_snmp($dns_name){
+
+        $mail   = Configure::read('experimental.snmp.contact'); 
+        $ro     = Configure::read('experimental.snmp.ro'); 
+        $rw     = Configure::read('experimental.snmp.rw');
+
+        $return_string = 
+            "file_name:\n".
+                "/etc/config/snmpd_wip\n".
+            "file_content:\n".
+            "config agent\n".   //n
+	        "option agentaddress UDP:161\n\n".
+            "config com2sec public\n".
+	        "option secname ro\n".
+	        "option source default\n".
+	        "option community $ro\n\n".
+            "config com2sec private\n". //n
+	        "option secname rw\n".
+	        "option source localhost\n".
+	        "option community $rw\n\n".
+            "config group public_v1\n". //n
+	        "option group public\n".
+	        "option version v1\n".
+	        "option secname ro\n\n".
+            "config group public_v2c\n".    //n
+	        "option group public\n".
+	        "option version v2c\n".
+	        "option secname ro\n\n".
+            "config group public_usm\n".    //n
+	        "option group public\n".
+	        "option version usm\n".
+	        "option secname ro\n\n".
+            "config group private_v1\n".    //n
+	        "option group private\n".
+	        "option version v1\n".
+	        "option secname rw\n\n".    //n
+            "config group private_v2c\n".
+	        "option group private\n".
+	        "option version v2c\n".
+	        "option secname rw\n\n".
+            "config group private_usm\n".   //n
+	        "option group private\n".
+	        "option version usm\n".
+	        "option secname rw\n\n".
+            "config view all\n".
+	        "option viewname all\n".
+	        "option type included\n".
+	        "option oid .1\n\n".
+            "config access public_access\n".    //n
+	        "option group public\n".
+	        "option context none\n".
+	        "option version any\n".
+	        "option level noauth\n".
+	        "option prefix exact\n".
+	        "option read all\n".
+	        "option write none\n".
+	        "option notify none\n\n".
+            "config access private_access\n" .   //n
+	        "option group private\n".
+	        "option context none\n".
+	        "option version any\n".
+	        "option level noauth\n".
+	        "option prefix exact\n".
+	        "option read all\n".
+	        "option write all\n".
+	        "option notify all\n\n".    
+            "config system\n".  //n
+	        "option sysLocation	'office'\n".
+	        "option sysContact	'$mail'\n".
+	        "option sysName		'$dns_name'\n".
+            "#	option sysServices	72\n".
+            "#	option sysDescr		'adult playground'\n".
+            "#	option sysObjectID	'1.2.3.4'\n\n".
+            "config exec\n".
+	        "option name	filedescriptors\n".
+	        "option prog	/bin/cat\n".
+	        "option args	/proc/sys/fs/file-nr\n".
+            "#	option miboid	1.2.3.4\n\n";
+
         return $return_string;
     }
 
