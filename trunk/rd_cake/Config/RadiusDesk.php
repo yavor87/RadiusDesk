@@ -51,7 +51,7 @@ $config['user_settings']['map']['lat']      = 42.3379770178396;
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
-$config['experimental']['active']                   = true;
+$config['experimental']['active']                   = false;
 
 //IP Settings
 $config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
@@ -100,6 +100,14 @@ S6UMIw==
 ';
 $config['experimental']['openvpn']['mask']          = '255.255.0.0';
 $config['experimental']['openvpn']['broadcast']     = '10.8.255.255';
+
+$config['experimental']['eduroam']['radius_server'] = '192.168.10.20';
+$config['experimental']['eduroam']['radius_secret'] = 'eduroam';
+
+$config['experimental']['snmp']['ro']               = 'public';
+$config['experimental']['snmp']['rw']               = 'private';
+$config['experimental']['snmp']['contact']          = 'radiusdesk@gmail.com';
+
 
 
 ?>
