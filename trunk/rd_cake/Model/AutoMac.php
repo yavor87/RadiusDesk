@@ -37,6 +37,16 @@ class AutoMac extends AppModel {
                 'rule'    => 'isUnique',
                 'message' => 'This MAC already exists'
             )
+        ),
+        'dns_name' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This DNS name already exists'
+            )
         )
     );
 
