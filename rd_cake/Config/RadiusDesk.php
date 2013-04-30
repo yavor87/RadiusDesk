@@ -51,7 +51,7 @@ $config['user_settings']['map']['lat']      = 42.3379770178396;
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
-$config['experimental']['active']                   = false;
+$config['experimental']['active']                   = true;
 
 //IP Settings
 $config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
