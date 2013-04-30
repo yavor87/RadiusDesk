@@ -1247,6 +1247,14 @@ class AutoMacsController extends AppController {
         $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'ssid_open','AutoSetup.auto_mac_id' => $mac_id)));
         $open_ssid  = $q_r['AutoSetup']['value'];
 
+        //Eduroam flag
+        $eduroam = false;
+        $q_r = $this->{$this->modelClass}->AutoSetup->find('first', array('conditions' =>array( 'AutoSetup.description' => 'eduroam','AutoSetup.auto_mac_id' => $mac_id)));
+        if($q_r['AutoSetup']['value'] == '1'){
+            $eduroam = true;
+        }
+        
+
         //NB add auth options......
         $wireless =
                 "file_name:\n".
@@ -1278,6 +1286,26 @@ class AutoMacsController extends AppController {
                     "\toption mode ap\n".
                     "\toption ssid '$open_ssid'\n\n";
         $return_string = $return_string."\n".$wireless;
+
+        //Eduroam?
+        if($eduroam){
+
+            $srv  = Configure::read('experimental.eduroam.radius_server');
+            $scrt = Configure::read('experimental.eduroam.radius_secret');
+            $return_string = $return_string.
+                "config wifi-iface\n".
+                "\toption device   radio0\n".
+                "\toption network  lan\n".
+                "\toption mode ap\n".
+                "\toption ssid 'eduroam'\n".
+                "\toption encryption wpa2\n".
+                "\toption auth_server $srv\n".
+                "\toption auth_secret $scrt\n".
+                "\toption acct_server $srv\n".
+                "\toption acct_secret $scrt\n".
+                "\toption acct_interval 600\n".
+                "\toption port 1812\n\n";
+        }
         return $return_string;
     }
 
