@@ -156,7 +156,15 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     labelClsExtra: 'lblRdReq',
                                     vtype       : 'MacAddress',
                                     fieldStyle  : 'text-transform:uppercase'
-                                }
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : 'DNS name',
+                                    name        : "dns_name",
+                                    allowBlank  : false,
+                                    blankText   : i18n('sSupply_a_value'),
+                                    labelClsExtra: 'lblRdReq'
+                                },
                             ]
                         },
                         { 
@@ -315,6 +323,19 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value"),
                                     labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype           : 'displayfield',
+                                    fieldLabel      : 'Eduroam SSID',
+                                    labelClsExtra   : 'lblRdGrouping'
+                                },
+                                {
+                                    xtype           : 'checkbox',      
+                                    fieldLabel      : 'Enable eduroam',
+                                    name            : 'eduroam',
+                                    inputValue      : 'active',
+                                    checked         : false,
+                                    labelClsExtra   : 'lblRdReq'
                                 }
                             ]
                         },
