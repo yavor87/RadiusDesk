@@ -30,6 +30,7 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
         me.columns  = [
             {xtype: 'rownumberer'},
             { text: i18n('sOwner'),         dataIndex: 'owner',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'DNS name',             dataIndex: 'dns_name',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'MAC Address',          dataIndex: 'name',           tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'IP Address',           dataIndex: 'ip_address',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'Mask',                 dataIndex: 'ip_mask',        tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
@@ -40,10 +41,24 @@ Ext.define('Rd.view.autoSetups.gridAutoSetups' ,{
             { text: 'Channel',              dataIndex: 'channel',        tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Power',                dataIndex: 'power',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Connect distance',     dataIndex: 'distance',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
-            { text: 'Secure SSID',          dataIndex: 'ssid_secure',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
-            { text: 'RADIUS',               dataIndex: 'radius',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
-            { text: 'Secret',               dataIndex: 'secret',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
-            { text: 'OpenSSID',             dataIndex: 'ssid_open',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
+            { text: 'Secure SSID',          dataIndex: 'ssid_secure',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'RADIUS',               dataIndex: 'radius',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'Secret',               dataIndex: 'secret',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'OpenSSID',             dataIndex: 'ssid_open',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { 
+                text:   'Eduroam',
+                flex: 1,  
+                xtype:  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            "<tpl if='eduroam == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
+                            "<tpl if='eduroam == false'><div class=\"fieldBlue\">"+i18n("sNo")+"</div></tpl>"
+                        ),
+                dataIndex: 'eduroam',
+                filter  : {
+                    type: 'boolean'    
+                },
+                hidden: true
+            },
             { text: 'VPN Server',           dataIndex: 'vpn_server',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Tunnel IP',            dataIndex: 'tunnel_ip',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},
             { text: 'Contact IP',           dataIndex: 'contact_ip',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: false},

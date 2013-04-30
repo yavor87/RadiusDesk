@@ -4,7 +4,8 @@ Ext.require([
     'Ext.window.MessageBox',
     'Ext.tip.*',
     'Ext.util.*',
-    'Ext.state.*'
+    'Ext.state.*',
+    'Ext.form.field.*'
 ]);
 
 //Declare some constants
@@ -29,6 +30,8 @@ Ext.application({
 
     launch: function() {
        var me = this;
+        //We call it here pre-maturely else it gives an error
+        me.applyVtypes();
        Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
        me.runAction('cStartup','Index');
     },

@@ -4,6 +4,7 @@ Ext.define('Rd.model.mAutoSetup', {
          {name: 'id',           type: 'int'     },
          {name: 'owner',        type: 'string'  },
          {name: 'name',         type: 'string'  },
+         {name: 'dns_name',     type: 'string'  },
 //IP Settings
          {name: 'ip_address',   type: 'string'  },
          {name: 'ip_mask',      type: 'string'  },
@@ -19,6 +20,7 @@ Ext.define('Rd.model.mAutoSetup', {
          {name: 'radius',       type: 'string'  },
          {name: 'secret',       type: 'string'  },
          {name: 'ssid_open',    type: 'string'  },
+         {name: 'eduroam',      type: 'bool'  },
 //OpenVPN
          {name: 'vpn_server',   type: 'string'  },
          {name: 'tunnel_ip',    type: 'string'  },
