@@ -234,10 +234,20 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+            array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity',        'itemId' => 'cActivityMonitor'),
+                        array(  'text'  => __('RADIUS client'),         'iconCls' => 'radius_client',   'itemId' => 'cRadiusClient'),
+                        array(  'text'  => __('Logfile viewer'),        'iconCls' => 'logfile_viewer',  'itemId' => 'cLogViewer'),
+                        array(  'text'  => __('Debug output'),          'iconCls' => 'debug',           'itemId' => 'cDebug'), 
+                        array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',       'itemId' => 'cI18n'),
+                        array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',          'itemId' => 'cAcos'),  
+                    )
+                )
+            ),
             array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers'),
             array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices'),
-            array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',   'itemId' => 'cI18n'),
-            array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',      'itemId' => 'cAcos'),
         );
 
         //Optional experimental stuff 
