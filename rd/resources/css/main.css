@@ -316,6 +316,23 @@
       background-image:url(../images/16x16/setup.png) !important;
 }
 
+.tools {
+      background-image:url(../images/16x16/tools.png) !important;
+}
+
+.debug {
+      background-image:url(../images/16x16/bug.png) !important;
+}
+
+.logfile_viewer {
+      background-image:url(../images/16x16/logfile_viewer.png) !important;
+}
+
+.radius_client {
+      background-image:url(../images/16x16/radius_client.png) !important;
+}
+
+
 .mapDiv {
     height: 210px;
     width:  310px;
@@ -486,6 +503,18 @@
 
 .b-snapshot {
     background-image:url(../images/32x32/snapshot.png);
+}
+
+.b-clear {
+    background-image:url(../images/32x32/clear.png);
+}
+
+.b-stop {
+    background-image:url(../images/32x32/stop.png);
+}
+
+.b-start {
+    background-image:url(../images/32x32/start.png);
 }
 
 
@@ -783,6 +812,37 @@ background-position: left center;
     color: #1e5304;
     font-size:12px;
 }
+
+.txtGrey {
+    color: #98989b;
+}
+
+.txtGreen {
+    color: #2c7607;
+}
+
+.txtRed {
+    color: #d92435;
+}
+
+.txtBlue {
+    color: #5c88e0;
+}
+
+.txtBold {
+    font-weight: bold;
+}
+
+.fileViewer {
+    padding: 10px;
+    margin: 2px;
+    background: black;
+    color: white;
+    opacity:0.9;
+    filter:alpha(opacity=90); /* For IE8 and earlier */
+}
+
+
 
 .gridRealm.availAll {
      border-radius: 8px;
