@@ -48,6 +48,7 @@ Ext.define('Rd.controller.cLogViewer', {
     showFirstTime: undefined,
     showDiv: undefined,
     htmlToAdd: '',
+    renderFlag: undefined,
     config: {
       //  urlAdd:             '/cake2/rd_cake/realms/add.json'
     },
@@ -65,13 +66,11 @@ Ext.define('Rd.controller.cLogViewer', {
                 click:      me.clear
             },
             '#logViewerWin'     : {
-                show:       me.onShow
-            }  
+                show:       me.onShow,
+                render:     me.onRender,
+                destroy:    me.onDestroy
+            },
         });
-    },
-    reload: function(){
-        var me =this;
-        me.getStore('sRealms').load();
     },
     clear: function(b){
         var me      = this;
@@ -79,13 +78,13 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     ioLoaded:   function(i){
         var me = this;
-       // console.log("Socket IO Loaded...");
 
         //Connect to host
-        me.socket = io.connect('http://localhost:8000');
+        var t = me.application.getDesktopData().token;
+        me.socket = io.connect('http://localhost:8000?token='+t);
         
         me.socket.on('connect', function() {
-         //   console.log('Connected to:', me.socket);
+            console.log('Connected to:', me.socket);
         });
 
         //Event binding
@@ -101,14 +100,19 @@ Ext.define('Rd.controller.cLogViewer', {
                     if(index == l){
                         last = true;
                     }
+                    console.log("KK",element);
                     me.newText(element, last);
                 });
             } 
         });
+
+        me.socket.on('error', function (reason){
+            console.error('Unable to connect Socket.IO GOOI HOM', reason);
+        });
     },
     onShow: function(w){
         var me = this;
-       // console.log("Window show");
+        console.log("Window show");
         if(me.showFirstTime == undefined){
             me.showFirstTime = true;
             me.showDiv = me.getFile().body.dom;
@@ -118,7 +122,27 @@ Ext.define('Rd.controller.cLogViewer', {
                 onLoad  : me.ioLoaded,
                 scope   : me
             });
+        }else{
+            if(me.renderFlag == true){
+                console.log("New start of window.... connect again");
+                me.showDiv = me.getFile().body.dom;
+                me.socket.socket.reconnect();
+                me.renderFlag = false; //Clear the flag
+            }
         }
+    },
+    onRender: function(w){
+        var me = this;
+        console.log("Window Render");
+        if(me.showFirstTime == true){
+            me.renderFlag = true; 
+        }
+    },
+    onDestroy: function(w){
+        console.log("Window destroyed");
+        var me = this;
+        me.renderFlag = false;
+        me.socket.disconnect();  
     },
     newText: function(line,last){
         var me = this;
