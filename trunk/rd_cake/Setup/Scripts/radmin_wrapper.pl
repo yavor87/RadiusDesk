@@ -10,6 +10,8 @@ if ($#ARGV < 0) {
 |                                                           |
 |-----------------------------------------------------------|
 |  Syntax - radmin_wrapper.pl stats [auth|acct] <client IP> |
+|  Syntax - radmin_wrapper.pl stop freeradius                         |
+|  Syntax - radmin_wrapper.pl start freeradius                         |
 |                                                           |
 =============================================================
 };
@@ -28,5 +30,41 @@ if(exists($ARGV[2])){
 
 if($arg1 eq 'stats'){
     my $return_val = `radmin -e "stats client $arg2 $arg3"`;
+    print($return_val);
+}
+
+#___ Start ____
+if($arg1 eq 'start'){
+    system("/etc/init.d/radiusd start");
+}
+
+#___ Stop ____
+if($arg1 eq 'stop'){
+    system("/etc/init.d/radiusd stop");
+}
+
+
+#___ Uptime ____
+if($arg1 eq 'uptime'){
+    my $return_val = `radmin -e "show uptime"`;
+    print($return_val);
+}
+
+#___ Version ____
+if($arg1 eq 'version'){
+    my $return_val = `radmin -e "show version"`;
+    print($return_val);
+}
+
+#___ Clients ____
+if($arg1 eq 'clients'){
+    my $return_val = `radmin -e "show client list"`;
+    print($return_val);
+}
+
+
+#____ Modules ____
+if($arg1 eq 'modules'){
+    my $return_val = `radmin -e "show module list"`;
     print($return_val);
 }
