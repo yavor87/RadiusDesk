@@ -173,10 +173,10 @@ class FreeRadiusController extends AppController {
     public function info(){
 
         //__ Authentication + Authorization __
-      //  $user = $this->_ap_right_check();
-      //  if(!$user){
-      //      return;
-     //   }
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
         $items = array();
 
@@ -226,6 +226,149 @@ class FreeRadiusController extends AppController {
         }
          
         
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function status_debug(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items = array();
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug level",$output);
+        if(count($output)>0){
+            $level = $output[0];
+            $items['level'] = intval($level);
+            if($items['level'] > 0){
+                //Check for a timeout value (there should be one)
+                $c          = ClassRegistry::init('Check');
+                //Check for existing ones
+                $q_r        = $c->find('first',array('conditions' =>array('Check.name' => 'debug_timeout')));
+                if($q_r){
+                    $time_added = $q_r['Check']['value']-time();
+                    if($time_added > 0){
+                        $items['time_added'] = $time_added;
+                    }    
+                }
+            }
+        }
+
+        unset($output);
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition",$output);
+        if(count($output)>0){
+            $condition = $output[0];
+            $items['condition'] = $condition;
+        }      
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function start_debug(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items = array();
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug start",$output);
+
+        //Check for filters
+        if((isset($this->request->query['nas_id']))&&(!isset($this->request->query['username']))){
+            $q = ClassRegistry::init('Na')->findById($this->request->query['nas_id']);
+            $ip = $q['Na']['nasname'];
+            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(Packet-Src-IP-Address == $ip)'",$output);
+        }
+
+        if((isset($this->request->query['username']))&&(!isset($this->request->query['nas_id']))){
+            $username = $this->request->query['username'];
+            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(User-Name == $username)'",$output);
+        }
+
+        if((isset($this->request->query['username']))&&(isset($this->request->query['nas_id']))){
+            $q = ClassRegistry::init('Na')->findById($this->request->query['nas_id']);
+            $ip = $q['Na']['nasname'];
+            $username = $this->request->query['username'];
+            $condition = "((User-Name == $username)&&(Packet-Src-IP-Address == $ip))";
+            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '$condition'",$output);
+        }
+
+        //Start the timeout
+        $c          = ClassRegistry::init('Check');
+        $d          = array();
+        //Check for existing ones
+        $q_r        = $c->find('first',array('conditions' =>array('Check.name' => 'debug_timeout')));
+        if($q_r){
+            $d['id'] = $q_r['Check']['id'];    
+        }
+
+        $timeout = time()+360;
+        $d['name']  = 'debug_timeout';
+        $d['value'] = $timeout;
+        $c->save($d);
+
+        $items['timeout']   = $timeout;
+        $items['time_added']= 360;
+    
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function stop_debug(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items = array();
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug stop",$output);
+
+        //Clear the timeout
+        $c = ClassRegistry::init('Check');
+        $c->deleteAll(array('Check.name' => 'debug_timeout'));
+
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+     public function time_debug(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items = array();
+
+        //Clear the timeout
+        $c = ClassRegistry::init('Check');
+        //Check for existing ones
+        $q_r        = $c->find('first',array('conditions' =>array('Check.name' => 'debug_timeout')));
+        if($q_r){
+            $id     = $q_r['Check']['id'];
+            $value  = $q_r['Check']['value']+360;
+            $time_added = $value-time();
+            $c->id = $id;
+            $c->saveField('value', $value);
+            $items['time_added'] = $time_added;    
+        }
+
         $this->set(array(
             'data'          => $items,
             'success'       => true,
