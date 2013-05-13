@@ -68,3 +68,30 @@ if($arg1 eq 'modules'){
     my $return_val = `radmin -e "show module list"`;
     print($return_val);
 }
+
+#____ Modules ____
+if($arg1 eq 'debug'){
+
+    if(($arg2 eq 'level')||($arg2 eq 'condition')){
+        my $return_val = `radmin -e "show debug $arg2"`;
+        print($return_val);
+    }
+
+    if(($arg2 eq 'start')||($arg2 eq 'stop')){
+        my $level = 0; #Defualt is to stop
+        if($arg2 eq 'start'){
+            $level = 4;
+        }
+        my $return_val = `radmin -e "debug level $level"`;
+        #Clear condition on stop
+        if($arg2 eq 'stop'){
+            my $return_val = `radmin -e "debug condition"`;
+        }
+    }
+
+    if($arg2 eq 'condition'){
+        my $return_val = `radmin -e "debug level 0"`; #Clear the debug first
+        $return_val = `radmin -e "debug condition '$arg3'"`;
+    }
+}
+
