@@ -521,6 +521,10 @@
     background-image:url(../images/32x32/start.png);
 }
 
+.b-time_add {
+    background-image:url(../images/32x32/time_add.png);
+}
+
 
 .language16 {
     background-image:url(../images/16x16/language.png);
