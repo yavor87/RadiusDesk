@@ -8,10 +8,10 @@ Ext.define('Rd.view.logViewer.pnlViewFile', {
     bodyCls : 'fileViewer',
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'), items : [ 
-            { xtype: 'button',  iconCls: 'b-clear',     scale: 'large', itemId: 'clear',    tooltip:    i18n('sClear_screen')   },
-            { xtype: 'button',  iconCls: 'b-btn_info',  scale: 'large', itemId: 'info',     tooltip:    i18n('sFreeRADIUS_info')}
+            { xtype: 'button',  iconCls: 'b-clear',     scale: 'large', itemId: 'clear',    tooltip:    i18n('sClear_screen')   }
+            
         ]},
-        { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), width: 150, items : [ 
+        { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), items : [ 
             { xtype: 'button',  iconCls: 'b-start',     scale: 'large', itemId: 'start',    tooltip:    i18n('sStart_FreeRADIUS'),
                 toggleGroup     : 'start_stop',
                 enableToggle    : true,
@@ -22,7 +22,8 @@ Ext.define('Rd.view.logViewer.pnlViewFile', {
                 toggleGroup     : 'start_stop',
                 enableToggle    : true,
                 pressed         : false
-            }
+            },
+            { xtype: 'button',  iconCls: 'b-btn_info',  scale: 'large', itemId: 'info',     tooltip:    i18n('sFreeRADIUS_info')}
         ]}
     ],
     bbar: [
