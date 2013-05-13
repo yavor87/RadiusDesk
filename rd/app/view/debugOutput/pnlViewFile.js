@@ -1,6 +1,6 @@
 Ext.define('Rd.view.logViewer.pnlViewFile', {
     extend  : 'Ext.panel.Panel',
-    alias   : 'widget.pnlViewFile',
+    alias   : 'widget.pnlViewDebug',
     html    : '',
     autoScroll : true,
     autoCreate: true,
@@ -11,7 +11,7 @@ Ext.define('Rd.view.logViewer.pnlViewFile', {
             { xtype: 'button',  iconCls: 'b-clear',     scale: 'large', itemId: 'clear',    tooltip:    i18n('sClear_screen')   }
             
         ]},
-        { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), width:200, items : [ 
+        { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), items : [ 
             { xtype: 'button',  iconCls: 'b-start',     scale: 'large', itemId: 'start',    tooltip:    i18n('sStart_FreeRADIUS'),
                 toggleGroup     : 'start_stop',
                 enableToggle    : true,

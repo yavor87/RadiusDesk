@@ -17,7 +17,7 @@ Ext.define('Rd.controller.cLogViewer', {
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'realmsWin',
+                stateId: 'logViewerWin',
                 items: [
                     {
                         region: 'north',
@@ -43,7 +43,6 @@ Ext.define('Rd.controller.cLogViewer', {
     ],
     stores: [],
     models: [],
-    lines:  0,
     socket: undefined,
     showFirstTime: undefined,
     showDiv: undefined,
@@ -53,7 +52,8 @@ Ext.define('Rd.controller.cLogViewer', {
         urlFrStatus:    '/cake2/rd_cake/free_radius/status.json',
         urlFrStart:     '/cake2/rd_cake/free_radius/start.json',
         urlFrStop:      '/cake2/rd_cake/free_radius/stop.json',
-        urlFrInfo:      '/cake2/rd_cake/free_radius/info.json'
+        urlFrInfo:      '/cake2/rd_cake/free_radius/info.json',
+        portWebSocket:  '8000'
     },
     refs: [
          {  ref:    'file', selector:   'pnlViewFile'},
@@ -160,10 +160,12 @@ Ext.define('Rd.controller.cLogViewer', {
 
         //Connect to host
         var t = me.application.getDesktopData().token;
-        me.socket = io.connect('http://localhost:8000?token='+t);
+        //Get the current host
+        var host = document.location.host;
+        me.socket = io.connect('http://'+host+':'+me.portWebSocket+'?token='+t);
         
         me.socket.on('connect', function() {
-            console.log('Connected to:', me.socket);
+          //  console.log('Connected to:', me.socket);
         });
 
         //Event binding
@@ -185,7 +187,7 @@ Ext.define('Rd.controller.cLogViewer', {
         });
 
         me.socket.on('error', function (reason){
-            console.error('Unable to connect Socket.IO GOOI HOM', reason);
+            console.error('Unable to connect Socket.IO', reason);
         });
     },
     onShow: function(w){
@@ -194,9 +196,10 @@ Ext.define('Rd.controller.cLogViewer', {
         if(me.showFirstTime == undefined){
             me.showFirstTime = true;
             me.showDiv = me.getFile().body.dom;
+            var host = document.location.host;
             //Load the Socket library
             Ext.Loader.loadScript({
-                url     : "http://127.0.0.1:8000/socket.io/socket.io.js",
+                url     : 'http://'+host+':'+me.portWebSocket+'/socket.io/socket.io.js',
                 onLoad  : me.ioLoaded,
                 scope   : me
             });
@@ -236,7 +239,7 @@ Ext.define('Rd.controller.cLogViewer', {
         });
     },
     onDestroy: function(w){
-        console.log("Window destroyed");
+        //console.log("Window destroyed");
         var me = this;
         me.renderFlag = false;
         me.socket.disconnect();  
