@@ -39,7 +39,7 @@ Ext.define('Rd.controller.cLogViewer', {
         return win;
     },
     views:  [
-        'components.pnlBanner', 'logViewer.pnlViewFile'
+        'components.pnlBanner', 'logViewer.pnlViewFile', 'logViewer.winRadiusInfo'
     ],
     stores: [],
     models: [],
@@ -50,7 +50,10 @@ Ext.define('Rd.controller.cLogViewer', {
     htmlToAdd: '',
     renderFlag: undefined,
     config: {
-      //  urlAdd:             '/cake2/rd_cake/realms/add.json'
+        urlFrStatus:    '/cake2/rd_cake/free_radius/status.json',
+        urlFrStart:     '/cake2/rd_cake/free_radius/start.json',
+        urlFrStop:      '/cake2/rd_cake/free_radius/stop.json',
+        urlFrInfo:      '/cake2/rd_cake/free_radius/info.json'
     },
     refs: [
          {  ref:    'file', selector:   'pnlViewFile'},
@@ -65,6 +68,15 @@ Ext.define('Rd.controller.cLogViewer', {
             'pnlViewFile #clear': {
                 click:      me.clear
             },
+            'pnlViewFile #start': {
+                click:      me.start
+            },
+            'pnlViewFile #stop': {
+                click:      me.stop
+            },
+            'pnlViewFile #info': {
+                click:      me.info
+            },
             '#logViewerWin'     : {
                 show:       me.onShow,
                 render:     me.onRender,
@@ -75,6 +87,73 @@ Ext.define('Rd.controller.cLogViewer', {
     clear: function(b){
         var me      = this;
         me.showDiv.innerHTML = '';
+    },
+    start: function(b){
+        var me      = this;
+        //Determine if the server is running and change the start/stop button accordingly
+        Ext.Ajax.request({
+            url: me.urlFrStart,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    b.up('pnlViewFile').down('#info').setDisabled(false);
+                    Ext.ux.Toaster.msg(
+                        "FreeRADIUS service started",
+                        "FreeRADIUS service started fine",
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );  
+                }   
+            },
+            scope: me
+        });   
+    },
+    stop: function(b){
+        var me      = this;
+        //Determine if the server is running and change the start/stop button accordingly
+        
+        Ext.Ajax.request({
+            url: me.urlFrStop,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    b.up('pnlViewFile').down('#info').setDisabled(true);
+                    Ext.ux.Toaster.msg(
+                        "FreeRADIUS service stopped",
+                        "FreeRADIUS service stopped fine",
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });   
+    },
+    info: function(b){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlFrInfo,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    me.showInfo(jsonData.data);
+                }   
+            },
+            scope: me
+        });   
+    },
+    showInfo: function(info){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winRadiusInfo')){
+            var w = Ext.widget('winRadiusInfo',{
+                        id      :'winRadiusInfoId',
+                        info    : info
+                    });
+            me.application.runAction('cDesktop','Add',w); 
+        }
     },
     ioLoaded:   function(i){
         var me = this;
@@ -100,7 +179,6 @@ Ext.define('Rd.controller.cLogViewer', {
                     if(index == l){
                         last = true;
                     }
-                    console.log("KK",element);
                     me.newText(element, last);
                 });
             } 
@@ -112,7 +190,7 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     onShow: function(w){
         var me = this;
-        console.log("Window show");
+        //console.log("Window show");
         if(me.showFirstTime == undefined){
             me.showFirstTime = true;
             me.showDiv = me.getFile().body.dom;
@@ -124,7 +202,7 @@ Ext.define('Rd.controller.cLogViewer', {
             });
         }else{
             if(me.renderFlag == true){
-                console.log("New start of window.... connect again");
+               // console.log("New start of window.... connect again");
                 me.showDiv = me.getFile().body.dom;
                 me.socket.socket.reconnect();
                 me.renderFlag = false; //Clear the flag
@@ -133,10 +211,29 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     onRender: function(w){
         var me = this;
-        console.log("Window Render");
+        //console.log("Window Render");
         if(me.showFirstTime == true){
             me.renderFlag = true; 
         }
+        
+        //Determine if the server is running and change the start/stop button accordingly
+        Ext.Ajax.request({
+            url: me.urlFrStatus,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    if(jsonData.data.running == true){
+                        me.getFile().down('#start').toggle(true);
+                        me.getFile().down('#info').setDisabled(false);
+                    }else{
+                        me.getFile().down('#stop').toggle(true);
+                        me.getFile().down('#info').setDisabled(true);
+                    } 
+                }   
+            },
+            scope: me
+        });
     },
     onDestroy: function(w){
         console.log("Window destroyed");

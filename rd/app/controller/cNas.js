@@ -29,7 +29,6 @@ Ext.define('Rd.controller.cNas', {
                     },
                     {
                         region  : 'center',
-                        xtype   : 'tabpanel',
                         layout  : 'fit',
                         xtype   : 'tabpanel',
                         margins : '0 0 0 0',

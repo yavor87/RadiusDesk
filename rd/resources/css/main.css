@@ -332,6 +332,10 @@
       background-image:url(../images/16x16/radius_client.png) !important;
 }
 
+.infoWin {
+      background-image:url(../images/16x16/info.png) !important;
+}
+
 
 .mapDiv {
     height: 210px;
