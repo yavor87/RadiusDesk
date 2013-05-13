@@ -110,5 +110,130 @@ class FreeRadiusController extends AppController {
         )); 
     }
 
+    public function status(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $pid = exec('pidof radiusd');
+        $items = array();
+        $items['pid'] = intval($pid);
+        if($pid == ''){
+            $items['running'] = false; 
+        }else{
+            $items['running'] = true; 
+        }
+
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function start(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
+        $items = array();
+        
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function stop(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
+        $items = array();
+        
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+    public function info(){
+
+        //__ Authentication + Authorization __
+      //  $user = $this->_ap_right_check();
+      //  if(!$user){
+      //      return;
+     //   }
+
+        $items = array();
+
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl uptime freeradius",$output);
+        if(count($output)>0){
+            $uptime = $output[0];
+            $items['uptime'] = $uptime;
+        }else{
+            $this->set(array(
+                'success'       => false,
+                '_serialize'    => array('success')
+            ));
+            return;
+        }
+        
+        unset($output);
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl version freeradius",$output);
+        if(count($output)>0){
+            $version = $output[0];
+            $items['version'] = $version;
+        }
+
+        unset($output);
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl clients freeradius",$output);
+        if(count($output)>0){
+            $clients = array();
+            $id = 1;
+            foreach($output as $i){
+                $t_val = trim($i, " \t.");
+                array_push($clients,array('id' => $id, 'name' => $t_val));
+                $id++;
+            }
+            $items['clients'] = $clients;
+        }
+        
+        unset($output);
+        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl modules freeradius",$output);
+        if(count($output)>0){
+            $modules = array();
+            $id = 1;
+            foreach($output as $i){
+                $t_val = trim($i, " \t.");
+                array_push($modules,array('id' => $id, 'name' => $t_val));
+                $id++;
+            }
+            $items['modules'] = $modules;
+        }
+         
+        
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+    }
+
+
+
 }
 ?>
