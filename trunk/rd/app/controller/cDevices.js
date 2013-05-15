@@ -101,6 +101,9 @@ Ext.define('Rd.controller.cDevices', {
             'gridDevices #enable_disable' : {
                 click:      me.enableDisable
             },
+            'gridDevices #test_radius' : {
+                click:      me.testRadius
+            },
             'gridDevices'   : {
               //  select:      me.select
             },
@@ -507,7 +510,7 @@ Ext.define('Rd.controller.cDevices', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(sel_count > 1){);
+            if(sel_count > 1){
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -733,6 +736,22 @@ Ext.define('Rd.controller.cDevices', {
             failure             : Ext.ux.formFail
         });
     },
+    testRadius: function(button){
+        var me = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_test'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr = grid.getSelectionModel().getLastSelected();
+            me.application.runAction('cRadiusClient','TestDevice',sr);        
+        }
+    },  
     onTabBasicInfoActive: function(t){
         var me      = this;
         var form    = t.down('form');
