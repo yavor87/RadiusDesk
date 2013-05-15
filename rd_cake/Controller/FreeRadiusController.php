@@ -376,6 +376,86 @@ class FreeRadiusController extends AppController {
         ));
     }
 
+    public function test_radius(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if(isset($this->request->data['user_type'])){
+
+            if($this->request->data['user_type'] = 'permanent'){
+                $q_r        = ClassRegistry::init('User')->findById($this->request->data['user_id']);
+                $username   = $q_r['User']['username'];
+                $q_r        = ClassRegistry::init('Radcheck')->find('first', 
+                    array('conditions' =>
+                        array('Radcheck.username' => $username,'Radcheck.attribute' => 'Cleartext-Password')
+                    )
+                );
+                $pwd        = $q_r['Radcheck']['value'];
+            }
+        }
+
+        $items = array();
+
+        $items['request']['username']   = $username;
+        $items['request']['password']   = $pwd;
+        exec("perl /var/www/cake2/rd_cake/Setup/Scripts/radscenario.pl $username $pwd",$output);
+
+        $send_flag      = false;
+        $receive_flag   = false;
+        $fail_flag      = true;
+
+        $send_data      = array();
+        $receive_data   = array();
+
+        $line           = 0;
+
+        foreach($output as $i){
+            $i = trim($i);
+            if (preg_match("/Sending Access-Request/", $i)) {
+                $send_flag  = true;
+                $send_line  = $line;
+            }
+
+            if (preg_match("/^Received/", $i)) { //Failure
+                $send_flag      = false;
+                $receive_flag   = true;
+                $receive_line   = $line;
+            }
+
+            if (preg_match("/^Received Access-Accept packet/", $i)) { //Failure
+                $fail_flag      = false;
+            }
+
+            if(($send_flag == true)&&($line > $send_line)){
+                if($i !=''){
+                    array_push($send_data,$i);
+                }   
+            }
+
+            if(($receive_flag == true)&&($line > $receive_line)){
+                if($i !=''){
+                    array_push($receive_data,$i);
+                }    
+            }
+
+            $line++;
+        }
+
+        $items['send']      = $send_data;
+        $items['received']  = $receive_data;
+        $items['failed']    = $fail_flag;
+
+        $this->set(array(
+            'data'          => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'data')
+        ));
+
+    }
+
 
 
 }
