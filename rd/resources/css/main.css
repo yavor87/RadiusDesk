@@ -841,6 +841,33 @@ background-position: left center;
     font-weight: bold;
 }
 
+.green_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #0ca630;
+    background: #d0f8da;
+}
+
+.blue_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #4a709b;
+    background: #d3dfec;
+}
+
+.red_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #d92435;
+    background: #f1e2e2;
+}
+
 .fileViewer {
     padding: 10px;
     margin: 2px;

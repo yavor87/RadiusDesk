@@ -112,6 +112,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'gridPermanentUsers #enable_disable' : {
                 click:      me.enableDisable
             },
+            'gridPermanentUsers #test_radius' : {
+                click:      me.testRadius
+            },
             'gridPermanentUsers'   : {
                 select:      me.select
             },
@@ -894,6 +897,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             failure             : Ext.ux.formFail
         });
+    },
+    testRadius: function(button){
+        var me = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_test'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr = grid.getSelectionModel().getLastSelected();
+            me.application.runAction('cRadiusClient','TestPermanent',sr);        
+        }
     },  
     gridUserRadpostauthsReload: function(button){
         var me  = this;
