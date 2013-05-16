@@ -336,6 +336,10 @@
       background-image:url(../images/16x16/info.png) !important;
 }
 
+.dynamic_pages {
+      background-image:url(../images/16x16/dynamic_pages.png) !important;
+}
+
 
 .mapDiv {
     height: 210px;
@@ -944,8 +948,17 @@ background-position: left center;
 /*Wallpaper selection */
 .thumb-wrap {
     text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #86a5e5;
+    background: #f3f5f9;
+}
+
+.thumb-wrap:hover{
+    border: 2px solid #526b9d;
+    background: #c4cbd7;
 }
 
 .thumb-wrap img {

@@ -1,7 +1,7 @@
 Ext.define('Rd.patch.ExtJS411aPatch', {
     requires: [
         'Rd.patch.form.SubmitFix',
-        'Rd.patch.view.GridLoadMask'
-       // 'Rd.patch.window.Window' //Suspect that it cause trouble
+        'Rd.patch.view.GridLoadMask',
+        'Rd.patch.window.Window' 
     ]
 });
