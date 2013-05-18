@@ -965,6 +965,11 @@ background-position: left center;
     cursor:pointer;
 }
 
+.thumb-wrap.x-item-selected {
+    border: 1px solid #fd6473;
+    background: #e1c8d4;
+}
+
 
 
 
