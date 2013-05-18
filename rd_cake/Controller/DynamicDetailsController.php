@@ -565,8 +565,72 @@ class DynamicDetailsController extends AppController {
         $this->set('json_return',$json_return);
     }
 
+    public function index_photo(){
 
-      public function note_index(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];
+            $this->{$this->modelClass}->DynamicPhoto->contain();
+            $q_r = $this->{$this->modelClass}->DynamicPhoto->find('all', array('conditions' => array('DynamicPhoto.dynamic_detail_id' =>$dd_id)));
+            foreach($q_r as $i){
+                $t = $i['DynamicPhoto']['title'];
+                $d = $i['DynamicPhoto']['description'];
+                array_push($items,array('title' => $t, 'description' => $d));
+            }
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+
+
+
+
+    }
+
+    public function upload_photo($id = null){
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->layout = 'ext_file_upload';
+
+        $path_parts     = pathinfo($_FILES['photo']['name']);
+        $unique         = time();
+        $dest           = IMAGES."dynamic_logos/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/dynamic_logos/".$unique.'.'.$path_parts['extension'];
+
+        //Now add....
+        $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
+/*       
+        $this->{$this->modelClass}->id = $this->request->data['id'];
+       // $this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension']);
+        if($this->{$this->modelClass}->saveField('icon_file_name', $unique.'.'.$path_parts['extension'])){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $this->{$this->modelClass}->id;
+            $json_return['success']             = true;
+            $json_return['icon_file_name']      = $unique.'.'.$path_parts['extension'];
+        }else{
+            $json_return['errors']      = $this->{$this->modelClass}->validationErrors;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+        }
+*/
+        $json_return['success']             = true;
+        $this->set('json_return',$json_return);
+    }
+
+
+
+    public function note_index(){
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
