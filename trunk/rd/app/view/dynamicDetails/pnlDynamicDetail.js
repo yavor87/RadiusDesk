@@ -16,6 +16,11 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
                 title   : i18n('sLogo'),
                 itemId  : 'tabLogo',
                 xtype   : 'pnlDynamicDetailLogo'
+            },
+            { 
+                title   : i18n('sPhotos'),
+                itemId  : 'tabPhoto',
+                xtype   : 'pnlDynamicDetailPhoto'
             }
         ]; 
         me.callParent(arguments);

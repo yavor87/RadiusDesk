@@ -44,9 +44,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
     views:  [
         'dynamicDetails.gridDynamicDetails',                'dynamicDetails.winDynamicDetailAddWizard', 'dynamicDetails.pnlDynamicDetail',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','dynamicDetails.pnlDynamicDetailDetail',
-        'dynamicDetails.pnlDynamicDetailLogo'
+        'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto'
     ],
-    stores: ['sDynamicDetails','sAccessProvidersTree'],
+    stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
     models: ['mDynamicDetail','mAccessProviderTree'],
     selectedRecord: null,
     config: {
@@ -335,7 +335,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 closable:   true,
                 iconCls:    'edit', 
                 layout:     'fit', 
-                items:      {'xtype' : 'pnlDynamicDetail',dynamicDetail_id: id}
+                items:      {'xtype' : 'pnlDynamicDetail',dynamic_detail_id: id}
             });
             tp.setActiveTab(tab_id); //Set focus on Add Tab
         }
@@ -624,7 +624,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var me      = this;
         var form    = tab.down('form');
         var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
-        form.load({url:me.urlViewDynamicDetailDetail, method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
+        form.load({url:me.urlViewDynamicDetail, method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
     },
     tabLogoActivate: function(tab){
         var me      = this;
@@ -632,7 +632,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
         var p_img   = tab.down('#pnlImg');
         Ext.Ajax.request({
-            url: me.urlViewDynamicDetailDetail,
+            url: me.urlViewDynamicDetail,
             method: 'GET',
             params: {dynamic_detail_id : dynamic_detail_id },
             success: function(response){
