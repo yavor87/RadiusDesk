@@ -44,10 +44,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
     views:  [
         'dynamicDetails.gridDynamicDetails',                'dynamicDetails.winDynamicDetailAddWizard', 'dynamicDetails.pnlDynamicDetail',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','dynamicDetails.pnlDynamicDetailDetail',
-        'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto'
+        'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd'
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
-    models: ['mDynamicDetail','mAccessProviderTree'],
+    models: ['mDynamicDetail','mAccessProviderTree','mPhoto'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
@@ -58,9 +58,11 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlViewDynamicDetail: '/cake2/rd_cake/dynamic_details/view.json',
         urlLogoBase:        '/cake2/rd_cake/img/dynamic_details/',
         urlUploadLogo:      '/cake2/rd_cake/dynamic_details/upload_logo/',
+        urlPhotoBase:       '/cake2/rd_cake/img/dynamic_photos/', //NOTE This is actually declared in the pnlDynamicDetailPoto.js view file
+        urlUploadPhoto:     '/cake2/rd_cake/dynamic_details/upload_photo/'
     },
     refs: [
-         {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'} 
+         {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
     ],
     init: function() {
         me = this;
@@ -144,6 +146,21 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabLogo #cancel': {
                 click:       me.logoCancel
             },
+            'pnlDynamicDetail #tabPhoto': {
+                activate:       me.tabPhotoActivate
+            },
+            'pnlDynamicDetail #tabPhoto #reload': {
+                click:       me.photoReload
+            },
+            'pnlDynamicDetail #tabPhoto #add': {
+                click:       me.photoAdd
+            },
+            'winPhotoAdd #save': {
+                click:      me.photoAddSave
+            },
+            'winPhotoAdd #cancel': {
+                click:      me.photoAddCancel
+            }
             
         });;
     },
@@ -364,7 +381,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         me.getGridDynamicDetails().down('#count').update({count: count});
     },
 
-     csvExport: function(button,format) {
+    csvExport: function(button,format) {
         var me          = this;
         var columns     = me.getGridDynamicDetails().columns;
         var col_list    = [];
@@ -646,7 +663,6 @@ Ext.define('Rd.controller.cDynamicDetails', {
         });
     },
     logoSave: function(button){
-        console.log("goooo");
         var me      = this;
         var form    = button.up('form');
         var pnl_r   = form.up('pnlDynamicDetail');
@@ -677,5 +693,57 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var me      = this;
         var form    = button.up('form');
         form.getForm().reset();
-    }
+    },
+    tabPhotoActivate:  function(t){
+        var me = this;
+        t.down('dataview').getStore().load();
+    },
+    photoReload:  function(b){
+        var me = this;
+        b.up('#tabPhoto').down('dataview').getStore().load();
+    },
+    photoAdd: function(b){
+        var me = this;
+        var d_id = b.up('pnlDynamicDetail').dynamic_detail_id;
+        var d_v  = b.up('#tabPhoto').down('dataview');
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winPhotoAddId')){
+            var w   = Ext.widget('winPhotoAdd',
+            {
+                id                  : 'winPhotoAddId',
+                dynamic_detail_id   : d_id,
+                data_view           : d_v
+            });
+            me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    photoAddSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            waitMsg: 'Uploading your photo...',
+            url: me.urlUploadPhoto,
+            params: {'id' : window.dynamic_detail_id },
+            success: function(form, action) {              
+                //FIXME reload store....
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.data_view.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    photoAddCancel: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        form.getForm().reset();
+    },
 });
