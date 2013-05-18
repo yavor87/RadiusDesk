@@ -654,7 +654,6 @@ Ext.define('Rd.controller.cRealms', {
         });
     },
     logoSave: function(button){
-        console.log("goooo");
         var me      = this;
         var form    = button.up('form');
         var pnl_r   = form.up('pnlRealm');

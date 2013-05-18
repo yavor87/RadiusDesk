@@ -3,6 +3,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
     alias   : 'widget.pnlDynamicDetailPhoto',
     border  : false,
     layout  : 'hbox',
+    store   : undefined,
+    dynamic_detail_id: null,
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
     requires: [
         'Rd.view.components.ajaxToolbar'
@@ -21,8 +23,39 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
             '</tpl>'
         );
 
+        me.store = Ext.create(Ext.data.Store,{
+            model: 'Rd.model.mPhoto',
+            proxy: {
+                type  :'ajax',
+                url   : '/cake2/rd_cake/dynamic_details/index_photo.json',
+                extraParams : { 'dynamic_detail_id' : me.dynamic_detail_id},
+                format  : 'json',
+                reader: {
+                    type: 'json',
+                    root: 'items'
+                }
+            },
+            listeners: {
+                load: function(store, records, successful) {
+                    if(!successful){
+                        Ext.ux.Toaster.msg(
+                            'Error encountered',
+                            store.getProxy().getReader().rawData.message.message,
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                        //console.log(store.getProxy().getReader().rawData.message.message);
+                    }else{
+                        var count       = me.down('dataview').getStore().getTotalCount();
+                        me.down('#count').update({count: count});
+                    }   
+                },
+                scope: this
+            }
+        });
+
         var v = Ext.create('Ext.view.View', {
-            store: 'sWallpapers',
+            store: me.store,
             tpl: imageTpl,
             itemSelector: 'div.thumb-wrap',
             emptyText: 'No images available'
