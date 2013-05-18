@@ -826,6 +826,85 @@ class DynamicDetailsController extends AppController {
         ));
     }
 
+     public function menu_for_photos(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                ))   
+            );
+        }
+
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
+
+            //Add
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',      
+                    'tooltip'   => __('Add')));
+            }
+            //Delete
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-delete',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'delete',
+                    'disabled'  => true,   
+                    'tooltip'   => __('Delete')));
+            }
+
+            //Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,     
+                    'tooltip'   => __('Edit')));
+            }
+
+           
+            $menu = array(
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group)
+                   );
+        }
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
     private function _find_parents($id){
 
         $this->User->contain();//No dependencies
