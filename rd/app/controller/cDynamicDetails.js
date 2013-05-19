@@ -44,10 +44,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
     views:  [
         'dynamicDetails.gridDynamicDetails',                'dynamicDetails.winDynamicDetailAddWizard', 'dynamicDetails.pnlDynamicDetail',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','dynamicDetails.pnlDynamicDetailDetail',
-        'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd'
+        'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
+        'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
+        'dynamicDetails.winPageEdit'
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
-    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto'],
+    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
@@ -59,7 +61,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlLogoBase:        '/cake2/rd_cake/img/dynamic_details/',
         urlUploadLogo:      '/cake2/rd_cake/dynamic_details/upload_logo/',
         urlPhotoBase:       '/cake2/rd_cake/img/dynamic_photos/', //NOTE This is actually declared in the pnlDynamicDetailPoto.js view file
-        urlUploadPhoto:     '/cake2/rd_cake/dynamic_details/upload_photo/'
+        urlUploadPhoto:     '/cake2/rd_cake/dynamic_details/upload_photo/',
+        urlEditPhoto:       '/cake2/rd_cake/dynamic_details/edit_photo/',
+        urlAddPage:         '/cake2/rd_cake/dynamic_details/add_page.json',
+        urlEditPage:        '/cake2/rd_cake/dynamic_details/edit_page.json',
     },
     refs: [
          {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
@@ -155,12 +160,45 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabPhoto #add': {
                 click:       me.photoAdd
             },
+            'pnlDynamicDetail #tabPhoto #delete': {
+                click:      me.photoDel
+            },
+            'pnlDynamicDetail #tabPhoto #edit': {
+                click:      me.photoEdit
+            },
             'winPhotoAdd #save': {
                 click:      me.photoAddSave
             },
             'winPhotoAdd #cancel': {
                 click:      me.photoAddCancel
-            }
+            },
+            'winPhotoEdit #save': {
+                click:      me.photoEditSave
+            },
+            'winPhotoEdit #cancel': {
+                click:      me.photoEditCancel
+            },
+            'pnlDynamicDetail #tabPages': {
+                activate:       me.tabPagesActivate
+            },
+            'pnlDynamicDetail gridDynamicDetailPages #reload': {
+                click:       me.pageReload
+            },
+            'pnlDynamicDetail gridDynamicDetailPages #add': {
+                click:       me.pageAdd
+            },
+            'pnlDynamicDetail gridDynamicDetailPages #delete': {
+                click:      me.pageDel
+            },
+            'pnlDynamicDetail gridDynamicDetailPages #edit': {
+                click:      me.pageEdit
+            },
+            'winPageAdd #save': {
+                click:      me.pageAddSave
+            },
+            'winPageEdit #save': {
+                click:      me.pageEditSave
+            },
             
         });;
     },
@@ -745,5 +783,243 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var me      = this;
         var form    = button.up('form');
         form.getForm().reset();
+    },
+    photoDel:   function(button){
+        var me      = this;
+        var d_view  = button.up('#tabPhoto').down('dataview');     
+        //Find out if there was something selected
+        if(d_view.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    d_view.getStore().remove(d_view.getSelectionModel().getSelection());
+                    d_view.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            d_view.getStore().load();   //Update the count   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            d_view.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+
+                }
+            });
+        }
+    },
+    photoEdit:   function(button){
+        var me      = this;
+        var d_view  = button.up('#tabPhoto').down('dataview');     
+        //Find out if there was something selected
+        if(d_view.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(d_view.getSelectionModel().getCount() > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPhotoEditId')){
+                    var w   = Ext.widget('winPhotoEdit',
+                    {
+                        id                  : 'winPhotoEditId',
+                        data_view           : d_view
+                    });
+                    w.down('form').loadRecord(d_view.getSelectionModel().getLastSelected());
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    photoEditSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            waitMsg: 'Updating your photo...',
+            url: me.urlEditPhoto,
+            success: function(form, action) {              
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.data_view.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    photoEditCancel: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        form.getForm().reset();
+    },
+    tabPagesActivate: function(g){
+        var me      = this;
+        g.getStore().load();
+    },
+    pageReload:  function(b){
+        var me = this;
+        b.up('pnlDynamicDetail').down('#tabPages').getStore().load();
+    },
+    pageAdd: function(b){
+        var me      = this;
+        var d_id    = b.up('pnlDynamicDetail').dynamic_detail_id;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPages');
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winPageAddId')){
+            var w   = Ext.widget('winPageAdd',
+            {
+                id                  : 'winPageAddId',
+                dynamic_detail_id   : d_id,
+                grid                : grid
+            });
+            me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    pageAddSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddPage,
+            params: {'dynamic_detail_id' : window.dynamic_detail_id },
+            success: function(form, action) {              
+                //FIXME reload store....
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.grid.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    pageEdit:   function(b){
+        var me      = this;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPages');     
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(grid.getSelectionModel().getCount() > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPageEditId')){
+                    var w   = Ext.widget('winPageEdit',
+                    {
+                        id                  : 'winPageEditId',
+                        grid                : grid
+                    });
+                    w.down('form').loadRecord(grid.getSelectionModel().getLastSelected());
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    pageEditSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditPage,
+            success: function(form, action) {              
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.grid.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    pageDel:   function(b){
+        var me      = this;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPages');     
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();   //Update the count   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+
+                }
+            });
+        }
     },
 });
