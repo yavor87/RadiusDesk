@@ -17,14 +17,17 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
         var imageTpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<div class="thumb-wrap">',
-                    '<img src="{img}" />',
-                    '<br/><span>{file}</span>',
+                    '<div>',
+                        '<div><h1>{title}</h1></div>',
+                            '<img src="{img}" />',
+                        '<div class="description">{description}</div>',
+                    '</div>',
                 '</div>',
             '</tpl>'
         );
 
         me.store = Ext.create(Ext.data.Store,{
-            model: 'Rd.model.mPhoto',
+            model: 'Rd.model.mDynamicPhoto',
             proxy: {
                 type  :'ajax',
                 url   : '/cake2/rd_cake/dynamic_details/index_photo.json',
