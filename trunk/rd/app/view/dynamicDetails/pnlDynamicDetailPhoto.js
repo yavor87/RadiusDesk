@@ -2,6 +2,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlDynamicDetailPhoto',
     border  : false,
+    frame   : false,
     layout  : 'hbox',
     store   : undefined,
     dynamic_detail_id: null,
@@ -36,6 +37,9 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                 reader: {
                     type: 'json',
                     root: 'items'
+                },
+                api: {
+                    destroy  : '/cake2/rd_cake/dynamic_details/delete_photo.json'
                 }
             },
             listeners: {
@@ -58,10 +62,11 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
         });
 
         var v = Ext.create('Ext.view.View', {
-            store: me.store,
-            tpl: imageTpl,
+            store       : me.store,
+            multiSelect : true,
+            tpl         : imageTpl,
             itemSelector: 'div.thumb-wrap',
-            emptyText: 'No images available'
+            emptyText   : 'No images available'
         });
 
         me.items =  {

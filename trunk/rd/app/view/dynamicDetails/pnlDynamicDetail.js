@@ -22,6 +22,18 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
                 itemId  : 'tabPhoto',
                 xtype   : 'pnlDynamicDetailPhoto',
                 dynamic_detail_id : me.dynamic_detail_id
+            },
+            { 
+                title   : i18n('sOwn_pages'),
+                itemId  : 'tabPages',
+                xtype   : 'gridDynamicDetailPages',
+                dynamic_detail_id : me.dynamic_detail_id
+            },
+            { 
+                title   : i18n('sDynamic_keys'),
+                itemId  : 'tabPairs',
+               // xtype   : 'pnlDynamicDetailPairs',
+                dynamic_detail_id : me.dynamic_detail_id
             }
         ]; 
         me.callParent(arguments);
