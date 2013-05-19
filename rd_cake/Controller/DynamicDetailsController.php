@@ -640,6 +640,192 @@ class DynamicDetailsController extends AppController {
         $this->set('json_return',$json_return);
     }
 
+    public function delete_photo($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            //Get the filename to delete
+            $q_r = $this->{$this->modelClass}->DynamicPhoto->findById($this->data['id']);
+            if($q_r){
+                $file_to_delete = IMAGES."/dynamic_photos/".$q_r['DynamicPhoto']['file_name'];
+                $this->{$this->modelClass}->DynamicPhoto->id = $this->data['id'];
+                if($this->{$this->modelClass}->DynamicPhoto->delete($this->{$this->modelClass}->DynamicPhoto->id,true)){
+                    unlink($file_to_delete);
+                }
+            }     
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                //Get the filename to delete
+                $q_r = $this->{$this->modelClass}->DynamicPhoto->findById($d['id']);
+                if($q_r){
+                    $file_to_delete = IMAGES."/dynamic_photos/".$q_r['DynamicPhoto']['file_name'];
+                    $this->{$this->modelClass}->DynamicPhoto->id = $d['id'];
+                    if($this->{$this->modelClass}->DynamicPhoto->delete($this->{$this->modelClass}->DynamicPhoto->id,true)){
+                        unlink($file_to_delete);
+                    }
+                }
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+    public function edit_photo(){
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->layout = 'ext_file_upload';
+
+        //Always do this
+        $this->{$this->modelClass}->DynamicPhoto->id = $this->request->data['id'];
+        $this->{$this->modelClass}->DynamicPhoto->saveField('title',        $this->request->data['title']);
+        $this->{$this->modelClass}->DynamicPhoto->saveField('description',  $this->request->data['description']);
+
+        if($_FILES['photo']['size'] > 0){
+            $q_r        = $this->{$this->modelClass}->DynamicPhoto->findById($this->request->data['id']);
+            if($q_r){
+                
+                $file_name      = $q_r['DynamicPhoto']['file_name'];
+                $file_to_delete = IMAGES."/dynamic_photos/".$file_name;
+                unlink($file_to_delete);
+
+                $path_parts     = pathinfo($_FILES['photo']['name']);
+                $unique         = time();
+                $dest           = IMAGES."dynamic_photos/".$unique.'.'.$path_parts['extension'];
+                move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+                $this->{$this->modelClass}->DynamicPhoto->saveField('file_name', $unique.'.'.$path_parts['extension']);
+            }  
+        }
+
+        $json_return['success'] = true;
+        $this->set('json_return',$json_return);
+    }
+
+    public function index_page(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];
+            $this->{$this->modelClass}->DynamicPage->contain();
+            $q_r = $this->{$this->modelClass}->DynamicPage->find('all', array('conditions' => array('DynamicPage.dynamic_detail_id' =>$dd_id)));
+            foreach($q_r as $i){
+                $id     = $i['DynamicPage']['id'];
+                $dd_id  = $i['DynamicPage']['dynamic_detail_id'];
+                $n      = $i['DynamicPage']['name'];
+                $c      = $i['DynamicPage']['content'];
+                array_push($items,
+                    array(
+                        'id'                => $id, 
+                        'dynamic_detail_id' => $dd_id, 
+                        'name'              => $n, 
+                        'content'           => $c
+                    )
+                );
+            }
+        }
+        
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
+    public function add_page() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
+
+        if ($this->{$this->modelClass}->DynamicPage->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->DynamicPage->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create item'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+	}
+
+    public function edit_page() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
+
+        if ($this->{$this->modelClass}->DynamicPage->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->DynamicPage->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create item'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+	}
+
+    public function delete_page($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            //Get the filename to delete
+            $this->{$this->modelClass}->DynamicPage->id = $this->data['id'];
+            $this->{$this->modelClass}->DynamicPage->delete($this->{$this->modelClass}->DynamicPage->id,true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                //Get the filename to delete
+                $this->{$this->modelClass}->DynamicPage->id = $d['id'];
+                $this->{$this->modelClass}->DynamicPage->delete($this->{$this->modelClass}->DynamicPage->id,true);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
     public function note_index(){
 
         //__ Authentication + Authorization __
@@ -900,7 +1086,7 @@ class DynamicDetailsController extends AppController {
         ));
     }
 
-     public function menu_for_photos(){
+    public function menu_for_photos(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -978,6 +1164,86 @@ class DynamicDetailsController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
+
+     public function menu_for_dynamic_pages(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                ))   
+            );
+        }
+
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
+
+            //Add
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',      
+                    'tooltip'   => __('Add')));
+            }
+            //Delete
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-delete',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'delete',
+                    'disabled'  => true,   
+                    'tooltip'   => __('Delete')));
+            }
+
+            //Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,     
+                    'tooltip'   => __('Edit')));
+            }
+
+           
+            $menu = array(
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group)
+                   );
+        }
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
 
     private function _find_parents($id){
 
