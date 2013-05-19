@@ -47,7 +47,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd'
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
-    models: ['mDynamicDetail','mAccessProviderTree','mPhoto'],
+    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
@@ -726,7 +726,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
             clientValidation: true,
             waitMsg: 'Uploading your photo...',
             url: me.urlUploadPhoto,
-            params: {'id' : window.dynamic_detail_id },
+            params: {'dynamic_detail_id' : window.dynamic_detail_id },
             success: function(form, action) {              
                 //FIXME reload store....
                 Ext.ux.Toaster.msg(

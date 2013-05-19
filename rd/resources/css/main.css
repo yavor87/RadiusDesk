@@ -970,6 +970,19 @@ background-position: left center;
     background: #e1c8d4;
 }
 
+.thumb-wrap h1{
+    padding: 10px;
+    color: #526b9d;
+    font-size:20px;
+}
+
+.thumb-wrap .description{
+    padding: 10px;
+    color: #526b9d;
+    font-size:14px;
+    font-style:oblique;
+}
+
 
 
 
