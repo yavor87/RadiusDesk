@@ -580,21 +580,30 @@ class DynamicDetailsController extends AppController {
             $this->{$this->modelClass}->DynamicPhoto->contain();
             $q_r = $this->{$this->modelClass}->DynamicPhoto->find('all', array('conditions' => array('DynamicPhoto.dynamic_detail_id' =>$dd_id)));
             foreach($q_r as $i){
-                $t = $i['DynamicPhoto']['title'];
-                $d = $i['DynamicPhoto']['description'];
-                array_push($items,array('title' => $t, 'description' => $d));
+                $id     = $i['DynamicPhoto']['id'];
+                $dd_id  = $i['DynamicPhoto']['dynamic_detail_id'];
+                $t      = $i['DynamicPhoto']['title'];
+                $d      = $i['DynamicPhoto']['description'];
+                $f      = $i['DynamicPhoto']['file_name'];
+                $location = Configure::read('paths.dynamic_photos').$f;
+                array_push($items,
+                    array(
+                        'id'                => $id, 
+                        'dynamic_detail_id' => $dd_id, 
+                        'title'             => $t, 
+                        'description'       => $d, 
+                        'file_name'         => $f,
+                        'img'               => "/cake2/rd_cake/webroot/files/image.php/image-name.jpg?width=200&height=200&image=".$location
+                    )
+                );
             }
         }
         
         $this->set(array(
-            'data'     => $items,
+            'items'     => $items,
             'success'   => true,
-            '_serialize'=> array('success', 'data')
+            '_serialize'=> array('success', 'items')
         ));
-
-
-
-
     }
 
     public function upload_photo($id = null){
@@ -605,30 +614,31 @@ class DynamicDetailsController extends AppController {
 
         $path_parts     = pathinfo($_FILES['photo']['name']);
         $unique         = time();
-        $dest           = IMAGES."dynamic_logos/".$unique.'.'.$path_parts['extension'];
-        $dest_www       = "/cake2/rd_cake/webroot/img/dynamic_logos/".$unique.'.'.$path_parts['extension'];
+        $dest           = IMAGES."dynamic_photos/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
 
         //Now add....
-        $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
-/*       
-        $this->{$this->modelClass}->id = $this->request->data['id'];
-       // $this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension']);
-        if($this->{$this->modelClass}->saveField('icon_file_name', $unique.'.'.$path_parts['extension'])){
+        $data                       = array();
+        $data['id']                 = null;
+        $data['file_name']          = $unique.'.'.$path_parts['extension'];
+        $data['dynamic_detail_id']  = $this->request->data['dynamic_detail_id'];
+        $data['title']              = $this->request->data['title'];
+        $data['description']        = $this->request->data['description'];
+
+        $this->{$this->modelClass}->DynamicPhoto->create();
+
+        if($this->{$this->modelClass}->DynamicPhoto->save($data)){
             move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
-            $json_return['id']                  = $this->{$this->modelClass}->id;
+            $json_return['id']                  = $this->{$this->modelClass}->DynamicPhoto->id;
             $json_return['success']             = true;
-            $json_return['icon_file_name']      = $unique.'.'.$path_parts['extension'];
+
         }else{
             $json_return['errors']      = $this->{$this->modelClass}->validationErrors;
             $json_return['message']     = array("message"   => __('Problem uploading photo'));
             $json_return['success']     = false;
         }
-*/
-        $json_return['success']             = true;
         $this->set('json_return',$json_return);
     }
-
-
 
     public function note_index(){
 
