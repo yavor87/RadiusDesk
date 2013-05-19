@@ -39,7 +39,9 @@ $config['nas_types'][1]     = array('name' => 'CoovaChilli',        'id' => 'Coo
 $config['nas_types'][0]     = array('name' => 'Mikrotik',           'id' => 'Mikrotik',             'active' => true);
 
 //FIXME To incorporate
-$config['paths']['wallpaper_location'] = "/rd/resources/images/wallpapers/";
+$config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
+
+$config['paths']['dynamic_photos']      = "/cake2/rd_cake/webroot/img/dynamic_photos/";   
 
 //Define default settings for the users:
 $config['user_settings']['wallpaper']       = "9.jpg";
