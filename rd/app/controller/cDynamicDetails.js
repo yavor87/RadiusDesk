@@ -46,10 +46,11 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','dynamicDetails.pnlDynamicDetailDetail',
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
-        'dynamicDetails.winPageEdit'
+        'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
+        'dynamicDetails.winPairEdit',           
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
-    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage'],
+    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
@@ -65,6 +66,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlEditPhoto:       '/cake2/rd_cake/dynamic_details/edit_photo/',
         urlAddPage:         '/cake2/rd_cake/dynamic_details/add_page.json',
         urlEditPage:        '/cake2/rd_cake/dynamic_details/edit_page.json',
+        urlAddPair:         '/cake2/rd_cake/dynamic_details/add_pair.json',
+        urlEditPair:        '/cake2/rd_cake/dynamic_details/edit_pair.json',
     },
     refs: [
          {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
@@ -198,6 +201,27 @@ Ext.define('Rd.controller.cDynamicDetails', {
             },
             'winPageEdit #save': {
                 click:      me.pageEditSave
+            },
+            'pnlDynamicDetail #tabPairs': {
+                activate:       me.tabPairsActivate
+            },
+            'pnlDynamicDetail gridDynamicDetailPairs #reload': {
+                click:       me.pairReload
+            },
+            'pnlDynamicDetail gridDynamicDetailPairs #add': {
+                click:       me.pairAdd
+            },
+            'pnlDynamicDetail gridDynamicDetailPairs #delete': {
+                click:      me.pairDel
+            },
+            'pnlDynamicDetail gridDynamicDetailPairs #edit': {
+                click:      me.pairEdit
+            },
+            'winPairAdd #save': {
+                click:      me.pairAddSave
+            },
+            'winPairEdit #save': {
+                click:      me.pairEditSave
             },
             
         });;
@@ -1022,4 +1046,143 @@ Ext.define('Rd.controller.cDynamicDetails', {
             });
         }
     },
+    tabPairsActivate: function(g){
+        var me      = this;
+        g.getStore().load();
+    },
+    pairReload:  function(b){
+        var me = this;
+        b.up('pnlDynamicDetail').down('#tabPairs').getStore().load();
+    },
+    pairAdd: function(b){
+        var me      = this;
+        var d_id    = b.up('pnlDynamicDetail').dynamic_detail_id;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPairs');
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winPairAddId')){
+            var w   = Ext.widget('winPairAdd',
+            {
+                id                  : 'winPairAddId',
+                dynamic_detail_id   : d_id,
+                grid                : grid
+            });
+            me.application.runAction('cDesktop','Add',w);       
+        }
+    },
+    pairAddSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddPair,
+            params: {'dynamic_detail_id' : window.dynamic_detail_id },
+            success: function(form, action) {              
+                //FIXME reload store....
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.grid.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    pairEdit:   function(b){
+        var me      = this;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPairs');     
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(grid.getSelectionModel().getCount() > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                if(!me.application.runAction('cDesktop','AlreadyExist','winPairEditId')){
+                    var w   = Ext.widget('winPairEdit',
+                    {
+                        id                  : 'winPairEditId',
+                        grid                : grid
+                    });
+                    w.down('form').loadRecord(grid.getSelectionModel().getLastSelected());
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    pairEditSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var window  = form.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditPair,
+            success: function(form, action) {              
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+                window.grid.getStore().load();
+                window.close();
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    pairDel:   function(b){
+        var me      = this;
+        var grid    = b.up('pnlDynamicDetail').down('#tabPairs');     
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();   //Update the count   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+
+                }
+            });
+        }
+    }
 });

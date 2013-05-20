@@ -32,7 +32,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
             { 
                 title   : i18n('sDynamic_keys'),
                 itemId  : 'tabPairs',
-               // xtype   : 'pnlDynamicDetailPairs',
+                xtype   : 'gridDynamicDetailPairs',
                 dynamic_detail_id : me.dynamic_detail_id
             }
         ]; 
