@@ -7,155 +7,46 @@ class DynamicDetailsController extends AppController {
     public $components = array('Aa');
     public $uses       = array('DynamicDetail','User');
     protected $base    = "Access Providers/Controllers/DynamicDetails/";
-    
-  
-    public function index_ap(){
-    //This method will display the Access Provider we are looking at's list of available dynamis detail's entries.
-    //This will be:
-    // ALL the upstream AP's who has DynamicDetails that is flagged as 'available_to_siblings' (And That's it :-))
-    //The Access Provider creating a sub-provider can create a private dynamic detail entry that is not listed in any of the sub-provider's lists (but that is under the dynamil details application)
-    //We will also go through each of these ones to determine if the AP has CRUD access to the DynamicDetail and reflect it in the feedback...
 
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
+    public function info_for(){
 
-        $user_id = null;
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
-        }
-
-        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }
-
-        if(isset($this->request->query['ap_id'])){
-            $ap_id      = $this->request->query['ap_id'];
-            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root
-            $items      = array();
-            foreach($q_r as $i){
-                
-                $user_id    = $i['User']['id'];
-                $this->DynamicDetail->contain();
-                $r        = $this->DynamicDetail->find('all',array('conditions' => array('DynamicDetail.user_id' => $user_id, 'DynamicDetail.available_to_siblings' => true)));
-                foreach($r  as $j){
-                    $id     = $j['DynamicDetail']['id'];
-                    $name   = $j['DynamicDetail']['name'];
-                    $create = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'DynamicDetail','foreign_key' => $id), 'create');
-                    $read   = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'DynamicDetail','foreign_key' => $id), 'read');
-                    $update = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'DynamicDetail','foreign_key' => $id), 'update');
-                    $delete = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'DynamicDetail','foreign_key' => $id), 'delete');
-                    array_push($items,array('id' => $id, 'name' => $name, 'create' => $create, 'read' => $read, 'update' => $update, 'delete' => $delete));
+        $items = array();
+        if(isset($this->request->query['dynamic_id'])){
+            $this->{$this->modelClass}->contain('DynamicPage','DynamicPhoto');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+            if($q_r){
+                $items['detail']['name']            = $q_r['DynamicDetail']['name'];
+                $items['detail']['icon_file_name']  = Configure::read('paths.dynamic_detail_icon').$q_r['DynamicDetail']['icon_file_name'];
+                $items['detail']['phone']           = $q_r['DynamicDetail']['phone'];
+                $items['detail']['fax']             = $q_r['DynamicDetail']['fax'];
+                $items['detail']['cell']            = $q_r['DynamicDetail']['cell'];
+                $items['detail']['email']           = $q_r['DynamicDetail']['email'];
+                $items['detail']['url']             = $q_r['DynamicDetail']['url'];
+                $items['detail']['street_no']       = $q_r['DynamicDetail']['street_no'];
+                $items['detail']['street']          = $q_r['DynamicDetail']['street'];
+                $items['detail']['town_suburb']     = $q_r['DynamicDetail']['town_suburb'];
+                $items['detail']['city']            = $q_r['DynamicDetail']['city'];
+                $items['detail']['country']         = $q_r['DynamicDetail']['country'];
+                $items['detail']['lon']             = $q_r['DynamicDetail']['lon'];
+                $items['detail']['lat']             = $q_r['DynamicDetail']['lat'];
+                //Modify the photo path:
+                $c = 0;
+                foreach($q_r['DynamicPhoto'] as $i){
+                    $q_r['DynamicPhoto'][$c]['file_name'] = Configure::read('paths.dynamic_photos').$i['file_name'];
+                    $c++;
                 }
+                $items['photos']                    = $q_r['DynamicPhoto'];
+                $items['pages']                     = $q_r['DynamicPage'];
             }
-        }  
-
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-
-   
-
-    public function dummy_edit(){
-          $this->set(array(
-            'items'     => array(),
-            'success'   => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-
-
-    public function edit_ap(){
-
-        //The ap_id who's DynamicDetail rights HAS to be a sibling of the user who initiated the request
-        //___AA Check Starts ___
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-        $user_id = null;
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
-        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }else{
-           $this->Aa->fail_no_rights($this);
-           return;
-        }
-        //__ AA Check Ends ___
-
-
-        if(isset($this->request->query['ap_id'])){
-
-            //Make sure the $ap_id is a child of $user_id - perhaps we should sub-class the Behaviaour...
-            //TODO Complete this check
-
-            $ap_id  = $this->request->query['ap_id'];
-            $id     = $this->request->data['id'];
-            if($this->request->data['create'] == true){
-                $this->Acl->allow(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicPage','foreign_key' => $id), 'create');
-            }else{
-                $this->Acl->deny(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'create');
-            } 
-
-            if($this->request->data['read'] == true){
-                $this->Acl->allow(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'read');
-            }else{
-                $this->Acl->deny(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'read');
-            }
-
-            if($this->request->data['update'] == true){
-                $this->Acl->allow(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'update');
-            }else{
-                $this->Acl->deny(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'update');
-            } 
-            
-            if($this->request->data['delete'] == true){
-                $this->Acl->allow(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'delete');
-            }else{
-                $this->Acl->deny(
-                array('model' => 'User', 'foreign_key' => $ap_id), 
-                array('model' => 'DynamicDetail','foreign_key' => $id), 'delete');
-            }  
         }
 
         $this->set(array(
-            'items' => array(),
+            'data' => $items,
             'success' => true,
-            '_serialize' => array('items','success')
+            '_serialize' => array('data','success')
         ));
+
     }
-    //____ END :: Access Providers application ______
-
-
-//----------------------------------------------------------------------------
-
 
     public function export_csv(){
 
@@ -1124,6 +1015,10 @@ class DynamicDetailsController extends AppController {
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                )),
+                array('xtype' => 'buttongroup','title' => __('Preview'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-mobile',     'scale' => 'large', 'itemId' => 'mobile',    'tooltip'=> __('Mobile')),
+                    array('xtype' => 'button', 'iconCls' => 'b-desktop',    'scale' => 'large', 'itemId' => 'desktop',   'tooltip'=> __('Desktop')),
                 ))
                 
             );
