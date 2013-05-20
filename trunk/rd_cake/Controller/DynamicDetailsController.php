@@ -826,6 +826,124 @@ class DynamicDetailsController extends AppController {
         ));
 	}
 
+    public function index_pair(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];
+            $this->{$this->modelClass}->DynamicPair->contain();
+            $q_r = $this->{$this->modelClass}->DynamicPair->find('all', array('conditions' => array('DynamicPair.dynamic_detail_id' =>$dd_id)));
+            foreach($q_r as $i){
+                $id     = $i['DynamicPair']['id'];
+                $dd_id  = $i['DynamicPair']['dynamic_detail_id'];
+                $n      = $i['DynamicPair']['name'];
+                $v      = $i['DynamicPair']['value'];
+                $p      = $i['DynamicPair']['priority'];
+                array_push($items,
+                    array(
+                        'id'                => $id, 
+                        'dynamic_detail_id' => $dd_id, 
+                        'name'              => $n, 
+                        'value'             => $v,
+                        'priority'          => $p
+                    )
+                );
+            }
+        }
+        
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
+    public function add_pair() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
+
+        if ($this->{$this->modelClass}->DynamicPair->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->DynamicPair->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create item'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+	}
+
+    public function edit_pair() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+        $user       = $this->Aa->user_for_token($this);
+        $user_id    = $user['id'];
+
+        if ($this->{$this->modelClass}->DynamicPair->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->DynamicPair->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not create item'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+	}
+
+    public function delete_pair($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            //Get the filename to delete
+            $this->{$this->modelClass}->DynamicPair->id = $this->data['id'];
+            $this->{$this->modelClass}->DynamicPair->delete($this->{$this->modelClass}->DynamicPair->id,true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                //Get the filename to delete
+                $this->{$this->modelClass}->DynamicPair->id = $d['id'];
+                $this->{$this->modelClass}->DynamicPair->delete($this->{$this->modelClass}->DynamicPair->id,true);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+
     public function note_index(){
 
         //__ Authentication + Authorization __
@@ -1165,7 +1283,7 @@ class DynamicDetailsController extends AppController {
         ));
     }
 
-     public function menu_for_dynamic_pages(){
+    public function menu_for_dynamic_pages(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -1243,6 +1361,86 @@ class DynamicDetailsController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
+
+    public function menu_for_dynamic_pairs(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                ))   
+            );
+        }
+
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $action_group   = array();
+            $document_group = array();
+            $specific_group = array();
+
+            array_push($action_group,array(  
+                'xtype'     => 'button',
+                'iconCls'   => 'b-reload',  
+                'scale'     => 'large', 
+                'itemId'    => 'reload',   
+                'tooltip'   => __('Reload')));
+
+            //Add
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',     
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',      
+                    'tooltip'   => __('Add')));
+            }
+            //Delete
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-delete',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'delete',
+                    'disabled'  => true,   
+                    'tooltip'   => __('Delete')));
+            }
+
+            //Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-edit',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,     
+                    'tooltip'   => __('Edit')));
+            }
+
+           
+            $menu = array(
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group)
+                   );
+        }
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
 
 
     private function _find_parents($id){
