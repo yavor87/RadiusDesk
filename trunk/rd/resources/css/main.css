@@ -529,6 +529,14 @@
     background-image:url(../images/32x32/time_add.png);
 }
 
+.b-mobile {
+    background-image:url(../images/32x32/mobile.png);
+}
+
+.b-desktop {
+    background-image:url(../images/32x32/desktop.png);
+}
+
 
 .language16 {
     background-image:url(../images/16x16/language.png);
