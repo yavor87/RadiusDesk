@@ -68,6 +68,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlEditPage:        '/cake2/rd_cake/dynamic_details/edit_page.json',
         urlAddPair:         '/cake2/rd_cake/dynamic_details/add_pair.json',
         urlEditPair:        '/cake2/rd_cake/dynamic_details/edit_pair.json',
+        urlPreviewMobile:   '/rd_login_pages/mobile/CoovaChilli/index.html',
+        urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/index.html',
     },
     refs: [
          {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
@@ -98,6 +100,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
             },
             'gridDynamicDetails #csv'  : {
                 click:      me.csvExport
+            },
+            'gridDynamicDetails #mobile'  : {
+                click:      me.previewMobile
+            },
+            'gridDynamicDetails #desktop'  : {
+                click:      me.previewDesktop
             },
             'gridDynamicDetails'   : {
                 itemclick:  me.gridClick
@@ -1183,6 +1191,54 @@ Ext.define('Rd.controller.cDynamicDetails', {
 
                 }
             });
+        }
+    },
+    previewMobile: function(b){
+        var me          = this;
+        //Find out if there was something selected
+        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(me.getGridDynamicDetails().getSelectionModel().getCount() > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                var record = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+                window.open(me.urlPreviewMobile+"?dynamic_id="+record.getId())
+            }         
+        }
+    },
+    previewDesktop: function(b){
+         var me          = this;
+        //Find out if there was something selected
+        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(me.getGridDynamicDetails().getSelectionModel().getCount() > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                var record = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+                window.open(me.urlPreviewDesktop+"?dynamic_id="+record.getId())
+            }         
         }
     }
 });
