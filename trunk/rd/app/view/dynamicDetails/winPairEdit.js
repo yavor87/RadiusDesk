@@ -1,12 +1,12 @@
-Ext.define('Rd.view.dynamicDetails.winPageAdd', {
+Ext.define('Rd.view.dynamicDetails.winPairEdit', {
     extend: 'Ext.window.Window',
-    alias : 'widget.winPageAdd',
-    title : i18n('sAdd_own_page'),
+    alias : 'widget.winPairEdit',
+    title : i18n('sEdit_dynamic_pair'),
     layout: 'fit',
     autoShow: false,
-    width:    600,
-    height:   450,
-    iconCls: 'add',
+    width:    400,
+    height:   350,
+    iconCls: 'edit',
     dynamic_detail_id: undefined,
     grid:  undefined,
     items:  {
@@ -28,20 +28,33 @@ Ext.define('Rd.view.dynamicDetails.winPageAdd', {
         items       : [
             {
                 xtype           : 'textfield',
+                name            : "id",
+                hidden          : true
+            },
+            {
+                xtype           : 'textfield',
                 fieldLabel      : i18n('sName'),
                 name            : "name",
                 labelClsExtra   : 'lblRdReq',
                 allowBlank      : false
             },
             {
-                xtype           : 'htmleditor',
-                width           : 580,
-                height          : 250,
-                //fieldLabel      : i18n('sContent'),
-                name            : "content",
+                xtype           : 'textfield',
+                fieldLabel      : i18n('sValue'),
+                name            : "value",
                 labelClsExtra   : 'lblRdReq',
                 allowBlank      : false
-            }     
+            },
+            {
+                xtype           : 'numberfield',
+                name            : 'priority',
+                fieldLabel      : i18n('sPriority'),
+                value           : 1,
+                maxValue        : 20,
+                minValue        : 1,
+                labelClsExtra   : 'lblRdReq',
+                allowBlank      : false
+            }
         ],
         buttons: [
             {

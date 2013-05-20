@@ -1,12 +1,12 @@
 Ext.define('Rd.view.dynamicDetails.winPageEdit', {
     extend: 'Ext.window.Window',
     alias : 'widget.winPageEdit',
-    title : i18n('sAdd_photo'),
+    title : i18n('sEdit_own_page'),
     layout: 'fit',
     autoShow: false,
     width:    600,
     height:   450,
-    iconCls: 'add',
+    iconCls: 'edit',
     dynamic_detail_id: undefined,
     grid:  undefined,
     items:  {
