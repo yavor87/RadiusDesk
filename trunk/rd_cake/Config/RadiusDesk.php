@@ -42,6 +42,7 @@ $config['nas_types'][0]     = array('name' => 'Mikrotik',           'id' => 'Mik
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
 
 $config['paths']['dynamic_photos']      = "/cake2/rd_cake/webroot/img/dynamic_photos/";   
+$config['paths']['dynamic_detail_icon'] = "/cake2/rd_cake/webroot/img/dynamic_details/";
 
 //Define default settings for the users:
 $config['user_settings']['wallpaper']       = "9.jpg";
