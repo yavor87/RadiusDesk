@@ -69,7 +69,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlAddPair:         '/cake2/rd_cake/dynamic_details/add_pair.json',
         urlEditPair:        '/cake2/rd_cake/dynamic_details/edit_pair.json',
         urlPreviewMobile:   '/rd_login_pages/mobile/CoovaChilli/index.html',
-        urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/index.html',
+        urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html',
     },
     refs: [
          {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
