@@ -1,0 +1,295 @@
+.topPane {
+    background-color: #3D475C;
+}
+
+.centerPane {
+    background-color: #3D475C;
+}
+
+.bottomPane {
+    background-color: #3D475C;
+}
+
+.b-prev {
+    background-image:url(../images/big/prev.png);
+}
+
+.b-next {
+    background-image:url(../images/big/next.png);
+}
+
+.b-info {
+    background-image:url(../images/big/info.png);
+}
+
+.b-connect {
+    background-image:url(../images/big/connect.png);
+}
+
+.b-help {
+    background-image:url(../images/big/help.png);
+}
+
+.b-register {
+    background-image:url(../images/big/register.png);
+}
+
+.b-pay {
+    background-image:url(../images/big/pay.png);
+}
+
+.b-free {
+    background-image:url(../images/big/free.png);
+}
+
+.b-fast {
+    background-image:url(../images/big/fast.png);
+}
+
+.b-info-top {
+    background-image:url(../images/big/info-top.png);
+}
+
+.b-btn_connect {
+    background-image:url(../images/big/btn_connect.png);
+}
+
+
+
+.sessionClass {
+    padding: 5px;
+}
+.sessionClass > div {
+    clear: both;
+}
+
+.sessionClass div.alternate {
+    background-color: #f4f6f4;
+}
+
+.sessionClass .value {
+    color: #057612;
+    font-weight: normal;
+    font-size:140%;
+    padding: 5px;
+}
+
+.sessionClass .item {
+    color: #495982;
+    font-weight: bold;
+    font-size:140%;
+    padding: 5px;
+    width: 150px;
+    float: left;
+}
+
+.usageClass div.alternate {
+    background-color: #f4f6f4;
+}
+
+
+.usageClass .lbl {
+    padding: 5px;
+    color: #495982;
+    font-weight: bold;
+    font-size:140%;
+    width: 150px;
+    float: left
+}
+
+.usageClass .val {
+    padding: 5px;
+    color: #057612;
+    font-weight: normal;
+    font-size:140%;
+}
+
+.topButton.x-btn-pressed .x-btn-inner {
+    font-size:20px;
+    color: #3307d9;
+}
+
+.topButton .x-btn-inner{  
+    font-size:20px;
+    color: #6b6a72;
+}
+
+
+
+.fieldReq {
+    font-weight: bold;
+    color: #980820;
+}
+
+.fieldOpt {
+    font-weight: bold;
+    color: #6b6a72;
+}
+
+/*Small icons */
+.free {
+    background-image:url(../images/generic/free.png);
+}
+
+.fast {
+    background-image:url(../images/generic/fast.png);
+}
+
+.connect {
+    background-image:url(../images/generic/connect.png);
+}
+
+.info {
+    background-image:url(../images/16x16/info.png);
+}
+
+.key {
+    background-image:url(../images/16x16/key.png);
+}
+
+.help {
+    background-image:url(../images/16x16/help.png);
+}
+
+
+.regMsg {
+    padding: 5px;
+    margin: 5px;
+    font-size:130%;
+    color: #6b6a72;
+}
+
+.regMsg div {
+    color: #96989f;
+    font-size:150%;
+    margin: 5px 5px 5px 0px;
+}
+
+.regMsg span.email {
+     color: blue;
+}
+
+.regMsg div.redFrm {
+    height: 200px;
+    padding: 5px;
+    margin: 5px;
+    border-style:solid !important;
+    border-color:#ff0a0a !important;
+    font-size:12px;
+}
+
+.regMsg div.redWarn{
+    font-size:22px;
+    color: #ff0a0a !important;
+    font-weight: bold;
+}
+
+.regMsg div.detail{
+    font-size:16px;
+}
+
+.ccFeedbackClass div.head {
+    color: #96989f;
+    font-size:130%;
+    margin: 5px 5px 5px 0px;
+    text-align: center;
+}
+
+.ccFeedbackClass div.msg {
+    color: #009800;
+    font-size:105%;
+    margin: 20px 5px 5px 20px;
+}
+.ccFeedbackClass div.msg_err {
+    color: #d92435;
+    font-size:105%;
+    margin: 20px 5px 5px 20px;
+}
+
+.ccFeedbackClass .item {
+    padding: 5px;
+    margin: 5px;
+    font-size:95%;
+    color: #6b6a72;
+}
+
+.ccFeedbackClass .value {
+    padding: 5px;
+    margin: 5px;
+    font-size:95%;
+    color: #270ded;
+}
+
+/* Splash Screen stuff */
+.x-mask.splashscreen {
+    background-color: white;
+    opacity: 1;
+}
+
+.x-mask-msg.splashscreen,
+.x-mask-msg.splashscreen div {
+    font-size: 16px;
+    padding: 30px 5px 5px 5px;
+    border: none;
+    background-color: transparent;
+    background-position: top center;
+}
+
+.x-message-box .x-window-body .x-box-inner {
+    min-height: 110px !important;
+}
+
+.x-splash-icon {
+    /* Important required due to the loading symbols CSS selector */
+    background-image: url('../images/splash.gif') !important;
+    margin-top: -30px;
+    margin-bottom: 10px;
+    min-height: 100px !important;
+}
+
+.divAbout {
+    margin: 5px;
+}
+
+.imgAbout {
+    text-align: center;
+}
+
+.lblAbout {
+    float:left;
+    padding: 5px;
+    color: #495982;
+    font-weight: bold;
+    width:80px;
+}
+.lblInfo{
+    padding: 5px;
+}
+
+.cntrOR {
+    text-align: center;
+    font-size:18px;
+    color: #6b6a72;
+    font-weight: bold;
+}
+
+.st {
+    font-weight: bold;
+    color: #495982;
+}
+
+.dyn {
+    color: #057612;
+}
+
+.winHelp {
+    padding: 10px;
+}
+
+.winHelp h2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #526b9d;
+    font-size:18px;
+}
+
