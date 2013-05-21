@@ -78,6 +78,14 @@ class DynamicDetailsController extends AppController {
 
     }
 
+    public function chilli_browser_detect(){
+        $redir_to = Configure::read('CoovaDynamicLogin.desktop').$_SERVER['QUERY_STRING'];
+        if($this->request->is('mobile')){
+            $redir_to = Configure::read('CoovaDynamicLogin.mobile').$_SERVER['QUERY_STRING'];
+        }
+        $this->response->header('Location', $redir_to);
+    }
+
     public function export_csv(){
 
         $this->autoRender   = false;
@@ -514,7 +522,7 @@ class DynamicDetailsController extends AppController {
                         'title'             => $t, 
                         'description'       => $d, 
                         'file_name'         => $f,
-                        'img'               => "/cake2/rd_cake/webroot/files/image.php/image-name.jpg?width=200&height=200&image=".$location
+                        'img'               => "/cake2/rd_cake/webroot/files/image.php?width=200&height=200&image=".$location
                     )
                 );
             }
