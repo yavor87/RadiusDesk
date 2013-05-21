@@ -11,24 +11,12 @@ class DynamicDetailsController extends AppController {
     public function info_for(){
 
         $items = array();
-        if(isset($this->request->query['dynamic_id'])){
+
+        if(isset($this->request->query['dynamic_id'])){ //preview link will call this page ?dynamic_id=<id>
+
             $this->{$this->modelClass}->contain('DynamicPage','DynamicPhoto');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
             if($q_r){
-                $items['detail']['name']            = $q_r['DynamicDetail']['name'];
-                $items['detail']['icon_file_name']  = Configure::read('paths.dynamic_detail_icon').$q_r['DynamicDetail']['icon_file_name'];
-                $items['detail']['phone']           = $q_r['DynamicDetail']['phone'];
-                $items['detail']['fax']             = $q_r['DynamicDetail']['fax'];
-                $items['detail']['cell']            = $q_r['DynamicDetail']['cell'];
-                $items['detail']['email']           = $q_r['DynamicDetail']['email'];
-                $items['detail']['url']             = $q_r['DynamicDetail']['url'];
-                $items['detail']['street_no']       = $q_r['DynamicDetail']['street_no'];
-                $items['detail']['street']          = $q_r['DynamicDetail']['street'];
-                $items['detail']['town_suburb']     = $q_r['DynamicDetail']['town_suburb'];
-                $items['detail']['city']            = $q_r['DynamicDetail']['city'];
-                $items['detail']['country']         = $q_r['DynamicDetail']['country'];
-                $items['detail']['lon']             = $q_r['DynamicDetail']['lon'];
-                $items['detail']['lat']             = $q_r['DynamicDetail']['lat'];
                 //Modify the photo path:
                 $c = 0;
                 foreach($q_r['DynamicPhoto'] as $i){
@@ -38,6 +26,48 @@ class DynamicDetailsController extends AppController {
                 $items['photos']                    = $q_r['DynamicPhoto'];
                 $items['pages']                     = $q_r['DynamicPage'];
             }
+
+        }else{ //Build a query since it was not called from the preview link
+            $conditions = array("OR" =>array());
+      
+            foreach(array_keys($this->request->query) as $key){
+                array_push($conditions["OR"],
+                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+                ); //OR query all the keys
+            }
+            $this->{$this->modelClass}->DynamicPair->contain(array('DynamicDetail' => array('DynamicPhoto','DynamicPage')));
+            $q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
+                array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
+
+            if($q_r){
+                
+                //Modify the photo path:
+                $c = 0;
+                foreach($q_r['DynamicDetail']['DynamicPhoto'] as $i){
+                    $q_r['DynamicDetail']['DynamicPhoto'][$c]['file_name'] = Configure::read('paths.dynamic_photos').$i['file_name'];
+                    $c++;
+                }
+                $items['photos']                    = $q_r['DynamicDetail']['DynamicPhoto'];
+                $items['pages']                     = $q_r['DynamicDetail']['DynamicPage'];
+            }
+        }
+
+        //Get the detail for the page
+        if($q_r){
+            $items['detail']['name']            = $q_r['DynamicDetail']['name'];
+            $items['detail']['icon_file_name']  = Configure::read('paths.dynamic_detail_icon').$q_r['DynamicDetail']['icon_file_name'];
+            $items['detail']['phone']           = $q_r['DynamicDetail']['phone'];
+            $items['detail']['fax']             = $q_r['DynamicDetail']['fax'];
+            $items['detail']['cell']            = $q_r['DynamicDetail']['cell'];
+            $items['detail']['email']           = $q_r['DynamicDetail']['email'];
+            $items['detail']['url']             = $q_r['DynamicDetail']['url'];
+            $items['detail']['street_no']       = $q_r['DynamicDetail']['street_no'];
+            $items['detail']['street']          = $q_r['DynamicDetail']['street'];
+            $items['detail']['town_suburb']     = $q_r['DynamicDetail']['town_suburb'];
+            $items['detail']['city']            = $q_r['DynamicDetail']['city'];
+            $items['detail']['country']         = $q_r['DynamicDetail']['country'];
+            $items['detail']['lon']             = $q_r['DynamicDetail']['lon'];
+            $items['detail']['lat']             = $q_r['DynamicDetail']['lat'];
         }
 
         $this->set(array(
