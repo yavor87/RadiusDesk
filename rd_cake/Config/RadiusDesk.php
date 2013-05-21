@@ -51,6 +51,10 @@ $config['user_settings']['map']['zoom']     = 18;
 $config['user_settings']['map']['lng']      = -71.0955740216735;
 $config['user_settings']['map']['lat']      = 42.3379770178396;
 
+//The location of the mobile and desktop login pages for CoovaChilli
+$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
+$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html';
+
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
