@@ -16,8 +16,8 @@ var rdDynamic = (function () {
     //Public -> Add Dynamic info
     var addDynamicInfo = function(){
         var retInfo;
-        var url = co.dynUrl;
-        $.getJSON(url, $.getUrlVars(), function(j) { //We send the ruery string along
+        var url = co.dynUrl+document.location.search;
+        $.getJSON(url, null, function(j) { //We send the ruery string along
 
             //______________________________________
             //____Add the photo's if there are any

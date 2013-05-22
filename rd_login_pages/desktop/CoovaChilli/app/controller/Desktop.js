@@ -43,21 +43,10 @@ Ext.define('CoovaLogin.controller.Desktop', {
 
     startUp: function(){
         var me = this;  
-
-         //____ ADD ON HACK FOR DYNAMIC PAGES ____ 
-        var dflt = 'localhost';
-        var pageParameters = Ext.urlDecode(window.location.search.substring(1));
-        if(pageParameters.dynamic_id != undefined){
-                //Override the default
-                dflt = pageParameters.dynamic_id;
-        }
-        //____ END of HACK ______________________
-    
-
+   
         Ext.Ajax.request({
-            url     : me.application.config.urlRealmInfo,
+            url     : me.application.config.urlRealmInfo+document.location.search,
             method  : 'GET',
-            params  : {'dynamic_id' : dflt},
             success : function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
