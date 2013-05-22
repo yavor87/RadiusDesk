@@ -5,8 +5,9 @@ var rdConnect = (function () {
 
     var uamIp,uamPort;  //Variables with 'global' scope
 
-    var urlUse          = 'http://10.1.0.1/c2/yfi_cake/third_parties/json_usage_check?key=12345&username='
-    var urlUam          = 'http://10.1.0.1/coova_json/uam.php';
+    var h               = document.location.hostname;
+    var urlUse          = 'http://'+h+'/c2/yfi_cake/third_parties/json_usage_check?key=12345&username='
+    var urlUam          = 'http://'+h+'/rd_login_pages/services/uam.php';
     var counter         = undefined; //refresh counter's id
     var timeUntilStatus = 20; //interval to refresh
     var refreshInterval = 20; //ditto
@@ -19,7 +20,7 @@ var rdConnect = (function () {
     var password        = undefined;
     var remember        = false;
 
-    var noStatus        = false;
+    var noStatus        = true;
     var redirectTo      = "http://google.com";
 
     var sessionData     = undefined;
