@@ -7,7 +7,7 @@ class DynamicDetailNote extends AppModel {
      public $belongsTo = array(
         'DynamicDetail' => array(
                     'className' => 'DynamicDetail',
-                    'foreignKey' => 'realm_id'
+                    'foreignKey' => 'dynamic_detail_id'
                     ),
         'Note' => array(
                     'className' => 'Note',
