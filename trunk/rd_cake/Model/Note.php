@@ -31,6 +31,7 @@ class Note extends AppModel {
         'TagNote'   => array('dependent'    => true),
         'RealmNote' => array('dependent'    => true),
         'UserNote'  => array('dependent'    => true),
-        'ProfileComponentNote'  => array('dependent'    => true)
+        'ProfileComponentNote'  => array('dependent'    => true),
+        'DynamicDetailNote'  => array('dependent'    => true)
     );
 }
