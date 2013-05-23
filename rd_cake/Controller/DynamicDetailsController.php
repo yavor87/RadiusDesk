@@ -405,12 +405,39 @@ class DynamicDetailsController extends AppController {
         }
 
 	    if(isset($this->data['id'])){   //Single item delete
-            $message = "Single item ".$this->data['id'];
+
+            //First find all the photos for this item then delete them
+            $this->{$this->modelClass}->contain('DynamicPhoto');
+            $q_r = $this->{$this->modelClass}->findById($this->data['id']);
+            foreach($q_r['DynamicPhoto'] as $i){
+                $file_to_delete = IMAGES."/dynamic_photos/".$i['file_name'];
+                $this->{$this->modelClass}->DynamicPhoto->id = $i['id'];
+                if($this->{$this->modelClass}->DynamicPhoto->delete($this->{$this->modelClass}->DynamicPhoto->id,true)){
+                        if(file_exists($file_to_delete)){
+                            unlink($file_to_delete);
+                        }
+                }
+            }
+
             $this->DynamicDetail->id = $this->data['id'];
             $this->DynamicDetail->delete($this->DynamicDetail->id,true);
       
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
+
+                //First find all the photos for this item then delete them
+                $this->{$this->modelClass}->contain('DynamicPhoto');
+                $q_r = $this->{$this->modelClass}->findById($d['id']);
+                foreach($q_r['DynamicPhoto'] as $i){
+                    $file_to_delete = IMAGES."/dynamic_photos/".$i['file_name'];
+                    $this->{$this->modelClass}->DynamicPhoto->id = $i['id'];
+                    if($this->{$this->modelClass}->DynamicPhoto->delete($this->{$this->modelClass}->DynamicPhoto->id,true)){
+                            if(file_exists($file_to_delete)){
+                                unlink($file_to_delete);
+                            }
+                    }
+                }
+
                 $this->DynamicDetail->id = $d['id'];
                 $this->DynamicDetail->delete($this->DynamicDetail->id,true);
             }
@@ -473,8 +500,8 @@ class DynamicDetailsController extends AppController {
 
         $path_parts     = pathinfo($_FILES['photo']['name']);
         $unique         = time();
-        $dest           = IMAGES."dynamic_logos/".$unique.'.'.$path_parts['extension'];
-        $dest_www       = "/cake2/rd_cake/webroot/img/dynamic_logos/".$unique.'.'.$path_parts['extension'];
+        $dest           = IMAGES."dynamic_details/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/dynamic_details/".$unique.'.'.$path_parts['extension'];
 
         //Now add....
         $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
