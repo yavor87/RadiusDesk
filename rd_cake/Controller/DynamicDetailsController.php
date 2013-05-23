@@ -79,9 +79,9 @@ class DynamicDetailsController extends AppController {
     }
 
     public function chilli_browser_detect(){
-        $redir_to = Configure::read('CoovaDynamicLogin.desktop').$_SERVER['QUERY_STRING'];
+        $redir_to = Configure::read('CoovaDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
         if($this->request->is('mobile')){
-            $redir_to = Configure::read('CoovaDynamicLogin.mobile').$_SERVER['QUERY_STRING'];
+            $redir_to = Configure::read('CoovaDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
         }
         $this->response->header('Location', $redir_to);
     }
