@@ -5,7 +5,7 @@ Ext.define('Rd.view.components.pnlGMap', {
         'Rd.view.components.ajaxToolbar'
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_maps.json',
-    urlPhotoBase:   '/cake2/rd_cake/img/nas/',
+    urlPhotoBase:   '/cake2/rd_cake/webroot/img/nas/',
     markers     : [],
     infoWindows : [],
     infowindow  : undefined,

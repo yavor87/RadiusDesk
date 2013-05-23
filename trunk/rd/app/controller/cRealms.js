@@ -57,7 +57,7 @@ Ext.define('Rd.controller.cRealms', {
         urlExportCsv:       '/cake2/rd_cake/realms/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/realms/note_add.json',
         urlViewRealmDetail: '/cake2/rd_cake/realms/view.json',
-        urlLogoBase:        '/cake2/rd_cake/img/realms/',
+        urlLogoBase:        '/cake2/rd_cake/webroot/img/realms/',
         urlUploadLogo:      '/cake2/rd_cake/realms/upload_logo/',
     },
     refs: [

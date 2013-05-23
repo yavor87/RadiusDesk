@@ -51,7 +51,6 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                             Ext.ux.Constants.clsWarn,
                             Ext.ux.Constants.msgWarn
                         );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
                     }else{
                         var count       = me.down('dataview').getStore().getTotalCount();
                         me.down('#count').update({count: count});
@@ -66,7 +65,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
             multiSelect : true,
             tpl         : imageTpl,
             itemSelector: 'div.thumb-wrap',
-            emptyText   : 'No images available'
+            emptyText   : i18n('sNo_images_available')
         });
 
         me.items =  {

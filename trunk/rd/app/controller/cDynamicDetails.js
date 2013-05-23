@@ -59,9 +59,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlExportCsv:       '/cake2/rd_cake/dynamic_details/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/dynamic_details/note_add.json',
         urlViewDynamicDetail: '/cake2/rd_cake/dynamic_details/view.json',
-        urlLogoBase:        '/cake2/rd_cake/img/dynamic_details/',
+        urlLogoBase:        '/cake2/rd_cake/webroot/img/dynamic_details/',
         urlUploadLogo:      '/cake2/rd_cake/dynamic_details/upload_logo/',
-        urlPhotoBase:       '/cake2/rd_cake/img/dynamic_photos/', //NOTE This is actually declared in the pnlDynamicDetailPoto.js view file
         urlUploadPhoto:     '/cake2/rd_cake/dynamic_details/upload_photo/',
         urlEditPhoto:       '/cake2/rd_cake/dynamic_details/edit_photo/',
         urlAddPage:         '/cake2/rd_cake/dynamic_details/add_page.json',

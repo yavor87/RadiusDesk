@@ -74,7 +74,7 @@ Ext.define('Rd.controller.cNas', {
         urlMapDelete:       '/cake2/rd_cake/nas/delete_map.json',
         urlMapSave:         '/cake2/rd_cake/nas/edit_map.json',
         urlViewPhoto:       '/cake2/rd_cake/nas/view_photo.json',
-        urlPhotoBase:       '/cake2/rd_cake/img/nas/',
+        urlPhotoBase:       '/cake2/rd_cake/webroot/img/nas/',
         urlUploadPhoto:     '/cake2/rd_cake/nas/upload_photo/',
         urlGreenMark:       'resources/images/map_markers/green-dot.png',
         urlRedMark:         'resources/images/map_markers/red-dot.png', 

@@ -1,16 +1,17 @@
 Ext.define('Rd.view.realms.gridRealms' ,{
-    extend:'Ext.grid.Panel',
-    alias : 'widget.gridRealms',
-    store : 'sRealms',
-    stateful: true,
-    stateId: 'StateGridRealms',
-    stateEvents:['groupclick','columnhide'],
-    border: false,
-    requires: [
+    extend      :'Ext.grid.Panel',
+    alias       : 'widget.gridRealms',
+    multiSelect : true,
+    store       : 'sRealms',
+    stateful    : true,
+    stateId     : 'StateGridRealms',
+    stateEvents :['groupclick','columnhide'],
+    border      : false,
+    requires    : [
         'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu: '/cake2/rd_cake/realms/menu_for_grid.json',
-    bbar: [
+    urlMenu     : '/cake2/rd_cake/realms/menu_for_grid.json',
+    bbar        : [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],
     initComponent: function(){
