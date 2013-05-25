@@ -18,6 +18,8 @@ Ext.define('Rd.model.mPermanentUser', {
          {name: 'to_date'},
          'data_usage',
          'time_usage',
+         'data_cap',
+         'time_cap',
          {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'},
