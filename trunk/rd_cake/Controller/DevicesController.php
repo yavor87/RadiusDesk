@@ -1343,7 +1343,16 @@ class DevicesController extends AppController {
         $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
             array('Radreply.username' => $username), false
         );
-        //FIXME : ALSO Radacct and Radpostauth
+
+        $acct = ClassRegistry::init('Radacct'); //With devices we use callingstaton id instead of username
+        $acct->deleteAll( 
+            array('Radacct.callingstationid' => $username), false
+        );
+
+        $post_a = ClassRegistry::init('Radpostauth');
+        $post_a->deleteAll( 
+            array('Radpostauth.username' => $username), false
+        );
     }
 
     private function _is_sibling_of($parent_id,$user_id){
