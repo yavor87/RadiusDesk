@@ -123,6 +123,46 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 hidden      : true,
                 filter      : {type: 'string'}
             },
+            {
+                header: i18n('sData_used'),
+                dataIndex: 'data_cap',
+                width: 110,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
+            {
+                header: i18n('sTime_used'),
+                dataIndex: 'time_cap',
+                width: 110,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
