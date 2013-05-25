@@ -101,6 +101,9 @@ class User extends AppModel {
             'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, users WHERE users.username=Radreply.username AND users.id={$__cakeID__$}',
             'dependent'     => true
         ),
+        'Device' => array(
+            'dependent'     => true   
+        ),
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
