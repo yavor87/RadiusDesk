@@ -200,6 +200,8 @@ class PermanentUsersController extends AppController {
                     'last_reject_time'      => $i['User']['last_reject_time'],
                     'last_reject_nas'       => $i['User']['last_reject_nas'],
                     'last_reject_message'   => $i['User']['last_reject_message'],
+                    'data_cap'              => 80,
+                    'time_cap'              => 20,
                     'notes'     => $notes_flag
                 )
             );
@@ -1557,7 +1559,16 @@ class PermanentUsersController extends AppController {
             array('Radreply.username' => $username), false
         );
 
-        //FIXME : ALSO Radacct and Radpostauth
+        $acct = ClassRegistry::init('Radacct');
+        $acct->deleteAll( 
+            array('Radacct.username' => $username), false
+        );
+
+        $post_a = ClassRegistry::init('Radpostauth');
+        $post_a->deleteAll( 
+            array('Radpostauth.username' => $username), false
+        );
+
 
     }
 
