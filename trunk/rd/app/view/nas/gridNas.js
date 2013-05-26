@@ -143,10 +143,8 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 flex        : 1,
                 renderer    : function(value,metaData, record){
                     if(value != 'unknown'){
-                        //This is mega cool way to do it using Ext.Date.format      
-                        var start     = record.get('status_time').getTime();
-                        var now       = new Date().getTime();
-                        var online    = new Date((now-start));
+
+                        var online    = new Date((record.get('status_time')*1000));
                         if(value == 'up'){
                             return "<div class=\"fieldGreen\">"+i18n("sUp")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
                         }

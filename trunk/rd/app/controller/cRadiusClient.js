@@ -170,14 +170,17 @@ Ext.define('Rd.controller.cRadiusClient', {
     submitRequest: function(b){
         me = this;
         var form = b.up('form');
+        me.getPnlRadiusReply().setLoading(true, true);
         form.submit({
             clientValidation: true,
             url: me.urlRequest,
             success: function(form, action,b,c) {
+                me.getPnlRadiusReply().setLoading(false);
                 me.getPnlRadiusReply().update(action.result.data);
                 console.log(action.result); 
             },
             failure: function(form,action){
+                me.getPnlRadiusReply().setLoading(false);
                 console.log(form);
                 console.log(action); 
             }

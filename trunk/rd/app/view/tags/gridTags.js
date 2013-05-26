@@ -11,7 +11,7 @@ Ext.define('Rd.view.tags.gridTags' ,{
         'Rd.view.components.ajaxToolbar'
     ],
     viewConfig: {
-        loadMask:false
+        loadMask:true
     },
     urlMenu: '/cake2/rd_cake/tags/menu_for_grid.json',
     bbar: [
