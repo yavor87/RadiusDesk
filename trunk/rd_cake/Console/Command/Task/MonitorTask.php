@@ -23,7 +23,7 @@ class MonitorTask extends Shell {
     private function _show_header(){
         $this->out('<comment>==============================</comment>');
         $this->out('<comment>----------Monitor Tests-------</comment>');
-        $this->out('<comment>----------RADIUSdesk 2012-----</comment>');
+        $this->out('<comment>----------RADIUSdesk 2013-----</comment>');
         $this->out('<comment>______________________________</comment>');
     }
 
