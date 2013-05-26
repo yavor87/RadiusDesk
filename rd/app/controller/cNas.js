@@ -341,6 +341,7 @@ Ext.define('Rd.controller.cNas', {
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
+                            me.user_id = 0; //We do it a bit defferent on this one
                             var w = Ext.widget('winNasAddWizard',{
                                 id          :'winNasAddWizardId',
                                 startScreen : 'scrnConType',
