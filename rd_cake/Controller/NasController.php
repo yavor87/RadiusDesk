@@ -142,10 +142,10 @@ class NasController extends AppController {
             }else{
                 if($i['NaState'][0]['state'] == 1){
                     $status = 'up';
-                    $status_time = $i['NaState'][0]['modified'];
+                    $status_time = time() - strtotime($i['NaState'][0]['modified']); //Rather just set the uptime to avoid timzone issues
                 }else{
                     $status = 'down';
-                    $status_time = $i['NaState'][0]['modified'];
+                    $status_time = time() -  strtotime($i['NaState'][0]['modified']);
                 }
             }
 
@@ -928,6 +928,10 @@ class NasController extends AppController {
         }
 
         if ($this->{$this->modelClass}->save($this->request->data)) {
+
+            //If monitor was == off; clear the NaStates
+            $this->{$this->modelClass}->NaState->deleteAll(array('NaState.na_id' => $this->request->data['id']), false);
+
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
