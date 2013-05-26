@@ -42,18 +42,27 @@ class Na extends AppModel {
 	);
 
     public $hasMany = array(
-        'NaRealm',
-        'NaTag',
+        'NaRealm'   => array(
+            'dependent'     => true   
+        ),
+        'NaTag' => array(
+            'dependent'     => true   
+        ),
         'NaNote'    => array(
             'dependent'     => true   
         ),
-        'OpenvpnClient',
-        'PptpClient',
+        'OpenvpnClient' => array(
+            'dependent'     => true   
+        ),
+        'PptpClient'    => array(
+            'dependent'     => true   
+        ),
         //We are only interested in the last entry
         'NaState'   => array(
                         'limit'     => 1,
                         'className' => 'NaState',
-                        'order'     => 'NaState.created DESC'
+                        'order'     => 'NaState.created DESC',
+                        'dependent' => true
                     ),
     );
 
