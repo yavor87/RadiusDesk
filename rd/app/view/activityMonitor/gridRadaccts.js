@@ -57,9 +57,10 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                 renderer    : function(value,metaData, record){
                     if(value == null){
                         //This is mega cool way to do it using Ext.Date.format      
-                        var start     = record.get('acctstarttime').getTime();
-                        var now       = new Date().getTime();
-                        var online    = new Date((now-start));
+                        var now         = new Date();
+                        var tz_diff     = now.getTimezoneOffset()*60*1000;
+                        var elapsed     = Ext.Date.getElapsed(record.get('acctstarttime'));
+                        var online      = new Date((elapsed+tz_diff));
                         return "<div class=\"hasRight\">"+i18n("sActive")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
                     }else{
                         return value;

@@ -763,10 +763,12 @@ Ext.define('Rd.controller.cNas', {
                 if(record.get('status') == 'down'){
                     var s = i18n("sDown");
                 }
-                var start     = record.get('status_time').getTime();
-                var now       = new Date().getTime();
-                var online    = new Date((now-start));
-                t_i_s         = s+" "+Ext.Date.format(online, 'z:H:i:s');
+
+                var now         = new Date();
+                var tz_diff     = now.getTimezoneOffset()*60*1000;
+                var elapsed     = Ext.Date.getElapsed(record.get('status_time'));
+                var online      = new Date((elapsed+tz_diff));
+                t_i_s           = s+" "+Ext.Date.format(online, 'z:H:i:s');
             }
 
             var d  = Ext.apply({

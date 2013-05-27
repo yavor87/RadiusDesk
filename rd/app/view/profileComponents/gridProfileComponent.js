@@ -77,8 +77,8 @@ Ext.define('Rd.view.profileComponents.gridProfileComponent' ,{
                         },
                         failure: function(batch,options){
                             Ext.ux.Toaster.msg(
-                                i18n('sProblems_updating_the_right'),
-                                i18n('sRight_could_not_be_updated'),
+                                i18n('sProblems_updating_the_item'),
+                                i18n('sItem_could_not_be_updated'),
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
