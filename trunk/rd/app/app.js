@@ -78,10 +78,10 @@ Ext.application({
             IPAddressMask: /[\d\.]/i,
          
             MacAddress: function(v) {
-                return (/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/).test(v);
+                return (/^([a-fA-F0-9]{2}-){5}[a-fA-F0-9]{2}$/).test(v);
             },
-            MacAddressMask: /[a-fA-F0-9:]/,
-            MacAddressText: i18n('sExample') + ': 01:23:45:67:89:ab',
+            MacAddressMask: /[a-fA-F0-9\-]/,
+            MacAddressText: i18n('sExample') + ': 01-23-45-67-89-AB',
          
             DnsName: function(v) {
                 return (/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/).test(v);

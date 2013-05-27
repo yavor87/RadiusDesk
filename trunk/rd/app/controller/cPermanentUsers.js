@@ -65,7 +65,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
         urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json',
         urlEditTracking:    '/cake2/rd_cake/permanent_users/edit_tracking.json',
         urlEnableDisable:   '/cake2/rd_cake/permanent_users/enable_disable.json',
-        urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json'
+        urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json',
+        urlDevicesListedOnly:'/cake2/rd_cake/permanent_users/restrict_list_of_devices.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridPermanentUsers'}       
@@ -189,6 +190,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser gridUserDevices #reload' :{
                 click:      me.gridUserDevicesReload
+            },
+            'pnlPermanentUser gridUserDevices #chkListedOnly' :{
+                change:      me.gridUserDevicesListedOnly
             },
             'pnlPermanentUser gridUserPrivate' : {
                 activate:      me.gridActivate
@@ -929,6 +933,28 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var g   = button.up('gridUserRadaccts');
         g.getStore().load();
     },
+    gridUserDevicesListedOnly : function(chk){
+        var me          = this;
+        var username    = chk.up('gridUserDevices').username;
+        Ext.Ajax.request({
+            url: me.urlDevicesListedOnly,
+            method: 'GET',
+            params: {username : username, restrict : chk.getValue() },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    Ext.ux.Toaster.msg(
+                                i18n('sItem_updated'),
+                                i18n('sItem_updated_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                    );    
+                }   
+            },
+            scope: me
+        });
+    },
+
     genericDelete:   function(button){
         var me      = this;
         var grid    = button.up('grid');   

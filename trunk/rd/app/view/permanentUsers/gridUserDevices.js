@@ -14,9 +14,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
     },
     urlMenu: '/cake2/rd_cake/permanent_users/menu_for_user_devices.json',
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },
-        '->',
-        {   xtype: 'component', itemId: 'totals',  tpl: i18n('tpl_In_{in}_Out_{out}_Total_{total}'),   style: 'margin-right:5px', cls: 'lblRd' }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     columns: [
             {xtype: 'rownumberer'},
@@ -95,7 +93,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
             encode  : true, 
             local   : false
         };
-        me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
+        me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu+'?user_id='+me.user_id+'&username='+me.username});
         me.features = [filters];
 
         //Create a store specific to this Permanent User
