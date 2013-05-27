@@ -141,11 +141,11 @@ class NasController extends AppController {
                 $status_time = null;
             }else{
                 if($i['NaState'][0]['state'] == 1){
-                    $status = 'up';
-                    $status_time = time() - strtotime($i['NaState'][0]['modified']); //Rather just set the uptime to avoid timzone issues
+                    $status         = 'up';
+                    $status_time    = $i['NaState'][0]['modified'];
                 }else{
-                    $status = 'down';
-                    $status_time = time() -  strtotime($i['NaState'][0]['modified']);
+                    $status         = 'down';
+                    $status_time    = $i['NaState'][0]['modified'];
                 }
             }
 
