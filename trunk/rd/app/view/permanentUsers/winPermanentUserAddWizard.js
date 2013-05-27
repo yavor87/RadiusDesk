@@ -310,7 +310,7 @@ Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
                                     boxLabel    : i18n('sRADIUS_authentication'),
                                     name        : 'track_auth',
                                     inputValue  : 'track_auth',
-                                    checked     : true,
+                                    checked     : false, //Default not to track it
                                     boxLabelCls : 'lblRdCheck'
                                 },
                                 {

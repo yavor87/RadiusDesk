@@ -144,7 +144,11 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 renderer    : function(value,metaData, record){
                     if(value != 'unknown'){
 
-                        var online    = new Date((record.get('status_time')*1000));
+                        var now         = new Date();
+                        var tz_diff     = now.getTimezoneOffset()*60*1000;
+
+                        var elapsed     = Ext.Date.getElapsed(record.get('status_time'));
+                        var online      = new Date((elapsed+tz_diff));
                         if(value == 'up'){
                             return "<div class=\"fieldGreen\">"+i18n("sUp")+" "+Ext.Date.format(online, 'z:H:i:s')+"</div>";
                         }

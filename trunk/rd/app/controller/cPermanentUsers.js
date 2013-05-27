@@ -351,7 +351,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var r = s.getById(value);
         if(r != null){
             var cap = r.get('cap_in_profile');
-            console.log(cap);
+           // console.log(cap);
             if(cap){
                 cmbCap.setVisible(true);
                 cmbCap.setDisabled(false);
@@ -441,7 +441,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
 
       edit:   function(){
-        console.log("Edit node");  
+       // console.log("Edit node");  
         var me = this;
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getGrid().getSelectionModel().getCount();
@@ -723,8 +723,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
     btnNoteAddNext: function(button){
         var me      = this;
         var win     = button.up('winNoteAdd');
-        console.log(win.noteForId);
-        console.log(win.noteForGrid);
+       // console.log(win.noteForId);
+       // console.log(win.noteForGrid);
         win.refreshGrid.getStore().load();
         var form    = win.down('form');
         form.submit({
@@ -787,7 +787,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     changePassword: function(){
         var me = this;
-        console.log("Changing password");
+     //   console.log("Changing password");
          //Find out if there was something selected
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
@@ -917,7 +917,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     gridUserRadpostauthsReload: function(button){
         var me  = this;
         var g = button.up('gridUserRadpostauths');
-        g.getStore().reload();
+        g.getStore().load();
     },
     gridUserDevicesReload: function(button){
         var me  = this;
@@ -926,13 +926,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     gridUserRadacctsReload: function(button){
         var me  = this;
-        var g = button.up('gridUserRadaccts');
-        g.getStore().reload();
+        var g   = button.up('gridUserRadaccts');
+        g.getStore().load();
     },
     genericDelete:   function(button){
         var me      = this;
-        var grid    = button.up('grid');
-        console.log("Generic delete clicked...");    
+        var grid    = button.up('grid');   
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -1082,7 +1081,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     winClose:   function(){
         var me = this;
-        console.log("Clear interval");
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }
@@ -1093,7 +1091,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     cmbVendorChange: function(cmb){
         var me = this;
-        console.log("Combo thing changed");
         var value   = cmb.getValue();
         var grid    = cmb.up('gridUserPrivate');
         var attr    = grid.down('cmbAttribute');
@@ -1103,7 +1100,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     attrAdd: function(b){
         var me = this;
-        console.log("Add to specific template");
         var grid    = b.up('gridUserPrivate');
         var attr    = grid.down('cmbAttribute');
         var a_val   = attr.getValue();

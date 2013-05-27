@@ -262,7 +262,7 @@ Ext.define('Rd.controller.cDevices', {
         var r = s.getById(value);
         if(r != null){
             var cap = r.get('cap_in_profile');
-            console.log(cap);
+          //  console.log(cap);
             if(cap){
                 cmbCap.setVisible(true);
                 cmbCap.setDisabled(false);
@@ -390,7 +390,7 @@ Ext.define('Rd.controller.cDevices', {
         me.getGrid().down('#count').update({count: count});
     },
     edit:   function(){
-        console.log("Edit device");  
+      //  console.log("Edit device");  
         var me = this;
         //See if there are anything selected... if not, inform the user
         var sel_count = me.getGrid().getSelectionModel().getCount();
@@ -625,8 +625,8 @@ Ext.define('Rd.controller.cDevices', {
     btnNoteAddNext: function(button){
         var me      = this;
         var win     = button.up('winNoteAdd');
-        console.log(win.noteForId);
-        console.log(win.noteForGrid);
+      //  console.log(win.noteForId);
+      //  console.log(win.noteForGrid);
         win.refreshGrid.getStore().load();
         var form    = win.down('form');
         form.submit({
@@ -821,7 +821,7 @@ Ext.define('Rd.controller.cDevices', {
     gridDeviceRadpostauthsReload: function(button){
         var me  = this;
         var g = button.up('gridDeviceRadpostauths');
-        g.getStore().reload();
+        g.getStore().load();
     },
     onDeviceRadacctsActivate: function(g){
         var me = this;
@@ -834,12 +834,12 @@ Ext.define('Rd.controller.cDevices', {
     gridDeviceRadacctsReload: function(button){
         var me  = this;
         var g = button.up('gridDeviceRadaccts');
-        g.getStore().reload();
+        g.getStore().load();
     },
     genericDelete:   function(button){
         var me      = this;
         var grid    = button.up('grid');
-        console.log("Generic delete clicked...");    
+     //   console.log("Generic delete clicked...");    
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -878,7 +878,7 @@ Ext.define('Rd.controller.cDevices', {
     },
     winClose:   function(){
         var me = this;
-        console.log("Clear interval");
+       // console.log("Clear interval");
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }
@@ -889,7 +889,7 @@ Ext.define('Rd.controller.cDevices', {
     },
     cmbVendorChange: function(cmb){
         var me = this;
-        console.log("Combo thing changed");
+       // console.log("Combo thing changed");
         var value   = cmb.getValue();
         var grid    = cmb.up('gridDevicePrivate');
         var attr    = grid.down('cmbAttribute');
@@ -899,7 +899,7 @@ Ext.define('Rd.controller.cDevices', {
     },
     attrAdd: function(b){
         var me = this;
-        console.log("Add to specific template");
+      //  console.log("Add to specific template");
         var grid    = b.up('gridDevicePrivate');
         var attr    = grid.down('cmbAttribute');
         var a_val   = attr.getValue();

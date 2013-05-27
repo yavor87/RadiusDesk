@@ -75,6 +75,11 @@ Ext.define('Rd.patch.window.Window', {
                 //Only if there were previously saved ones
                 if (Ext.util.Cookies.get(me.getId()+"_WinPosX") != null){
                     pos[0] = parseInt(Ext.util.Cookies.get(me.getId()+"_WinPosX"));
+                }else{
+                    if(pos[0] < 0){ //The bug sets it to -1000; we set x and y here if that condition happen
+                        pos[0] = 100;
+                        pos[1] = 50;
+                    }
                 }
 
                 if (Ext.util.Cookies.get(me.getId()+"_WinPosY") != null){
