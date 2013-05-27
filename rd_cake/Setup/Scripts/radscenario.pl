@@ -104,6 +104,7 @@ my $radclient = "/usr/local/bin/radclient";
 
 
 my @scenario_string = ("auth User-Name=$username User-Password=$password",
+
                        );
 
 if($disconn_flag){
