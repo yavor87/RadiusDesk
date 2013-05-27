@@ -192,7 +192,8 @@ class DevicesController extends AppController {
             $this->request->data['active'] = 1;
         }
 
-        //FIXME we should probably check if the AP this user rule.....
+        //Ensure the MAC is UC
+        $this->request->data['name'] = strtoupper($this->request->data['name']);
 
         //The rest of the attributes should be same as the form..
         $this->{$this->modelClass}->create();

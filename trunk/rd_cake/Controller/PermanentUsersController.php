@@ -953,6 +953,32 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+    //Adds of removes the special Rd-Mac-Check check attribute to a permanent user to restrict the devices they can use
+    public function restrict_list_of_devices(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if((isset($this->request->query['username']))&&(isset($this->request->query['restrict']))){
+            $username = $this->request->query['username'];
+            if($this->request->query['restrict'] == 'true'){
+                $this->_replace_radcheck_item($username,'Rd-Mac-Check',1);       
+            }else{
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Mac-Check'), false
+                ); 
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
     public function change_password(){
 
         //__ Authentication + Authorization __
@@ -1397,11 +1423,34 @@ class PermanentUsersController extends AppController {
         //Empty by default
         $menu = array();
 
+        $checked = false;
+        if(isset($this->request->query['username'])){
+            $count = $this->{$this->modelClass}->Radcheck->find('count',array('conditions' => 
+                array(
+                    'Radcheck.username'     => $this->request->query['username'], 
+                    'Radcheck.attribute'    => 'Rd-Mac-Check',
+                    'Radcheck.value'        => '1',
+                )
+            ));
+            if($count > 0){
+                $checked = true;
+            }
+        }
+        
+
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')), 
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 
+                            'xtype'         => 'checkbox', 
+                            'boxLabel'      => 'Connect only from listed devices', 
+                            'itemId'        => 'chkListedOnly',
+                            'checked'       => $checked, 
+                            'boxLabelCls'   => 'lblRdCheck',
+                            'margin'        => 5
+                        )
                 )) 
             );
         }
