@@ -1,6 +1,7 @@
 <?php
 class FreeRadiusController extends AppController {
 
+
     public $name       = 'PhpPhrases';
     public $components = array('Aa');
 
