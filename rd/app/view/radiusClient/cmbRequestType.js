@@ -18,7 +18,7 @@ Ext.define('Rd.view.radiusClient.cmbRequestType', {
             fields: ['id', 'text'],
             data : [
                 {"id":"auth",       "text": i18n("sAuthentication")},
-                {"id":"acct",       "text": i18n("sAccounting")}
+               // {"id":"acct",       "text": i18n("sAccounting")}
             ]
         });
         me.store = s;
