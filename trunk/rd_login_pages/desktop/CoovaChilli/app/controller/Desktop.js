@@ -82,6 +82,12 @@ Ext.define('CoovaLogin.controller.Desktop', {
             var i = this.getImg();
             i.setSrc(me.application.config.urlBase+me.photos[me.currentPhoto].file_name); 
         } 
+
+        //Check if we need to show Help Window
+        if(me.application.showHelp){
+            console.log("Start by showing help");
+            me.winHelpCreate();
+        }
     },
     //____________________________ SLIDE SHOW _______________________________
 
@@ -137,17 +143,7 @@ Ext.define('CoovaLogin.controller.Desktop', {
             return;
         }
         if(butId == 'help'){
-            var html_string = ''
-            Ext.Array.forEach(me.pages,function(item,index,arr){
-                html_string =  html_string+"<h2>"+item.name+"</h2>"+item.content+"<br>";
-
-            },me);
-            if(me.winHelp == undefined){
-                me.winHelp = me.getView('winHelp').create({'html':html_string});
-                me.winHelp.show();
-            }else{
-                me.winHelp.show();
-            }
+            me.winHelpCreate();
             return;
         }
 
@@ -161,7 +157,24 @@ Ext.define('CoovaLogin.controller.Desktop', {
         }        
         //me.application.activeWindow.show();
     },
+    winHelpCreate: function(){
+        me              = this;
+        var html_string = '';
+        Ext.Array.forEach(me.pages,function(item,index,arr){
+            html_string =  html_string+"<h2>"+item.name+"</h2>"+item.content+"<br>";
 
+        },me);
+        if(me.winHelp == undefined){
+            me.winHelp = me.getView('winHelp').create({'html':html_string});
+            me.winHelp.show();
+        }else{
+            me.winHelp.show();
+        }
+    },
+    activateHelp: function(){
+        me  = this;
+        me.startWithHelp = true;
+    },
     winHelpDestroy: function(w){
         var me = this;
         me.winHelp = undefined;

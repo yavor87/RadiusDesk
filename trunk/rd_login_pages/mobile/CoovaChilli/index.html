@@ -26,6 +26,8 @@
 			
 		$(document).ready(function(){
 
+            
+
             //___ Dynamic content ____
             var h       = document.location.hostname;
             var dynUrl  = "http://"+h+"/cake2/rd_cake/dynamic_details/info_for.json";
@@ -40,6 +42,17 @@
              //   console.log("Not a hotspot");
           //  } 
             //___ END Dynamic Content ____
+
+            //If it is a preview page....
+            $('#Help').on('pageshow',function(e){
+                if($.getUrlVar('dynamic_id') != undefined){
+                    $('#previewHeading').text("Mobile preview");
+                    document.title = "Mobile preview";
+                    return
+                }
+            });
+            $.mobile.changePage('#Help');
+           
 
 
             //______ Connect part ______
@@ -190,7 +203,7 @@
 <div data-role="page" data-add-back-btn="false" id="Help">
 
 	<div data-role="header" data-position="fixed" data-theme="b">
-		<h1>Help</h1>
+		<h1 id="previewHeading">Help</h1>
 	</div>
 
 	<div data-role="content" id="HelpContent">	

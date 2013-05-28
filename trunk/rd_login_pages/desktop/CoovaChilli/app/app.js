@@ -54,7 +54,7 @@ Ext.application({
         redirectTo  : "http://google.com"
     },
     //____ End of Configuration settings _____
-
+    showHelp: false,
     //This is an enhancement which will auto appen the user's realm when they log in etc.
     realm: {
         name: false,
