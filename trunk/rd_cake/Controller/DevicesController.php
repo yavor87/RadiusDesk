@@ -193,7 +193,7 @@ class DevicesController extends AppController {
         }
 
         //Ensure the MAC is UC
-        $this->request->data['name'] = strtoupper($this->request->data['name']);
+        $this->request->data['name'] = strtolower($this->request->data['name']);
 
         //The rest of the attributes should be same as the form..
         $this->{$this->modelClass}->create();
