@@ -112,7 +112,7 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                     blankText   : i18n('sSupply_a_value'),
                                     labelClsExtra: 'lblRdReq',
                                     vtype       : 'MacAddress',
-                                    fieldStyle  : 'text-transform:uppercase'
+                                    fieldStyle  : 'text-transform:lowercase'
                                 },
                                 {
                                     xtype       : 'textfield',
