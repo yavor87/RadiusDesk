@@ -32,7 +32,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=148 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=149 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `acos` (
 
 LOCK TABLES `acos` WRITE;
 /*!40000 ALTER TABLE `acos` DISABLE KEYS */;
-INSERT INTO `acos` VALUES (35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',117,126),(29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,110),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',111,116),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,101),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',102,109),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',112,113),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',114,115),(67,31,NULL,NULL,'Realms','',31,50),(68,67,NULL,NULL,'index','',32,33),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',105,106),(42,32,NULL,NULL,'View users or vouchers not created self','',103,104),(43,31,NULL,NULL,'Vouchers','',3,6),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',7,10),(46,45,NULL,NULL,'index','',8,9),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',107,108),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',11,30),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',12,13),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',14,15),(61,58,NULL,NULL,'edit','',16,17),(62,58,NULL,NULL,'delete','',18,19),(65,58,NULL,NULL,'change_password','',20,21),(69,67,NULL,NULL,'add','',34,35),(70,67,NULL,NULL,'edit','',36,37),(71,67,NULL,NULL,'delete','',38,39),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',51,70),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',52,53),(104,102,NULL,NULL,'add','',54,55),(105,102,NULL,NULL,'edit','',56,57),(106,102,NULL,NULL,'delete','',58,59),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',71,90),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',72,73),(109,107,NULL,NULL,'add','',74,75),(110,107,NULL,NULL,'edit','',76,77),(111,107,NULL,NULL,'delete','',78,79),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',60,61),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',80,81),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',82,83),(115,107,NULL,NULL,'note_index','List notes',84,85),(116,107,NULL,NULL,'note_add','',86,87),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',88,89),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',62,63),(119,102,NULL,NULL,'note_index','List notes',64,65),(120,102,NULL,NULL,'note_add','',66,67),(121,102,NULL,NULL,'note_del','',68,69),(122,67,NULL,NULL,'export_csv','',40,41),(123,67,NULL,NULL,'index_for_filter','',42,43),(124,67,NULL,NULL,'note_index','',44,45),(125,67,NULL,NULL,'note_add','',46,47),(126,67,NULL,NULL,'note_del','',48,49),(127,58,NULL,NULL,'export_csv','',22,23),(128,58,NULL,NULL,'note_index','',24,25),(129,58,NULL,NULL,'note_add','',26,27),(130,58,NULL,NULL,'note_del','',28,29),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',91,96),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',92,93),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',94,95),(146,35,'Realm',30,'Residence Inn',NULL,124,125),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',97,100),(138,137,NULL,NULL,'index','',98,99),(142,35,'DynamicDetail',3,'Green Earth',NULL,122,123);
+INSERT INTO `acos` VALUES (35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',117,128),(29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,110),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',111,116),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,101),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',102,109),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',112,113),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',114,115),(67,31,NULL,NULL,'Realms','',31,50),(68,67,NULL,NULL,'index','',32,33),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',105,106),(42,32,NULL,NULL,'View users or vouchers not created self','',103,104),(43,31,NULL,NULL,'Vouchers','',3,6),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',7,10),(46,45,NULL,NULL,'index','',8,9),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',107,108),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',11,30),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',12,13),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',14,15),(61,58,NULL,NULL,'edit','',16,17),(62,58,NULL,NULL,'delete','',18,19),(65,58,NULL,NULL,'change_password','',20,21),(69,67,NULL,NULL,'add','',34,35),(70,67,NULL,NULL,'edit','',36,37),(71,67,NULL,NULL,'delete','',38,39),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',51,70),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',52,53),(104,102,NULL,NULL,'add','',54,55),(105,102,NULL,NULL,'edit','',56,57),(106,102,NULL,NULL,'delete','',58,59),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',71,90),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',72,73),(109,107,NULL,NULL,'add','',74,75),(110,107,NULL,NULL,'edit','',76,77),(111,107,NULL,NULL,'delete','',78,79),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',60,61),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',80,81),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',82,83),(115,107,NULL,NULL,'note_index','List notes',84,85),(116,107,NULL,NULL,'note_add','',86,87),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',88,89),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',62,63),(119,102,NULL,NULL,'note_index','List notes',64,65),(120,102,NULL,NULL,'note_add','',66,67),(121,102,NULL,NULL,'note_del','',68,69),(122,67,NULL,NULL,'export_csv','',40,41),(123,67,NULL,NULL,'index_for_filter','',42,43),(124,67,NULL,NULL,'note_index','',44,45),(125,67,NULL,NULL,'note_add','',46,47),(126,67,NULL,NULL,'note_del','',48,49),(127,58,NULL,NULL,'export_csv','',22,23),(128,58,NULL,NULL,'note_index','',24,25),(129,58,NULL,NULL,'note_add','',26,27),(130,58,NULL,NULL,'note_del','',28,29),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',91,96),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',92,93),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',94,95),(146,35,'Realm',30,'Residence Inn',NULL,124,125),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',97,100),(138,137,NULL,NULL,'index','',98,99),(142,35,'DynamicDetail',3,'SA Coast - Struisbaai',NULL,122,123),(148,35,'Realm',31,'Holiday Inn',NULL,126,127);
 /*!40000 ALTER TABLE `acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +199,7 @@ CREATE TABLE `auto_macs` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +227,7 @@ CREATE TABLE `auto_setups` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +334,7 @@ CREATE TABLE `device_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,7 +367,7 @@ CREATE TABLE `devices` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -376,7 +376,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (17,'00:00:00:00:00:00','Test1',1,NULL,NULL,NULL,NULL,NULL,166,'2013-05-27 05:59:23','2013-05-27 05:59:23');
+INSERT INTO `devices` VALUES (19,'d0-31-10-00-04-f3','Tablet',1,'2013-05-28 14:04:24','2013-05-28 13:10:02','192.168.1.1','192.168.1.1','Most likely PEAP failure=3B run in debug',166,'2013-05-28 08:38:05','2013-05-28 12:12:28'),(20,'08-00-27-90-61-ae','Linux VM',1,NULL,NULL,NULL,NULL,NULL,166,'2013-05-28 08:59:00','2013-05-28 08:59:00');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -444,7 +444,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'Green Earth',1,'1369296799.png','27128037032','27128037033','27128037034','green.earth@gmail.com','http://www.greenearth.com','100','President Street','Silverton','Pretoria','South Africa',0,0,44,'2013-05-23 09:57:09','2013-05-23 10:13:19');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-05-28 15:10:06');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -523,7 +523,7 @@ CREATE TABLE `dynamic_photos` (
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `title` (`title`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,7 +532,7 @@ CREATE TABLE `dynamic_photos` (
 
 LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
-INSERT INTO `dynamic_photos` VALUES (11,3,'Open sky','Fill your lungs with fresh air','1369297614.jpg','2013-05-23 10:16:10','2013-05-23 10:26:54'),(12,3,'Beautiful trails to enjoy','There are plenty places to go and visit on foot','1369297678.jpg','2013-05-23 10:17:08','2013-05-23 10:27:58'),(13,3,'Hug a tree','.... or just enjoy it\'s shade','1369297089.jpg','2013-05-23 10:18:09','2013-05-23 10:18:09'),(14,3,'Castles in the air?','No just across the road','1369297138.jpg','2013-05-23 10:18:58','2013-05-23 10:18:58'),(15,3,'Tiptoe through the tulips','Tiny Tim, eat your heart out!','1369297291.jpg','2013-05-23 10:21:31','2013-05-23 10:21:31');
+INSERT INTO `dynamic_photos` VALUES (16,3,'Animals Welcome','Nice long beaches to go for a walk','1369745727.jpg','2013-05-28 14:55:27','2013-05-28 14:55:27'),(17,3,'Fresh fish daily','The best yellowtail in South Africa','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01'),(18,3,'Whiskey on the rocks?','.... or your favourite softdrink','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04'),(19,3,'Castles in the sand','Lots of sand for the kids to play in','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30'),(20,3,'Rocks rocks rocks','Nature\'s own obstacle course  ','1369746199.jpg','2013-05-28 15:03:19','2013-05-28 15:03:19'),(21,3,'And a road of my own','With the city and the rat race behind me','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04'),(22,3,'Sounds of the sea','Where land and water meet','1369746423.jpg','2013-05-28 15:07:03','2013-05-28 15:07:03');
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -604,7 +604,7 @@ CREATE TABLE `na_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -630,7 +630,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -639,7 +639,7 @@ CREATE TABLE `na_realms` (
 
 LOCK TABLES `na_realms` WRITE;
 /*!40000 ALTER TABLE `na_realms` DISABLE KEYS */;
-INSERT INTO `na_realms` VALUES (98,49,30,'2013-05-25 16:03:32','2013-05-25 16:03:32');
+INSERT INTO `na_realms` VALUES (98,49,30,'2013-05-25 16:03:32','2013-05-25 16:03:32'),(101,50,30,'2013-05-27 16:06:34','2013-05-27 16:06:34');
 /*!40000 ALTER TABLE `na_realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -684,7 +684,7 @@ CREATE TABLE `na_tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -734,7 +734,7 @@ CREATE TABLE `nas` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nasname` (`nasname`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -743,7 +743,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','other',NULL,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-05-27 06:25:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-05-27 06:25:03');
+INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','other',NULL,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-05-28 15:30:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-05-28 15:30:03'),(50,'192.168.1.1','Linksys','other',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-05-27 13:19:48','2013-05-27 13:41:16');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -816,7 +816,7 @@ CREATE TABLE `openvpn_clients` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -900,7 +900,7 @@ CREATE TABLE `pptp_clients` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -980,7 +980,7 @@ CREATE TABLE `profile_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1007,7 +1007,7 @@ CREATE TABLE `profiles` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1016,7 +1016,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (5,'Profile-A',1,44,'2013-05-25 13:32:27','2013-05-25 13:32:27');
+INSERT INTO `profiles` VALUES (5,'Profile-A',1,44,'2013-05-25 13:32:27','2013-05-25 13:32:27'),(6,'Device-Basic-1',1,44,'2013-05-27 09:25:58','2013-05-27 09:25:58');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1091,7 +1091,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=410 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=476 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1100,7 +1100,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (381,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(382,'dvdwalt','Rd-User-Type',':=','user'),(386,'dvdwalt','Rd-Account-Disabled',':=','0'),(396,'dvdwalt','User-Profile',':=','Profile-A'),(397,'dvdwalt','Rd-Realm',':=','Residence Inn'),(398,'dvdwalt','Rd-Cap-Type',':=','hard'),(403,'00:00:00:00:00:00','Rd-User-Type',':=','device'),(404,'00:00:00:00:00:00','Rd-Realm',':=','Residence Inn'),(405,'00:00:00:00:00:00','Rd-Device-Owner',':=','dvdwalt'),(406,'00:00:00:00:00:00','User-Profile',':=','Profile-A'),(407,'00:00:00:00:00:00','Rd-Cap-Type',':=','hard'),(408,'00:00:00:00:00:00','Rd-Account-Disabled',':=','0'),(409,'00:00:00:00:00:00','Rd-Not-Track-Auth',':=','1');
+INSERT INTO `radcheck` VALUES (381,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(382,'dvdwalt','Rd-User-Type',':=','user'),(420,'dvdwalt','User-Profile',':=','Profile-A'),(421,'dvdwalt','Rd-Realm',':=','Residence Inn'),(422,'dvdwalt','Rd-Cap-Type',':=','soft'),(443,'d0-31-10-00-04-f3','Rd-User-Type',':=','device'),(444,'d0-31-10-00-04-f3','Rd-Realm',':=','Residence Inn'),(449,'d0-31-10-00-04-f3','Rd-Not-Track-Auth',':=','1'),(459,'d0-31-10-00-04-f3','User-Profile',':=','Device-Basic-1'),(460,'d0-31-10-00-04-f3','Rd-Device-Owner',':=','dvdwalt'),(461,'d0-31-10-00-04-f3','Rd-Cap-Type',':=','hard'),(462,'08-00-27-90-61-ae','Rd-User-Type',':=','device'),(463,'08-00-27-90-61-ae','Rd-Realm',':=','Residence Inn'),(464,'08-00-27-90-61-ae','Rd-Device-Owner',':=','dvdwalt'),(465,'08-00-27-90-61-ae','User-Profile',':=','Device-Basic-1'),(466,'08-00-27-90-61-ae','Rd-Cap-Type',':=','hard'),(467,'08-00-27-90-61-ae','Rd-Account-Disabled',':=','0'),(468,'08-00-27-90-61-ae','Rd-Not-Track-Auth',':=','1'),(472,'d0-31-10-00-04-f3','Rd-Account-Disabled',':=','0'),(474,'dvdwalt','Rd-Account-Disabled',':=','0'),(475,'dvdwalt','Rd-Not-Track-Auth',':=','1');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1153,7 +1153,7 @@ CREATE TABLE `radgroupreply` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `groupname` (`groupname`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1181,7 +1181,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=654 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1190,7 +1190,6 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
-INSERT INTO `radpostauth` VALUES (653,'dvdwalt','Residence Inn','dvdwalt','Access-Accept','127.0.0.1','2013-05-27 04:28:27');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1209,7 +1208,7 @@ CREATE TABLE `radreply` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1235,7 +1234,7 @@ CREATE TABLE `radusergroup` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1244,7 +1243,7 @@ CREATE TABLE `radusergroup` (
 
 LOCK TABLES `radusergroup` WRITE;
 /*!40000 ALTER TABLE `radusergroup` DISABLE KEYS */;
-INSERT INTO `radusergroup` VALUES (7,'Profile-A','Data-500M',100);
+INSERT INTO `radusergroup` VALUES (7,'Profile-A','Data-500M',100),(9,'Device-Basic-1','Data-1G',100);
 /*!40000 ALTER TABLE `radusergroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1312,7 +1311,7 @@ CREATE TABLE `realms` (
 
 LOCK TABLES `realms` WRITE;
 /*!40000 ALTER TABLE `realms` DISABLE KEYS */;
-INSERT INTO `realms` VALUES (30,'Residence Inn',1,'logo.jpg','1-811-355-3300','1-811-355-0440','1-811-355-0440','ri@residence-inn.com','http://www.residence-inn.com','300','West Broadway','Salt Lake City','Salt Lake City','USA',0,0,44,'2013-05-25 12:38:05','2013-05-25 12:39:37');
+INSERT INTO `realms` VALUES (30,'Residence Inn',1,'logo.jpg','1-811-355-3300','1-811-355-0440','1-811-355-0440','ri@residence-inn.com','http://www.residence-inn.com','300','West Broadway','Salt Lake City','Salt Lake City','USA',0,0,44,'2013-05-25 12:38:05','2013-05-25 12:39:37'),(31,'Holiday Inn',1,'logo.jpg','','','','','','','','','','',0,0,44,'2013-05-27 16:02:59','2013-05-27 16:02:59');
 /*!40000 ALTER TABLE `realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1330,7 +1329,7 @@ CREATE TABLE `tag_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1357,7 +1356,7 @@ CREATE TABLE `tags` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1506,7 +1505,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','c.jpg','2013-04-06 13:51:50','2013-05-25 11:38:29');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','13.jpg','2013-04-06 13:51:50','2013-05-28 14:49:53');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1553,7 +1552,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','5164f20c-9528-428a-83ed-0b7e03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,6,'2012-12-10 13:14:13','2013-05-25 10:36:23'),(165,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','51a09555-4758-4faf-bcc8-104903662c24','John','Smith','500 West Street\nEast LA\n','555555555','jsmith@residence-inn.com','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-05-25 12:41:25','2013-05-25 12:41:25'),(166,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','51a0a201-53f4-4777-960b-04ee03662c24','Dirk','van der Walt','100 President Street\nSilverton\n0184','27125555555','dvdwalt@gmail.co.za','sql',1,0,'2013-05-27 06:28:27','2013-05-25 16:03:22','127.0.0.1','127.0.0.1','User dvdwalt belongs to realm Residence Inn which cannot connect to 127.0.0.1',4,10,4,44,4,5,'2013-05-25 13:35:29','2013-05-25 13:35:29');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','5164f20c-9528-428a-83ed-0b7e03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,6,'2012-12-10 13:14:13','2013-05-25 10:36:23'),(165,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','51a09555-4758-4faf-bcc8-104903662c24','John','Smith','500 West Street\nEast LA\n','555555555','jsmith@residence-inn.com','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-05-25 12:41:25','2013-05-25 12:41:25'),(166,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','51a0a201-53f4-4777-960b-04ee03662c24','Dirk','van der Walt','100 President Street\nSilverton\n0184','27125555555','dvdwalt@gmail.co.za','sql',1,0,'2013-05-28 14:04:24','2013-05-28 13:10:02','192.168.1.1','192.168.1.1','Most likely PEAP failure=3B run in debug',4,10,4,44,4,5,'2013-05-25 13:35:29','2013-05-28 13:10:46');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1566,4 +1565,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-05-27  6:34:20
+-- Dump completed on 2013-05-28 15:32:24
