@@ -77,7 +77,7 @@ class DesktopController extends AppController {
         //List all the wallpapres in the wallpaper directory:
         $wp_document_root   = "/var/www";
         $r_wp_dir           = "/rd/resources/images/wallpapers/";
-        $wp_dir             = "$wp_document_root"."$r_wp_dir";
+        $wp_dir             = "/var/www/rd/resources/images/wallpapers/";
 
         $id = 1;
 
@@ -91,7 +91,8 @@ class DesktopController extends AppController {
                             'id'    => $id,
                             'file'  => $entry,
                             'r_dir' => $r_wp_dir,
-                            'img'   => "/cake2/rd_cake/webroot/files/image.php/image-name.jpg?width=200&height=200&image=".$r_wp_dir.$entry
+                            'img'   => "/cake2/rd_cake/webroot/files/image.php?width=200&height=200&image=".$r_wp_dir.$entry
+                            //'img'   => "/cake2/rd_cake/webroot/files/image.php/image-name.jpg?width=200&height=200&image=".$r_wp_dir.$entry
                         ));
                         $id++;
                     }     
