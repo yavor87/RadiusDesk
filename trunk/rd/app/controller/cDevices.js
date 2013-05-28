@@ -32,8 +32,8 @@ Ext.define('Rd.controller.cDevices', {
                         margins : '0 0 0 0',
                         border  : true,
                         items   : [
-                            { 'title' : i18n('sRegistered_devices'), xtype: 'gridDevices'},
-                            { 'title' : i18n('sUnclaimed_devices')}
+                            { 'title' : i18n('sRegistered_devices'), xtype: 'gridDevices'}
+                           // { 'title' : i18n('sUnclaimed_devices')}
                         ]
                     }
                 ]

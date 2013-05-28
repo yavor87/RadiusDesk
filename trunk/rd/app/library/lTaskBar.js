@@ -45,8 +45,8 @@ Ext.define('Rd.library.lTaskBar', {
           ///  },
             //'-',
             me.windowBar,
-          ////  '-',
-          ////  me.tray
+           '-',
+           me.tray
         ];
 
         me.callParent();
@@ -94,7 +94,9 @@ Ext.define('Rd.library.lTaskBar', {
     getTrayConfig: function () {
         var ret = {
             width: 80,
-            items: this.trayItems
+            items: [
+                { xtype: 'trayclock', flex: 1 }
+            ]
         };
         delete this.trayItems;
         return ret;
