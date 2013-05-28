@@ -4,6 +4,7 @@ Ext.define('CoovaLogin.view.winHelp', {
     title : 'Help',
     layout: 'fit',
     autoShow: false,
+    autoScroll: true,
     width:    400,
     height:   300,
     iconCls: 'help',

@@ -87,6 +87,12 @@ Ext.define('CoovaLogin.controller.Connect', {
         if(queryObj.uamport != undefined){  //Override defaults
             me.uamPort = queryObj.uamport;
         }else{
+
+            //It may have been called to be previewed
+            if(queryObj.dynamic_id != undefined){
+                document.title = "Desktop preview";
+                me.application.showHelp =true;
+            }
             return false;   //Not a hotspot
         }
         if(queryObj.uamip != undefined){    //Override defaults
