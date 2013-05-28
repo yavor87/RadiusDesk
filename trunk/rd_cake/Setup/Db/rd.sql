@@ -403,7 +403,6 @@ CREATE TABLE `dynamic_detail_notes` (
 
 LOCK TABLES `dynamic_detail_notes` WRITE;
 /*!40000 ALTER TABLE `dynamic_detail_notes` DISABLE KEYS */;
-INSERT INTO `dynamic_detail_notes` VALUES (3,3,70,'2013-05-23 10:45:41','2013-05-23 10:45:41');
 /*!40000 ALTER TABLE `dynamic_detail_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,7 +471,7 @@ CREATE TABLE `dynamic_pages` (
 
 LOCK TABLES `dynamic_pages` WRITE;
 /*!40000 ALTER TABLE `dynamic_pages` DISABLE KEYS */;
-INSERT INTO `dynamic_pages` VALUES (7,3,'Welcome to Green Earth','<font color=\"0000FF\" size=\"3\">â€‹We supply</font><br><ul><li><font color=\"969696\" face=\"arial\">A relaxing environment</font></li><li><font color=\"969696\" face=\"arial\">Room service<br></font></li><li><font color=\"969696\" face=\"arial\">High speed Internet</font></li><li><font color=\"969696\" face=\"arial\">Nice food</font></li></ul><p><b><font color=\"808080\" size=\"3\">Any enquiries please contact reception&nbsp; x5555</font></b><br></p>','2013-05-23 10:30:58','2013-05-23 10:30:58');
+INSERT INTO `dynamic_pages` VALUES (7,3,'Welcome to Struisbaai','<font color=\"0000FF\"><font size=\"3\">You are in a High Speed Internet Zone!<br></font></font><ul><li>Thanks to the vibrant community, you can now enjoy being connected 24/7 @ speeds of up to 10Mb/s</li><li>Ideal for watching HD movies over the Internet</li><li>Budget connectivity is also available <br></li></ul><p><br></p>','2013-05-23 10:30:58','2013-05-28 21:45:59');
 /*!40000 ALTER TABLE `dynamic_pages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -502,7 +501,7 @@ CREATE TABLE `dynamic_pairs` (
 
 LOCK TABLES `dynamic_pairs` WRITE;
 /*!40000 ALTER TABLE `dynamic_pairs` DISABLE KEYS */;
-INSERT INTO `dynamic_pairs` VALUES (5,'ssid','GreenEarth',1,3,NULL,'2013-05-23 10:32:48','2013-05-23 10:32:48');
+INSERT INTO `dynamic_pairs` VALUES (5,'ssid','Struisbaai',1,3,NULL,'2013-05-23 10:32:48','2013-05-28 22:02:38');
 /*!40000 ALTER TABLE `dynamic_pairs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -743,7 +742,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','other',NULL,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-05-28 15:30:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-05-28 15:30:03'),(50,'192.168.1.1','Linksys','other',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-05-27 13:19:48','2013-05-27 13:41:16');
+INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','other',NULL,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-05-28 22:55:02',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-05-28 22:55:02'),(50,'192.168.1.1','Linksys','other',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-05-27 13:19:48','2013-05-27 13:41:16');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -794,7 +793,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (70,'A Note about Green Earth\nIt is green ;-)',0,44,'2013-05-23 10:45:41','2013-05-23 10:45:41'),(76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'RADIUSdesk sample data',1,44,'2013-05-25 12:41:55','2013-05-25 12:41:55');
+INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'RADIUSdesk sample data',1,44,'2013-05-25 12:41:55','2013-05-25 12:41:55');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1505,7 +1504,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','13.jpg','2013-04-06 13:51:50','2013-05-28 14:49:53');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','13.jpg','2013-04-06 13:51:50','2013-05-28 19:52:43');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1552,7 +1551,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','5164f20c-9528-428a-83ed-0b7e03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,6,'2012-12-10 13:14:13','2013-05-25 10:36:23'),(165,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','51a09555-4758-4faf-bcc8-104903662c24','John','Smith','500 West Street\nEast LA\n','555555555','jsmith@residence-inn.com','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-05-25 12:41:25','2013-05-25 12:41:25'),(166,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','51a0a201-53f4-4777-960b-04ee03662c24','Dirk','van der Walt','100 President Street\nSilverton\n0184','27125555555','dvdwalt@gmail.co.za','sql',1,0,'2013-05-28 14:04:24','2013-05-28 13:10:02','192.168.1.1','192.168.1.1','Most likely PEAP failure=3B run in debug',4,10,4,44,4,5,'2013-05-25 13:35:29','2013-05-28 13:10:46');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','5164f20c-9528-428a-83ed-0b7e03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,6,'2012-12-10 13:14:13','2013-05-25 10:36:23'),(165,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','51a09555-4758-4faf-bcc8-104903662c24','John','Smith','500 West Street\nEast LA\n','555555555','jsmith@residence-inn.com','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-05-25 12:41:25','2013-05-25 12:41:25'),(166,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','51a0a201-53f4-4777-960b-04ee03662c24','Dirk','van der Walt','100 President Street\nSilverton\n0184','27125555555','dvdwalt@gmail.co.za','sql',1,0,'2013-05-28 20:34:58','2013-05-28 13:10:02','127.0.0.1','192.168.1.1','Most likely PEAP failure=3B run in debug',4,10,4,44,4,5,'2013-05-25 13:35:29','2013-05-28 13:10:46');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1565,4 +1564,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-05-28 15:32:24
+-- Dump completed on 2013-05-28 22:55:35
