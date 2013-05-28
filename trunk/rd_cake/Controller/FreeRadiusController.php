@@ -385,7 +385,7 @@ class FreeRadiusController extends AppController {
 
         if(isset($this->request->data['user_type'])){
 
-            if($this->request->data['user_type'] = 'permanent'){
+            if($this->request->data['user_type'] == 'permanent'){
                 $q_r        = ClassRegistry::init('User')->findById($this->request->data['user_id']);
                 $username   = $q_r['User']['username'];
                 $q_r        = ClassRegistry::init('Radcheck')->find('first', 
@@ -395,6 +395,13 @@ class FreeRadiusController extends AppController {
                 );
                 $pwd        = $q_r['Radcheck']['value'];
             }
+
+            if($this->request->data['user_type'] == 'device'){
+                $q_r        = ClassRegistry::init('Device')->findById($this->request->data['device_id']);
+                $username   = $q_r['Device']['name'];
+                $pwd        = $username;
+            }
+
         }
 
         $items = array();
