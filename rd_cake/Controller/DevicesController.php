@@ -155,6 +155,7 @@ class DevicesController extends AppController {
                 array(
                     'id'            => $i['Device']['id'], 
                     'user'          => $i['User']['username'],
+                    'user_id'       => $i['User']['id'],
                     'name'          => $i['Device']['name'],
                     'description'   => $i['Device']['description'], 
                     'realm'         => $realm,
