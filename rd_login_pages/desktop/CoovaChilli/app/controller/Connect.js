@@ -163,7 +163,9 @@ Ext.define('CoovaLogin.controller.Connect', {
     connectBeforeShow: function(w){
         me = this;
         if((me.firstTime == true)&&(me.noPopUp == true)){
-            console.log("Initial... hide pop-up");
+            if (window.console) {
+                window.console.log("Initial... hide pop-up");
+            }
             me.firstTime = false;
             return false; //Stop the show
         } 
@@ -379,7 +381,9 @@ Ext.define('CoovaLogin.controller.Connect', {
         }else{
            // console.log("Check if we need to store the credentials")
             if(me.remember == true){
-                console.log("Store credentails");
+                if (window.console) {
+                    window.console.log("Store credentails");
+                }
                 Ext.util.Cookies.set('coovaUn',me.userName);
                 Ext.util.Cookies.set('coovaPw',me.password);
             }

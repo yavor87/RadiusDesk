@@ -85,7 +85,10 @@ Ext.define('CoovaLogin.controller.Desktop', {
 
         //Check if we need to show Help Window
         if(me.application.showHelp){
-            console.log("Start by showing help");
+             if (window.console) {
+                    window.console.log("Start by showing help");
+             }
+            
             me.winHelpCreate();
         }
     },
