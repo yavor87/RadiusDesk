@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
-    public $components = array('Aa');
+    public $components = array('Aa','Kicker');
     public $uses       = array('Radacct','User');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
@@ -307,6 +307,15 @@ class RadacctsController extends AppController {
             return;
         }
 
+        foreach(array_keys($this->request->query) as $key){
+            if(preg_match('/^\d+/',$key)){
+                $qr = $this->{$this->modelClass}->find('first',array('conditions' => array('Radacct.radacctid' => $key)));
+                if($qr){
+                    $this->Kicker->kick($qr['Radacct']);
+                }  
+            }
+        }
+
         $this->set(array(
             'success' => true,
             '_serialize' => array('success')
@@ -322,11 +331,23 @@ class RadacctsController extends AppController {
             return;
         }
 
+        foreach(array_keys($this->request->query) as $key){
+            if(preg_match('/^\d+/',$key)){
+                $qr = $this->{$this->modelClass}->find('first',array('conditions' => array('Radacct.radacctid' => $key)));
+                if($qr){
+                    if($qr['Radacct']['acctstoptime'] == null){
+                        $now = date('Y-m-d h:i:s');
+                        $this->{$this->modelClass}->id = $key;
+                        $this->{$this->modelClass}->saveField('acctstoptime', $now);
+                    }
+                }  
+            }
+        }
+
         $this->set(array(
             'success' => true,
             '_serialize' => array('success')
         ));
-
     }
 
     //--------- END BASIC CRUD ---------------------------
