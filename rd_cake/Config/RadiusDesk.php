@@ -27,6 +27,7 @@ $config['pptp']['chap_secrets']                    = '/etc/ppp/chap-secrets';
 //Dictionary files to include for profiles...
 $config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
 $config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
+$config['freeradius']['radclient']                  = '/usr/local/bin/radclient';
 
 
 //Define the configured dynamic attributes
