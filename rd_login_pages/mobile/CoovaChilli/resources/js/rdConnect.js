@@ -20,7 +20,7 @@ var rdConnect = (function () {
     var password        = undefined;
     var remember        = false;
 
-    var noStatus        = true;
+    var noStatus        = false;
     var redirectTo      = "http://google.com";
 
     var sessionData     = undefined;
