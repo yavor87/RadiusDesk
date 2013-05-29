@@ -299,6 +299,36 @@ class RadacctsController extends AppController {
         }
 	}
 
+    public function kick_active(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+
+    }
+
+    public function close_open(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+
+    }
+
     //--------- END BASIC CRUD ---------------------------
 
     //----- Menus ------------------------
