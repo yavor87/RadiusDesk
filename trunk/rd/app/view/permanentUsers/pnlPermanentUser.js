@@ -68,7 +68,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         fieldLabel  : i18n('sFrom'),
                         name        : 'from_date',
                         itemId      : 'from_date',
-                        minValue    : new Date(),  // limited to the current date or after
+                        minValue    : new Date("May 20, 2013 00:00:00"),
                         hidden      : true,
                         disabled    : true,
                         value       : dtFrom
@@ -78,7 +78,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         fieldLabel  : i18n('sTo'),
                         name        : 'to_date',
                         itemId      : 'to_date',
-                        minValue    : new Date(),  // limited to the current date or after
+                        minValue    : new Date("May 21, 2013 00:00:00"),
                         hidden      : true,
                         disabled    : true,
                         value       : dtTo
