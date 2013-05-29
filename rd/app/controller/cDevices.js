@@ -176,6 +176,9 @@ Ext.define('Rd.controller.cDevices', {
             'pnlDevice #profile' : {
                 change:  me.cmbProfileChange
             },
+            'pnlDevice #owner' : {
+                render:      me.renderEventOwner
+            },
             'pnlDevice #always_active' : {
                 change:  me.chkAlwaysActiveChange
             },
@@ -425,7 +428,7 @@ Ext.define('Rd.controller.cDevices', {
                     closable:   true,
                     iconCls:    'edit', 
                     layout:     'fit', 
-                    items:      {'xtype' : 'pnlDevice',d_id: d_id, d_name: d_tab_name}
+                    items:      {'xtype' : 'pnlDevice',d_id: d_id, d_name: d_tab_name,record:sr}
                 });
                 tp.setActiveTab(d_tab_id); //Set focus on Add Tab             
             });
@@ -973,6 +976,21 @@ Ext.define('Rd.controller.cDevices', {
                     });
                 }
             });
+        }
+    },
+    renderEventOwner: function(cmb){
+
+        var me                      = this;
+        var pnlDevice               = cmb.up('pnlDevice');
+        pnlDevice.cmbOwnerRendered  = true;
+        console.log("Render event owner pappie");
+        if(pnlDevice.record != undefined){
+            var un      = pnlDevice.record.get('user');
+            var u_id    = pnlDevice.record.get('user_id');
+
+            var rec = Ext.create('Rd.model.mPermanentUser', {username: un, id: u_id});
+            cmb.getStore().loadData([rec],false);
+            //cmb.setValue(rec.getId());
         }
     }
 
