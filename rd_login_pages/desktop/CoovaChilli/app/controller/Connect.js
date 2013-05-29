@@ -140,7 +140,7 @@ Ext.define('CoovaLogin.controller.Connect', {
                             me.sessionData = j;
                             me.refreshCounter();
                             //Refresh the usage ....
-                            me.yfiUsageRefresh();
+                           //// me.yfiUsageRefresh();
                         }
                     }
                 }
@@ -186,7 +186,7 @@ Ext.define('CoovaLogin.controller.Connect', {
                 if(me.timeUntilStatus == 0){      //Each time we reach null we refresh the screens
                     me.timeUntilStatus = me.refreshInterval; //Start anew
                     me.coovaRefresh();
-                    me.yfiUsageRefresh();
+                   //// me.yfiUsageRefresh();
                 }
             }
         }, 1000 );

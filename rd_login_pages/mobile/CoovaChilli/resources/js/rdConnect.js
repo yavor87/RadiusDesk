@@ -98,7 +98,7 @@ var rdConnect = (function () {
                             sessionData = j;
                             refreshCounter();
                             //Refresh the usage ....
-                            yfiUsageRefresh();
+                           //// yfiUsageRefresh();
                         }
                     }
                 }
@@ -153,7 +153,7 @@ var rdConnect = (function () {
                 if(timeUntilStatus == 0){      //Each time we reach null we refresh the screens
                     timeUntilStatus = refreshInterval; //Start anew
                     coovaRefresh();
-                    yfiUsageRefresh();
+                   ///// yfiUsageRefresh();
                 }
             }
         }, 1000 );

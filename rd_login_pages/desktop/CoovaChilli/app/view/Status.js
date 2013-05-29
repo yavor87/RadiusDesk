@@ -8,7 +8,7 @@ Ext.define('CoovaLogin.view.Status', {
     height: 340,
     plain: true,
     border: false,
-    inclUsage: true, //Adjust this one to include or exclude Usage tab
+    inclUsage: false, //Adjust this one to include or exclude Usage tab
     requires: ['Ext.tab.Panel','Ext.tab.Bar','Ext.tab.Tab','Ext.ProgressBar'],
     layout: {
         type: 'vbox',
