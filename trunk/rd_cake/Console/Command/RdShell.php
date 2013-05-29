@@ -6,7 +6,7 @@
 
 class RdShell extends AppShell {
 
-    public $tasks = array('Monitor');
+    public $tasks = array('Monitor','Debug','Autoclose');
 
     public function main() {
 
@@ -24,6 +24,17 @@ class RdShell extends AppShell {
 
             $this->Monitor->execute();
         }
+
+        //Check if a debug trace was started and stop it after timeout.
+        if($this->args[0] == 'debug_check'){
+            $this->Debug->check();     
+        }
+
+        //Check if a debug trace was started and stop it after timeout.
+        if($this->args[0] == 'auto_close'){
+            $this->Autoclose->check();     
+        }
+
     }
 
     public function getOptionParser() {
@@ -41,7 +52,7 @@ class RdShell extends AppShell {
         $parser->addArgument('action', array(
             'help' => 'The action to do',
             'required' => true,
-            'choices' => array('mon','restart_check')
+            'choices' => array('mon','restart_check','debug_check','auto_close')
         ));
 
         $parser->epilog('Have alot of fun....');
