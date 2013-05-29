@@ -123,7 +123,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 hidden      : true,
                 filter      : {type: 'string'}
             },
-            {
+         /*   {
                 header: i18n('sData_used'),
                 dataIndex: 'data_cap',
                 width: 110,
@@ -162,7 +162,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                         return "N/A";
                     }
                 }
-            },
+            },*/
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
