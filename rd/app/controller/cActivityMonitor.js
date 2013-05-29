@@ -468,7 +468,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
                                     i18n('sItem_updated_fine'),
                                     Ext.ux.Constants.clsInfo,
                                     Ext.ux.Constants.msgInfo
-                        );    
+                        );
+                        me.reload();    
                     }   
                 },
                 scope: me
@@ -488,13 +489,19 @@ Ext.define('Rd.controller.cActivityMonitor', {
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){ 
              Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
+                i18n('sSelect_an_item'),
+                i18n('sFirst_select_an_item'),
+                Ext.ux.Constants.clsWarn,
+                Ext.ux.Constants.msgWarn
             );
         }else{
-
+            Ext.ux.Toaster.msg(
+                'Sending request',
+                'Please be patient',
+                Ext.ux.Constants.clsInfo,
+                Ext.ux.Constants.msgInfo
+            );
+            button.setDisabled(true);
             //________________
             var extra_params    = {};
             var s               = grid.getSelectionModel().getSelection();
@@ -508,14 +515,16 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 method: 'GET',
                 params: extra_params,
                 success: function(response){
+                    button.setDisabled(false);
                     var jsonData    = Ext.JSON.decode(response.responseText);
                     if(jsonData.success){
                         Ext.ux.Toaster.msg(
-                                    i18n('sItem_updated'),
-                                    i18n('sItem_updated_fine'),
-                                    Ext.ux.Constants.clsInfo,
-                                    Ext.ux.Constants.msgInfo
-                        );    
+                            i18n('sItem_updated'),
+                            i18n('sItem_updated_fine'),
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                        me.reload();    
                     }   
                 },
                 scope: me
