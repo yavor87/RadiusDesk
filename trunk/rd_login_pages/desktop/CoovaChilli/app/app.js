@@ -65,7 +65,9 @@ Ext.application({
     //We put the active window property at the application level in order to have a central place to set and get it
     activeWindow: undefined,
     launch: function() {
-        console.log("App starting");
+        if (window.console) {
+            window.console.log("App starting");
+        }
 
         // Setup a task to fadeOut the splashscreen
         var task = new Ext.util.DelayedTask(function() {
