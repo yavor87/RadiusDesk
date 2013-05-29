@@ -12,6 +12,14 @@ Ext.define('Rd.view.components.cmbNas', {
     mode: 'local',
     name: 'profile_id',
     labelClsExtra: 'lblRd',
+    listConfig: {
+        getInnerTpl: function () {
+            return  '<div data-qtip="{nasname} : {shortname}">'+
+                    '<div class="combo-main">{nasname}</div>'+
+                    '<div class="combo-detail"> {shortname}</div>'+
+                    '</div>';
+            }
+    },
     initComponent: function() {
         var me= this;
         var s = Ext.create('Ext.data.Store', {
