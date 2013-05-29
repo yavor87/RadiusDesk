@@ -56,6 +56,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
       //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlExportCsvAcct:     '/cake2/rd_cake/radaccts/export_csv',
         urlExportCsvAuth:     '/cake2/rd_cake/radpostauths/export_csv',
+        urlKickActive:        '/cake2/rd_cake/radaccts/kick_active.json',
+        urlCloseOpen:         '/cake2/rd_cake/radaccts/close_open.json'
         
     },
     refs: [
@@ -86,6 +88,12 @@ Ext.define('Rd.controller.cActivityMonitor', {
             },
             'gridRadaccts #csv'  : {
                 click:      me.csvExportAcct
+            },
+            'gridRadaccts #kick'  : {
+                click:      me.kickActive
+            },
+            'gridRadaccts #close'  : {
+                click:      me.closeOpen
             },
             'gridRadaccts'   : {
               //  select:      me.select
@@ -424,6 +432,99 @@ Ext.define('Rd.controller.cActivityMonitor', {
             window.open(me.urlExportCsvAuth+append_url);
             win.close();
         }
+    },
+   
+    closeOpen : function(button){
+
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            //________________
+            var extra_params    = {};
+            var s               = grid.getSelectionModel().getSelection();
+            Ext.Array.each(s,function(record){
+                var r_id = record.getId();
+                extra_params[r_id] = r_id;
+            });
+     
+            Ext.Ajax.request({
+                url: me.urlCloseOpen,
+                method: 'GET',
+                params: extra_params,
+                success: function(response){
+                    var jsonData    = Ext.JSON.decode(response.responseText);
+                    if(jsonData.success){
+                        Ext.ux.Toaster.msg(
+                                    i18n('sItem_updated'),
+                                    i18n('sItem_updated_fine'),
+                                    Ext.ux.Constants.clsInfo,
+                                    Ext.ux.Constants.msgInfo
+                        );    
+                    }   
+                },
+                scope: me
+            });
+            //_____________________ 
+
+  
+        }
+
+
+    },
+
+    kickActive: function(button){
+
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            //________________
+            var extra_params    = {};
+            var s               = grid.getSelectionModel().getSelection();
+            Ext.Array.each(s,function(record){
+                var r_id = record.getId();
+                extra_params[r_id] = r_id;
+            });
+    
+            Ext.Ajax.request({
+                url: me.urlKickActive,
+                method: 'GET',
+                params: extra_params,
+                success: function(response){
+                    var jsonData    = Ext.JSON.decode(response.responseText);
+                    if(jsonData.success){
+                        Ext.ux.Toaster.msg(
+                                    i18n('sItem_updated'),
+                                    i18n('sItem_updated_fine'),
+                                    Ext.ux.Constants.clsInfo,
+                                    Ext.ux.Constants.msgInfo
+                        );    
+                    }   
+                },
+                scope: me
+            });
+            //_____________________  
+
+        }
+
     }
+
 
 });
