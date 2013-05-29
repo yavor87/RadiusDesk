@@ -48,13 +48,11 @@
                 if($.getUrlVar('dynamic_id') != undefined){
                     $('#previewHeading').text("Mobile preview");
                     document.title = "Mobile preview";
-                    return
+                    $.mobile.changePage('#Help');
+                    return;
                 }
             });
-            $.mobile.changePage('#Help');
-           
-
-
+            
             //______ Connect part ______
             var c       = rdConnect({},window.jQuery);
             c.index();
