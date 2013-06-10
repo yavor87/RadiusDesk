@@ -59,7 +59,7 @@ $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChil
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
-$config['experimental']['active']                   = false;
+$config['experimental']['active']                   = true;
 
 //IP Settings
 $config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
