@@ -110,25 +110,25 @@ Ext.define('Rd.controller.cAutoSetups', {
             '#winCsvColumnSelectAutoSetups #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=autoSetups] #reload' : {
+            'gridNote[noteForGrid=auto_macs] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote[noteForGrid=autoSetups] #add' : {
+            'gridNote[noteForGrid=auto_macs] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote[noteForGrid=autoSetups] #delete' : {
+            'gridNote[noteForGrid=auto_macs] #delete' : {
                 click:  me.noteDelete
             },
-            'gridNote[noteForGrid=autoSetups]' : {
+            'gridNote[noteForGrid=auto_macs]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=autoSetups] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=auto_macs] #btnNoteTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=autoSetups] #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=auto_macs] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=autoSetups] #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=auto_macs] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
             'pnlAutoSetup #tabSettings': {
@@ -479,13 +479,13 @@ Ext.define('Rd.controller.cAutoSetups', {
 
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
-                
+                //auto_macs
                 if(!me.application.runAction('cDesktop','AlreadyExist','winNoteAutoSetups'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteAutoSetups'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'autoSetups',
+                            noteForGrid : 'auto_macs',
                             noteForName : sr.get('name')
                         });
                     me.application.runAction('cDesktop','Add',w);       
