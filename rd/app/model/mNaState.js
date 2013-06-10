@@ -5,6 +5,6 @@ Ext.define('Rd.model.mNaState', {
          {name: 'state',        type: 'bool' },
          {name: 'time',         type: 'string'  },
          {name: 'start',        type: 'string'  },
-         {name: 'end',          type: 'string'  },
+         {name: 'end',          type: 'string'  }
         ]
 });

@@ -20,7 +20,7 @@ Ext.define('Rd.controller.cI18n', {
                 stateId: 'i18nWin',
                 tools: [{
                     type:'help',
-                    tooltip: i18n('sGet_Help'),
+                    tooltip: i18n('sGet_Help')
     
                 } ],
                 items: [
@@ -30,7 +30,7 @@ Ext.define('Rd.controller.cI18n', {
                         heading: i18n('sTranslation_management'),
                         image:  'resources/images/48x48/i18n.png'
                     },
-                    {'xtype' : 'i18nP',region  : 'center',}
+                    {'xtype' : 'i18nP',region  : 'center'}
                 ]
             });
         }
@@ -885,7 +885,7 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         if(!me.application.runAction('cDesktop','AlreadyExist','winPhpCopyId')){
             var w = Ext.widget('winPhpCopy',{
-                id          :'winPhpCopyId',
+                id          :'winPhpCopyId'
             });
             me.application.runAction('cDesktop','Add',w);         
         } 
@@ -930,7 +930,7 @@ Ext.define('Rd.controller.cI18n', {
                     var win = me.application.runAction('cDesktop','AlreadyExist','winPhpMetaId');
                     if(!win){
                          win = Ext.widget('winPhpMeta',{
-                            id          :'winPhpMetaId',
+                            id          :'winPhpMetaId'
                         });
                         me.application.runAction('cDesktop','Add',win);         
                     } 
@@ -974,5 +974,5 @@ Ext.define('Rd.controller.cI18n', {
         var me = this;
         var count = me.getStore('sI18nJsPhrases').getTotalCount();
         me.getJsGrid().down('#count').update({count: count});
-    },
+    }
 });

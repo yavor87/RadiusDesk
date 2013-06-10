@@ -133,7 +133,7 @@ Ext.define('Rd.controller.cProfileComponents', {
             },
             'gridProfileComponent  #delete': {
                 click:      me.attrDelete
-            },
+            }
         });
     },
     reload: function(){

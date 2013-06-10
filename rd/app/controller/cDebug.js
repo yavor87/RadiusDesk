@@ -58,7 +58,7 @@ Ext.define('Rd.controller.cDebug', {
         portWebSocket:      '8000'
     },
     refs: [
-         {  ref:    'file', selector:   'pnlViewDebug'},
+         {  ref:    'file', selector:   'pnlViewDebug'}
     ],
     init: function() {
          var me = this;
@@ -83,7 +83,7 @@ Ext.define('Rd.controller.cDebug', {
                 show:       me.onShow,
                 render:     me.onRender,
                 destroy:    me.onDestroy
-            },
+            }
         });
     },
     clear: function(b){

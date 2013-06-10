@@ -137,7 +137,7 @@ Ext.define('Rd.controller.cAutoSetups', {
             },
             'pnlAutoSetup pnlAutoSetupSettings #save': {
                 click:      me.editSubmit
-            },
+            }
         });
     },
     reload: function(){
@@ -650,5 +650,5 @@ Ext.define('Rd.controller.cAutoSetups', {
         var form    = tab.down('form');
         var am_id  = tab.up('pnlAutoSetup').am_id;
         form.load({url:me.urlViewASDetail, method:'GET',params:{am_id:am_id}});
-    },
+    }
 });

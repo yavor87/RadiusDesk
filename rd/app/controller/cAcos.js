@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cAcos', {
                     items   : [
                             { 'title' : i18n('sAccess_Controll_Objects'),'xtype':'treeAco'},
                             { 'title' : i18n('sAccess_Provider_Rights'),'xtype':'treeApRights'},  
-                            { 'title' : i18n('sPermanent_User_Rights')},
+                            { 'title' : i18n('sPermanent_User_Rights')}
                         ]
                 }]
             });
