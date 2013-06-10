@@ -16,7 +16,7 @@ Ext.define('Rd.controller.cRadiusClient', {
         { ref:  'cmbPermanent',     selector: 'cmbPermanentUser'    },
         { ref:  'cmbDevice',        selector: 'cmbDevice'           },
         { ref:  'cmbUserType',      selector: 'cmbUserType'         },
-        { ref:  'pnlRadiusReply',   selector: 'pnlRadiusReply'      },
+        { ref:  'pnlRadiusReply',   selector: 'pnlRadiusReply'      }
     ],
     init: function() {
         var me = this;
@@ -39,7 +39,7 @@ Ext.define('Rd.controller.cRadiusClient', {
             },
             '#radiusClientWin'     : {
                 destroy:    me.onDestroy
-            }, 
+            } 
         });
     },
     actionIndex: function(){

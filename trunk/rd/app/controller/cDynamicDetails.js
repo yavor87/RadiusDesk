@@ -30,7 +30,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         xtype   : 'tabpanel',
                         layout  : 'fit',
                         items: [
-                            { 'title' : i18n('sDynamic_login_pages'), 'xtype':'gridDynamicDetails'},
+                            { 'title' : i18n('sDynamic_login_pages'), 'xtype':'gridDynamicDetails'}
                         ],
                         margins : '0 0 0 0',
                         border  : false
@@ -47,7 +47,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
-        'dynamicDetails.winPairEdit',           
+        'dynamicDetails.winPairEdit'          
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
     models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair'],
@@ -68,13 +68,13 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlAddPair:         '/cake2/rd_cake/dynamic_details/add_pair.json',
         urlEditPair:        '/cake2/rd_cake/dynamic_details/edit_pair.json',
         urlPreviewMobile:   '/rd_login_pages/mobile/CoovaChilli/index.html',
-        urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html',
+        urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html'
     },
     refs: [
          {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
     ],
     init: function() {
-        me = this;
+        var me = this;
         if (me.inited) {
             return;
         }
@@ -229,9 +229,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
             },
             'winPairEdit #save': {
                 click:      me.pairEditSave
-            },
-            
-        });;
+            }      
+        });
     },
     reload: function(){
         var me =this;

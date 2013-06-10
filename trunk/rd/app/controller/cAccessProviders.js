@@ -206,7 +206,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 selLanguage : me.application.getSelLanguage(),
                                 startScreen : 'scrnData',
                                 user_id     : '0',
-                                owner       : i18n('sLogged_in_user'),
+                                owner       : i18n('sLogged_in_user')
                             });
                             me.application.runAction('cDesktop','Add',w);         
                         }   

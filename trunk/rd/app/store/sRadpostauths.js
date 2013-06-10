@@ -22,6 +22,5 @@ Ext.define('Rd.store.sRadpostauths', {
                // destroy  : '/cake2/rd_cake/devices/delete.json'
             },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
-    },
-    //autoLoad: false
+    }
 });

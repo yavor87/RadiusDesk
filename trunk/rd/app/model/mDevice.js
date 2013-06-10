@@ -19,6 +19,6 @@ Ext.define('Rd.model.mDevice', {
          'time_usage',
          {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
-         {name: 'delete',       type: 'bool'},
+         {name: 'delete',       type: 'bool'}
         ]
 });

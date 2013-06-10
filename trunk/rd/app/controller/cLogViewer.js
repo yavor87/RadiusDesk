@@ -56,7 +56,7 @@ Ext.define('Rd.controller.cLogViewer', {
         portWebSocket:  '8000'
     },
     refs: [
-         {  ref:    'file', selector:   'pnlViewFile'},
+         {  ref:    'file', selector:   'pnlViewFile'}
     ],
     init: function() {
         var me = this;
@@ -81,7 +81,7 @@ Ext.define('Rd.controller.cLogViewer', {
                 show:       me.onShow,
                 render:     me.onRender,
                 destroy:    me.onDestroy
-            },
+            }
         });
     },
     clear: function(b){

@@ -88,7 +88,7 @@ Ext.define('Rd.controller.cNas', {
         {  ref: 'pnlGMap',  selector:   'pnlGMap'}       
     ],
     init: function() {
-        me = this;
+        var me = this;
         if (me.inited) {
             return;
         }
@@ -222,21 +222,21 @@ Ext.define('Rd.controller.cNas', {
                 activate:       me.tabOpenVpnActivate
             },
             'pnlNas #tabOpenVpn #save': {
-                click:          me.saveOpenVpn,
+                click:          me.saveOpenVpn
             },
             'pnlNas #tabPptp': {
                 beforerender:   me.tabPptpActivate,
                 activate:       me.tabPptpActivate
             },
             'pnlNas #tabPptp #save': {
-                click:          me.savePptp,
+                click:          me.savePptp
             },
             'pnlNas #tabDynamic': {
                 beforerender:   me.tabDynamicActivate,
                 activate:       me.tabDynamicActivate
             },
             'pnlNas #tabDynamic #save': {
-                click:          me.saveDynamic,
+                click:          me.saveDynamic
             },
             'pnlNas #tabNas': {
                 beforerender:   me.tabNasActivate,
@@ -772,7 +772,7 @@ Ext.define('Rd.controller.cNas', {
             }
 
             var d  = Ext.apply({
-                time_in_state   : t_i_s,
+                time_in_state   : t_i_s
             }, record.data);
 
             qr[0].down('#tabMapInfo').update(d);

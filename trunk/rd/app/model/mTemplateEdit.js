@@ -5,6 +5,6 @@ Ext.define('Rd.model.mTemplateEdit', {
         {name: 'attribute',    type: 'string'  },
         {name: 'type',         type: 'string'  },
         {name: 'tooltip',      type: 'string'  },
-        {name: 'unit',         type: 'string'  },
+        {name: 'unit',         type: 'string'  }
         ]
 });

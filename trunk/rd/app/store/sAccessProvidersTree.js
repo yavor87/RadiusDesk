@@ -26,5 +26,5 @@ Ext.define('Rd.store.sAccessProvidersTree', {
         },
         scope: this
     },
-    autoLoad: true,
+    autoLoad: true
 });

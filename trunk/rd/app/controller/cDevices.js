@@ -1,5 +1,8 @@
 Ext.define('Rd.controller.cDevices', {
     extend: 'Ext.app.Controller',
+    uses : [
+        'Rd.model.mPrivateAttribute'
+    ],
     actionIndex: function(){
         var me = this;
         var desktop = this.application.getController('cDesktop');
@@ -65,7 +68,7 @@ Ext.define('Rd.controller.cDevices', {
         urlEditBasic:       '/cake2/rd_cake/devices/edit_basic_info.json',
         urlViewTracking:    '/cake2/rd_cake/devices/view_tracking.json',
         urlEditTracking:    '/cake2/rd_cake/devices/edit_tracking.json',
-        urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json',
+        urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridDevices'}       

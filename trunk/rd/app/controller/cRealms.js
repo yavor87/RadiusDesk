@@ -30,8 +30,7 @@ Ext.define('Rd.controller.cRealms', {
                         xtype   : 'tabpanel',
                         layout  : 'fit',
                         items: [
-                            { 'title' : i18n('sRealms'), 'xtype':'gridRealms'},
-                            // { 'title' : 'Advanced realms'}
+                            { 'title' : i18n('sRealms'), 'xtype':'gridRealms'}
                         ],
                         margins : '0 0 0 0',
                         border  : false
@@ -58,7 +57,7 @@ Ext.define('Rd.controller.cRealms', {
         urlNoteAdd:         '/cake2/rd_cake/realms/note_add.json',
         urlViewRealmDetail: '/cake2/rd_cake/realms/view.json',
         urlLogoBase:        '/cake2/rd_cake/webroot/img/realms/',
-        urlUploadLogo:      '/cake2/rd_cake/realms/upload_logo/',
+        urlUploadLogo:      '/cake2/rd_cake/realms/upload_logo/'
     },
     refs: [
          {  ref:    'gridRealms',           selector:   'gridRealms'},
@@ -145,8 +144,7 @@ Ext.define('Rd.controller.cRealms', {
             },
             'pnlRealm #tabLogo #cancel': {
                 click:       me.logoCancel
-            },
-            
+            }   
         });;
     },
     reload: function(){

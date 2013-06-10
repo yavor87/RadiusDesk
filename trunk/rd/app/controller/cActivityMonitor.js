@@ -130,8 +130,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
             },
             '#winCsvColumnSelectAuth #save': {
                 click:  me.csvExportSubmitAuth
-            },
-            
+            }   
         });
 
     },

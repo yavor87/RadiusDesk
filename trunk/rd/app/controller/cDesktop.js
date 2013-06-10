@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cDesktop', {
     config: {
         urlWallpaper                : 'resources/images/wallpapers/2.jpg',
         urlSaveWallpaperSelection   : '/cake2/rd_cake/desktop/save_wallpaper_selection.json',
-        urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json',
+        urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json'
     },
     models: ['mDesktopShortcut', 'mWallpaper'],
     uses: [

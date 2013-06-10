@@ -22,6 +22,6 @@ Ext.define('Rd.model.mPermanentUser', {
          'time_cap',
          {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
-         {name: 'delete',       type: 'bool'},
+         {name: 'delete',       type: 'bool'}
         ]
 });
