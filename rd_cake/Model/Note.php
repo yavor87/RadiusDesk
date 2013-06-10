@@ -32,6 +32,7 @@ class Note extends AppModel {
         'RealmNote' => array('dependent'    => true),
         'UserNote'  => array('dependent'    => true),
         'ProfileComponentNote'  => array('dependent'    => true),
-        'DynamicDetailNote'  => array('dependent'    => true)
+        'DynamicDetailNote'  => array('dependent'    => true),
+        'AutoMacNote'  => array('dependent'    => true),
     );
 }
