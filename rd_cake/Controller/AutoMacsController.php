@@ -15,7 +15,7 @@ class AutoMacsController extends AppController {
     );
 
     var $scaffold;
-/*
+
 
 //------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ class AutoMacsController extends AppController {
         //Build query
         $user_id    = $user['id'];
         $c          = $this->_build_common_query($user);
-        $q_r        = $this->Tag->find('all',$c);
+        $q_r        = $this->{$this->modelClass}->find('all',$c);
 
         //Create file
         $this->ensureTmp();     
@@ -54,25 +54,47 @@ class AutoMacsController extends AppController {
 
             $columns    = array();
             $csv_line   = array();
+
+            $as_items   = array();
+
+            //We will create an array with all the items regardless:
+            foreach($i['AutoSetup'] as $as_item){
+                $item   = $as_item['description'];
+                $value  = $as_item['value'];
+                $as_items[$item] = $value;
+            }
+
+
+
             if(isset($this->request->query['columns'])){
                 $columns = json_decode($this->request->query['columns']);
                 foreach($columns as $c){
-                    //Realms
                     $column_name = $c->name;
                     if($column_name == 'notes'){
                         $notes   = '';
-                        foreach($i['TagNote'] as $n){
+                        foreach($i['AutoMacNote'] as $n){
                             if(!$this->_test_for_private_parent($n['Note'],$user)){
                                 $notes = $notes.'['.$n['Note']['note'].']';    
                             }
                         }
                         array_push($csv_line,$notes);
                     }elseif($column_name =='owner'){
-                        $owner_id       = $i['Tag']['user_id'];
+                        $owner_id       = $i['AutoMac']['user_id'];
                         $owner_tree     = $this->_find_parents($owner_id);
                         array_push($csv_line,$owner_tree); 
                     }else{
-                        array_push($csv_line,$i['Tag']["$column_name"]);  
+
+                        //Here we need to do some serious processing!
+                        //================= ******* =================
+                        if(in_array($column_name,array_keys($as_items))){
+                            array_push($csv_line,$as_items[$column_name]);  
+                        }else{
+                            array_push($csv_line,$i['AutoMac']["$column_name"]); 
+                        }
+
+                        //===========================================
+
+                        //array_push($csv_line,$i['AutoMac']["$column_name"]);  
                     }
                 }
                 fputcsv($fp, $csv_line,';','"');
@@ -87,8 +109,6 @@ class AutoMacsController extends AppController {
         $this->response->body($data);
     }
 
-
-*/
 
     //____ BASIC CRUD AutoMacs Manager ________
     public function index(){
@@ -904,6 +924,7 @@ class AutoMacsController extends AppController {
                 }
                 
                 array_push($c['conditions'],array("AutoSetup.description" => $this->request->query['sort']));
+            
                 $sort = "AutoSetup.value";
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
@@ -916,13 +937,13 @@ class AutoMacsController extends AppController {
 
         //====== REQUEST FILTER =====
         if(isset($this->request->query['filter'])){
-            $filter = json_decode($this->request->query['filter']);
-            
+            $filter_array = array();
+            $filter = json_decode($this->request->query['filter']);            
             foreach($filter as $f){
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                        array_push($filter_array,array("User.username LIKE" => '%'.$f->value.'%'));
                     }elseif(in_array($f->field,$this->setup_items)){                       
                         //Add a search clause
                         //Join the Radcheck table - only together with clause:
@@ -939,6 +960,11 @@ class AutoMacsController extends AppController {
                             'AutoSetup.description'  => $f->field,
                             "AutoSetup.value LIKE" => '%'.$f->value.'%'
                         ));
+                      ///  array_push($filter_array,array(
+                      ///      'AutoSetup.description'  => $f->field,
+                     ///       "AutoSetup.value LIKE" => '%'.$f->value.'%'
+                     ///   ));
+
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
@@ -950,6 +976,9 @@ class AutoMacsController extends AppController {
                      array_push($c['conditions'],array("$col" => $f->value));
                 }
             }
+
+          ////  array_push($c['conditions'],array('OR' => $filter_array));
+
         }
         //====== END REQUEST FILTER =====
 
@@ -982,7 +1011,11 @@ class AutoMacsController extends AppController {
             array_push($c['conditions'],array('OR' => $tree_array));  
         }    
    
-        //====== END AP FILTER =====      
+        //====== END AP FILTER =====  
+
+
+    //    print_r($c);
+    
         return $c;
     }
 
