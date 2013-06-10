@@ -26,7 +26,7 @@ Ext.define('Rd.view.nas.pnlNasOpenVpn', {
                 labelAlign: 'left',
                 labelSeparator: '',
                 margin: Rd.config.fieldMargin,
-                labelWidth: Rd.config.labelWidth,
+                labelWidth: Rd.config.labelWidth
             },
             tbar: [
                 { xtype: 'tbtext', text: i18n('sOpenVPN_credentials'), cls: 'lblWizard' }

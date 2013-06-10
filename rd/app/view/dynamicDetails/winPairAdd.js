@@ -23,7 +23,7 @@ Ext.define('Rd.view.dynamicDetails.winPairAdd', {
             labelAlign: 'left',
             labelSeparator: '',
             margin: Rd.config.fieldMargin,
-            labelWidth: Rd.config.labelWidth,
+            labelWidth: Rd.config.labelWidth
         },
         items       : [
             {

@@ -26,7 +26,7 @@ Ext.define('Rd.view.nas.pnlNasDynamic', {
                 labelAlign: 'left',
                 labelSeparator: '',
                 margin: Rd.config.fieldMargin,
-                labelWidth: Rd.config.labelWidth,
+                labelWidth: Rd.config.labelWidth
             },
             tbar: [
                 { xtype: 'tbtext', text: i18n('sUnique_AVP_combination'), cls: 'lblWizard' }

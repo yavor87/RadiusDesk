@@ -1,4 +1,4 @@
-Ext.define('Rd.view.permanentUser.winPermanentUserAddWizard', {
+Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
     extend:     'Ext.window.Window',
     alias :     'widget.winPermanentUserAddWizard',
     closable:   true,

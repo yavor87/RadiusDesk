@@ -105,7 +105,7 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                     phpMode : false,
                     options : ['user', 'voucher', 'device']
                 }
-            },
+            }
         ];
 
         //Create a mask and assign is as a property to the window

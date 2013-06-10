@@ -44,7 +44,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                     labelSeparator: '',
                     margin: Rd.config.fieldMargin,
                     labelWidth: Rd.config.labelWidth,
-                    maxWidth: Rd.config.maxWidth,  
+                    maxWidth: Rd.config.maxWidth  
                 },
                 items       : [
                     {
@@ -196,7 +196,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         inputValue  : 'on_public_maps',
                                         checked     : false,
                                         boxLabelCls : 'lblRdCheck',
-                                        margin: Rd.config.fieldMargin,
+                                        margin: Rd.config.fieldMargin
                                     }    
                                 ]
                             },
@@ -214,7 +214,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         inputValue  : 'record_auth',
                                         checked     : false,
                                         boxLabelCls : 'lblRdCheck',
-                                        margin: Rd.config.fieldMargin,
+                                        margin: Rd.config.fieldMargin
                                     },
                                     {
                                         xtype       : 'checkbox',      
@@ -223,7 +223,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         inputValue  : 'ignore_acct',
                                         checked     : false,
                                         boxLabelCls : 'lblRdCheck',
-                                        margin: Rd.config.fieldMargin,
+                                        margin: Rd.config.fieldMargin
                                     },
                                     {
                                         xtype       : 'checkbox',      
@@ -232,7 +232,7 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                         inputValue  : 'session_auto_close',
                                         checked     : false,
                                         boxLabelCls : 'lblRdCheck',
-                                        margin: Rd.config.fieldMargin,
+                                        margin: Rd.config.fieldMargin
                                     },
                                     {
                                         xtype: 'numberfield',

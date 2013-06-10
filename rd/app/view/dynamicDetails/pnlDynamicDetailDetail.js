@@ -1,4 +1,4 @@
-Ext.define('Rd.view.nas.pnlDynamicDetailDetail', {
+Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlDynamicDetailDetail',
     border  : false,
@@ -22,7 +22,7 @@ Ext.define('Rd.view.nas.pnlDynamicDetailDetail', {
                     labelSeparator  : '',
                     margin          : Rd.config.fieldMargin,
                     labelWidth      : Rd.config.labelWidth,
-                    maxWidth        : Rd.config.maxWidth,  
+                    maxWidth        : Rd.config.maxWidth  
                 },
                 items       : [
                     {

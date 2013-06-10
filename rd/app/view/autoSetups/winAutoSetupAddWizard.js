@@ -164,7 +164,7 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     allowBlank  : false,
                                     blankText   : i18n('sSupply_a_value'),
                                     labelClsExtra: 'lblRdReq'
-                                },
+                                }
                             ]
                         },
                         { 
@@ -248,7 +248,7 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     name        : 'wifi_active',
                                     inputValue  : 'active',
                                     checked     : true,
-                                    labelClsExtra: 'lblRdReq',
+                                    labelClsExtra: 'lblRdReq'
                                 }, 
                                 {
                                     xtype: 'numberfield',
@@ -259,7 +259,7 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     value: 6,
                                     maxValue: 14,
                                     minValue: 1,
-                                    labelClsExtra: 'lblRdReq',
+                                    labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype: 'numberfield',
@@ -269,7 +269,7 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     value: 10,
                                     maxValue: 22,
                                     minValue: 1,
-                                    labelClsExtra: 'lblRdReq',
+                                    labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype: 'numberfield',
@@ -279,7 +279,7 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
                                     value: 30,
                                     maxValue: 200,
                                     minValue: 1,
-                                    labelClsExtra: 'lblRdReq',
+                                    labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype           : 'displayfield',

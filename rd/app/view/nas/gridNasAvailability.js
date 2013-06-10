@@ -7,7 +7,7 @@ Ext.define('Rd.view.nas.gridNasAvailability' ,{
     stateId: 'StateGridNas',
     stateEvents:['groupclick','columnhide'],
     viewConfig: {
-        preserveScrollOnRefresh: true,
+        preserveScrollOnRefresh: true
     },
     requires: [
         'Rd.view.components.ajaxToolbar'
@@ -54,7 +54,7 @@ Ext.define('Rd.view.nas.gridNasAvailability' ,{
                 },
                 api: {
                     destroy  : '/cake2/rd_cake/na_states/delete.json'
-                },
+                }
             },
             listeners: {
                 load: function(store, records, successful) {      

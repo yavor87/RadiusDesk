@@ -10,7 +10,7 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
         loadMask:true
     },
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 

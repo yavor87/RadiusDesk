@@ -144,8 +144,7 @@ Ext.define('Rd.view.devices.gridDeviceRadaccts' ,{
                     }   
                 },
                 scope: this
-            },
-            //autoLoad: true    
+            }  
         });
        
         //Create a mask and assign is as a property to the window

@@ -23,7 +23,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
             labelAlign: 'left',
             labelSeparator: '',
             margin: Rd.config.fieldMargin,
-            labelWidth: Rd.config.labelWidth,
+            labelWidth: Rd.config.labelWidth
         },
         items       : [
             {
@@ -31,7 +31,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
                 fieldLabel  : i18n('sTitle'),
                 name        : "title",
                 labelClsExtra: 'lblRdReq',
-                allowBlank  : false,
+                allowBlank  : false
             },
             {
                 xtype       : 'textareafield',
@@ -40,7 +40,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
                 fieldLabel  : i18n('sDescription'),
                 anchor      : '100%',
                 labelClsExtra: 'lblRdReq',
-                allowBlank  : false,
+                allowBlank  : false
             },
             {
                 xtype: 'filefield',

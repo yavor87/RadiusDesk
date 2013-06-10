@@ -48,7 +48,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailLogo', {
                             labelAlign: 'left',
                             labelSeparator: '',
                             margin: Rd.config.fieldMargin,
-                            labelWidth: Rd.config.labelWidth,
+                            labelWidth: Rd.config.labelWidth
                         },
                         items       : [
                             {

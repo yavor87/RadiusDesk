@@ -32,7 +32,7 @@ Ext.define('Rd.view.nas.winMapNasAdd', {
                 ],
                 items: [
                     {
-                        xtype       : 'cmbNas',
+                        xtype       : 'cmbNas'
                     }
                 ],
                 buttons: [

@@ -202,12 +202,12 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : i18n('sName'),
-                                    name        : "name",
+                                    name        : "name"
                                 },
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : i18n('sSurname'),
-                                    name        : "surname",
+                                    name        : "surname"
                                 },
                                 {
                                     xtype       : 'textfield',

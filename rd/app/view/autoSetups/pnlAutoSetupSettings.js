@@ -1,4 +1,4 @@
-Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
+Ext.define('Rd.view.autoSetups.pnlAutoSetupSettings', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlAutoSetupSettings',
     border  : false,
@@ -22,7 +22,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                     labelSeparator  : '',
                     margin          : Rd.config.fieldMargin,
                     labelWidth      : Rd.config.labelWidth,
-                    maxWidth        : Rd.config.maxWidth,  
+                    maxWidth        : Rd.config.maxWidth  
                 },
                 items:[
                     {
@@ -139,7 +139,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                                         name        : 'wifi_active',
                                         inputValue  : 'active',
                                         checked     : true,
-                                        labelClsExtra: 'lblRdReq',
+                                        labelClsExtra: 'lblRdReq'
                                     }, 
                                     {
                                         xtype: 'numberfield',
@@ -150,7 +150,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                                         value: 6,
                                         maxValue: 14,
                                         minValue: 1,
-                                        labelClsExtra: 'lblRdReq',
+                                        labelClsExtra: 'lblRdReq'
                                     },
                                     {
                                         xtype: 'numberfield',
@@ -160,7 +160,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                                         value: 10,
                                         maxValue: 22,
                                         minValue: 1,
-                                        labelClsExtra: 'lblRdReq',
+                                        labelClsExtra: 'lblRdReq'
                                     },
                                     {
                                         xtype: 'numberfield',
@@ -170,7 +170,7 @@ Ext.define('Rd.view.autoSetup.pnlAutoSetupSettings', {
                                         value: 30,
                                         maxValue: 200,
                                         minValue: 1,
-                                        labelClsExtra: 'lblRdReq',
+                                        labelClsExtra: 'lblRdReq'
                                     },
                                     {
                                         xtype           : 'displayfield',

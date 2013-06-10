@@ -1,4 +1,4 @@
-Ext.define('Rd.view.nas.pnlRealmDetail', {
+Ext.define('Rd.view.realms.pnlRealmDetail', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlRealmDetail',
     border  : false,
@@ -22,7 +22,7 @@ Ext.define('Rd.view.nas.pnlRealmDetail', {
                     labelSeparator  : '',
                     margin          : Rd.config.fieldMargin,
                     labelWidth      : Rd.config.labelWidth,
-                    maxWidth        : Rd.config.maxWidth,  
+                    maxWidth        : Rd.config.maxWidth  
                 },
                 items       : [
                     {

@@ -1,4 +1,4 @@
-Ext.define('Rd.view.nas.pnlAccessProviderDetail', {
+Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlAccessProviderDetail',
     border  : false,
@@ -32,7 +32,7 @@ Ext.define('Rd.view.nas.pnlAccessProviderDetail', {
                     labelSeparator  : '',
                     margin          : Rd.config.fieldMargin,
                     labelWidth      : Rd.config.labelWidth,
-                    maxWidth        : Rd.config.maxWidth,  
+                    maxWidth        : Rd.config.maxWidth  
                 },
                 items       : [
                     {
@@ -110,12 +110,12 @@ Ext.define('Rd.view.nas.pnlAccessProviderDetail', {
                                     {
                                         xtype       : 'textfield',
                                         fieldLabel  : i18n('sName'),
-                                        name        : "name",
+                                        name        : "name"
                                     },
                                     {
                                         xtype       : 'textfield',
                                         fieldLabel  : i18n('sSurname'),
-                                        name        : "surname",
+                                        name        : "surname"
                                     },
                                     {
                                         xtype       : 'textfield',
