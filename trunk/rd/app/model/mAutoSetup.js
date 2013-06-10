@@ -13,7 +13,7 @@ Ext.define('Rd.model.mAutoSetup', {
          {name: 'ip_dns_2',     type: 'string'  },
 //Wifi settings
          {name: 'wifi_active',  type: 'bool'  },
-         {name: 'chanel',       type: 'int'  },
+         {name: 'channel',       type: 'int'  },
          {name: 'power',        type: 'int'  },
          {name: 'distance',     type: 'int'  },
          {name: 'ssid_secure',  type: 'string'  },
