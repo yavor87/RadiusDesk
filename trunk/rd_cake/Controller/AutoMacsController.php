@@ -583,10 +583,10 @@ class AutoMacsController extends AppController {
         $items = array();
         if(isset($this->request->query['for_id'])){
             $tag_id = $this->request->query['for_id'];
-            $q_r    = $this->Tag->TagNote->find('all', 
+            $q_r    = $this->AutoMac->AutoMacNote->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('TagNote.tag_id' => $tag_id)
+                    'conditions'    => array('AutoMacNote.auto_mac_id' => $tag_id)
                 )
             );
             foreach($q_r as $i){
@@ -636,14 +636,14 @@ class AutoMacsController extends AppController {
 
         $success    = false;
         $msg        = array('message' => __('Could not create note'));
-        $this->Tag->TagNote->Note->create(); 
+        $this->AutoMac->AutoMacNote->Note->create(); 
         //print_r($this->request->data);
-        if ($this->Tag->TagNote->Note->save($this->request->data)) {
+        if ($this->AutoMac->AutoMacNote->Note->save($this->request->data)) {
             $d                      = array();
-            $d['TagNote']['tag_id']   = $this->request->data['for_id'];
-            $d['TagNote']['note_id'] = $this->Tag->TagNote->Note->id;
-            $this->Tag->TagNote->create();
-            if ($this->Tag->TagNote->save($d)) {
+            $d['AutoMacNote']['auto_mac_id']   = $this->request->data['for_id'];
+            $d['AutoMacNote']['note_id'] = $this->AutoMac->AutoMacNote->Note->id;
+            $this->AutoMac->AutoMacNote->create();
+            if ($this->AutoMac->AutoMacNote->save($d)) {
                 $success = true;
             }
         }
@@ -680,35 +680,35 @@ class AutoMacsController extends AppController {
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->Tag->TagNote->Note->findById($this->data['id']);
+            $item       = $this->AutoMac->AutoMacNote->Note->findById($this->data['id']);
             $owner_id   = $item['Note']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->Tag->TagNote->Note->id = $this->data['id'];
-                    $this->Tag->TagNote->Note->delete($this->data['id'],true);
+                    $this->AutoMac->AutoMacNote->Note->id = $this->data['id'];
+                    $this->AutoMac->AutoMacNote->Note->delete($this->data['id'],true);
                 }else{
                     $fail_flag = true;
                 }
             }else{
-                $this->Tag->TagNote->Note->id = $this->data['id'];
-                $this->Tag->TagNote->Note->delete($this->data['id'],true);
+                $this->AutoMac->AutoMacNote->Note->id = $this->data['id'];
+                $this->AutoMac->AutoMacNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->Tag->TagNote->Note->findById($d['id']);
+                $item       = $this->AutoMac->AutoMacNote->Note->findById($d['id']);
                 $owner_id   = $item['Note']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->Tag->TagNote->Note->id = $d['id'];
-                        $this->Tag->TagNote->Note->delete($d['id'],true);
+                        $this->AutoMac->AutoMacNote->Note->id = $d['id'];
+                        $this->AutoMac->AutoMacNote->Note->delete($d['id'],true);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
-                    $this->Tag->TagNote->Note->id = $d['id'];
-                    $this->Tag->TagNote->Note->delete($d['id'],true);
+                    $this->AutoMac->AutoMacNote->Note->id = $d['id'];
+                    $this->AutoMac->AutoMacNote->Note->delete($d['id'],true);
                 }
    
             }
@@ -996,7 +996,7 @@ class AutoMacsController extends AppController {
                 if($i_id != $user_id){ //upstream
                     array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
                 }else{
-                    array_push($tree_array,array('Tag.user_id' => $i_id));
+                    array_push($tree_array,array('AutoMac.user_id' => $i_id));
                 }
             }
             //** ALL the AP's children
