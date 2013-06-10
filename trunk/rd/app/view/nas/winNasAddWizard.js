@@ -170,13 +170,7 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                 xtype: 'radiogroup',
                 fieldLabel: i18n('sConnection_type'),
                 columns: 1,
-                vertical: true,
-               // items: [
-                  //  { boxLabel: 'Direct (fixed IP)',    name: 'rb', inputValue: 'direct', checked: true },
-                 //   { boxLabel: 'OpenVPN',              name: 'rb', inputValue: 'openvpn'},
-                  //  { boxLabel: 'PPTP',                 name: 'rb', inputValue: 'pptpd' },
-                  //  { boxLabel: 'Dynamic client',       name: 'rb', inputValue: 'dynamic' }
-               // ]
+                vertical: true
             }],
             buttons: buttons
         });
@@ -319,7 +313,7 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                                 boxLabelCls : 'lblRdCheck',
                                 itemId      : 'chkAvailForAll',
                                 name        : 'available_to_all',
-                                inputValue  : true,
+                                inputValue  : true
                             }],
                             layout: 'fit',
                             items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
@@ -469,7 +463,7 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                                 boxLabelCls : 'lblRdCheck',
                                 itemId      : 'chkAvailForAll',
                                 name        : 'available_to_all',
-                                inputValue  : true,
+                                inputValue  : true
                             }],
                             layout: 'fit',
                             items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
@@ -607,7 +601,7 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                                 boxLabelCls : 'lblRdCheck',
                                 itemId      : 'chkAvailForAll',
                                 name        : 'available_to_all',
-                                inputValue  : true,
+                                inputValue  : true
                             }],
                             layout: 'fit',
                             items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
@@ -726,7 +720,7 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                                 boxLabelCls : 'lblRdCheck',
                                 itemId      : 'chkAvailForAll',
                                 name        : 'available_to_all',
-                                inputValue  : true,
+                                inputValue  : true
                             }],
                             layout: 'fit',
                             items: { xtype: 'gridRealmsForNasOwner', realFlag: true}

@@ -8,9 +8,6 @@ Ext.define('Rd.view.accessProviders.winDetail', {
     height: 500,
     resizable:  false,
     iconCls: 'add',
-    requires: [
-        'Rd.view.accessProviders.frmDetail'
-    ],
     parent_name: '',
     parent_id: '',
     initComponent: function(){

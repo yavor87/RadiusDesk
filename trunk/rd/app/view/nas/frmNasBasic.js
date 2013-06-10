@@ -209,7 +209,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                                 inputValue  : 'record_auth',
                                 checked     : false,
                                 boxLabelCls : 'lblRdCheck',
-                                margin: me.marginSize,
+                                margin: me.marginSize
                             },
                             {
                                 xtype       : 'checkbox',      
@@ -218,7 +218,7 @@ Ext.define('Rd.view.nas.frmNasBasic', {
                                 inputValue  : 'session_auto_close',
                                 checked     : false,
                                 boxLabelCls : 'lblRdCheck',
-                                margin: me.marginSize,
+                                margin: me.marginSize
                             },
                             {
                                 xtype: 'numberfield',

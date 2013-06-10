@@ -188,7 +188,7 @@ Ext.define('Rd.view.dynamicDetails.frmDetail', {
                 fieldLabel  : i18n('sLatitude'),
                 name        : "lat",
                 allowBlank  : true
-            },
+            }
         ]}
      
         ];

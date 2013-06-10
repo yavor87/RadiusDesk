@@ -40,7 +40,7 @@ Ext.define('Rd.view.nas.pnlNasPhoto', {
                 labelAlign: 'left',
                 labelSeparator: '',
                 margin: Rd.config.fieldMargin,
-                labelWidth: Rd.config.labelWidth,
+                labelWidth: Rd.config.labelWidth
             },
             items       : [
                 {

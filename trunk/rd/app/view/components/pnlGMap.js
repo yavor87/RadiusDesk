@@ -65,7 +65,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                     t_i_s           = s+" "+Ext.Date.format(online, 'z:H:i:s');
                 }
                 var d  = Ext.apply({
-                    time_in_state   : t_i_s,
+                    time_in_state   : t_i_s
                 }, me.marker_record.data);
 
                 var tpl = new Ext.Template([

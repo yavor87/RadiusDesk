@@ -22,7 +22,7 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
         { xtype: 'cmbNas', allowBlank: true }
     ],
     bbar: [
-        {   xtype: 'component', itemId: 'status',   tpl: 'Status: {mesg}',   style: 'margin-right:5px', cls: 'lblYfi' },
+        {   xtype: 'component', itemId: 'status',   tpl: 'Status: {mesg}',   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     requires: ['Rd.view.components.chrtBasicPie'],
     authBasicStore    : null,
@@ -87,6 +87,6 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
         });
         var acct_basic_chart = Ext.create('Rd.view.components.chrtBasicPie', { store: me.acctDetailStore });
         return acct_basic_chart;
-    },
+    }
 });
 

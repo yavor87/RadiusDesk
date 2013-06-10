@@ -11,7 +11,7 @@ Ext.define('Rd.view.radiusClient.frmRadiusRequest', {
         labelSeparator  : '',
         margin          : Rd.config.fieldMargin,
         labelWidth      : Rd.config.labelWidth,
-        maxWidth        : Rd.config.maxWidth,  
+        maxWidth        : Rd.config.maxWidth  
     },
     requires: [
         'Rd.view.radiusClient.cmbRequestType', 'Rd.view.radiusClient.cmbUserType', 'Rd.view.components.cmbPermanentUser',

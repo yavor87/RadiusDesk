@@ -19,7 +19,7 @@ Ext.define('Rd.view.realms.winRealmAdd', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
-        'Ext.form.field.Radio',
+        'Ext.form.field.Radio'
     ],
      initComponent: function() {
         var me = this;

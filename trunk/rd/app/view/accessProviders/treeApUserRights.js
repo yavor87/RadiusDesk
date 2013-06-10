@@ -1,4 +1,4 @@
-Ext.define('Rd.view.acessProviders.treeApUserRights' ,{
+Ext.define('Rd.view.accessProviders.treeApUserRights' ,{
     extend:'Ext.tree.Panel',
     requires:   ['Rd.view.components.advCheckColumn'],
     useArrows: true,

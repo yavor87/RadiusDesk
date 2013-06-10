@@ -8,7 +8,7 @@ Ext.define('Rd.view.i18n.gridPhpPhrases' ,{
     border: false,
     multiSelect: true,
     viewConfig: {
-        preserveScrollOnRefresh: true,
+        preserveScrollOnRefresh: true
     },
     requires: ['Rd.view.components.vCmbLanguages'],
     columns: [

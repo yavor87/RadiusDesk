@@ -37,7 +37,7 @@ Ext.define('Rd.view.components.winEnableDisable', {
                         vertical: true,
                         items: [
                             { boxLabel: i18n('sEnable'),    name: 'rb',     inputValue: 'enable', checked: true },
-                            { boxLabel: i18n('sDisable'),   name: 'rb',     inputValue: 'disable'},
+                            { boxLabel: i18n('sDisable'),   name: 'rb',     inputValue: 'disable'}
                         ]
                     }
                 ],

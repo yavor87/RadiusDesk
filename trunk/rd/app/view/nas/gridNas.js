@@ -7,7 +7,7 @@ Ext.define('Rd.view.nas.gridNas' ,{
     stateId: 'StateGridNas',
     stateEvents:['groupclick','columnhide'],
     viewConfig: {
-        preserveScrollOnRefresh: true,
+        preserveScrollOnRefresh: true
     },
     border: false,
     requires: [

@@ -1,4 +1,4 @@
-Ext.define('Rd.view.profiles.winTagManage', {
+Ext.define('Rd.view.profiles.winComponentManage', {
     extend: 'Ext.window.Window',
     alias : 'widget.winComponentManage',
     title : i18n('sEdit_profile'),
@@ -53,7 +53,7 @@ Ext.define('Rd.view.profiles.winTagManage', {
                         disabled: false,
                         name: 'component_id',
                         displayField: 'name',
-                        valueField: 'id',
+                        valueField: 'id'
                     },
                     {
                         xtype: 'numberfield',

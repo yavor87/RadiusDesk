@@ -6,7 +6,7 @@ Ext.define('Rd.view.i18n.gridJavascriptPhrases' ,{
     'stateId': 'StateGridJavascriptPhrases',
     'stateEvents':['groupclick','columnhide'],
     viewConfig: {
-        preserveScrollOnRefresh: true,
+        preserveScrollOnRefresh: true
     },
     border: false,
     requires: ['Rd.view.components.vCmbLanguages'],

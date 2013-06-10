@@ -83,7 +83,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                 }
                 return '<div class="' + cls.join(' ') + '">&#160;</div>';
             }
-        },
+        }
     ],
     tbar: [
         { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')}      

@@ -44,7 +44,7 @@ Ext.define('Rd.view.i18n.winPhpEdit', {
                         fieldLabel: i18n('sMsgid'),
                         name : "msgid",
                         allowBlank:false,
-                        blankText : i18n('sSpecify_a_valid_name_please'),
+                        blankText : i18n('sSpecify_a_valid_name_please')
                     }],
                 buttons: [
                     {

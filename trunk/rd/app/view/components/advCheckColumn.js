@@ -12,6 +12,5 @@ Ext.define('Rd.view.components.advCheckColumn', {
         if (enabled) {
             me.callParent(arguments);
         }
-    },
-
+    }
 });

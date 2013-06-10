@@ -50,7 +50,7 @@ Ext.define('Rd.view.nas.winTagManage', {
                         allowBlank: false,
                         name: 'tag_id',
                         displayField: 'name',
-                        valueField: 'id',
+                        valueField: 'id'
                     }
                 ],
                 buttons: [
