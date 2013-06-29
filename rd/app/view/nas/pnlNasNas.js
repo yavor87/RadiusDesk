@@ -98,6 +98,12 @@ Ext.define('Rd.view.nas.pnlNasNas', {
                                     anchor  : '100%'
                                 },
                                 items: [
+                                   {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : i18n('sNAS-Identifier'),
+                                        name        : "nasidentifier",
+                                        labelClsExtra: 'lblRd'
+                                    },
                                    { 
                                         xtype        : 'cmbNasTypes'
                                     },
