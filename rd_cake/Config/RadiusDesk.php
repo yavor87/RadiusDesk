@@ -12,7 +12,7 @@ $config['commands']['msgcat'] = '/usr/bin/msgcat';
 $config['conn_type'][0]     = array('name' => __('Direct (Fixed IP)'),  'id' => 'direct',   'active' => true);
 $config['conn_type'][1]     = array('name' => __('OpenVPN'),            'id' => 'openvpn',  'active' => false);
 $config['conn_type'][2]     = array('name' => __('PPTP'),               'id' => 'pptp',     'active' => false);
-$config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 'dynamic',  'active' => false);
+$config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 'dynamic',  'active' => true);
 
 //Define the location of ccd (client config directory)
 //FIXME This value does not get read by the OpenvpnClients Model - investigate
@@ -35,9 +35,10 @@ $config['dynamic_attributes'][0]     = array('name' => 'Called-Station-Id',  'id
 $config['dynamic_attributes'][1]     = array('name' => 'Mikrotik-Realm',     'id' => 'Mikrotik-Realm',      'active' => true);
 
 //Define nas types
-$config['nas_types'][0]     = array('name' => 'Other',              'id' => 'other',                'active' => true);
-$config['nas_types'][1]     = array('name' => 'CoovaChilli',        'id' => 'CoovaChilli',          'active' => true);
-$config['nas_types'][0]     = array('name' => 'Mikrotik',           'id' => 'Mikrotik',             'active' => true);
+$config['nas_types'][0]     = array('name' => 'Other',                  'id' => 'other',                    'active' => true);
+$config['nas_types'][1]     = array('name' => 'CoovaChilli',            'id' => 'CoovaChilli',              'active' => true);
+$config['nas_types'][2]     = array('name' => 'CoovaChilli-Heartbeat',  'id' => 'CoovaChilli-Heartbeat',    'active' => true);
+$config['nas_types'][3]     = array('name' => 'Mikrotik',               'id' => 'Mikrotik',                 'active' => true);
 
 //FIXME To incorporate
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
