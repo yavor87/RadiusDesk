@@ -36,6 +36,7 @@ $config['freeradius']['radclient']                  = '/usr/local/bin/radclient'
 //Define the configured dynamic attributes
 $config['dynamic_attributes'][0]     = array('name' => 'Called-Station-Id',  'id' => 'Called-Station-Id',   'active' => true);
 $config['dynamic_attributes'][1]     = array('name' => 'Mikrotik-Realm',     'id' => 'Mikrotik-Realm',      'active' => true);
+$config['dynamic_attributes'][2]     = array('name' => 'NAS-Identifier',     'id' => 'NAS-Identifier',      'active' => true);
 
 //Define nas types
 $config['nas_types'][0]     = array('name' => 'Other',                  'id' => 'other',                    'active' => true);
