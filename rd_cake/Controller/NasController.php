@@ -1171,11 +1171,40 @@ class NasController extends AppController {
         ));
 	}
 
+    //FOR The CoovaAP heartbeat system
     //This view needs to send plain text out
     public function get_coova_detail($mac){
+
         $this->autoRender = false; // no view to render
         $this->response->type('text');
-        $response = "HEARTBEAT=YES\nNAS-ID=KOOS\nNAS-IP=10.120.0.1\nSSID=GOOIHOM\n";
+
+        $pattern = '/^([0-9a-fA-F]{2}[-]){5}[0-9a-fA-F]{2}$/i';
+        if(preg_match($pattern, $mac)< 1){
+            $error      = "ERROR=MAC missing or wrong";
+            $response   = "HEARTBEAT=NO\n$error\n";
+            $this->response->body($response);
+            return;
+        }
+
+        //MAC format fine; see if defined
+        $this->{$this->modelClass}->contain();
+        $q_r = $this->{$this->modelClass}->find('first', array('conditions' => 
+            array('Na.server' => $mac,'Na.type' => 'CoovaChilli-Heartbeat'))
+        );
+
+        if($q_r){
+            $nas_id = $q_r['Na']['nasidentifier'];
+            $nas_ip = $q_r['Na']['nasname'];
+            $ssid   = $q_r['Na']['community'];
+            if(($nas_id == '')||($nas_ip == '')||($ssid == '')){
+                $response = "HEARTBEAT=NO\nERROR=DATA MISSING\n"; 
+            }else{
+                $response = "HEARTBEAT=YES\nNAS-ID=$nas_id\nNAS-IP=$nas_ip\nSSID=$ssid\n";         
+            }
+            
+        }else{
+            $response = "HEARTBEAT=NO\nERROR=NO MATCH FOR MAC $mac\n"; 
+        }
         $this->response->body($response);
     }
 
