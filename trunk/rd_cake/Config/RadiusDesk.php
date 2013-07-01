@@ -24,6 +24,9 @@ $config['pptp']['start_ip']                        = '10.20.30.2';
 $config['pptp']['server_ip']                       = '10.20.30.1';
 $config['pptp']['chap_secrets']                    = '/etc/ppp/chap-secrets';
 
+//Define dynamic specific settings
+$config['dynamic']['start_ip']                     = '10.120.0.1'; //Make this a Class B subnet (64000) which will never include a value also specified for a FIXED client
+
 //Dictionary files to include for profiles...
 $config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
 $config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
