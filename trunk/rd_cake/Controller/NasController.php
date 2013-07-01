@@ -417,7 +417,7 @@ class NasController extends AppController {
         $class_b    = $octet_1.'.'.$octet_2;
         $q_r        = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => "$class_b%"), 'order' => 'Na.nasname DESC'));
 
-        if($q_r != ''){
+        if($q_r){
             $ip         = $q_r['Na']['nasname'];
             $next_ip    = $this->_get_next_ip($ip);           
             $not_available = true;
@@ -1919,9 +1919,9 @@ class NasController extends AppController {
         return false;
     }
 
-    private function _check_if_available($ip){
+     private function _check_if_available($ip){
 
-        $count = $this->find('count',array('conditions' => array('Nas.nasname' => $ip)));
+        $count = $this->Na->find('count',array('conditions' => array('Na.nasname' => $ip)));
         if($count == 0){
             return true;
         }else{
