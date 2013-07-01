@@ -192,6 +192,7 @@ class NasController extends AppController {
                 'id'                    => $i['Na']['id'], 
                 'nasname'               => $i['Na']['nasname'],
                 'shortname'             => $i['Na']['shortname'],
+                'nasidentifier'         => $i['Na']['nasidentifier'],
                 'secret'                => $i['Na']['secret'],
                 'type'                  => $i['Na']['type'],
                 'ports'                 => $i['Na']['ports'],
@@ -234,133 +235,6 @@ class NasController extends AppController {
             '_serialize' => array('items','success','totalCount')
         ));
     }
-
-    public function add() {
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-        //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
-            $this->request->data['user_id'] = $user_id;
-        }
-
-        //Make available to siblings check
-        if(isset($this->request->data['available_to_siblings'])){
-            $this->request->data['available_to_siblings'] = 1;
-        }else{
-            $this->request->data['available_to_siblings'] = 0;
-        }
-
-        //If this attribute is not present it will fail empty check
-        if(!isset($this->request->data['nasname'])){
-            $this->request->data['nasname'] = ''; //Make it empty if not present
-        }
-
-        //We need to see what the connection type was that was chosen
-        $connection_type = 'direct'; //Default
-        if(isset($this->request->data['connection_type'])){
-            if($this->request->data['connection_type'] == 'openvpn'){   //Add the OpenVPN item
-                $d = array();
-                $d['OpenvpnClient']['username'] = $this->request->data['vpn_username'];
-                $d['OpenvpnClient']['password'] = $this->request->data['vpn_password'];
-                $this->Na->OpenvpnClient->create();
-                if(!$this->Na->OpenvpnClient->save($d)){
-                    $first_error = reset($this->Na->OpenvpnClient->validationErrors);
-                    $this->set(array(
-                        'errors'    => $this->Na->OpenvpnClient->validationErrors,
-                        'success'   => false,
-                        'message'   => array('message' => 'Could not create OpenVPN Client <br>'.$first_error[0]),
-                        '_serialize' => array('errors','success','message')
-                    ));
-                    return;
-                }else{
-                    //Derive the nasname (ip address) from the new OpenvpnClient entry
-                    $qr = $this->Na->OpenvpnClient->findById($this->Na->OpenvpnClient->id);
-                    //IP Address =
-                    $nasname = Configure::read('openvpn.ip_half').$qr['OpenvpnClient']['subnet'].'.'.$qr['OpenvpnClient']['peer1'];
-                    $this->request->data['nasname'] = $nasname;
-                }
-            }
-        }
-
-        if(isset($this->request->data['connection_type'])){
-            if($this->request->data['connection_type'] == 'dynamic'){   //Add discover the next dynamic-<number>
-
-                $qr = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => 'dynamic-%'), 'order' => 'Na.nasname DESC'));
-                if($qr == ''){
-                    $this->request->data['nasname'] = 'dynamic-1';
-                }else{
-                    $last_id = $qr['Na']['nasname'];
-                    $last_nr = preg_replace('/^dynamic-/', "", $last_id);
-                    //See if there are not any holes:
-                    $start_id = 1;
-                    $hole_flag = false;
-                    while($start_id < $last_nr){
-                        $nn = 'dynamic-'.$start_id;
-                        $count = $this->Na->find('count', array('conditions' => array('Na.nasname' => $nn))); //This name is missing; we can take it
-                        if($count == 0){
-                            $this->request->data['nasname'] = $nn; 
-                            $hole_flag = true;
-                            break;
-                        }
-                        $start_id++;
-                    }
-                    if(!$hole_flag){ //There was no gap; take the next number
-                        $this->request->data['nasname'] = 'dynamic-'.($last_nr+1);
-                    }     
-                }   
-            }
-        }
-
-        $this->{$this->modelClass}->create();
-        //print_r($this->request->data);
-        if ($this->{$this->modelClass}->save($this->request->data)) {
-
-            
-
-            //Check if we need to add na_realms table
-            if(isset($this->request->data['avail_for_all'])){
-            //Available to all does not add any na_realm entries
-            }else{
-                foreach(array_keys($this->request->data) as $key){
-                    if(preg_match('/^\d+/',$key)){
-                        //----------------
-                        $this->_add_nas_realm($this->{$this->modelClass}->id,$key);
-                        //-------------
-                    }
-                }
-            }
-
-            //If it was an OpenvpnClient we need to update the na_id field
-            if($this->request->data['connection_type'] == 'openvpn'){
-                $this->Na->OpenvpnClient->saveField('na_id', $this->{$this->modelClass}->id);
-            }
-          
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        } else {
-            //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
-            if($this->request->data['connection_type'] == 'openvpn'){
-                $this->Na->OpenvpnClient->delete();
-            }
-
-            $first_error = reset($this->{$this->modelClass}->validationErrors);
-            $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item').' <br>'.$first_error[0]),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
-
-	}
 
     public function add_direct(){
 
@@ -535,28 +409,29 @@ class NasController extends AppController {
             $this->request->data['nasname'] = ''; //Make it empty if not present
         }
 
-        $qr = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => 'dynamic-%'), 'order' => 'Na.nasname DESC'));
-        if($qr == ''){
-            $this->request->data['nasname'] = 'dynamic-1';
-        }else{
-            $last_id = $qr['Na']['nasname'];
-            $last_nr = preg_replace('/^dynamic-/', "", $last_id);
-            //See if there are not any holes:
-            $start_id = 1;
-            $hole_flag = false;
-            while($start_id < $last_nr){
-                $nn = 'dynamic-'.$start_id;
-                $count = $this->Na->find('count', array('conditions' => array('Na.nasname' => $nn))); //This name is missing; we can take it
-                if($count == 0){
-                    $this->request->data['nasname'] = $nn; 
-                    $hole_flag = true;
+        //Get the class B subnet of the start_ip
+        $start_ip   = Configure::read('dynamic.start_ip');
+        $pieces     = explode('.',$start_ip);
+        $octet_1    = $pieces[0];
+        $octet_2    = $pieces[1];
+        $class_b    = $octet_1.'.'.$octet_2;
+        $q_r        = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => "$class_b%"), 'order' => 'Na.nasname DESC'));
+
+        if($q_r != ''){
+            $ip         = $q_r['Na']['nasname'];
+            $next_ip    = $this->_get_next_ip($ip);           
+            $not_available = true;
+            while($not_available){
+                if($this->_check_if_available($next_ip)){
+                    $this->request->data['nasname']     = $next_ip;
+                    $not_available = false;
                     break;
+                }else{
+                    $next_ip = $this->_get_next_ip($next_ip);
                 }
-                $start_id++;
-            }
-            if(!$hole_flag){ //There was no gap; take the next number
-                $this->request->data['nasname'] = 'dynamic-'.($last_nr+1);
-            }     
+            }              
+        }else{ //The very first entry
+            $this->request->data['nasname'] = $start_ip;
         }
 
         //Then we add the rest.....
@@ -1296,6 +1171,14 @@ class NasController extends AppController {
         ));
 	}
 
+    //This view needs to send plain text out
+    public function get_coova_detail($mac){
+        $this->autoRender = false; // no view to render
+        $this->response->type('text');
+        $response = "HEARTBEAT=YES\nNAS-ID=KOOS\nNAS-IP=10.120.0.1\nSSID=GOOIHOM\n";
+        $this->response->body($response);
+    }
+
 
     public function note_index(){
 
@@ -2006,6 +1889,35 @@ class NasController extends AppController {
         }
         //No match
         return false;
+    }
+
+    private function _check_if_available($ip){
+
+        $count = $this->find('count',array('conditions' => array('Nas.nasname' => $ip)));
+        if($count == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private function _get_next_ip($ip){
+
+        $pieces     = explode('.',$ip);
+        $octet_1    = $pieces[0];
+        $octet_2    = $pieces[1];
+        $octet_3    = $pieces[2];
+        $octet_4    = $pieces[3];
+
+        if($octet_4 >= 254){
+            $octet_4 = 1;
+            $octet_3 = $octet_3 +1;
+        }else{
+
+            $octet_4 = $octet_4 +1;
+        }
+        $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
+        return $next_ip;
     }
 
 }
