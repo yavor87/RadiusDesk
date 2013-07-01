@@ -1189,17 +1189,16 @@ class NasController extends AppController {
         //MAC format fine; see if defined
         $this->{$this->modelClass}->contain();
         $q_r = $this->{$this->modelClass}->find('first', array('conditions' => 
-            array('Na.server' => $mac,'Na.type' => 'CoovaChilli-Heartbeat'))
+            array('Na.community' => $mac,'Na.type' => 'CoovaChilli-Heartbeat'))
         );
 
         if($q_r){
             $nas_id = $q_r['Na']['nasidentifier'];
             $nas_ip = $q_r['Na']['nasname'];
-            $ssid   = $q_r['Na']['community'];
-            if(($nas_id == '')||($nas_ip == '')||($ssid == '')){
+            if(($nas_id == '')||($nas_ip == '')){
                 $response = "HEARTBEAT=NO\nERROR=DATA MISSING\n"; 
             }else{
-                $response = "HEARTBEAT=YES\nNAS-ID=$nas_id\nNAS-IP=$nas_ip\nSSID=$ssid\n";         
+                $response = "HEARTBEAT=YES\nNAS-ID=$nas_id\nNAS-IP=$nas_ip\n";         
             }
             
         }else{
