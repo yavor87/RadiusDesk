@@ -1084,11 +1084,16 @@ class NasController extends AppController {
 
         $items = array();
         $nn_disabled = true;
+        $chilli_heartbeat_flag = false;
 
         //Determine which tabs will be displayed (based on the connection type)
         if(isset($this->request->query['nas_id'])){
             $q_r = $this->{$this->modelClass}->findById($this->request->query['nas_id']);
             if($q_r){
+
+                if($q_r['Na']['type'] == 'CoovaChilli-Heartbeat'){
+                    $chilli_heartbeat_flag = true;
+                }
                 $conn_type = $q_r['Na']['connection_type'];
                 if($conn_type == 'openvpn'){
                     array_push($items,array( 'title'  => __('OpenVPN'), 'itemId' => 'tabOpenVpn', 'xtype' => 'pnlNasOpenVpn'));
@@ -1113,6 +1118,10 @@ class NasController extends AppController {
         array_push($items,array( 'title'  => __('Realms'),'itemId' => 'tabRealms', 'layout' => 'fit', 'border' => false, 'xtype' => 'pnlRealmsForNasOwner'));
          array_push($items,array( 'title'  => __('Photo'),'itemId' => 'tabPhoto', 'xtype' => 'pnlNasPhoto'));
          array_push($items,array( 'title'  => __('Availability'), 'itemId' => 'tabAvailability', 'xtype' => 'gridNasAvailability'));
+
+        if($chilli_heartbeat_flag == true){
+            array_push($items,array( 'title'  => __('Heartbeat actions'),'itemId' => 'tabActions','xtype' => 'gridNasActions'));
+        }
 
         $this->set(array(
                 'items'     => $items,

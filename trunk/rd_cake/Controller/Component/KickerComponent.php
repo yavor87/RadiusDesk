@@ -25,7 +25,24 @@ class KickerComponent extends Component {
         $framedipaddress    = $radacct_entry['framedipaddress'];
 		$device_mac			= $radacct_entry['callingstationid'];
         $nas_mac			= $radacct_entry['calledstationid'];
+        $nas_identifier     = $radacct_entry['nasidentifier'];
 
+
+        //_____ CoovaChilli-Heartbeat ______________
+        $hb_q_r = ClassRegistry::init('Na')->find('first',array('conditions' => 
+            array('Na.nasidentifier' => $nas_identifier,'Na.type' => 'CoovaChilli-Heartbeat')
+        ));
+
+        if($hb_q_r != ''){
+            $nas_id                 = $hb_q_r['Na']['id'];
+            $d['Action']['na_id']   = $nas_id;
+            $d['Action']['action']  = 'execute';
+            $d['Action']['command'] = "chilli_query logout $device_mac";
+            ClassRegistry::init('Action')->save($d);
+            return;
+        }
+
+        //_____ Direct Connected Clients _____
         $q_r                = ClassRegistry::init('Na')->findByNasname($nas_ip);
 
         if($q_r){
