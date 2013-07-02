@@ -1,10 +1,10 @@
-Ext.define('Rd.view.nas.gridNasAvailability' ,{
+Ext.define('Rd.view.nas.gridNasActions' ,{
     extend:'Ext.grid.Panel',
-    alias : 'widget.gridNasAvailability',
+    alias : 'widget.gridNasActions',
     border: false,
     stateful: true,
     multiSelect: true,
-    stateId: 'StateGridNasAvailability',
+    stateId: 'StateGridNasActions',
     stateEvents:['groupclick','columnhide'],
     viewConfig: {
         preserveScrollOnRefresh: true
@@ -12,23 +12,24 @@ Ext.define('Rd.view.nas.gridNasAvailability' ,{
     requires: [
         'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu:        '/cake2/rd_cake/na_states/menu_for_grid.json',
-    urlIndex:       '/cake2/rd_cake/na_states/index.json',
+    urlMenu:        '/cake2/rd_cake/actions/menu_for_grid.json',
+    urlIndex:       '/cake2/rd_cake/actions/index.json',
     columns: [
         {xtype: 'rownumberer'},
+        { text: i18n('sAction'),     dataIndex: 'action',        tdCls: 'gridTree', flex: 1, sortable: true},
+        { text: i18n('sCommand'),    dataIndex: 'command',       tdCls: 'gridTree', flex: 1, sortable: true},
         { 
-            text    : i18n('sState'),
-            flex    : 1,  
-            xtype   : 'templatecolumn', 
-            tpl     : new Ext.XTemplate(
-                        "<tpl if='state == true'><div class=\"fieldGreen\">"+i18n('sUp')+"</div></tpl>",
-                        "<tpl if='state == false'><div class=\"fieldRed\">"+i18n('sDown')+"</div></tpl>"
-                    ),
-            dataIndex: 'state'           
+            text        : i18n('sStatus'),
+            flex        : 1,  
+            xtype       : 'templatecolumn', 
+            tpl         : new Ext.XTemplate(
+                            "<tpl if='status == \"awaiting\"'><div class=\"fieldBlue\">"+i18n('sAwaiting')+"</div></tpl>",
+                            "<tpl if='status == \"fetched\"'><div class=\"fieldGreen\">"+i18n('sFetched')+"</div></tpl>"
+            ),
+            dataIndex   : 'status'
         },
-        { text: i18n('sDuration'),  dataIndex: 'time',       tdCls: 'gridTree', flex: 1, sortable: false},
-        { text: i18n('sStarted'),   dataIndex: 'start',      tdCls: 'gridTree', flex: 1, sortable: false},
-        { text: i18n('sEnded'),     dataIndex: 'end',        tdCls: 'gridTree', flex: 1, sortable: false}
+        { text: i18n('sCreated'),    dataIndex: 'created',       tdCls: 'gridTree', flex: 1, sortable: true},
+        { text: i18n('sModified'),   dataIndex: 'modified',      tdCls: 'gridTree', flex: 1, sortable: true}
     ],
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
@@ -41,7 +42,7 @@ Ext.define('Rd.view.nas.gridNasAvailability' ,{
 
         //Create a store specific to this Owner
         me.store = Ext.create(Ext.data.Store,{
-            model: 'Rd.model.mNaState',
+            model: 'Rd.model.mAction',
             proxy: {
                 type: 'ajax',
                 format  : 'json',
@@ -53,7 +54,7 @@ Ext.define('Rd.view.nas.gridNasAvailability' ,{
                     messageProperty: 'message'
                 },
                 api: {
-                    destroy  : '/cake2/rd_cake/na_states/delete.json'
+                    destroy  : '/cake2/rd_cake/actions/delete.json'
                 }
             },
             listeners: {

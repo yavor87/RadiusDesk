@@ -70,9 +70,10 @@ Ext.define('Rd.view.nas.gridNas' ,{
         
         me.columns = [
             {xtype: 'rownumberer'},
-            { text: i18n('sOwner'),        dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: i18n('sIP_Address'),   dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: i18n('sName'),         dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sOwner'),         dataIndex: 'owner',        tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sIP_Address'),    dataIndex: 'nasname',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sName'),          dataIndex: 'shortname',    tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
+            { text: i18n('sNAS-Identifier'),dataIndex: 'nasidentifier',tdCls: 'gridTree', flex: 1, filter: {type: 'string'}, hidden: true},
             { 
                 text        : i18n('sConnection_type'), 
                 dataIndex   : 'connection_type',        

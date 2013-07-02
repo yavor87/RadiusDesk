@@ -31,6 +31,13 @@ Ext.define('Rd.view.nas.pnlNas', {
 
             var gridA   = me.down('gridNasAvailability');
             gridA.getStore().getProxy().setExtraParam('nas_id',me.nas_id);
+
+            //If there is an Actions grid included.
+            var gridActions = me.down('gridNasActions');
+            if(gridActions != undefined){
+                gridActions.getStore().getProxy().setExtraParam('nas_id',me.nas_id);
+            }
+
         }
     }
 });

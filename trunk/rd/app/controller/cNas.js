@@ -47,10 +47,11 @@ Ext.define('Rd.controller.cNas', {
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
         'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto', 
-        'nas.winMapPreferences', 'nas.gridNasAvailability'
+        'nas.winMapPreferences', 'nas.gridNasAvailability', 'nas.gridNasActions', 'nas.winNasActionAdd'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
-    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 'mTag', 'mNasType', 'mNaState' ],
+    models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 
+                'mTag', 'mNasType', 'mNaState', 'mAction' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/nas/add.json',
@@ -81,7 +82,8 @@ Ext.define('Rd.controller.cNas', {
         urlBlueMark:        'resources/images/map_markers/blue-dot.png', 
         urlYellowMark:      'resources/images/map_markers/yellow-dot.png',
         urlViewMapPref:     '/cake2/rd_cake/nas/view_map_pref.json', 
-        urlEditMapPref:     '/cake2/rd_cake/nas/edit_map_pref.json'
+        urlEditMapPref:     '/cake2/rd_cake/nas/edit_map_pref.json',
+        urlNasActionsAdd:   '/cake2/rd_cake/actions/add.json'
     },
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'},
@@ -278,7 +280,7 @@ Ext.define('Rd.controller.cNas', {
             },
             '#pnlMapsEdit #save': {
                 click: me.btnMapSave
-            },
+            },//Photo
             'pnlNas #tabPhoto': {
                 activate:       me.tabPhotoActivate
             },
@@ -293,7 +295,7 @@ Ext.define('Rd.controller.cNas', {
             },
             'winMapPreferences #save': {
                 click:      me.mapPreferencesSave
-            },
+            },//Availability
             'pnlNas #tabAvailability': {
                 activate:   me.tabAvailabilityActivate
             },
@@ -302,7 +304,22 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNasAvailability #delete' :{
                 click:      me.gridNasAvailabilityDelete
-            }
+            },//Actions
+            'pnlNas #tabActions': {
+                activate:   me.tabActionsActivate
+            },
+            'gridNasActions #reload' :{
+                click:      me.gridNasActionsReload
+            },
+            'gridNasActions #add' :{
+                click:      me.gridNasActionsAdd
+            },
+            'gridNasActions #delete' :{
+                click:      me.gridNasActionsDelete
+            },
+            'winNasActionAdd #save': {
+                click: me.gridNasActionsAddSubmit
+            },
         });
     },
     reload: function(){
@@ -1591,6 +1608,86 @@ Ext.define('Rd.controller.cNas', {
     gridNasAvailabilityDelete:   function(button){
         var me      = this;  
         var grid    = button.up('gridNasAvailability');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    //Actions
+    gridNasActionsReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridNasActions');
+        grid.getStore().load();
+    },
+    tabActionsActivate : function(tab){
+        var me      = this;
+        tab.getStore().load();
+    },
+    gridNasActionsAdd: function(button){
+        var me      = this;
+        var pnl_nas = button.up('pnlNas');
+        var grid    = button.up('gridNasActions');
+        var nas_id  = pnl_nas.nas_id;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winNasActionAddId')){
+            var w = Ext.widget('winNasActionAdd',{id:'winNasActionAddId',nas_id: nas_id,grid: grid});
+            me.application.runAction('cDesktop','Add',w);       
+       }   
+    },
+   gridNasActionsAddSubmit: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('winNasActionAdd');
+
+        form.submit({
+            clientValidation: true,
+            url             : me.urlNasActionsAdd,
+            success: function(form, action) {
+                win.grid.getStore().load(); //Refresh the grid
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    gridNasActionsDelete:   function(button){
+        var me      = this;  
+        var grid    = button.up('gridNasActions');   
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
