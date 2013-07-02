@@ -4,6 +4,7 @@ Ext.define('Rd.model.mNas', {
          {name: 'id',           type: 'int'     },
          {name: 'nasname',      type: 'string'  },
          {name: 'shortname',    type: 'string'  },
+         {name: 'nasidentifier',type: 'string'  },
          {name: 'type',         type: 'string'  },
          {name: 'ports',        type: 'string'  },
          {name: 'secret',       type: 'string'  },
