@@ -64,6 +64,9 @@ class Na extends AppModel {
                         'order'     => 'NaState.created DESC',
                         'dependent' => true
                     ),
+        'Action'    => array(
+            'dependent'     => true   
+        ),
     );
 
     //Get the note ID before we delete it
