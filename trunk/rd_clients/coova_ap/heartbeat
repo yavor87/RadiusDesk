@@ -1,0 +1,18 @@
+#!/bin/sh /etc/rc.common
+# Example script
+# Copyright (C) 2007 OpenWrt.org
+ 
+START=85
+STOP=85
+  
+start() {        
+    echo start
+    # commands to launch application
+    /etc/heartbeat/heartbeat.sh start
+}                 
+                   
+stop() {          
+    echo stop
+    # commands to kill application
+    /etc/heartbeat/heartbeat.sh stop 
+}
