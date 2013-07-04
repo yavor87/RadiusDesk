@@ -1,5 +1,5 @@
-//Ext.Loader.setConfig({enabled:true});
-Ext.Loader.setConfig({enabled:true,disableCaching: false});
+Ext.Loader.setConfig({enabled:true});
+//Ext.Loader.setConfig({enabled:true,disableCaching: false});
 
 Ext.require([
     'Ext.window.MessageBox',
