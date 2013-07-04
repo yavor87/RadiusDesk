@@ -547,6 +547,10 @@
     background-image:url(../images/32x32/desktop.png);
 }
 
+.b-pdf {
+    background-image:url(../images/32x32/pdf.png);
+}
+
 
 .language16 {
     background-image:url(../images/16x16/language.png);
