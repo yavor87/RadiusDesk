@@ -247,6 +247,7 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+            array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers',    'itemId' => 'cVouchers'),
             array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers'),
             array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices'),
         );
