@@ -70,7 +70,6 @@ CREATE TABLE `actions` (
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
-INSERT INTO `actions` VALUES (4,55,'execute','ls','fetched','2013-07-02 20:00:40','2013-07-02 20:00:40');
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -772,7 +771,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','','CoovaChilli',3799,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-07-02 21:25:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-07-02 21:25:03'),(55,'10.120.0.1','CoovaAP-01','Dirk-AP','CoovaChilli-Heartbeat',NULL,'testing123','','00-1D-7E-BC-C2-12','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Dirk-AP-Home','off',600,600,'2013-07-02 20:21:33',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-07-02 10:00:59','2013-07-02 20:21:18');
+INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','','CoovaChilli',3799,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-07-04 14:10:04',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-07-04 14:10:04'),(55,'10.120.0.1','CoovaAP-01','Dirk-AP','CoovaChilli-Heartbeat',NULL,'testing123','','00-1D-7E-BC-C2-12','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Dirk-AP-Home','off',600,600,'2013-07-02 20:21:33',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-07-02 10:00:59','2013-07-02 20:21:18');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1584,6 +1583,40 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','5164f20c-9528-428a-83ed-0b7e03662c24','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,6,'2012-12-10 13:14:13','2013-05-25 10:36:23'),(165,'ap','f487af6f7caae763ccf4b063d9055a91304685b9','51a09555-4758-4faf-bcc8-104903662c24','John','Smith','500 West Street\nEast LA\n','555555555','jsmith@residence-inn.com','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-05-25 12:41:25','2013-05-25 12:41:25'),(166,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','51a0a201-53f4-4777-960b-04ee03662c24','Dirk','van der Walt','100 President Street\nSilverton\n0184','27125555555','dvdwalt@gmail.co.za','sql',1,0,'2013-07-01 21:35:51','2013-05-28 13:10:02','127.0.0.1','192.168.1.1','Most likely PEAP failure=3B run in debug',4,10,4,44,4,5,'2013-05-25 13:35:29','2013-05-28 13:10:46');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `vouchers`
+--
+
+DROP TABLE IF EXISTS `vouchers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vouchers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `batch` varchar(128) NOT NULL DEFAULT '',
+  `perc_time_used` int(6) DEFAULT '0',
+  `perc_data_used` int(6) DEFAULT '0',
+  `last_accept_time` datetime DEFAULT NULL,
+  `last_reject_time` datetime DEFAULT NULL,
+  `last_accept_nas` varchar(128) DEFAULT NULL,
+  `last_reject_nas` varchar(128) DEFAULT NULL,
+  `last_reject_message` varchar(255) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vouchers`
+--
+
+LOCK TABLES `vouchers` WRITE;
+/*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1594,4 +1627,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-07-02 21:38:04
+-- Dump completed on 2013-07-04 14:20:49
