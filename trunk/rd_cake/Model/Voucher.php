@@ -42,6 +42,15 @@ class Voucher extends AppModel {
         ),
     );
 
+    public function beforeSave(){
+
+        //Try to detect if it is an existing (edit):
+        $existing_flag = false;
+        if(!isset($this->data['Voucher']['id'])){
+            $this->data['Voucher']['name'] = $this->_detemine_voucher_name();     
+        }  
+    }
+
     public function afterSave($created){
         if($created){
             $this->_add_radius_user();
@@ -69,9 +78,19 @@ class Voucher extends AppModel {
     }
 
     private function _add_radius_user(){
+
         $username   = $this->data['Voucher']['name'];
+        $this->_add_radcheck_item($username,'Cleartext-Password',$this->_generatePassword());
         $this->_add_radcheck_item($username,'Rd-User-Type','voucher');
 
+        //Realm (Rd-Realm)
+        if(array_key_exists('realm_id',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['realm_id'] != ''){
+                $q_r = ClassRegistry::init('Realm')->findById($this->data['Voucher']['realm_id']);
+                $realm_name = $q_r['Realm']['name'];
+                $this->_add_radcheck_item($username,'Rd-Realm',$realm_name);
+            }
+        }
 
         //Profile name (User-Profile)
         if(array_key_exists('profile_id',$this->data['Voucher'])){ //It may be missing; you never know...
@@ -82,50 +101,6 @@ class Voucher extends AppModel {
             }
         }
 
-        //cap type (Rd-Cap-Type this will dertermine if we enforce a counter or not) 
-        if(array_key_exists('cap',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['cap'] != ''){      
-                $this->_add_radcheck_item($username,'Rd-Cap-Type',$this->data['Voucher']['cap']);
-            }
-        }  
-        
-        //enabled or disabled (Rd-Account-Disabled)
-        if(array_key_exists('active',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['active'] != ''){
-                if($this->data['Voucher']['active'] == 1){ //Reverse the logic...
-                    $dis = 0;
-                }else{
-                    $dis = 1;
-                }
-                $this->_add_radcheck_item($username,'Rd-Account-Disabled',$dis);
-            }
-        }
-
-        //Activation date (Rd-Account-Activation-Time)
-        if(array_key_exists('from_date',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['from_date'] != ''){       
-                $expiration = $this->_radius_format_date($this->data['Voucher']['from_date']);
-                $this->_add_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
-            }
-        }  
-
-        //Expiration date (Expiration)
-        if(array_key_exists('to_date',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['to_date'] != ''){       
-                $expiration = $this->_radius_format_date($this->data['Voucher']['to_date']);
-                $this->_add_radcheck_item($username,'Expiration',$expiration);
-            }
-        }
-
-        //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth)
-        if(!array_key_exists('track_auth',$this->data['Voucher'])){ //It may be missing; you never know...     
-            $this->_add_radcheck_item($username,'Rd-Not-Track-Auth',1);
-        }
-
-        //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
-        if(!array_key_exists('track_acct',$this->data['Voucher'])){ //It may be missing; you never know...
-            $this->_add_radcheck_item($username,'Rd-Not-Track-Acct',1);
-        }  
     }
 
     private function _radius_format_date($d){
@@ -165,5 +140,70 @@ class Voucher extends AppModel {
         $this->Radcheck->id         = null;
     }
 
+    function _detemine_voucher_name(){
 
+        $precede = $this->data['Voucher']['precede'];
+        if($precede == ''){
+            $this->contain();
+            $reply  =   $this->find('first',array(
+                            'order'         => array('Voucher.name DESC'))
+                        );
+            $last_value = 0;
+            if($reply){
+                $last_value = $reply['Voucher']['name'];    
+            }
+            $next_number = sprintf("%06d", $last_value+1); 
+            return $next_number;
+        }else{
+
+            $precede        = $precede.'-';
+            $this->contain();
+            $reply          = $this->find('first',array(
+                                                        'fields'=>array('Voucher.name'),
+                                                        'conditions'=>array('Voucher.name LIKE' => $precede.'%'),
+                                                        'order'=> array( 'Voucher.name DESC'))
+                                            );
+            $last_entry     =($reply['Voucher']['name']);
+            $voucher_name;
+
+            if(!$last_entry){
+                $voucher_name = $precede."000001";
+            }else{
+
+                //Get the last number
+                $number = preg_replace("/^$precede/",'',$last_entry);
+                $number = sprintf("%06d", $number+1);
+                $voucher_name = $precede.$number;
+            }
+            return $voucher_name;
+        }
+    }
+
+    function _generatePassword ($length = 8){
+
+        $length = $this->data['Voucher']['pwd_length'];
+        if($length == ''){
+            $length = 8;
+        }
+        // start with a blank password
+        $password = "";
+        // define possible characters
+       // $possible = "!#$%^&*()+=?0123456789bBcCdDfFgGhHjJkmnNpPqQrRstTvwxyz";
+        $possible = "0123456789bBcCdDfFgGhHjJkmnNpPqQrRstTvwxyz";
+        // set up a counter
+        $i = 0; 
+        // add random characters to $password until $length is reached
+        while ($i < $length) { 
+
+            // pick a random character from the possible ones
+            $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+            // we don't want this character if it's already in the password
+            if (!strstr($password, $char)) { 
+                $password .= $char;
+                $i++;
+            }
+        }
+        // done!
+        return $password;
+    }
 }
