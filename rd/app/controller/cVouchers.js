@@ -42,10 +42,11 @@ Ext.define('Rd.controller.cVouchers', {
     },
 
     views:  [
-        'components.pnlBanner',     'vouchers.gridVouchers'         
+        'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
+        'components.cmbRealm',      'components.cmbProfile'      
     ],
-    stores: ['sVouchers'],
-    models: ['mAccessProviderTree','mVoucher'],
+    stores: ['sVouchers',   'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
+    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/vouchers/add.json',
@@ -65,9 +66,18 @@ Ext.define('Rd.controller.cVouchers', {
 
         me.getStore('sVouchers').addListener('load',me.onStoreVouchersLoaded, me);
         me.control({
+            '#vouchersWin'    : {
+                beforeshow:      me.winClose
+            },
+            '#vouchersWin'    : {
+                destroy:      me.winClose
+            },
             'gridVouchers #reload': {
                 click:      me.reload
-            }, 
+            },
+            'gridVouchers #reload menuitem[group=refresh]'   : {
+                click:      me.reloadOptionClick
+            },  
             'gridVouchers #add'   : {
                 click:      me.add
             },
@@ -83,8 +93,20 @@ Ext.define('Rd.controller.cVouchers', {
             'gridVouchers'   : {
                 select:      me.select
             },
+            'gridVouchers'    : {
+                activate:      me.gridActivate
+            },
             'winVoucherAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
+            },
+            'winVoucherAddWizard #quantity' : {
+                change:  me.quantityChange
+            },
+            'winVoucherAddWizard #activate_on_login' : {
+                change:  me.chkActivateOnLoginChange
+            },
+            'winVoucherAddWizard #never_expire' : {
+                change:  me.chkNeverExpireChange
             },
             'winVoucherAddWizard #btnDataPrev' : {
                 click:  me.btnDataPrev
@@ -97,9 +119,43 @@ Ext.define('Rd.controller.cVouchers', {
             }
         });
     },
+    winClose:   function(){
+        var me = this;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+    },
     reload: function(){
         var me =this;
         me.getStore('sVouchers').load();
+    },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        
+        if(n == 'mnuRefreshCancel'){
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReload = setInterval(function(){        
+            me.reload();
+        },  interval);  
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     add: function(button){
         
@@ -264,75 +320,6 @@ Ext.define('Rd.controller.cVouchers', {
             }    
         }
     },
-
-    radioComponentManage: function(rbg){
-        var me      = this;
-        var form    = rbg.up('form');
-        var cmb     = form.down('combo');
-        var prior   = form.down('numberfield');
-
-        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
-            cmb.setVisible(true);
-            cmb.setDisabled(false);
-        }else{
-            cmb.setVisible(false);
-            cmb.setDisabled(true);
-        }
-
-        if(rbg.getValue().rb == 'add'){
-            prior.setVisible(true);
-            prior.setDisabled(false);
-        }else{
-            prior.setVisible(false);
-            prior.setDisabled(true);
-        }
-    },
-
-    btnComponentManageSave: function(button){
-        var me      = this;
-        var win     = button.up('window');
-        var form    = win.down('form');
-        var cmb     = form.down('combo');
-        var rbg     = form.down('radiogroup');
-
-        //For these two we need to have a value selected
-        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
-            if(cmb.getValue() == null){
-                Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_item'),
-                        i18n('sSelect_a_component_to_add_or_remove'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-                );
-                 return;
-            } 
-        }
-
-        var extra_params    = {};
-        var s               = me.getGrid().getSelectionModel().getSelection();
-        Ext.Array.each(s,function(record){
-            var r_id = record.getId();
-            extra_params[r_id] = r_id;
-        });
-
-        //Checks passed fine...      
-        form.submit({
-            clientValidation: true,
-            url: me.urlManageComponents,
-            params: extra_params,
-            success: function(form, action) {
-                win.close();
-                me.getGrid().getStore().load();
-                Ext.ux.Toaster.msg(
-                    i18n('sVouchers_modified'),
-                    i18n('sVouchers_modified_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
-    },
     onStoreVouchersLoaded: function() {
         var me      = this;
         var count   = me.getStore('sVouchers').getTotalCount();
@@ -404,5 +391,43 @@ Ext.define('Rd.controller.cVouchers', {
             window.open(me.urlExportCsv+append_url);
             win.close();
         }
+    },
+    quantityChange: function(number){
+        var me      = this;
+        var form    = number.up('form');
+        var batch   = form.down('#batch');
+        var value   = number.getValue();
+        if(value>1){
+            batch.setVisible(true);
+            batch.setDisabled(false);   
+        }else{
+            batch.setVisible(false);
+            batch.setDisabled(true);
+        }
+    },
+    chkActivateOnLoginChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var dv      = form.down('#days_valid');
+        var value   = chk.getValue();
+        if(value){
+            dv.setVisible(true);
+            dv.setDisabled(false);      
+        }else{
+            dv.setVisible(false);
+            dv.setDisabled(true); 
+        }
+    },
+    chkNeverExpireChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var e       = form.down('#expire');
+        var value   = chk.getValue();
+        if(value){
+            e.setDisabled(true);                
+        }else{
+            e.setDisabled(false);
+        }
     }
+
 });
