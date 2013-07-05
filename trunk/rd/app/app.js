@@ -72,23 +72,28 @@ Ext.application({
     applyVtypes: function(){
 
         Ext.apply(Ext.form.field.VTypes, {
+
+            //__IP Address__
             IPAddress:  function(v) {
                 return (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/).test(v);
             },
             IPAddressText:  i18n('sExample') + ': 192.168.1.1',
             IPAddressMask: /[\d\.]/i,
          
+            //__ MAC Address __
             MacAddress: function(v) {
                 return (/^([a-fA-F0-9]{2}-){5}[a-fA-F0-9]{2}$/).test(v);
             },
             MacAddressMask: /[a-fA-F0-9\-]/,
             MacAddressText: i18n('sExample') + ': 01-23-45-67-89-AB',
          
+            //__ Hostname __
             DnsName: function(v) {
                 return (/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/).test(v);
             },
             DnsNameText: i18n('This is not a valid DNS name'),
             
+            //__ Password match __
             PasswordMatch: function(a,b){
                 var me  = this;
                 var f   = b.up('form');
@@ -103,6 +108,8 @@ Ext.application({
                 return true;
             },
             PasswordMatchText: i18n('sPasswords_does_not_match'),
+
+            //__ Numeric __
             Numeric : function(){
 				  var objRegExp  =  /[0-9]/;
 				  return function(strValue){
@@ -112,6 +119,11 @@ Ext.application({
 		    }(),
 		    NumericText: 'Only numbers are allowed',
             NumericMask: /[0-9]/
+
+            //__ Voucher batch required __
+            
+
+
         });
 
     }

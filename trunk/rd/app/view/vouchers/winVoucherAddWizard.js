@@ -1,12 +1,12 @@
-Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
+Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
     extend:     'Ext.window.Window',
-    alias :     'widget.winPermanentUserAddWizard',
+    alias :     'widget.winVoucherAddWizard',
     closable:   true,
     draggable:  true,
     resizable:  false,
-    title:      i18n('sNew_permanent_user'),
+    title:      i18n('sNew_voucher'),
     width:      400,
-    height:     500,
+    height:     450,
     plain:      true,
     border:     false,
     layout:     'card',
@@ -15,16 +15,14 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
     defaults: {
             border: false
     },
-    no_tree: false, //If the user has no children we don't bother giving them a branchless tree
-    user_id: '',
-    owner: '',
+    no_tree : false, //If the user has no children we don't bother giving them a branchless tree
+    user_id : '',
+    owner   : '',
     startScreen: 'scrnApTree', //Default start screen
-    selLanguage: null,
     requires: [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
-        'Ext.form.field.Text',
-        'Rd.view.components.vCmbLanguages'
+        'Ext.form.field.Text'
     ],
     initComponent: function() {
         var me = this;
@@ -34,7 +32,6 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
             scrnApTree,
             scrnData
         ];
-        console.log(me.selLanguage); 
         me.callParent(arguments);
         me.getLayout().setActiveItem(me.startScreen);  
     },
@@ -78,14 +75,12 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
         return pnlTree;
     },
 
-    //_______ Data for permanent user  _______
+    //_______ Data for voucher  _______
     mkScrnData: function(){
-
 
         var me      = this;
 
         //Set default values for from and to:
-        var dtFrom  = new Date();
         var dtTo    = new Date();
         dtTo.setYear(dtTo.getFullYear() + 1);
 
@@ -125,7 +120,7 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
             layout:     'fit',
             itemId:     'scrnData',
             autoScroll: true,
-            fieldDefaults: { 
+            fieldDefaults: {
                 msgTarget: 'under',
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
@@ -138,7 +133,7 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                 { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
             ],
             items:[
-                {
+               {
                     xtype   : 'tabpanel',
                     layout  : 'fit',
                     xtype   : 'tabpanel',
@@ -155,10 +150,11 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                             },
                             items       : [
                                 {
-                                    itemId  : 'parent_id',
+                                    itemId  : 'user_id',
                                     xtype   : 'textfield',
-                                    name    : "parent_id",
-                                    hidden  : true
+                                    name    : "user_id",
+                                    hidden  : true,
+                                    value   : me.user_id
                                 },
                                 {
                                     itemId      : 'owner',
@@ -169,19 +165,10 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : i18n('sUsername'),
-                                    name        : "username",
-                                    allowBlank  : false,
-                                    blankText   : i18n('sSupply_a_value'),
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sPassword'),
-                                    name        : "password",
-                                    allowBlank  : false,
-                                    blankText   : i18n('sSupply_a_value'),
-                                    labelClsExtra: 'lblRdReq'
+                                    name        : 'precede',
+                                    fieldLabel  : i18n('sPrecede_string'),
+                                    allowBlank  : true,
+                                    labelClsExtra: 'lblRd'
                                 },
                                 {
                                     xtype       : 'cmbRealm',
@@ -195,61 +182,34 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     itemId      : 'profile'
                                 },
                                 {
-                                    xtype       : 'cmbCap',
+                                    xtype       : 'numberfield',
+                                    name        : 'quantity',
+                                    fieldLabel  : i18n('sHow_many_qm'),
+                                    value       : 1,
+                                    maxValue    : 500,
+                                    minValue    : 1,
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'quantity'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    name        : 'batch',
+                                    fieldLabel  : i18n('sBatch_name'),
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'cap',
-                                    hidden      : true,
-                                    value       : 'hard'
-                                }
-                            ]
-                        },
-                        { 
-                            'title' : i18n('sPersonal_info'),
-                            'layout'    : 'anchor',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            items: [
-                                {
-                                    xtype: 'textfield',
-                                    fieldLabel: i18n('sName'),
-                                    name : "name",
-                                    allowBlank:true
+                                    itemId      : 'batch',
+                                    disabled    : true,
+                                    hidden      : true
                                 },
                                 {
-                                    xtype: 'textfield',
-                                    fieldLabel: i18n('sSurname'),
-                                    name : "surname",
-                                    allowBlank:true
-                                },
-                                { 
-                                    xtype       : 'cmbLanguages', 
-                                    width       : 350, 
-                                    fieldLabel  : i18n('sLanguage'),  
-                                    name        : 'language',
-                                    value       : me.selLanguage,
-                                    allowBlank  : false,
-                                    labelClsExtra: 'lblRd' 
-                                },
-                                {
-                                    xtype: 'textfield',
-                                    fieldLabel: i18n('sPhone'),
-                                    name : "phone",
-                                    allowBlank:true
-                                },
-                                {
-                                    xtype: 'textfield',
-                                    fieldLabel: i18n('s_email'),
-                                    name : "email",
-                                    allowBlank:true
-                                },
-                                {
-                                    xtype     : 'textareafield',
-                                    grow      : true,
-                                    name      : 'address',
-                                    fieldLabel: i18n('sAddress'),
-                                    anchor    : '100%'
+                                    xtype       : 'slider',
+                                    name        : 'pwd_length',
+                                    fieldLabel  : i18n('sPassword_length'),
+                                    width       : 200,
+                                    value       : 3,
+                                    increment   : 1,
+                                    minValue    : 3,
+                                    maxValue    : 15
                                 }
                             ]
                         },
@@ -262,74 +222,50 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                             items       : [
                                 {
                                     xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sActivate'),
-                                    name        : 'active',
-                                    inputValue  : 'active',
-                                    checked     : true,
+                                    fieldLabel  : i18n('sActivate_upon_first_login'),
+                                    name        : 'activate_on_login',
+                                    inputValue  : 'activate_on_login',
+                                    itemId      : 'activate_on_login',
+                                    checked     : false,
                                     boxLabelCls : 'lblRdCheck'
+                                },
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'days_valid',
+                                    fieldLabel  : i18n('sDays_available_after_first_login'),
+                                    value       : 1,
+                                    maxValue    : 90,
+                                    minValue    : 1,
+                                    itemId      : 'days_valid',
+                                    hidden      : true,
+                                    disabled    : true
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sAlways_active'),
-                                    name        : 'always_active',
-                                    inputValue  : 'always_active',
-                                    itemId      : 'always_active',
+                                    fieldLabel  : i18n('sNever_expire'),
+                                    name        : 'never_expire',
+                                    inputValue  : 'never_expire',
+                                    itemId      : 'never_expire',
                                     checked     : true,
                                     boxLabelCls : 'lblRdCheck'
                                 },
                                 {
-                                    xtype: 'datefield',
-                                    fieldLabel: i18n('sFrom'),
-                                    name: 'from_date',
-                                    itemId      : 'from_date',
-                                    minValue: new Date(),  // limited to the current date or after
-                                    hidden      : true,
-                                    disabled    : true,
-                                    value       : dtFrom
-                                },
-                                {
-                                    xtype: 'datefield',
-                                    fieldLabel: i18n('sTo'),
-                                    name: 'to_date',
-                                    itemId      : 'to_date',
-                                    minValue: new Date(),  // limited to the current date or after
-                                    hidden      : true,
+                                    xtype       : 'datefield',
+                                    fieldLabel  : i18n('sExpire'),
+                                    name        : 'expire',
+                                    itemId      : 'expire',
+                                    minValue    : new Date(),  // limited to the current date or after
                                     disabled    : true,
                                     value       : dtTo
                                 }
                             ]
-                        },
-                        { 
-                            'title' : i18n('sTracking'),
-                            'layout'    : 'anchor',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            items       : [
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_authentication'),
-                                    name        : 'track_auth',
-                                    inputValue  : 'track_auth',
-                                    checked     : false, //Default not to track it
-                                    boxLabelCls : 'lblRdCheck'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_accounting'),
-                                    name        : 'track_acct',
-                                    inputValue  : 'track_acct',
-                                    checked     : true,
-                                    boxLabelCls : 'lblRdCheck'
-                                }
-                            ]   
                         }
                     ]
-                }
-                
+                }              
             ],
             buttons: buttons
         });
         return frmData;
+
     }   
 });
