@@ -67,7 +67,6 @@ class VouchersController extends AppController {
                     'name'          => $i['Voucher']['name'],
                     'realm'         => $realm,
                     'profile'       => $profile,
-                    'active'        => $i['Voucher']['active'],
                     'last_accept_time'      => $i['Voucher']['last_accept_time'],
                     'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
                     'last_reject_time'      => $i['Voucher']['last_reject_time'],
@@ -91,33 +90,52 @@ class VouchersController extends AppController {
         if(!$user){   //If not a valid user
             return;
         }
+        $user_id    = $user['id'];
 
-        $this->request['active']       = 0;
+        //Get the owner's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
    
-        //Two fields should be tested for first:
-        if(array_key_exists('active',$this->request->data)){
-            $this->request->data['active'] = 1;
+        //___Two fields should be tested for first___:
+        if(array_key_exists('activate_on_login',$this->request->data)){
+            $this->request->data['activate_on_login'] = 1;
         }
 
-        //Ensure the MAC is UC
-        $this->request->data['name'] = strtolower($this->request->data['name']);
+        if(array_key_exists('never_expire',$this->request->data)){
+            $this->request->data['never_expire'] = 1;
+        }
+        //____ END OF TWO FIELD CHECK ___
 
-        //The rest of the attributes should be same as the form..
-        $this->{$this->modelClass}->create();
-        if ($this->{$this->modelClass}->save($this->request->data)) {
+        //The rest of the attributes should be same as the form.
+
+        if(array_key_exists('quantity',$this->request->data)){
+            $qty = $this->request->data['quantity'];
+            $counter = 0;
+            while($counter < $qty){
+                $this->{$this->modelClass}->create();
+                if ($this->{$this->modelClass}->save($this->request->data)) {
+                    $success_flag = true;
+                    $this->{$this->modelClass}->id = null;
+                } else {
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $this->{$this->modelClass}->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                    return; //Get out of here!
+                }
+                $counter = $counter + 1;
+            }
+
+            //The loop completed fine
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
-        } else {
-            $message = 'Error';
-            $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
+        }  
     }
 
     public function delete($id = null) {
