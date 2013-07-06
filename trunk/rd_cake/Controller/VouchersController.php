@@ -167,7 +167,7 @@ class VouchersController extends AppController {
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:
             $this->{$this->modelClass}->contain('User');
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $ap_id      = $item['User']['parent_id'];
+            $ap_id      = $item['User']['id'];
             $username   = $item['Voucher']['name'];
             if($ap_id != $user_id){
                 if($this->_is_sibling_of($user_id,$ap_id)== true){
@@ -187,7 +187,7 @@ class VouchersController extends AppController {
             foreach($this->data as $d){
 
                 $item       = $this->{$this->modelClass}->findById($d['id']);
-                $ap_id      = $item['User']['parent_id'];
+                $ap_id      = $item['User']['id'];
                 $username   = $item['Voucher']['name'];
                 if($ap_id != $user_id){
                     if($this->_is_sibling_of($user_id,$ap_id) == true){
@@ -1123,13 +1123,36 @@ class VouchersController extends AppController {
         );
     }
 
+    private function _delete_clean_up_voucher($username){
+
+        $this->{$this->modelClass}->Radcheck->deleteAll(   //Delete a previous one
+            array('Radcheck.username' => $username), false
+        );
+
+        $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
+            array('Radreply.username' => $username), false
+        );
+
+        $acct = ClassRegistry::init('Radacct');
+        $acct->deleteAll( 
+            array('Radacct.username' => $username), false
+        );
+
+        $post_a = ClassRegistry::init('Radpostauth');
+        $post_a->deleteAll( 
+            array('Radpostauth.username' => $username), false
+        );
+    }
+
     private function _is_sibling_of($parent_id,$user_id){
         $this->User->contain();//No dependencies
         $q_r        = $this->User->getPath($user_id);
-        foreach($q_r as $i){
-            $id = $i['User']['id'];
-            if($id == $parent_id){
-                return true;
+        if($q_r){
+            foreach($q_r as $i){
+                $id = $i['User']['id'];
+                if($id == $parent_id){
+                    return true;
+                }
             }
         }
         //No match
