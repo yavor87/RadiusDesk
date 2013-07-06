@@ -43,7 +43,7 @@ Ext.define('Rd.controller.cVouchers', {
 
     views:  [
         'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
-        'components.cmbRealm',      'components.cmbProfile'      
+        'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher'      
     ],
     stores: ['sVouchers',   'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile' ],
@@ -302,24 +302,48 @@ Ext.define('Rd.controller.cVouchers', {
         }
     },
 
-    edit: function(button){
-        var me      = this;
-        var grid    = button.up('grid');
-        //Find out if there was something selected
-        if(grid.getSelectionModel().getCount() == 0){
-             Ext.ux.Toaster.msg(
+    edit:   function(){
+        var me = this;
+        //See if there are anything selected... if not, inform the user
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+            Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item_to_edit'),
+                        i18n('sFirst_select_an_item'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winComponentManageId')){
-                var w = Ext.widget('winComponentManage',{id:'winComponentManageId'});
-                me.application.runAction('cDesktop','Add',w);       
-            }    
+
+            var selected    =  me.getGrid().getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = me.getGrid().up('tabpanel');
+                var v_id        = sr.getId();
+                var v_tab_id    = 'vTab_'+v_id;
+                var nt          = tp.down('#'+v_tab_id);
+                if(nt){
+                    tp.setActiveTab(v_tab_id); //Set focus on  Tab
+                    return;
+                }
+
+                var v_tab_name = sr.get('name');
+                //Tab not there - add one
+                tp.add({ 
+                    title :     v_tab_name,
+                    itemId:     v_tab_id,
+                    closable:   true,
+                    iconCls:    'edit', 
+                    layout:     'fit', 
+                    items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name}
+                });
+                tp.setActiveTab(v_tab_id); //Set focus on Add Tab
+            });
         }
     },
+
     onStoreVouchersLoaded: function() {
         var me      = this;
         var count   = me.getStore('sVouchers').getTotalCount();
