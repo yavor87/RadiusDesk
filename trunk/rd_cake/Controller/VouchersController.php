@@ -49,6 +49,7 @@ class VouchersController extends AppController {
             //Find the realm and profile names
             $realm  = 'not defined';
             $profile= 'not defined';
+            $password = 'not defined';
 
             foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
@@ -57,16 +58,25 @@ class VouchersController extends AppController {
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
                 }
+                if($rc['attribute'] == 'Cleartext-Password'){
+                    $password = $rc['value'];
+                }
+
             }
 
             array_push($items,
                 array(
                     'id'            => $i['Voucher']['id'], 
-                    'user'          => $i['User']['username'],
+                    'owner'         => $i['User']['username'],
                     'user_id'       => $i['User']['id'],
+                    'batch'         => $i['Voucher']['batch'],
                     'name'          => $i['Voucher']['name'],
+                    'password'      => $password,
                     'realm'         => $realm,
                     'profile'       => $profile,
+                    'perc_time_used'=> $i['Voucher']['perc_time_used'],
+                    'perc_data_used'=> $i['Voucher']['perc_data_used'],
+                    'status'        => $i['Voucher']['status'],
                     'last_accept_time'      => $i['Voucher']['last_accept_time'],
                     'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
                     'last_reject_time'      => $i['Voucher']['last_reject_time'],
@@ -994,10 +1004,51 @@ class VouchersController extends AppController {
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
                 //Strings
-                if($f->type == 'string'){
-
-                   
-                }
+                if($f->field == 'realm'){
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck_realm',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck_realm.username = Voucher.name')
+                        )); 
+                        array_push($c['conditions'],array(
+                            'Radcheck_realm.attribute'  => 'Rd-Realm',
+                            "Radcheck_realm.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'profile'){                       
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck_profile',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck_profile.username = Voucher.name')
+                        ));
+                        array_push($c['conditions'],array(
+                            'Radcheck_profile.attribute'  => 'User-Profile',
+                            "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'password'){                       
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck_password',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck_password.username = Voucher.name')
+                        ));
+                        array_push($c['conditions'],array(
+                            'Radcheck_password.attribute'  => 'Cleartext-Password',
+                            "Radcheck_password.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'owner'){
+                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
                 //Bools
                 if($f->type == 'boolean'){
                      $col = $this->modelClass.'.'.$f->field;

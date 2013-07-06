@@ -1513,29 +1513,29 @@ class PermanentUsersController extends AppController {
                         //Join the Radcheck table - only together with clause:
                         array_push($c['joins'],array(
                             'table'         => 'radcheck',
-                            'alias'         => 'Radcheck',
+                            'alias'         => 'Radcheck_realm',
                             'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck.username = User.username')
+                            'conditions'    => array('Radcheck_realm.username = User.username')
                         )); 
                         array_push($c['conditions'],array(
-                            'Radcheck.attribute'  => 'Rd-Realm',
-                            "Radcheck.value LIKE" => '%'.$f->value.'%'
+                            'Radcheck_realm.attribute'  => 'Rd-Realm',
+                            "Radcheck_realm.value LIKE" => '%'.$f->value.'%'
                         ));
                     }elseif($f->field == 'profile'){                       
                         //Add a search clause
                         //Join the Radcheck table - only together with clause:
                         array_push($c['joins'],array(
                             'table'         => 'radcheck',
-                            'alias'         => 'Radcheck',
+                            'alias'         => 'Radcheck_profile',
                             'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck.username = User.username')
+                            'conditions'    => array('Radcheck_profile.username = User.username')
                         ));
                         array_push($c['conditions'],array(
-                            'Radcheck.attribute'  => 'User-Profile',
-                            "Radcheck.value LIKE" => '%'.$f->value.'%'
+                            'Radcheck_profile.attribute'  => 'User-Profile',
+                            "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
                         ));
                     }elseif($f->field == 'owner'){
-                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
