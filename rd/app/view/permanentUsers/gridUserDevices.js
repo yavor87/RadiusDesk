@@ -21,8 +21,8 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
             { text: i18n('sOwner'),         dataIndex: 'user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sMAC_address'),   dataIndex: 'name',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
+            { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
             { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 

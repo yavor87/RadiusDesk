@@ -30,10 +30,79 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
         me.columns  = [
             {xtype: 'rownumberer'},
             { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},  
-            { text: i18n('sName'),         dataIndex: 'name',tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sBatch'),        dataIndex: 'batch',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sRealm'),        dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sProfile'),      dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sName'),         dataIndex: 'name',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sPassword'),     dataIndex: 'password',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
+            { 
+                text        : i18n('sBatch'),
+                sortable    : true,
+                flex        : 1,  
+                xtype       : 'templatecolumn', 
+                tpl:        new Ext.XTemplate(
+                                '<tpl if="Ext.isEmpty(batch)"><div class=\"fieldBlue\">'+i18n('s_br_Single_voucher_br')+'</div>',
+                                '<tpl else>','{batch}','</tpl>' 
+                            ),
+                dataIndex   : 'batch',
+                filter: { type: 'string'}
+            },
+            { text: i18n('sRealm'),        dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable : false},
+            { text: i18n('sProfile'),      dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable : false},
+              {
+                header: i18n('sData_used'),
+                dataIndex: 'perc_data_used',
+                width: 110,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
+            {
+                header: i18n('sTime_used'),
+                dataIndex: 'perc_time_used',
+                width: 110,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
+            { 
+                text        : i18n('sStatus'),
+                flex        : 1,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='status == \"new\"'><div class=\"fieldGreen\">"+i18n('sNew')+"</div></tpl>",
+                                "<tpl if='status == \"used\"'><div class=\"fieldOrange\">"+i18n('sUsed')+"</div></tpl>",
+                                "<tpl if='status == \"depleted\"'><div class=\"fieldRed\">"+i18n('sDepleted')+"</div></tpl>",
+                                "<tpl if='status == \"expired\"'><div class=\"fieldRed\">"+i18n('sExpired')+"</div></tpl>"
+                ),
+                dataIndex   : 'status',
+                filter      : {
+                                type    : 'list',
+                                phpMode : false,
+                                options : ['new', 'used', 'depleted', 'expired']
+                              }
+            },
             {
                 text        : i18n('sLast_accept_time'),
                 flex        : 1,

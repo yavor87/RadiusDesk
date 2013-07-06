@@ -32,8 +32,8 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
             { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sUsername'),     dataIndex: 'username',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sAuth_type'),    dataIndex: 'auth_type',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sProfile'),      dataIndex: 'profile',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
+            { text: i18n('sProfile'),      dataIndex: 'profile',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
             {
                 text        : i18n('sName'),
                 flex        : 1,
