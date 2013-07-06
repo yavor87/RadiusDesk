@@ -1254,7 +1254,7 @@ class DevicesController extends AppController {
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
-            if($this->request->query['sort'] == 'owner'){
+            if($this->request->query['sort'] == 'user'){
                 $sort = 'User.username';
             }elseif(($this->request->query['sort'] == 'profile')||($this->request->query['sort'] == 'realm')){
                 $sort = 'Radcheck.value';
@@ -1281,7 +1281,38 @@ class DevicesController extends AppController {
                 //Strings
                 if($f->type == 'string'){
 
-                   
+                    if($f->field == 'realm'){
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck_realm',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck_realm.username = Device.name')
+                        )); 
+                        array_push($c['conditions'],array(
+                            'Radcheck_realm.attribute'  => 'Rd-Realm',
+                            "Radcheck_realm.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'profile'){                       
+                        //Add a search clause
+                        //Join the Radcheck table - only together with clause:
+                        array_push($c['joins'],array(
+                            'table'         => 'radcheck',
+                            'alias'         => 'Radcheck_profile',
+                            'type'          => 'LEFT',
+                            'conditions'    => array('Radcheck_profile.username = Device.name')
+                        ));
+                        array_push($c['conditions'],array(
+                            'Radcheck_profile.attribute'  => 'User-Profile',
+                            "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
+                        ));
+                    }elseif($f->field == 'user'){
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                    }
                 }
                 //Bools
                 if($f->type == 'boolean'){
