@@ -225,7 +225,7 @@ class VouchersController extends AppController {
     }
 
 
-     public function view_basic_info(){
+    public function view_basic_info(){
 
         //We need the voucher_id;
         //We supply the profile_id; realm_id; cap; always_active; from_date; to_date
@@ -237,25 +237,19 @@ class VouchersController extends AppController {
         }
 
         $user_id    = $user['id'];
-
-        $items = array();
+        $items      = array();
 
         //TODO Check if the owner of this voucher is in the chain of the APs
         if(isset($this->request->query['voucher_id'])){
 
             $profile        = false;
             $realm          = false;
+            $activate       = false;
             $always_active  = true;
-            $to_date        = false;
-            $from_date      = false;
-            $cap            = false;
-            $owner          = false;
-            $description    = false;
+            $expire         = false;
 
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['voucher_id']);
-
-            $items['description'] = $q_r['Voucher']['description'];
 
             foreach($q_r['Radcheck'] as $rc){
 
@@ -267,16 +261,16 @@ class VouchersController extends AppController {
                   $profile =  $rc['value'];
                 }
 
-                if($rc['attribute'] == 'Rd-Account-Activation-Time'){
-                  $from_date =  $rc['value'];
+                if($rc['attribute'] == 'Expiration'){
+                  $expire =  $rc['value'];
+                }
+
+                if($rc['attribute'] == 'Rd-Voucher'){
+                    $activate = $rc['value'];
                 }
 
                 if($rc['attribute'] == 'Expiration'){
-                  $to_date =  $rc['value'];
-                }
-                
-                if($rc['attribute'] == 'Rd-Cap-Type'){
-                  $cap =  $rc['value'];
+                  $expire =  $rc['value'];
                 }
             }
         
@@ -286,26 +280,24 @@ class VouchersController extends AppController {
                 $items['profile_id'] = intval($q_r['Profile']['id']);
             }
 
-
-            if($owner){
-                $q_r = $this->User = ClassRegistry::init('User')->findByUsername($owner);
-                $items['user_id'] = intval($q_r['User']['id']);
+            if($realm){
+                $q_r = $this->User = ClassRegistry::init('Realm')->findByName($realm);
+                $items['realm_id'] = intval($q_r['Realm']['id']);
             }
 
-
-            if($cap){
-                $items['cap'] = $cap;
+            if($activate){
+                $items['activate_on_login'] = 'activate_on_login';
+                $pieces                     = explode("-", $activate);
+                $items['days_valid']        = $pieces[0];  
             }
 
-            if(($from_date)&&($to_date)){
-                $items['always_active'] = false;
-                $items['from_date']     = $this->_extjs_format_radius_date($from_date);
-                $items['to_date']       = $this->_extjs_format_radius_date($to_date);
+            if($expire){
+                $items['never_expire']  = false;
+                $items['expire']        = $this->_extjs_format_radius_date($expire);
             }else{
-                $items['always_active'] = true;
-            }
+                $items['never_expire'] = true;
+            }   
         }
-               // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
 
         $this->set(array(
             'data'   => $items, //For the form to load we use data instead of the standard items as for grids
@@ -336,32 +328,32 @@ class VouchersController extends AppController {
                 $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
             }
 
-            if(isset($this->request->data['to_date'])){
-                $expiration = $this->_radius_format_date($this->request->data['to_date']);
-                $this->_replace_radcheck_item($username,'Expiration',$expiration);
+            if(isset($this->request->data['realm_id'])){
+                $q_r = ClassRegistry::init('Realm')->findById($this->data['realm_id']);
+                $realm_name = $q_r['Realm']['name'];
+                $this->_replace_radcheck_item($username,'Rd-Realm',$realm_name);
             }
 
-            if(isset($this->request->data['from_date'])){
-                $expiration = $this->_radius_format_date($this->request->data['from_date']);
-                $this->_replace_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
-            }
-
-            
-            if(isset($this->request->data['always_active'])){ //Clean up if there were previous ones
-                ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Account-Activation-Time'), false
-                );
-
+            if(isset($this->request->data['never_expire'])){ //Clean up if there were previous ones
+             
                 ClassRegistry::init('Radcheck')->deleteAll(
                     array('Radcheck.username' => $username,'Radcheck.attribute' => 'Expiration'), false
                 );
             }
-            
-            if(isset($this->request->data['cap'])){
-                $this->_replace_radcheck_item($username,'Rd-Cap-Type',$this->request->data['cap']);
-            }else{              //Clean up if there were previous ones
+
+            if(isset($this->request->data['expire'])){
+                $expiration = $this->_radius_format_date($this->request->data['expire']);
+                $this->_replace_radcheck_item($username,'Expiration',$expiration);
+            }
+
+            if(isset($this->request->data['days_valid'])){
+                $expiration = $this->request->data['days_valid']."-00-00-00";
+                $this->_replace_radcheck_item($username,'Rd-Voucher',$expiration);
+            }
+
+            if(!isset($this->request->data['activate_on_login'])){
                 ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type'), false
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Voucher'), false
                 );
             }
         }
@@ -386,7 +378,7 @@ class VouchersController extends AppController {
         $read_only_attributes = array(
             'Rd-User-Type', 'Rd-Voucher-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
             'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
-            'Rd-Cap-Type', 'Rd-Realm', 'Cleartext-Password'
+            'Rd-Cap-Type-Time', 'Rd-Cap-Type-Time', 'Rd-Realm', 'Cleartext-Password', 'Rd-Voucher'
         );
 
        // $exclude_attribues = array(
