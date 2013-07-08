@@ -62,7 +62,19 @@ Ext.define('Rd.view.devices.pnlDevice', {
                         labelClsExtra: 'lblRdReq',
                         itemId      : 'cap',
                         hidden      : true,
-                        value       : 'hard'
+                        value       : 'hard',
+                        fieldLabel  : i18n('sCap_type_for_data'),
+                        itemId      : 'cmbDataCap'
+                    },
+                    {
+                        xtype       : 'cmbCap',
+                        allowBlank  : false,
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'cap',
+                        hidden      : true,
+                        value       : 'hard',
+                        fieldLabel  : i18n('sCap_type_for_time'),
+                        itemId      : 'cmbTimeCap'
                     },
                     {
                         xtype       : 'checkbox',      

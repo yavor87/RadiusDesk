@@ -349,19 +349,27 @@ Ext.define('Rd.controller.cPermanentUsers', {
     cmbProfileChange:   function(cmb){
         var me      = this;
         var form    = cmb.up('form');
-        var cmbCap  = form.down('cmbCap');
+        var cmbDataCap  = form.down('#cmbDataCap');
+        var cmbTimeCap  = form.down('#cmbTimeCap');
         var value   = cmb.getValue();
         var s = cmb.getStore();
         var r = s.getById(value);
         if(r != null){
-            var cap = r.get('cap_in_profile');
-           // console.log(cap);
-            if(cap){
-                cmbCap.setVisible(true);
-                cmbCap.setDisabled(false);
+            var data_cap = r.get('data_cap_in_profile');
+            if(data_cap){
+                cmbDataCap.setVisible(true);
+                cmbDataCap.setDisabled(false);
             }else{
-                cmbCap.setVisible(false);
-                cmbCap.setDisabled(true);
+                cmbDataCap.setVisible(false);
+                cmbDataCap.setDisabled(true);
+            }
+            var time_cap = r.get('time_cap_in_profile');
+            if(time_cap){
+                cmbTimeCap.setVisible(true);
+                cmbTimeCap.setDisabled(false);
+            }else{
+                cmbTimeCap.setVisible(false);
+                cmbTimeCap.setDisabled(true);
             }
         }
     },
