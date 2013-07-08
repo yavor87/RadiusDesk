@@ -101,6 +101,22 @@ class Voucher extends AppModel {
             }
         }
 
+        //Activate upon first login
+        if(array_key_exists('days_valid',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['days_valid'] != ''){       
+                $valid = $this->data['Voucher']['days_valid']."-00-00-00";
+                $this->_add_radcheck_item($username,'Rd-Voucher',$valid);
+            }
+        }
+
+        //Expiration date (Expiration)
+        if(array_key_exists('expire',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['expire'] != ''){       
+                $expiration = $this->_radius_format_date($this->data['Voucher']['expire']);
+                $this->_add_radcheck_item($username,'Expiration',$expiration);
+            }
+        }
+
     }
 
     private function _radius_format_date($d){
@@ -206,4 +222,5 @@ class Voucher extends AppModel {
         // done!
         return $password;
     }
+
 }

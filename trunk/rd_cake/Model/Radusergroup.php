@@ -16,7 +16,7 @@ class Radusergroup extends AppModel {
         'Radgroupcheck'  => array(
             'className'     => 'Radgroupcheck',
             'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radgroupcheck.groupname FROM radgroupcheck AS Radgroupcheck, radusergroup WHERE radusergroup.groupname=Radgroupcheck.groupname AND radusergroup.id={$__cakeID__$} AND Radgroupcheck.attribute="Rd-Reset-Type" ORDER BY Radgroupcheck.attribute ASC',
+            'finderQuery'   => 'SELECT Radgroupcheck.groupname,Radgroupcheck.attribute FROM radgroupcheck AS Radgroupcheck, radusergroup WHERE radusergroup.groupname=Radgroupcheck.groupname AND radusergroup.id={$__cakeID__$} AND ((Radgroupcheck.attribute="Rd-Reset-Type-Time") OR (Radgroupcheck.attribute="Rd-Reset-Type-Data")) ORDER BY Radgroupcheck.attribute ASC',
             'dependent'     => true
         )
     );
