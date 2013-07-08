@@ -202,7 +202,8 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_data'),
-                                    itemId      : 'cmbDataCap'
+                                    itemId      : 'cmbDataCap',
+                                    name        : 'cap_data'
                                 },
                                 {
                                     xtype       : 'cmbCap',
@@ -212,7 +213,8 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_time'),
-                                    itemId      : 'cmbTimeCap'
+                                    itemId      : 'cmbTimeCap',
+                                    name        : 'cap_time'
                                 }
                             ]
                         },
