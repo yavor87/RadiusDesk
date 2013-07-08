@@ -200,7 +200,19 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     labelClsExtra: 'lblRdReq',
                                     itemId      : 'cap',
                                     hidden      : true,
-                                    value       : 'hard'
+                                    value       : 'hard',
+                                    fieldLabel  : i18n('sCap_type_for_data'),
+                                    itemId      : 'cmbDataCap'
+                                },
+                                {
+                                    xtype       : 'cmbCap',
+                                    allowBlank  : false,
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'cap',
+                                    hidden      : true,
+                                    value       : 'hard',
+                                    fieldLabel  : i18n('sCap_type_for_time'),
+                                    itemId      : 'cmbTimeCap'
                                 }
                             ]
                         },
