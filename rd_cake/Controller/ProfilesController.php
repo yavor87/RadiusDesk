@@ -60,11 +60,17 @@ class ProfilesController extends AppController {
 
             //Add the components (already from the highest priority
             $components = array();
-            $cap_in_profile = false; // A flag that will be set if the profile contains a component with Rd-Reset-Type group check attribute.
+            $data_cap_in_profile = false; // A flag that will be set if the profile contains a component with Rd-Reset-Type-Data group check attribute.
+            $time_cap_in_profile = false; // A flag that will be set if the profile contains a component with Rd-Reset-Type-Time group check attribute.
             foreach($i['Radusergroup'] as $cmp){
-                if(count($cmp['Radgroupcheck'])>0){
-                    $cap_in_profile = true;
-                }
+                foreach($cmp['Radgroupcheck'] as $chk){
+                    if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+                        $data_cap_in_profile = true;
+                    }
+                    if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+                        $time_cap_in_profile = true;
+                    }
+                } 
                 unset($cmp['Radgroupcheck']);
                 array_push($components,$cmp);
             }
@@ -75,7 +81,8 @@ class ProfilesController extends AppController {
                 'owner'                 => $owner_tree, 
                 'available_to_siblings' => $i['Profile']['available_to_siblings'],
                 'profile_components'    => $components,
-                'cap_in_profile'        => $cap_in_profile,
+                'data_cap_in_profile'   => $data_cap_in_profile,
+                'time_cap_in_profile'   => $time_cap_in_profile,
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']

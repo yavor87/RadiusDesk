@@ -200,6 +200,7 @@ class PermanentUsersController extends AppController {
                     'last_reject_time'      => $i['User']['last_reject_time'],
                     'last_reject_nas'       => $i['User']['last_reject_nas'],
                     'last_reject_message'   => $i['User']['last_reject_message'],
+//This is a work in progress with dummy values
                     'data_cap'              => 80,
                     'time_cap'              => 20,
                     'notes'     => $notes_flag
@@ -381,7 +382,8 @@ class PermanentUsersController extends AppController {
             $always_active  = true;
             $to_date        = false;
             $from_date      = false;
-            $cap            = false;
+            $cap_data       = false;
+            $cap_time       = false;
 
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
@@ -404,9 +406,14 @@ class PermanentUsersController extends AppController {
                   $to_date =  $rc['value'];
                 }
                 
-                if($rc['attribute'] == 'Rd-Cap-Type'){
-                  $cap =  $rc['value'];
+                if($rc['attribute'] == 'Rd-Cap-Type-Data'){
+                  $cap_data =  $rc['value'];
                 }
+                
+                if($rc['attribute'] == 'Rd-Cap-Type-Time'){
+                  $cap_time =  $rc['value'];
+                }
+
             }
         
             //Now we do the rest....
@@ -420,8 +427,12 @@ class PermanentUsersController extends AppController {
                 $items['realm_id'] = intval($q_r['Realm']['id']);
             }
 
-            if($cap){
-                $items['cap'] = $cap;
+            if($cap_data){
+                $items['cap_data'] = $cap_data;
+            }
+
+             if($cap_time){
+                $items['cap_time'] = $cap_time;
             }
 
             if(($from_date)&&($to_date)){
@@ -487,11 +498,19 @@ class PermanentUsersController extends AppController {
                 );
             }
             
-            if(isset($this->request->data['cap'])){
-                $this->_replace_radcheck_item($username,'Rd-Cap-Type',$this->request->data['cap']);
+            if(isset($this->request->data['cap_time'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type-Time',$this->request->data['cap_time']);
             }else{              //Clean up if there were previous ones
                 ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type'), false
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type-Time'), false
+                );
+            }
+
+            if(isset($this->request->data['cap_data'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type-Data',$this->request->data['cap_data']);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type-Data'), false
                 );
             }
         }
@@ -584,7 +603,7 @@ class PermanentUsersController extends AppController {
         $read_only_attributes = array(
             'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
             'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
-            'Rd-Cap-Type', 'Rd-Realm', 'Cleartext-Password'
+            'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password'
         );
 
        // $exclude_attribues = array(
