@@ -314,7 +314,8 @@ class DevicesController extends AppController {
             $always_active  = true;
             $to_date        = false;
             $from_date      = false;
-            $cap            = false;
+            $cap_data       = false;
+            $cap_time       = false;
             $owner          = false;
             $description    = false;
 
@@ -341,8 +342,12 @@ class DevicesController extends AppController {
                   $to_date =  $rc['value'];
                 }
                 
-                if($rc['attribute'] == 'Rd-Cap-Type'){
-                  $cap =  $rc['value'];
+                if($rc['attribute'] == 'Rd-Cap-Type-Data'){
+                  $cap_data =  $rc['value'];
+                }
+                
+                if($rc['attribute'] == 'Rd-Cap-Type-Time'){
+                  $cap_time =  $rc['value'];
                 }
 
                 if($rc['attribute'] == 'Rd-Device-Owner'){
@@ -363,8 +368,12 @@ class DevicesController extends AppController {
             }
 
 
-            if($cap){
-                $items['cap'] = $cap;
+             if($cap_data){
+                $items['cap_data'] = $cap_data;
+            }
+
+             if($cap_time){
+                $items['cap_time'] = $cap_time;
             }
 
             if(($from_date)&&($to_date)){
@@ -435,13 +444,22 @@ class DevicesController extends AppController {
                 );
             }
             
-            if(isset($this->request->data['cap'])){
-                $this->_replace_radcheck_item($username,'Rd-Cap-Type',$this->request->data['cap']);
+            if(isset($this->request->data['cap_data'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type-Data',$this->request->data['cap_data']);
             }else{              //Clean up if there were previous ones
                 ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type'), false
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type-Data'), false
                 );
             }
+
+            if(isset($this->request->data['cap_time'])){
+                $this->_replace_radcheck_item($username,'Rd-Cap-Type-Time',$this->request->data['cap_time']);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type-Time'), false
+                );
+            }
+
         }
 
         $this->set(array(
@@ -464,7 +482,7 @@ class DevicesController extends AppController {
         $read_only_attributes = array(
             'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
             'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
-            'Rd-Cap-Type', 'Rd-Realm', 'Cleartext-Password'
+            'Rd-Cap-Type-Data', 'Rd-Cap-Type-Data' , 'Rd-Realm', 'Cleartext-Password'
         );
 
        // $exclude_attribues = array(
