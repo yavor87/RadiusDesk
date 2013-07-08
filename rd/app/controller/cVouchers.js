@@ -43,14 +43,16 @@ Ext.define('Rd.controller.cVouchers', {
 
     views:  [
         'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
-        'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher'      
+        'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
+        'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridUserRadaccts'     
     ],
     stores: ['sVouchers',   'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
-    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile' ],
+    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct' ],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/vouchers/add.json',
-        urlEdit:            '/cake2/rd_cake/vouchers/edit.json',
+        urlViewBasic:       '/cake2/rd_cake/vouchers/view_basic_info.json',
+        urlEditBasic:       '/cake2/rd_cake/vouchers/edit_basic_info.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv'
     },
@@ -113,6 +115,36 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'winVoucherAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
+            },
+            'pnlVoucher #tabBasicInfo' : {
+                activate: me.onTabBasicInfoActive
+            },
+            'pnlVoucher #activate_on_login' : {
+                change:  me.chkActivateOnLoginChange
+            },
+            'pnlVoucher #never_expire' : {
+                change:  me.chkNeverExpireChange
+            },
+            'pnlVoucher #tabBasicInfo #save' : {
+                click: me.saveBasicInfo
+            },
+            'pnlVoucher gridVoucherPrivate' : {
+                activate:      me.gridActivate
+            },
+            'gridVoucherPrivate' : {
+                beforeedit:     me.onBeforeEditVoucherPrivate
+            },
+            'gridVoucherPrivate  #cmbVendor': {
+                change:      me.cmbVendorChange
+            },
+            'gridVoucherPrivate  #add': {
+                click:      me.attrAdd
+            },
+            'gridVoucherPrivate  #reload': {
+                click:      me.attrReload
+            },
+            'gridVoucherPrivate  #delete': {
+                click:      me.attrDelete
             },
             '#winCsvColumnSelectVouchers #save': {
                 click:  me.csvExportSubmit
@@ -344,6 +376,36 @@ Ext.define('Rd.controller.cVouchers', {
         }
     },
 
+    onTabBasicInfoActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the voucher's id
+        var voucher_id = t.up('pnlVoucher').v_id;
+        form.load({url:me.urlViewBasic, method:'GET',params:{voucher_id:voucher_id}});
+    },
+    saveBasicInfo:function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var voucher_id = button.up('pnlVoucher').v_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditBasic,
+            params              : {id: voucher_id},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+
     onStoreVouchersLoaded: function() {
         var me      = this;
         var count   = me.getStore('sVouchers').getTotalCount();
@@ -451,6 +513,97 @@ Ext.define('Rd.controller.cVouchers', {
             e.setDisabled(true);                
         }else{
             e.setDisabled(false);
+        }
+    },
+    onBeforeEditVoucherPrivate: function(g,e){
+        var me = this;
+        return e.record.get('edit');
+    },
+    cmbVendorChange: function(cmb){
+        var me = this;
+        var value   = cmb.getValue();
+        var grid    = cmb.up('gridVoucherPrivate');
+        var attr    = grid.down('cmbAttribute');
+        //Cause this to result in a reload of the Attribute combo
+        attr.getStore().getProxy().setExtraParam('vendor',value);
+        attr.getStore().load();   
+    },
+    attrAdd: function(b){
+        var me = this;
+        var grid    = b.up('gridVoucherPrivate');
+        var attr    = grid.down('cmbAttribute');
+        var a_val   = attr.getValue();
+        if(a_val == null){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            //We do not do double's
+            var f = grid.getStore().find('attribute',a_val);
+            if(f == -1){
+                grid.getStore().add(Ext.create('Rd.model.mPrivateAttribute',
+                    {
+                        type            : 'check',
+                        attribute       : a_val,
+                        op              : ':=',
+                        value           : i18n('sReplace_this_value'),
+                        delete          : true,
+                        edit            : true
+                    }
+                ));
+                grid.getStore().sync();
+            }
+        }
+    },
+
+    attrReload: function(b){
+        var me = this;
+        var grid = b.up('gridVoucherPrivate');
+        grid.getStore().load();
+    },
+    attrDelete: function(button){
+
+        var me      = this;
+        var grid    = button.up('gridVoucherPrivate');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                           // grid.getStore().load();   //Update the count
+                            me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
         }
     }
 
