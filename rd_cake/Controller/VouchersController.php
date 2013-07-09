@@ -747,6 +747,36 @@ class VouchersController extends AppController {
         ));
     }
 
+     public function change_password(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //For this action to sucees on the User model we need: 
+        // id; group_id; password; token should be empty ('')
+        $success = false;
+
+        if(isset($this->request->data['voucher_id'])){
+
+            //Get the name of this voucher
+            $q_r        = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
+            $username   = $q_r['Voucher']['name'];
+            if($username != ''){
+                $this->_replace_radcheck_item($username,'Cleartext-Password',$this->request->data['password']);
+                $success    = true; 
+            }
+        }
+
+        $this->set(array(
+            'success' => $success,
+            '_serialize' => array('success',)
+        ));
+    }
+
 
 
     public function view(){
@@ -794,6 +824,7 @@ class VouchersController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
                     array('xtype' => 'button', 'iconCls' => 'b-test',    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
                 )) 
             );
