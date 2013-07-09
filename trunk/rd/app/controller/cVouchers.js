@@ -44,7 +44,8 @@ Ext.define('Rd.controller.cVouchers', {
     views:  [
         'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
         'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
-        'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridUserRadaccts'     
+        'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
+        'vouchers.winVoucherPassword'   
     ],
     stores: ['sVouchers',   'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct' ],
@@ -54,7 +55,8 @@ Ext.define('Rd.controller.cVouchers', {
         urlViewBasic:       '/cake2/rd_cake/vouchers/view_basic_info.json',
         urlEditBasic:       '/cake2/rd_cake/vouchers/edit_basic_info.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv'
+        urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
+        urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
     },
     refs: [
         {  ref: 'grid',  selector:   'gridVouchers'}       
@@ -91,6 +93,12 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'gridVouchers #csv'  : {
                 click:      me.csvExport
+            },
+            'gridVouchers #password'  : {
+                click:      me.changePassword
+            },
+            'gridVouchers #test_radius' : {
+                click:      me.testRadius
             },
             'gridVouchers'   : {
                 select:      me.select
@@ -148,6 +156,18 @@ Ext.define('Rd.controller.cVouchers', {
             },
             '#winCsvColumnSelectVouchers #save': {
                 click:  me.csvExportSubmit
+            },
+            'pnlVoucher gridVoucherRadaccts #reload' :{
+                click:      me.gridVoucherRadacctsReload
+            },
+            'pnlVoucher gridVoucherRadaccts #delete' :{
+                click:      me.genericDelete
+            },
+            'pnlVoucher gridVoucherRadaccts' : {
+                activate:      me.gridActivate
+            },
+            'winVoucherPassword #save': {
+                click: me.changePasswordSubmit
             }
         });
     },
@@ -605,6 +625,130 @@ Ext.define('Rd.controller.cVouchers', {
                 }
             });
         }
-    }
+    },
+    gridVoucherRadacctsReload: function(button){
+        var me  = this;
+        var g   = button.up('gridVoucherRadaccts');
+        g.getStore().load();
+    },
+    genericDelete:   function(button){
+        var me      = this;
+        var grid    = button.up('grid');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load();  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    changePassword: function(){
+        var me = this;
+     //   console.log("Changing password");
+         //Find out if there was something selected
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr = me.getGrid().getSelectionModel().getLastSelected(); 
+                if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherPassword'+sr.getId())){
+                    var w = Ext.widget('winVoucherPassword',
+                        {
+                            id          : 'winVoucherPassword'+sr.getId(),
+                            voucher_id  : sr.getId(),
+                            username    : sr.get('name'),
+                            title       : i18n('sChange_password_for')+' '+sr.get('name')
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    changePasswordSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var extra_params        = {};
+        var sr                  = me.getGrid().getSelectionModel().getLastSelected();
+        extra_params['voucher_id'] = sr.getId();
+
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlChangePassword,
+            params              : extra_params,
+            success             : function(form, action) {
+                win.close();
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sPassword_changed'),
+                    i18n('sPassword_changed_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+    testRadius: function(button){
+        var me = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_test'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr = grid.getSelectionModel().getLastSelected();
+            me.application.runAction('cRadiusClient','TestPermanent',sr);        
+        }
+    } 
 
 });
