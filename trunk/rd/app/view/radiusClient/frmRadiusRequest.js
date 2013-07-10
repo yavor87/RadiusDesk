@@ -14,8 +14,8 @@ Ext.define('Rd.view.radiusClient.frmRadiusRequest', {
         maxWidth        : Rd.config.maxWidth  
     },
     requires: [
-        'Rd.view.radiusClient.cmbRequestType', 'Rd.view.radiusClient.cmbUserType', 'Rd.view.components.cmbPermanentUser',
-        'Rd.view.components.cmbDevice'
+        'Rd.view.radiusClient.cmbRequestType',  'Rd.view.radiusClient.cmbUserType', 'Rd.view.components.cmbPermanentUser',
+        'Rd.view.components.cmbDevice',         'Rd.view.components.cmbVoucher'
     ],
     buttons: [
         {
@@ -44,6 +44,11 @@ Ext.define('Rd.view.radiusClient.frmRadiusRequest', {
             },
             {
                 xtype       : 'cmbDevice',
+                hidden      : true,
+                disabled    : true
+            },
+            {
+                xtype       : 'cmbVoucher',
                 hidden      : true,
                 disabled    : true
             }

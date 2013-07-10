@@ -1,5 +1,7 @@
 Ext.define('Rd.controller.cRadiusClient', {
     extend          : 'Ext.app.Controller',
+    cmbVRendered    : false,
+    vRecord         : undefined,
     cmbPuRendered   : false,
     puRecord        : undefined,
     cmbDRendered    : false,
@@ -8,11 +10,12 @@ Ext.define('Rd.controller.cRadiusClient', {
         'components.pnlBanner',     'radiusClient.frmRadiusRequest',    'radiusClient.pnlRadiusReply'
     ],
     stores: [],
-    models: ['mPermanentUser','mDevice'],
+    models: ['mPermanentUser','mDevice', 'mVoucher' ],
     config: {
         urlRequest:         '/cake2/rd_cake/free_radius/test_radius.json'
     },
     refs: [
+        { ref:  'cmbVoucher',       selector: 'cmbVoucher'          },
         { ref:  'cmbPermanent',     selector: 'cmbPermanentUser'    },
         { ref:  'cmbDevice',        selector: 'cmbDevice'           },
         { ref:  'cmbUserType',      selector: 'cmbUserType'         },
@@ -33,6 +36,9 @@ Ext.define('Rd.controller.cRadiusClient', {
             },
             'frmRadiusRequest cmbDevice': {
                 render:      me.renderEventD
+            },
+            'frmRadiusRequest cmbVoucher': {
+                render:      me.renderEventV
             },
             'frmRadiusRequest #send': {
                 click:      me.submitRequest
@@ -94,6 +100,18 @@ Ext.define('Rd.controller.cRadiusClient', {
         desktop.restoreWindow(win);    
         return win;
     },
+    actionTestVoucher: function(v_record){
+        var me = this;
+        me.vRecord = v_record;
+        if(me.cmbVRendered == true){
+            console.log("Combo already rendered... set it");
+            me.getCmbUserType().setValue('voucher');
+            me.getCmbVoucher().getStore().loadData([me.vRecord],false);
+            me.getCmbVoucher().setValue(me.vRecord.getId());
+        }
+        me.actionIndex();
+    },
+
     actionTestPermanent: function(pu_record){
         var me = this;
         me.puRecord = pu_record;
@@ -115,6 +133,16 @@ Ext.define('Rd.controller.cRadiusClient', {
             me.getCmbDevice().setValue(me.dRecord.getId());
         }
         me.actionIndex();
+    },
+    renderEventV: function(cmb){
+        var me = this;
+        me.cmbVRendered = true;
+        if(me.vRecord != undefined){
+            console.log("Voucher detail present first time combo render");
+            me.getCmbUserType().setValue('voucher');
+            me.getCmbVoucher().getStore().loadData([me.vRecord],false);
+            me.getCmbVoucher().setValue(me.vRecord.getId());
+        } 
     },
     renderEventPu: function(cmb){
         var me = this;
@@ -144,15 +172,35 @@ Ext.define('Rd.controller.cRadiusClient', {
 
         me.dRecord         = undefined;
         me.cmbDRendered    = false;
+
+        me.vRecord         = undefined;
+        me.cmbVRendered    = false;
     },
     userTypeChange: function(cmb,new_val,old_val){
         var me = this;
         var pu = cmb.up('form').down('cmbPermanentUser');
         var d  = cmb.up('form').down('cmbDevice');
+        var v  = cmb.up('form').down('cmbVoucher');
+        if(new_val == 'voucher'){
+
+            v.setVisible(true);
+            v.setDisabled(false);
+
+            d.setVisible(false);
+            d.setDisabled(true);
+
+            pu.setVisible(false);
+            pu.setDisabled(true);
+        }
+
+
         if(new_val == 'device'){
 
             d.setVisible(true);
             d.setDisabled(false);
+
+            v.setVisible(false);
+            v.setDisabled(true);
 
             pu.setVisible(false);
             pu.setDisabled(true);
@@ -162,6 +210,9 @@ Ext.define('Rd.controller.cRadiusClient', {
 
             pu.setVisible(true);
             pu.setDisabled(false);
+
+            v.setVisible(false);
+            v.setDisabled(true);
 
             d.setVisible(false);
             d.setDisabled(true);
