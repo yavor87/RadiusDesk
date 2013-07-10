@@ -17,6 +17,7 @@ Ext.define('Rd.view.radiusClient.cmbUserType', {
         var s = Ext.create('Ext.data.Store', {
             fields: ['id', 'text'],
             data : [
+                {"id":"voucher",      "text": i18n("sVoucher")},
                 {"id":"permanent",    "text": i18n("sPermanent_user")},
                 {"id":"device",       "text": i18n("sDevice")}
             ]

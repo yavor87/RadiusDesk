@@ -747,7 +747,7 @@ Ext.define('Rd.controller.cVouchers', {
             );
         }else{
             var sr = grid.getSelectionModel().getLastSelected();
-            me.application.runAction('cRadiusClient','TestPermanent',sr);        
+            me.application.runAction('cRadiusClient','TestVoucher',sr);        
         }
     } 
 
