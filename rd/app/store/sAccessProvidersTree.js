@@ -2,10 +2,10 @@ Ext.define('Rd.store.sAccessProvidersTree', {
     extend: 'Ext.data.TreeStore',
     model: 'Rd.model.mAccessProviderTree',
     proxy: {
-            type: 'ajax',
+            type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            'url'   : '/cake2/rd_cake/access_providers/index_tree.json',
+            url     : '/cake2/rd_cake/access_providers/index_tree.json',
             reader: {
                 type: 'json',
                 root: 'items',
@@ -26,5 +26,5 @@ Ext.define('Rd.store.sAccessProvidersTree', {
         },
         scope: this
     },
-    autoLoad: true
+    autoLoad: false
 });

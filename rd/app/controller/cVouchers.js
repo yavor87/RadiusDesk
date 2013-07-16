@@ -45,9 +45,9 @@ Ext.define('Rd.controller.cVouchers', {
         'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
         'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
         'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
-        'vouchers.winVoucherPassword'   
+        'vouchers.winVoucherPassword', 'components.winPdf'   
     ],
-    stores: ['sVouchers',   'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
+    stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct' ],
     selectedRecord: null,
     config: {
@@ -90,6 +90,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'gridVouchers #edit'   : {
                 click:      me.edit
+            },
+            'gridVouchers #pdf'  : {
+                click:      me.pdfExport
             },
             'gridVouchers #csv'  : {
                 click:      me.csvExport
@@ -431,6 +434,27 @@ Ext.define('Rd.controller.cVouchers', {
         var count   = me.getStore('sVouchers').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
+    pdfExport: function(button){
+        console.log("PDF exporting");
+        var me  = this;
+        var win = me.application.runAction('cDesktop','AlreadyExist','winPdfId');
+        var title = i18n('sVoucher_export_to_pdf');
+        var urlPdf = 'http://192.168.1.102/cake2/rd_cake/vouchers/test_pdf'
+
+        if(!win){
+            var w = Ext.widget('winPdf',{
+                id          : 'winPdfId',
+                title       : title,
+                srcUrl      : urlPdf
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }else{
+            win.setSrc(urlPdf);
+            win.setTitle(title);
+        }
+
+    },
+
     csvExport: function(button,format) {
         var me          = this;
         var columns     = me.getGrid().columns;
