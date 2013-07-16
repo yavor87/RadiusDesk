@@ -40,41 +40,10 @@ Ext.define('Rd.view.autoSetups.winAutoSetupAddWizard', {
 
     //____ AccessProviders tree SCREEN ____
     mkScrnApTree: function(){
-
-        //A form which allows the user to select
-        var pnlTree = Ext.create('Ext.tree.Panel',{
-            itemId: 'scrnApTree',
-            useArrows: true,
-            store: 'sAccessProvidersTree',
-            rootVisible: true,
-            rowLines: true,
-            layout: 'fit',
-            stripeRows: true,
-            border: false,
-            tbar: [
-                { xtype: 'tbtext', text: 'Select the owner of this device', cls: 'lblWizard' }
-            ],
-            columns: [
-                {
-                    xtype: 'treecolumn', //this is so we know which column will show the tree
-                    text: i18n('sOwner'),
-                    sortable: true,
-                    flex: 1,
-                    dataIndex: 'username',
-                    tdCls: 'gridTree'
-                }
-            ],
-            buttons: [
-                    {
-                        itemId: 'btnTreeNext',
-                        text: i18n('sNext'),
-                        scale: 'large',
-                        iconCls: 'b-next',
-                        margin: Rd.config.buttonMargin
-                    }
-                ]
-        });
-        return pnlTree;
+       var pnlTree = Ext.create('Rd.view.components.pnlAccessProvidersTree',{
+            itemId: 'scrnApTree'
+       });
+       return pnlTree;
     },
 
     //_______ Data for Access Provider  _______
