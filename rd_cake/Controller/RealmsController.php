@@ -44,11 +44,12 @@ class RealmsController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //Or AP
             $user_id = $user['id'];
         }
+        $items      = array();
 
         if(isset($this->request->query['ap_id'])){
             $ap_id      = $this->request->query['ap_id'];
             $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root
-            $items      = array();
+            
             foreach($q_r as $i){
                 
                 $user_id    = $i['User']['id'];
@@ -434,7 +435,7 @@ class RealmsController extends AppController {
     //____ BASIC CRUD Realm Manager ________
     public function index(){
     //Display a list of realms with their owners
-    //This will be dispalyed to the Administrator as well as Access Providers who has righs
+    //This will be dispalyed to the Administrator as well as Access Providers who has rights
 
          //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -1150,7 +1151,7 @@ class RealmsController extends AppController {
                 }       
             }
             //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $ap_clause));   
+            array_push($c['conditions'],array('OR' => $tree_array));   
         }       
         //====== END AP FILTER =====
 

@@ -5,6 +5,7 @@ class DesktopController extends AppController {
 
     public $name       = 'Desktop';
     public $components = array('Aa');   //We'll use the Aa component to determine certain rights
+    protected $base    = "Access Providers/Controllers/Desktop/";
 
 
     public function authenticate(){
@@ -161,6 +162,30 @@ class DesktopController extends AppController {
         ));
     }
 
+    public function desktop_shortcuts(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+        if($user['group_name'] == Configure::read('group.admin')){ 
+            $items = $this->_build_admin_shortcuts();
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){ 
+            $items = $this->_build_ap_shortcuts($user_id);
+        }
+
+        $this->set(array(
+            'success' => true,
+            'items'    => $items,
+            '_serialize' => array('success','items')
+        ));
+
+    }
+
 
     private function _get_user_detail($username){
 
@@ -299,6 +324,41 @@ class DesktopController extends AppController {
 
         //___ What What ______
         return $menu;
+    }
+
+
+    private function _build_admin_shortcuts(){
+        $items = array();
+        array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
+        array_push($items, array( 'name'    => 'Permanent Users', 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
+        array_push($items, array( 'name'    => 'BYOD manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+        return $items;
+    }
+
+
+
+
+    private function _build_ap_shortcuts($id){
+
+        $items = array();
+        $base   = "Access Providers/Controllers/";
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
+            array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
+            array_push($items, array( 'name'    => 'Permanent Users', 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
+            array_push($items, array( 'name'    => 'BYOD manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        }
+
+        array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+        return $items;
+
     }
 
 }
