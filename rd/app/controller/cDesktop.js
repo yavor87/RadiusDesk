@@ -506,7 +506,6 @@ Ext.define('Rd.controller.cDesktop', {
     },
     onSettings: function(b){
         var me = this;
-        console.log("Showing settings....");
         if(!me.application.runAction('cDesktop','AlreadyExist','winDesktopSettingsId')){
             var w = Ext.widget('winDesktopSettings',{
                 id  :'winDesktopSettingsId'
@@ -553,10 +552,7 @@ Ext.define('Rd.controller.cDesktop', {
 
     onSelectWallpaper: function(a, record, c){
         var me = this;
-        console.log(record.get('img'));
         var wp = record.get('r_dir')+record.get('file');
-        me.setWallpaper(wp);
-
         //Update this user's preferences:
         Ext.Ajax.request({
             url: me.urlSaveWallpaperSelection,
@@ -564,14 +560,25 @@ Ext.define('Rd.controller.cDesktop', {
             params: {wallpaper: wp},
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){ 
+                //Only change if success == true
+                if(jsonData.success == true){
+                    me.setWallpaper(wp); 
                     Ext.ux.Toaster.msg(
                         i18n('sWalpaper_changed'),
                         i18n('sWalpaper_changed_fine'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
-                }   
+                }
+
+                if(jsonData.success == false){ 
+                    Ext.ux.Toaster.msg(
+                        i18n('sError_encountered'),
+                        jsonData.message.message,
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                    );
+                }
             },
             scope: me
         });
