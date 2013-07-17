@@ -131,7 +131,7 @@ class AppController extends Controller {
         
         //Most tables that has entries which belongs to an Access Provider as the user_id also includes
         // and available_to_siblings flag which if not set; makes the entry private
-        // This peice of code will take the current user making the request; and compare it with fields in an entry from a table
+        // This piece of code will take the current user making the request; and compare it with fields in an entry from a table
         // It will then evaluate where it is in the hirarchy and is below the item marked as private; not display it
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return false;

@@ -10,6 +10,25 @@ class VouchersController extends AppController {
 
     //-------- BASIC CRUD -------------------------------
 
+
+    public export_csv(){
+
+
+    }
+
+    public export_pdf(){
+
+
+
+    }
+
+
+    public function test_pdf(){
+        App::import('Vendor', 'xtcpdf');
+        $this->response->type('application/pdf');
+        $this->layout = 'pdf';  
+    }
+
     public function index(){
         //-- Required query attributes: token;
         //-- Optional query attribute: sel_language (for i18n error messages)
@@ -218,12 +237,6 @@ class VouchersController extends AppController {
             ));
         }
 	}
-
-
-    public function edit(){
-
-    }
-
 
     public function view_basic_info(){
 
@@ -778,11 +791,6 @@ class VouchersController extends AppController {
     }
 
 
-
-    public function view(){
-
-    }
-
     //--------- END BASIC CRUD ---------------------------
 
     //----- Menus ------------------------
@@ -865,7 +873,7 @@ class VouchersController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit_basic_info')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',    
@@ -892,21 +900,24 @@ class VouchersController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
-            //Tags
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($specific_group,array(
+           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'change_password')){
+
+                array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-meta_edit',    
+                    'iconCls'   => 'b-password',
                     'scale'     => 'large', 
-                    'itemId'    => 'tag',
-                    'disabled'  => true,     
-                    'tooltip'=> __('Change password')));
+                    'itemId'    => 'password', 
+                    'tooltip'   => __('Change password')));
+
+
+                array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-test',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'test_radius',  
+                    'tooltip'   => __('Test RADIUS')));
+
             }
-
-           
-
-
-           // array_push($menu,array('xtype' => 'tbfill'));
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
@@ -1253,3 +1264,4 @@ class VouchersController extends AppController {
     }
 
 }
+?>
