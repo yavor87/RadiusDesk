@@ -11,12 +11,12 @@ class VouchersController extends AppController {
     //-------- BASIC CRUD -------------------------------
 
 
-    public export_csv(){
+    public function export_csv(){
 
 
     }
 
-    public export_pdf(){
+    public function export_pdf(){
 
 
 
