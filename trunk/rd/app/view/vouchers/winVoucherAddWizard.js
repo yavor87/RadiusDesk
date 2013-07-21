@@ -144,7 +144,8 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                 {
                                     xtype       : 'cmbRealm',
                                     allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'realm'
                                 },
                                 {
                                     xtype       : 'cmbProfile',
