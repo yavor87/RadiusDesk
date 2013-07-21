@@ -254,6 +254,14 @@ Ext.define('Rd.controller.cVouchers', {
             var win = button.up('winVoucherAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
+
+            //We need to update the Store of the Realms and Profile select list to reflect the specific Access Provider
+            win.down('#realm').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            win.down('#realm').getStore().load();
+
+            win.down('#profile').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            win.down('#profile').getStore().load();    
+            
             win.getLayout().setActiveItem('scrnData');
         }else{
             Ext.ux.Toaster.msg(
