@@ -23,6 +23,105 @@ class RealmsController extends AppController {
 //------------------------------------------------------------------------
 
     //____ Access Providers application ______
+
+    public function index_ap_create(){
+    //This method will display the Access Provider we are looking at's list of realms which it has create rights for
+    //This will be used to display in the Wizard of available Realms in the Create screens of Vouchers; Permanent Users; and Devices
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+        $items      = array();
+
+        if(isset($this->request->query['ap_id'])){
+            $ap_id      = $this->request->query['ap_id'];
+            if($ap_id == 0){
+                $ap_id = $user_id;
+            }
+            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
+            foreach($q_r as $i){
+                
+                $user_id    = $i['User']['id'];
+                $this->Realm->contain();
+                $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
+                foreach($r  as $j){
+                    $id     = $j['Realm']['id'];
+                    $name   = $j['Realm']['name'];
+                    $create = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $ap_id), 
+                                array('model' => 'Realm','foreign_key' => $id), 'create');
+                    if($create == true){
+                        array_push($items,array('id' => $id, 'name' => $name));
+                    }
+                }
+            }
+        }
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+        public function index_ap_update(){
+    //This method will display the Access Provider we are looking at's list of realms which it has edit rights for
+    //This will be used to display in the Wizard of available Realms in the Edit screens of Vouchers; Permanent Users; and Devices
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+        $items      = array();
+
+        if(isset($this->request->query['ap_id'])){
+            $ap_id      = $this->request->query['ap_id'];
+            if($ap_id == 0){
+                $ap_id = $user_id;
+            }
+            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
+            foreach($q_r as $i){
+                
+                $user_id    = $i['User']['id'];
+                $this->Realm->contain();
+                $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
+                foreach($r  as $j){
+                    $id     = $j['Realm']['id'];
+                    $name   = $j['Realm']['name'];
+                    $create = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $ap_id), 
+                                array('model' => 'Realm','foreign_key' => $id), 'update');
+                    if($create == true){
+                        array_push($items,array('id' => $id, 'name' => $name));
+                    }
+                }
+            }
+        }
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
   
     public function index_ap(){
     //This method will display the Access Provider we are looking at's list of available realms.

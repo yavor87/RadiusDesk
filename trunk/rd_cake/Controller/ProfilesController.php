@@ -12,6 +12,47 @@ class ProfilesController extends AppController {
 //------------------------------------------------------------------------
 
 
+    //____ Access Provider _________
+    public function index_ap(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+        $items      = array();
+        if(isset($this->request->query['ap_id'])){
+            $ap_id      = $this->request->query['ap_id'];
+            if($ap_id == 0){
+                $ap_id = $user_id;
+            }
+            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
+            foreach($q_r as $i){               
+                $user_id    = $i['User']['id'];
+                $this->Profile->contain();
+                $r        = $this->Profile->find('all',array('conditions' => array('Profile.user_id' => $user_id, 'Profile.available_to_siblings' => true)));
+                foreach($r  as $j){
+                    $id     = $j['Profile']['id'];
+                    $name   = $j['Profile']['name'];
+                    array_push($items,array('id' => $id, 'name' => $name));
+                }
+            }
+        }
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
     //____ BASIC CRUD Manager ________
     public function index(){
 
