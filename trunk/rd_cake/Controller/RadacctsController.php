@@ -605,7 +605,7 @@ class RadacctsController extends AppController {
 
         //====== AP FILTER =====
         //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
-        if($user['group_name'] == Configure::read('group.ap')){  //AP 
+/*        if($user['group_name'] == Configure::read('group.ap')){  //AP 
             $ap_children    = $this->User->find_access_provider_children($user['id']);
             if($ap_children){   //Only if the AP has any children...
                 $ap_clause      = array();
@@ -616,7 +616,7 @@ class RadacctsController extends AppController {
                 //Add it as an OR clause
                 array_push($c['conditions'],array('OR' => $ap_clause));  
             }
-        }      
+        }   */   
         //====== END AP FILTER =====
         return $c;
     }

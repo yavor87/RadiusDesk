@@ -66,9 +66,9 @@ class VouchersController extends AppController {
         foreach($q_r as $i){
 
             //Find the realm and profile names
-            $realm  = 'not defined';
-            $profile= 'not defined';
-            $password = 'not defined';
+            $realm      = 'not defined';
+            $profile    = 'not defined';
+            $password   = 'not defined';
 
             foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
@@ -80,7 +80,12 @@ class VouchersController extends AppController {
                 if($rc['attribute'] == 'Cleartext-Password'){
                     $password = $rc['value'];
                 }
+            }
 
+            if($realm != 'not defined'){
+                $owner_id       = $i['Voucher']['user_id'];
+                $q_r            = $this->User = ClassRegistry::init('Realm')->findByName($realm);
+                $action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
             }
 
             array_push($items,
@@ -100,7 +105,9 @@ class VouchersController extends AppController {
                     'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
                     'last_reject_time'      => $i['Voucher']['last_reject_time'],
                     'last_reject_nas'       => $i['Voucher']['last_reject_nas'],
-                    'last_reject_message'   => $i['Voucher']['last_reject_message']
+                    'last_reject_message'   => $i['Voucher']['last_reject_message'],
+                    'update'                => $action_flags['update'],
+                    'delete'                => $action_flags['delete']
                 )
             );
         }
@@ -115,8 +122,8 @@ class VouchersController extends AppController {
 
     public function add(){
 
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
         $user_id    = $user['id'];
@@ -451,7 +458,14 @@ class VouchersController extends AppController {
 
     public function private_attr_add(){
 
-         if(isset($this->request->query['username'])){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['username'])){
             $username = $this->request->query['username'];
             $this->request->data['username'] = $username;
 
@@ -505,7 +519,14 @@ class VouchersController extends AppController {
 
    public function private_attr_edit(){
 
-         if(isset($this->request->query['username'])){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['username'])){
             $username = $this->request->query['username'];
             $this->request->data['username'] = $username;
 
@@ -622,6 +643,13 @@ class VouchersController extends AppController {
     }
 
     public function private_attr_delete(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
 
         $fail_flag = true;
 
@@ -907,6 +935,7 @@ class VouchersController extends AppController {
                     'iconCls'   => 'b-password',
                     'scale'     => 'large', 
                     'itemId'    => 'password', 
+                    'disabled'  => true,
                     'tooltip'   => __('Change password')));
 
 
@@ -953,32 +982,23 @@ class VouchersController extends AppController {
             );
         }
 
-        $this->set(array(
-            'items'         => $menu,
-            'success'       => true,
-            '_serialize'    => array('items','success')
-        ));
+        //Access Provider => selected power
+        if($user['group_name'] == Configure::read('group.ap')){  //Admin
+            $id   = $user['id'];
+            $actions = array();
+            array_push($actions,
+                array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload'))
+            );
 
+           
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete_accounting_data')){
+                array_push($actions,
+                    array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete'))
+                );             
+            }
 
-    }
-
-     function menu_for_authentication_data(){
-
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-
-        //Empty by default
-        $menu = array();
-
-        //Admin => all power
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
-                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
-                )) 
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => $actions) 
             );
         }
 
@@ -988,7 +1008,6 @@ class VouchersController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
-
 
 
     //______ END EXT JS UI functions ________
@@ -1101,7 +1120,7 @@ class VouchersController extends AppController {
                 $ap_clause      = array();
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($ap_clause,array('User.parent_id' => $id));
+                    array_push($ap_clause,array('Voucher.user_id' => $id));
                 }      
                 //Add it as an OR clause
                 array_push($c['conditions'],array('OR' => $ap_clause));  
@@ -1193,31 +1212,19 @@ class VouchersController extends AppController {
         return false;
     }
 
-     private function _get_action_flags($owner_id,$user){
+    private function _get_action_flags($user,$owner_id,$realm_id){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return array('update' => true, 'delete' => true);
         }
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
-            $user_id = $user['id'];
-
-            //test for self
-            if($owner_id == $user_id){
-                return array('update' => true, 'delete' => true );
-            }
-            //Test for Parents
-            foreach($this->parents as $i){
-                if($i['User']['id'] == $owner_id){
-                    return array('update' => false, 'delete' => false );
-                }
-            }
-
-            //Test for Children
-            foreach($this->children as $i){
-                if($i['User']['id'] == $owner_id){
-                    return array('update' => true, 'delete' => true);
-                }
-            }  
+            $update = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'update');
+            $delete = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'delete');
+            return array('update' => $update, 'delete' => $delete);
         }
     }
 
