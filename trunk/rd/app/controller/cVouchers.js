@@ -29,7 +29,6 @@ Ext.define('Rd.controller.cVouchers', {
                         region  : 'center',
                         xtype   : 'tabpanel',
                         layout  : 'fit',
-                        xtype   : 'tabpanel',
                         margins : '0 0 0 0',
                         border  : true,
                         items   : { 'title' : i18n('sVouchers'), xtype: 'gridVouchers'}
@@ -104,10 +103,8 @@ Ext.define('Rd.controller.cVouchers', {
                 click:      me.testRadius
             },
             'gridVouchers'   : {
-                select:      me.select
-            },
-            'gridVouchers'    : {
-                activate:      me.gridActivate
+                select      :  me.select,
+                activate    :  me.gridActivate
             },
             'winVoucherAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -234,7 +231,7 @@ Ext.define('Rd.controller.cVouchers', {
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
                             var w = Ext.widget('winVoucherAddWizard',
-                                {id:'winVoucherAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                                {id:'winVoucherAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true,apId:'0'}
                             );
                             me.application.runAction('cDesktop','Add',w);         
                         }
@@ -297,10 +294,9 @@ Ext.define('Rd.controller.cVouchers', {
             failure: Ext.ux.formFail
         });
     },
-    select: function(grid,record){
+    select:  function(grid, record, item, index, event){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
-
         //Dynamically update the top toolbar
         tb = me.getGrid().down('toolbar[dock=top]');
 
@@ -308,10 +304,12 @@ Ext.define('Rd.controller.cVouchers', {
         if(edit == true){
             if(tb.down('#edit') != null){
                 tb.down('#edit').setDisabled(false);
+                tb.down('#password').setDisabled(false);
             }
         }else{
             if(tb.down('#edit') != null){
                 tb.down('#edit').setDisabled(true);
+                tb.down('#password').setDisabled(true);
             }
         }
 

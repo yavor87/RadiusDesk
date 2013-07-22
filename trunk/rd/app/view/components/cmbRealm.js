@@ -14,6 +14,7 @@ Ext.define('Rd.view.components.cmbRealm', {
     name            : 'realm_id',
     labelClsExtra   : 'lblRd',
     type            : 'create',
+    extraParam      : false,
     initComponent: function() {
         var me  = this;
         var url = '/cake2/rd_cake/realms/index_ap_update.json';
@@ -35,6 +36,10 @@ Ext.define('Rd.view.components.cmbRealm', {
             },
             autoLoad            : false
         });
+
+        if(me.extraParam){
+            s.getProxy().setExtraParam('ap_id',me.extraParam);
+        }
         me.store = s;
         this.callParent(arguments);
     }

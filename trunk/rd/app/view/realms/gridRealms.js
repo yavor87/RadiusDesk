@@ -11,6 +11,9 @@ Ext.define('Rd.view.realms.gridRealms' ,{
         'Rd.view.components.ajaxToolbar'
     ],
     urlMenu     : '/cake2/rd_cake/realms/menu_for_grid.json',
+    viewConfig: {
+        loadMask:true
+    },
     bbar        : [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi'  }
     ],

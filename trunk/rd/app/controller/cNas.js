@@ -126,10 +126,8 @@ Ext.define('Rd.controller.cNas', {
                 click:      me.reloadOptionClick
             },
             'gridNas'       : {
-                select:      me.select
-            },
-            'gridNas'       : {
-                activate:      me.gridActivate
+                select      : me.select,
+                activate    : me.gridActivate
             },
             'winNasAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -658,7 +656,6 @@ Ext.define('Rd.controller.cNas', {
     select: function(grid,record){
         var me = this;
         //Adjust the Edit Delete and Tag buttons accordingly...
-
         //Dynamically update the top toolbar
         tb = me.getGridNas().down('toolbar[dock=top]');
         var edit = record.get('update');
