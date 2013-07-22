@@ -12,6 +12,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
     layout:     'card',
     iconCls:    'add',
     autoShow:   false,
+    apId    :   false,
     defaults: {
             border: false
     },
@@ -145,13 +146,15 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     xtype       : 'cmbRealm',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'realm'
+                                    itemId      : 'realm',
+                                    extraParam  : me.apId
                                 },
                                 {
                                     xtype       : 'cmbProfile',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'profile'
+                                    itemId      : 'profile',
+                                    extraParam  : me.apId
                                 },
                                 {
                                     xtype       : 'numberfield',

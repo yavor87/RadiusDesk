@@ -12,6 +12,7 @@ Ext.define('Rd.view.components.cmbProfile', {
     mode            : 'local',
     name            : 'profile_id',
     labelClsExtra   : 'lblRd',
+    extraParam      : false,
     initComponent   : function() {
         var me= this;
         var s = Ext.create('Ext.data.Store', {
@@ -29,6 +30,11 @@ Ext.define('Rd.view.components.cmbProfile', {
             },
             autoLoad    : false
         });
+
+        if(me.extraParam){
+            s.getProxy().setExtraParam('ap_id',me.extraParam);
+        }
+
         me.store = s;
         this.callParent(arguments);
     }

@@ -12,7 +12,7 @@ Ext.define('Rd.view.vouchers.gridVoucherRadaccts' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/permanent_users/menu_for_accounting_data.json',
+    urlMenu: '/cake2/rd_cake/vouchers/menu_for_accounting_data.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },
         '->',
