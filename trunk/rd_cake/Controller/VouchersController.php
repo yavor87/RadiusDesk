@@ -81,6 +81,9 @@ class VouchersController extends AppController {
                     $password = $rc['value'];
                 }
             }
+            $action_flags = array();
+            $action_flags['update'] = true;
+            $action_flags['delete'] = true;
 
             if($realm != 'not defined'){
                 $owner_id       = $i['Voucher']['user_id'];
