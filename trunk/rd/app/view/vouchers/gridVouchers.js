@@ -39,7 +39,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 xtype       : 'templatecolumn', 
                 tpl:        new Ext.XTemplate(
                                 '<tpl if="Ext.isEmpty(batch)"><div class=\"fieldBlue\">'+i18n('s_br_Single_voucher_br')+'</div>',
-                                '<tpl else>','{batch}','</tpl>' 
+                                '<tpl else><div class=\"fieldGrey\">','{batch}','</div></tpl>' 
                             ),
                 dataIndex   : 'batch',
                 filter: { type: 'string'}
@@ -57,7 +57,8 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                             Ext.widget('progressbar', {
                                 renderTo: id,
                                 value: v / 100,
-                                width: 100
+                                width: 100,
+                                text: v +" %"
                             });
                         }, 50);
                         return Ext.String.format('<div id="{0}"></div>', id);
@@ -77,7 +78,8 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                             Ext.widget('progressbar', {
                                 renderTo: id,
                                 value: v / 100,
-                                width: 100
+                                width: 100,
+                                text: v+" %"
                             });
                         }, 50);
                         return Ext.String.format('<div id="{0}"></div>', id);
@@ -92,8 +94,8 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
                                 "<tpl if='status == \"new\"'><div class=\"fieldGreen\">"+i18n('sNew')+"</div></tpl>",
-                                "<tpl if='status == \"used\"'><div class=\"fieldOrange\">"+i18n('sUsed')+"</div></tpl>",
-                                "<tpl if='status == \"depleted\"'><div class=\"fieldRed\">"+i18n('sDepleted')+"</div></tpl>",
+                                "<tpl if='status == \"used\"'><div class=\"fieldYellow\">"+i18n('sUsed')+"</div></tpl>",
+                                "<tpl if='status == \"depleted\"'><div class=\"fieldOrange\">"+i18n('sDepleted')+"</div></tpl>",
                                 "<tpl if='status == \"expired\"'><div class=\"fieldRed\">"+i18n('sExpired')+"</div></tpl>"
                 ),
                 dataIndex   : 'status',
