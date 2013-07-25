@@ -830,6 +830,39 @@ background-position: left center;
     font-size:12px;
 }
 
+.fieldOrange {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #f6dbc5;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #1e5304;
+    font-size:12px;
+}
+
+.fieldGrey {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #dcddde;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #5c5d5e;
+    font-size:12px;
+}
+
+.fieldYellow {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #fbf2a2;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #5c5d5e;
+    font-size:12px;
+}
+
 .txtGrey {
     color: #98989b;
 }
