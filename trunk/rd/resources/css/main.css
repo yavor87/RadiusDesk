@@ -350,6 +350,10 @@
       background-image:url(../images/16x16/dynamic_pages.png) !important;
 }
 
+.pdf {
+      background-image:url(../images/16x16/pdf.png) !important;
+}
+
 
 .mapDiv {
     height: 210px;
