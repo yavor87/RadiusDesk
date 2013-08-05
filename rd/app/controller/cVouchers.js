@@ -44,10 +44,11 @@ Ext.define('Rd.controller.cVouchers', {
         'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
         'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
         'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
-        'vouchers.winVoucherPassword', 'components.winPdf'   
+        'vouchers.winVoucherPassword', 'components.winPdf',     'vouchers.winVoucherPdf',
+        'vouchers.cmbPdfFormats',   'components.vCmbLanguages'  
     ],
-    stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
-    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct' ],
+    stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
+    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct', 'mPdfFormat'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/vouchers/add.json',
@@ -56,6 +57,7 @@ Ext.define('Rd.controller.cVouchers', {
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
+        urlPdfBase:         '/cake2/rd_cake/vouchers/test_pdf'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridVouchers'}       
@@ -168,6 +170,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'winVoucherPassword #save': {
                 click: me.changePasswordSubmit
+            },
+            'winVoucherPdf  #save': {
+                click:  me.pdfExportSubmit
             }
         });
     },
@@ -442,10 +447,68 @@ Ext.define('Rd.controller.cVouchers', {
     },
     pdfExport: function(button){
         console.log("PDF exporting");
-        var me  = this;
-        var win = me.application.runAction('cDesktop','AlreadyExist','winPdfId');
-        var title = i18n('sVoucher_export_to_pdf');
-        var urlPdf = 'http://192.168.1.102/cake2/rd_cake/vouchers/test_pdf'
+        var me          = this;
+        var selecteds   = false;
+
+        //First check is there is actually some records that is displayed!
+        if(me.getGrid().getStore().getCount() == 0){
+            Ext.ux.Toaster.msg(
+                i18n('sNothing_to_export'),
+                i18n('sList_is_empty'),
+                Ext.ux.Constants.clsWarn,
+                Ext.ux.Constants.msgWarn
+            );
+            return;  
+        }
+
+        //Check if there are items selected to give them the option to export only selecteds
+        if(me.getGrid().getSelectionModel().getCount() > 0){
+            selecteds = true;
+        }
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherPdfId')){
+            var w = Ext.widget('winVoucherPdf',{id:'winVoucherPdfId', selecteds : selecteds});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    pdfExportSubmit: function(button){
+        var me      = this;
+        console.log("PDF pappie");
+        var url_to_add = '';
+        var filter = me.getGrid().filters.getFilterData();
+        if(filter.length > 0){
+            var filter = Ext.encode(me.getGrid().filters.getFilterData());
+            console.log(filter);
+            console.log("filter="+encodeURIComponent(filter));
+            url_to_add = "filter="+encodeURIComponent(filter);
+        }
+
+        //Check if the 'selected_only' was chosen
+        var form = button.up('form');
+        if(form.down('checkbox') != undefined){
+            if(form.down('checkbox').getValue()){
+                console.log("Get selection...");
+                var selected = [];
+                Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
+                    var v_id        = sr.getId();
+                    Ext.Array.push(selected,v_id);
+                });
+                if(selected.length > 0){
+                    var sel = Ext.encode(selected);
+                    console.log("selected="+encodeURIComponent(sel));
+                    //If it is selected we don't care about the filter 
+                    url_to_add = "selected="+encodeURIComponent(sel);
+ 
+                }
+            }
+        }
+        me.pdfOpenWindow(url_to_add);
+    },
+    pdfOpenWindow: function(url_to_add){
+        var me      = this;
+        var win     = me.application.runAction('cDesktop','AlreadyExist','winPdfId');
+        var title   = i18n('sVoucher_export_to_pdf');
+        var urlPdf  = me.urlPdfBase+'?'+url_to_add;
 
         if(!win){
             var w = Ext.widget('winPdf',{
@@ -458,9 +521,7 @@ Ext.define('Rd.controller.cVouchers', {
             win.setSrc(urlPdf);
             win.setTitle(title);
         }
-
     },
-
     csvExport: function(button,format) {
         var me          = this;
         var columns     = me.getGrid().columns;
