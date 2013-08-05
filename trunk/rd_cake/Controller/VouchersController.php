@@ -24,7 +24,7 @@ class VouchersController extends AppController {
 
 
     public function test_pdf(){
-        App::import('Vendor', 'xtcpdf');
+        App::import('Vendor', 'generic_pdf');
         $this->response->type('application/pdf');
         $this->layout = 'pdf';  
     }
@@ -823,6 +823,24 @@ class VouchersController extends AppController {
 
 
     //--------- END BASIC CRUD ---------------------------
+
+
+     public function pdf_voucher_formats(){
+
+        $items = array();
+        $ct = Configure::read('voucher_formats');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
 
     //----- Menus ------------------------
     public function menu_for_grid(){
