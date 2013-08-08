@@ -483,14 +483,15 @@ Ext.define('Rd.controller.cVouchers', {
         var format  = form.down('cmbPdfFormats').getValue();
         //Get the language
         var language = form.down('cmbLanguages').getValue();
+        //Token
+        var token = Ext.util.Cookies.get("Token"); //No token?
 
-        var url_to_add = 'language='+language+"&format="+format+'&';
+        var url_to_add = 'language='+language+"&format="+format+'&token='+token+'&';
 
         //Check for filter
         var filter = me.getGrid().filters.getFilterData();
         if(filter.length > 0){
             var filter = Ext.encode(me.getGrid().filters.getFilterData());
-            //console.log(filter);
             //console.log("filter="+encodeURIComponent(filter));
             url_to_add = url_to_add+"filter="+encodeURIComponent(filter);
         }
