@@ -4,7 +4,7 @@ Ext.define('Rd.view.voucher.pnlVoucher', {
     border: false,
     v_id: null,
     v_name: null,
-    v_record: null, //We will supply each instance with a reference to the selected record.
+    record: null, //We will supply each instance with a reference to the selected record.
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:
@@ -39,7 +39,8 @@ Ext.define('Rd.view.voucher.pnlVoucher', {
                     {
                         xtype       : 'cmbRealm',
                         allowBlank  : false,
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'realm'
                     },
                     {
                         xtype       : 'cmbProfile',

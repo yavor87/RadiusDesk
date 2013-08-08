@@ -4,7 +4,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
     border: false,
     pu_id: null,
     pu_name: null,
-    pu_record: null, //We will supply each instance with a reference to the selected record.
+    record: null, //We will supply each instance with a reference to the selected record.
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:
@@ -38,7 +38,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                     {
                         xtype       : 'cmbRealm',
                         allowBlank  : false,
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+                        itemId      : 'realm'
                     },
                     {
                         xtype       : 'cmbProfile',

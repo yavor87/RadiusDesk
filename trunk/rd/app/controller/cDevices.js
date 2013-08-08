@@ -177,7 +177,8 @@ Ext.define('Rd.controller.cDevices', {
                 activate:      me.onDeviceRadacctsActivate
             },
             'pnlDevice #profile' : {
-                change:  me.cmbProfileChange
+                change:  me.cmbProfileChange,
+                render:  me.renderEventProfile
             },
             'pnlDevice #owner' : {
                 render:      me.renderEventOwner
@@ -990,18 +991,25 @@ Ext.define('Rd.controller.cDevices', {
         }
     },
     renderEventOwner: function(cmb){
-
         var me                      = this;
         var pnlDevice               = cmb.up('pnlDevice');
         pnlDevice.cmbOwnerRendered  = true;
-        console.log("Render event owner pappie");
         if(pnlDevice.record != undefined){
             var un      = pnlDevice.record.get('user');
             var u_id    = pnlDevice.record.get('user_id');
-
-            var rec = Ext.create('Rd.model.mPermanentUser', {username: un, id: u_id});
+            var rec     = Ext.create('Rd.model.mPermanentUser', {username: un, id: u_id});
             cmb.getStore().loadData([rec],false);
-            //cmb.setValue(rec.getId());
+        }
+    },
+    renderEventProfile: function(cmb){
+        var me          = this;
+        var pnlDevice   = cmb.up('pnlDevice');
+        pnlDevice.cmbProfileRendered  = true;
+        if(pnlDevice.record != undefined){
+            var pn      = pnlDevice.record.get('profile');
+            var p_id    = pnlDevice.record.get('profile_id');
+            var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
+            cmb.getStore().loadData([rec],false);
         }
     }
 

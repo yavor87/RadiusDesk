@@ -129,6 +129,12 @@ Ext.define('Rd.controller.cVouchers', {
             'pnlVoucher #tabBasicInfo' : {
                 activate: me.onTabBasicInfoActive
             },
+            'pnlVoucher #profile' : {
+                render:  me.renderEventProfile
+            },
+            'pnlVoucher #realm' : {
+                render:      me.renderEventRealm
+            },
             'pnlVoucher #activate_on_login' : {
                 change:  me.chkActivateOnLoginChange
             },
@@ -403,7 +409,7 @@ Ext.define('Rd.controller.cVouchers', {
                     closable:   true,
                     iconCls:    'edit', 
                     layout:     'fit', 
-                    items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name}
+                    items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name, record: sr }
                 });
                 tp.setActiveTab(v_tab_id); //Set focus on Add Tab
             });
@@ -474,13 +480,24 @@ Ext.define('Rd.controller.cVouchers', {
     pdfExportSubmit: function(button){
         var me      = this;
         console.log("PDF pappie");
-        var url_to_add = '';
+        
+
+        
+        var form    = button.up('form');
+        //Get the format
+        var format  = form.down('cmbPdfFormats').getValue();
+        //Get the language
+        var language = form.down('cmbLanguages').getValue();
+
+        var url_to_add = 'language='+language+"&format="+format+'&';
+
+        //Check for filter
         var filter = me.getGrid().filters.getFilterData();
         if(filter.length > 0){
             var filter = Ext.encode(me.getGrid().filters.getFilterData());
             console.log(filter);
             console.log("filter="+encodeURIComponent(filter));
-            url_to_add = "filter="+encodeURIComponent(filter);
+            url_to_add = url_to_add+"filter="+encodeURIComponent(filter);
         }
 
         //Check if the 'selected_only' was chosen
@@ -497,8 +514,7 @@ Ext.define('Rd.controller.cVouchers', {
                     var sel = Ext.encode(selected);
                     console.log("selected="+encodeURIComponent(sel));
                     //If it is selected we don't care about the filter 
-                    url_to_add = "selected="+encodeURIComponent(sel);
- 
+                    url_to_add = url_to_add+"selected="+encodeURIComponent(sel);
                 }
             }
         }
@@ -840,6 +856,30 @@ Ext.define('Rd.controller.cVouchers', {
             var sr = grid.getSelectionModel().getLastSelected();
             me.application.runAction('cRadiusClient','TestVoucher',sr);        
         }
-    } 
+    },
+    renderEventRealm: function(cmb){
+        var me                      = this;
+        var pnlPu               = cmb.up('pnlVoucher');
+        pnlPu.cmbRealmRendered  = true;
+        if(pnlPu.record != undefined){
+            var rn      = pnlPu.record.get('realm');
+            var r_id    = pnlPu.record.get('realm_id');
+            var rec     = Ext.create('Rd.model.mRealm', {name: rn, id: r_id});
+            cmb.getStore().loadData([rec],false);
+        }
+    },
+    renderEventProfile: function(cmb){
+        var me          = this;
+        var pnlPu       = cmb.up('pnlVoucher');
+        console.log("RRRRR");
+        pnlPu.cmbProfileRendered  = true;
+        if(pnlPu.record != undefined){
+            console.log("AAAAA");
+            var pn      = pnlPu.record.get('profile');
+            var p_id    = pnlPu.record.get('profile_id');
+            var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
+            cmb.getStore().loadData([rec],false);
+        }
+    }
 
 });

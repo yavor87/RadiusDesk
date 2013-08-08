@@ -5,7 +5,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
     d_id: null,
     d_name: null,
     cmbOwnerRendered: false,
-    record: undefined,
+    record: undefined, //The record of the device which we edit
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:

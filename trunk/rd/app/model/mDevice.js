@@ -6,6 +6,7 @@ Ext.define('Rd.model.mDevice', {
          {name: 'user_id'},
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },
+         {name: 'profile_id'},
          'name', 'description','vendor_id',
          {name: 'active',       type: 'bool'    },
          {name: 'last_accept_time'},
