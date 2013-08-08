@@ -25,9 +25,85 @@ class VouchersController extends AppController {
 
     public function test_pdf(){
         App::import('Vendor', 'generic_pdf');
+        
         $this->response->type('application/pdf');
-        $this->layout = 'pdf';  
+        $this->layout = 'pdf';
+
+        $language   = '4_4'; //default
+        $format     = 'a4'; 
+
+        //Compulsory to know the format and language
+        if(isset($this->request->query['language'])){
+            $language = $this->request->query['language'];
+        }
+
+        if(isset($this->request->query['format'])){
+            $format = $this->request->query['format'];
+        }
+        $this->set('format',$format);
+
+        $pieces = explode('_',$language);
+        $l      = ClassRegistry::init('Language');
+        $l->contain();
+        $l_q    = $l->findById($pieces[1]);
+        //print_r($l_q);
+        if($l_q['Language']['rtl'] == '1'){
+            $this->set('rtl',true);
+        }else{
+            $this->set('rtl',false);
+        }
+
+        //We need to see if there are a selection:
+        if(isset($this->request->query['selected'])){
+            $selected = json_decode($this->request->query['selected']);
+            $sel_condition = array();
+            foreach($selected as $i){
+                array_push($sel_condition, array("Voucher.id" => $i)); 
+            }
+
+            $voucher_data = array();
+
+            $this->Voucher->contain('Radcheck');
+            $q_r = $this->Voucher->find('all', array('conditions' => array('OR' => $sel_condition)));
+            foreach($q_r as $i){
+                $v              = array();
+                $v['username']  = $i['Voucher']['name'];
+                $v['password']  = false;
+                $v['expiration']= false;
+                $v['days_valid']= false;
+                $v['profile']   = false;
+
+                foreach($i['Radcheck'] as $j){
+                    if($j['attribute'] == 'Rd-Realm'){
+                        $realm = $j['value'];
+                    }
+                    if($j['attribute'] == 'Cleartext-Password'){
+                        $v['password'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'Expiration'){
+                        $v['expiration'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'Rd-Voucher'){
+                        $v['days_valid'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'User-Profile'){
+                        $v['profile'] = $j['value'];
+                    }
+                }
+                if(!array_key_exists($realm,$voucher_data)){
+                    $r = ClassRegistry::init('Realm')->findByName($realm);
+                    $voucher_data[$realm] = $r['Realm'];
+                    $voucher_data[$realm]['vouchers'] = array();
+                }
+                array_push($voucher_data[$realm]['vouchers'],$v); 
+                
+            }
+            $this->set('voucher_data',$voucher_data);
+           // print_r($voucher_data);
+           // exit;
+        }
     }
+
 
     public function index(){
         //-- Required query attributes: token;
@@ -62,7 +138,10 @@ class VouchersController extends AppController {
         $total  = $this->{$this->modelClass}->find('count'  , $c);  
         $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
 
-        $items  = array();
+        $items      = array();
+        $profiles   = array();
+        $realms     = array();
+
         foreach($q_r as $i){
 
             //Find the realm and profile names
@@ -73,9 +152,21 @@ class VouchersController extends AppController {
             foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
                     $profile = $rc['value'];
+                    if(!array_key_exists($profile,$profiles)){
+                        $p = ClassRegistry::init('Profile');
+                        $p->contain();
+                        $q_r = $p->findByName($profile);
+                        $profiles[$profile] = $q_r['Profile']['id'];
+                    }
                 }
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
+                    if(!array_key_exists($realm,$realms)){
+                        $r = ClassRegistry::init('Realm');
+                        $r->contain();
+                        $q_r = $r->findByName($realm);
+                        $realms[$realm] = $q_r['Realm']['id'];
+                    }
                 }
                 if($rc['attribute'] == 'Cleartext-Password'){
                     $password = $rc['value'];
@@ -100,7 +191,9 @@ class VouchersController extends AppController {
                     'name'          => $i['Voucher']['name'],
                     'password'      => $password,
                     'realm'         => $realm,
+                    'realm_id'      => $realms[$realm],
                     'profile'       => $profile,
+                    'profile_id'    => $profiles[$profile],
                     'perc_time_used'=> $i['Voucher']['perc_time_used'],
                     'perc_data_used'=> $i['Voucher']['perc_data_used'],
                     'status'        => $i['Voucher']['status'],

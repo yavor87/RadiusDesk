@@ -126,7 +126,9 @@ class DevicesController extends AppController {
         $total  = $this->{$this->modelClass}->find('count'  , $c);  
         $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
 
-        $items  = array();
+        $items      = array();
+        $profiles   = array();
+
         foreach($q_r as $i){
 
             //Create notes flag
@@ -145,6 +147,12 @@ class DevicesController extends AppController {
             foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
                     $profile = $rc['value'];
+                    if(!array_key_exists($profile,$profiles)){
+                        $p = ClassRegistry::init('Profile');
+                        $p->contain();
+                        $q_r = $p->findByName($profile);
+                        $profiles[$profile] = $q_r['Profile']['id'];
+                    }
                 }
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
@@ -160,6 +168,7 @@ class DevicesController extends AppController {
                     'description'   => $i['Device']['description'], 
                     'realm'         => $realm,
                     'profile'       => $profile,
+                    'profile_id'    => $profiles[$profile],
                     'active'        => $i['Device']['active'],
                     'last_accept_time'      => $i['Device']['last_accept_time'],
                     'last_accept_nas'       => $i['Device']['last_accept_nas'],
