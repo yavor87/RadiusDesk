@@ -198,7 +198,11 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 activate:      me.gridActivate
             },
             'pnlPermanentUser #profile' : {
-                change:  me.cmbProfileChange
+                change:  me.cmbProfileChange,
+                render:  me.renderEventProfile
+            },
+            'pnlPermanentUser #realm' : {
+                render:      me.renderEventRealm
             },
             'pnlPermanentUser #always_active' : {
                 change:  me.chkAlwaysActiveChange
@@ -488,7 +492,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     closable:   true,
                     iconCls:    'edit', 
                     layout:     'fit', 
-                    items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id, pu_name: pu_tab_name}
+                    items:      {'xtype' : 'pnlPermanentUser',pu_id: pu_id, pu_name: pu_tab_name, record: sr}
                 });
                 tp.setActiveTab(pu_tab_id); //Set focus on Add Tab
             });
@@ -1209,5 +1213,28 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 }
             });
         }
+    },
+    renderEventRealm: function(cmb){
+        var me                      = this;
+        var pnlPu               = cmb.up('pnlPermanentUser');
+        pnlPu.cmbRealmRendered  = true;
+        if(pnlPu.record != undefined){
+            var rn      = pnlPu.record.get('realm');
+            var r_id    = pnlPu.record.get('realm_id');
+            var rec     = Ext.create('Rd.model.mRealm', {name: rn, id: r_id});
+            cmb.getStore().loadData([rec],false);
+        }
+    },
+    renderEventProfile: function(cmb){
+        var me          = this;
+        var pnlPu       = cmb.up('pnlPermanentUser');
+        pnlPu.cmbProfileRendered  = true;
+        if(pnlPu.record != undefined){
+            var pn      = pnlPu.record.get('profile');
+            var p_id    = pnlPu.record.get('profile_id');
+            var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
+            cmb.getStore().loadData([rec],false);
+        }
     }
+
 });
