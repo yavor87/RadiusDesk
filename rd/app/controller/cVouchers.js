@@ -452,7 +452,6 @@ Ext.define('Rd.controller.cVouchers', {
         me.getGrid().down('#count').update({count: count});
     },
     pdfExport: function(button){
-        console.log("PDF exporting");
         var me          = this;
         var selecteds   = false;
 
@@ -478,11 +477,7 @@ Ext.define('Rd.controller.cVouchers', {
         }
     },
     pdfExportSubmit: function(button){
-        var me      = this;
-        console.log("PDF pappie");
-        
-
-        
+        var me      = this;      
         var form    = button.up('form');
         //Get the format
         var format  = form.down('cmbPdfFormats').getValue();
@@ -495,8 +490,8 @@ Ext.define('Rd.controller.cVouchers', {
         var filter = me.getGrid().filters.getFilterData();
         if(filter.length > 0){
             var filter = Ext.encode(me.getGrid().filters.getFilterData());
-            console.log(filter);
-            console.log("filter="+encodeURIComponent(filter));
+            //console.log(filter);
+            //console.log("filter="+encodeURIComponent(filter));
             url_to_add = url_to_add+"filter="+encodeURIComponent(filter);
         }
 
@@ -504,7 +499,7 @@ Ext.define('Rd.controller.cVouchers', {
         var form = button.up('form');
         if(form.down('checkbox') != undefined){
             if(form.down('checkbox').getValue()){
-                console.log("Get selection...");
+                //console.log("Get selection...");
                 var selected = [];
                 Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
                     var v_id        = sr.getId();
@@ -512,7 +507,7 @@ Ext.define('Rd.controller.cVouchers', {
                 });
                 if(selected.length > 0){
                     var sel = Ext.encode(selected);
-                    console.log("selected="+encodeURIComponent(sel));
+                   // console.log("selected="+encodeURIComponent(sel));
                     //If it is selected we don't care about the filter 
                     url_to_add = url_to_add+"selected="+encodeURIComponent(sel);
                 }
@@ -871,10 +866,8 @@ Ext.define('Rd.controller.cVouchers', {
     renderEventProfile: function(cmb){
         var me          = this;
         var pnlPu       = cmb.up('pnlVoucher');
-        console.log("RRRRR");
         pnlPu.cmbProfileRendered  = true;
         if(pnlPu.record != undefined){
-            console.log("AAAAA");
             var pn      = pnlPu.record.get('profile');
             var p_id    = pnlPu.record.get('profile_id');
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
