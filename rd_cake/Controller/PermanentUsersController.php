@@ -148,11 +148,11 @@ class PermanentUsersController extends AppController {
         $total  = $this->{$this->modelClass}->find('count'  , $c);  
         $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
 
-        $items  = array();
+        $items      = array();
+        $profiles   = array();
+        $realms     = array();
+
         foreach($q_r as $i){ 
-
-            
-
             $owner_id       = $i['Owner']['id'];
             $owner_tree     = $this->_find_parents($owner_id);
 
@@ -168,14 +168,27 @@ class PermanentUsersController extends AppController {
             //Find the realm and profile names
             $realm  = 'not defined';
             $profile= 'not defined';
+
             foreach($i['Radcheck'] as $rc){
 
                 if($rc['attribute'] == 'User-Profile'){
                     $profile = $rc['value'];
+                    if(!array_key_exists($profile,$profiles)){
+                        $p = ClassRegistry::init('Profile');
+                        $p->contain();
+                        $q_r = $p->findByName($profile);
+                        $profiles[$profile] = $q_r['Profile']['id'];
+                    }
                 }
 
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
+                    if(!array_key_exists($realm,$realms)){
+                        $r = ClassRegistry::init('Realm');
+                        $r->contain();
+                        $q_r = $r->findByName($realm);
+                        $realms[$realm] = $q_r['Realm']['id'];
+                    }
                 }
 
             }
@@ -192,7 +205,9 @@ class PermanentUsersController extends AppController {
                     'address'   => $i['User']['address'],
                     'auth_type' => $i['User']['auth_type'],
                     'realm'     => $realm,
+                    'realm_id'  => $realms[$realm],
                     'profile'   => $profile,
+                    'profile_id'=> $profiles[$profile],
                     'active'    => $i['User']['active'], 
                     'monitor'   => $i['User']['monitor'],
                     'last_accept_time'      => $i['User']['last_accept_time'],
