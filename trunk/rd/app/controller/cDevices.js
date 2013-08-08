@@ -772,7 +772,24 @@ Ext.define('Rd.controller.cDevices', {
         var form    = t.down('form');
         //get the user's id
         var device_id = t.up('pnlDevice').d_id;
-        form.load({url:me.urlViewBasic, method:'GET',params:{device_id:device_id}});
+        form.load({url:me.urlViewBasic, method:'GET',params:{device_id:device_id}, 
+            success : function(a,b){
+                //Set the CAP's of the permanent user
+                if(b.result.data.cap_data != undefined){
+                    var cmbDataCap  = form.down('#cmbDataCap');
+                    cmbDataCap.setVisible(true);
+                    cmbDataCap.setDisabled(false);
+                    cmbDataCap.setValue(b.result.data.cap_data);
+                }
+
+                if(b.result.data.cap_time != undefined){
+                    var cmbTimeCap  = form.down('#cmbTimeCap');
+                    cmbTimeCap.setVisible(true);
+                    cmbTimeCap.setDisabled(false);
+                    cmbTimeCap.setValue(b.result.data.cap_time);
+                }
+            } 
+        });
     },
     saveBasicInfo:function(button){
 
