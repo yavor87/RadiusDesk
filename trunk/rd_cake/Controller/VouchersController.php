@@ -32,7 +32,7 @@ class VouchersController extends AppController {
         $language   = '4_4'; //default
         $format     = 'a4'; 
 
-        //Compulsory to know the format and language
+        //Compulsory to know the **format** and **language**
         if(isset($this->request->query['language'])){
             $language = $this->request->query['language'];
         }
@@ -53,6 +53,7 @@ class VouchersController extends AppController {
             $this->set('rtl',false);
         }
 
+        //==== Selected items is the easiest =====
         //We need to see if there are a selection:
         if(isset($this->request->query['selected'])){
             $selected = json_decode($this->request->query['selected']);
@@ -63,8 +64,8 @@ class VouchersController extends AppController {
 
             $voucher_data = array();
 
-            $this->Voucher->contain('Radcheck');
-            $q_r = $this->Voucher->find('all', array('conditions' => array('OR' => $sel_condition)));
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->find('all', array('conditions' => array('OR' => $sel_condition)));
             foreach($q_r as $i){
                 $v              = array();
                 $v['username']  = $i['Voucher']['name'];
@@ -99,8 +100,54 @@ class VouchersController extends AppController {
                 
             }
             $this->set('voucher_data',$voucher_data);
-           // print_r($voucher_data);
-           // exit;
+        }else{
+            //Check if there is a filter applied
+            $user = $this->_ap_right_check();
+            if(!$user){
+                return;
+            }
+            $user_id    = $user['id'];
+     
+            $c          = $this->_build_common_query($user);
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r        = $this->{$this->modelClass}->find('all', $c);
+
+            $voucher_data = array();
+
+            foreach($q_r as $i){
+                $v              = array();
+                $v['username']  = $i['Voucher']['name'];
+                $v['password']  = false;
+                $v['expiration']= false;
+                $v['days_valid']= false;
+                $v['profile']   = false;
+
+                foreach($i['Radcheck'] as $j){
+                    if($j['attribute'] == 'Rd-Realm'){
+                        $realm = $j['value'];
+                    }
+                    if($j['attribute'] == 'Cleartext-Password'){
+                        $v['password'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'Expiration'){
+                        $v['expiration'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'Rd-Voucher'){
+                        $v['days_valid'] = $j['value'];
+                    }
+                    if($j['attribute'] == 'User-Profile'){
+                        $v['profile'] = $j['value'];
+                    }
+                }
+                if(!array_key_exists($realm,$voucher_data)){
+                    $r = ClassRegistry::init('Realm')->findByName($realm);
+                    $voucher_data[$realm] = $r['Realm'];
+                    $voucher_data[$realm]['vouchers'] = array();
+                }
+                array_push($voucher_data[$realm]['vouchers'],$v); 
+                
+            }
+            $this->set('voucher_data',$voucher_data);
         }
     }
 
@@ -1170,6 +1217,14 @@ class VouchersController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+                
+                //Clause for the PDF filter style
+                if(array_key_exists('data',$f)){
+                    print_r($f->data->type);
+                    $f->type  = $f->data->type;
+                    $f->value = $f->data->value;
+                }
+
                 //Strings
                 if($f->field == 'realm'){
                         //Add a search clause
