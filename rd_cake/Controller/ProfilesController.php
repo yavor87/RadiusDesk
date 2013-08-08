@@ -34,11 +34,33 @@ class ProfilesController extends AppController {
         $items      = array();
 
         if($admin_flag){
+            $this->Profile->contain(array('Radusergroup'  => array('Radgroupcheck')));
             $r = $this->Profile->find('all');
             foreach($r as $j){
                 $id     = $j['Profile']['id'];
                 $name   = $j['Profile']['name'];
-                array_push($items,array('id' => $id, 'name' => $name));
+                $data_cap_in_profile = false; 
+                $time_cap_in_profile = false; 
+                foreach($j['Radusergroup'] as $cmp){
+                    foreach($cmp['Radgroupcheck'] as $chk){
+                      //  print_r($chk);
+                        if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+                            $data_cap_in_profile = true;
+                        }
+                        if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+                            $time_cap_in_profile = true;
+                        }
+                    } 
+                    unset($cmp['Radgroupcheck']);
+                }
+                array_push($items,
+                    array(
+                        'id'                    => $id, 
+                        'name'                  => $name,
+                        'data_cap_in_profile'   => $data_cap_in_profile,
+                        'time_cap_in_profile'   => $time_cap_in_profile
+                    )
+                );
             }
 
         }else{
@@ -51,12 +73,34 @@ class ProfilesController extends AppController {
                 $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
                 foreach($q_r as $i){               
                     $user_id    = $i['User']['id'];
-                    $this->Profile->contain();
+                    $this->Profile->contain(array('Radusergroup'  => array('Radgroupcheck')));
                     $r        = $this->Profile->find('all',array('conditions' => array('Profile.user_id' => $user_id, 'Profile.available_to_siblings' => true)));
                     foreach($r  as $j){
                         $id     = $j['Profile']['id'];
                         $name   = $j['Profile']['name'];
-                        array_push($items,array('id' => $id, 'name' => $name));
+
+                        $data_cap_in_profile = false; 
+                        $time_cap_in_profile = false; 
+                        foreach($j['Radusergroup'] as $cmp){
+                            foreach($cmp['Radgroupcheck'] as $chk){
+                                if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+                                    $data_cap_in_profile = true;
+                                }
+                                if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+                                    $time_cap_in_profile = true;
+                                }
+                            } 
+                            unset($cmp['Radgroupcheck']);
+                        }
+                        
+                        array_push($items,
+                            array(
+                                'id'                    => $id, 
+                                'name'                  => $name,
+                                'data_cap_in_profile'   => $data_cap_in_profile,
+                                'time_cap_in_profile'   => $time_cap_in_profile
+                            )
+                        );
                     }
                 }
             }
