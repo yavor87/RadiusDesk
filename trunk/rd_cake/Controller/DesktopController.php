@@ -329,10 +329,10 @@ class DesktopController extends AppController {
 
     private function _build_admin_shortcuts(){
         $items = array();
-        array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
-        array_push($items, array( 'name'    => 'Permanent Users', 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
-        array_push($items, array( 'name'    => 'BYOD manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
-        array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+        array_push($items, array( 'name' => __('Vouchers'), 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
+        array_push($items, array( 'name'    => __('Permanent Users'), 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
+        array_push($items, array( 'name'    => __('BYOD manager'), 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        array_push($items, array( 'name'    => __('Activity monitor'), 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
         return $items;
     }
 

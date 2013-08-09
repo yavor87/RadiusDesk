@@ -16,14 +16,15 @@ class VouchersController extends AppController {
 
     }
 
+  
     public function export_pdf(){
 
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
 
-
-    }
-
-
-    public function test_pdf(){
         App::import('Vendor', 'generic_pdf');
         App::import('Vendor', 'label_pdf');
         
@@ -34,8 +35,8 @@ class VouchersController extends AppController {
         $format     = 'a4'; 
 
         //Compulsory to know the **format** and **language**
-        if(isset($this->request->query['language'])){
-            $language = $this->request->query['language'];
+        if(isset($this->request->query['sel_language'])){
+            $language = $this->request->query['sel_language'];
         }
 
         if(isset($this->request->query['format'])){
@@ -103,11 +104,7 @@ class VouchersController extends AppController {
             $this->set('voucher_data',$voucher_data);
         }else{
             //Check if there is a filter applied
-            $user = $this->_ap_right_check();
-            if(!$user){
-                return;
-            }
-            $user_id    = $user['id'];
+           
      
             $c          = $this->_build_common_query($user);
             $this->{$this->modelClass}->contain('Radcheck');
