@@ -87,7 +87,7 @@ class GenericPdf extends TCPDF {
 
         //AP Address
         $this->SetFont($font_type_1,$font_format_b,10);
-        $this->Cell($cell_width,4,"Address",$cell_outline,2);
+        $this->Cell($cell_width,4,__("Address"),$cell_outline,2);
         $this->SetFont($font_type_2,'',8);
         $address = $d['street_no']." ".$d['street']."\n".$d['town_suburb']."\n".$d['city']."\n".$d["country"]."\nLat ".$d["lat"]."\n"."Lng ".$d["lon"];
         $this->MultiCell($cell_width,3,$address,$cell_outline,2);
@@ -96,7 +96,7 @@ class GenericPdf extends TCPDF {
         //Contact Detail
         $this->SetXY( $x_mid_txt, $y_txt );
         $this->SetFont($font_type_1,$font_format_b,8);
-        $this->Cell($cell_width,4,'Contact Detail',$cell_outline,2);
+        $this->Cell($cell_width,4,__('Contact Detail'),$cell_outline,2);
         //url
         if($d['url'] != ''){
             $this->SetFont($font_type_2,$font_format_i,8);
@@ -115,19 +115,19 @@ class GenericPdf extends TCPDF {
         //phone
         if($d['phone'] != ''){
             $this->SetFont($font_type_2,$font_format_i,8);
-            $this->Cell($cell_width,3,$d['phone'].' ('.'phone'.')',$cell_outline,2);
+            $this->Cell($cell_width,3,$d['phone'].' ('.__('phone').')',$cell_outline,2);
         }
 
         //cell
         if($d['fax'] != ''){
             $this->SetFont($font_type_2,$font_format_i,8);
-            $this->Cell($cell_width,3,$d['fax'].' ('.'fax'.')',$cell_outline,2);
+            $this->Cell($cell_width,3,$d['fax'].' ('.__('fax').')',$cell_outline,2);
         }
 
          //fax
         if($d['cell'] != ''){
             $this->SetFont($font_type_2,$font_format_i,8);
-            $this->Cell($cell_width,3,$d['fax'].' ('.'cell'.')',$cell_outline,2);
+            $this->Cell($cell_width,3,$d['fax'].' ('.__('cell').')',$cell_outline,2);
         }
     }
 
@@ -200,7 +200,7 @@ class GenericPdf extends TCPDF {
 
         $this->SetX($x_p);
         $this->SetFont( 'dejavusans','', 8);
-        $this->Cell(22,$cell_height, "Username", 0, 0, "L");
+        $this->Cell(22,$cell_height, __("Username"), 0, 0, "L");
 
         $this->SetFont( 'dejavusans', $font_format_b, 8);
         $this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
@@ -208,7 +208,7 @@ class GenericPdf extends TCPDF {
         //--Password----
         $this->SetFont( 'dejavusans', '', 8);
         $this->SetX($x_p);
-        $this->Cell(22,$cell_height,"Password", 0, 0, "L");
+        $this->Cell(22,$cell_height,__("Password"), 0, 0, "L");
 
         $this->SetFont('dejavusans', $font_format_b, 8);
         $this->Cell(30,$cell_height, $voucher['password'], 0, 2, "L");
@@ -217,7 +217,7 @@ class GenericPdf extends TCPDF {
         $this->SetTextColor(157,157,167);
         $this->SetFont( $font_type, $font_format_i, $text_size);
         $this->SetX($x_p);
-        $this->Cell(22,$cell_height,"Profile" , 0, 0, "L");
+        $this->Cell(22,$cell_height,__("Profile") , 0, 0, "L");
 
         $this->SetFont( $font_type, $font_format_b, $text_size);
         $this->Cell(30,$cell_height, $voucher['profile'], 0, 2, "L");
@@ -230,15 +230,15 @@ class GenericPdf extends TCPDF {
             $pieces     = explode('-',$voucher['days_valid']);
             if($pieces[0] != 0){
                 if($pieces[0] >= 2){
-                    $dv   = $pieces[0].' '.gettext('days from first log-in');
+                    $dv   = $pieces[0].' '.__('days from first log-in');
                 }else{
-                    $dv   = $pieces[0].' '.gettext('day from first log-in');
+                    $dv   = $pieces[0].' '.__('day from first log-in');
                 }
             }
 
             $this->SetFont( $font_type, $font_format_i, $text_size);
             $this->SetX($x_p);
-            $this->Cell(22,$cell_height,"Valid for" , 0, 0, "L");
+            $this->Cell(22,$cell_height,__("Valid for") , 0, 0, "L");
 
             $this->SetFont( $font_type, $font_format_b, $text_size);
             $this->Cell(30,$cell_height, $dv, 0, 2, "L");
@@ -248,7 +248,7 @@ class GenericPdf extends TCPDF {
         if($voucher['expiration'] != ''){
             $this->SetFont( $font_type, $font_format_i, $text_size);
             $this->SetX($x_p);
-            $this->Cell(22,$cell_height,"Expiry date" , 0, 0, "L");
+            $this->Cell(22,$cell_height,__("Expiry date") , 0, 0, "L");
 
             $this->SetFont( $font_type, $font_format_b, $text_size);
             $this->Cell(30,$cell_height, $voucher['expiration'], 0, 2, "L");
@@ -268,9 +268,7 @@ class GenericPdf extends TCPDF {
         }else{
             $this->SetY( $y_curr);
         }
-
     }
-
 }
 
 ?>  
