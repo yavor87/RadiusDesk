@@ -46,23 +46,20 @@ if(($format == 'a4')||($format == 'a4_page')){
     //Close and output PDF document
     $pdf->Output('test.pdf', 'I');
 }else{
-
-        App::import('Vendor', 'label_pdf');
-        $pdf = new LabelPdf('5160');
-        $pdf->AddPage();
-
-        //--Loop through the PDF data adding labels----
-       // print_r($pdf_structure);
-     //   foreach($pdf_structure as $label){
-
-      //      $pdf->Logo = 'img/graphics/'.$label['icon'];
-       //     $pdf->Add_Label($label);
-
-     //   }
-
-        $pdf->Output('test.pdf', 'I');
+    App::import('Vendor', 'label_pdf');
+    $pdf = new LabelPdf($format);
+    $pdf->setRTL($rtl);
+    $pdf->AddPage();
+    foreach(array_keys($voucher_data) as $key){
+        $d = $voucher_data["$key"];
+        foreach($d['vouchers'] as $v){
+            $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
+            $pdf->Add_Label($v);
+        }
+    } 
+    $pdf->Output('test.pdf', 'I');
 }
-
+?>
 
 
 ?>
