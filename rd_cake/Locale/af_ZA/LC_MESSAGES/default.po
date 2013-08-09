@@ -73,8 +73,7 @@ msgid "Document"
 msgstr "Dokumentasie"
 
 #: Controller/AccessProvidersController.php:259
-#: Controller/NasController.php:690
-#: Controller/RealmsController.php:727
+#: Controller/NasController.php:690 Controller/RealmsController.php:727
 #: Controller/TagsController.php:427
 msgid "Add notes"
 msgstr "Notas"
@@ -99,8 +98,7 @@ msgid "Change Password"
 msgstr "Verander Wagwoord"
 
 #: Controller/AccessProvidersController.php:321
-#: Controller/NasController.php:751
-#: Controller/RealmsController.php:785
+#: Controller/NasController.php:751 Controller/RealmsController.php:785
 #: Controller/TagsController.php:485
 msgid "Add Notes"
 msgstr "Notas"
@@ -111,7 +109,7 @@ msgstr "Kan nie grond nodus verander nie"
 
 #: Controller/CountriesController.php:49
 msgid "Problem adding country"
-msgstr ""
+msgstr "Kon nie land byvoeg nie"
 
 #: Controller/DesktopController.php:30
 msgid "Confirm this name"
@@ -155,178 +153,233 @@ msgstr "Regte bestuurder"
 
 #: Controller/GroupsController.php:30;62;90
 msgid "Invalid group"
-msgstr ""
+msgstr "Ongeldige groep"
 
 #: Controller/GroupsController.php:44;66
 msgid "The group has been saved"
-msgstr ""
+msgstr "Die groep is gestoor"
 
 #: Controller/GroupsController.php:47;69
 msgid "The group could not be saved. Please, try again."
-msgstr ""
+msgstr "Die groep kon nie gestoor word nie, probeer assebleif weer"
 
 #: Controller/GroupsController.php:93
 msgid "Group deleted"
-msgstr ""
+msgstr "Groep verwyder"
 
 #: Controller/GroupsController.php:96
 msgid "Group was not deleted"
-msgstr ""
+msgstr "Groep nie verwyder"
 
-#: Controller/NasController.php:319
-#: Controller/TagsController.php:248
+#: Controller/NasController.php:319 Controller/TagsController.php:248
 msgid "Could not create item"
-msgstr ""
+msgstr "Kon nie item skep nie"
 
 #: Controller/NasController.php:398
 msgid "Single item"
-msgstr ""
+msgstr "Enkel item"
 
 #: Controller/NasController.php:481
 msgid "Could not create note"
-msgstr ""
+msgstr "Kon nie nota skep nie"
 
-#: Controller/NasController.php:564
-#: Controller/TagsController.php:340
+#: Controller/NasController.php:564 Controller/TagsController.php:340
 msgid "Could not delete some items"
-msgstr ""
+msgstr "Kon nie items verwyder nie"
 
 #: Controller/NasController.php:693;785
 msgid "Nas"
-msgstr ""
+msgstr "Nas"
 
 #: Controller/NasController.php:694;770
 msgid "Manage tags"
-msgstr ""
+msgstr "Bestuur merkers"
 
 #: Controller/NasController.php:695
 msgid "Map"
-msgstr ""
+msgstr "Kaart"
 
 #: Controller/NasController.php:778
 msgid "Maps"
-msgstr ""
+msgstr "Kaarte"
 
-#: Controller/NasController.php:818
-#: Controller/RealmsController.php:829
+#: Controller/NasController.php:818 Controller/RealmsController.php:829
 msgid "orphaned"
-msgstr ""
+msgstr "wees"
 
 #: Controller/PhpPhrasesController.php:371
 msgid "The file default.po is missing for"
-msgstr ""
+msgstr "Die default.po leer is soek"
 
 #: Controller/PhpPhrasesController.php:391
 msgid "No language specified"
-msgstr ""
+msgstr "Geen taal gespesifiseer"
 
 #: Controller/PhraseKeysController.php:41
 #: Controller/PhraseValuesController.php:145
 msgid "Could not create key"
-msgstr ""
+msgstr "Kon nie die sleutel skep nie"
 
 #: Controller/TagsController.php:279
 msgid "Could not update item"
-msgstr ""
+msgstr "Kon nie item opdateer nie"
 
 #: Controller/UsersController.php:18
 msgid "Invalid user"
-msgstr ""
+msgstr "Ongeldige gebruiker"
 
 #: Controller/UsersController.php:22
 msgid "User deleted"
-msgstr ""
+msgstr "Gebruiker uitgewis"
 
 #: Controller/UsersController.php:25
 msgid "User was not deleted"
-msgstr ""
+msgstr "Gebruiken nie uitgewis nie"
 
 #: Controller/Component/TokenAclComponent.php:28
 msgid "You do not have rights for this action"
-msgstr ""
+msgstr "Jy is nie gemagtig vir die aksie nie"
 
 #: Controller/Component/TokenAuthComponent.php:28
 msgid "Token in wrong format"
-msgstr ""
+msgstr "Teken in verkeerde formaat"
 
 #: Controller/Component/TokenAuthComponent.php:34
 msgid "Token missing"
-msgstr ""
+msgstr "Teken is soek"
 
 #: Controller/Component/TokenAuthComponent.php:59
 msgid "No user for token"
-msgstr ""
+msgstr "Geen gebruiker vir teken"
 
 #: Controller/Component/TokenAuthComponent.php:64
 msgid "Account disabled"
-msgstr ""
+msgstr "Gebruiker is verban"
 
-#: Model/Country.php:validation for field name
-#: Model/Language.php:validation for field name
+#: Model/Country.php:validation for field name Model/Language.php:validation
 msgid "You already have an entry"
-msgstr ""
+msgstr "Jy het reeeds so inskrywing"
 
 #: Model/Country.php:validation for field name
 msgid "Country name is required"
-msgstr ""
+msgstr "Landstaal word benodig"
 
 #: Model/Country.php:validation for field iso_code
-#: Model/Language.php:validation for field iso_code
+#: Model/Language.php:validation
 msgid "ISO code is required"
-msgstr ""
+msgstr "ISO kode word benodig"
 
 #: Model/Country.php:validation for field iso_code
 msgid "Iso codes can not be more than two characters"
-msgstr ""
+msgstr "ISO kodes kan nie langer as twee letters wees nie"
 
 #: Model/Country.php:validation for field iso_code
-#: Model/Language.php:validation for field iso_code
+#: Model/Language.php:validation
 msgid "Minimum length of 2 characters"
-msgstr ""
+msgstr "Minimum lente van twee letters"
 
 #: Model/Country.php:validation for field icon_file
 msgid "Supply a name for the icon file"
-msgstr ""
+msgstr "Voorsien 'n naam vir die ikoon leer"
 
-#: Model/Group.php:validation for field name
-#: Model/User.php:validation for field username;validation for field password
+#: Model/Group.php:validation for field name Model/User.php:validation
+#: username;validation password
 msgid "notempty"
-msgstr ""
+msgstr "nie leeg"
 
 #: Model/Language.php:validation for field name
 msgid "Language name is required"
-msgstr ""
+msgstr "Naam vir taal word benodig"
 
 #: Model/Language.php:validation for field iso_code
 msgid "Maximum lenght of 2 characters"
-msgstr ""
+msgstr "Maksimum van twee letters"
 
-#: Model/Na.php:validation for field nasname;validation for field shortname
-#: Model/Note.php:validation for field note
-#: Model/OpenvpnClient.php:validation for field username
-#: Model/PhraseKey.php:validation for field name
-#: Model/PhraseValue.php:validation for field name
-#: Model/Realm.php:validation for field name
-#: Model/Tag.php:validation for field name
+#: Model/Na.php:validation for field nasname;validation shortname
+#: Model/Note.php:validation note Model/OpenvpnClient.php:validation username
+#: Model/PhraseKey.php:validation name Model/PhraseValue.php:validation
+#: Model/Realm.php:validation Model/Tag.php:validation
 msgid "Value is required"
-msgstr ""
+msgstr "Waarde is benodig"
 
-#: Model/Na.php:validation for field nasname;validation for field shortname
-#: Model/OpenvpnClient.php:validation for field username
-#: Model/Realm.php:validation for field name
-#: Model/Tag.php:validation for field name
+#: Model/Na.php:validation for field nasname;validation shortname
+#: Model/OpenvpnClient.php:validation username Model/Realm.php:validation name
+#: Model/Tag.php:validation
 msgid "This name is already taken"
-msgstr ""
+msgstr "Naam is reeds geneem"
 
 #: Model/PhraseKey.php:validation for field name
 msgid "This key is already defined"
-msgstr ""
+msgstr "Sleutel is reeds geneem"
 
 #: Model/User.php:validation for field group_id
 msgid "numeric"
-msgstr ""
+msgstr "syfer"
 
 #: webroot/test.php:87
 msgid "Debug setting does not allow access to this url."
-msgstr ""
+msgstr "Ontfout verstelling laat nie hierdie URL toe nie"
 
+#: Manual add
+msgid "Permanent Users"
+msgstr "Permanente Gebruikers"
+
+#: Manual add
+msgid "Vouchers"
+msgstr "Koeponne"
+
+#: Manual add
+msgid "BYOD Manager"
+msgstr "BYOD-Bestuurder"
+
+#: Manual add
+msgid "Activity monitor"
+msgstr "Aktiviteitsvenster"
+
+#: Manual add
+msgid "Internet Access Voucher"
+msgstr "Toegang tot die Interwebs"
+
+#: Manual add
+msgid "Address"
+msgstr "Adres"
+
+#: Manual add
+msgid "Contact Detail"
+msgstr "Kontak besonderhede"
+
+#: Manual add
+msgid "phone"
+msgstr "telefoon"
+
+#: Manual add
+msgid "fax"
+msgstr "faks"
+
+#: Manual add
+msgid "cell"
+msgstr "loopfoon"
+
+#: Manual add
+msgid "Username"
+msgstr "Naam"
+
+#: Manual add
+msgid "Password"
+msgstr "Wagwoord"
+
+#: Manual add
+msgid "days from first log-in"
+msgstr "dae vanaf eerste intekening"
+
+#: Manual add
+msgid "day from first log-in"
+msgstr "dea vanaf eertste aantekening"
+
+#: Manual add
+msgid "Valid for"
+msgstr "Geldig vir"
+
+#: Manual add
+msgid "Expiry date"
+msgstr "Vervaldatum"

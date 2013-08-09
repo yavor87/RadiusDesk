@@ -14,9 +14,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Config/RadiusDesk.php:12
+#: ja boet
 msgid "Direct (Fixed IP)"
-msgstr ""
+msgstr "kkoos"
 
 #: Config/RadiusDesk.php:13
 msgid "OpenVPN"
@@ -73,8 +73,7 @@ msgid "Document"
 msgstr "Dokumentasie"
 
 #: Controller/AccessProvidersController.php:259
-#: Controller/NasController.php:690
-#: Controller/RealmsController.php:727
+#: Controller/NasController.php:690 Controller/RealmsController.php:727
 #: Controller/TagsController.php:427
 msgid "Add notes"
 msgstr "Notas"
@@ -99,8 +98,7 @@ msgid "Change Password"
 msgstr "Verander Wagwoord"
 
 #: Controller/AccessProvidersController.php:321
-#: Controller/NasController.php:751
-#: Controller/RealmsController.php:785
+#: Controller/NasController.php:751 Controller/RealmsController.php:785
 #: Controller/TagsController.php:485
 msgid "Add Notes"
 msgstr "Notas"
@@ -147,7 +145,7 @@ msgstr "NAS-toesel merkers"
 
 #: Controller/DesktopController.php:130
 msgid "Translation manager"
-msgstr "Vertalings bestuurderj"
+msgstr "Vertalings bestuurder"
 
 #: Controller/DesktopController.php:131
 msgid "Rights manager"
@@ -173,8 +171,7 @@ msgstr ""
 msgid "Group was not deleted"
 msgstr ""
 
-#: Controller/NasController.php:319
-#: Controller/TagsController.php:248
+#: Controller/NasController.php:319 Controller/TagsController.php:248
 msgid "Could not create item"
 msgstr ""
 
@@ -186,8 +183,7 @@ msgstr ""
 msgid "Could not create note"
 msgstr ""
 
-#: Controller/NasController.php:564
-#: Controller/TagsController.php:340
+#: Controller/NasController.php:564 Controller/TagsController.php:340
 msgid "Could not delete some items"
 msgstr ""
 
@@ -207,8 +203,7 @@ msgstr ""
 msgid "Maps"
 msgstr ""
 
-#: Controller/NasController.php:818
-#: Controller/RealmsController.php:829
+#: Controller/NasController.php:818 Controller/RealmsController.php:829
 msgid "orphaned"
 msgstr ""
 
@@ -261,8 +256,7 @@ msgstr ""
 msgid "Account disabled"
 msgstr ""
 
-#: Model/Country.php:validation for field name
-#: Model/Language.php:validation for field name
+#: Model/Country.php:validation for field name Model/Language.php:validation
 msgid "You already have an entry"
 msgstr ""
 
@@ -271,7 +265,7 @@ msgid "Country name is required"
 msgstr ""
 
 #: Model/Country.php:validation for field iso_code
-#: Model/Language.php:validation for field iso_code
+#: Model/Language.php:validation
 msgid "ISO code is required"
 msgstr ""
 
@@ -280,7 +274,7 @@ msgid "Iso codes can not be more than two characters"
 msgstr ""
 
 #: Model/Country.php:validation for field iso_code
-#: Model/Language.php:validation for field iso_code
+#: Model/Language.php:validation
 msgid "Minimum length of 2 characters"
 msgstr ""
 
@@ -288,8 +282,8 @@ msgstr ""
 msgid "Supply a name for the icon file"
 msgstr ""
 
-#: Model/Group.php:validation for field name
-#: Model/User.php:validation for field username;validation for field password
+#: Model/Group.php:validation for field name Model/User.php:validation
+#: username;validation password
 msgid "notempty"
 msgstr ""
 
@@ -301,20 +295,16 @@ msgstr ""
 msgid "Maximum lenght of 2 characters"
 msgstr ""
 
-#: Model/Na.php:validation for field nasname;validation for field shortname
-#: Model/Note.php:validation for field note
-#: Model/OpenvpnClient.php:validation for field username
-#: Model/PhraseKey.php:validation for field name
-#: Model/PhraseValue.php:validation for field name
-#: Model/Realm.php:validation for field name
-#: Model/Tag.php:validation for field name
+#: Model/Na.php:validation for field nasname;validation shortname
+#: Model/Note.php:validation note Model/OpenvpnClient.php:validation username
+#: Model/PhraseKey.php:validation name Model/PhraseValue.php:validation
+#: Model/Realm.php:validation Model/Tag.php:validation
 msgid "Value is required"
 msgstr ""
 
-#: Model/Na.php:validation for field nasname;validation for field shortname
-#: Model/OpenvpnClient.php:validation for field username
-#: Model/Realm.php:validation for field name
-#: Model/Tag.php:validation for field name
+#: Model/Na.php:validation for field nasname;validation shortname
+#: Model/OpenvpnClient.php:validation username Model/Realm.php:validation name
+#: Model/Tag.php:validation
 msgid "This name is already taken"
 msgstr ""
 
@@ -328,5 +318,4 @@ msgstr ""
 
 #: webroot/test.php:87
 msgid "Debug setting does not allow access to this url."
-msgstr ""
-
+msgstr "test"
