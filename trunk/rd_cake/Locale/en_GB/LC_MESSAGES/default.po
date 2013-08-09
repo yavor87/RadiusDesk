@@ -330,3 +330,51 @@ msgstr ""
 msgid "Debug setting does not allow access to this url."
 msgstr ""
 
+#: Manual add
+msgid "Permanent Users"
+msgstr ""
+#: Manual add
+msgid "Vouchers"
+msgstr ""
+#: Manual add
+msgid "BYOD Manager"
+msgstr ""
+#: Manual add
+msgid "Activity monitor"
+msgstr ""
+#: Manual add
+msgid "Internet Access Voucher"
+msgstr ""
+#: Manual add
+msgid "Address"
+msgstr ""
+#: Manual add
+msgid "Contact Detail"
+msgstr ""
+#: Manual add
+msgid "phone"
+msgstr ""
+#: Manual add
+msgid "fax"
+msgstr ""
+#: Manual add
+msgid "cell"
+msgstr ""
+#: Manual add
+msgid "Username"
+msgstr ""
+#: Manual add
+msgid "Password"
+msgstr ""
+#: Manual add
+msgid "days from first log-in"
+msgstr ""
+#: Manual add
+msgid "day from first log-in"
+msgstr ""
+#: Manual add
+msgid "Valid for"
+msgstr ""
+#: Manual add
+msgid "Expiry date"
+msgstr ""
