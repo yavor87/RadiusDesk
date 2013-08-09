@@ -25,6 +25,7 @@ class VouchersController extends AppController {
 
     public function test_pdf(){
         App::import('Vendor', 'generic_pdf');
+        App::import('Vendor', 'label_pdf');
         
         $this->response->type('application/pdf');
         $this->layout = 'pdf';
