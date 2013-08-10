@@ -688,6 +688,7 @@ Ext.define('Rd.controller.cI18n', {
 
     phpAdd: function(){
         var me = this;
+
         if(me.selPhpLanguage == null){
             Ext.ux.Toaster.msg(
                         i18n('sSelect_something'),
@@ -714,6 +715,7 @@ Ext.define('Rd.controller.cI18n', {
             url: me.urlPhpAdd+"?language="+me.selPhpLanguage,
             success: function(form, action) {
                 win.close();
+
                 me.getPhpGrid().getStore().load();
                 Ext.ux.Toaster.msg(
                     i18n('sItem_added'),
