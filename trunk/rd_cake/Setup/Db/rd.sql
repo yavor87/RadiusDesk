@@ -404,7 +404,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (19,'d0-31-10-00-04-f3','Tablet',1,'2013-05-28 14:04:24','2013-05-28 13:10:02','192.168.1.1','192.168.1.1','Most likely PEAP failure=3B run in debug',167,'2013-05-28 08:38:05','2013-08-08 14:39:17'),(20,'08-00-27-90-61-ae','Linux VM',1,NULL,NULL,NULL,NULL,NULL,166,'2013-05-28 08:59:00','2013-08-07 16:08:45');
+INSERT INTO `devices` VALUES (19,'d0-31-10-00-04-f3','Tablet',1,'2013-05-28 14:04:24','2013-05-28 13:10:02','192.168.1.1','192.168.1.1','Most likely PEAP failure=3B run in debug',167,'2013-05-28 08:38:05','2013-08-08 14:45:24'),(20,'08-00-27-90-61-ae','Linux VM',1,NULL,NULL,NULL,NULL,NULL,166,'2013-05-28 08:59:00','2013-08-07 16:08:45');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -770,7 +770,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','','CoovaChilli',3799,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-08-08 14:40:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-08-08 14:40:03'),(55,'10.120.0.1','CoovaAP-01','Dirk-AP','CoovaChilli-Heartbeat',NULL,'testing123','','00-1D-7E-BC-C2-12','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Dirk-AP-Home','off',600,600,'2013-07-02 20:21:33',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-07-02 10:00:59','2013-07-02 20:21:18');
+INSERT INTO `nas` VALUES (49,'127.0.0.1','localhost','','CoovaChilli',3799,'testing123','','','RADIUS Client','direct',1,0,0,'','','ping',600,600,'2013-08-10 19:25:03',0,3600,0,-25.7381389511493,28.3009659048564,'logo.jpg',44,'2013-05-25 12:48:54','2013-08-10 19:25:03'),(55,'10.120.0.1','CoovaAP-01','Dirk-AP','CoovaChilli-Heartbeat',NULL,'testing123','','00-1D-7E-BC-C2-12','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Dirk-AP-Home','off',600,600,'2013-07-02 20:21:33',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-07-02 10:00:59','2013-07-02 20:21:18');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1118,7 +1118,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=8218 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8224 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1127,7 +1127,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (381,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(382,'dvdwalt','Rd-User-Type',':=','user'),(474,'dvdwalt','Rd-Account-Disabled',':=','0'),(475,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(7710,'rviljoen','Cleartext-Password',':=','rviljoen'),(7711,'rviljoen','Rd-User-Type',':=','user'),(7715,'rviljoen','Rd-Account-Disabled',':=','0'),(7716,'rviljoen','Rd-Not-Track-Auth',':=','1'),(7813,'d0-31-10-00-04-f3','Rd-Cap-Type',':=','hard'),(7873,'rviljoen','User-Profile',':=','Device-Basic-1'),(7874,'rviljoen','Rd-Realm',':=','Residence Inn'),(7875,'rviljoen','Expiration',':=','19 Jul 2013'),(7876,'rviljoen','Rd-Account-Activation-Time',':=','1 Jul 2013'),(8144,'000049','Cleartext-Password',':=','pTNnbf'),(8145,'000049','Rd-User-Type',':=','voucher'),(8146,'000049','Rd-Realm',':=','Simpsons Home'),(8147,'000049','User-Profile',':=','Profile-A'),(8164,'000001','Cleartext-Password',':=','DvR'),(8165,'000001','Rd-User-Type',':=','voucher'),(8166,'000001','Rd-Realm',':=','Simpsons Home'),(8167,'000001','User-Profile',':=','Profile-A'),(8168,'000001','Rd-Voucher',':=','1-00-00-00'),(8169,'000002','Cleartext-Password',':=','P8x'),(8170,'000002','Rd-User-Type',':=','voucher'),(8171,'000002','Rd-Realm',':=','Simpsons Home'),(8172,'000002','User-Profile',':=','Profile-A'),(8173,'000003','Cleartext-Password',':=','08r'),(8174,'000003','Rd-User-Type',':=','voucher'),(8175,'000003','Rd-Realm',':=','Residence Inn'),(8176,'000003','User-Profile',':=','Profile-A'),(8177,'000003','Rd-Voucher',':=','4-00-00-00'),(8178,'000003','Expiration',':=','5 Aug 2014'),(8179,'000004','Cleartext-Password',':=','wxz'),(8180,'000004','Rd-User-Type',':=','voucher'),(8181,'000004','Rd-Realm',':=','Simpsons Home'),(8182,'000004','User-Profile',':=','Profile-A'),(8183,'000004','Rd-Voucher',':=','5-00-00-00'),(8184,'000005','Cleartext-Password',':=','5Ny'),(8185,'000005','Rd-User-Type',':=','voucher'),(8186,'000005','Rd-Realm',':=','Simpsons Home'),(8187,'000005','User-Profile',':=','Profile-A'),(8188,'000005','Rd-Voucher',':=','5-00-00-00'),(8189,'000006','Cleartext-Password',':=','sqN'),(8190,'000006','Rd-User-Type',':=','voucher'),(8191,'000006','Rd-Realm',':=','Simpsons Home'),(8192,'000006','User-Profile',':=','Profile-A'),(8193,'000006','Rd-Voucher',':=','5-00-00-00'),(8194,'000007','Cleartext-Password',':=','gkB'),(8195,'000007','Rd-User-Type',':=','voucher'),(8196,'000007','Rd-Realm',':=','Simpsons Home'),(8197,'000007','User-Profile',':=','Profile-A'),(8198,'000007','Rd-Voucher',':=','5-00-00-00'),(8199,'08-00-27-90-61-ae','User-Profile',':=','Device-Basic-1'),(8200,'08-00-27-90-61-ae','Rd-Device-Owner',':=','dvdwalt'),(8209,'dvdwalt','User-Profile',':=','Profile-A'),(8210,'dvdwalt','Rd-Realm',':=','Residence Inn'),(8211,'dvdwalt','Rd-Cap-Type-Data',':=','hard'),(8215,'d0-31-10-00-04-f3','User-Profile',':=','Profile-A'),(8216,'d0-31-10-00-04-f3','Rd-Device-Owner',':=','rviljoen'),(8217,'d0-31-10-00-04-f3','Rd-Cap-Type-Data',':=','soft');
+INSERT INTO `radcheck` VALUES (381,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(382,'dvdwalt','Rd-User-Type',':=','user'),(474,'dvdwalt','Rd-Account-Disabled',':=','0'),(475,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(7710,'rviljoen','Cleartext-Password',':=','rviljoen'),(7711,'rviljoen','Rd-User-Type',':=','user'),(7715,'rviljoen','Rd-Account-Disabled',':=','0'),(7716,'rviljoen','Rd-Not-Track-Auth',':=','1'),(7813,'d0-31-10-00-04-f3','Rd-Cap-Type',':=','hard'),(7873,'rviljoen','User-Profile',':=','Device-Basic-1'),(7874,'rviljoen','Rd-Realm',':=','Residence Inn'),(7875,'rviljoen','Expiration',':=','19 Jul 2013'),(7876,'rviljoen','Rd-Account-Activation-Time',':=','1 Jul 2013'),(8144,'000049','Cleartext-Password',':=','pTNnbf'),(8145,'000049','Rd-User-Type',':=','voucher'),(8146,'000049','Rd-Realm',':=','Simpsons Home'),(8147,'000049','User-Profile',':=','Profile-A'),(8164,'000001','Cleartext-Password',':=','DvR'),(8165,'000001','Rd-User-Type',':=','voucher'),(8166,'000001','Rd-Realm',':=','Simpsons Home'),(8167,'000001','User-Profile',':=','Profile-A'),(8168,'000001','Rd-Voucher',':=','1-00-00-00'),(8169,'000002','Cleartext-Password',':=','P8x'),(8170,'000002','Rd-User-Type',':=','voucher'),(8171,'000002','Rd-Realm',':=','Simpsons Home'),(8172,'000002','User-Profile',':=','Profile-A'),(8173,'000003','Cleartext-Password',':=','08r'),(8174,'000003','Rd-User-Type',':=','voucher'),(8175,'000003','Rd-Realm',':=','Residence Inn'),(8176,'000003','User-Profile',':=','Profile-A'),(8177,'000003','Rd-Voucher',':=','4-00-00-00'),(8178,'000003','Expiration',':=','5 Aug 2014'),(8179,'000004','Cleartext-Password',':=','wxz'),(8180,'000004','Rd-User-Type',':=','voucher'),(8181,'000004','Rd-Realm',':=','Simpsons Home'),(8182,'000004','User-Profile',':=','Profile-A'),(8183,'000004','Rd-Voucher',':=','5-00-00-00'),(8184,'000005','Cleartext-Password',':=','5Ny'),(8185,'000005','Rd-User-Type',':=','voucher'),(8186,'000005','Rd-Realm',':=','Simpsons Home'),(8187,'000005','User-Profile',':=','Profile-A'),(8188,'000005','Rd-Voucher',':=','5-00-00-00'),(8194,'000007','Cleartext-Password',':=','gkB'),(8195,'000007','Rd-User-Type',':=','voucher'),(8196,'000007','Rd-Realm',':=','Simpsons Home'),(8197,'000007','User-Profile',':=','Profile-A'),(8198,'000007','Rd-Voucher',':=','5-00-00-00'),(8199,'08-00-27-90-61-ae','User-Profile',':=','Device-Basic-1'),(8200,'08-00-27-90-61-ae','Rd-Device-Owner',':=','dvdwalt'),(8209,'dvdwalt','User-Profile',':=','Profile-A'),(8210,'dvdwalt','Rd-Realm',':=','Residence Inn'),(8211,'dvdwalt','Rd-Cap-Type-Data',':=','hard'),(8218,'d0-31-10-00-04-f3','User-Profile',':=','Device-Basic-1'),(8219,'d0-31-10-00-04-f3','Rd-Device-Owner',':=','rviljoen'),(8220,'000008','Cleartext-Password',':=','Hk2'),(8221,'000008','Rd-User-Type',':=','voucher'),(8222,'000008','Rd-Realm',':=','Simpsons Home'),(8223,'000008','User-Profile',':=','Profile-A');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1208,7 +1208,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1217,7 +1217,7 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
-INSERT INTO `radpostauth` VALUES (66,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:02:57'),(67,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:02:58'),(68,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:03:04'),(69,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:03:09'),(89,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-24 23:24:24'),(90,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-24 23:24:25'),(91,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 03:19:12'),(92,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 10:51:20'),(93,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:14:08'),(94,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:20:56'),(95,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:22:21'),(96,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:33:40'),(97,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:36:53');
+INSERT INTO `radpostauth` VALUES (66,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:02:57'),(67,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:02:58'),(68,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:03:04'),(69,'000049','Simpsons Home','pTNnbf','Access-Accept','127.0.0.1','2013-07-22 20:03:09'),(89,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-24 23:24:24'),(90,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-24 23:24:25'),(91,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 03:19:12'),(92,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 10:51:20'),(93,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:14:08'),(94,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:20:56'),(95,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:22:21'),(96,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:33:40'),(97,'000001','Simpsons Home','DvR','Access-Accept','127.0.0.1','2013-07-25 11:36:53'),(98,'000003','Residence Inn','08r','Access-Accept','127.0.0.1','2013-08-08 13:04:33'),(99,'000004','Simpsons Home','wxz','Access-Accept','127.0.0.1','2013-08-08 13:04:41'),(100,'000008','Simpsons Home','Hk2','Access-Accept','127.0.0.1','2013-08-10 00:11:22');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1532,7 +1532,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','13.jpg','2013-04-06 13:51:50','2013-05-28 19:52:43'),(57,168,'wallpaper','8.jpg','2013-07-16 20:56:16','2013-07-16 21:09:32'),(58,169,'wallpaper','1.jpg','2013-07-16 21:13:52','2013-07-16 21:13:52');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2013-08-08 15:05:38'),(57,168,'wallpaper','8.jpg','2013-07-16 20:56:16','2013-07-16 21:09:32'),(58,169,'wallpaper','1.jpg','2013-07-16 21:13:52','2013-07-16 21:13:52');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1606,7 +1606,7 @@ CREATE TABLE `vouchers` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1914 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1915 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1615,7 +1615,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (1907,'000001','','used',51,0,'2013-07-25 13:36:53','2013-07-25 13:37:27','127.0.0.1','127.0.0.1','N/A',168,'2013-07-25 01:24:09','2013-07-25 13:46:01'),(1908,'000002','Gooi','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,168,'2013-07-25 13:07:56','2013-07-25 13:07:56'),(1909,'000003','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-05 14:23:16','2013-08-05 14:23:16'),(1910,'000004','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1911,'000005','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1912,'000006','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1913,'000007','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56');
+INSERT INTO `vouchers` VALUES (1907,'000001','','used',51,0,'2013-07-25 13:36:53','2013-08-08 15:04:25','127.0.0.1','127.0.0.1','The time for voucher 000001 is depleted',168,'2013-07-25 01:24:09','2013-07-25 13:46:01'),(1908,'000002','Gooi','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,168,'2013-07-25 13:07:56','2013-07-25 13:07:56'),(1909,'000003','','new',NULL,NULL,'2013-08-08 15:04:33',NULL,'127.0.0.1',NULL,NULL,44,'2013-08-05 14:23:16','2013-08-05 14:23:16'),(1910,'000004','hom','new',NULL,NULL,'2013-08-08 15:04:41',NULL,'127.0.0.1',NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1911,'000005','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1913,'000007','hom','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-08-07 11:47:56','2013-08-07 11:47:56'),(1914,'000008','','new',NULL,NULL,'2013-08-10 02:11:22',NULL,'127.0.0.1',NULL,NULL,169,'2013-08-09 18:52:54','2013-08-09 18:52:54');
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1628,4 +1628,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-08-08 14:43:17
+-- Dump completed on 2013-08-10 19:25:13
