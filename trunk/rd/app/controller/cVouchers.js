@@ -45,7 +45,7 @@ Ext.define('Rd.controller.cVouchers', {
         'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
         'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
         'vouchers.winVoucherPassword', 'components.winPdf',     'vouchers.winVoucherPdf',
-        'vouchers.cmbPdfFormats',   'components.vCmbLanguages'  
+        'vouchers.cmbPdfFormats',   'components.vCmbLanguages', 'components.winCsvColumnSelect'  
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
     models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct', 'mPdfFormat'],
@@ -57,7 +57,7 @@ Ext.define('Rd.controller.cVouchers', {
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
-        urlPdfBase:         '/cake2/rd_cake/vouchers/test_pdf'
+        urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridVouchers'}       
@@ -486,7 +486,7 @@ Ext.define('Rd.controller.cVouchers', {
         //Token
         var token = Ext.util.Cookies.get("Token"); //No token?
 
-        var url_to_add = 'language='+language+"&format="+format+'&token='+token+'&';
+        var url_to_add = 'sel_language='+language+"&format="+format+'&token='+token+'&';
 
         //Check for filter
         var filter = me.getGrid().filters.getFilterData();

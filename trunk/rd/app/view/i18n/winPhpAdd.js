@@ -8,7 +8,7 @@ Ext.define('Rd.view.i18n.winPhpAdd', {
     iconCls: 'add',
     initComponent: function() {
         var me = this;
-        this.items = [
+        me.items = [
             {
                 xtype: 'form',
                 border: false,
@@ -57,6 +57,6 @@ Ext.define('Rd.view.i18n.winPhpAdd', {
                 ]
             }
         ];
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });
