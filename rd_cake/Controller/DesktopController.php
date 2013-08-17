@@ -322,7 +322,37 @@ class DesktopController extends AppController {
             array_push($menu, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  => array('items' =>$sm_nas_devices)));     
         }
 
-        //___ What What ______
+        //____ Tools ____
+        array_push($menu,
+             array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'menu'  =>
+                     array( 'items' =>
+                        array(
+                            array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity',        'itemId' => 'cActivityMonitor'),
+                            array(  'text'  => __('RADIUS client'),         'iconCls' => 'radius_client',   'itemId' => 'cRadiusClient'),                          
+                        )
+                    )
+                )
+        );
+
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
+            array_push($menu,
+                array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers',    'itemId' => 'cVouchers')
+            );
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
+            array_push($menu,
+                array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers')
+            );
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
+            array_push($menu,
+                array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices')
+            );
+        }
+
         return $menu;
     }
 

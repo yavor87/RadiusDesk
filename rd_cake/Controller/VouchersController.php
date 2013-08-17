@@ -298,8 +298,8 @@ class VouchersController extends AppController {
                 }
             }
             $action_flags = array();
-            $action_flags['update'] = true;
-            $action_flags['delete'] = true;
+            $action_flags['update'] = false;
+            $action_flags['delete'] = false;
 
             if($realm != 'not defined'){
                 $owner_id       = $i['Voucher']['user_id'];
@@ -1112,12 +1112,22 @@ class VouchersController extends AppController {
             $action_group   = array();
             $document_group = array();
             $specific_group = array();
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+
+            //Reload
+            array_push($action_group,array( 
+                'xtype'     =>  'splitbutton',  
+                'iconCls'   => 'b-reload',   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+                'tooltip'   => _('Reload'),
+                'menu'      => array(             
+                    'items'     => array( 
+                                    '<b class="menu-title">Reload every:</b>',            
+                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
+                ))));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
