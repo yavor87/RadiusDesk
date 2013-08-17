@@ -117,9 +117,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 click:      me.testRadius
             },
             'gridPermanentUsers'   : {
-                select:      me.select
-            },
-            'gridPermanentUsers'    : {
+                select:      me.select,
                 activate:      me.gridActivate
             },
             'winPermanentUserAddWizard #btnTreeNext' : {
@@ -425,11 +423,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             );
         }
     },
-
-    select: function(grid,record){
+    select:  function(grid, record, item, index, event){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
-/*
         //Dynamically update the top toolbar
         tb = me.getGrid().down('toolbar[dock=top]');
 
@@ -437,10 +433,12 @@ Ext.define('Rd.controller.cPermanentUsers', {
         if(edit == true){
             if(tb.down('#edit') != null){
                 tb.down('#edit').setDisabled(false);
+                tb.down('#password').setDisabled(false);
             }
         }else{
             if(tb.down('#edit') != null){
                 tb.down('#edit').setDisabled(true);
+                tb.down('#password').setDisabled(true);
             }
         }
 
@@ -454,10 +452,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 tb.down('#delete').setDisabled(true);
             }
         }
-*/
     },
-
-      edit:   function(){
+    edit:   function(){
        // console.log("Edit node");  
         var me = this;
         //See if there are anything selected... if not, inform the user
