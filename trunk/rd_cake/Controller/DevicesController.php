@@ -1113,12 +1113,21 @@ class DevicesController extends AppController {
             $action_group   = array();
             $document_group = array();
             $specific_group = array();
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+            //Reload
+            array_push($action_group,array( 
+                'xtype'     =>  'splitbutton',  
+                'iconCls'   => 'b-reload',   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+                'tooltip'   => _('Reload'),
+                'menu'      => array(             
+                    'items'     => array( 
+                                    '<b class="menu-title">Reload every:</b>',            
+                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
+                ))));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
@@ -1141,7 +1150,7 @@ class DevicesController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit_basic_info')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',    
@@ -1169,16 +1178,23 @@ class DevicesController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
-            //Tags
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($specific_group,array(
+            //Enable-disable
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'enable_disable')){ 
+                  array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-meta_edit',    
+                    'iconCls'   => 'b-disable', 
                     'scale'     => 'large', 
-                    'itemId'    => 'tag',
-                    'disabled'  => true,     
-                    'tooltip'=> __('Change password')));
+                    'itemId'    => 'enable_disable',
+                    'tooltip'=> __('Enable / Disable')));
             }
+
+            array_push($specific_group, array(
+                'xtype'     => 'button', 
+                'iconCls'   => 'b-test',    
+                'scale'     => 'large', 
+                'itemId'    => 'test_radius',  
+                'tooltip'   => __('Test RADIUS')));
+
 
            
 

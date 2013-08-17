@@ -4,8 +4,10 @@ class FreeRadiusController extends AppController {
 
     public $name       = 'PhpPhrases';
     public $components = array('Aa');
+    protected $base    = "Access Providers/Controllers/FreeRadius/"; //Required for AP Rights
 
     public function index(){
+    //== AP + Root ==
 
         //First the auth
         $type = 'auth';
@@ -172,7 +174,7 @@ class FreeRadiusController extends AppController {
     }
 
     public function info(){
-
+    
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
@@ -235,7 +237,7 @@ class FreeRadiusController extends AppController {
     }
 
     public function status_debug(){
-
+    //== Only Root ==
         $user = $this->_ap_right_check();
         if(!$user){
             return;
@@ -274,6 +276,7 @@ class FreeRadiusController extends AppController {
     }
 
     public function start_debug(){
+    //== Only Root ==
 
         $user = $this->_ap_right_check();
         if(!$user){
@@ -328,6 +331,7 @@ class FreeRadiusController extends AppController {
     }
 
     public function stop_debug(){
+    //== Only Root ==
 
         $user = $this->_ap_right_check();
         if(!$user){
@@ -348,8 +352,8 @@ class FreeRadiusController extends AppController {
         ));
     }
 
-     public function time_debug(){
-
+    public function time_debug(){
+    //== Only Root ==
         $user = $this->_ap_right_check();
         if(!$user){
             return;

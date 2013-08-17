@@ -193,6 +193,16 @@ class PermanentUsersController extends AppController {
 
             }
 
+            $action_flags = array();
+            $action_flags['update'] = false;
+            $action_flags['delete'] = false;
+
+            if($realm != 'not defined'){
+                $owner_id       = $i['User']['parent_id'];
+                $q_r            = ClassRegistry::init('Realm')->findByName($realm);
+                $action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
+            }
+
             array_push($items,
                 array(
                     'id'        => $i['User']['id'], 
@@ -218,7 +228,9 @@ class PermanentUsersController extends AppController {
 //This is a work in progress with dummy values
                     'data_cap'              => 80,
                     'time_cap'              => 20,
-                    'notes'     => $notes_flag
+                    'notes'                 => $notes_flag,
+                    'update'                => $action_flags['update'],
+                    'delete'                => $action_flags['delete']
                 )
             );
         }                
@@ -1306,12 +1318,21 @@ class PermanentUsersController extends AppController {
             $action_group   = array();
             $document_group = array();
             $specific_group = array();
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+            //Reload
+            array_push($action_group,array( 
+                'xtype'     =>  'splitbutton',  
+                'iconCls'   => 'b-reload',   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+                'tooltip'   => _('Reload'),
+                'menu'      => array(             
+                    'items'     => array( 
+                                    '<b class="menu-title">Reload every:</b>',            
+                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
+                ))));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
@@ -1334,7 +1355,7 @@ class PermanentUsersController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit_basic_info')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',    
@@ -1362,21 +1383,31 @@ class PermanentUsersController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
-            //Tags
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($specific_group,array(
+
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'change_password')){ 
+                  array_push($specific_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-meta_edit',    
+                    'iconCls'   => 'b-password',
                     'scale'     => 'large', 
-                    'itemId'    => 'tag',
-                    'disabled'  => true,     
+                    'itemId'    => 'password', 
                     'tooltip'=> __('Change password')));
             }
-
            
-
-
-           // array_push($menu,array('xtype' => 'tbfill'));
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'enable_disable')){ 
+                  array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-disable', 
+                    'scale'     => 'large', 
+                    'itemId'    => 'enable_disable',
+                    'tooltip'=> __('Enable / Disable')));
+            }
+            
+            array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-test',    
+                    'scale'     => 'large', 
+                    'itemId'    => 'test_radius',  
+                    'tooltip'   => __('Test RADIUS')));
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
@@ -1664,6 +1695,22 @@ class PermanentUsersController extends AppController {
         }
         //No match
         return false;
+    }
+
+     private function _get_action_flags($user,$owner_id,$realm_id){
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return array('update' => true, 'delete' => true);
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $update = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'update');
+            $delete = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'delete');
+            return array('update' => $update, 'delete' => $delete);
+        }
     }
 
     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
