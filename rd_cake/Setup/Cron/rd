@@ -2,4 +2,4 @@
 * * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Rd debug_check >> /dev/null 2>&1
 * * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Rd auto_close >> /dev/null 2>&1
 * * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Accounting >> /dev/null 2>&1
-* * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Voucher >> /dev/null 2>&1
+*/15 * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Voucher >> /dev/null 2>&1
