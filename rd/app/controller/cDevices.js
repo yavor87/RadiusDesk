@@ -108,9 +108,7 @@ Ext.define('Rd.controller.cDevices', {
                 click:      me.testRadius
             },
             'gridDevices'   : {
-              //  select:      me.select
-            },
-            'gridDevices'   : {
+                select:        me.select,
                 activate:      me.gridActivate
             },
             'winDeviceAddWizard #btnDataNext' : {
