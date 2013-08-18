@@ -30,6 +30,9 @@ class UsageTask extends Shell {
             $pieces     = explode("-", $expire);
             $time_avail = ($pieces[0] * 86400)+($pieces[1] * 3600)+($pieces[2] * 60)+($pieces[3]);
             $time_since_logon = $this->Radacct->query("SELECT (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(acctstarttime)) as time_since_login from radacct where username='$username' order by acctstarttime ASC LIMIT 1");
+            if(!$time_since_logon){
+                $time_since_logon = 0;
+            }
 
             $time_left  = $time_avail - $time_since_logon[0][0]['time_since_login'];
 

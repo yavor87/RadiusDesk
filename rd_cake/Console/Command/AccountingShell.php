@@ -12,7 +12,6 @@ class AccountingShell extends AppShell {
 
         //Clear the table for the next lot
         $this->NewAccounting->query('TRUNCATE table new_accountings;');
-
     }
 
     private function process_username($username){
