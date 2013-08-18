@@ -159,6 +159,16 @@ class DevicesController extends AppController {
                 }
             }
 
+            $action_flags = array();
+            $action_flags['update'] = false;
+            $action_flags['delete'] = false;
+
+            if($realm != 'not defined'){
+                $owner_id       = $i['User']['parent_id'];
+                $q_r            = ClassRegistry::init('Realm')->findByName($realm);
+                $action_flags   = $this->_get_action_flags_for_devices($user,$owner_id,$q_r['Realm']['id']);
+            }
+
             array_push($items,
                 array(
                     'id'            => $i['Device']['id'], 
@@ -175,7 +185,9 @@ class DevicesController extends AppController {
                     'last_reject_time'      => $i['Device']['last_reject_time'],
                     'last_reject_nas'       => $i['Device']['last_reject_nas'],
                     'last_reject_message'   => $i['Device']['last_reject_message'],
-                    'notes'         => $notes_flag
+                    'notes'         => $notes_flag,
+                    'update'                => $action_flags['update'],
+                    'delete'                => $action_flags['delete']
                 )
             );
         }
@@ -1444,7 +1456,23 @@ class DevicesController extends AppController {
         return false;
     }
 
-     private function _get_action_flags($owner_id,$user){
+     private function _get_action_flags_for_devices($user,$owner_id,$realm_id){
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return array('update' => true, 'delete' => true);
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $update = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'update');
+            $delete = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'delete');
+            return array('update' => $update, 'delete' => $delete);
+        }
+    }
+
+    private function _get_action_flags($owner_id,$user){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return array('update' => true, 'delete' => true);
         }
