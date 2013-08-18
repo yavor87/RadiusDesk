@@ -286,52 +286,23 @@ class RadpostauthsController extends AppController {
             $action_group   = array();
             $document_group = array();
             $specific_group = array();
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+            //Reload
+            array_push($action_group,array( 
+                'xtype'     =>  'splitbutton',  
+                'iconCls'   => 'b-reload',   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+                'tooltip'   => _('Reload'),
+                'menu'      => array(             
+                    'items'     => array( 
+                                    '<b class="menu-title">Reload every:</b>',            
+                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
+                ))));
 
-            //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',     
-                    'scale'     => 'large', 
-                    'itemId'    => 'add',      
-                    'tooltip'   => __('Add')));
-            }
-            //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',  
-                    'scale'     => 'large', 
-                    'itemId'    => 'delete',
-                    'disabled'  => true,   
-                    'tooltip'   => __('Delete')));
-            }
-
-            //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',    
-                    'scale'     => 'large', 
-                    'itemId'    => 'edit',
-                    'disabled'  => true,     
-                    'tooltip'   => __('Edit')));
-            }
-
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
-                array_push($document_group,array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',     
-                        'scale'     => 'large', 
-                        'itemId'    => 'note',      
-                        'tooltip'   => __('Add Notes')));
-            }
+            
 
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
@@ -342,26 +313,9 @@ class RadpostauthsController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
-            //Tags
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-                array_push($specific_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-meta_edit',    
-                    'scale'     => 'large', 
-                    'itemId'    => 'tag',
-                    'disabled'  => true,     
-                    'tooltip'=> __('Change password')));
-            }
-
-           
-
-
-           // array_push($menu,array('xtype' => 'tbfill'));
-
             $menu = array(
-                        array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'),       'items' => $document_group),
-                        array('xtype' => 'buttongroup','title' => __('Extra actions'),  'items' => $specific_group)
+                        array('xtype' => 'buttongroup','title' => __('Action'),                 'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),'width'=> 75,  'items' => $document_group)
                     );
         }
         $this->set(array(
@@ -451,19 +405,30 @@ class RadpostauthsController extends AppController {
         //====== END REQUEST FILTER =====
 
         //====== AP FILTER =====
-        //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
         if($user['group_name'] == Configure::read('group.ap')){  //AP 
-            $ap_children    = $this->User->find_access_provider_children($user['id']);
-            if($ap_children){   //Only if the AP has any children...
-                $ap_clause      = array();
-                foreach($ap_children as $i){
-                    $id = $i['id'];
-                    array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
-                }      
-                //Add it as an OR clause
-                array_push($c['conditions'],array('OR' => $ap_clause));  
+            $this->Realm = ClassRegistry::init('Realm');
+            $this->User  = ClassRegistry::init('User');
+            $q_r        = $this->User->getPath($user['id']); //Get all the parents up to the root
+            $ap_clause  = array();
+
+            foreach($q_r as $i){         
+                $user_id    = $i['User']['id'];
+                $this->Realm->contain();
+                $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
+                foreach($r  as $j){
+                    $id     = $j['Realm']['id'];
+                    $name   = $j['Realm']['name'];   
+                    $read   = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Realm','foreign_key' => $id), 'read');
+                    if($read == true){
+                        array_push($ap_clause,array($this->modelClass.'.realm' => $name));
+                    }                   
+                }
             }
-        }      
+            //Add it as an OR clause
+            array_push($c['conditions'],array('OR' => $ap_clause)); 
+        }
         //====== END AP FILTER =====
         return $c;
     }
