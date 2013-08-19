@@ -71,7 +71,8 @@ Ext.define('Rd.controller.cDevices', {
         urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridDevices'}       
+        {  ref: 'grid',         selector:   'gridDevices'},
+        {  ref: 'privateGrid',  selector:   'gridDevicePrivate'},      
     ],
     init: function() {
         var me = this;
@@ -160,6 +161,7 @@ Ext.define('Rd.controller.cDevices', {
                 click:      me.genericDelete
             },
             'pnlDevice gridDevicePrivate' : {
+                select:        me.selectDevicePrivate,
                 activate:      me.onDeviceActivate
             },
             'pnlDevice gridDeviceRadpostauths' : {
@@ -911,6 +913,22 @@ Ext.define('Rd.controller.cDevices', {
        // console.log("Clear interval");
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
+        }
+    },
+    selectDevicePrivate:  function(grid, record, item, index, event){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+        //Dynamically update the top toolbar
+        tb = me.getPrivateGrid().down('toolbar[dock=top]');
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
         }
     },
     onBeforeEditDevicePrivate: function(g,e){

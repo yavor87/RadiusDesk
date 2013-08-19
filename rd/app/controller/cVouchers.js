@@ -60,7 +60,8 @@ Ext.define('Rd.controller.cVouchers', {
         urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridVouchers'}       
+        {  ref: 'grid',         selector:   'gridVouchers'} ,
+        {  ref: 'privateGrid',  selector:   'gridVoucherPrivate'}       
     ],
     init: function() {
         var me = this;
@@ -145,6 +146,7 @@ Ext.define('Rd.controller.cVouchers', {
                 click: me.saveBasicInfo
             },
             'pnlVoucher gridVoucherPrivate' : {
+                select:        me.selectVoucherPrivate,
                 activate:      me.gridActivate
             },
             'gridVoucherPrivate' : {
@@ -636,6 +638,22 @@ Ext.define('Rd.controller.cVouchers', {
             e.setDisabled(true);                
         }else{
             e.setDisabled(false);
+        }
+    },
+    selectVoucherPrivate:  function(grid, record, item, index, event){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+        //Dynamically update the top toolbar
+        tb = me.getPrivateGrid().down('toolbar[dock=top]');
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
         }
     },
     onBeforeEditVoucherPrivate: function(g,e){

@@ -15,7 +15,7 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 
             {   xtype: 'button',  iconCls: 'b-reload',    scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
-            {   xtype: 'button',  iconCls: 'b-delete', scale: 'large',      itemId: 'delete',    tooltip:    i18n('sDelete')}
+            {   xtype: 'button',  iconCls: 'b-delete',    scale: 'large',   itemId: 'delete',    disabled: true, tooltip:    i18n('sDelete')}
         ]}, 
         { xtype: 'buttongroup', title: i18n('sSelection'),items : [
             {   xtype: 'cmbVendor'     , itemId:'cmbVendor',    emptyText: i18n('sSelect_a_vendor') },
