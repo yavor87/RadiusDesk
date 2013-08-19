@@ -8,6 +8,12 @@ class VouchersController extends AppController {
     public $uses       = array('Voucher','User');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
+    protected  $read_only_attributes = array(
+            'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
+            'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
+            'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password'
+        );
+
     //-------- BASIC CRUD -------------------------------
 
 
@@ -616,16 +622,6 @@ class VouchersController extends AppController {
 
         $items = array();
 
-        $read_only_attributes = array(
-            'Rd-User-Type', 'Rd-Voucher-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
-            'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
-            'Rd-Cap-Type-Time', 'Rd-Cap-Type-Time', 'Rd-Realm', 'Cleartext-Password', 'Rd-Voucher'
-        );
-
-       // $exclude_attribues = array(
-       //     'Cleartext-Password'
-       // )
-
         //TODO Check if the owner of this user is in the chain of the APs
         if(isset($this->request->query['username'])){
             $username = $this->request->query['username'];
@@ -633,7 +629,7 @@ class VouchersController extends AppController {
             foreach($q_r as $i){
                 $edit_flag      = true;
                 $delete_flag    = true;
-                if(in_array($i['Radcheck']['attribute'],$read_only_attributes)){
+                if(in_array($i['Radcheck']['attribute'],$this->read_only_attributes)){
                     $edit_flag      = false;
                     $delete_flag    = false;
                 }     
@@ -653,7 +649,7 @@ class VouchersController extends AppController {
             foreach($q_r as $i){
                 $edit_flag      = true;
                 $delete_flag    = true;
-                if(in_array($i['Radreply']['attribute'],$read_only_attributes)){
+                if(in_array($i['Radreply']['attribute'],$this->read_only_attributes)){
                     $edit_flag      = false;
                     $delete_flag    = false;
                 }     
@@ -872,7 +868,7 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        $fail_flag = true;
+        $fail_flag = false;
 
         $rc = ClassRegistry::init('Radcheck');
         $rr = ClassRegistry::init('Radreply');
@@ -880,29 +876,44 @@ class VouchersController extends AppController {
         if(isset($this->data['id'])){   //Single item delete
             $type_id            = explode( '_', $this->request->data['id']);
             if(preg_match("/^chk_/",$this->request->data['id'])){
-                $rc->id = $type_id[1];
-                $rc->delete();
+                //Check if it should not be deleted
+                $qr = $rc->findById($type_id[1]);
+                if($qr){
+                    $name = $qr['Radcheck']['attribute'];
+                    if(in_array($name,$this->read_only_attributes)){
+                        $fail_flag = true;
+                    }else{
+                        $rc->id = $type_id[1];
+                        $rc->delete();
+                    }            
+                }
             }
 
             if(preg_match("/^rpl_/",$this->request->data['id'])){   
                 $rr->id = $type_id[1];
                 $rr->delete();
             }
-            
-            $fail_flag = false;
-   
         }else{                          //Assume multiple item delete
+            $fail_flag          = false;
             foreach($this->data as $d){
                 $type_id            = explode( '_', $d['id']);
                 if(preg_match("/^chk_/",$d['id'])){
-                    $rc->id = $type_id[1];
-                    $rc->delete();
+                    //Check if it should not be deleted
+                    $qr = $rc->findById($type_id[1]);
+                    if($qr){
+                        $name = $qr['Radcheck']['attribute'];
+                        if(in_array($name,$this->read_only_attributes)){
+                            $fail_flag = true;
+                        }else{
+                            $rc->id = $type_id[1];
+                            $rc->delete();
+                        }            
+                    }
                 }
                 if(preg_match("/^rpl_/",$d['id'])){   
                     $rr->id = $type_id[1];
                     $rr->delete();
-                }          
-                $fail_flag = false;  
+                }            
             }
         }
 
