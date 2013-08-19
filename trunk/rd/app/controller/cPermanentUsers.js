@@ -69,7 +69,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
         urlDevicesListedOnly:'/cake2/rd_cake/permanent_users/restrict_list_of_devices.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridPermanentUsers'}       
+        {  ref: 'grid',         selector:   'gridPermanentUsers'},
+        {  ref: 'privateGrid',  selector:   'gridUserPrivate'},        
     ],
     init: function() {
         var me = this;
@@ -193,6 +194,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 change:      me.gridUserDevicesListedOnly
             },
             'pnlPermanentUser gridUserPrivate' : {
+                select:        me.selectUserPrivate,
                 activate:      me.gridActivate
             },
             'pnlPermanentUser #profile' : {
@@ -1135,6 +1137,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me = this;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
+        }
+    },
+    selectUserPrivate:  function(grid, record, item, index, event){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+        //Dynamically update the top toolbar
+        tb = me.getPrivateGrid().down('toolbar[dock=top]');
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
         }
     },
     onBeforeEditUserPrivate: function(g,e){
