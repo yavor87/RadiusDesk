@@ -274,11 +274,13 @@ class RadacctsController extends AppController {
         }
 
         //FIXME We need to find a creative wat to determine if the Access Provider can delete this accounting data!!!
-	    if(isset($this->data['id'])){   //Single item delete             
+	    if(isset($this->data['id'])){   //Single item delete
+            $this->_voucher_status_check($this->data['id']);        
             $this->{$this->modelClass}->id = $this->data['id'];
             $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
         }else{                          //Assume multiple item delete
-            foreach($this->data as $d){   
+            foreach($this->data as $d){ 
+                $this->_voucher_status_check($d['id']);   
                 $this->{$this->modelClass}->id = $d['id'];
                 $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
             }         
@@ -652,6 +654,39 @@ class RadacctsController extends AppController {
         }
         //No match
         return false;
+    }
+
+    private function _voucher_status_check($id){
+
+        //Find the count of this username; if zero check if voucher; if voucher change status to 'new';
+        $q_r = $this->{$this->modelClass}->findByRadacctid($id);
+        if($q_r){
+            $user_type = 'unknown';
+            $un = $q_r['Radacct']['username'];
+            //Get the user type
+            if(count($q_r['Radcheck']) > 0){
+                foreach($q_r['Radcheck'] as $rc){
+                    if($rc['attribute'] == 'Rd-User-Type'){
+                        $user_type = $rc['value'];   
+                    }
+                }
+            }
+            //Check if voucher
+            if($user_type == 'voucher'){
+                $count = $this->{$this->modelClass}->find('count', array('conditions' => array('Radacct.username' => $un)));
+                if($count == 1){
+                    $this->Voucher = ClassRegistry::init('Voucher');
+                    $this->Voucher->contain();
+                    $qr = $this->Voucher->find('first', array('conditions' => array('Voucher.name' => $un)));
+                    if($qr){
+                        $this->Voucher->id = $qr['Voucher']['id'];
+                        $this->Voucher->saveField('status', 'new');
+                        $this->Voucher->saveField('perc_data_used', null);
+                        $this->Voucher->saveField('perc_time_used', null);
+                    }                           
+                }
+            }
+        }
     }
 
 }
