@@ -47,14 +47,13 @@ class NaStatesController extends AppController {
 
         $total  = $this->{$this->modelClass}->find('count',$c);       
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
-
-        $items      = array();
+        $items  = array();
 
         //If there is only one entry - we take it from that entry till now
         if(count($q_r) == 1){
             $state_time = $this->Formatter->diff_in_time($q_r[0]['NaState']['created']);
             array_push($items,array(
-                'id'                    => $i['NaState']['id'], 
+                'id'                    => $q_r[0]['NaState']['id'], 
                 'state'                 => $q_r[0]['NaState']['state'],
                 'time'                  => $state_time,
                 'start'                 => $q_r[0]['NaState']['created']
