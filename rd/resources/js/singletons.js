@@ -157,3 +157,19 @@ Ext.ux.bytesToHuman = function (fileSizeInBytes) {
     return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 };
 
+
+
+//-- Format to a readable time -->
+Ext.ux.secondsToHuman = function(seconds) {
+    var numdays     = Math.floor(seconds / 86400); 
+    var numhours    = Math.floor((seconds % 86400) / 3600);
+    var numminutes  = Math.floor(((seconds  % 86400) % 3600) / 60);
+    var numseconds  = ((seconds % 86400) % 3600) % 60;
+    return  padDigits(numdays,2) + ":" + padDigits(numhours,2) + ":" + padDigits(numminutes,2) + ":" + padDigits(numseconds,2);
+
+    function padDigits(number, digits) {
+        return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+    }
+}
+
+
