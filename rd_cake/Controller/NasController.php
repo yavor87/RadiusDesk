@@ -142,10 +142,10 @@ class NasController extends AppController {
             }else{
                 if($i['NaState'][0]['state'] == 1){
                     $status         = 'up';
-                    $status_time    = $i['NaState'][0]['modified'];
+                    $status_time    = time()- strtotime($i['NaState'][0]['modified']);
                 }else{
                     $status         = 'down';
-                    $status_time    = $i['NaState'][0]['modified'];
+                    $status_time    = time() -strtotime($i['NaState'][0]['modified']);
                 }
             }
 
