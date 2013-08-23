@@ -155,6 +155,14 @@ class RadacctsController extends AppController {
                 }
             }
 
+            if($i['Radacct']['acctstoptime'] == null){
+                $online_time    = time()-strtotime($i['Radacct']['acctstarttime']);
+                $active         = true; 
+            }else{
+                $online_time    = $i['Radacct']['acctstoptime'];
+                $active         = false;
+            }
+
             array_push($items,
                 array(
                     'id'                => $i['Radacct']['radacctid'], 
@@ -167,7 +175,7 @@ class RadacctsController extends AppController {
                     'nasportid'         => $i['Radacct']['nasportid'],
                     'nasporttype'       => $i['Radacct']['nasporttype'],
                     'acctstarttime'     => $i['Radacct']['acctstarttime'],
-                    'acctstoptime'      => $i['Radacct']['acctstoptime'],
+                    'acctstoptime'      => $online_time,
                     'acctsessiontime'   => $i['Radacct']['acctsessiontime'],
                     'acctauthentic'     => $i['Radacct']['acctauthentic'],
                     'connectinfo_start' => $i['Radacct']['connectinfo_start'],
@@ -183,7 +191,8 @@ class RadacctsController extends AppController {
                     'acctstartdelay'    => $i['Radacct']['acctstartdelay'],
                     'acctstopdelay'     => $i['Radacct']['acctstopdelay'],
                     'xascendsessionsvrkey' => $i['Radacct']['xascendsessionsvrkey'],
-                    'user_type'         => $user_type
+                    'user_type'         => $user_type,
+                    'active'            => $active
                 )
             );
         }                
