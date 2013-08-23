@@ -8,6 +8,7 @@ Ext.define('Rd.model.mRadacct', {
         'groupname',
         'realm',
         'nasipaddress',
+        'nasidentifier',
         'nasportid',
         'nasporttype',
         {name:'acctstarttime', type: 'date', dateFormat: 'Y-m-d H:i:s'},
