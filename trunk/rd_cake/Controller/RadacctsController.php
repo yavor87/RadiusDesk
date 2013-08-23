@@ -172,6 +172,7 @@ class RadacctsController extends AppController {
                     'groupname'         => $i['Radacct']['groupname'],
                     'realm'             => $i['Radacct']['realm'],
                     'nasipaddress'      => $i['Radacct']['nasipaddress'],
+                    'nasidentifier'     => $i['Radacct']['nasidentifier'],
                     'nasportid'         => $i['Radacct']['nasportid'],
                     'nasporttype'       => $i['Radacct']['nasporttype'],
                     'acctstarttime'     => $i['Radacct']['acctstarttime'],
