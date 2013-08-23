@@ -27,6 +27,7 @@ Ext.define('Rd.model.mRadacct', {
         'acctstartdelay',
         'acctstopdelay',
         'xascendsessionsvrkey',
-        'user_type'
+        'user_type',
+        'active'
         ]
 });

@@ -778,11 +778,7 @@ Ext.define('Rd.controller.cNas', {
                     var s = i18n("sDown");
                 }
 
-                var now         = new Date();
-                var tz_diff     = now.getTimezoneOffset()*60*1000;
-                var elapsed     = Ext.Date.getElapsed(record.get('status_time'));
-                var online      = new Date((elapsed+tz_diff));
-                t_i_s           = s+" "+Ext.Date.format(online, 'z:H:i:s');
+                t_i_s           = s+" "+Ext.ux.secondsToHuman(record.get('status_time'));;
             }
 
             var d  = Ext.apply({
