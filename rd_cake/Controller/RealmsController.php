@@ -17,6 +17,17 @@ class RealmsController extends AppController {
     public $components = array('Aa');
     public $uses       = array('Realm','User');
     protected $base    = "Access Providers/Controllers/Realms/";
+
+    //----- ACL Checks -----
+    /*
+        index_ap_create
+        index_ap_update
+        index_ap
+        list_realms_for_nas_owner
+        dummy_edit
+        update_na_realm
+
+    //---- END ACL ------- */
     
 
 
@@ -34,7 +45,7 @@ class RealmsController extends AppController {
         }
 
         $user_id    = null;
-        $admin_flag = true;
+        $admin_flag = false;
     
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $user_id    = $user['id'];
@@ -56,30 +67,28 @@ class RealmsController extends AppController {
 
         }else{
             //Access Providers needs more work...
-            if(isset($this->request->query['ap_id'])){
-                $ap_id      = $this->request->query['ap_id'];
-                if($ap_id == 0){
-                    $ap_id = $user_id;
-                }
-                $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
-                foreach($q_r as $i){
-                    
-                    $user_id    = $i['User']['id'];
-                    $this->Realm->contain();
-                    $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
-                    foreach($r  as $j){
-                        $id     = $j['Realm']['id'];
-                        $name   = $j['Realm']['name'];
-                        $create = $this->Acl->check(
-                                    array('model' => 'User', 'foreign_key' => $ap_id), 
-                                    array('model' => 'Realm','foreign_key' => $id), 'create');
-                        if($create == true){
-                            array_push($items,array('id' => $id, 'name' => $name));
-                        }
+            $ap_id      = $user_id;
+            if($ap_id == 0){
+                $ap_id = $user_id;
+            }
+            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
+            foreach($q_r as $i){    
+                $user_id    = $i['User']['id'];
+                $this->Realm->contain();
+                $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
+                foreach($r  as $j){
+                    $id     = $j['Realm']['id'];
+                    $name   = $j['Realm']['name'];
+                    $create = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $ap_id), 
+                                array('model' => 'Realm','foreign_key' => $id), 'create');
+                    if($create == true){
+                        array_push($items,array('id' => $id, 'name' => $name));
                     }
                 }
             }
         }
+
         $this->set(array(
             'items' => $items,
             'success' => true,
@@ -96,28 +105,40 @@ class RealmsController extends AppController {
             return;
         }
 
-        $user_id = null;
+        $user_id    = null;
+        $admin_flag = false;
+
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $user_id = $user['id'];
         }
 
         if($user['group_name'] == Configure::read('group.ap')){  //Or AP
             $user_id = $user['id'];
+            $admin_flag = true;
         }
         $items      = array();
 
-        if(isset($this->request->query['ap_id'])){
-            $ap_id      = $this->request->query['ap_id'];
+       if($admin_flag){
+            $r = $this->Realm->find('all');
+            foreach($r as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                array_push($items,array('id' => $id, 'name' => $name));
+            }
+
+        }else{
+            //Access Providers needs more work...
+            $ap_id      = $user_id;
             if($ap_id == 0){
                 $ap_id = $user_id;
             }
             $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
-            foreach($q_r as $i){
-                
+            foreach($q_r as $i){    
                 $user_id    = $i['User']['id'];
                 $this->Realm->contain();
                 $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
                 foreach($r  as $j){
+                    print_r($j);
                     $id     = $j['Realm']['id'];
                     $name   = $j['Realm']['name'];
                     $create = $this->Acl->check(
@@ -129,6 +150,7 @@ class RealmsController extends AppController {
                 }
             }
         }
+
         $this->set(array(
             'items' => $items,
             'success' => true,
@@ -136,7 +158,6 @@ class RealmsController extends AppController {
         ));
     }
 
-  
     public function index_ap(){
     //This method will display the Access Provider we are looking at's list of available realms.
     //This will be:
