@@ -268,7 +268,7 @@ class PermanentUsersController extends AppController {
             $this->request->data['monitor'] = 1;
         }
 
-        if($this->request->data['parent_id'] == '0'){ //This is the holder of the token
+        if(($this->request->data['parent_id'] == '0')||($this->request->data['parent_id'] == '')){ //This is the holder of the token
             $this->request->data['parent_id'] = $user['id'];
         }
 
