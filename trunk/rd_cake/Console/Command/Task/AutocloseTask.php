@@ -31,6 +31,12 @@ class AutocloseTask extends Shell {
                 $this->out("<info>AutoClose::Auto closing potential stale sessions on $nasname after $close_after dead time</info>");
                 $this->Radacct->query("UPDATE radacct set acctstoptime=ADDDATE(acctstarttime, INTERVAL acctsessiontime SECOND), acctterminatecause='Clear-Stale-Session' where nasipaddress='$nasname' AND acctstoptime is NULL AND ((UNIX_TIMESTAMP(now()) - (UNIX_TIMESTAMP(acctstarttime)+acctsessiontime))> $close_after)");
 
+                //It may be that the nasidentifier is actually the unique attribute 
+                //and not the nasipaddress (espacially when doing Miktoritk!!!)
+                $nasidentifier  = $item['Na']['nasidentifier'];
+                $this->Radacct->query("UPDATE radacct set acctstoptime=ADDDATE(acctstarttime, INTERVAL acctsessiontime SECOND), acctterminatecause='Clear-Stale-Session' where nasidentifier='$nasidentifier' AND acctstoptime is NULL AND ((UNIX_TIMESTAMP(now()) - (UNIX_TIMESTAMP(acctstarttime)+acctsessiontime))> $close_after)");
+
+
             }
         }else{
            $this->out("<info>AutoClose::No NAS devices configured for auto session closing</info>");
