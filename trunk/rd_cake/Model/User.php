@@ -202,10 +202,17 @@ class User extends AppModel {
             }
         }
 
-        //cap type (Rd-Cap-Type this will dertermine if we enforce a counter or not) 
-        if(array_key_exists('cap',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['cap'] != ''){      
-                $this->_add_radcheck_item($username,'Rd-Cap-Type',$this->data['User']['cap']);
+        //cap type (Rd-Cap-Type-Time this will dertermine if we enforce a counter or not) 
+        if(array_key_exists('cap_time',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['cap_time'] != ''){      
+                $this->_add_radcheck_item($username,'Rd-Cap-Type-Time',$this->data['User']['cap_time']);
+            }
+        } 
+
+        //cap type (Rd-Cap-Type-Data this will dertermine if we enforce a counter or not) 
+        if(array_key_exists('cap_data',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['cap_data'] != ''){      
+                $this->_add_radcheck_item($username,'Rd-Cap-Type-Data',$this->data['User']['cap_data']);
             }
         }  
         
