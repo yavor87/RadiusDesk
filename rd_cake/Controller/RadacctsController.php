@@ -605,6 +605,7 @@ class RadacctsController extends AppController {
             $this->Realm = ClassRegistry::init('Realm');
             $q_r        = $this->User->getPath($user['id']); //Get all the parents up to the root
             $ap_clause  = array();
+            $ap_id      = $user['id'];
 
             foreach($q_r as $i){         
                 $user_id    = $i['User']['id'];
@@ -621,10 +622,25 @@ class RadacctsController extends AppController {
                     }                   
                 }
             }
+
+            //Get all the realms owned by the $ap_id but NOT available_to_siblings
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
+            foreach($r  as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                $create = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'read'); 
+                if($create == true){
+                        array_push($ap_clause,array($this->modelClass.'.realm' => $name));
+                }
+            }   
+
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $ap_clause)); 
         }
         //====== END AP FILTER =====
+        //print_r($c);
         return $c;
     }
 
