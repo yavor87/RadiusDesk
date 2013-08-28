@@ -71,7 +71,7 @@ class PptpClient extends AppModel {
             //_______________ NEW ONE _______________
             //This is a new one.... lets see if we can re-use some ip
             $q_r = $this->find('first', array('order' => array('PptpClient.ip ASC')));
-            if($q_r != ''){
+            if($q_r){
                 $ip         = $q_r['PptpClient']['ip'];
                 $next_ip    = $this->_get_next_ip($ip);           
                 $not_available = true;
