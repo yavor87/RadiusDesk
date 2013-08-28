@@ -87,6 +87,19 @@ class RealmsController extends AppController {
                     }
                 }
             }
+
+            //Get all the realms owned by the $ap_id but NOT available_to_siblings
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
+            foreach($r  as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                $create = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'create'); 
+                if($create == true){
+                        array_push($items,array('id' => $id, 'name' => $name));
+                }
+            }   
         }
 
         $this->set(array(
@@ -138,7 +151,7 @@ class RealmsController extends AppController {
                 $this->Realm->contain();
                 $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
                 foreach($r  as $j){
-                    print_r($j);
+                  //  print_r($j);
                     $id     = $j['Realm']['id'];
                     $name   = $j['Realm']['name'];
                     $create = $this->Acl->check(
@@ -149,6 +162,20 @@ class RealmsController extends AppController {
                     }
                 }
             }
+
+            //Get all the realms owned by the $ap_id but NOT available_to_siblings
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
+            foreach($r  as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                $create = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'update'); 
+                if($create == true){
+                        array_push($items,array('id' => $id, 'name' => $name));
+                }
+            }   
+
         }
 
         $this->set(array(
@@ -182,8 +209,9 @@ class RealmsController extends AppController {
 
         if(isset($this->request->query['ap_id'])){
             $ap_id      = $this->request->query['ap_id'];
-            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root
-            
+
+            //Get all the parents up to the root
+            $q_r        = $this->User->getPath($ap_id); 
             foreach($q_r as $i){
                 
                 $user_id    = $i['User']['id'];
@@ -207,6 +235,26 @@ class RealmsController extends AppController {
                     array_push($items,array('id' => $id, 'name' => $name, 'create' => $create, 'read' => $read, 'update' => $update, 'delete' => $delete));
                 }
             }
+
+            //Get all the realms owned by the $ap_id but NOT available_to_siblings
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
+            foreach($r  as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                $create = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'create');
+                $read   = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'read');
+                $update = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'update');
+                $delete = $this->Acl->check(
+                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Realm','foreign_key' => $id), 'delete');
+                array_push($items,array('id' => $id, 'name' => $name, 'create' => $create, 'read' => $read, 'update' => $update, 'delete' => $delete));
+            }   
         }  
 
         $this->set(array(

@@ -826,14 +826,17 @@ class AccessProvidersController extends AppController {
 
         $items = array();
         $this->User = ClassRegistry::init('User');
-        $this->User->contain();
+        $this->User->contain('Group');
 
         $tree = false;
         if(
             ($user['group_name'] == Configure::read('group.admin'))||
             ($user['group_name'] == Configure::read('group.ap'))
         ){  //Admin or AP
-            if($this->User->childCount($user['id']) > 0){
+            $child_count= $this->User->find('count',
+                array('conditions' => array('User.parent_id' => $user['id'],'Group.name' => Configure::read('group.ap')))
+            );
+            if($child_count > 0){
                 $tree = true;
             }
         }
