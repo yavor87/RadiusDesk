@@ -139,7 +139,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'gridNote[noteForGrid=dynamicDetails]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=dynamicDetails] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=dynamicDetails] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=dynamicDetails] #btnNoteAddPrev'  : {   

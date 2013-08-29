@@ -123,7 +123,7 @@ Ext.define('Rd.controller.cRealms', {
             'gridNote[noteForGrid=realms]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=realms] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=realms] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=realms] #btnNoteAddPrev'  : {   

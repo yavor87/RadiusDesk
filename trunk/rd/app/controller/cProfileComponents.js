@@ -113,7 +113,7 @@ Ext.define('Rd.controller.cProfileComponents', {
             'gridNote[noteForGrid=profile_components]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=profile_components] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=profile_components] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=profile_components] #btnNoteAddPrev'  : {   
