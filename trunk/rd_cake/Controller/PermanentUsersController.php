@@ -1463,6 +1463,15 @@ class PermanentUsersController extends AppController {
             );
         }
 
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -1484,6 +1493,15 @@ class PermanentUsersController extends AppController {
 
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
                         array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
@@ -1536,10 +1554,44 @@ class PermanentUsersController extends AppController {
                             'checked'       => $checked, 
                             'boxLabelCls'   => 'lblRdCheck',
                             'margin'        => 5
+                        ),
+                        array( 
+                            'xtype'         => 'checkbox', 
+                            'boxLabel'      => 'Auto-add device after authentication', 
+                            'itemId'        => 'chkAutoAdd',
+                            'checked'       => false, 
+                            'boxLabelCls'   => 'lblRdCheck',
+                            'margin'        => 5
                         )
                 )) 
             );
         }
+
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 
+                            'xtype'         => 'checkbox', 
+                            'boxLabel'      => 'Connect only from listed devices', 
+                            'itemId'        => 'chkListedOnly',
+                            'checked'       => $checked, 
+                            'boxLabelCls'   => 'lblRdCheck',
+                            'margin'        => 5
+                        ),
+                        array( 
+                            'xtype'         => 'checkbox', 
+                            'boxLabel'      => 'Auto-add device after authentication', 
+                            'itemId'        => 'chkAutoAdd',
+                            'checked'       => false, 
+                            'boxLabelCls'   => 'lblRdCheck',
+                            'margin'        => 5
+                        )
+                )) 
+            );
+        }
+
 
         $this->set(array(
             'items'         => $menu,

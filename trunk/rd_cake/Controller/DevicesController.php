@@ -1258,6 +1258,15 @@ class DevicesController extends AppController {
             );
         }
 
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -1279,6 +1288,15 @@ class DevicesController extends AppController {
 
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Ap
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
                         array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
