@@ -410,6 +410,7 @@ class RadpostauthsController extends AppController {
             $this->User  = ClassRegistry::init('User');
             $q_r        = $this->User->getPath($user['id']); //Get all the parents up to the root
             $ap_clause  = array();
+            $ap_id      = $user['id'];
 
             foreach($q_r as $i){         
                 $user_id    = $i['User']['id'];
