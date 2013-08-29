@@ -27,12 +27,13 @@ class Note extends AppModel {
 	);
 
     public $hasMany = array(
-        'NaNote'    => array('dependent'    => true),
-        'TagNote'   => array('dependent'    => true),
-        'RealmNote' => array('dependent'    => true),
-        'UserNote'  => array('dependent'    => true),
+        'NaNote'                => array('dependent'    => true),
+        'TagNote'               => array('dependent'    => true),
+        'RealmNote'             => array('dependent'    => true),
+        'UserNote'              => array('dependent'    => true),
+        'DeviceNote'            => array('dependent'    => true),
         'ProfileComponentNote'  => array('dependent'    => true),
-        'DynamicDetailNote'  => array('dependent'    => true),
-        'AutoMacNote'  => array('dependent'    => true),
+        'DynamicDetailNote'     => array('dependent'    => true),
+        'AutoMacNote'           => array('dependent'    => true),
     );
 }
