@@ -113,7 +113,7 @@ Ext.define('Rd.controller.cTags', {
             'gridNote[noteForGrid=tags]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=tags] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=tags] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=tags] #btnNoteAddPrev'  : {   

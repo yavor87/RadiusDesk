@@ -114,7 +114,7 @@ Ext.define('Rd.controller.cProfiles', {
             'gridNote[noteForGrid=profiles]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=profiles] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=profiles] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=profiles] #btnNoteAddPrev'  : {   

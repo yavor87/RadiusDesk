@@ -144,7 +144,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             'gridNote[noteForGrid=access_providers]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=access_providers] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=access_providers] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=access_providers] #btnNoteAddPrev'  : {   

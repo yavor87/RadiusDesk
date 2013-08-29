@@ -157,7 +157,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'gridNote[noteForGrid=permanentUsers]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=permanentUsers] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=permanentUsers] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=permanentUsers] #btnNoteAddPrev'  : {   

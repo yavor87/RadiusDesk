@@ -122,7 +122,7 @@ Ext.define('Rd.controller.cAutoSetups', {
             'gridNote[noteForGrid=auto_macs]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=auto_macs] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=auto_macs] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=auto_macs] #btnNoteAddPrev'  : {   

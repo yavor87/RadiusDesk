@@ -142,7 +142,7 @@ Ext.define('Rd.controller.cDevices', {
             'gridNote[noteForGrid=devices]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=devices] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=devices] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=devices] #btnNoteAddPrev'  : {   

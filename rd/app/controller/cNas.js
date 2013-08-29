@@ -192,7 +192,7 @@ Ext.define('Rd.controller.cNas', {
             'gridNote[noteForGrid=nas]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=nas] #btnNoteTreeNext' : {
+            'winNoteAdd[noteForGrid=nas] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=nas] #btnNoteAddPrev'  : {   
