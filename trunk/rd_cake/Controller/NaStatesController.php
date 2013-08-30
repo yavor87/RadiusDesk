@@ -252,9 +252,10 @@ class NaStatesController extends AppController {
             }
         }
         //====== END REQUEST FILTER =====
-
+//FIXME Is this needed?
+/*
         //====== AP FILTER =====
-        //If the user is an AP; we need to add an extra clause to only show the Tags which he is allowed to see.
+        //If the user is an AP; we need to add an extra clause to only show the NaStates which he is allowed to see.
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $tree_array = array();
             $user_id    = $user['id'];
@@ -279,8 +280,10 @@ class NaStatesController extends AppController {
                 }       
             }   
             //Add it as an OR clause
+            print_r($tree_array);
             array_push($c['conditions'],array('OR' => $tree_array));  
-        }       
+        } 
+*/      
         //====== END AP FILTER =====      
         return $c;
     }

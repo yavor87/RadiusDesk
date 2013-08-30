@@ -494,6 +494,12 @@ class DynamicDetailsController extends AppController {
 
     public function upload_logo($id = null){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
         //are posted to the server.
         $this->layout = 'ext_file_upload';
@@ -1216,7 +1222,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => false,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -1227,7 +1233,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-edit',    
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'disabled'  => false,     
                     'tooltip'   => __('Edit')));
             }
 
@@ -1295,7 +1301,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => false,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -1306,7 +1312,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-edit',    
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'disabled'  => false,     
                     'tooltip'   => __('Edit')));
             }
 
@@ -1374,7 +1380,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => false,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -1385,7 +1391,7 @@ class DynamicDetailsController extends AppController {
                     'iconCls'   => 'b-edit',    
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'disabled'  => false,     
                     'tooltip'   => __('Edit')));
             }
 
@@ -1521,7 +1527,7 @@ class DynamicDetailsController extends AppController {
                 }       
             }
             //Add it as an OR clause
-            array_push($c['conditions'],array('OR' => $ap_clause));   
+            array_push($c['conditions'],array('OR' => $tree_array));   
         }       
         //====== END AP FILTER =====
 
