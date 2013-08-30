@@ -238,8 +238,8 @@ class AccessProvidersController extends AppController {
 
     public function add(){
 
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
 
@@ -742,21 +742,22 @@ class AccessProvidersController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
-        
-            array_push($specific_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-expand',  
-                    'scale'     => 'large', 
-                    'itemId'    => 'expand',   
-                    'tooltip'   => __('Expand')));
-
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'change_password')){      
+           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'change_password')){      
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-password',
                     'scale'     => 'large', 
                     'itemId'    => 'password', 
                     'tooltip'   => __('Change Password')));
+            }
+            
+           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'enable_disable')){      
+                array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-disable', 
+                    'scale'     => 'large', 
+                    'itemId'    => 'enable_disable',
+                    'tooltip'   => __('Enable / Disable')));
             }
 
              $menu = array(

@@ -687,9 +687,9 @@ class ProfileComponentsController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
-                array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100, 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                   // array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 ))
                 
             );
@@ -748,7 +748,7 @@ class ProfileComponentsController extends AppController {
                         'itemId'    => 'note',      
                         'tooltip'   => __('Add Notes')));
             }
-
+/*
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
@@ -757,10 +757,10 @@ class ProfileComponentsController extends AppController {
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
             }
-
+*/
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group)
+                        array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100,   'items' => $document_group)
                    );
         }
         $this->set(array(

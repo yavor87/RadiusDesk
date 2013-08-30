@@ -322,6 +322,22 @@ class DesktopController extends AppController {
             array_push($menu, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  => array('items' =>$sm_nas_devices)));     
         }
 
+        //____ Profiles _____
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Profiles/index")){    //Required to show the Profiles menu item
+
+            $sm_profiles = array();
+
+            //___Check the sub-menu rights___:
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ProfileComponents/index")){
+                array_push($sm_profiles, array('text' => __('Profile Components') ,  'iconCls' => 'components',  'itemId' => 'cProfileComponents'));
+            } 
+            //___ END Sub Menu___
+
+            array_push($sm_profiles, array('text' => __('Profiles') ,  'iconCls' => 'profiles', 'itemId' => 'cProfiles'));
+
+            array_push($menu, array(  'text'  => __('Profiles'),  'iconCls' => 'profiles',  'menu'  => array('items' =>$sm_profiles)));     
+        }
+
         //____ Tools ____
         array_push($menu,
              array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'menu'  =>
@@ -353,6 +369,11 @@ class DesktopController extends AppController {
             );
         }
 
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
+            array_push($menu,
+                array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages','itemId' => 'cDynamicDetails')
+            );
+        }
         return $menu;
     }
 
