@@ -1046,6 +1046,34 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+
+    //Enable or disable the Auto-Mac Add functionality for the permanent users
+    public function auto_mac_on_off(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if((isset($this->request->query['username']))&&(isset($this->request->query['auto_mac']))){
+            $username = $this->request->query['username'];
+            if($this->request->query['auto_mac'] == 'true'){
+                $this->_replace_radcheck_item($username,'Rd-Auto-Mac',1);       
+            }else{
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Auto-Mac'), false
+                ); 
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+
     public function change_password(){
 
         //__ Authentication + Authorization __
@@ -1527,7 +1555,8 @@ class PermanentUsersController extends AppController {
         //Empty by default
         $menu = array();
 
-        $checked = false;
+        $checked            = false;
+        $checked_add_mac    = false;
         if(isset($this->request->query['username'])){
             $count = $this->{$this->modelClass}->Radcheck->find('count',array('conditions' => 
                 array(
@@ -1538,6 +1567,18 @@ class PermanentUsersController extends AppController {
             ));
             if($count > 0){
                 $checked = true;
+            }
+
+            //Auto-add MAC check
+            $count_add_mac = $this->{$this->modelClass}->Radcheck->find('count',array('conditions' => 
+                array(
+                    'Radcheck.username'     => $this->request->query['username'], 
+                    'Radcheck.attribute'    => 'Rd-Auto-Mac',
+                    'Radcheck.value'        => '1',
+                )
+            ));
+            if($count_add_mac > 0){
+                $checked_add_mac = true;
             }
         }
         
@@ -1558,8 +1599,8 @@ class PermanentUsersController extends AppController {
                         array( 
                             'xtype'         => 'checkbox', 
                             'boxLabel'      => 'Auto-add device after authentication', 
-                            'itemId'        => 'chkAutoAdd',
-                            'checked'       => false, 
+                            'itemId'        => 'chkAutoAddMac',
+                            'checked'       => $checked_add_mac, 
                             'boxLabelCls'   => 'lblRdCheck',
                             'margin'        => 5
                         )
