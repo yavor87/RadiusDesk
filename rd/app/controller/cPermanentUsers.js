@@ -66,7 +66,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
         urlEditTracking:    '/cake2/rd_cake/permanent_users/edit_tracking.json',
         urlEnableDisable:   '/cake2/rd_cake/permanent_users/enable_disable.json',
         urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json',
-        urlDevicesListedOnly:'/cake2/rd_cake/permanent_users/restrict_list_of_devices.json'
+        urlDevicesListedOnly:'/cake2/rd_cake/permanent_users/restrict_list_of_devices.json',
+        urlAutoAddMac:      '/cake2/rd_cake/permanent_users/auto_mac_on_off.json'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridPermanentUsers'},
@@ -192,6 +193,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser gridUserDevices #chkListedOnly' :{
                 change:      me.gridUserDevicesListedOnly
+            },
+            'pnlPermanentUser gridUserDevices #chkAutoAddMac' :{
+                change:      me.gridUserDevicesAutoAddMac
             },
             'pnlPermanentUser gridUserPrivate' : {
                 select:        me.selectUserPrivate,
@@ -947,10 +951,56 @@ Ext.define('Rd.controller.cPermanentUsers', {
     gridUserDevicesListedOnly : function(chk){
         var me          = this;
         var username    = chk.up('gridUserDevices').username;
+        var g_devices   = chk.up('gridUserDevices');
+        var chk_auto    = g_devices.down('#chkAutoAddMac');
+
+        //We have to uncheck the auto add check if this is checked
+        var chk_listed  = chk.getValue();
+        if(chk_listed){   
+            if(chk_auto.getValue()){
+                console.log("Disable auto add check");
+                chk_auto.setValue(false);
+            }            
+        }
+
         Ext.Ajax.request({
             url: me.urlDevicesListedOnly,
             method: 'GET',
             params: {username : username, restrict : chk.getValue() },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    Ext.ux.Toaster.msg(
+                                i18n('sItem_updated'),
+                                i18n('sItem_updated_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                    );    
+                }   
+            },
+            scope: me
+        });
+    },
+
+    gridUserDevicesAutoAddMac : function(chk){
+        var me          = this;
+        var username    = chk.up('gridUserDevices').username;
+        var g_devices   = chk.up('gridUserDevices');
+        var chk_listed  = g_devices.down('#chkListedOnly');
+
+       //We have to uncheck the only from this devices check if this is checked
+        var auto_m = chk.getValue();
+        if(auto_m){   
+            if(chk_listed.getValue()){
+                console.log("Disable only listed check");
+                chk_listed.setValue(false);
+            }            
+        }
+
+        Ext.Ajax.request({
+            url: me.urlAutoAddMac,
+            method: 'GET',
+            params: {username : username, auto_mac : chk.getValue() },
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
