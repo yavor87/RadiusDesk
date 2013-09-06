@@ -1123,6 +1123,39 @@ class PermanentUsersController extends AppController {
         ));
     }
 
+    public function view_password(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $success    = false;
+        $value      = false;
+        if(isset($this->request->query['user_id'])){
+            $this->{$this->modelClass}->contain('Radcheck');
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
+            if($q_r){
+
+                foreach($q_r['Radcheck'] as $i){
+                    if($i['attribute'] == 'Cleartext-Password'){
+                        $value = $i['value'];
+                        break;
+                    }
+                }
+            }
+            $success = true;
+        }
+        $this->set(array(
+            'success'   => $success,
+            'value'     => $value,
+            '_serialize' => array('success','value')
+        ));
+
+    }
+
     public function enable_disable(){
         
         //__ Authentication + Authorization __

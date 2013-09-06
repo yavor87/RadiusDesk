@@ -290,6 +290,12 @@ class DesktopController extends AppController {
     private function _build_ap_menus($id){
 
         $menu   = array();
+
+        //Add-on for Password Manager Only (Typically Hotel Front Desk)
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), "Access Providers/Other Rights/Password Manager Only")){
+            return $menu;
+        }
+
         $base   = "Access Providers/Controllers/";
 
         //____ Realms and Providers ____
@@ -393,6 +399,14 @@ class DesktopController extends AppController {
     private function _build_ap_shortcuts($id){
 
         $items = array();
+
+        //Add-on for Password Manager Only (Typically Hotel Front Desk)
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), "Access Providers/Other Rights/Password Manager Only")){
+            //WIP
+            array_push($items, array( 'name'    => __('Password manager'), 'iconCls' => 'password-shortcut', 'controller' => 'cPassword'));
+            return $items;
+        }
+
         $base   = "Access Providers/Controllers/";
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
