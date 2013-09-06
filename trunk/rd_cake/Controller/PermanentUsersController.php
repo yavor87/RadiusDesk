@@ -1094,6 +1094,7 @@ class PermanentUsersController extends AppController {
             $group_name  = Configure::read('group.user');
             $q_r         = $this->{$this->modelClass}->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
             $group_id    = $q_r['Group']['id'];
+            $user_id    = $this->request->data['user_id'];
 
             $d['User']['id']        = $this->request->data['user_id'];
             $d['User']['group_id']  = $group_id;  
@@ -1101,6 +1102,18 @@ class PermanentUsersController extends AppController {
             $d['User']['token']     = '';
             $this->{$this->modelClass}->id  = $this->request->data['user_id'];
             $this->{$this->modelClass}->save($d);
+
+            //Check if there are auto add devices and wipe them out (These devices will start with "Auto add");
+            $this->Device           = ClassRegistry::init('Device');
+            $this->Device->contain();
+            $q_r = $this->Device->find('all',array('conditions' =>array('Device.user_id' => $user_id,'Device.description LIKE' => 'Auto add%')));
+            
+            foreach($q_r as $i){
+                $username           = $i['Device']['name'];
+                $this->Device->id   = $i['Device']['id'];
+                $this->Device->delete($i['Device']['id'], true);
+                $this->_delete_clean_up_device($username);
+            }
             $success               = true;  
         }
 
@@ -1869,6 +1882,25 @@ class PermanentUsersController extends AppController {
         return "$month_count/$day/$year";
     }
 
+    private function _delete_clean_up_device($username){
 
+        $this->{$this->modelClass}->Radcheck->deleteAll(   //Delete a previous one
+            array('Radcheck.username' => $username), false
+        );
+
+        $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
+            array('Radreply.username' => $username), false
+        );
+
+        $acct = ClassRegistry::init('Radacct'); //With devices we use callingstaton id instead of username
+        $acct->deleteAll( 
+            array('Radacct.callingstationid' => $username), false
+        );
+
+        $post_a = ClassRegistry::init('Radpostauth');
+        $post_a->deleteAll( 
+            array('Radpostauth.username' => $username), false
+        );
+    }
 
 }
