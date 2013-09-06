@@ -34,6 +34,7 @@ class FindMacTask extends Shell {
                 //Transform this line
                 $vendor = preg_replace("/$big_match\s?/","",$i);
                 $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                $vendor = rtrim($vendor);
                 return $vendor;   
             }
         }
@@ -45,6 +46,7 @@ class FindMacTask extends Shell {
                     //Transform this line
                     $vendor = preg_replace("/$small_match\s?/","",$i);
                     $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                    $vendor = rtrim($vendor);
                     return $vendor;
                 }
             }
