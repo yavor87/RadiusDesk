@@ -716,6 +716,10 @@ td.dirk div {
     background-image: url(../images/48x48/activity.png);
 }
 
+.password-shortcut {
+    background-image: url(../images/48x48/key.png);
+}
+
 /* Fin Fix for 16x16 tabicons */
 
 .x-tab-icon{
