@@ -258,6 +258,13 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             layout  : 'fit',
             xtype   : 'gridUserRadaccts',
             username: me.pu_name
+        },
+        { 
+            title   : 'Usage graphs', 
+            layout  : 'fit',
+            xtype   : 'pnlUsageGraphs',
+            username: me.pu_name,
+            g_type  : 'permanent_user'
         }
         
     ]; 
