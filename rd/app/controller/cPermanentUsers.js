@@ -46,7 +46,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
        'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
         'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
-       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices'
+       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraphs'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: [
