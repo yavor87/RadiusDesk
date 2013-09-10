@@ -184,6 +184,7 @@ Ext.define('Rd.controller.cDesktop', {
     //@@ This will call the application's runAction to source the controller and show it's window
     onShortcutItemClick: function (dataView, record) {
         var me = this;
+        me.getPnlDesktop().setLoading(true); //Mask it
         //Call the controller's Index method
         var win = me.application.runAction(record.get('controller'),'Index');
     },
@@ -331,6 +332,8 @@ Ext.define('Rd.controller.cDesktop', {
                 }
             });
         };
+
+        me.getPnlDesktop().setLoading(false);
         return win;
     },
 
@@ -389,7 +392,6 @@ Ext.define('Rd.controller.cDesktop', {
                 }
             });
         };
-
         me.restoreWindow(win);
         return win;
     },
@@ -442,12 +444,14 @@ Ext.define('Rd.controller.cDesktop', {
     },
 
     restoreWindow: function (win) {
+        var me = this;
         if (win.isVisible()) {
             win.restore();
             win.toFront();
         } else {
             win.show();
         }
+        me.getPnlDesktop().setLoading(false);
         return win;
     },
 
@@ -517,6 +521,8 @@ Ext.define('Rd.controller.cDesktop', {
     onMenuItem: function(memuItem){
         var me      = this;
         var itemId  = memuItem.getItemId();
+
+        me.getPnlDesktop().setLoading(true); //Mask it
         //If the itemId of the menuitem is not set; it will reply with the id which
         //will be menuitem-<something>
         var m=itemId.match(/menuitem-/g);
