@@ -44,10 +44,10 @@ Ext.define('Rd.controller.cRealms', {
     views:  [
         'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','realms.pnlRealmDetail',
-        'realms.pnlRealmLogo'
+        'realms.pnlRealmLogo',              'components.pnlUsageGraph'
     ],
     stores: ['sRealms','sAccessProvidersTree'],
-    models: ['mRealm','mAccessProviderTree'],
+    models: ['mRealm','mAccessProviderTree', 'mUserStat'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/realms/add.json',
@@ -144,7 +144,34 @@ Ext.define('Rd.controller.cRealms', {
             },
             'pnlRealm #tabLogo #cancel': {
                 click:       me.logoCancel
-            }   
+            },
+            'pnlRealm #pnlUsageGraphs #daily' : {
+                activate:      me.loadGraph
+            },
+            'pnlRealm #pnlUsageGraphs #daily #reload' : {
+                click:      me.reloadDailyGraph
+            },
+            'pnlRealm #pnlUsageGraphs #daily #day' : {
+                change:      me.changeDailyGraph
+            },
+            'pnlRealm #pnlUsageGraphs #weekly' : {
+                activate:      me.loadGraph
+            },
+            'pnlRealm #pnlUsageGraphs #weekly #reload' : {
+                click:      me.reloadWeeklyGraph
+            },
+            'pnlRealm #pnlUsageGraphs #weekly #day' : {
+                change:      me.changeWeeklyGraph
+            },
+            'pnlRealm #pnlUsageGraphs #monthly' : {
+                activate:      me.loadGraph
+            },
+            'pnlRealm #pnlUsageGraphs #monthly #reload' : {
+                click:      me.reloadMonthlyGraph
+            },
+            'pnlRealm #pnlUsageGraphs #monthly #day' : {
+                change:      me.changeMonthlyGraph
+            }  
         });;
     },
     reload: function(){
@@ -682,5 +709,79 @@ Ext.define('Rd.controller.cRealms', {
         var me      = this;
         var form    = button.up('form');
         form.getForm().reset();
+    },
+    loadGraph: function(tab){
+        var me  = this;
+        tab.down("chart").setLoading(true);
+        //Get the value of the Day:
+        var day = tab.down('#day');
+        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
+        me.reloadChart(tab);
+    },
+    reloadDailyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#daily");
+        me.reloadChart(tab);
+    },
+    changeDailyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#daily");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadWeeklyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#weekly");
+        me.reloadChart(tab);
+    },
+    changeWeeklyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#weekly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadMonthlyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#monthly");
+        me.reloadChart(tab);
+    },
+    changeMonthlyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#monthly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadChart: function(tab){
+        var me      = this;
+        var chart   = tab.down("chart");
+        chart.setLoading(true); //Mask it
+        chart.getStore().load({
+            scope: me,
+            callback: function(records, operation, success) {
+                chart.setLoading(false);
+                if(success){
+                    Ext.ux.Toaster.msg(
+                            "Graph fetched",
+                            "Graph detail fetched OK",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                    //-- Show totals
+                    var rawData     = chart.getStore().getProxy().getReader().rawData;
+                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
+                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
+                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
+                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
+
+                }else{
+                    Ext.ux.Toaster.msg(
+                            "Problem fetching graph",
+                            "Problem fetching graph detail",
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                } 
+            }
+        });   
     }
 });

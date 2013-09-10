@@ -8,44 +8,31 @@ Ext.define('Rd.view.components.pnlUsageGraphs', {
     requires: [
         'Ext.chart.*'
     ],
+    type        : 'user',
+    username    : false,  
     initComponent: function(){
         var me      = this;
 
-        var store = Ext.create('Ext.data.JsonStore', {
-            fields: ['hour', 'data_in', 'data_out'],
-            data: [
-                    {hour: 0,  data_in: 0, data_out: 0 },
-                    {hour: 1,  data_in: 34000000, data_out: 23890000 },
-                    {hour: 2,  data_in: 56703000, data_out: 38900000 },
-                    {hour: 3,  data_in: 0, data_out: 0 },
-                    {hour: 4,  data_in: 38910000, data_out: 56070000 },
-                    {hour: 5,  data_in: 34000000, data_out: 23890000 },
-                    {hour: 6,  data_in: 56703000, data_out: 38900000 },
-                    {hour: 7,  data_in: 42100000, data_out: 50410000 },
-                    {hour: 8,  data_in: 3891, data_out: 560 },
-                    {hour: 9,  data_in: 34000000, data_out: 23890000 },
-                    {hour: 10, data_in: 56703000, data_out: 38900000 },
-                    {hour: 11,  data_in: 34000000, data_out: 23890 },
-                    {hour: 12,  data_in: 56703000, data_out: 38900000 },
-                    {hour: 13,  data_in: 42100, data_out: 50410000 },
-                    {hour: 14,  data_in: 38910000, data_out: 56070000 },
-                    {hour: 15,  data_in: 34000000, data_out: 23890000 },
-                    {hour: 16,  data_in: 56703000, data_out: 38900000 },
-                    {hour: 17,  data_in: 42100000, data_out: 50410000 },
-                    {hour: 18,  data_in: 38910000, data_out: 56070000 },
-                    {hour: 19,  data_in: 34000000, data_out: 23890000 },
-                    {hour: 20, data_in: 56703000, data_out: 38900000 },
-                    {hour: 21, data_in: 42100000, data_out: 50410000 },
-                    {hour: 22, data_in: 38910000, data_out: 56070000 },
-                    {hour: 23, data_in: 42100000, data_out: 50410000 },
-                    {hour: 24, data_in: 38910000, data_out: 56070000 },
-                  ]
+        me.storeDaily = Ext.create(Ext.data.Store,{
+            model: 'Rd.model.mUserStatDaily',
+            proxy: {
+                type        : 'ajax',
+                format      : 'json',
+                extraParams : { 'username' : me.username, 'type' : me.type },
+                url         : '/cake2/rd_cake/user_stats/index.json',
+                reader      : {
+                    type        : 'json',
+                    root        : 'items',
+                    messageProperty: 'message'
+                }
+            },
+            autoLoad: false    
         });
 
         var chart = Ext.create('Ext.chart.Chart',{
             animate : true,
             shadow  : true,
-            store   : store,
+            store   : me.storeDaily,
             legend: {
                 position: 'right'
             },
@@ -89,31 +76,34 @@ Ext.define('Rd.view.components.pnlUsageGraphs', {
         me.items    = [
             {   
                 title   : "Daily",
+                itemId  : "daily",
                 layout  : 'fit',
                 tbar: [
                     { xtype: 'buttongroup', title: i18n('sAction'), items : [
-                        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload-daily',   tooltip:    i18n('sReload')},
+                        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
                         {
                             xtype       : 'datefield',
                             fieldLabel  : 'Day',
-                            name        : 'day_start',
-                            itemId      : 'day_start',
+                            name        : 'day',
+                            itemId      : 'day',
                             value       : new Date(),
                             labelClsExtra: 'lblRd',
                             labelAlign  : 'left',
                             labelSeparator: '',
                             labelWidth  : 50,
-                            margin      : 15
+                            margin      : 2
                        }                
                     ]}
                 ],
                 items   : chart 
             },
             { 
-                title   : "Weekly"
+                title   : "Weekly",
+                itemId  : "weekly"
             },
             { 
-                title   : "Monthly"
+                title   : "Monthly",
+                itemId  : "monthly"
             }
         ];
         me.callParent(arguments);
