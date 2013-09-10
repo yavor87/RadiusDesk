@@ -121,8 +121,6 @@ Ext.application({
             NumericMask: /[0-9]/
 
             //__ Voucher batch required __
-            
-
 
         });
 
