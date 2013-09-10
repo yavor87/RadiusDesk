@@ -46,11 +46,11 @@ Ext.define('Rd.controller.cPermanentUsers', {
        'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
        'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
         'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
-       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraphs'
+       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraph'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: [
-        'mAccessProviderTree',     'mPermanentUser',    'mRealm',       'mProfile', 
+        'mAccessProviderTree',     'mPermanentUser',    'mRealm',       'mProfile', 'mUserStat',
         'mRadacct',                 'mRadpostauth',     'mAttribute',   'mVendor',  'mPrivateAttribute', 'mDevice' ],
     selectedRecord: null,
     config: {
@@ -234,6 +234,33 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser #tabTracking #save' : {
                 click: me.saveTracking
+            },
+            'pnlPermanentUser #pnlUsageGraphs #daily' : {
+                activate:      me.loadGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #daily #reload' : {
+                click:      me.reloadDailyGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #daily #day' : {
+                change:      me.changeDailyGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #weekly' : {
+                activate:      me.loadGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #weekly #reload' : {
+                click:      me.reloadWeeklyGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #weekly #day' : {
+                change:      me.changeWeeklyGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #monthly' : {
+                activate:      me.loadGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #monthly #reload' : {
+                click:      me.reloadMonthlyGraph
+            },
+            'pnlPermanentUser #pnlUsageGraphs #monthly #day' : {
+                change:      me.changeMonthlyGraph
             },
             'winEnableDisable #save': {
                 click: me.enableDisableSubmit
@@ -1317,6 +1344,79 @@ Ext.define('Rd.controller.cPermanentUsers', {
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
             cmb.getStore().loadData([rec],false);
         }
-    }
+    },
+    loadGraph: function(tab){
+        var me  = this;
+        tab.down("chart").setLoading(true);
+        //Get the value of the Day:
+        var day = tab.down('#day');
+        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
+        me.reloadChart(tab);
+    },
+    reloadDailyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#daily");
+        me.reloadChart(tab);
+    },
+    changeDailyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#daily");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadWeeklyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#weekly");
+        me.reloadChart(tab);
+    },
+    changeWeeklyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#weekly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadMonthlyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#monthly");
+        me.reloadChart(tab);
+    },
+    changeMonthlyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#monthly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadChart: function(tab){
+        var me      = this;
+        var chart   = tab.down("chart");
+        chart.setLoading(true); //Mask it
+        chart.getStore().load({
+            scope: me,
+            callback: function(records, operation, success) {
+                chart.setLoading(false);
+                if(success){
+                    Ext.ux.Toaster.msg(
+                            "Graph fetched",
+                            "Graph detail fetched OK",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                    //-- Show totals
+                    var rawData     = chart.getStore().getProxy().getReader().rawData;
+                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
+                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
+                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
+                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
 
+                }else{
+                    Ext.ux.Toaster.msg(
+                            "Problem fetching graph",
+                            "Problem fetching graph detail",
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                } 
+            }
+        });   
+    }
 });

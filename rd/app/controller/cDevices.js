@@ -51,11 +51,11 @@ Ext.define('Rd.controller.cDevices', {
        'components.cmbPermanentUser',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect',
        'components.winEnableDisable',   'devices.pnlDevice',      'devices.gridDeviceRadaccts', 
-       'devices.gridDeviceRadpostauths','devices.gridDevicePrivate',
+       'devices.gridDeviceRadpostauths','devices.gridDevicePrivate', 'components.pnlUsageGraph',
        'components.cmbVendor',          'components.cmbAttribute'
     ],
     stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices', 'sAttributes', 'sVendors'  ],
-    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice',   
+    models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice',   'mUserStat',
              'mRadacct',                'mRadpostauth',    'mAttribute','mVendor',      'mPrivateAttribute'
     ],
     selectedRecord: null,
@@ -218,6 +218,33 @@ Ext.define('Rd.controller.cDevices', {
             },
             'gridDevicePrivate  #delete': {
                 click:      me.attrDelete
+            },
+            'pnlDevice #pnlUsageGraphs #daily' : {
+                activate:      me.loadGraph
+            },
+            'pnlDevice #pnlUsageGraphs #daily #reload' : {
+                click:      me.reloadDailyGraph
+            },
+            'pnlDevice #pnlUsageGraphs #daily #day' : {
+                change:      me.changeDailyGraph
+            },
+            'pnlDevice #pnlUsageGraphs #weekly' : {
+                activate:      me.loadGraph
+            },
+            'pnlDevice #pnlUsageGraphs #weekly #reload' : {
+                click:      me.reloadWeeklyGraph
+            },
+            'pnlDevice #pnlUsageGraphs #weekly #day' : {
+                change:      me.changeWeeklyGraph
+            },
+            'pnlDevice #pnlUsageGraphs #monthly' : {
+                activate:      me.loadGraph
+            },
+            'pnlDevice #pnlUsageGraphs #monthly #reload' : {
+                click:      me.reloadMonthlyGraph
+            },
+            'pnlDevice #pnlUsageGraphs #monthly #day' : {
+                change:      me.changeMonthlyGraph
             }
         });
 
@@ -1044,6 +1071,80 @@ Ext.define('Rd.controller.cDevices', {
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
             cmb.getStore().loadData([rec],false);
         }
+    },
+    loadGraph: function(tab){
+        var me  = this;
+        tab.down("chart").setLoading(true);
+        //Get the value of the Day:
+        var day = tab.down('#day');
+        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
+        me.reloadChart(tab);
+    },
+    reloadDailyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#daily");
+        me.reloadChart(tab);
+    },
+    changeDailyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#daily");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadWeeklyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#weekly");
+        me.reloadChart(tab);
+    },
+    changeWeeklyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#weekly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadMonthlyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#monthly");
+        me.reloadChart(tab);
+    },
+    changeMonthlyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#monthly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadChart: function(tab){
+        var me      = this;
+        var chart   = tab.down("chart");
+        chart.setLoading(true); //Mask it
+        chart.getStore().load({
+            scope: me,
+            callback: function(records, operation, success) {
+                chart.setLoading(false);
+                if(success){
+                    Ext.ux.Toaster.msg(
+                            "Graph fetched",
+                            "Graph detail fetched OK",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                    //-- Show totals
+                    var rawData     = chart.getStore().getProxy().getReader().rawData;
+                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
+                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
+                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
+                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
+
+                }else{
+                    Ext.ux.Toaster.msg(
+                            "Problem fetching graph",
+                            "Problem fetching graph detail",
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                } 
+            }
+        });   
     }
 
 });
