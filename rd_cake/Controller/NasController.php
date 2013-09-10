@@ -1138,6 +1138,45 @@ class NasController extends AppController {
             array_push($items,array( 'title'  => __('Heartbeat actions'),'itemId' => 'tabActions','xtype' => 'gridNasActions'));
         }
 
+        $na_id = $this->request->query['nas_id'];
+
+        array_push($items,array( 'title'  => __('Usage graphs'), 'layout' => 'fit', 'xtype' => 'tabpanel', 'itemId' => 'pnlUsageGraphs',
+            'margins'   => '0 0 0 0',
+            'plain'     => true,
+            'border'    => true,
+            'tabPosition' => 'bottom',
+            'items'     => array(
+                array(
+                    'title'   => "Daily",
+                    'itemId'  => "daily",
+                    'xtype'   => 'pnlUsageGraph',
+                    'span'    => 'daily',
+                    'layout'  => 'fit',
+                    'username'=> $na_id,
+                    'type'    => 'nas'
+                ),
+                array(
+                    'title'   => "Weekly",
+                    'itemId'  => "weekly",
+                    'xtype'   => 'pnlUsageGraph',
+                    'span'    => 'weekly',
+                    'layout'  => 'fit',
+                    'username'=> $na_id,
+                    'type'    => 'nas'
+                ),
+                array(
+                    'title'   => "Monthly",
+                    'itemId'  => "monthly",
+                    'xtype'   => 'pnlUsageGraph',
+                    'span'    => 'monthly',
+                    'layout'  => 'fit',
+                    'username'=> $na_id,
+                    'type'    => 'nas'
+                ),
+            )
+
+        ));
+
         $this->set(array(
                 'items'     => $items,
                 'success'   => true,
@@ -1145,24 +1184,7 @@ class NasController extends AppController {
         ));
 
     }
-/*
-    public function edit() {
 
-       if ($this->{$this->modelClass}->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        }else{
-             $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not update item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
-	}
-*/
 
     public function delete($id = null) {
     //FIXME This is seriously wrong! it is going to delete wrong stuff!
