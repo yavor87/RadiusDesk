@@ -596,7 +596,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var graph_id    = 'graphTab_'+graph_tab_name;
                 var grapht      = tp.down('#'+graph_id);
                 if(grapht){
-                    tp.setActiveTab(radacct_id); //Set focus on  Tab
+                    tp.setActiveTab(graph_id); //Set focus on  Tab
                     return;
                 }
                 //Tab not there - add one
