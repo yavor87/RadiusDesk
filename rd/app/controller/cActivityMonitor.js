@@ -46,10 +46,10 @@ Ext.define('Rd.controller.cActivityMonitor', {
 
     views:  [
        'components.pnlBanner',  'activityMonitor.gridRadaccts', 'activityMonitor.gridRadpostauths', 'components.cmbNas',
-        'activityMonitor.pnlRadius',    'components.winCsvColumnSelect'
+        'activityMonitor.pnlRadius',    'components.winCsvColumnSelect',    'components.pnlUsageGraph'
     ],
     stores: [ 'sRadaccts',  'sRadpostauths'  ],
-    models: [ 'mRadacct',   'mRadpostauth', 'mNas' ],
+    models: [ 'mRadacct',   'mRadpostauth', 'mNas', 'mUserStat' ],
     selectedRecord: null,
     specific_nas : undefined,
     config: {
@@ -88,6 +88,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
             },
             'gridRadaccts #csv'  : {
                 click:      me.csvExportAcct
+            },
+            'gridRadaccts #graph'  : {
+                click:      me.usageGraph
             },
             'gridRadaccts #kick'  : {
                 click:      me.kickActive
@@ -130,7 +133,34 @@ Ext.define('Rd.controller.cActivityMonitor', {
             },
             '#winCsvColumnSelectAuth #save': {
                 click:  me.csvExportSubmitAuth
-            }   
+            },
+            '#daily' : {
+                activate:      me.loadGraph
+            },
+            '#daily #reload' : {
+                click:      me.reloadDailyGraph
+            },
+            '#daily #day' : {
+                change:      me.changeDailyGraph
+            },
+            '#weekly' : {
+                activate:      me.loadGraph
+            },
+            '#weekly #reload' : {
+                click:      me.reloadWeeklyGraph
+            },
+            '#weekly #day' : {
+                change:      me.changeWeeklyGraph
+            },
+            '#monthly' : {
+                activate:      me.loadGraph
+            },
+            '#monthly #reload' : {
+                click:      me.reloadMonthlyGraph
+            },
+            '#monthly #day' : {
+                change:      me.changeMonthlyGraph
+            }     
         });
 
     },
@@ -532,7 +562,159 @@ Ext.define('Rd.controller.cActivityMonitor', {
 
         }
 
+    },
+    usageGraph : function(button){
+
+        var me      = this;
+        var grid    = button.up('grid');
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){ 
+             Ext.ux.Toaster.msg(
+                i18n('sSelect_an_item'),
+                i18n('sFirst_select_an_item'),
+                Ext.ux.Constants.clsWarn,
+                Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var selected    =  grid.getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(grid.getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp          = grid.up('tabpanel');
+
+                var graph_tab_name  = sr.get('username');
+                var type            = sr.get('user_type');
+                if(type == 'device'){
+                    graph_tab_name  = sr.get('callingstationid');
+                }
+
+                var graph_id    = 'graphTab_'+graph_tab_name;
+                var grapht      = tp.down('#'+graph_tab_name);
+                if(grapht){
+                    tp.setActiveTab(radacct_id); //Set focus on  Tab
+                    return;
+                }
+                //Tab not there - add one
+                tp.add({ 
+                    title       : type+' '+graph_tab_name,
+                    itemId      : graph_id,
+                    closable    : true,
+                    iconCls     : 'graph', 
+                    layout      :  'fit', 
+                    xtype       : 'tabpanel',
+                    margins     : '0 0 0 0',
+                    plain       : true,
+                    border      : true,
+                    tabPosition: 'bottom',
+                    items   :   [
+                        {
+                            title   : "Daily",
+                            itemId  : "daily",
+                            xtype   : 'pnlUsageGraph',
+                            span    : 'daily',
+                            layout  : 'fit',
+                            username: graph_tab_name,
+                            type    : type
+                        },
+                        {
+                            title   : "Weekly",
+                            itemId  : "weekly",
+                            xtype   : 'pnlUsageGraph',
+                            span    : 'weekly',
+                            layout  : 'fit',
+                            username: graph_tab_name,
+                            type    : type
+                        },
+                        {
+                            title   : "Monthly",
+                            itemId  : "monthly",
+                            layout  : 'fit',
+                            xtype   : 'pnlUsageGraph',
+                            span    : 'monthly',
+                            username: graph_tab_name,
+                            type    : type
+                        }
+                    ]
+                });
+                tp.setActiveTab(graph_id); //Set focus on Add Tab
+            });
+
+        }        
+
+    },
+    loadGraph: function(tab){
+        var me  = this;
+        tab.down("chart").setLoading(true);
+        //Get the value of the Day:
+        var day = tab.down('#day');
+        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
+        me.reloadChart(tab);
+    },
+    reloadDailyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#daily");
+        me.reloadChart(tab);
+    },
+    changeDailyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#daily");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadWeeklyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#weekly");
+        me.reloadChart(tab);
+    },
+    changeWeeklyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#weekly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadMonthlyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#monthly");
+        me.reloadChart(tab);
+    },
+    changeMonthlyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#monthly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadChart: function(tab){
+        var me      = this;
+        var chart   = tab.down("chart");
+        chart.setLoading(true); //Mask it
+        chart.getStore().load({
+            scope: me,
+            callback: function(records, operation, success) {
+                chart.setLoading(false);
+                if(success){
+                    Ext.ux.Toaster.msg(
+                            "Graph fetched",
+                            "Graph detail fetched OK",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                    //-- Show totals
+                    var rawData     = chart.getStore().getProxy().getReader().rawData;
+                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
+                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
+                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
+                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
+
+                }else{
+                    Ext.ux.Toaster.msg(
+                            "Problem fetching graph",
+                            "Problem fetching graph detail",
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                } 
+            }
+        });   
     }
-
-
 });

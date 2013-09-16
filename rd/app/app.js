@@ -33,7 +33,8 @@ Ext.application({
        var me = this;
         //We call it here pre-maturely else it gives an error
         me.applyVtypes();
-       Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
+      // Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
+        Ext.state.Manager.setProvider(Ext.create('Ext.state.LocalStorageProvider'));
        me.runAction('cStartup','Index');
     },
 
