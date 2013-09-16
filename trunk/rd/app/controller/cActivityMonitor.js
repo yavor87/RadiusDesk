@@ -593,9 +593,6 @@ Ext.define('Rd.controller.cActivityMonitor', {
                     username        = sr.get('callingstationid');
                 }
 
-                //username
-                var username        = sr.get('username');
-
                 var graph_id    = 'graphTab_'+graph_tab_name;
                 var grapht      = tp.down('#'+graph_tab_name);
                 if(grapht){
