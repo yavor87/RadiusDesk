@@ -354,6 +354,10 @@
       background-image:url(../images/16x16/pdf.png) !important;
 }
 
+.graph {
+      background-image:url(../images/16x16/graph.png) !important;
+}
+
 
 .mapDiv {
     height: 210px;
@@ -553,6 +557,10 @@
 
 .b-pdf {
     background-image:url(../images/32x32/pdf.png);
+}
+
+.b-graph {
+    background-image:url(../images/32x32/graph.png);
 }
 
 
