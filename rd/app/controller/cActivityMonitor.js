@@ -618,7 +618,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             xtype   : 'pnlUsageGraph',
                             span    : 'daily',
                             layout  : 'fit',
-                            username: graph_tab_name,
+                            username: username,
                             type    : type
                         },
                         {
@@ -627,7 +627,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             xtype   : 'pnlUsageGraph',
                             span    : 'weekly',
                             layout  : 'fit',
-                            username: graph_tab_name,
+                            username: username,
                             type    : type
                         },
                         {
@@ -636,7 +636,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             layout  : 'fit',
                             xtype   : 'pnlUsageGraph',
                             span    : 'monthly',
-                            username: graph_tab_name,
+                            username: username,
                             type    : type
                         }
                     ]
