@@ -403,8 +403,9 @@ class RadacctsController extends AppController {
                             'tooltip'       => __('Show only currently connected')
                     )     
                 )),
-                array('xtype' => 'buttongroup', 'width'=> 75 ,'title' => __('Document'), 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-graph',   'scale' => 'large', 'itemId' => 'graph',    'tooltip'=> __('Usage graph')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-kick', 'scale' => 'large', 'itemId' => 'kick', 'tooltip'=> __('Kick user off')),
@@ -457,6 +458,13 @@ class RadacctsController extends AppController {
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
             }
+
+          array_push($document_group,array(
+                'xtype'     => 'button', 
+                'iconCls'   => 'b-graph',     
+                'scale'     => 'large', 
+                'itemId'    => 'graph',      
+                'tooltip'   => __('Usage graph')));
 
 
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'kick_active')){ 
