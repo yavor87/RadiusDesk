@@ -586,8 +586,11 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var graph_tab_name  = sr.get('username');
                 var graph_tab_name  = graph_tab_name.replace("@","_"); 
                 var type            = sr.get('user_type');
+                //username
+                var username        = sr.get('username');
                 if(type == 'device'){
                     graph_tab_name  = sr.get('callingstationid');
+                    username        = sr.get('callingstationid');
                 }
 
                 //username
