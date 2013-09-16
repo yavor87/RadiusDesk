@@ -211,7 +211,7 @@ class UserStatsController extends AppController {
         if(isset($this->request->query['type'])){
             $type = $this->request->query['type'];
             //Permanent users an vouchers
-            if(($type == 'permanent')||($type == 'voucher')){
+            if(($type == 'permanent')||($type == 'voucher')||($type == 'user')){
                 array_push($base_search,array('UserStat.username' => $username));   
             }
             //Devices
