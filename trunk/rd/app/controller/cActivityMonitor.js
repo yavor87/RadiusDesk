@@ -584,7 +584,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var tp          = grid.up('tabpanel');
 
                 var graph_tab_name  = sr.get('username');
-                var graph_tab_name  = graph_tab_name.replace("@","_"); 
+                graph_tab_name      = graph_tab_name.replace("@","_");//Replece @
+                graph_tab_name      = graph_tab_name.toLowerCase();//Make lower case
                 var type            = sr.get('user_type');
                 //username
                 var username        = sr.get('username');
