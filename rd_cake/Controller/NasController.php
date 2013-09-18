@@ -1106,7 +1106,7 @@ class NasController extends AppController {
             $q_r = $this->{$this->modelClass}->findById($this->request->query['nas_id']);
             if($q_r){
 
-                if($q_r['Na']['type'] == 'CoovaChilli-Heartbeat'){
+                if(($q_r['Na']['type'] == 'CoovaChilli-Heartbeat')||($q_r['Na']['type'] == 'Mikrotik-Heartbeat')){
                     $chilli_heartbeat_flag = true;
                 }
                 $conn_type = $q_r['Na']['connection_type'];
