@@ -33,7 +33,7 @@ class KickerComponent extends Component {
             array('Na.nasidentifier' => $nas_identifier,'Na.type' => 'CoovaChilli-Heartbeat')
         ));
 
-        if($hb_q_r != ''){
+        if($hb_q_r){
             $nas_id                 = $hb_q_r['Na']['id'];
             $d['Action']['na_id']   = $nas_id;
             $d['Action']['action']  = 'execute';
@@ -47,7 +47,7 @@ class KickerComponent extends Component {
             array('Na.nasidentifier' => $nas_identifier,'Na.type' => 'Mikrotik-Heartbeat')
         ));
 
-        if($hb_q_r != ''){
+        if($hb_q_r){
             $nas_id                 = $hb_q_r['Na']['id'];
             $d['Action']['na_id']   = $nas_id;
             $d['Action']['action']  = 'execute';
