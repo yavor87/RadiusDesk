@@ -4,21 +4,40 @@ try {
 
     header("Content-type: text/plain");
 
-    //=================
-    //First we check if the MAC is a valid MAC
-    if(!(isset($_GET['mac']))){
+
+    //We will only allow mac or nasid in the query string
+    if((isset($_GET['mac']))||(isset($_GET['nasid']))){
+      
+        //=== MAC =====
+        $mac_addr = false;
+        if(isset($_GET['mac'])){
+            $mac_addr = $_GET['mac'];
+            //Check if the MAC is in the correct format
+            $pattern = '/^([0-9a-fA-F]{2}[-]){5}[0-9a-fA-F]{2}$/i';
+            if(preg_match($pattern, $mac_addr)< 1){
+                $error = "ERROR: MAC missing or wrong";
+                echo "$error";
+                return;
+            }
+        }
+
+        //=== NASID ===
+        $n_id = false;
+        if(isset($_GET['nasid'])){
+            $n_id = $_GET['nasid'];
+            //NASID should be at least 3 characters long
+            if(strlen($n_id)<3){
+                $error = "ERROR: NASID should be more than 3 charaters long";
+                echo "$error";
+                return;
+            }
+        }
+
+    }else{
         echo "Page called in a wrong way!";
         return;
-    }else{
-        $mac_addr = $_GET['mac'];
-        //Check if the MAC is in the correct format
-        $pattern = '/^([0-9a-fA-F]{2}[-]){5}[0-9a-fA-F]{2}$/i';
-        if(preg_match($pattern, $mac_addr)< 1){
-            $error = "ERROR: MAC missing or wrong";
-            echo "$error";
-            return;
-        }
     }
+
 
     //=====================
     //Basic sanity checks complete, now connect....
@@ -35,15 +54,33 @@ try {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     //Check if any of the NAS devices has this MAC defined as it's community
-    $stmt_nas_id        = $dbh->prepare("SELECT id FROM nas WHERE community= :mac_addr");
-    $stmt_nas_id->bindParam(':mac_addr',$mac_addr);
-    $stmt_nas_id->execute();
+    if($mac_addr){
+        $stmt_nas_id        = $dbh->prepare("SELECT id,type FROM nas WHERE community= :mac_addr");
+        $stmt_nas_id->bindParam(':mac_addr',$mac_addr);
+        $stmt_nas_id->execute();
+        $result             = $stmt_nas_id->fetch(PDO::FETCH_ASSOC);
+        if($result == ''){
+            header("Content-type: text/plain"); //send command
+            echo("ERROR: MAC not listed in database");
+            return;
+        }
+        $nas_id         = $result['id'];
+        $type           = $result['type'];
+    }
 
-    $result             = $stmt_nas_id->fetch(PDO::FETCH_ASSOC);
-    if($result == ''){
-        header("Content-type: text/plain"); //send command
-        echo("ERROR: MAC not listed in database");
-        return;
+    //Check if any of the NAS devices has this nasidentifier defined as it's nasidentifier
+    if($n_id){
+        $stmt_nas_id        = $dbh->prepare("SELECT id,type FROM nas WHERE nasidentifier= :nas_id");
+        $stmt_nas_id->bindParam(':nas_id',$n_id);
+        $stmt_nas_id->execute();
+        $result             = $stmt_nas_id->fetch(PDO::FETCH_ASSOC);
+        if($result == ''){
+            header("Content-type: text/plain"); //send command
+            echo("ERROR: nasidentifier not listed in database");
+            return;
+        }
+        $nas_id         = $result['id'];
+        $type           = $result['type'];
     }
 
     //==================
@@ -72,7 +109,17 @@ try {
             $id         = $item['id'];
             $action     = $item['action'];
             $command    = $item['command'];
-            $return_string = $return_string."unique_id: $id\naction: $action\n$command\n";
+
+            //Commands for CoovaChilli-Heartbeat
+            if($type == 'CoovaChilli-Heartbeat'){
+                $return_string = $return_string."unique_id: $id\naction: $action\n$command\n";
+            }
+
+            //Commands for Mikrotik-Heartbeat are returned different
+            if($type == 'Mikrotik-Heartbeat'){
+                $return_string = $return_string."$command\n";
+            }
+
             $nas_id     = $item['nasid'];
             //Mark this action as fetched
             $action_id  = $id;
