@@ -42,6 +42,22 @@ class KickerComponent extends Component {
             return;
         }
 
+        //_____ Mikrotik-Heartbeat ___________
+        $hb_q_r = ClassRegistry::init('Na')->find('first',array('conditions' => 
+            array('Na.nasidentifier' => $nas_identifier,'Na.type' => 'Mikrotik-Heartbeat')
+        ));
+
+        if($hb_q_r != ''){
+            $nas_id                 = $hb_q_r['Na']['id'];
+            $d['Action']['na_id']   = $nas_id;
+            $d['Action']['action']  = 'execute';
+            $d['Action']['command'] = ':foreach HOST in=[/ip hotspot host find address="'.$framedipaddress.'"] do={/ip hotspot host remove $HOST}';
+            ClassRegistry::init('Action')->save($d);
+            return;
+        }
+        
+
+
         //_____ Direct Connected Clients _____
         $q_r                = ClassRegistry::init('Na')->findByNasname($nas_ip);
 
