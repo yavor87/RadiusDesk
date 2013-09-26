@@ -1,0 +1,67 @@
+.b-connect {
+    background-image:url(../images/32x32/connect.png);
+}
+
+
+.b-info-top {
+    background-image:url(../images/32x32/info-top.png);
+}
+
+.b-help {
+    background-image:url(../images/32x32/help.png);
+}
+
+
+.b-prev {
+    background-image:url(../images/32x32/prev.png);
+}
+
+.b-next {
+    background-image:url(../images/32x32/next.png);
+}
+
+.b-info {
+    background-image:url(../images/32x32/info.png);
+}
+
+/*Small icons */
+.connect {
+    background-image:url(../images/16x16/connect.png);
+}
+
+.info {
+    background-image:url(../images/16x16/info.png);
+}
+
+
+.key {
+    background-image:url(../images/16x16/key.png);
+}
+
+
+/*About stuff */
+.divAbout {
+    margin: 5px;
+}
+
+.imgAbout {
+    text-align: center;
+}
+
+.lblAbout {
+    float:left;
+    padding: 5px;
+    color: #495982;
+    font-weight: bold;
+    width:80px;
+}
+.lblInfo{
+    padding: 5px;
+}
+
+/* Hidden iframe */
+iframe.hidden
+{
+    display:none
+}
+
