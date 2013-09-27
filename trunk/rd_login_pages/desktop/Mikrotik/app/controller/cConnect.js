@@ -68,7 +68,7 @@ Ext.define('MikrotikLogin.controller.cConnect', {
         Ext.data.JsonP.request({
             url: me.queryObj.link_status,
             timeout: 3000,
-            callbackKey: 'callback',
+            callbackKey: 'var',
             success: function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
 
