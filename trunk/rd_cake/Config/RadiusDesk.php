@@ -77,6 +77,11 @@ $config['user_settings']['map']['lat']      = 42.3379770178396;
 $config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
 $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html';
 
+//The location of the mobile and desktop login pages for Mikrotik
+$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/desktop/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages/desktop/Mikrotik/index.html';
+
+
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
