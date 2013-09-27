@@ -83,7 +83,7 @@ Ext.define('MikrotikLogin.controller.cDesktop', {
         });
 
         //We hand controll over to the Connect controller to tell us if we are: A hotspot, connected, or not connected...
-        ////me.application.getController('Connect').index(); //Hack not to show pop-up (use instead of index)
+        me.application.getController('cConnect').index();
     },
 
     //____________________________ REALM DETAIL _______________________________
