@@ -86,6 +86,14 @@ class DynamicDetailsController extends AppController {
         $this->response->header('Location', $redir_to);
     }
 
+    public function mikrotik_browser_detect(){
+        $redir_to = Configure::read('MikrotikDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
+        if($this->request->is('mobile')){
+            $redir_to = Configure::read('MikrotikDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+        }
+        $this->response->header('Location', $redir_to);
+    }
+
     public function export_csv(){
 
         $this->autoRender   = false;
