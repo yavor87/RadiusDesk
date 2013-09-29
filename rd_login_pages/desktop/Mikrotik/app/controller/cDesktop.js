@@ -3,7 +3,8 @@ Ext.define('MikrotikLogin.controller.cDesktop', {
     requires: ['Ext.data.JsonP'],
     views: [
         'pnlMain',
-        'pnlAboutMenu'
+        'pnlAboutMenu',
+        'winHelp'
     ],
     winHelp: undefined,
     refs: [
@@ -11,7 +12,8 @@ Ext.define('MikrotikLogin.controller.cDesktop', {
         { ref: 'img',       selector: '#bgImage',       xtype: ''}, //The background image
         { ref: 'infoButton',selector: '#btnInfo',       xtype: ''},
         { ref: 'nextButton',selector: '#btnNext',       xtype: ''},
-        { ref: 'prevButton',selector: '#btnPrev',       xtype: ''}
+        { ref: 'prevButton',selector: '#btnPrev',       xtype: ''},
+        { ref: 'winHelp'   ,selector: 'winHelp'}
     ],
     info            : undefined,    //realm info 
     photos          : undefined,  //list of photos
@@ -92,6 +94,7 @@ Ext.define('MikrotikLogin.controller.cDesktop', {
         //The data should contain the realm name which we will assign to me.application.realm.name
         me.info     = data.detail;
         me.photos   = data.photos;
+        me.pages    = data.pages;
         if(me.photos.length > 0){
             me.getInfoButton().setDisabled(false); //Enable next button
             if(me.photos.length > 1){
@@ -164,7 +167,7 @@ Ext.define('MikrotikLogin.controller.cDesktop', {
         me.application.activeWindow.hide();
 
         if(butId == 'connect'){
-            me.application.getController('Connect').index();
+            me.application.getController('cConnect').index();
         }
         if(butId !== 'connect'){    //The connect does a JSON call which will cause a race condition
             me.application.activeWindow.show(); 

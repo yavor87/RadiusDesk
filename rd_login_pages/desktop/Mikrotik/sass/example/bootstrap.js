@@ -5,7 +5,6 @@
  * metadata-driven class system features 
  */
 Ext.Loader.addClassPathMappings({
-  "CoovaLogin": "../../app",
   "MikrotikLogin": "../../app",
   " Ext.Msg": "../../ext/src/window/MessageBox.js",
   "ExtThemeNeptune": "../../ext/packages/ext-theme-neptune/overrides",
@@ -20,7 +19,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "MikrotikLogin.controller.cConnect": [],
   "Ext.ux.grid.filter.Filter": [],
   "Ext.ux.GroupTabRenderer": [],
-  "MikrotikLogin.view.Main": [],
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.FieldReplicator": [],
@@ -35,7 +33,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "ExtThemeNeptune.tab.Tab": [],
   "Ext.ux.grid.menu.ListMenu": [],
   "Ext.ux.GMapPanel": [],
-  "MikrotikLogin.view.NotHotspot": [],
   "Ext.ux.form.MultiSelect": [
     "Ext.ux.Multiselect"
   ],
@@ -50,7 +47,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.PreviewPlugin": [],
   "Ext.ux.DataView.Animated": [],
   "ExtThemeNeptune.resizer.Splitter": [],
-  "MikrotikLogin.view.Status": [],
   "Ext.ux.ajax.SimXhr": [],
   "Ext.ux.event.RecorderManager": [],
   "Ext.ux.ProgressBarPager": [],
@@ -62,12 +58,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.SlidingPager": [],
   "Ext.ux.TabReorderer": [],
   "Ext.ux.grid.filter.NumericFilter": [],
-  "MikrotikLogin.view.Land": [],
   "ExtThemeNeptune.layout.component.Dock": [],
   "ExtThemeNeptune.panel.Table": [],
   "Ext.ux.grid.menu.RangeMenu": [],
   "Ext.ux.event.Recorder": [],
   "Ext.ux.RowExpander": [],
+  "MikrotikLogin.view.winStatus": [],
   "Ext.ux.event.Player": [],
   "ExtThemeNeptune.panel.Tool": [],
   "Ext.ux.ajax.SimManager": [],
@@ -79,7 +75,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "MikrotikLogin.view.winHelp": [],
   "Ext.ux.TabScrollerMenu": [],
   "ExtThemeNeptune.menu.Separator": [],
-  "CoovaLogin.view.Connect": [],
   "Ext.ux.IFrame": [],
   "Ext.ux.DataView.Draggable": [],
   "Ext.ux.TabCloseMenu": [],
@@ -88,6 +83,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.LiveSearchGridPanel": [],
   "Ext.ux.grid.filter.DateFilter": [],
   "Ext.ux.DataTip": [],
+  "MikrotikLogin.view.winNotHotspot": [],
   "MikrotikLogin.view.pnlMain": [],
   "Ext.ux.grid.filter.DateTimeFilter": [],
   "Ext.ux.form.ItemSelector": [
@@ -95,12 +91,12 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.ux.TreePicker": [],
   "Ext.ux.ajax.JsonSimlet": [],
+  "MikrotikLogin.view.winConnect": [],
   "ExtThemeNeptune.form.field.HtmlEditor": [],
   "Ext.ux.Spotlight": [],
   "Ext.ux.grid.FiltersFeature": [],
   "ExtThemeNeptune.picker.Month": [],
   "ExtThemeNeptune.grid.RowEditor": [],
-  "MikrotikLogin.view.AboutMenu": [],
   "ExtThemeNeptune.Component": [],
   "Ext.ux.data.PagingMemoryProxy": [
     "Ext.data.PagingMemoryProxy"
@@ -116,7 +112,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.GroupTabRenderer": [
     "plugin.grouptabrenderer"
   ],
-  "MikrotikLogin.view.Main": [],
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
   "Ext.ux.FieldReplicator": [],
@@ -136,9 +131,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.grid.menu.ListMenu": [],
   "Ext.ux.GMapPanel": [
     "widget.gmappanel"
-  ],
-  "MikrotikLogin.view.NotHotspot": [
-    "widget.notHotspotW"
   ],
   "Ext.ux.form.MultiSelect": [
     "widget.multiselect",
@@ -163,9 +155,6 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.ux.DataView.Animated": [],
   "ExtThemeNeptune.resizer.Splitter": [],
-  "MikrotikLogin.view.Status": [
-    "widget.statusW"
-  ],
   "Ext.ux.ajax.SimXhr": [],
   "Ext.ux.event.RecorderManager": [
     "widget.eventrecordermanager"
@@ -185,14 +174,14 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.grid.filter.NumericFilter": [
     "gridfilter.numeric"
   ],
-  "MikrotikLogin.view.Land": [
-    "widget.land"
-  ],
   "ExtThemeNeptune.layout.component.Dock": [],
   "ExtThemeNeptune.panel.Table": [],
   "Ext.ux.grid.menu.RangeMenu": [],
   "Ext.ux.event.Recorder": [],
   "Ext.ux.RowExpander": [],
+  "MikrotikLogin.view.winStatus": [
+    "widget.winStatus"
+  ],
   "Ext.ux.event.Player": [],
   "ExtThemeNeptune.panel.Tool": [],
   "Ext.ux.ajax.SimManager": [],
@@ -214,9 +203,6 @@ Ext.ClassManager.addNameAliasMappings({
     "plugin.tabscrollermenu"
   ],
   "ExtThemeNeptune.menu.Separator": [],
-  "CoovaLogin.view.Connect": [
-    "widget.connectW"
-  ],
   "Ext.ux.IFrame": [
     "widget.uxiframe"
   ],
@@ -235,6 +221,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.DataTip": [
     "plugin.datatip"
   ],
+  "MikrotikLogin.view.winNotHotspot": [
+    "widget.winNotHotspot"
+  ],
   "MikrotikLogin.view.pnlMain": [
     "widget.pnlMain"
   ],
@@ -251,6 +240,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.ajax.JsonSimlet": [
     "simlet.json"
   ],
+  "MikrotikLogin.view.winConnect": [
+    "widget.winConnect"
+  ],
   "ExtThemeNeptune.form.field.HtmlEditor": [],
   "Ext.ux.Spotlight": [],
   "Ext.ux.grid.FiltersFeature": [
@@ -258,9 +250,6 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "ExtThemeNeptune.picker.Month": [],
   "ExtThemeNeptune.grid.RowEditor": [],
-  "MikrotikLogin.view.AboutMenu": [
-    "widget.aboutMenu"
-  ],
   "ExtThemeNeptune.Component": [],
   "Ext.ux.data.PagingMemoryProxy": [
     "proxy.pagingmemory"

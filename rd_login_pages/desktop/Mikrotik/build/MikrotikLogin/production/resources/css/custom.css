@@ -38,6 +38,10 @@
     background-image:url(../images/16x16/key.png);
 }
 
+.help {
+    background-image:url(../images/16x16/help.png);
+}
+
 
 /*About stuff */
 .divAbout {
@@ -59,9 +63,40 @@
     padding: 5px;
 }
 
-/* Hidden iframe */
-iframe.hidden
-{
-    display:none
+.sessionClass div.alternate {
+    background-color: #f4f6f4;
 }
+
+.sessionClass .value {
+    color       : #057612;
+    font-weight : normal;
+    padding     : 5px;
+}
+
+.sessionClass .item {
+    color       : #495982;
+    font-weight : bold;
+    padding     : 5px;
+    width       : 150px;
+    float       : left;
+}
+
+.cntrOR {
+    text-align: center;
+    font-size:18px;
+    color: #6b6a72;
+    font-weight: bold;
+}
+
+.winHelp {
+    padding: 10px;
+}
+
+.winHelp h2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #526b9d;
+    font-size:18px;
+}
+
 

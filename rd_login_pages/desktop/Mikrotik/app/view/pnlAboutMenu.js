@@ -3,7 +3,7 @@ Ext.define('MikrotikLogin.view.pnlAboutMenu', {
     alias       : 'widget.pnlAboutMenu',
     layout      : 'fit',
     width       : 300,
-    height      : 400,
+    height      : 450,
     initComponent: function() {
         var me = this;// menu = me.menu;
         var tpl = Ext.create('Ext.XTemplate', [
