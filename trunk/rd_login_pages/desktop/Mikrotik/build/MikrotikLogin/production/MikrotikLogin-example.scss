@@ -1,6 +1,5 @@
 $image-search-path: '/var/www/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/resources';
 $theme-name:  'ext-theme-neptune' !default;
-$include-coovalogin-view-connect: true;
 $include-ext-abstractcomponent: true;
 $include-ext-abstractmanager: true;
 $include-ext-abstractplugin: true;
@@ -556,15 +555,13 @@ $include-mikrotiklogin-app-application: true;
 $include-mikrotiklogin-controller-main: true;
 $include-mikrotiklogin-controller-cconnect: true;
 $include-mikrotiklogin-controller-cdesktop: true;
-$include-mikrotiklogin-view-aboutmenu: true;
-$include-mikrotiklogin-view-land: true;
-$include-mikrotiklogin-view-main: true;
-$include-mikrotiklogin-view-nothotspot: true;
-$include-mikrotiklogin-view-status: true;
 $include-mikrotiklogin-view-viewport: true;
 $include-mikrotiklogin-view-pnlaboutmenu: true;
 $include-mikrotiklogin-view-pnlmain: true;
+$include-mikrotiklogin-view-winconnect: true;
 $include-mikrotiklogin-view-winhelp: true;
+$include-mikrotiklogin-view-winnothotspot: true;
+$include-mikrotiklogin-view-winstatus: true;
 /* including package ext-theme-base */
 @import '../../../ext/packages/ext-theme-base/sass/etc/all';
 /* including package ext-theme-neutral */
