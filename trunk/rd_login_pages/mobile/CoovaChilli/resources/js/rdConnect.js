@@ -314,7 +314,7 @@ var rdConnect = (function () {
         .fail(function(){
             //We will retry for me.retryCount
             currentRetry = currentRetry+1;
-            if(me.currentRetry <= me.retryCount){
+            if(currentRetry <= retryCount){
                 login(encPwd);
             }else{
                 showLoginError("Coova Not responding to login requests");
