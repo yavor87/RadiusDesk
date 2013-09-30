@@ -78,10 +78,8 @@ $config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChill
 $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html';
 
 //The location of the mobile and desktop login pages for Mikrotik
-$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/desktop/Mikrotik/index.html';
-$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages/desktop/Mikrotik/index.html';
-
-
+$config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
