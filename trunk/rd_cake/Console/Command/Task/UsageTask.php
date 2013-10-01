@@ -62,7 +62,7 @@ class UsageTask extends Shell {
         }
         if($counter_data['reset'] == 'monthly'){
             print("Start at 1st of month");
-            $start_time = mktime(0, 0, 0, date('m'), 1, date('Y'))
+            $start_time = mktime(0, 0, 0, date('m'), 1, date('Y'));
         }
         return $start_time;
     }
