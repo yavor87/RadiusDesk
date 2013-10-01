@@ -3,6 +3,68 @@
 class UsageTask extends Shell {
     public $uses = array('Radusergroup','Radgroupcheck','Radacct','Radcheck');
 
+    public function time_usage($counter_data,$username,$field){
+        print_r($counter_data);
+        $query_string = false;
+        if($counter_data['reset'] =='never'){
+            $query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE $field='$username'"; 
+        }else{
+            $start_time = $this->_find_start_time($counter_data);
+            if($start_time){
+                $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($month_start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
+                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+            }
+        }
+
+        if($query_string){
+            $q_r = $this->Radacct->query($query_string);
+            $accounting_used = $q_r[0][0]['used'];
+            return $accounting_used;
+        }else{
+            return false;
+        }
+    }
+
+    public function data_usage($counter_data,$username,$field){
+        print_r($counter_data);
+        $query_string = false;
+        if($counter_data['reset'] =='never'){
+            $query_string = "SELECT IFNULL(SUM(acctinputoctets)+SUM(acctoutputoctets),0) as used FROM radacct WHERE $field='$username'"; 
+        }else{
+            $start_time = $this->_find_start_time($counter_data);
+            if($start_time){
+                $query_string = "SELECT IFNULL(SUM(acctinputoctets - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0))+ ".
+                                "SUM(acctoutputoctets -GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)),0) as used ".
+                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+            }
+        }
+
+        if($query_string){
+            $q_r = $this->Radacct->query($query_string);
+            $accounting_used = $q_r[0][0]['used'];
+            return $accounting_used;
+        }else{
+            return false;
+        }
+    }
+
+
+    private function _find_start_time($counter_data){
+        $start_time = false;
+        if($counter_data['reset'] == 'daily'){
+            $start_time = strtotime("today");
+        }
+        if($counter_data['reset'] == 'weekly'){
+            $start_time = strtotime('first day of this week');
+        }
+        if($counter_data['reset'] == 'monthly'){
+            $start_time = strtotime('first day of this month');
+        }
+        return $start_time;
+    }
+
+
+    //===== RESET::never =======
     public function find_no_reset_time_usage($username) {
         //We only find the totals reset = never
         $usage = false;
