@@ -9,6 +9,8 @@ Ext.define('Rd.model.mPermanentUser', {
          {name: 'realm_id'},
          {name: 'profile',      type: 'string'  },
          {name: 'profile_id'},
+          'perc_time_used',
+          'perc_data_used',
          'name','surname', 'phone', 'email', 'address',
          {name: 'active',       type: 'bool'    },
          {name: 'last_accept_time'},

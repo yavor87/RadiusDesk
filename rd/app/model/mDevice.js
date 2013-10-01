@@ -7,6 +7,8 @@ Ext.define('Rd.model.mDevice', {
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },
          {name: 'profile_id'},
+         'perc_time_used',
+         'perc_data_used',
          'name', 'description','vendor_id',
          {name: 'active',       type: 'bool'    },
          {name: 'last_accept_time'},

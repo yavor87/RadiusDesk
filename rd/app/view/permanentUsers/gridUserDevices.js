@@ -73,6 +73,50 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 hidden      : true,
                 filter      : {type: 'string'}
             },
+            {
+                header      : i18n('sData_used'),
+                dataIndex   : 'perc_data_used',
+                width       : 110,
+                hidden      : true,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100,
+                                text: v +" %"
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
+            {
+                header      : i18n('sTime_used'),
+                dataIndex   : 'perc_time_used',
+                width       : 110,
+                hidden      : true,
+                renderer: function (v, m, r) {
+                    if(v != null){
+                        var id = Ext.id();
+                        Ext.defer(function () {
+                            Ext.widget('progressbar', {
+                                renderTo: id,
+                                value: v / 100,
+                                width: 100,
+                                text: v+" %"
+                            });
+                        }, 50);
+                        return Ext.String.format('<div id="{0}"></div>', id);
+                    }else{
+                        return "N/A";
+                    }
+                }
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,

@@ -46,7 +46,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             },
             { text: i18n('sRealm'),        dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable : false},
             { text: i18n('sProfile'),      dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable : false},
-              {
+            {
                 header: i18n('sData_used'),
                 dataIndex: 'perc_data_used',
                 width: 110,
