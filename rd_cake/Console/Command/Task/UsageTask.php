@@ -40,6 +40,7 @@ class UsageTask extends Shell {
         }
 
         if($query_string){
+            print_r($query_string);
             $q_r = $this->Radacct->query($query_string);
             $accounting_used = $q_r[0][0]['used'];
             return $accounting_used;
@@ -52,13 +53,16 @@ class UsageTask extends Shell {
     private function _find_start_time($counter_data){
         $start_time = false;
         if($counter_data['reset'] == 'daily'){
-            $start_time = strtotime("today");
+            print("Start at midnight");
+            $start_time = mktime(0, 0, 0, date('m'), date('d'), date('Y')); 
         }
         if($counter_data['reset'] == 'weekly'){
-            $start_time = strtotime('first day of this week');
+            print("Start at monday");
+            $start_time = mktime(0, 0, 0, date('n'), date('j'), date('Y')) - ((date('N')-1)*3600*24); 
         }
         if($counter_data['reset'] == 'monthly'){
-            $start_time = strtotime('first day of this month');
+            print("Start at 1st of month");
+            $start_time = mktime(0, 0, 0, date('m'), 1, date('Y'))
         }
         return $start_time;
     }
