@@ -224,6 +224,8 @@ class PermanentUsersController extends AppController {
                     'realm_id'  => $realms[$realm],
                     'profile'   => $profile,
                     'profile_id'=> $profiles[$profile],
+                    'perc_time_used'=> $i['User']['perc_time_used'],
+                    'perc_data_used'=> $i['User']['perc_data_used'],
                     'active'    => $i['User']['active'], 
                     'monitor'   => $i['User']['monitor'],
                     'last_accept_time'      => $i['User']['last_accept_time'],

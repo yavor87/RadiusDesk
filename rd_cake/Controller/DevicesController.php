@@ -184,6 +184,8 @@ class DevicesController extends AppController {
                     'realm'         => $realm,
                     'profile'       => $profile,
                     'profile_id'    => $profiles[$profile],
+                    'perc_time_used'=> $i['Device']['perc_time_used'],
+                    'perc_data_used'=> $i['Device']['perc_data_used'],
                     'active'        => $i['Device']['active'],
                     'last_accept_time'      => $i['Device']['last_accept_time'],
                     'last_accept_nas'       => $i['Device']['last_accept_nas'],
