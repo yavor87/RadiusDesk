@@ -6,7 +6,7 @@ class CountersTask extends Shell {
     public function return_counter_data($profile_name,$type) {
         $counters = array();
         $this->_show_header($profile_name);
-        if($type == 'voucher'){ //nothing fancy here initially
+        if(($type == 'voucher')||($type == 'user')||($type == 'device')){ //nothing fancy here initially
             $counters = $this->_find_counters($profile_name);
         }
         return $counters;    

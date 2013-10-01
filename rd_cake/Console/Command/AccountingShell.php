@@ -145,6 +145,83 @@ class AccountingShell extends AppShell {
                 }
             }
         }
+
+
+        //____ Permanent users _____
+        if($type == 'user'){
+            $this->out("<info>$username is a Permanent User</info>");
+            //Find the profile
+            $profile = $this->_find_user_profile($username);
+            if($profile){
+                $counters = $this->Counters->return_counter_data($profile,$type);
+                //___time___
+                if(array_key_exists('time', $counters)){
+                    
+                    $used       = $this->Usage->time_usage($counters['time'],$username,'username');
+                    $perc_used  = intval(($used / $counters['time']['value'])* 100);                  
+                    $q_r        = $this->User->findByUsername($username);
+                    if($q_r){
+                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->User->id             = $q_r['User']['id'];
+                        $d['User']['id']            = $q_r['User']['id'];
+                        $d['User']['perc_time_used']= $perc_used;
+                        $this->User->save($d);
+                    }
+                }
+
+                //___data___
+                if(array_key_exists('data', $counters)){
+                    $used       = $this->Usage->data_usage($counters['data'],$username,'username');
+                    $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
+                    $q_r        = $this->User->findByUsername($username);
+                    if($q_r){
+                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->User->id             = $q_r['User']['id'];
+                        $d['User']['id']            = $q_r['User']['id'];
+                        $d['User']['perc_data_used']= $perc_used;
+                        $this->User->save($d);
+                    }
+                }
+            }
+        }
+
+        //____ Devices _____
+        if($type == 'device'){
+            $this->out("<info>$username is a Device</info>");
+            //Find the profile
+            $profile = $this->_find_user_profile($username);
+            if($profile){
+                $counters = $this->Counters->return_counter_data($profile,$type);
+                //___time___
+                if(array_key_exists('time', $counters)){
+                    
+                    $used       = $this->Usage->time_usage($counters['time'],$username,'callingstationid');
+                    $perc_used  = intval(($used / $counters['time']['value'])* 100);                  
+                    $q_r        = $this->Device->findByName($username);
+                    if($q_r){
+                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->Device->id             = $q_r['Device']['id'];
+                        $d['Device']['id']            = $q_r['Device']['id'];
+                        $d['Device']['perc_time_used']= $perc_used;
+                        $this->Device->save($d);
+                    }
+                }
+
+                //___data___
+                if(array_key_exists('data', $counters)){
+                    $used       = $this->Usage->data_usage($counters['data'],$username,'callingstationid');
+                    $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
+                    $q_r        = $this->Device->findByName($username);
+                    if($q_r){
+                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->Device->id             = $q_r['Device']['id'];
+                        $d['Device']['id']            = $q_r['Device']['id'];
+                        $d['Device']['perc_data_used']= $perc_used;
+                        $this->Device->save($d);
+                    }
+                }
+            }
+        }
     }
 
     private function find_type($username){
