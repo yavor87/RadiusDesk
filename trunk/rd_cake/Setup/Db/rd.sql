@@ -417,6 +417,8 @@ CREATE TABLE `devices` (
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `perc_time_used` int(6) DEFAULT NULL,
+  `perc_data_used` int(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -427,7 +429,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'aa-aa-aa-aa-aa-aa','ll',1,NULL,NULL,NULL,NULL,NULL,187,'2013-09-10 13:20:30','2013-09-10 13:20:30');
+INSERT INTO `devices` VALUES (1,'aa-aa-aa-aa-aa-aa','ll',1,NULL,NULL,NULL,NULL,NULL,187,'2013-09-10 13:20:30','2013-09-10 13:20:30',NULL,NULL);
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -793,7 +795,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-09-01 21:20:20');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli-Heartbeat',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,'2013-09-18 13:41:12',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-09-18 13:40:47');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1606,7 +1608,7 @@ CREATE TABLE `user_stats` (
   `acctinputoctets` bigint(20) NOT NULL,
   `acctoutputoctets` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=929 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1651,6 +1653,8 @@ CREATE TABLE `users` (
   `rght` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `perc_time_used` int(6) DEFAULT NULL,
+  `perc_data_used` int(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1661,7 +1665,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,8,'2012-12-10 13:14:13','2013-09-06 17:55:16'),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2013-09-06 17:55:16'),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','522a3240-d3dc-4d55-b807-3b3903662c24','','','','','','sql',1,0,'2013-09-06 21:51:41',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,6,7,'2013-09-04 10:51:36','2013-09-06 21:51:28'),(189,'rviljoen','338cbc30785306676b55fdf07df58bb17a5443fc','5229fc2c-dd3c-4249-b045-3b3a03662c24','','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,10,4,182,3,4,'2013-09-06 17:55:54','2013-09-06 18:00:44');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,8,'2012-12-10 13:14:13','2013-09-06 17:55:16',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2013-09-06 17:55:16',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','522a3240-d3dc-4d55-b807-3b3903662c24','','','','','','sql',1,0,'2013-09-06 21:51:41',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,6,7,'2013-09-04 10:51:36','2013-09-06 21:51:28',NULL,NULL),(189,'rviljoen','338cbc30785306676b55fdf07df58bb17a5443fc','5229fc2c-dd3c-4249-b045-3b3a03662c24','','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,10,4,182,3,4,'2013-09-06 17:55:54','2013-09-06 18:00:44',NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1710,4 +1714,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-09-10 20:23:37
+-- Dump completed on 2013-10-01 14:04:04
