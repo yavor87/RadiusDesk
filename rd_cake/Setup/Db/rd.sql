@@ -795,7 +795,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli-Heartbeat',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,'2013-09-18 13:41:12',0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-09-18 13:40:47');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1171,7 +1171,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=8489 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8497 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1180,7 +1180,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (8304,'000001','Rd-User-Type',':=','voucher'),(8307,'000001','Cleartext-Password',':=','koos'),(8308,'000001','User-Profile',':=','Time-Standard-1Hour'),(8309,'000001','Rd-Realm',':=','College'),(8353,'dvdwalt','Rd-User-Type',':=','user'),(8354,'dvdwalt','Rd-Realm',':=','Residence Inn'),(8355,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(8356,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(8357,'dvdwalt','Rd-Account-Disabled',':=','0'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8471,'rviljoen','Rd-User-Type',':=','user'),(8472,'rviljoen','Rd-Realm',':=','Residence Inn'),(8473,'rviljoen','User-Profile',':=','Data-Standard-1G'),(8474,'rviljoen','Rd-Cap-Type-Data',':=','hard'),(8475,'rviljoen','Rd-Account-Disabled',':=','0'),(8476,'rviljoen','Rd-Not-Track-Auth',':=','1'),(8480,'rviljoen','Cleartext-Password',':=','previouspassword'),(8481,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(8482,'aa-aa-aa-aa-aa-aa','Rd-User-Type',':=','device'),(8483,'aa-aa-aa-aa-aa-aa','Rd-Realm',':=','Residence Inn'),(8484,'aa-aa-aa-aa-aa-aa','Rd-Device-Owner',':=','dvdwalt'),(8485,'aa-aa-aa-aa-aa-aa','User-Profile',':=','Time-Standard-1Hour'),(8486,'aa-aa-aa-aa-aa-aa','Rd-Cap-Type-Time',':=','hard'),(8487,'aa-aa-aa-aa-aa-aa','Rd-Account-Disabled',':=','0'),(8488,'aa-aa-aa-aa-aa-aa','Rd-Not-Track-Auth',':=','1');
+INSERT INTO `radcheck` VALUES (8304,'000001','Rd-User-Type',':=','voucher'),(8307,'000001','Cleartext-Password',':=','koos'),(8308,'000001','User-Profile',':=','Time-Standard-1Hour'),(8309,'000001','Rd-Realm',':=','College'),(8353,'dvdwalt','Rd-User-Type',':=','user'),(8354,'dvdwalt','Rd-Realm',':=','Residence Inn'),(8355,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(8356,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(8357,'dvdwalt','Rd-Account-Disabled',':=','0'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8471,'rviljoen','Rd-User-Type',':=','user'),(8472,'rviljoen','Rd-Realm',':=','Residence Inn'),(8473,'rviljoen','User-Profile',':=','Data-Standard-1G'),(8474,'rviljoen','Rd-Cap-Type-Data',':=','hard'),(8475,'rviljoen','Rd-Account-Disabled',':=','0'),(8476,'rviljoen','Rd-Not-Track-Auth',':=','1'),(8480,'rviljoen','Cleartext-Password',':=','previouspassword'),(8481,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(8482,'aa-aa-aa-aa-aa-aa','Rd-User-Type',':=','device'),(8483,'aa-aa-aa-aa-aa-aa','Rd-Realm',':=','Residence Inn'),(8484,'aa-aa-aa-aa-aa-aa','Rd-Device-Owner',':=','dvdwalt'),(8485,'aa-aa-aa-aa-aa-aa','User-Profile',':=','Time-Standard-1Hour'),(8486,'aa-aa-aa-aa-aa-aa','Rd-Cap-Type-Time',':=','hard'),(8487,'aa-aa-aa-aa-aa-aa','Rd-Account-Disabled',':=','0'),(8488,'aa-aa-aa-aa-aa-aa','Rd-Not-Track-Auth',':=','1'),(8489,'000002','Cleartext-Password',':=','0Qq'),(8490,'000002','Rd-User-Type',':=','voucher'),(8491,'000002','Rd-Realm',':=','College'),(8492,'000002','User-Profile',':=','Time-Standard-1Hour'),(8493,'000003','Cleartext-Password',':=','QP3'),(8494,'000003','Rd-User-Type',':=','voucher'),(8495,'000003','Rd-Realm',':=','College'),(8496,'000003','User-Profile',':=','Time-Standard-1Hour');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1692,7 +1692,7 @@ CREATE TABLE `vouchers` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1701,7 +1701,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (1,'000001','','new',NULL,NULL,'2013-08-28 13:12:49',NULL,'127.0.0.1',NULL,NULL,182,'2013-08-28 13:12:10','2013-08-28 13:13:17');
+INSERT INTO `vouchers` VALUES (1,'000001','','new',NULL,NULL,'2013-08-28 13:12:49',NULL,'127.0.0.1',NULL,NULL,182,'2013-08-28 13:12:10','2013-08-28 13:13:17'),(2,'000002','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,182,'2013-10-03 09:47:58','2013-10-03 09:47:58'),(3,'000003','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,182,'2013-10-03 09:48:07','2013-10-03 09:48:07');
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1714,4 +1714,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-01 14:04:04
+-- Dump completed on 2013-10-03 10:25:57
