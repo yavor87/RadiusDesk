@@ -116,10 +116,13 @@ Ext.define('Rd.controller.cPassword', {
     },
     changePasswordSubmit: function(button){
         var me      = this;
+        var window  = button.up('window');
         var form    = button.up('form');
         var cmb     = form.down("cmbPermanentUser");
         var extra_params        = {};
         extra_params['user_id'] = cmb.getValue();
+
+        window.setLoading(true);
         //Checks passed fine...      
         form.submit({
             clientValidation    : true,
@@ -127,6 +130,7 @@ Ext.define('Rd.controller.cPassword', {
             params              : extra_params,
             success             : function(form, action) {
                 me.userChanged(cmb); //Force a reload of the new value
+                window.setLoading(false);
                 Ext.ux.Toaster.msg(
                     i18n('sPassword_changed'),
                     i18n('sPassword_changed_fine'),
