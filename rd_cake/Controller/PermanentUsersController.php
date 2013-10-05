@@ -1116,6 +1116,38 @@ class PermanentUsersController extends AppController {
                 $this->Device->delete($i['Device']['id'], true);
                 $this->_delete_clean_up_device($username);
             }
+
+            //Check if we need to add or remove actvation and expiry dates
+
+            $this->User             = ClassRegistry::init('User');
+            $q_user = $this->User->findById($this->request->data['user_id']);
+
+            if($q_user){
+                $username = $q_user['User']['username'];
+
+                if(isset($this->request->data['to_date'])){
+                    $expiration = $this->_radius_format_date($this->request->data['to_date']);
+                    $this->_replace_radcheck_item($username,'Expiration',$expiration);
+                }
+
+                if(isset($this->request->data['from_date'])){
+                    $expiration = $this->_radius_format_date($this->request->data['from_date']);
+                    $this->_replace_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
+                }
+
+                
+                if(isset($this->request->data['always_active'])){ //Clean up if there were previous ones
+                    ClassRegistry::init('Radcheck')->deleteAll(
+                        array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Account-Activation-Time'), false
+                    );
+
+                    ClassRegistry::init('Radcheck')->deleteAll(
+                        array('Radcheck.username' => $username,'Radcheck.attribute' => 'Expiration'), false
+                    );
+                }
+                //---End of Expiry and Activation---
+            }
+
             $success               = true;  
         }
 
@@ -1136,6 +1168,9 @@ class PermanentUsersController extends AppController {
 
         $success    = false;
         $value      = false;
+        $activate   = false;
+        $expire     = false;
+
         if(isset($this->request->query['user_id'])){
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
@@ -1144,7 +1179,12 @@ class PermanentUsersController extends AppController {
                 foreach($q_r['Radcheck'] as $i){
                     if($i['attribute'] == 'Cleartext-Password'){
                         $value = $i['value'];
-                        break;
+                    }
+                    if($i['attribute'] == 'Rd-Account-Activation-Time'){
+                        $activate = $this->_extjs_format_radius_date($i['value']);
+                    }
+                    if($i['attribute'] == 'Expiration'){
+                        $expire = $this->_extjs_format_radius_date($i['value']);
                     }
                 }
             }
@@ -1153,7 +1193,9 @@ class PermanentUsersController extends AppController {
         $this->set(array(
             'success'   => $success,
             'value'     => $value,
-            '_serialize' => array('success','value')
+            'activate'  => $activate,
+            'expire'    => $expire,
+            '_serialize' => array('success','value','activate','expire')
         ));
 
     }
