@@ -27,8 +27,15 @@ Ext.define('Rd.view.password.frmPassword', {
         }
     ],
     initComponent: function(){
-        var me      = this; 
+        var me      = this;
+
+        //Set default values for from and to:
+        var dtFrom  = new Date();
+        var dtTo    = new Date();
+        dtTo.setDate(dtTo.getDate() + 7); //Expire by defaul 7 days later
+ 
         me.items    = [
+            
             {
                 xtype       : 'cmbPermanentUser',
                 fieldLabel  : i18n('sUsername')
@@ -36,15 +43,45 @@ Ext.define('Rd.view.password.frmPassword', {
             {
                 xtype       : 'displayfield',
                 value       : '(select user first)',
-                fieldLabel  : 'Current Password',
-                fieldCls    : 'green_round'
+                fieldLabel  : 'Current password',
+                fieldCls    : 'green_round',
+                itemId          : 'currentPwd'
             },
             {
                 xtype       : 'textfield',
                 name        : 'password',
-                fieldLabel  : 'New Password',
+                fieldLabel  : 'New password',
                 allowBlank  : false,
                 minLength   : 4
+            },
+            {
+                xtype       : 'checkbox',      
+                boxLabel    : i18n('sAlways_active'),
+                name        : 'always_active',
+                inputValue  : 'always_active',
+                itemId      : 'always_active',
+                checked     : true,
+                boxLabelCls : 'lblRdCheck'
+            },
+            {
+                xtype: 'datefield',
+                fieldLabel: i18n('sFrom'),
+                name: 'from_date',
+                itemId      : 'from_date',
+                minValue: new Date(),  // limited to the current date or after
+                hidden      : true,
+                disabled    : true,
+                value       : dtFrom
+            },
+            {
+                xtype: 'datefield',
+                fieldLabel: i18n('sTo'),
+                name: 'to_date',
+                itemId      : 'to_date',
+                minValue: new Date(),  // limited to the current date or after
+                hidden      : true,
+                disabled    : true,
+                value       : dtTo
             }
         ];   
         me.callParent(arguments);

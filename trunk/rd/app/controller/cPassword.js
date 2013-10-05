@@ -9,9 +9,9 @@ Ext.define('Rd.controller.cPassword', {
             win = desktop.createWindow({
                 id          : 'passwordWin',
                 title       : "Password manager",
-                width       : 350,
+                width       : 400,
                 height      : 450,
-                resizable   : false,
+                resizable   : true,
                 iconCls     : 'rights',
                 animCollapse: false,
                 border      : false,
@@ -71,6 +71,9 @@ Ext.define('Rd.controller.cPassword', {
             'frmPassword cmbPermanentUser': {
                 change:      me.userChanged
             },
+            'frmPassword #always_active' : {
+                change:  me.chkAlwaysActiveChange
+            },
             'frmPassword #save': {
                 click:       me.changePasswordSubmit
             }
@@ -80,7 +83,10 @@ Ext.define('Rd.controller.cPassword', {
         var me      = this;
         var value   = cmb.getValue();
         var form    = cmb.up('form');
-        var label   = form.down('displayfield');
+        var label   = form.down('#currentPwd');
+        var from    = form.down('#from_date');
+        var to      = form.down('#to_date');
+        var chk     = form.down('checkbox');
         Ext.Ajax.request({
             url: me.urlGetPwd,
             method: 'GET',
@@ -88,7 +94,15 @@ Ext.define('Rd.controller.cPassword', {
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
-                    label.setValue(jsonData.value); 
+                    label.setValue(jsonData.value);
+                    if((jsonData.activate == false)&&(jsonData.expire == false)){
+                        chk.setValue(true);
+                    }else{
+                        to.setValue(jsonData.expire);
+                        from.setValue(jsonData.activate);
+                        chk.setValue(false);
+                    }
+                   // me.chkAlwaysActiveChange(chk); //Refresh the view
                     Ext.ux.Toaster.msg(
                         "Fetched password",
                         "Password fetched for selected user",
@@ -122,5 +136,23 @@ Ext.define('Rd.controller.cPassword', {
             },
             failure             : Ext.ux.formFail
         });
+    },
+    chkAlwaysActiveChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var from    = form.down('#from_date');
+        var to      = form.down('#to_date');
+        var value   = chk.getValue();
+        if(value){
+            to.setVisible(false);
+            to.setDisabled(true);
+            from.setVisible(false);
+            from.setDisabled(true);
+        }else{
+            to.setVisible(true);
+            to.setDisabled(false);
+            from.setVisible(true);
+            from.setDisabled(false);
+        }
     }
 });
