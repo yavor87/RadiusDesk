@@ -5,7 +5,7 @@ class PermanentUsersController extends AppController {
 
     public $name       = 'PermanentUsers';
     public $uses       = array('User');
-    public $components = array('Aa');
+    public $components = array('Aa','Kicker');
     protected $base    = "Access Providers/Controllers/PermanentUsers/";
 
     protected  $read_only_attributes = array(
@@ -1120,6 +1120,7 @@ class PermanentUsersController extends AppController {
             //Check if we need to add or remove actvation and expiry dates
 
             $this->User             = ClassRegistry::init('User');
+            $this->User->contain();
             $q_user = $this->User->findById($this->request->data['user_id']);
 
             if($q_user){
@@ -1146,8 +1147,15 @@ class PermanentUsersController extends AppController {
                     );
                 }
                 //---End of Expiry and Activation---
-            }
 
+                //Also check if the person is not perhaps currently connected and then kick them off
+                $this->radacct  = ClassRegistry::init('Radacct');
+                $this->radacct->contain();
+                $q_acct = $this->radacct->find('all',array('conditions' => array('Radacct.username' => $username,'Radacct.acctstoptime' => 'null')));
+                foreach($q_acct as $a){
+                    $this->Kicker->kick($a['Radacct']);
+                }
+            }
             $success               = true;  
         }
 
