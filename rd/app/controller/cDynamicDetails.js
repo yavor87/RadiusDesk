@@ -115,6 +115,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'winDynamicDetailAddWizard #btnDynamicDetailDetailPrev' : {
                 click:  me.btnDynamicDetailDetailPrev
             },
+            'winDynamicDetailAddWizard #chkTc' : {
+                change:  me.chkTcChange
+            },
             'winDynamicDetailAddWizard #save' : {
                 click:  me.addSubmit
             },
@@ -151,6 +154,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabDetail': {
                 beforerender:   me.tabDetailActivate,
                 activate:       me.tabDetailActivate
+            },
+            'pnlDynamicDetail #tabDetail #chkTc' : {
+                change:  me.chkTcChange
             },
             'pnlDynamicDetail #tabLogo': {
                 activate:       me.tabLogoActivate
@@ -350,6 +356,17 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 Ext.ux.formFail(form,action)
             }
         });
+    },
+    chkTcChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var url     = form.down('#txtTcUrl');
+        var value   = chk.getValue();
+        if(value){
+            url.setDisabled(false);                
+        }else{
+            url.setDisabled(true);
+        }
     },
     del:   function(button){
         var me      = this;     
