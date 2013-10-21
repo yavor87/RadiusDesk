@@ -250,6 +250,36 @@ Ext.define('Rd.view.dynamicDetails.winDynamicDetailAddWizard', {
                                     labelClsExtra: 'lblRd'
                                 }
                             ]
+                        },
+                        { 
+                            'title'     : "T&C",
+                            'layout'    : 'anchor',
+                            itemId      : 'tabAddress',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            autoScroll:true,
+                            items       : [         
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : "Compulsory",
+                                    itemId      : 'chkTc',
+                                    name        : 't_c_check',
+                                    inputValue  : 't_c_check',
+                                    checked     : false,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : "URL",
+                                    itemId      : 'txtTcUrl',
+                                    name        : "t_c_url",
+                                    disabled    : true,
+                                    allowBlank  : false,
+                                    margin      : 15,
+                                    vtype       : 'url'
+                                }   
+                            ]
                         }
                     ]
                 }
