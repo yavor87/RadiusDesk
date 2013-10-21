@@ -276,8 +276,7 @@ Ext.define('Rd.view.dynamicDetails.winDynamicDetailAddWizard', {
                                     name        : "t_c_url",
                                     disabled    : true,
                                     allowBlank  : false,
-                                    margin      : 15,
-                                    vtype       : 'url'
+                                    margin      : 15
                                 }   
                             ]
                         }
