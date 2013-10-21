@@ -68,6 +68,8 @@ class DynamicDetailsController extends AppController {
             $items['detail']['country']         = $q_r['DynamicDetail']['country'];
             $items['detail']['lon']             = $q_r['DynamicDetail']['lon'];
             $items['detail']['lat']             = $q_r['DynamicDetail']['lat'];
+            $items['detail']['t_c_check']       = $q_r['DynamicDetail']['t_c_check'];
+            $items['detail']['t_c_url']         = $q_r['DynamicDetail']['t_c_url'];
         }
 
         $this->set(array(
@@ -226,7 +228,9 @@ class DynamicDetailsController extends AppController {
                 'city'                  => $i['DynamicDetail']['city'],
                 'country'               => $i['DynamicDetail']['country'],
                 'lat'                   => $i['DynamicDetail']['lat'],
-                'lon'                   => $i['DynamicDetail']['lon'], 
+                'lon'                   => $i['DynamicDetail']['lon'],
+                't_c_check'             => $i['DynamicDetail']['t_c_check'],
+                't_c_url'               => $i['DynamicDetail']['t_c_url'],
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']
@@ -355,6 +359,14 @@ class DynamicDetailsController extends AppController {
             $this->request->data['available_to_siblings'] = 0;
         }
 
+        //T & C compulsory check
+        if(isset($this->request->data['t_c_check'])){
+            $this->request->data['t_c_check'] = 1;
+        }else{
+            $this->request->data['t_c_check'] = 0;
+        }
+
+
         if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -386,6 +398,13 @@ class DynamicDetailsController extends AppController {
             $this->request->data['available_to_siblings'] = 1;
         }else{
             $this->request->data['available_to_siblings'] = 0;
+        }
+
+        //T & C compulsory check
+        if(isset($this->request->data['t_c_check'])){
+            $this->request->data['t_c_check'] = 1;
+        }else{
+            $this->request->data['t_c_check'] = 0;
         }
 
 		if ($this->DynamicDetail->save($this->request->data)) {
@@ -488,6 +507,8 @@ class DynamicDetailsController extends AppController {
                 $items['country']                   = $q_r['DynamicDetail']['country'];
                 $items['lat']                       = $q_r['DynamicDetail']['lat'];
                 $items['lon']                       = $q_r['DynamicDetail']['lon'];
+                $items['t_c_check']                 = $q_r['DynamicDetail']['t_c_check'];
+                $items['t_c_url']                   = $q_r['DynamicDetail']['t_c_url'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
