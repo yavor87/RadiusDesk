@@ -172,6 +172,18 @@ class ActionsController extends AppController {
                 'itemId'    => 'reload',   
                 'tooltip'   => __('Reload')));
 
+            //Add
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'add')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-add',  
+                    'scale'     => 'large', 
+                    'itemId'    => 'add',
+                    'disabled'  => false,   
+                    'tooltip'   => __('Add')));
+            }
+
+
             //Delete
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
@@ -179,7 +191,7 @@ class ActionsController extends AppController {
                     'iconCls'   => 'b-delete',  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => false,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -274,7 +286,7 @@ class ActionsController extends AppController {
             if($ap_children){   //Only if the AP has any children...
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                    array_push($tree_array,array('Na.user_id' => $id));
                 }       
             }   
             //Add it as an OR clause
