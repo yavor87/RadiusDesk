@@ -88,6 +88,7 @@ class RealmsController extends AppController {
                 }
             }
 
+/*
             //Get all the realms owned by the $ap_id but NOT available_to_siblings
             $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
             foreach($r  as $j){
@@ -99,7 +100,17 @@ class RealmsController extends AppController {
                 if($create == true){
                         array_push($items,array('id' => $id, 'name' => $name));
                 }
-            }   
+            }  
+*/
+
+            //Get all the realms owned by the $ap_id 
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id)));
+            foreach($r  as $j){
+                $id     = $j['Realm']['id'];
+                $name   = $j['Realm']['name'];
+                array_push($items,array('id' => $id, 'name' => $name));
+            }
+
         }
 
         $this->set(array(
