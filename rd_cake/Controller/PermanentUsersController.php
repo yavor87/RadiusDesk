@@ -1915,6 +1915,13 @@ class PermanentUsersController extends AppController {
         }
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
+
+            //If the $user['id'] is the same is the owner; we allow them to update and delete
+            if($user['id'] == $owner_id){
+                return array('update' => true, 'delete' => true);
+            }
+
+
             $update = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $owner_id), 
                                 array('model' => 'Realm','foreign_key' => $realm_id), 'update');
