@@ -631,17 +631,12 @@ class RadacctsController extends AppController {
                 }
             }
 
-            //Get all the realms owned by the $ap_id but NOT available_to_siblings
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
+            //Get all the realms owned by the $ap_id 
+            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id)));
             foreach($r  as $j){
                 $id     = $j['Realm']['id'];
                 $name   = $j['Realm']['name'];
-                $create = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'read'); 
-                if($create == true){
-                        array_push($ap_clause,array($this->modelClass.'.realm' => $name));
-                }
+                array_push($ap_clause,array($this->modelClass.'.realm' => $name));
             }   
 
             //Add it as an OR clause
