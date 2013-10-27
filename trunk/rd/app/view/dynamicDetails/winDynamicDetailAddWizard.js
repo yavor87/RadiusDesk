@@ -254,7 +254,7 @@ Ext.define('Rd.view.dynamicDetails.winDynamicDetailAddWizard', {
                         { 
                             'title'     : "T&C",
                             'layout'    : 'anchor',
-                            itemId      : 'tabAddress',
+                            itemId      : 'tabTc',
                             defaults    : {
                                 anchor: '100%'
                             },
