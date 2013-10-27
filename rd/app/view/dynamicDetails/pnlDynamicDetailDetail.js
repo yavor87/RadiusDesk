@@ -186,7 +186,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
                             { 
                             'title'     : "T&C",
                             'layout'    : 'anchor',
-                            itemId      : 'tabAddress',
+                            itemId      : 'tabTc',
                             defaults    : {
                                 anchor: '100%'
                             },
