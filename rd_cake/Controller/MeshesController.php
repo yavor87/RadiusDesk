@@ -645,7 +645,8 @@ class MeshesController extends AppController {
                     ),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                    array('xtype' => 'button', 'iconCls' => 'b-view',    'scale' => 'large', 'itemId' => 'view',     'tooltip'=> __('View'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100, 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
