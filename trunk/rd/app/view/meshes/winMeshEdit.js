@@ -1,0 +1,57 @@
+Ext.define('Rd.view.meshes.winMeshEdit', {
+    extend  : 'Ext.window.Window',
+    alias   : 'widget.winMeshEdit',
+    width   : 800,
+    height  : 400,
+    iconCls : 'mesh',
+    animCollapse:false,
+    border  :false,
+    isWindow: true,
+    minimizable: true,
+    maximizable: true,
+    constrainHeader:true,
+    layout  : 'border',
+    stateful: true,
+    autoShow:   false,
+    initComponent: function() {
+        var me      = this; 
+        me.items    = [
+            {
+                region: 'north',
+                xtype:  'pnlBanner',
+                heading: me.title,
+                image:  'resources/images/48x48/mesh.png'
+            },
+            {
+                region  : 'center',
+                layout  : 'fit',
+                xtype   : 'tabpanel',
+                margins : '0 0 0 0',
+                border  : false,
+                items   : [
+                    {
+                        title   :  'Entry points',
+                        itemId  : 'tabEntryPoints',
+                    },
+                    {
+                        title   :  'Mesh settings',
+                        itemId  : 'tabMeshSettings'
+                    },
+                    {
+                        title   :  'Exit points',
+                        itemId  : 'tabExitPoints'
+                    },
+                    {
+                        title   :  'Nodes',
+                        itemId  : 'tabNodes'
+                    },
+                    {
+                        title   :  'Map',
+                        itemId  : 'tabMap'
+                    }
+                ]
+            }
+        ];
+        me.callParent(arguments);
+    }
+});

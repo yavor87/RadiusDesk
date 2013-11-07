@@ -40,7 +40,7 @@ Ext.define('Rd.controller.cMeshes', {
     },
 
     views:  [
-        'components.pnlBanner', 'meshes.gridMeshes', 'meshes.winMeshAddWizard'
+        'components.pnlBanner', 'meshes.gridMeshes', 'meshes.winMeshAddWizard', 'meshes.winMeshEdit'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree'],
     models      : ['mMesh',     'mAccessProviderTree' ],
@@ -81,7 +81,7 @@ Ext.define('Rd.controller.cMeshes', {
                // click:      me.del
             },
             'gridMeshes #edit'   : {
-                //click:      me.edit
+                click:      me.edit
             },
             'winMeshAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -209,5 +209,35 @@ Ext.define('Rd.controller.cMeshes', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    edit: function(button){
+        var me      = this;   
+        //Find out if there was something selected
+        var selCount = me.getGrid().getSelectionModel().getCount();
+        if(selCount == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(selCount > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                var sr      = me.getGrid().getSelectionModel().getLastSelected();
+                var id      = 'winMeshEdit'+sr.getId();
+                var name    = sr.get('name');   
+                if(!me.application.runAction('cDesktop','AlreadyExist',id)){
+                    var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name});
+                    me.application.runAction('cDesktop','Add',w);      
+                }
+            }
+        }
     },
 });
