@@ -282,6 +282,7 @@ class DesktopController extends AppController {
             array_push($menus,array(  'text'  => __('Auto Setup'),            'iconCls' => 'setup',       'itemId' => 'cAutoSetups'));
         }
 
+        array_push($menus,array(  'text'  => __('MESHdesk'),            'iconCls' => 'mesh',       'itemId' => 'cMeshes'));
         array_push($menus,array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages','itemId' => 'cDynamicDetails'));
 
         return $menus;
