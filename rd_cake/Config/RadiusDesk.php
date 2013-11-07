@@ -83,7 +83,7 @@ $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
-$config['experimental']['active']                   = true;
+$config['experimental']['active']                   = false;
 
 //IP Settings
 $config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
