@@ -358,6 +358,10 @@
       background-image:url(../images/16x16/graph.png) !important;
 }
 
+.mesh {
+      background-image:url(../images/16x16/mesh.png) !important;
+}
+
 
 .mapDiv {
     height: 210px;
