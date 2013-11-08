@@ -684,7 +684,7 @@ CREATE TABLE `meshes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -693,7 +693,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (11,'koos',44,'2013-11-07 15:33:40','2013-11-07 15:33:40'),(12,'koos1',44,'2013-11-07 15:34:17','2013-11-07 15:34:17');
+INSERT INTO `meshes` VALUES (13,'City Campus East',44,'2013-11-08 21:24:57','2013-11-08 21:24:57');
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1770,4 +1770,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-07 15:37:18
+-- Dump completed on 2013-11-08 21:36:57
