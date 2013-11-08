@@ -1,4 +1,4 @@
-Ext.define('Rd.view.nas.cmbPdfFormats', {
+Ext.define('Rd.view.vouchers.cmbPdfFormats', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbPdfFormats',
     fieldLabel      : i18n('sOutput_format'),

@@ -40,10 +40,11 @@ Ext.define('Rd.controller.cMeshes', {
     },
 
     views:  [
-        'components.pnlBanner', 'meshes.gridMeshes', 'meshes.winMeshAddWizard', 'meshes.winMeshEdit'
+        'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
+        'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions'
     ],
-    stores      : ['sMeshes',   'sAccessProvidersTree'],
-    models      : ['mMesh',     'mAccessProviderTree' ],
+    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions'],
+    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption' ],
     selectedRecord: null,
     config      : {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
@@ -91,7 +92,10 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
-            },  
+            },
+            'gridMeshEntries #add': {
+                click:  me.addEntry
+            }  
         });
     },
     winClose:   function(){
@@ -130,7 +134,7 @@ Ext.define('Rd.controller.cMeshes', {
     },
     onStoreMeshesLoaded: function() {
         var me      = this;
-        var count   = me.getStore('sTags').getTotalCount();
+        var count   = me.getStore('sMeshes').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
     add: function(button){
@@ -234,10 +238,21 @@ Ext.define('Rd.controller.cMeshes', {
                 var id      = 'winMeshEdit'+sr.getId();
                 var name    = sr.get('name');   
                 if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-                    var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name});
+                    var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name, itemId: sr.getId()});
                     me.application.runAction('cDesktop','Add',w);      
                 }
             }
         }
     },
+    addEntry: function(button){
+        var me = this;
+        console.log("Add an Entry Point");
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddEntryId')){
+            var w = Ext.widget('winMeshAddEntry',
+            {
+                id          :'winMeshAddEntryId'
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    }
 });
