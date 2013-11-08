@@ -81,6 +81,17 @@ $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChil
 $config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/index.html';
 $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
 
+
+//===== MESHdesk ======
+//== Encryption types ==
+//Define the encryption types and if they are active or not
+$config['encryption'][0]     = array('name' => __('None'),              'id' => 'none',     'active' => true);
+$config['encryption'][1]     = array('name' => __('WEP'),               'id' => 'wep',      'active' => true);
+$config['encryption'][2]     = array('name' => __('WPA Personal'),      'id' => 'psk',      'active' => true);
+$config['encryption'][3]     = array('name' => __('WPA2 Personal'),     'id' => 'psk2',     'active' => true);
+$config['encryption'][4]     = array('name' => __('WPA Enterprise'),    'id' => 'wpa',      'active' => true);
+$config['encryption'][5]     = array('name' => __('WPA2 Enterprise'),   'id' => 'wpa2',     'active' => true);
+
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
 $config['experimental']['active']                   = false;
