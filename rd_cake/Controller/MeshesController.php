@@ -181,6 +181,22 @@ class MeshesController extends AppController {
             '_serialize' => array('items','success','totalCount')
         ));
     }
+
+    public function mesh_entries_index(){
+
+        $items = array();
+        $total = 0;
+
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+
+    }
+
 /*
     //____ BASIC CRUD Manager ________
     public function index_for_filter(){
@@ -610,6 +626,25 @@ class MeshesController extends AppController {
     }
 
 */
+
+    //-- List available encryption options --
+    public function encryption_options(){
+
+        $items = array();
+        $ct = Configure::read('encryption');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
     //----- Menus ------------------------
     public function menu_for_grid(){
 
@@ -724,6 +759,37 @@ class MeshesController extends AppController {
                         array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100,   'items' => $document_group)
                    );
         }
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    public function menu_for_entries_grid(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                ))
+                
+            );
+        }
+
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
