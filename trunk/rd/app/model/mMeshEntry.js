@@ -3,9 +3,9 @@ Ext.define('Rd.model.mMeshEntry', {
     fields: [
          {name: 'id',               type: 'int'     },
          {name: 'name',             type: 'string'  },
-         {name: 'enctryption',      type: 'string'  },
+         {name: 'encryption',       type: 'string'  },
          {name: 'hidden',           type: 'bool'},
          {name: 'isolate',          type: 'bool'},
-         {name: 'all_nodes',        type: 'bool'}
+         {name: 'apply_to_all',     type: 'bool'}
         ]
 });

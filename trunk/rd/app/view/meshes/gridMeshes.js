@@ -31,6 +31,8 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
             {xtype: 'rownumberer'},
             { text: i18n('sOwner'),     dataIndex: 'owner',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
             { text: i18n('sName'),      dataIndex: 'name',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: 'SSID',             dataIndex: 'ssid',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
+            { text: 'BSSID',            dataIndex: 'bssid',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true},
             { text: 'Node count',       dataIndex: 'node_count',    tdCls: 'gridTree', flex: 1},
             { text: 'Nodes up',         dataIndex: 'nodes_up',      tdCls: 'gridTree', flex: 1},
             { text: 'Nodes down',       dataIndex: 'nodes_down',    tdCls: 'gridTree', flex: 1},

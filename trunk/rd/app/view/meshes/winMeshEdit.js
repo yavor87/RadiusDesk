@@ -33,6 +33,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                         title   :  'Entry points',
                         itemId  : 'tabEntryPoints_'+me.getItemId(),
                         xtype   : 'gridMeshEntries',
+                        meshId  : me.getItemId()
                     },
                     {
                         title   :  'Mesh settings',
