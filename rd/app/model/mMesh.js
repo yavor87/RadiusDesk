@@ -3,6 +3,8 @@ Ext.define('Rd.model.mMesh', {
     fields: [
          {name: 'id',               type: 'int'     },
          {name: 'name',             type: 'string'  },
+         {name: 'ssid',             type: 'string'  },
+         {name: 'bssid',            type: 'string'  },
          {name: 'owner',            type: 'string'  },
          {name: 'node_count',       type: 'int'},
          {name: 'nodes_up',         type: 'int'},

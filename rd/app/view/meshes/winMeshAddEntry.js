@@ -73,7 +73,13 @@ Ext.define('Rd.view.meshes.winMeshAddEntry', {
                             },
                             autoScroll:true,
                             items       : [
-                               
+                                {
+                                    itemId  : 'mesh_id',
+                                    xtype   : 'textfield',
+                                    name    : "mesh_id",
+                                    hidden  : true,
+                                    value   : me.meshId
+                                }, 
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : 'SSID',
@@ -122,37 +128,38 @@ Ext.define('Rd.view.meshes.winMeshAddEntry', {
                                     labelClsExtra   : 'lblRdReq',
                                     allowBlank      : false, 
                                 },
-                              /*  {
+                                {
                                     xtype       : 'textfield',
                                     fieldLabel  : 'Key',
                                     name        : 'key',
-                                    allowBlank  : false,
+                                    itemId      : 'key',
+                                    allowBlank  : false,  
                                     blankText   : i18n("sSupply_a_value"),
-                                    labelClsExtra: 'lblRdReq'
-                                }, */
+                                    labelClsExtra: 'lblRdReq',
+                                    hidden      : true,
+                                    disabled    : true
+                                }, 
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : 'RADIUS server',
                                     name        : 'auth_server',
+                                    itemId      : 'auth_server',
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value"),
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    hidden      : true,
+                                    disabled    : true
                                 },
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : 'Shared secret',
                                     name        : 'auth_secret',
+                                    itemId      : 'auth_secret',
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value"),
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : 'RADIUS VLAN assignment',
-                                    name        : 'dynamic_vlan',
-                                    inputValue  : 'dynamic_vlan',
-                                    checked     : false,
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    hidden      : true,
+                                    disabled    : true
                                 }
                             ]
                         }

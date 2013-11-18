@@ -49,7 +49,8 @@ Ext.define('Rd.controller.cMeshes', {
     config      : {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
         urlEdit:            '/cake2/rd_cake/meshes/edit.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json'
+        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridMeshes'}       
@@ -79,7 +80,7 @@ Ext.define('Rd.controller.cMeshes', {
                 click:      me.add
             },
             'gridMeshes #delete'   : {
-               // click:      me.del
+                click:      me.del
             },
             'gridMeshes #edit'   : {
                 click:      me.edit
@@ -93,9 +94,21 @@ Ext.define('Rd.controller.cMeshes', {
             'winMeshAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
+            'gridMeshEntries #reload': {
+                click:  me.reloadEntry
+            },
             'gridMeshEntries #add': {
                 click:  me.addEntry
-            }  
+            },
+            'winMeshAddEntry cmbEncryptionOptions': {
+                change: me.cmbEncryptionChange
+            },
+            'winMeshAddEntry #save': {
+                click: me.btnAddEntrySave
+            },
+            'gridMeshEntries #delete': {
+                click: me.delEntry
+            }   
         });
     },
     winClose:   function(){
@@ -244,15 +257,159 @@ Ext.define('Rd.controller.cMeshes', {
             }
         }
     },
+    del:   function(){
+        var me      = this;     
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
+                    me.getGrid().getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.onStoreMeshesLoaded();   //Update the count   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.getGrid().getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    reloadEntry: function(button){
+        var me      = this;
+        console.log("reload entry grid");
+        var win     = button.up("winMeshEdit");
+        var entGrid = win.down("gridMeshEntries");
+        entGrid.getStore().reload();
+    },
     addEntry: function(button){
-        var me = this;
+        var me      = this;
+        var win     = button.up("winMeshEdit");
+        var store   = win.down("gridMeshEntries").getStore();
         console.log("Add an Entry Point");
         if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddEntryId')){
             var w = Ext.widget('winMeshAddEntry',
             {
-                id          :'winMeshAddEntryId'
+                id          :'winMeshAddEntryId',
+                store       : store,
+                meshId      : win.getItemId()
             });
             me.application.runAction('cDesktop','Add',w);         
         }
-    }
+    },
+    cmbEncryptionChange: function(cmb){
+        var me      = this;
+        var form    = cmb.up('form');
+        var key     = form.down('#key');
+        var srv     = form.down('#auth_server');
+        var scrt    = form.down('#auth_secret'); 
+        var val     = cmb.getValue();
+        if(val == 'none'){
+            key.setVisible(false);
+            key.setDisabled(true); 
+            srv.setVisible(false);
+            srv.setDisabled(true);
+            scrt.setVisible(false);
+            scrt.setDisabled(true);  
+        }
+
+        if((val == 'wep')|(val == 'psk')|(val =='psk2')){
+            key.setVisible(true);
+            key.setDisabled(false); 
+            srv.setVisible(false);
+            srv.setDisabled(true);
+            scrt.setVisible(false);
+            scrt.setDisabled(true);  
+        }
+
+        if((val == 'wpa')|(val == 'wpa2')){
+            key.setVisible(false);
+            key.setDisabled(true); 
+            srv.setVisible(true);
+            srv.setDisabled(false);
+            scrt.setVisible(true);
+            scrt.setDisabled(false);  
+        }
+
+    },
+    btnAddEntrySave:  function(button){
+        var me      = this;
+        var win     = button.up("winMeshAddEntry");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddEntry,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    'New mesh entry point added',
+                    'New mesh enty point created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    delEntry:   function(btn){
+        var me      = this;
+        var win     = btn.up("window");
+        var grid    = win.down("gridMeshEntries");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
 });
