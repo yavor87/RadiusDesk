@@ -1,6 +1,11 @@
 <?
 class VoucherShell extends AppShell {
 
+    //This shell runs at longer intervals (15 min) to check for tw things.
+    //It checks all the new and used vouchers and then see if:
+   //It has **Rd-Voucher** attribute it will mark it as depleted if the time is up
+   //It has **Expiration** attribute it will mark the voucher as expired if it is passed the expiration date
+
     public $uses    = array('Radcheck','Radacct','Voucher','Radusergroup','Radgroupcheck');
     public $tasks   = array('Counters','Usage');
 
