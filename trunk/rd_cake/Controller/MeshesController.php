@@ -166,6 +166,8 @@ class MeshesController extends AppController {
             array_push($items,array(
                 'id'                    => $i['Mesh']['id'], 
                 'name'                  => $i['Mesh']['name'],
+                'ssid'                  => $i['Mesh']['ssid'],
+                'bssid'                 => $i['Mesh']['bssid'],
                 'owner'                 => $owner_tree, 
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
@@ -182,20 +184,7 @@ class MeshesController extends AppController {
         ));
     }
 
-    public function mesh_entries_index(){
-
-        $items = array();
-        $total = 0;
-
-        //___ FINAL PART ___
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            'totalCount' => $total,
-            '_serialize' => array('items','success','totalCount')
-        ));
-
-    }
+    
 
 /*
     //____ BASIC CRUD Manager ________
@@ -318,75 +307,6 @@ class MeshesController extends AppController {
         }
 	}
 
-/*
-    public function manage_components() {
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-          //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id        = $user['id'];
-
-        $rb             = $this->request->data['rb']; 
-
-        if(($rb == 'add')||($rb == 'remove')){
-            $component_id   = $this->request->data['component_id'];
-            $this->ProfileComponent = ClassRegistry::init('ProfileComponent');
-            $q_r    = $this->ProfileComponent->findById($component_id);
-            $component_name = $q_r['ProfileComponent']['name'];
-        }
-
-        foreach(array_keys($this->request->data) as $key){
-            if(preg_match('/^\d+/',$key)){
-
-                if($rb == 'sub'){
-                    $this->Profile->id = $key;
-                    $this->Profile->saveField('available_to_siblings', 1);
-                }
-
-                if($rb == 'no_sub'){
-                    $this->Profile->id = $key;
-                    $this->Profile->saveField('available_to_siblings', 0);
-                }
-
-                if($rb == 'remove'){
-                    $q_r            = $this->Profile->findById($key);
-                    $profile_name   = $q_r['Profile']['name'];
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(
-                        array('Radusergroup.username' => $profile_name,'Radusergroup.groupname' => $component_name), false
-                    );
-                }
-               
-                if($rb == 'add'){
-                    $q_r            = $this->Profile->findById($key);
-                    $profile_name   = $q_r['Profile']['name'];
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name,'Radusergroup.groupname' => $component_name), false
-                    );
-                    $d = array();
-                    $d['username']  = $profile_name;
-                    $d['groupname'] = $component_name;
-                    $d['priority']  = $this->request->data['priority'];
-                    $this->{$this->modelClass}->Radusergroup->create();
-                    $this->{$this->modelClass}->Radusergroup->save($d);
-                }     
-                //-------------
-            }
-        }
-
-        $this->set(array(
-            'success'       => true,
-            '_serialize'    => array('success')
-        ));
-       
-	}
 
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
@@ -404,51 +324,38 @@ class MeshesController extends AppController {
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
-
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
             $item           = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id       = $item['Profile']['user_id'];
-            $profile_name   = $item['Profile']['name'];
+            $owner_id       = $item['Mesh']['user_id'];
+            $profile_name   = $item['Mesh']['name'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name), false
-                    );
                 }else{
                     $fail_flag = true;
                 }
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
                 $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                    array('Radusergroup.username' => $profile_name), false
-                );
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
                 $item           = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id       = $item['Profile']['user_id'];
-                $profile_name   = $item['Profile']['name'];
+                $owner_id       = $item['Mesh']['user_id'];
+                $profile_name   = $item['Mesh']['name'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                        $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                            array('Radusergroup.username' => $profile_name), false
-                        );
                     }else{
                         $fail_flag = true;
                     }
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name), false
-                    );
                 }
             }
         }
@@ -467,7 +374,7 @@ class MeshesController extends AppController {
         }
 	}
 
-
+/*
     public function note_index(){
 
         //__ Authentication + Authorization __
@@ -626,6 +533,119 @@ class MeshesController extends AppController {
     }
 
 */
+
+    //======= MESH entries ============
+    public function mesh_entries_index(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items      = array();
+        $total      = 0;
+        $entry      = ClassRegistry::init('MeshEntry');
+        $entry->contain();
+        $mesh_id    = $this->request->query['mesh_id'];
+        $q_r        = $entry->find('all',array('conditions' => array('MeshEntry.mesh_id' => $mesh_id)));
+
+        foreach($q_r as $m){
+            array_push($items,array( 
+                'id'            => $m['MeshEntry']['id'],
+                'mesh_id'       => $m['MeshEntry']['mesh_id'],
+                'name'          => $m['MeshEntry']['name'],
+                'hidden'        => $m['MeshEntry']['hidden'],
+                'isolate'       => $m['MeshEntry']['isolate'],
+                'apply_to_all'  => $m['MeshEntry']['apply_to_all'],
+                'encryption'    => $m['MeshEntry']['encryption'],
+                'key'           => $m['MeshEntry']['key'],
+                'auth_server'   => $m['MeshEntry']['auth_server'],
+                'auth_secret'   => $m['MeshEntry']['auth_secret'],
+                'dynamic_vlan'  => $m['MeshEntry']['dynamic_vlan']
+
+            ));
+        }
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+    }
+
+    public function mesh_entry_add(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $entry = ClassRegistry::init('MeshEntry'); 
+        $entry->create();
+        if ($entry->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $entry->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+
+    public function mesh_entry_edit(){
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+    }
+
+    public function mesh_entry_view(){
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+    }
+
+    public function mesh_entry_delete(){
+
+       if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag  = false;
+        $entry      = ClassRegistry::init('MeshEntry'); 
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id']; 
+            $entry->id = $this->data['id'];
+            $entry->delete($entry->id, true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                    $entry->id = $d['id'];
+                    $entry->delete($entry->id, true);
+            }
+        }  
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
 
     //-- List available encryption options --
     public function encryption_options(){
