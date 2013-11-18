@@ -92,6 +92,9 @@ $config['encryption'][3]     = array('name' => __('WPA2 Personal'),     'id' => 
 $config['encryption'][4]     = array('name' => __('WPA Enterprise'),    'id' => 'wpa',      'active' => true);
 $config['encryption'][5]     = array('name' => __('WPA2 Enterprise'),   'id' => 'wpa2',     'active' => true);
 
+//== MESHdesk SSID/BSSID
+$config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
+
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
 $config['experimental']['active']                   = false;
