@@ -42,7 +42,7 @@ Ext.define('Rd.controller.cMeshes', {
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
         'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions',
-        'meshes.winMeshEditEntry'
+        'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions'],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption' ],
