@@ -41,7 +41,8 @@ Ext.define('Rd.controller.cMeshes', {
 
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
-        'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions'
+        'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions',
+        'meshes.winMeshEditEntry'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions'],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption' ],
@@ -50,10 +51,13 @@ Ext.define('Rd.controller.cMeshes', {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
         urlEdit:            '/cake2/rd_cake/meshes/edit.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json'
+        urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json',
+        urlViewEntry:       '/cake2/rd_cake/meshes/mesh_entry_view.json',
+        urlEditEntry:       '/cake2/rd_cake/meshes/mesh_entry_edit.json'
     },
     refs: [
-        {  ref: 'grid',  selector:   'gridMeshes'}       
+        {  ref: 'grid',         selector: 'gridMeshes'},
+        {  ref: 'editEntryWin', selector: 'winMeshEditEntry'},      
     ],
     init: function() {
         var me = this;
@@ -100,6 +104,9 @@ Ext.define('Rd.controller.cMeshes', {
             'gridMeshEntries #add': {
                 click:  me.addEntry
             },
+            'gridMeshEntries #edit': {
+                click:  me.editEntry
+            },
             'winMeshAddEntry cmbEncryptionOptions': {
                 change: me.cmbEncryptionChange
             },
@@ -108,7 +115,16 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'gridMeshEntries #delete': {
                 click: me.delEntry
-            }   
+            },
+            'winMeshEditEntry': {
+                beforeshow:      me.loadEntry
+            },
+             'winMeshEditEntry cmbEncryptionOptions': {
+                change: me.cmbEncryptionChange
+            },
+            'winMeshEditEntry #save': {
+                click: me.btnEditEntrySave
+            },
         });
     },
     winClose:   function(){
@@ -365,6 +381,63 @@ Ext.define('Rd.controller.cMeshes', {
                 Ext.ux.Toaster.msg(
                     'New mesh entry point added',
                     'New mesh enty point created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    editEntry: function(button){
+        var me      = this;
+        var win     = button.up("winMeshEdit");
+        var store   = win.down("gridMeshEntries").getStore();
+
+        if(win.down("gridMeshEntries").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr      = win.down("gridMeshEntries").getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditEntryId')){
+                var w = Ext.widget('winMeshEditEntry',
+                {
+                    id          :'winMeshEditEntryId',
+                    store       : store,
+                    entryId     : id
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }else{
+                var w       = me.getEditEntryWin();
+                w.entryId   = id; 
+                me.loadEntry(w)
+            } 
+        }     
+    },
+    loadEntry: function(win){
+        console.log("Before show pappie");
+        var me      = this; 
+        var form    = win.down('form');
+        var entryId = win.entryId;
+        form.load({url:me.urlViewEntry, method:'GET',params:{entry_id:entryId}});
+    },
+    btnEditEntrySave:  function(button){
+        var me      = this;
+        var win     = button.up("winMeshEditEntry");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditEntry,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    'Mesh entry point updated',
+                    'Mesh enty point updated fine',
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
