@@ -600,18 +600,36 @@ class MeshesController extends AppController {
 
     public function mesh_entry_edit(){
 
-        $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
+
+        if ($this->request->is('post')) {
+            $entry = ClassRegistry::init('MeshEntry');
+            // If the form data can be validated and saved...
+            if ($entry->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        } 
     }
 
     public function mesh_entry_view(){
 
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $entry = ClassRegistry::init('MeshEntry');
+
+        $id    = $this->request->query['entry_id'];
+        $q_r   = $entry->findById($id);
+
         $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
+            'data'     => $q_r['MeshEntry'],
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
     }
 
     public function mesh_entry_delete(){
