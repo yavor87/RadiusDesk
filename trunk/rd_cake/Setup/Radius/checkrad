@@ -1499,8 +1499,9 @@ if ($ARGV[0] eq 'livingston') {
 	print LOG "  checkrad: unknown NAS type $ARGV[0]\n" if ($debug);
 	print STDERR "checkrad: unknown NAS type $ARGV[0]\n";
 	##$ret = 2;
-	#RADIUSDESK override unknown
-	$ret = 1;
+        #RADIUSDESK override unknown
+        $ret = 1;
+
 }
 
 if ($debug) {
