@@ -1,0 +1,19 @@
+$(if error == '')
+<html>
+   <head>
+      <title>...</title>
+      <meta http-equiv="refresh" content="0; url=http://repace_with_your_server.com/cake2/rd_cake/dynamic_details/mikrotik_browser_detect/?loginlink=$(link-login-only)&nasid=$(identity)&ssid=Struisbaai&type=mikrotik&link_status=$(link-status)&link_login_only=$(link-login-only)&link_logout=$(link-logout)">
+      <meta http-equiv="pragma" content="no-cache">
+      <meta http-equiv="expires" content="-1">
+   </head>
+   <body>
+   </body>
+</html>
+$(else)
+$(var)({
+	'logged_in' 		: '$(logged-in)', 	
+	'link_login_only' 	: '$(link-login-only)',
+	'error_orig'		: '$(error-orig)',
+	'error'			: '$(error)'
+})
+$(endif)
