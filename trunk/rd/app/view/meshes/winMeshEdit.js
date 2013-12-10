@@ -43,7 +43,9 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                     },
                     {
                         title   :  'Exit points',
-                        itemId  : 'tabExitPoints'
+                        itemId  : 'tabExitPoints',
+                        xtype   : 'gridMeshExits',
+                        meshId  : me.getItemId()
                     },
                     {
                         title   :  'Nodes',
