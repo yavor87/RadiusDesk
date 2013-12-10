@@ -666,7 +666,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -675,8 +675,36 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (14,29,'lll',0,1,1,'none','','','',0,'2013-11-18 14:10:34','2013-11-18 14:10:34'),(15,29,'kkk',1,1,1,'wep','ttttt','','',0,'2013-11-18 14:25:11','2013-11-18 14:25:11'),(16,29,'lekker',0,0,0,'wpa','','192.168.100.3','kooskoos',0,'2013-11-18 14:34:06','2013-11-18 14:34:06');
+INSERT INTO `mesh_entries` VALUES (17,29,'RD Guest',0,1,0,'none','','','',0,'2013-11-23 01:26:48','2013-11-23 01:26:48'),(18,29,'RD Wireless',0,1,1,'wpa2','','192.168.99.1','testing123',0,'2013-11-23 01:27:23','2013-11-23 01:28:11');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mesh_exits`
+--
+
+DROP TABLE IF EXISTS `mesh_exits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mesh_exits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesh_id` int(11) DEFAULT NULL,
+  `name` varchar(128) NOT NULL,
+  `type` enum('bridge','tagged_bridge','nat_dhcp','captive_portal') DEFAULT 'bridge',
+  `auto_detect` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mesh_exits`
+--
+
+LOCK TABLES `mesh_exits` WRITE;
+/*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1676,7 +1704,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','3.jpg','2013-04-06 13:51:50','2013-08-21 14:56:21'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','1.jpg','2013-04-06 13:51:50','2013-12-10 10:07:55'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1807,4 +1835,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-18 14:57:57
+-- Dump completed on 2013-12-10 10:14:21
