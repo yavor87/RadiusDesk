@@ -42,10 +42,11 @@ Ext.define('Rd.controller.cMeshes', {
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
         'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions',
-        'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings'
+        'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings', 'meshes.gridMeshExits',
+        'meshes.winMeshAddExit'
     ],
-    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions'],
-    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption' ],
+    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits' ],
+    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit'  ],
     selectedRecord: null,
     config      : {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
@@ -53,7 +54,10 @@ Ext.define('Rd.controller.cMeshes', {
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json',
         urlViewEntry:       '/cake2/rd_cake/meshes/mesh_entry_view.json',
-        urlEditEntry:       '/cake2/rd_cake/meshes/mesh_entry_edit.json'
+        urlEditEntry:       '/cake2/rd_cake/meshes/mesh_entry_edit.json',
+        urlAddExit:         '/cake2/rd_cake/meshes/mesh_exit_add.json',
+        urlViewExit:        '/cake2/rd_cake/meshes/mesh_exit_view.json',
+        urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json'
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'},
@@ -124,6 +128,9 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshEditEntry #save': {
                 click: me.btnEditEntrySave
+            },
+            'gridMeshExits #add': {
+                click:  me.addExit
             },
         });
     },
@@ -483,6 +490,36 @@ Ext.define('Rd.controller.cMeshes', {
                     });
                 }
             });
+        }
+    },
+    addExit: function(button){
+        var me      = this;
+
+        var win             = button.up("winMeshEdit");
+
+        //If there are NO entry points defined; we will NOT pop up this window.
+        var entries_count   = win.down("gridMeshEntries").getStore().count();
+        if(entries_count == 0){
+            Ext.ux.Toaster.msg(
+                'No entry points defined',
+                'Please define some entry points first',
+                Ext.ux.Constants.clsWarn,
+                Ext.ux.Constants.msgWarn
+            );
+            return;
+        }
+        
+        //Entry points present; continue 
+        var store   = win.down("gridMeshExits").getStore();
+        console.log("Add an Exit Point");
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddExitId')){
+            var w = Ext.widget('winMeshAddExit',
+            {
+                id          :'winMeshAddExitId',
+                store       : store,
+                meshId      : win.getItemId()
+            });
+            me.application.runAction('cDesktop','Add',w);         
         }
     },
 });
