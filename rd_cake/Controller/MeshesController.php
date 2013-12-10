@@ -665,6 +665,129 @@ class MeshesController extends AppController {
     }
 
 
+    //======= MESH exits ============
+    public function mesh_exits_index(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items      = array();
+        $total      = 0;
+        $exit      = ClassRegistry::init('MeshExit');
+        $exit->contain();
+        $mesh_id    = $this->request->query['mesh_id'];
+        $q_r        = $exit->find('all',array('conditions' => array('MeshExit.mesh_id' => $mesh_id)));
+
+        foreach($q_r as $m){
+            array_push($items,array( 
+                'id'            => $m['MeshExit']['id'],
+                'mesh_id'       => $m['MeshExit']['mesh_id'],
+                'name'          => $m['MeshExit']['name']
+
+            ));
+        }
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+    }
+
+    public function mesh_exit_add(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $exit = ClassRegistry::init('MeshExit'); 
+        $exit->create();
+        if ($exit->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $exit->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+
+    public function mesh_exit_edit(){
+
+
+        if ($this->request->is('post')) {
+            $exit = ClassRegistry::init('MeshExit');
+            // If the form data can be validated and saved...
+            if ($exit->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        } 
+    }
+
+    public function mesh_exit_view(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $exit = ClassRegistry::init('MeshExit');
+
+        $id    = $this->request->query['exit_id'];
+        $q_r   = $exit->findById($id);
+
+        $this->set(array(
+            'data'     => $q_r['MeshExit'],
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
+    public function mesh_exit_delete(){
+
+       if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag  = false;
+        $exit       = ClassRegistry::init('MeshExit'); 
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id']; 
+            $exit->id = $this->data['id'];
+            $exit->delete($exit->id, true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                    $exit->id = $d['id'];
+                    $exit->delete($exit->id, true);
+            }
+        }  
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+
     //-- List available encryption options --
     public function encryption_options(){
 
@@ -805,6 +928,37 @@ class MeshesController extends AppController {
     }
 
     public function menu_for_entries_grid(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                ))
+                
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+     public function menu_for_exits_grid(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
