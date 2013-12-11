@@ -15,7 +15,13 @@ class Mesh extends AppModel {
     public $hasMany = array(
         'MeshNote'   => array(
             'dependent'     => true   
-        )
+        ),
+        'MeshEntry'   => array(
+            'dependent'     => true   
+        ),
+        'MeshExit'   => array(
+            'dependent'     => true   
+        ),
     );
 
     public $validate = array(
