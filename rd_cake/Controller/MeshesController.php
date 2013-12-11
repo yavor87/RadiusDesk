@@ -684,7 +684,9 @@ class MeshesController extends AppController {
             array_push($items,array( 
                 'id'            => $m['MeshExit']['id'],
                 'mesh_id'       => $m['MeshExit']['mesh_id'],
-                'name'          => $m['MeshExit']['name']
+                'name'          => $m['MeshExit']['name'],
+                'type'          => $m['MeshExit']['type'],
+                'auto_detect'   => $m['MeshExit']['auto_detect'],
 
             ));
         }
@@ -784,6 +786,36 @@ class MeshesController extends AppController {
         $this->set(array(
             'success' => true,
             '_serialize' => array('success')
+        ));
+    }
+
+   public function mesh_entry_points(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //Get the mesh id
+        $mesh_id    = $this->request->query['mesh_id'];
+
+        $exit       = ClassRegistry::init('MeshExit');
+        $entry      = ClassRegistry::init('MeshEntry');
+
+        $entry->contain();
+        $ent_q_r    = $entry->find('all',array('conditions' => array('MeshEntry.mesh_id' => $mesh_id))); 
+       // print_r($ent_q_r);
+
+        $items = array();
+        array_push($items,array('id' => 0, 'name' => "(None)"));
+        foreach($ent_q_r as $i){
+            $id = $i['MeshEntry']['id'];
+            $n  = $i['MeshEntry']['name'];
+            array_push($items,array('id' => $id, 'name' => $n));
+        }
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
         ));
     }
 
