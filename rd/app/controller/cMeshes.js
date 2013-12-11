@@ -43,10 +43,10 @@ Ext.define('Rd.controller.cMeshes', {
         'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
         'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions',
         'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings', 'meshes.gridMeshExits',
-        'meshes.winMeshAddExit'
+        'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints'
     ],
-    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits' ],
-    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit'  ],
+    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits', 'sMeshEntryPoints' ],
+    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit', 'mMeshEntryPoint'  ],
     selectedRecord: null,
     config      : {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
@@ -129,8 +129,23 @@ Ext.define('Rd.controller.cMeshes', {
             'winMeshEditEntry #save': {
                 click: me.btnEditEntrySave
             },
+            'gridMeshExits #reload': {
+                click:  me.reloadExit
+            },
             'gridMeshExits #add': {
                 click:  me.addExit
+            },
+            'winMeshAddExit #btnTypeNext' : {
+                click:  me.btnExitTypeNext
+            },
+            'winMeshAddExit #btnDataPrev' : {
+                click:  me.btnExitDataPrev
+            },
+            'winMeshAddExit #save' : {
+                click:  me.btnAddExitSave
+            },
+            'gridMeshExits #delete': {
+                click: me.delExit
             },
         });
     },
@@ -492,6 +507,12 @@ Ext.define('Rd.controller.cMeshes', {
             });
         }
     },
+    reloadExit: function(button){
+        var me      = this;
+        var win     = button.up("winMeshEdit");
+        var exit    = win.down("gridMeshExits");
+        exit.getStore().reload();
+    },
     addExit: function(button){
         var me      = this;
 
@@ -520,6 +541,95 @@ Ext.define('Rd.controller.cMeshes', {
                 meshId      : win.getItemId()
             });
             me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    btnExitTypeNext: function(button){
+        var me      = this;
+        var win     = button.up('winMeshAddExit');
+        var type    = win.down('radiogroup').getValue().exit_type;
+        var vlan    = win.down('#vlan');
+        var tab_capt= win.down('#tabCaptivePortal');
+        var sel_type= win.down('#type');
+        sel_type.setValue(type);
+ 
+        if(type == 'tagged_bridge'){
+            vlan.setVisible(true);
+            vlan.setDisabled(false);
+        }else{
+            vlan.setVisible(false);
+            vlan.setDisabled(true);
+        }
+
+        if(type == 'captive_portal'){
+            tab_capt.setDisabled(false);
+        }else{
+            tab_capt.setDisabled(true); 
+        }
+        win.getLayout().setActiveItem('scrnData');
+    },
+    btnExitDataPrev: function(button){
+        var me      = this;
+        var win     = button.up('winMeshAddExit');
+        win.getLayout().setActiveItem('scrnType');
+    },
+    btnAddExitSave: function(button){
+        var me      = this;
+        var win     = button.up("winMeshAddExit");
+        var form    = win.down('#scrnData');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddExit,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    'New mesh exit point added',
+                    'New mesh exit point created fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    delExit:   function(btn){
+        var me      = this;
+        var win     = btn.up("window");
+        var grid    = win.down("gridMeshExits");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
         }
     },
 });
