@@ -675,7 +675,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (19,29,'RD Guest',0,1,1,'none','','','',0,'2013-12-10 14:21:52','2013-12-10 14:21:52'),(20,29,'RD Wireless',0,0,1,'none','','','',0,'2013-12-11 14:04:05','2013-12-11 14:04:05');
+INSERT INTO `mesh_entries` VALUES (19,29,'RD Guest',0,1,1,'none','','','',0,'2013-12-10 14:21:52','2013-12-10 14:21:52'),(20,29,'RD Wireless',0,0,1,'wpa2','radiusdesk','10.10.10.10','testing123',0,'2013-12-11 14:04:05','2013-12-12 09:09:59'),(21,29,'RD POS',1,1,0,'wep','radiusdesk','','',0,'2013-12-12 09:11:10','2013-12-12 09:11:10');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -693,7 +693,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -702,6 +702,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
+INSERT INTO `mesh_exit_mesh_entries` VALUES (3,8,19,'2013-12-12 09:08:31','2013-12-12 09:08:31'),(4,9,20,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(5,10,21,'2013-12-12 09:11:42','2013-12-12 09:11:42');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -722,7 +723,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -731,7 +732,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (1,NULL,'','bridge',0,NULL,'2013-12-11 11:25:49','2013-12-11 11:25:49'),(2,NULL,'','bridge',0,NULL,'2013-12-11 11:38:23','2013-12-11 11:38:23'),(6,29,'Common','bridge',1,NULL,'2013-12-11 14:04:52','2013-12-11 14:04:52');
+INSERT INTO `mesh_exits` VALUES (1,NULL,'','bridge',0,NULL,'2013-12-11 11:25:49','2013-12-11 11:25:49'),(2,NULL,'','bridge',0,NULL,'2013-12-11 11:38:23','2013-12-11 11:38:23'),(8,29,'Corporate Guest VLAN','tagged_bridge',1,101,'2013-12-12 09:08:31','2013-12-12 09:08:31'),(9,29,'Corporate Data VLAN','tagged_bridge',1,101,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(10,29,'Point of Sales VLAN','tagged_bridge',1,102,'2013-12-12 09:11:42','2013-12-12 09:11:42');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -786,7 +787,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (29,'koos','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2013-11-18 11:38:39','2013-11-18 11:38:39'),(30,'jan','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2013-11-18 14:39:36','2013-11-18 14:39:36');
+INSERT INTO `meshes` VALUES (29,'Mega Store - Bloemfontein','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2013-11-18 11:38:39','2013-11-18 11:38:39'),(30,'Mega Store - Pretoria','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2013-11-18 14:39:36','2013-11-18 14:39:36');
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1863,4 +1864,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-11 14:09:16
+-- Dump completed on 2013-12-12  9:58:45
