@@ -10,7 +10,7 @@ Ext.define('Rd.view.meshes.cmbMeshEntryPoints', {
     editable        : false,
     mode            : 'local',
     itemId          : 'entry_points',
-    name            : 'entry_points',
+    name            : 'entry_points[]',
     multiSelect     : true,
     labelClsExtra   : 'lblRdReq',
     allowBlank      : true
