@@ -67,7 +67,19 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
             {xtype: 'rownumberer'},
             { text: 'Name',                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1},
             { text: 'Type',                 dataIndex: 'type',          tdCls: 'gridTree', flex: 1},
-            { text: 'Connects with',        dataIndex: 'connects_with', tdCls: 'gridTree', flex: 1},
+            { 
+                text    :   'Connects with',
+                sortable: false,
+                flex    : 1,  
+                xtype   :  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"gridRealm noRight\">No one</div></tpl>', //Warn them when available     to all
+                            '<tpl for="connects_with">',     // interrogate the realms property within the data
+                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                            '</tpl>'
+                        ),
+                dataIndex: 'connects_with'
+            },  
             { text: 'Auto-detect',          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1}
         ];
         me.callParent(arguments);

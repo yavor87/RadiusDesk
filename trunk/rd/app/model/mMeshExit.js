@@ -4,7 +4,7 @@ Ext.define('Rd.model.mMeshExit', {
          {name: 'id',               type: 'int'     },
          {name: 'name',             type: 'string'  },
          {name: 'type',             type: 'string'  },
-         {name: 'connects_with',    type: 'string'},
+         'connects_with',
          {name: 'auto_detect',      type: 'bool'}
         ]
 });
