@@ -676,16 +676,24 @@ class MeshesController extends AppController {
         $items      = array();
         $total      = 0;
         $exit      = ClassRegistry::init('MeshExit');
-        $exit->contain();
+        $exit->contain('MeshExitMeshEntry.MeshEntry.name');
         $mesh_id    = $this->request->query['mesh_id'];
         $q_r        = $exit->find('all',array('conditions' => array('MeshExit.mesh_id' => $mesh_id)));
+       // print_r($q_r);
 
         foreach($q_r as $m){
+            $exit_entries = array();
+
+            foreach($m['MeshExitMeshEntry'] as $m_e_ent){
+                array_push($exit_entries,array('name' => $m_e_ent['MeshEntry']['name']));
+            }
+
             array_push($items,array( 
                 'id'            => $m['MeshExit']['id'],
                 'mesh_id'       => $m['MeshExit']['mesh_id'],
                 'name'          => $m['MeshExit']['name'],
                 'type'          => $m['MeshExit']['type'],
+                'connects_with' => $exit_entries,
                 'auto_detect'   => $m['MeshExit']['auto_detect'],
 
             ));
@@ -694,8 +702,7 @@ class MeshesController extends AppController {
         $this->set(array(
             'items' => $items,
             'success' => true,
-            'totalCount' => $total,
-            '_serialize' => array('items','success','totalCount')
+            '_serialize' => array('items','success')
         ));
     }
 
@@ -705,14 +712,48 @@ class MeshesController extends AppController {
             return;
         }
 
-        $exit = ClassRegistry::init('MeshExit'); 
+       // print_r($this->request->data);
+      //  exit;
+
+        $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
+        $exit           = ClassRegistry::init('MeshExit'); 
         $exit->create();
         if ($exit->save($this->request->data)) {
+            $new_id = $exit->id;
+
+            //Add the entry points
+            $count      = 0;
+            $entry_ids  = array();
+            $empty_flag = false;
+
+            if (array_key_exists('entry_points', $this->request->data)) {
+                foreach($this->request->data['entry_points'] as $e){
+                    if($this->request->data['entry_points'][$count] == 0){
+                        $empty_flag = true;
+                        break;
+                    }else{
+                        array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                    }
+                    $count++;
+                }
+            }
+
+            //Only if empty was not specified
+            if((!$empty_flag)&&(count($entry_ids)>0)){
+                $entry_point->create();
+                $data = array();
+                foreach($entry_ids as $id){
+                    $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
+                    $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
+                    $entry_point->save($data);
+                }
+            }
+
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
-        } else {
+        }else{
             $message = 'Error';
             $this->set(array(
                 'errors'    => $exit->validationErrors,
