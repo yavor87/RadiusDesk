@@ -768,10 +768,46 @@ class MeshesController extends AppController {
 
 
         if ($this->request->is('post')) {
-            $exit = ClassRegistry::init('MeshExit');
+
+            $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
+            $exit           = ClassRegistry::init('MeshExit');
+
             // If the form data can be validated and saved...
             if ($exit->save($this->request->data)) {
-                   $this->set(array(
+
+                //Add the entry points
+                $count      = 0;
+                $entry_ids  = array();
+                $empty_flag = false;
+                $new_id     = $this->request->data['id'];
+
+                //Clear previous ones first:
+                $entry_point->deleteAll(array('MeshExitMeshEntry.mesh_exit_id' => $new_id), false);
+
+                if (array_key_exists('entry_points', $this->request->data)) {
+                    foreach($this->request->data['entry_points'] as $e){
+                        if($this->request->data['entry_points'][$count] == 0){
+                            $empty_flag = true;
+                            break;
+                        }else{
+                            array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                        }
+                        $count++;
+                    }
+                }
+
+                //Only if empty was not specified
+                if((!$empty_flag)&&(count($entry_ids)>0)){
+                    $entry_point->create();
+                    $data = array();
+                    foreach($entry_ids as $id){
+                        $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
+                        $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
+                        $entry_point->save($data);
+                    }
+                }
+
+                $this->set(array(
                     'success' => true,
                     '_serialize' => array('success')
                 ));
@@ -787,9 +823,18 @@ class MeshesController extends AppController {
         }
 
         $exit = ClassRegistry::init('MeshExit');
+        $exit->contain('MeshExitMeshEntry');
 
         $id    = $this->request->query['exit_id'];
         $q_r   = $exit->findById($id);
+
+        //entry_points
+        $q_r['MeshExit']['entry_points'] = array();
+        foreach($q_r['MeshExitMeshEntry'] as $i){
+            array_push($q_r['MeshExit']['entry_points'],$i['id']);
+        }
+
+      //  print_r($q_r);
 
         $this->set(array(
             'data'     => $q_r['MeshExit'],
