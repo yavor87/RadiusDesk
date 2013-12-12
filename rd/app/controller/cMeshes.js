@@ -40,10 +40,10 @@ Ext.define('Rd.controller.cMeshes', {
     },
 
     views:  [
-        'components.pnlBanner',     'meshes.gridMeshes',      'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
-        'meshes.gridMeshEntries',   'meshes.winMeshAddEntry', 'meshes.cmbEncryptionOptions',
-        'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings', 'meshes.gridMeshExits',
-        'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints'
+        'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
+        'meshes.gridMeshEntries',   'meshes.winMeshAddEntry',   'meshes.cmbEncryptionOptions',
+        'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings',   'meshes.gridMeshExits',
+        'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits', 'sMeshEntryPoints' ],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit', 'mMeshEntryPoint'  ],
@@ -61,7 +61,8 @@ Ext.define('Rd.controller.cMeshes', {
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'},
-        {  ref: 'editEntryWin', selector: 'winMeshEditEntry'},      
+        {  ref: 'editEntryWin', selector: 'winMeshEditEntry'},
+        {  ref: 'editExitWin',  selector: 'winMeshEditExit'}      
     ],
     init: function() {
         var me = this;
@@ -146,6 +147,15 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'gridMeshExits #delete': {
                 click: me.delExit
+            },
+            'gridMeshExits #edit': {
+                click:  me.editExit
+            },
+            'winMeshEditExit': {
+                beforeshow:      me.loadExit
+            },
+            'winMeshEditExit #save': {
+                click: me.btnEditExitSave
             },
         });
     },
@@ -632,4 +642,81 @@ Ext.define('Rd.controller.cMeshes', {
             });
         }
     },
+    editExit: function(button){
+        var me      = this;
+        var win     = button.up("winMeshEdit");
+        var store   = win.down("gridMeshExits").getStore();
+
+        if(win.down("gridMeshExits").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr      = win.down("gridMeshExits").getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var meshId  = sr.get('mesh_id');
+            var type    = sr.get('type');
+            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditExitId')){
+                var w = Ext.widget('winMeshEditExit',
+                {
+                    id          :'winMeshEditExitId',
+                    store       : store,
+                    exitId      : id,
+                    meshId      : meshId,
+                    type        : type
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }else{
+                var w       = me.getEditExitWin();
+                var vlan    = w.down('#vlan');
+                var tab_capt= w.down('#tabCaptivePortal');
+                w.exitId    = id;
+                w.meshId    = meshId;
+
+                if(type == 'tagged_bridge'){
+                    vlan.setVisible(true);
+                    vlan.setDisabled(false);
+                }else{
+                    vlan.setVisible(false);
+                    vlan.setDisabled(true);
+                }
+
+                if(type == 'captive_portal'){
+                    tab_capt.setDisabled(false);
+                }else{
+                    tab_capt.setDisabled(true); 
+                }
+                me.loadExit(w)
+            } 
+        }     
+    },
+    loadExit: function(win){
+        var me      = this; 
+        var form    = win.down('form');
+        var exitId = win.exitId;
+        form.load({url:me.urlViewExit, method:'GET',params:{exit_id:exitId}});
+    },
+    btnEditExitSave:  function(button){
+        var me      = this;
+        var win     = button.up("winMeshEditExit");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditExit,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    'Mesh exit point updated',
+                    'Mesh exit point updated fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    }
 });
