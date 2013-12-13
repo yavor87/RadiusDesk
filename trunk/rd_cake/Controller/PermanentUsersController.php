@@ -1825,6 +1825,12 @@ class PermanentUsersController extends AppController {
                 }
             }
         }
+
+        //=== Check if the combobox send us a filter request ===
+        if(isset($this->request->query['query'])){
+            $un = $this->request->query['query'];
+            array_push($c['conditions'],array("User.username LIKE" => '%'.$un.'%'));  
+        }
     
         //== ONLY Permanent Users ==
         $p_user_name = Configure::read('group.user');
