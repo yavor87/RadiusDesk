@@ -24,6 +24,14 @@ class Mesh extends AppModel {
         ),
     );
 
+    public $hasOne = array(
+        'MeshSetting'   => array(
+            'dependent'     => true   
+        )
+    );
+
+
+
     public $validate = array(
         'name' => array(
             'required' => array(
