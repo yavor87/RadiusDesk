@@ -664,6 +664,56 @@ class MeshesController extends AppController {
         ));
     }
 
+    //======= MESH settings =======
+    public function mesh_settings_view(){
+        $id         = $this->request->query['mesh_id'];  
+        $data       = Configure::read('mesh_settings'); //Read the defaults
+        $setting    = ClassRegistry::init('MeshSetting');
+        $setting->contain();
+
+        $q_r = $setting->find('first', array('conditions' => array('MeshSetting.mesh_id' => $id)));
+        if($q_r){  
+            $data = $q_r['MeshSetting'];  
+        }
+
+        $this->set(array(
+            'data'      => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
+    public function mesh_settings_edit(){
+
+        if ($this->request->is('post')) {
+
+            //Unfortunately there are many check items which means they will not be in the POST if unchecked
+            //so we have to check for them
+            $check_items = array('ap','bl','ag','b','f');
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
+
+            $mesh_id = $this->request->data['mesh_id'];
+            //See if there is not already a setting entry
+            $setting    = ClassRegistry::init('MeshSetting');
+            $q_r        = $setting->find('first', array('conditions' => array('MeshSetting.mesh_id' => $mesh_id)));
+            if($q_r){
+                $this->request->data['id'] = $q_r['MeshSetting']['id']; //Set the ID
+            }
+
+            if ($setting->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
+    }
 
     //======= MESH exits ============
     public function mesh_exits_index(){
@@ -884,19 +934,41 @@ class MeshesController extends AppController {
         //Get the mesh id
         $mesh_id    = $this->request->query['mesh_id'];
 
+        $exit_id = false;
+
+        //Check if the exit_id was included
+        if(isset($this->request->query['exit_id'])){
+            $exit_id = $this->request->query['exit_id'];
+        }
+
         $exit       = ClassRegistry::init('MeshExit');
         $entry      = ClassRegistry::init('MeshEntry');
 
-        $entry->contain();
+        $entry->contain('MeshExitMeshEntry');
         $ent_q_r    = $entry->find('all',array('conditions' => array('MeshEntry.mesh_id' => $mesh_id))); 
-       // print_r($ent_q_r);
+        //print_r($ent_q_r);
 
         $items = array();
-        array_push($items,array('id' => 0, 'name' => "(None)"));
+        array_push($items,array('id' => 0, 'name' => "(None)")); //Allow the user not to assign at this stage
         foreach($ent_q_r as $i){
-            $id = $i['MeshEntry']['id'];
-            $n  = $i['MeshEntry']['name'];
-            array_push($items,array('id' => $id, 'name' => $n));
+
+            //If this entry point is already associated; we will NOT add it
+            if(count($i['MeshExitMeshEntry'])== 0){
+                $id = $i['MeshEntry']['id'];
+                $n  = $i['MeshEntry']['name'];
+                array_push($items,array('id' => $id, 'name' => $n));
+            }
+
+            //if $exit_id is set; we add it 
+            if($exit_id){
+                if(count($i['MeshExitMeshEntry'])> 0){
+                    if($i['MeshExitMeshEntry'][0]['mesh_exit_id'] == $exit_id){
+                        $id = $i['MeshEntry']['id'];
+                        $n  = $i['MeshEntry']['name'];
+                        array_push($items,array('id' => $id, 'name' => $n));
+                    }
+                }
+            }
         }
         $this->set(array(
             'items' => $items,
