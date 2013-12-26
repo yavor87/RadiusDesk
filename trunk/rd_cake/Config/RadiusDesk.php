@@ -92,6 +92,16 @@ $config['encryption'][3]     = array('name' => __('WPA2 Personal'),     'id' => 
 $config['encryption'][4]     = array('name' => __('WPA Enterprise'),    'id' => 'wpa',      'active' => true);
 $config['encryption'][5]     = array('name' => __('WPA2 Enterprise'),   'id' => 'wpa2',     'active' => true);
 
+//== Default mesh settings ==
+//Define default settings for the mesh which can be overwritten
+$config['mesh_settings']['ap']  = false; //AP Isolation
+$config['mesh_settings']['bl']  = false; //Bridge loop avoidence
+$config['mesh_settings']['ag']  = true;  //Aggregation
+$config['mesh_settings']['b']   = false; //Bonding
+$config['mesh_settings']['f']   = true;  //Fragmentation
+$config['mesh_settings']['it']  = 1000; //OGM Interval
+$config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching  
+
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
 
