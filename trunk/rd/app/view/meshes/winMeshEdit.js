@@ -48,8 +48,15 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                         meshId  : me.getItemId()
                     },
                     {
-                        title   :  'Nodes',
-                        itemId  : 'tabNodes'
+                        title       : 'Node settings',
+                        itemId      : 'tabNodeCommonSettings',
+                        xtype       : 'pnlNodeCommonSettings',
+                        meshId      : me.getItemId()   
+                    },
+                     {
+                        title       : 'Nodes',
+                        itemId      : 'tabNodes',
+                        meshId      : me.getItemId()     
                     },
                     {
                         title   :  'Map',

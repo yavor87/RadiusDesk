@@ -13,6 +13,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
     iconCls:    'edit',
     autoShow:   false,
     meshId:    '',
+    exitId:     '',
     store:      undefined,
     defaults: {
             border: false
@@ -34,6 +35,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
         });
  
         cmbConnectWith.getStore().getProxy().setExtraParam('mesh_id',me.meshId);
+        cmbConnectWith.getStore().getProxy().setExtraParam('exit_id',me.exitId);
         cmbConnectWith.getStore().load();
  
         var frmData = Ext.create('Ext.form.Panel',{

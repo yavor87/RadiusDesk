@@ -44,24 +44,24 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : 'Aggregation',
-                        name        : 'aggregation',
-                        inputValue  : 'aggregation',
+                        name        : 'ag',
+                        inputValue  : 'ag',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : 'Bonding',
-                        name        : 'bonding',
-                        inputValue  : 'bonding',
+                        name        : 'b',
+                        inputValue  : 'b',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : 'Fragmentation',
-                        name        : 'fragmentation',
-                        inputValue  : 'fragmentation',
+                        name        : 'f',
+                        inputValue  : 'f',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
@@ -79,10 +79,10 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'numberfield',
-                        name        : 'gatweway',
+                        name        : 'gatweway_switching',
                         fieldLabel  : 'Gateway switching',
                         value       : 20,
-                        maxValue    : 256,
+                        maxValue    : 255,
                         step        : 1,
                         minValue    : 1,
                         labelClsExtra: 'lblRdReq',

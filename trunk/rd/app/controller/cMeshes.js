@@ -43,7 +43,8 @@ Ext.define('Rd.controller.cMeshes', {
         'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard', 'meshes.winMeshEdit',
         'meshes.gridMeshEntries',   'meshes.winMeshAddEntry',   'meshes.cmbEncryptionOptions',
         'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings',   'meshes.gridMeshExits',
-        'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit'
+        'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
+        'meshes.pnlNodeCommonSettings'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits', 'sMeshEntryPoints' ],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit', 'mMeshEntryPoint'  ],
@@ -55,6 +56,8 @@ Ext.define('Rd.controller.cMeshes', {
         urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json',
         urlViewEntry:       '/cake2/rd_cake/meshes/mesh_entry_view.json',
         urlEditEntry:       '/cake2/rd_cake/meshes/mesh_entry_edit.json',
+        urlViewMeshSettings:'/cake2/rd_cake/meshes/mesh_settings_view.json',
+        urlEditMeshSettings:'/cake2/rd_cake/meshes/mesh_settings_edit.json',
         urlAddExit:         '/cake2/rd_cake/meshes/mesh_exit_add.json',
         urlViewExit:        '/cake2/rd_cake/meshes/mesh_exit_view.json',
         urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json'
@@ -129,6 +132,12 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshEditEntry #save': {
                 click: me.btnEditEntrySave
+            },
+            'winMeshEdit #tabMeshSettings' : {
+                activate:      me.frmMeshSettingsLoad
+            },
+            'pnlMeshSettings #save': {
+                click:  me.btnMeshSettingsSave
             },
             'gridMeshExits #reload': {
                 click:  me.reloadExit
@@ -516,6 +525,32 @@ Ext.define('Rd.controller.cMeshes', {
                 }
             });
         }
+    },
+    frmMeshSettingsLoad: function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        var meshId  = tab.meshId;
+        form.load({url:me.urlViewMeshSettings, method:'GET',params:{mesh_id:meshId}});
+    },
+    btnMeshSettingsSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var tab     = button.up('#tabMeshSettings');
+        var meshId  = tab.meshId;
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditMeshSettings,
+            params              : {mesh_id: meshId},
+            success: function(form, action) {
+                Ext.ux.Toaster.msg(
+                    'Mesh settings updated',
+                    'Mesh settings updated fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     reloadExit: function(button){
         var me      = this;
