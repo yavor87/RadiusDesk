@@ -693,7 +693,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -702,7 +702,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (3,8,19,'2013-12-12 09:08:31','2013-12-12 09:08:31'),(4,9,20,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(5,10,21,'2013-12-12 09:11:42','2013-12-12 09:11:42');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (4,9,20,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(8,8,19,'2013-12-12 13:58:23','2013-12-12 13:58:23');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -723,7 +723,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -732,7 +732,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (1,NULL,'','bridge',0,NULL,'2013-12-11 11:25:49','2013-12-11 11:25:49'),(2,NULL,'','bridge',0,NULL,'2013-12-11 11:38:23','2013-12-11 11:38:23'),(8,29,'Corporate Guest VLAN','tagged_bridge',1,101,'2013-12-12 09:08:31','2013-12-12 09:08:31'),(9,29,'Corporate Data VLAN','tagged_bridge',1,101,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(10,29,'Point of Sales VLAN','tagged_bridge',1,102,'2013-12-12 09:11:42','2013-12-12 09:11:42');
+INSERT INTO `mesh_exits` VALUES (8,29,'Corporate Guest VLAN','tagged_bridge',1,100,'2013-12-12 09:08:31','2013-12-12 13:58:23'),(9,29,'Corporate Data VLAN','tagged_bridge',1,101,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(10,29,'Point of Sales VLAN','tagged_bridge',1,103,'2013-12-12 09:11:42','2013-12-26 10:35:51');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -760,6 +760,39 @@ CREATE TABLE `mesh_notes` (
 LOCK TABLES `mesh_notes` WRITE;
 /*!40000 ALTER TABLE `mesh_notes` DISABLE KEYS */;
 /*!40000 ALTER TABLE `mesh_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mesh_settings`
+--
+
+DROP TABLE IF EXISTS `mesh_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mesh_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesh_id` int(11) DEFAULT NULL,
+  `ag` tinyint(1) NOT NULL DEFAULT '1',
+  `ap` tinyint(1) NOT NULL DEFAULT '0',
+  `b` tinyint(1) NOT NULL DEFAULT '0',
+  `bl` tinyint(1) NOT NULL DEFAULT '0',
+  `f` tinyint(1) NOT NULL DEFAULT '1',
+  `it` int(10) NOT NULL DEFAULT '1000',
+  `gateway_switching` int(10) NOT NULL DEFAULT '20',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mesh_settings`
+--
+
+LOCK TABLES `mesh_settings` WRITE;
+/*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
+INSERT INTO `mesh_settings` VALUES (8,29,1,0,0,0,1,5000,20,'2013-12-26 10:12:37','2013-12-26 10:13:32');
+/*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1864,4 +1897,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-12  9:58:45
+-- Dump completed on 2013-12-26 11:37:32
