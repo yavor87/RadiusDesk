@@ -66,7 +66,32 @@ Ext.define('Rd.view.meshes.gridMeshEntries' ,{
         me.columns  = [
             {xtype: 'rownumberer'},
             { text: 'SSID',                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1},
-            { text: 'Encryption',           dataIndex: 'encryption',    tdCls: 'gridTree', flex: 1},
+            { 
+                text        : 'Encryption',   
+                dataIndex   : 'encryption',  
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                renderer    : function(value,metaData, record){
+                    if(value == 'none'){                    
+                       return "None"
+                    }
+                    if(value == 'wep'){
+                        return "WEP"
+                    } 
+                    if(value == 'psk'){
+                        return "WPA Personal"
+                    } 
+                    if(value == 'psk2'){
+                        return "WPA2 Personal"
+                    } 
+                    if(value == 'wpa'){
+                        return "WPA Enterprise"
+                    } 
+                    if(value == 'wpa2'){
+                        return "WPA2 Enterprise"
+                    }             
+                }
+            },
             { text: 'Hidden',               dataIndex: 'hidden',        tdCls: 'gridTree', flex: 1},
             { text: 'Client isolation',     dataIndex: 'isolate',       tdCls: 'gridTree', flex: 1},
             { text: 'Apply to all nodes',   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1},
