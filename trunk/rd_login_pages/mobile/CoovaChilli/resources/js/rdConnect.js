@@ -260,6 +260,12 @@ var rdConnect = (function () {
             return;
 
         }else{  //Set the username 
+
+	    if(!($('#t_c').is(":checked"))){
+            	$('#connect_fb').html("Accept T&C first");
+            	return;
+	    }
+
             //Test to see if the #Username contains an @<realm> and if not, add a default realm...
             userName = escape($('#Username').val());
             password = $('#Password').val();
