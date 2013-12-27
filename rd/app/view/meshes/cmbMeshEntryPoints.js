@@ -3,7 +3,6 @@ Ext.define('Rd.view.meshes.cmbMeshEntryPoints', {
     alias           : 'widget.cmbMeshEntryPoints',
     fieldLabel      : 'Connects with',
     labelSeparator  : '',
-    store           : 'sMeshEntryPoints',
     queryMode       : 'local',
     valueField      : 'id',
     displayField    : 'name',
@@ -13,5 +12,25 @@ Ext.define('Rd.view.meshes.cmbMeshEntryPoints', {
     name            : 'entry_points[]',
     multiSelect     : true,
     labelClsExtra   : 'lblRdReq',
-    allowBlank      : true
+    allowBlank      : true,
+    initComponent: function(){
+        var me      = this;
+        var s       = Ext.create('Ext.data.Store', {
+            fields: ['id', 'name'],
+            proxy: {
+                    type    : 'ajax',
+                    format  : 'json',
+                    batchActions: true, 
+                    url     : '/cake2/rd_cake/meshes/mesh_entry_points.json',
+                    reader: {
+                        type            : 'json',
+                        root            : 'items',
+                        messageProperty : 'message'
+                    }
+            },
+            autoLoad: true
+        });
+        me.store = s;
+        me.callParent(arguments);
+    }
 });

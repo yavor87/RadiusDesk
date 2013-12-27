@@ -1,7 +1,7 @@
-Ext.define('Rd.view.meshes.cmbEncryptionOptions', {
+Ext.define('Rd.view.meshes.cmbHardwareOptions', {
     extend          : 'Ext.form.ComboBox',
-    alias           : 'widget.cmbEncryptionOptions',
-    fieldLabel      : 'Encryption',
+    alias           : 'widget.cmbHardwareOptions',
+    fieldLabel      : 'Hardware model',
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',
@@ -9,9 +9,9 @@ Ext.define('Rd.view.meshes.cmbEncryptionOptions', {
     allowBlank      : false,
     editable        : false,
     mode            : 'local',
-    itemId          : 'encryption',
-    name            : 'encryption',
-    value           : 'none',
+    itemId          : 'hardware',
+    name            : 'hardware',
+    value           : 'dragino2',
     labelClsExtra   : 'lblRd',
     initComponent: function(){
         var me      = this;
@@ -21,7 +21,7 @@ Ext.define('Rd.view.meshes.cmbEncryptionOptions', {
                     type    : 'ajax',
                     format  : 'json',
                     batchActions: true, 
-                    url     : '/cake2/rd_cake/meshes/encryption_options.json',
+                    url     : '/cake2/rd_cake/meshes/hardware_options.json',
                     reader: {
                         type: 'json',
                         root: 'items',

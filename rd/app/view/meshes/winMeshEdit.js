@@ -56,6 +56,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                      {
                         title       : 'Nodes',
                         itemId      : 'tabNodes',
+                        xtype       : 'gridNodes',
                         meshId      : me.getItemId()     
                     },
                     {
