@@ -47,11 +47,11 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits'
     ],
-    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sEncryptionOptions', 'sMeshExits', 'sMeshEntryPoints',
-        'sNodes',   'sHardwareOptions'
+    stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
+        'sNodes', 
     ],
-    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  , 'mEncryptionOption',  'mMeshExit', 'mMeshEntryPoint',  
-        'mNode',    'mHardwareOption'
+    models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  ,  'mMeshExit', 'mMeshEntryPoint',  
+        'mNode',
     ],
     selectedRecord: null,
     config      : {
