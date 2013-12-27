@@ -977,12 +977,82 @@ class MeshesController extends AppController {
         ));
     }
 
+    //-- List static entry point options for mesh --
+    public function static_entry_options(){
+
+        if(isset($this->request->query['mesh_id'])){
+            $mesh_id = $this->request->query['mesh_id'];
+        }
+
+        $entry  = ClassRegistry::init('MeshEntry');
+        $entry->contain();
+        $q_r    = $entry->find('all',array('conditions' => array('MeshEntry.apply_to_all' => 0)));
+        $items = array();
+        array_push($items,array('id' => 0, 'name' => "(None)")); //Allow the user not to assign at this stage
+        foreach($q_r as $i){
+            $id = $i['MeshEntry']['id'];
+            $n  = $i['MeshEntry']['name'];
+            array_push($items,array('id' => $id, 'name' => $n));
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+        
+
+    }
+
+    public function static_exit_options(){
+
+         if(isset($this->request->query['mesh_id'])){
+            $mesh_id = $this->request->query['mesh_id'];
+        }
+
+        $exit  = ClassRegistry::init('MeshExit');
+        $exit->contain();
+        $q_r    = $exit->find('all',array('conditions' => array('MeshExit.auto_detect' => 0)));
+        $items = array();
+        array_push($items,array('id' => 0, 'name' => "(None)")); //Allow the user not to assign at this stage
+        foreach($q_r as $i){
+            $id = $i['MeshExit']['id'];
+            $n  = $i['MeshExit']['name'];
+            array_push($items,array('id' => $id, 'name' => $n));
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+
+    }
+
 
     //-- List available encryption options --
     public function encryption_options(){
 
         $items = array();
         $ct = Configure::read('encryption');
+        foreach($ct as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    //-- List available hardware options --
+    public function hardware_options(){
+
+        $items = array();
+        $ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['active']){
                 array_push($items, $i);
@@ -1148,7 +1218,7 @@ class MeshesController extends AppController {
         ));
     }
 
-     public function menu_for_exits_grid(){
+    public function menu_for_exits_grid(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -1178,6 +1248,38 @@ class MeshesController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
+
+    public function menu_for_nodes_grid(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                ))
+                
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
 
     private function _find_parents($id){
 
