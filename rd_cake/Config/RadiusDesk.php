@@ -102,6 +102,11 @@ $config['mesh_settings']['f']   = true;  //Fragmentation
 $config['mesh_settings']['it']  = 1000; //OGM Interval
 $config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching  
 
+//== Device types for MESHdesk ==
+$config['hardware'][0]      = array('name' => __('Dragino MS14'),   'id'    => 'dragino2',       'active'    => true);
+$config['hardware'][1]      = array('name' => __('OpenMesh OM2P'),  'id'    => 'om2p' ,          'active'    => true);
+$config['hardware'][2]      = array('name' => __('PicoStation2'),   'id'    => 'picostation2',   'active'    => true);
+
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
 
