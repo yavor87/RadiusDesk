@@ -11,8 +11,9 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
     mode            : 'local',
     itemId          : 'static_exits',
     name            : 'static_exits',
-    value           : 'dragino2',
+    value           : '0',
     labelClsExtra   : 'lblRd',
+    meshId          : '' ,
     initComponent: function(){
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
@@ -21,7 +22,8 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/meshes/encryption_options.json',
+                extraParams: { 'mesh_id' : me.meshId }, 
+                url     : '/cake2/rd_cake/meshes/static_exit_options.json',
                 reader: {
                     type: 'json',
                     root: 'items',

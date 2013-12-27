@@ -12,7 +12,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     layout:     'fit',
     iconCls:    'add',
     autoShow:   false,
-    mesh_id:    '',
+    meshId :    '',
     defaults: {
             border: false
     },
@@ -20,9 +20,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Rd.view.meshes.cmbHardwareOptions',
-        'Rd.store.sHardwareOptions',
-        'Rd.model.mHardwareOption'
+        'Rd.view.meshes.cmbHardwareOptions'
     ],
      initComponent: function() {
         var me = this;  
@@ -88,10 +86,12 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         fieldLabel  : 'TX Power (%)'
                     },
                     {
-                        xtype       : 'cmbStaticEntries'
+                        xtype       : 'cmbStaticEntries',
+                        meshId      : me.meshId
                     },
                     {
-                        xtype       : 'cmbStaticExits'
+                        xtype       : 'cmbStaticExits',
+                        meshId      : me.meshId
                     }
             ]
         });

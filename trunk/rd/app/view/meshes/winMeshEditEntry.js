@@ -20,9 +20,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Rd.view.meshes.cmbEncryptionOptions',
-        'Rd.store.sEncryptionOptions',
-        'Rd.model.mEncryptionOption'
+        'Rd.view.meshes.cmbEncryptionOptions'
     ],
      initComponent: function() {
         var me = this;  
