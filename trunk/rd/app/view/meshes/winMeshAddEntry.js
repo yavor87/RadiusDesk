@@ -126,7 +126,7 @@ Ext.define('Rd.view.meshes.winMeshAddEntry', {
                                 { 
                                     xtype           : 'cmbEncryptionOptions', 
                                     labelClsExtra   : 'lblRdReq',
-                                    allowBlank      : false, 
+                                    allowBlank      : false 
                                 },
                                 {
                                     xtype       : 'textfield',
