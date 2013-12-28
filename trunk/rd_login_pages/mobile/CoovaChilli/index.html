@@ -108,6 +108,13 @@
     }(window, window.jQuery, window.Code.PhotoSwipe));
 	
 	</script>
+
+    <script type="text/javascript">
+        //This is a trick to solve the ios problem with the keybord popping up and the footer going over everything
+        //http://stackoverflow.com/questions/20069352/jquery-mobile-hide-fixed-footer-when-keyboard
+        document.write( '<style>.footer{visibility:hidden}@media(min-height:' + ($( window ).height() - 10) + 'px){.footer{visibility:visible}}</style>' );
+    </script>
+
 </head> 
 <body> 
 
@@ -191,7 +198,7 @@
 
 	</div><!-- /content -->
 
-	<div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	<div data-role="footer" data-id="login" data-position="fixed" data-theme="a" class='footer'>
 	    <div data-iconpos="top" data-role="navbar">
 		    <ul>
 			    <li><a data-icon="home" href="#Connect" class="ui-btn-active ui-state-persist">Connect</a></li>
