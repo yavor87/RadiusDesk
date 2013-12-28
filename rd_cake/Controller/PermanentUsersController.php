@@ -187,13 +187,18 @@ class PermanentUsersController extends AppController {
                     }
                 }
 
+
                 if($rc['attribute'] == 'Rd-Realm'){
                     $realm = $rc['value'];
                     if(!array_key_exists($realm,$realms)){
                         $r = ClassRegistry::init('Realm');
                         $r->contain();
                         $q_r = $r->findByName($realm);
-                        $realms[$realm] = $q_r['Realm']['id'];
+			if($q_r){
+                        	$realms[$realm] = $q_r['Realm']['id'];
+			}else{
+				$realms[$realm] = 'not defined';
+			}
                     }
                 }
 
@@ -206,8 +211,21 @@ class PermanentUsersController extends AppController {
             if($realm != 'not defined'){
                 $owner_id       = $i['User']['parent_id'];
                 $q_r            = ClassRegistry::init('Realm')->findByName($realm);
-                $action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
-            }
+		if($q_r){
+                	$action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
+			$r_id = $realms[$realm];
+		}else{
+			$r_id = "not defined";
+		}
+            }else{
+		$r_id = 'not defined';
+            }		
+	
+	   if($profile != 'not defined'){
+		$p_id = $profiles[$profile];
+	    }else{
+		$p_id = 'not defined';
+	   }
 
             array_push($items,
                 array(
@@ -221,9 +239,11 @@ class PermanentUsersController extends AppController {
                     'address'   => $i['User']['address'],
                     'auth_type' => $i['User']['auth_type'],
                     'realm'     => $realm,
-                    'realm_id'  => $realms[$realm],
+                    //'realm_id'  => $realms[$realm],
+                    'realm_id'  => $r_id,
                     'profile'   => $profile,
-                    'profile_id'=> $profiles[$profile],
+                   // 'profile_id'=> $profiles[$profile],
+                    'profile_id'=> $p_id,
                     'perc_time_used'=> $i['User']['perc_time_used'],
                     'perc_data_used'=> $i['User']['perc_data_used'],
                     'active'    => $i['User']['active'], 
@@ -249,6 +269,12 @@ class PermanentUsersController extends AppController {
             '_serialize'    => array('items','success','totalCount')
         ));
     }
+
+
+   public function fix_tree(){
+	$this->User->recover('tree');
+	$this->set(array('success' => true, '_serialize' => array('success')));
+  }
 
     public function add(){
 
@@ -1826,7 +1852,7 @@ class PermanentUsersController extends AppController {
             }
         }
 
-        //=== Check if the combobox send us a filter request ===
+	//=== Check if the combobox send us a filter request ===
         if(isset($this->request->query['query'])){
             $un = $this->request->query['query'];
             array_push($c['conditions'],array("User.username LIKE" => '%'.$un.'%'));  
