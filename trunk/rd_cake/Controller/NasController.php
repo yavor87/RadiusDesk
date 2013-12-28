@@ -168,11 +168,20 @@ class NasController extends AppController {
             //Realms
             foreach($i['NaRealm'] as $nr){
                 if(!$this->_test_for_private_parent($nr['Realm'],$user)){
+		    if(!array_key_exists('id',$nr['Realm'])){
+			$r_id = "undefined";
+			$r_n = "undefined";
+			$r_s =  false;
+		    }else{
+			$r_id = $nr['Realm']['id'];
+			$r_n = $nr['Realm']['name'];
+			$r_s = $nr['Realm']['available_to_siblings'];
+		   }
                     array_push($realms, 
                         array(
-                            'id'                    => $nr['Realm']['id'],
-                            'name'                  => $nr['Realm']['name'],
-                            'available_to_siblings' => $nr['Realm']['available_to_siblings']
+                            'id'                    => $r_id,
+                            'name'                  => $r_n,
+                            'available_to_siblings' => $r_s
                         ));
                 }
             } 
