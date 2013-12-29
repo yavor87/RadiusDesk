@@ -100,7 +100,15 @@ $config['mesh_settings']['ag']  = true;  //Aggregation
 $config['mesh_settings']['b']   = false; //Bonding
 $config['mesh_settings']['f']   = true;  //Fragmentation
 $config['mesh_settings']['it']  = 1000; //OGM Interval
-$config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching  
+$config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching 
+
+//== Default node settings ==
+$config['common_node_settings']['password']  = 'verysecure'; //Root password on nodes
+$config['common_node_settings']['power']     = 100; //% of tx power to use on devices
+$config['common_node_settings']['all_power'] = true; //Apply this power to all devices?
+$config['common_node_settings']['two_chan']  = 6; //% Channel to use on 2.4G wifi
+$config['common_node_settings']['five_chan'] = 44; //% Channel to use on 5G wifi
+ 
 
 //== Device types for MESHdesk ==
 $config['hardware'][0]      = array('name' => __('Dragino MS14'),   'id'    => 'dragino2',       'active'    => true);
