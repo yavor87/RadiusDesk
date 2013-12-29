@@ -693,7 +693,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -723,7 +723,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -891,7 +891,7 @@ CREATE TABLE `na_states` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -900,6 +900,7 @@ CREATE TABLE `na_states` (
 
 LOCK TABLES `na_states` WRITE;
 /*!40000 ALTER TABLE `na_states` DISABLE KEYS */;
+INSERT INTO `na_states` VALUES (2,'60',1,'2013-12-28 13:05:04','2013-12-28 13:05:04'),(3,'60',0,'2013-12-28 13:09:02','2013-12-28 13:09:02'),(4,'60',1,'2013-12-28 13:10:07','2013-12-28 13:10:07'),(5,'60',0,'2013-12-28 13:19:03','2013-12-28 13:19:03'),(6,'60',1,'2013-12-28 13:33:04','2013-12-28 13:33:04'),(7,'60',0,'2013-12-28 13:38:03','2013-12-28 13:38:03');
 /*!40000 ALTER TABLE `na_states` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -977,7 +978,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','one','one','CoovaChilli-Heartbeat',NULL,'one','','AB:AB:AB:AB:AB','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','one','off',600,600,NULL,0,3600,0,-25.7384047220846,28.3025484081752,'logo.jpg',182,'2013-10-24 13:08:04','2013-11-10 11:36:52');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','one','one','Mikrotik-Heartbeat',NULL,'one','','AB-AB-AB-AB-AB-AB','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','one','heartbeat',600,300,'2013-12-28 13:32:54',0,3600,0,-25.7384047220846,28.3025484081752,'logo.jpg',182,'2013-10-24 13:08:04','2013-12-28 13:04:13');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1001,6 +1002,37 @@ CREATE TABLE `new_accountings` (
 LOCK TABLES `new_accountings` WRITE;
 /*!40000 ALTER TABLE `new_accountings` DISABLE KEYS */;
 /*!40000 ALTER TABLE `new_accountings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `node_settings`
+--
+
+DROP TABLE IF EXISTS `node_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `node_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesh_id` int(11) DEFAULT NULL,
+  `password` varchar(128) NOT NULL,
+  `power` int(3) NOT NULL DEFAULT '100',
+  `all_power` tinyint(1) NOT NULL DEFAULT '1',
+  `two_chan` int(3) NOT NULL DEFAULT '6',
+  `five_chan` int(3) NOT NULL DEFAULT '44',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `node_settings`
+--
+
+LOCK TABLES `node_settings` WRITE;
+/*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
+INSERT INTO `node_settings` VALUES (9,29,'verysecure',41,1,6,44,'2013-12-29 14:47:59','2013-12-29 14:48:11');
+/*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1897,4 +1929,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-26 11:37:32
+-- Dump completed on 2013-12-29 15:54:18
