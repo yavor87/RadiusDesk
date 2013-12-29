@@ -27,7 +27,10 @@ class Mesh extends AppModel {
     public $hasOne = array(
         'MeshSetting'   => array(
             'dependent'     => true   
-        )
+        ),
+        'NodeSetting'   => array(
+            'dependent'     => true   
+        ),
     );
 
 
