@@ -977,6 +977,59 @@ class MeshesController extends AppController {
         ));
     }
 
+    //====== Common Node settings ================
+    //-- View common node settings --
+    public function node_common_settings_view(){
+
+        $id         = $this->request->query['mesh_id'];  
+        $data       = Configure::read('common_node_settings'); //Read the defaults
+        $setting    = ClassRegistry::init('NodeSetting');
+        $setting->contain();
+
+        $q_r = $setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $id)));
+        if($q_r){  
+            $data = $q_r['NodeSetting'];  
+        }
+
+        $this->set(array(
+            'data'      => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
+    public function node_common_settings_edit(){
+        if ($this->request->is('post')) {
+
+            //Unfortunately there are many check items which means they will not be in the POST if unchecked
+            //so we have to check for them
+            $check_items = array('all_power');
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
+
+            $mesh_id = $this->request->data['mesh_id'];
+            //See if there is not already a setting entry
+            $setting    = ClassRegistry::init('NodeSetting');
+            $q_r        = $setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $mesh_id)));
+            if($q_r){
+                $this->request->data['id'] = $q_r['NodeSetting']['id']; //Set the ID
+            }
+
+            if ($setting->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
+    }
+
+
     //-- List static entry point options for mesh --
     public function static_entry_options(){
 
