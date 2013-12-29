@@ -37,19 +37,11 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                         labelClsExtra: 'lblRdReq'
                     },         
                     {
-                        xtype       : 'checkbox',      
-                        fieldLabel  : 'AP isolation',
-                        name        : 'ap',
-                        inputValue  : 'ap',
-                        checked     : true,
-                        labelClsExtra: 'lblRdReq'
-                    },           
-                    {
                         xtype       : 'sliderfield',
                         value       : 50,
                         increment   : 10,
                         minValue    : 1,
-                        maxValue    : 100,
+                        maxValue    : 99,
                         name        : 'power',
                         fieldLabel  : 'TX Power (%)'
                     },
@@ -73,7 +65,7 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                     {
                         xtype       : 'numberfield',
                         anchor      : '100%',
-                        name        : 'two_chan',
+                        name        : 'five_chan',
                         fieldLabel  : '5G Channel',
                         value       : 44,
                         maxValue    : 116,

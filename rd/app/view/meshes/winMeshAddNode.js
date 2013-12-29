@@ -81,7 +81,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         value       : 50,
                         increment   : 10,
                         minValue    : 1,
-                        maxValue    : 100,
+                        maxValue    : 99,
                         name        : 'power',
                         fieldLabel  : 'TX Power (%)'
                     },

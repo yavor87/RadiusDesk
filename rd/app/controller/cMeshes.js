@@ -65,7 +65,9 @@ Ext.define('Rd.controller.cMeshes', {
         urlEditMeshSettings:'/cake2/rd_cake/meshes/mesh_settings_edit.json',
         urlAddExit:         '/cake2/rd_cake/meshes/mesh_exit_add.json',
         urlViewExit:        '/cake2/rd_cake/meshes/mesh_exit_view.json',
-        urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json'
+        urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json',
+        urlViewNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_view.json',
+        urlEditNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_edit.json',
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'},
@@ -170,7 +172,14 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshEditExit #save': {
                 click: me.btnEditExitSave
-            },//Here nodes start
+            },//Common node settings
+            'winMeshEdit #tabNodeCommonSettings' : {
+                activate:      me.frmNodeCommonSettingsLoad
+            },
+            'pnlNodeCommonSettings #save': {
+                click:  me.btnNodeCommonSettingsSave
+            },
+            //Here nodes start
             'gridNodes #reload': {
                 click:  me.reloadNodes
             },
@@ -779,7 +788,33 @@ Ext.define('Rd.controller.cMeshes', {
             },
             failure: Ext.ux.formFail
         });
-    }, //Nodes related
+    },//Common node settings
+    frmNodeCommonSettingsLoad: function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        var meshId  = tab.meshId;
+        form.load({url:me.urlViewNodeCommonSettings, method:'GET',params:{mesh_id:meshId}});
+    },
+    btnNodeCommonSettingsSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var tab     = button.up('#tabNodeCommonSettings');
+        var meshId  = tab.meshId;
+        form.submit({
+            clientValidation    : true,
+            url                 : me.urlEditNodeCommonSettings,
+            params              : {mesh_id: meshId},
+            success: function(form, action) {
+                Ext.ux.Toaster.msg(
+                    'Common node settings updated',
+                    'Common node settings updated fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },//Nodes related
     reloadNodes: function(button){
         var me      = this;
         var win     = button.up("winMeshEdit");
