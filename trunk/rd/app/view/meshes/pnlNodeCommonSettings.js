@@ -71,6 +71,24 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                         maxValue    : 116,
                         minValue    : 36,
                         step        : 8
+                    },
+                    {
+                        xtype       : 'numberfield',
+                        name        : 'heartbeat_interval',
+                        itemId      : 'heartbeat_interval',
+                        fieldLabel  : 'Heartbeat interval',
+                        value       : 60,
+                        maxValue    : 21600,
+                        minValue    : 60
+                    },    
+                    {
+                        xtype       : 'numberfield',
+                        name        : 'heartbeat_dead_after',
+                        itemId      : 'heartbeat_dead_after',
+                        fieldLabel  : i18n('sHeartbeat_is_dead_after'),
+                        value       : 600,
+                        maxValue    : 21600,
+                        minValue    : 300
                     }
                 ],
                 buttons: [

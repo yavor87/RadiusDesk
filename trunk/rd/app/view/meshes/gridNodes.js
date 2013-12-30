@@ -65,9 +65,36 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: 'Model',                    dataIndex: 'model',          tdCls: 'gridTree', flex: 1},
             { text: 'MAC Address',              dataIndex: 'name',           tdCls: 'gridTree', flex: 1},
-            { text: 'LAN Port(s)',              dataIndex: 'lan_bridge',     tdCls: 'gridTree', flex: 1}
+            { text: 'Hardware',                 dataIndex: 'hardware',       tdCls: 'gridTree', flex: 1},
+            { text: 'Power',                    dataIndex: 'power',          tdCls: 'gridTree', flex: 1},
+            { text: 'IP Address',               dataIndex: 'ip',             tdCls: 'gridTree', flex: 1},
+            { 
+                text    :   'Static entries',
+                sortable: false,
+                flex    : 1,  
+                xtype   :  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            '<tpl if="Ext.isEmpty(static_entries)"><div class=\"gridRealm noRight\">None</div></tpl>', 
+                            '<tpl for="static_entries">',     
+                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                            '</tpl>'
+                        ),
+                dataIndex: 'static_entries'
+            }, 
+            { 
+                text    :   'Static exits',
+                sortable: false,
+                flex    : 1,  
+                xtype   :  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            '<tpl if="Ext.isEmpty(static_exits)"><div class=\"gridRealm noRight\">None</div></tpl>', 
+                            '<tpl for="static_exits">',     
+                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                            '</tpl>'
+                        ),
+                dataIndex: 'static_exits'
+            }  
         ];
         me.callParent(arguments);
     }

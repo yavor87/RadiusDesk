@@ -7,7 +7,7 @@ Ext.define('Rd.store.sNodes', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/meshes/mesh_entries_index.json',
+            url     : '/cake2/rd_cake/meshes/mesh_nodes_index.json',
             reader: {
                 type            : 'json',
                 root            : 'items',
@@ -15,7 +15,7 @@ Ext.define('Rd.store.sNodes', {
                 totalProperty   : 'totalCount' //Required for dynamic paging
             },
             api: {
-                destroy  : '/cake2/rd_cake/meshes/mesh_entry_delete.json'
+                destroy  : '/cake2/rd_cake/meshes/mesh_node_delete.json'
             },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },

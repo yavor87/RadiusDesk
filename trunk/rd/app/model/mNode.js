@@ -3,9 +3,10 @@ Ext.define('Rd.model.mNode', {
     fields: [
          {name: 'id',               type: 'int'     },
          {name: 'name',             type: 'string'  },
-         {name: 'encryption',       type: 'string'  },
-         {name: 'hidden',           type: 'bool'},
-         {name: 'isolate',          type: 'bool'},
-         {name: 'apply_to_all',     type: 'bool'}
+         {name: 'hardware',         type: 'string'  },
+         {name: 'power',            type: 'int'     },
+         {name: 'ip',               type: 'string'  },
+          'static_entries',
+          'static_exits'
         ]
 });

@@ -10,8 +10,8 @@ Ext.define('Rd.view.meshes.cmbStaticEntries', {
     editable        : false,
     mode            : 'local',
     itemId          : 'static_entries',
-    name            : 'static_entries',
-    value           : '0',
+    name            : 'static_entries[]',
+    value           : 0,
     labelClsExtra   : 'lblRd',
     meshId          : '' ,
     initComponent: function(){

@@ -10,8 +10,8 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
     editable        : false,
     mode            : 'local',
     itemId          : 'static_exits',
-    name            : 'static_exits',
-    value           : '0',
+    name            : 'static_exits[]',
+    value           : 0,
     labelClsExtra   : 'lblRd',
     meshId          : '' ,
     initComponent: function(){
