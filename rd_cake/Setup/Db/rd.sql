@@ -1005,6 +1005,59 @@ LOCK TABLES `new_accountings` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `node_mesh_entries`
+--
+
+DROP TABLE IF EXISTS `node_mesh_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `node_mesh_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `node_id` int(11) NOT NULL,
+  `mesh_entry_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `node_mesh_entries`
+--
+
+LOCK TABLES `node_mesh_entries` WRITE;
+/*!40000 ALTER TABLE `node_mesh_entries` DISABLE KEYS */;
+INSERT INTO `node_mesh_entries` VALUES (9,70,21,'2013-12-30 16:44:52','2013-12-30 16:44:52');
+/*!40000 ALTER TABLE `node_mesh_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `node_mesh_exits`
+--
+
+DROP TABLE IF EXISTS `node_mesh_exits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `node_mesh_exits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `node_id` int(11) NOT NULL,
+  `mesh_exit_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `node_mesh_exits`
+--
+
+LOCK TABLES `node_mesh_exits` WRITE;
+/*!40000 ALTER TABLE `node_mesh_exits` DISABLE KEYS */;
+/*!40000 ALTER TABLE `node_mesh_exits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `node_settings`
 --
 
@@ -1019,10 +1072,12 @@ CREATE TABLE `node_settings` (
   `all_power` tinyint(1) NOT NULL DEFAULT '1',
   `two_chan` int(3) NOT NULL DEFAULT '6',
   `five_chan` int(3) NOT NULL DEFAULT '44',
+  `heartbeat_interval` int(5) NOT NULL DEFAULT '60',
+  `heartbeat_dead_after` int(5) NOT NULL DEFAULT '600',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1031,8 +1086,43 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (9,29,'verysecure',41,1,6,44,'2013-12-29 14:47:59','2013-12-29 14:48:11');
+INSERT INTO `node_settings` VALUES (10,29,'verysecure',101,1,6,44,120,600,'2013-12-30 12:01:42','2013-12-30 13:22:28');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `nodes`
+--
+
+DROP TABLE IF EXISTS `nodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nodes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesh_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `hardware` varchar(255) DEFAULT NULL,
+  `power` int(3) NOT NULL DEFAULT '100',
+  `ip` varchar(255) DEFAULT NULL,
+  `last_contact` datetime DEFAULT NULL,
+  `on_public_maps` tinyint(1) NOT NULL DEFAULT '0',
+  `lat` double DEFAULT NULL,
+  `lon` double DEFAULT NULL,
+  `photo_file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nodes`
+--
+
+LOCK TABLES `nodes` WRITE;
+/*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (70,29,'A8-40-41-13-60-E3','dragino2',51,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2013-12-30 16:44:52','2013-12-30 16:44:52');
+/*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1929,4 +2019,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-29 15:54:18
+-- Dump completed on 2013-12-30 17:32:45
