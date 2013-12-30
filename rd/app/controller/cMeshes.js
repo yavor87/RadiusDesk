@@ -68,6 +68,9 @@ Ext.define('Rd.controller.cMeshes', {
         urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json',
         urlViewNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_view.json',
         urlEditNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_edit.json',
+        urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
+        urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
+        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'},
