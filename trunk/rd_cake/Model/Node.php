@@ -1,0 +1,107 @@
+<?php
+App::uses('AppModel', 'Model');
+
+class Node extends AppModel {
+
+    public $actsAs = array('Containable');
+    public $validate = array(
+        'name' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This MAC is already taken'
+            )
+        )
+    );
+
+    public $belongsTo = array(
+        'Mesh' => array(
+                    'className' => 'Mesh',
+                    'foreignKey' => 'mesh_id'
+                    )
+    );
+
+   public $hasMany = array(
+            'NodeMeshEntry'   => array(
+                'dependent'     => true   
+            ),
+            'NodeMeshExit'   => array(
+                'dependent'     => true   
+            )
+    );
+
+
+    public function beforeSave(){
+
+        //Try to detect if it is an existing (edit):
+        $existing_flag = false;
+        if(isset($this->data['Node']['id'])){
+            if($this->data['Node']['id'] != ''){
+                $existing_flag = true;
+            }
+        }
+
+        if($existing_flag == true){ 
+           
+        }else{
+            //_______________ NEW ONE _______________
+            //This is a new one.... lets see if we can re-use some ip
+            $q_r = $this->find('first', array('order' => array('Node.ip ASC')));
+            if($q_r){
+                $ip         = $q_r['Node']['ip'];
+                $mesh_id    = $q_r['Node']['mesh_id'];
+                $next_ip    = $this->_get_next_ip($ip);           
+                $not_available = true;
+                while($not_available){
+                    if($this->_check_if_available($next_ip,$mesh_id)){
+                        $this->data['Node']['ip']     = $next_ip;
+                        $not_available = false;
+                        break;
+                    }else{
+                        $next_ip = $this->_get_next_ip($next_ip);
+                    }
+                }              
+            }else{ //The very first entry
+                $ip                         = Configure::read('mesh_node.start_ip');
+                $this->data['Node']['ip']   = $ip;
+            }
+            return true;
+        }
+    }
+
+
+
+    private function _check_if_available($ip,$mesh_id){
+        $count = $this->find('count',array('conditions' => array('Node.ip' => $ip,'Node.mesh_id' => $mesh_id)));
+        if($count == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    private function _get_next_ip($ip){
+
+        $pieces     = explode('.',$ip);
+        $octet_1    = $pieces[0];
+        $octet_2    = $pieces[1];
+        $octet_3    = $pieces[2];
+        $octet_4    = $pieces[3];
+
+        if($octet_4 >= 254){
+            $octet_4 = 1;
+            $octet_3 = $octet_3 +1;
+        }else{
+
+            $octet_4 = $octet_4 +1;
+        }
+        $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
+        return $next_ip;
+    }
+}
+
+?>

@@ -22,6 +22,9 @@ class Mesh extends AppModel {
         'MeshExit'   => array(
             'dependent'     => true   
         ),
+        'Node'   => array(
+            'dependent'     => true   
+        ),
     );
 
     public $hasOne = array(
