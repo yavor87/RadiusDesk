@@ -925,6 +925,250 @@ class MeshesController extends AppController {
         ));
     }
 
+
+    //===== Mesh nodes ======
+    public function mesh_nodes_index(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items      = array();
+        $total      = 0;
+        $node       = ClassRegistry::init('Node');
+        $node->contain(array('NodeMeshEntry.MeshEntry','NodeMeshExit.MeshExit'));
+        $mesh_id    = $this->request->query['mesh_id'];
+        $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
+
+        foreach($q_r as $m){
+            $static_entries = array();
+            $static_exits   = array();
+            foreach($m['NodeMeshEntry'] as $m_e_ent){
+                array_push($static_entries,array('name' => $m_e_ent['MeshEntry']['name']));
+            }
+
+            foreach($m['NodeMeshExit'] as $m_e_exit){
+                array_push($static_exits,array('name'   => $m_e_exit['MeshExit']['name']));
+            }
+
+            array_push($items,array( 
+                'id'            => $m['Node']['id'],
+                'mesh_id'       => $m['Node']['mesh_id'],
+                'name'          => $m['Node']['name'],
+                'hardware'      => $m['Node']['hardware'],
+                'power'         => $m['Node']['power'],
+                'static_entries'=> $static_entries,
+                'static_exits'  => $static_exits,
+                'ip'            => $m['Node']['ip'],
+            ));
+        }
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    public function mesh_node_add(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $static_entry   = ClassRegistry::init('NodeMeshEntry');
+        $static_exit    = ClassRegistry::init('NodeMeshExit');
+        $node           = ClassRegistry::init('Node');
+ 
+        $node->create();
+        if ($node->save($this->request->data)) {
+            $new_id = $node->id;
+
+            //Add the entry points
+            $count      = 0;
+            $entry_ids  = array();
+            $empty_flag = false;
+
+            if (array_key_exists('static_entries', $this->request->data)) {
+                foreach($this->request->data['static_entries'] as $e){
+                    if($this->request->data['static_entries'][$count] == 0){
+                        $empty_flag = true;
+                        break;
+                    }else{
+                        array_push($entry_ids,$this->request->data['static_entries'][$count]);
+                    }
+                    $count++;
+                }
+            }
+
+            //Only if empty was not specified
+            if((!$empty_flag)&&(count($entry_ids)>0)){
+                $static_entry->create();
+                $data = array();
+                foreach($entry_ids as $id){
+                    $data['NodeMeshEntry']['node_id']       = $new_id;
+                    $data['NodeMeshEntry']['mesh_entry_id'] = $id;
+                    $static_entry->save($data);
+                }
+            }
+
+            //Add the exit points
+            $count      = 0;
+            $exit_ids  = array();
+            $e_flag = false;
+
+            if (array_key_exists('static_exits', $this->request->data)) {
+                foreach($this->request->data['static_exits'] as $e){
+                    if($this->request->data['static_exits'][$count] == 0){
+                        $e_flag = true;
+                        break;
+                    }else{
+                        array_push($entry_ids,$this->request->data['static_exits'][$count]);
+                    }
+                    $count++;
+                }
+            }
+
+            //Only if empty was not specified
+            if((!$e_flag)&&(count($exit_ids)>0)){
+                $static_exit->create();
+                $data = array();
+                foreach($entry_ids as $id){
+                    $data['NodeMeshExit']['node_id']       = $new_id;
+                    $data['NodeMeshExit']['mesh_exit_id']  = $id;
+                    $static_exit->save($data);
+                }
+            }
+
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }else{
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $node->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+/*
+    public function mesh_exit_edit(){
+
+
+        if ($this->request->is('post')) {
+
+            $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
+            $exit           = ClassRegistry::init('MeshExit');
+
+            // If the form data can be validated and saved...
+            if ($exit->save($this->request->data)) {
+
+                //Add the entry points
+                $count      = 0;
+                $entry_ids  = array();
+                $empty_flag = false;
+                $new_id     = $this->request->data['id'];
+
+                //Clear previous ones first:
+                $entry_point->deleteAll(array('MeshExitMeshEntry.mesh_exit_id' => $new_id), false);
+
+                if (array_key_exists('entry_points', $this->request->data)) {
+                    foreach($this->request->data['entry_points'] as $e){
+                        if($this->request->data['entry_points'][$count] == 0){
+                            $empty_flag = true;
+                            break;
+                        }else{
+                            array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                        }
+                        $count++;
+                    }
+                }
+
+                //Only if empty was not specified
+                if((!$empty_flag)&&(count($entry_ids)>0)){
+                    $entry_point->create();
+                    $data = array();
+                    foreach($entry_ids as $id){
+                        $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
+                        $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
+                        $entry_point->save($data);
+                    }
+                }
+
+                $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        } 
+    }
+
+    public function mesh_exit_view(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $exit = ClassRegistry::init('MeshExit');
+        $exit->contain('MeshExitMeshEntry');
+
+        $id    = $this->request->query['exit_id'];
+        $q_r   = $exit->findById($id);
+
+        //entry_points
+        $q_r['MeshExit']['entry_points'] = array();
+        foreach($q_r['MeshExitMeshEntry'] as $i){
+            array_push($q_r['MeshExit']['entry_points'],$i['id']);
+        }
+
+      //  print_r($q_r);
+
+        $this->set(array(
+            'data'     => $q_r['MeshExit'],
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
+    public function mesh_exit_delete(){
+
+       if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag  = false;
+        $exit       = ClassRegistry::init('MeshExit'); 
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id']; 
+            $exit->id = $this->data['id'];
+            $exit->delete($exit->id, true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                    $exit->id = $d['id'];
+                    $exit->delete($exit->id, true);
+            }
+        }  
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+*/
+    //==== END Mesh nodes ======
+
    public function mesh_entry_points(){
         $user = $this->_ap_right_check();
         if(!$user){
