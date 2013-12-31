@@ -9,6 +9,12 @@ class Node extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Value is required'
+            )
+        ),
+        'mac' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
             ),
             'unique' => array(
                 'rule'    => 'isUnique',
