@@ -941,6 +941,15 @@ class MeshesController extends AppController {
         $mesh_id    = $this->request->query['mesh_id'];
         $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
 
+        //Create a hardware lookup for proper names of hardware
+            $hardware = array();        
+        $hw   = Configure::read('hardware');
+        foreach($hw as $h){
+            $id     = $h['id'];
+            $name   = $h['name']; 
+            $hardware["$id"]= $name;
+        }
+
         foreach($q_r as $m){
             $static_entries = array();
             $static_exits   = array();
@@ -952,11 +961,14 @@ class MeshesController extends AppController {
                 array_push($static_exits,array('name'   => $m_e_exit['MeshExit']['name']));
             }
 
+            $hw_id = $m['Node']['hardware'];
             array_push($items,array( 
                 'id'            => $m['Node']['id'],
                 'mesh_id'       => $m['Node']['mesh_id'],
                 'name'          => $m['Node']['name'],
-                'hardware'      => $m['Node']['hardware'],
+                'description'   => $m['Node']['description'],
+                'mac'           => $m['Node']['mac'],
+                'hardware'      => $hardware["$hw_id"],
                 'power'         => $m['Node']['power'],
                 'static_entries'=> $static_entries,
                 'static_exits'  => $static_exits,
