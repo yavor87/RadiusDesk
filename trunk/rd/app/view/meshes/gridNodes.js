@@ -65,7 +65,9 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer'},
-            { text: 'MAC Address',              dataIndex: 'name',           tdCls: 'gridTree', flex: 1},
+            { text: 'Name',                     dataIndex: 'name',           tdCls: 'gridTree', flex: 1},
+            { text: 'Description',              dataIndex: 'description',    tdCls: 'gridTree', flex: 1},
+            { text: 'MAC Address',              dataIndex: 'mac',            tdCls: 'gridTree', flex: 1},
             { text: 'Hardware',                 dataIndex: 'hardware',       tdCls: 'gridTree', flex: 1},
             { text: 'Power',                    dataIndex: 'power',          tdCls: 'gridTree', flex: 1},
             { text: 'IP Address',               dataIndex: 'ip',             tdCls: 'gridTree', flex: 1},
