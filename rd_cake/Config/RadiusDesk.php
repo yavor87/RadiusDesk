@@ -116,7 +116,7 @@ $config['common_node_settings']['heartbeat_dead_after'] = 300; //Mark a device a
  
 
 //== Device types for MESHdesk ==
-$config['hardware'][0]      = array('name' => __('Dragino MS14'),   'id'    => 'dragino2',       'active'    => true);
+$config['hardware'][0]      = array('name' => __('Dragino MS14 / MP2 Basic'),   'id'    => 'dragino2',       'active'    => true);
 $config['hardware'][1]      = array('name' => __('OpenMesh OM2P'),  'id'    => 'om2p' ,          'active'    => true);
 $config['hardware'][2]      = array('name' => __('PicoStation2'),   'id'    => 'picostation2',   'active'    => true);
 
