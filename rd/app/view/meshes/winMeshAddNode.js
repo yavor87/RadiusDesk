@@ -64,13 +64,28 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                     {
                         xtype       : 'textfield',
                         fieldLabel  : i18n('sMAC_address'),
-                        name        : "name",
+                        name        : "mac",
                         allowBlank  : false,
                         blankText   : i18n('sSupply_a_value'),
                         labelClsExtra: 'lblRdReq',
                         vtype       : 'MacAddress',
                         fieldStyle  : 'text-transform:lowercase',
                         value       : 'A8-40-41-13-60-E3'
+                    },
+                    {
+                        xtype       : 'textfield',
+                        fieldLabel  : i18n('sName'),
+                        name        : "name",
+                        allowBlank  : false,
+                        blankText   : i18n('sSupply_a_value'),
+                        labelClsExtra: 'lblRdReq'
+                    },
+                    {
+                        xtype       : 'textfield',
+                        fieldLabel  : 'Description',
+                        name        : "description",
+                        allowBlank  : true,
+                        labelClsExtra: 'lblRd'
                     },
                     {
                         xtype           : 'cmbHardwareOptions',
@@ -82,7 +97,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         value       : 50,
                         increment   : 10,
                         minValue    : 1,
-                        maxValue    : 99,
+                        maxValue    : 100,
                         name        : 'power',
                         fieldLabel  : 'TX Power (%)'
                     },

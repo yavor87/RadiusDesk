@@ -3,6 +3,8 @@ Ext.define('Rd.model.mNode', {
     fields: [
          {name: 'id',               type: 'int'     },
          {name: 'name',             type: 'string'  },
+         {name: 'description',      type: 'string'  },
+         {name: 'mac',              type: 'string'  },
          {name: 'hardware',         type: 'string'  },
          {name: 'power',            type: 'int'     },
          {name: 'ip',               type: 'string'  },
