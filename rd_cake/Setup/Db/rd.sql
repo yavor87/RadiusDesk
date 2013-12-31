@@ -666,7 +666,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -675,7 +675,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (19,29,'RD Guest',0,1,1,'none','','','',0,'2013-12-10 14:21:52','2013-12-10 14:21:52'),(20,29,'RD Wireless',0,0,1,'wpa2','radiusdesk','10.10.10.10','testing123',0,'2013-12-11 14:04:05','2013-12-12 09:09:59'),(21,29,'RD POS',1,1,0,'wep','radiusdesk','','',0,'2013-12-12 09:11:10','2013-12-12 09:11:10');
+INSERT INTO `mesh_entries` VALUES (19,29,'Ones',0,1,1,'psk2','radiusdeskwhatwhat','','',0,'2013-12-10 14:21:52','2013-12-31 18:18:54'),(26,29,'Two',0,0,1,'none','','','',0,'2013-12-31 18:20:12','2013-12-31 18:20:12'),(27,29,'Three',0,0,1,'psk2','bigbigbigbig','','',0,'2013-12-31 20:44:07','2013-12-31 20:44:07');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -702,7 +702,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (4,9,20,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(8,8,19,'2013-12-12 13:58:23','2013-12-12 13:58:23');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (8,8,19,'2013-12-12 13:58:23','2013-12-12 13:58:23');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1018,7 +1018,7 @@ CREATE TABLE `node_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1027,7 +1027,7 @@ CREATE TABLE `node_mesh_entries` (
 
 LOCK TABLES `node_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `node_mesh_entries` DISABLE KEYS */;
-INSERT INTO `node_mesh_entries` VALUES (9,70,21,'2013-12-30 16:44:52','2013-12-30 16:44:52');
+INSERT INTO `node_mesh_entries` VALUES (10,71,21,'2013-12-31 08:31:04','2013-12-31 08:31:04');
 /*!40000 ALTER TABLE `node_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1086,7 +1086,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (10,29,'verysecure',101,1,6,44,120,600,'2013-12-30 12:01:42','2013-12-30 13:22:28');
+INSERT INTO `node_settings` VALUES (10,29,'verysecure',101,1,6,44,120,600,'2013-12-30 12:01:42','2013-12-31 15:25:47');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1101,6 +1101,8 @@ CREATE TABLE `nodes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mesh_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `mac` varchar(255) NOT NULL,
   `hardware` varchar(255) DEFAULT NULL,
   `power` int(3) NOT NULL DEFAULT '100',
   `ip` varchar(255) DEFAULT NULL,
@@ -1112,7 +1114,7 @@ CREATE TABLE `nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1121,7 +1123,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (70,29,'A8-40-41-13-60-E3','dragino2',51,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2013-12-30 16:44:52','2013-12-30 16:44:52');
+INSERT INTO `nodes` VALUES (71,29,'B-9-Reception','Node @ reception','A8-40-41-13-60-E3','dragino2',91,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2013-12-31 08:31:04','2013-12-31 08:31:04'),(72,29,'B-9-Workshop-1','Node in workshop','A8-40-41-13-60-E4','dragino2',51,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2013-12-31 08:48:31','2013-12-31 08:48:31');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2019,4 +2021,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-30 17:32:45
+-- Dump completed on 2013-12-31 21:06:22
