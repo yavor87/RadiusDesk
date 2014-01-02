@@ -14,7 +14,10 @@ class MeshEntry extends AppModel {
     public $hasMany = array(
             'MeshExitMeshEntry'   => array(
                 'dependent'     => true   
-            )
+            ),
+            'NodeMeshEntry'   => array(
+                'dependent'     => true   
+            ),
     );
 }
 
