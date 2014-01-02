@@ -602,6 +602,16 @@ class MeshesController extends AppController {
 
 
         if ($this->request->is('post')) {
+
+            $check_items = array('hidden','isolate','apply_to_all');
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
+
             $entry = ClassRegistry::init('MeshEntry');
             // If the form data can be validated and saved...
             if ($entry->save($this->request->data)) {
@@ -851,6 +861,7 @@ class MeshesController extends AppController {
                     $entry_point->create();
                     $data = array();
                     foreach($entry_ids as $id){
+                        $entry_point->create();
                         $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
                         $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
                         $entry_point->save($data);
