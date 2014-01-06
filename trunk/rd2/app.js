@@ -36,7 +36,9 @@ Ext.namespace('Rd').config = {
 
 
 Ext.application({
-   
+
+    //Patch like a profesional: http://flexblog.faratasystems.com/2012/02/27/the-best-way-to-organize-your-ext-js-overrides
+    requires: ['Rd.patch.ExtJS421Patch'],
     name        : 'Rd',
     extend      : 'Rd.Application',
     desktopData : null,  //Data on how the desktop will look like which will be returned after login

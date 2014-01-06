@@ -1,3 +1,49 @@
+/*-- Toaster --*/
+/* The toaster div has different colours depending on the message type */
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:300px;
+    z-index:2147483647;
+}
+
+#msg-div .msg {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #F6F6F6;
+    border: 2px solid #ccc;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+
+#msg-div .msg h3 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#msg-div .msg p {
+    margin: 0;
+}
+
+#msg-div .warn {
+    border: 2px solid #fba601;
+    background: #ffe4af;
+}
+
+#msg-div .info {
+    border: 2px solid #0ca630;
+    background: #d0f8da;
+}
+
+#msg-div .error {
+    border: 2px solid #d91717;
+    background: #ffe3e3;
+}
+/*-- End Toaster--*/
+
 /*-- Logo --*/
 #poweredby {
     position: absolute;
@@ -34,7 +80,6 @@
 /*-- End Logo --*/
 
 /*-- Label experiment --*/
-
 .lblRdReq {
     color: #2F4078; 
     font-size:16px;
@@ -108,6 +153,166 @@
     margin: 0px;
     color: #000000;
     font-size:25px;
+}
+
+/* Grid styles */
+.gridTree .x-grid-cell-inner {
+    color: #676d76;
+    font-size:12px;
+/* May have to play around with the bottom items */
+    line-height: 16px;
+    padding-bottom: 0;
+}
+
+.gridRealm.availAll {
+     border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: black;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 2px 2px 2px 10px;
+    color: white;
+    font-size:12px;
+}
+
+.gridTag {
+     border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #e7edf6;
+    border: 1px solid #616b77;
+    margin-top: 1px;
+    padding: 1px 1px 1px 5px;
+    color: #727982;
+    font-size:10px;
+}
+
+.gridComment .x-grid-cell-inner {
+    color: #676d76;
+    font-size:12px;
+}
+
+/* Note rather replace the .hasRight and .noRight with a more generic class eg. red or green */
+
+.fieldRed {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #f6cecf;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #6b032f;
+    font-size:12px;
+}
+
+.fieldGreen {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #d4e0ce;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #1e5304;
+    font-size:12px;
+}
+
+.fieldBlue {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #c5f5fd;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #1e5304;
+    font-size:12px;
+}
+
+.fieldOrange {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #f6dbc5;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #1e5304;
+    font-size:12px;
+}
+
+.fieldGrey {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #dcddde;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #5c5d5e;
+    font-size:12px;
+}
+
+.fieldYellow {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #fbf2a2;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1px 1px 1px 5px;
+    color: #5c5d5e;
+    font-size:12px;
+}
+
+.txtGrey {
+    color: #98989b;
+}
+
+.txtGreen {
+    color: #2c7607;
+}
+
+.txtRed {
+    color: #d92435;
+}
+
+.txtBlue {
+    color: #5c88e0;
+}
+
+.txtBold {
+    font-weight: bold;
+}
+
+.green_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #0ca630;
+    background: #d0f8da;
+}
+
+.blue_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #4a709b;
+    background: #d3dfec;
+}
+
+.red_round {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #d92435;
+    background: #f1e2e2;
+}
+
+.fileViewer {
+    padding: 10px;
+    margin: 2px;
+    background: black;
+    color: white;
+    opacity:0.9;
+    filter:alpha(opacity=90); /* For IE8 and earlier */
 }
 
 
