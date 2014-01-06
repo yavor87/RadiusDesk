@@ -1087,7 +1087,7 @@ class VouchersController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -1100,17 +1100,17 @@ class VouchersController extends AppController {
                             )
                     ),
                    // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'iconCls' => 'b-add',    'glyph' => Configure::read('icnAdd'),    'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',   'glyph' => Configure::read('icnEdit'),   'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-pdf',     'scale' => 'large', 'itemId' => 'pdf',     'tooltip'=> __('Export to PDF')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-pdf',    'glyph' => Configure::read('icnPdf'),    'scale' => 'large', 'itemId' => 'pdf',     'tooltip'=> __('Export to PDF')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',    'glyph' => Configure::read('icnCsv'),    'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
-                    array('xtype' => 'button', 'iconCls' => 'b-test',    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
+                    array('xtype' => 'button', 'iconCls' => 'b-password',   'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
+                    array('xtype' => 'button', 'iconCls' => 'b-test',       'glyph' => Configure::read('icnYes'),    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
                 )) 
             );
         }

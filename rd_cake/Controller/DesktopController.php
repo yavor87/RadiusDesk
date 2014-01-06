@@ -234,7 +234,7 @@ class DesktopController extends AppController {
           //  array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers'),
           //  array(  'text'  => __('Permanent users'),       'iconCls' => 'group'),
           //  array(  'text'  => __('Accounting'),            'iconCls' => 'accounting'),
-            array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'menu'  =>
+            array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'glyph' => 57557 ,'menu'  =>
                  array( 'items' =>
                     array(
                         array('text' => __('Access Providers') ,'iconCls' => 'key',     'itemId' => 'cAccessProviders'),
@@ -244,7 +244,7 @@ class DesktopController extends AppController {
             ),
         //    array(  'text'  => __('Profiles'),              'iconCls' => 'profiles'),
           //  array(  'text'  => __('Activity/Stats'),        'iconCls' => 'stats'),
-            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  =>
+            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'glyph' => 57589, 'menu'  =>
                  array( 'items' =>
                     array(
                         array('text' => __('NAS Devices') ,     'iconCls' => 'nas',   'itemId' => 'cNas'),
@@ -252,7 +252,7 @@ class DesktopController extends AppController {
                     )
                 )
             ),
-            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles',  'menu'  =>
+            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles', 'glyph' => 57468, 'menu'  =>
                  array( 'items' =>
                     array(
                         array('text' => __('Profile Components') ,  'iconCls' => 'components',  'itemId' => 'cProfileComponents'),
@@ -260,7 +260,7 @@ class DesktopController extends AppController {
                     )
                 )
             ),
-            array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'menu'  =>
+            array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'glyph' => 57487 ,'menu'  =>
                  array( 'items' =>
                     array(
                         array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity',        'itemId' => 'cActivityMonitor'),
@@ -272,9 +272,9 @@ class DesktopController extends AppController {
                     )
                 )
             ),
-            array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers',    'itemId' => 'cVouchers'),
-            array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers'),
-            array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices'),
+            array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers', 'glyph' => 57606,   'itemId' => 'cVouchers'),
+            array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',    'glyph' => 57619,   'itemId' => 'cPermanentUsers'),
+            array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',  'glyph' => 57432,  'itemId' => 'cDevices'),
         );
 
         //Optional experimental stuff 
@@ -282,8 +282,8 @@ class DesktopController extends AppController {
             array_push($menus,array(  'text'  => __('Auto Setup'),            'iconCls' => 'setup',       'itemId' => 'cAutoSetups'));
         }
 
-        array_push($menus,array(  'text'  => __('MESHdesk'),            'iconCls' => 'mesh',       'itemId' => 'cMeshes'));
-        array_push($menus,array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages','itemId' => 'cDynamicDetails'));
+        array_push($menus,array(  'text'  => __('MESHdesk'),            'iconCls' => 'mesh',   'glyph' => 57460,    'itemId' => 'cMeshes'));
+        array_push($menus,array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages', 'glyph' => 57392, 'itemId' => 'cDynamicDetails'));
 
         return $menus;
     }
