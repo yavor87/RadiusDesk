@@ -82,6 +82,27 @@ $config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/i
 $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
 
 
+
+//==== Define glyphs -> We'll use glyphs insteadd of icons
+$config['icnLock']      = 57495;
+$config['icnYes']       = 57605;
+$config['icnMenu']      = 57594;
+$config['icnInfo']      = 57479;
+$config['icnPower']     = 57541;
+$config['icnSpanner']   = 57583;
+$config['icnHome']      = 57473;
+$config['icnDynamic']   = 57392;
+$config['incVoucher']   = 57606;
+$config['icnReload']    = 57374;
+$config['icnAdd']       = 57537;
+$config['icnEdit']      = 57524;
+$config['icnDelete']    = 57610;
+$config['icnPdf']       = 57447;
+$config['icnCsv']       = 57415;
+
+
+
+
 //===== MESHdesk ======
 //== Encryption types ==
 //Define the encryption types and if they are active or not
