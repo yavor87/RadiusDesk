@@ -40,4 +40,5 @@ Ext.define('Rd.patch.selection.Model', {
         }
         return false;
     }
+
 });

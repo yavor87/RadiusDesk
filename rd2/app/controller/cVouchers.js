@@ -229,6 +229,7 @@ Ext.define('Rd.controller.cVouchers', {
     },
     reload: function(){
         var me =this;
+        me.getGrid().getSelectionModel().deselectAll(true);
         me.getStore('sVouchers').load();
     },
     reloadOptionClick: function(menu_item){
@@ -387,25 +388,34 @@ Ext.define('Rd.controller.cVouchers', {
         }else{
             Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
-                    me.getGrid().getStore().remove(me.getGrid().getSelectionModel().getSelection());
-                    me.getGrid().getStore().sync({
-                        success: function(batch,options){
+
+                    var selected    = me.getGrid().getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+                    Ext.Ajax.request({
+                        url: '/cake2/rd_cake/vouchers/delete.json',
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){console.log('success');
                             Ext.ux.Toaster.msg(
                                 i18n('sItem_deleted'),
                                 i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStoreVouchersLoaded();   //Update the count   
-                        },
-                        failure: function(batch,options,c,d){
+                            me.reload(); //Reload from server
+                        },                                    
+                        failure: function(batch,options){
                             Ext.ux.Toaster.msg(
                                 i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
-                            me.getGrid().getStore().load(); //Reload from server since the sync was not good
+                            me.reload(); //Reload from server
                         }
                     });
                 }
@@ -787,6 +797,7 @@ Ext.define('Rd.controller.cVouchers', {
     gridVoucherRadacctsReload: function(button){
         var me  = this;
         var g   = button.up('gridVoucherRadaccts');
+        g.getSelectionModel().deselectAll(true);
         g.getStore().load();
     },
     genericDelete:   function(button){
