@@ -257,8 +257,7 @@ Ext.define('Rd.controller.cVouchers', {
     },
     gridActivate: function(g){
         var me = this;
-        g.getSelectionModel().deselectAll(true); 
-        g.getStore().reload();
+        g.getStore().load();
     },
     add: function(button){
         
