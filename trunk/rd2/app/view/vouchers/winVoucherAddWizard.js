@@ -11,6 +11,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
     border:     false,
     layout:     'card',
     iconCls:    'add',
+    glyph   :   Rd.config.icnAdd,
     autoShow:   false,
     apId    :   false,
     defaults: {
@@ -62,6 +63,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                     text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
+                    glyph   : Rd.config.icnBack,
                     margin: '0 20 40 0'
                 },
                 {
@@ -69,6 +71,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                     text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
                     margin: '0 20 40 0'
                 }
@@ -81,6 +84,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                     text: i18n('sNext'),
                     scale: 'large',
                     iconCls: 'b-next',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
                     margin: '0 20 40 0'
                 }

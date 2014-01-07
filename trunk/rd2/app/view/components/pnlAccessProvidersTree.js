@@ -30,6 +30,7 @@ Ext.define('Rd.view.components.pnlAccessProvidersTree', {
                 text: i18n('sNext'),
                 scale: 'large',
                 iconCls: 'b-next',
+                glyph   : Rd.config.icnNext,
                 margin: '0 20 40 0'
             }
         ],

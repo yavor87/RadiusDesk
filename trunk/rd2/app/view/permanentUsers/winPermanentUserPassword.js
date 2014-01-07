@@ -1,14 +1,13 @@
-Ext.define('Rd.view.components.winCsvColumnSelect', {
+Ext.define('Rd.view.permanentUsers.winPermanentUserPassword', {
     extend: 'Ext.window.Window',
-    alias : 'widget.winCsvColumnSelect',
-    title : i18n('sCSV_export'),
+    alias : 'widget.winPermanentUserPassword',
+    title : i18n('sChange_password'),
     layout: 'fit',
     autoShow: false,
     width:    350,
-    height:   400,
-    iconCls: 'list',
-    glyph   : Rd.config.icnCsv,
-    columns: [],
+    height:   250,
+    iconCls: 'rights',
+    glyph: Rd.config.icnKey,
     initComponent: function() {
         var me = this;
         this.items = [
@@ -29,14 +28,16 @@ Ext.define('Rd.view.components.winCsvColumnSelect', {
                 },
                 defaultType: 'textfield',
                 tbar: [
-                    { xtype: 'tbtext', text: i18n('sSelect_columns_to_include_in_CSV_list'), cls: 'lblWizard' }
+                    { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
                 ],
                 items: [
                     {
-                        xtype       : 'fieldcontainer',
-                        fieldLabel  : i18n('sColumns'),
-                        defaultType : 'checkboxfield',
-                        items:      me.columns
+                        xtype       : 'textfield',
+                        fieldLabel  : i18n('sPassword'),
+                        allowBlank  : false,
+                        labelClsExtra: 'lblRdReq',
+                        name        : "password",
+                        allowBlank  : false
                     }
                 ],
                 buttons: [
@@ -45,7 +46,7 @@ Ext.define('Rd.view.components.winCsvColumnSelect', {
                         text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
-                        glyph   : Rd.config.icnNext,
+                        glyph: Rd.config.icnNext,
                         formBind: true,
                         margin: '0 20 40 0'
                     }

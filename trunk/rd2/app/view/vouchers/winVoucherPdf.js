@@ -7,6 +7,7 @@ Ext.define('Rd.view.permanentUsers.winVoucherPdf', {
     width:    450,
     height:   300,
     iconCls: 'pdf',
+    glyph   : Rd.config.icnPdf,
     requires: [
         'Rd.view.vouchers.cmbPdfFormats',
         'Rd.view.components.vLanguagesCmb',
@@ -74,6 +75,7 @@ Ext.define('Rd.view.permanentUsers.winVoucherPdf', {
                         formBind: true,
                         scale: 'large',
                         iconCls: 'b-next',
+                        glyph   : Rd.config.icnYes,
                         formBind: true,
                         margin: '0 20 40 0'
                     }

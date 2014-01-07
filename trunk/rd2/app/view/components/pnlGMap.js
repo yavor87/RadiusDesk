@@ -145,21 +145,24 @@ Ext.define('Rd.view.components.pnlGMap', {
                             itemId  : 'save',
                             text    : i18n('sSave'),
                             scale   : 'large',
-                            iconCls : 'b-save'
+                            iconCls : 'b-save',
+                            glyph   : Rd.config.icnYes,
                         },
                         {
                             xtype   : 'button',
                             itemId  : 'cancel',
                             text    : i18n('sCancel'),
                             scale   : 'large',
-                            iconCls : 'b-close'
+                            iconCls : 'b-close',
+                            glyph   : Rd.config.icnClose,
                         },
                         {
                             xtype   : 'button',
                             itemId  : 'delete',
                             text    : i18n('sDelete'),
                             scale   : 'large',
-                            iconCls : 'b-delete'
+                            iconCls : 'b-delete',
+                            glyph   : Rd.config.icnDelete,
                         }  
                     ],
                     renderTo: c

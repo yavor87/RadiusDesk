@@ -80,7 +80,7 @@ Ext.define('Rd.view.components.pnlUsageGraphs', {
                 layout  : 'fit',
                 tbar: [
                     { xtype: 'buttongroup', title: i18n('sAction'), items : [
-                        { xtype: 'button',  iconCls: 'b-reload',    scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
+                        { xtype: 'button',  iconCls: 'b-reload',  glyph   : Rd.config.icnReload,  scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
                         {
                             xtype       : 'datefield',
                             fieldLabel  : 'Day',

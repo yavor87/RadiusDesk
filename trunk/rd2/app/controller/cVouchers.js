@@ -12,7 +12,7 @@ Ext.define('Rd.controller.cVouchers', {
                 btnText         : i18n('sVouchers'),
                 width           : 800,
                 height          : 400,
-                glyph           : Rd.config.incVoucher,
+                glyph           : Rd.config.icnVoucher,
                 animCollapse    : false,
                 border          : false,
                 constrainHeader : true,
@@ -239,9 +239,11 @@ Ext.define('Rd.controller.cVouchers', {
         var interval= 30000; //default
         clearInterval(me.autoReload);   //Always clear
         b.setIconCls('b-reload_time');
+        b.setGlyph(Rd.config.icnTime);
         
         if(n == 'mnuRefreshCancel'){
             b.setIconCls('b-reload');
+            b.setGlyph(Rd.config.icnReload);
             return;
         }
         
@@ -456,7 +458,8 @@ Ext.define('Rd.controller.cVouchers', {
                     title :     v_tab_name,
                     itemId:     v_tab_id,
                     closable:   true,
-                    iconCls:    'edit', 
+                    iconCls:    'edit',
+                    glyph       : Rd.config.icnEdit,
                     layout:     'fit', 
                     items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name, record: sr }
                 });

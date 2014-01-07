@@ -7,6 +7,7 @@ Ext.define('Rd.view.components.winEnableDisable', {
     width:    350,
     height:   300,
     iconCls: 'rights',
+    glyph   : Rd.config.icnLight,
     initComponent: function() {
         var me = this;
         this.items = [
@@ -47,6 +48,7 @@ Ext.define('Rd.view.components.winEnableDisable', {
                         text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
+                        glyph   : Rd.config.icnNext,
                         margin: '0 20 40 0'
                     }
                 ]

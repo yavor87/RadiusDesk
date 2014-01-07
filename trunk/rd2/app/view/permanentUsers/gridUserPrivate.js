@@ -1,9 +1,9 @@
-Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
+Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
     extend:'Ext.grid.Panel',
-    alias : 'widget.gridVoucherPrivate',
+    alias : 'widget.gridUserPrivate',
     multiSelect: true,
     stateful: true,
-    stateId: 'StateGridVoucherPrivate',
+    stateId: 'StateGridUserPrivate',
     stateEvents:['groupclick','columnhide'],
     border: false,
     viewConfig: {
@@ -14,13 +14,13 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
     ],
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 
-            {   xtype: 'button',  iconCls: 'b-reload', glyph   : Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
-            {   xtype: 'button',  iconCls: 'b-delete', glyph   : Rd.config.icnDelete,   scale: 'large',   itemId: 'delete',    disabled: true, tooltip:    i18n('sDelete')}
+            {   xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
+            {   xtype: 'button',  iconCls: 'b-delete', glyph: Rd.config.icnDelete,   scale: 'large',      itemId: 'delete',    disabled: true,    tooltip:    i18n('sDelete')}
         ]}, 
         { xtype: 'buttongroup', title: i18n('sSelection'),items : [
             {   xtype: 'cmbVendor'     , itemId:'cmbVendor',    emptyText: i18n('sSelect_a_vendor') },
             {   xtype: 'cmbAttribute'  , itemId:'cmbAttribute', emptyText: i18n('sSelect_an_attribute') },
-            {   xtype: 'button',  iconCls: 'b-add',    glyph   : Rd.config.icnAdd, scale: 'large', itemId: 'add',       tooltip:    i18n('sAdd')}
+            {   xtype: 'button',  iconCls: 'b-add', glyph: Rd.config.icnAdd,   scale: 'large', itemId: 'add',       tooltip:    i18n('sAdd')}
         ]}        
     ],
     plugins: [
@@ -136,10 +136,10 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
                     messageProperty: 'message'
                 },
                 api         : {
-                    create      : '/cake2/rd_cake/vouchers/private_attr_add.json',
-                    read        : '/cake2/rd_cake/vouchers/private_attr_index.json',
-                    update      : '/cake2/rd_cake/vouchers/private_attr_edit.json',
-                    destroy     : '/cake2/rd_cake/vouchers/private_attr_delete.json'
+                    create      : '/cake2/rd_cake/permanent_users/private_attr_add.json',
+                    read        : '/cake2/rd_cake/permanent_users/private_attr_index.json',
+                    update      : '/cake2/rd_cake/permanent_users/private_attr_edit.json',
+                    destroy     : '/cake2/rd_cake/permanent_users/private_attr_delete.json'
                 }
             },
             listeners: {

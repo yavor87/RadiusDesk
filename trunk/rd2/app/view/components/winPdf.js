@@ -7,6 +7,7 @@ Ext.define('Rd.view.components.winPdf', {
     width       : 600,
     height      : 400,
     iconCls     : 'pdf',
+    glyph       : Rd.config.icnPdf,
     isWindow    : true,
     constrainHeader: true,
     minimizable : true,

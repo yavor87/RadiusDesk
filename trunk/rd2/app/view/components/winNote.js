@@ -7,6 +7,7 @@ Ext.define('Rd.view.components.winNote', {
     width:    400,
     height:   400,
     iconCls: 'note',
+    glyph   : Rd.config.icnNote,
     requires: [
         'Rd.view.components.gridNote'
     ],
