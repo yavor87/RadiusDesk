@@ -94,6 +94,7 @@ Ext.define('Rd.view.voucher.pnlVoucher', {
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',
+                        glyph:  Rd.config.icnYes,
                         margin: '0 20 40 0'
                     }
                 ]

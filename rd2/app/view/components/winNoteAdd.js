@@ -11,6 +11,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
     border      : false,
     layout      : 'card',
     iconCls     : 'add',
+    glyph       : Rd.config.icnAdd,
     autoShow    : false,
     startScreen: 'scrnApTree', //Default start screen
     noteForId:  '', //Some attribute definitions
@@ -51,6 +52,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
                     text    : i18n('sPrev'),
                     scale   : 'large',
                     iconCls : 'b-prev',
+                    glyph   : Rd.config.icnBack,
                     margin  : '0 20 40 0'
                 },
                 {
@@ -58,6 +60,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
                     text    : i18n('sNext'),
                     scale   : 'large',
                     iconCls : 'b-next',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
                     margin  : '0 20 40 0'
                 }
@@ -70,6 +73,7 @@ Ext.define('Rd.view.components.winNoteAdd', {
                     text    : i18n('sNext'),
                     scale   : 'large',
                     iconCls : 'b-next',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
                     margin  : '0 20 40 0'
                 }

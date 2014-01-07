@@ -7,6 +7,7 @@ Ext.define('Rd.view.components.winHelp', {
     width:    600,
     height:   400,
     iconCls: 'help',
+    glyph   : Rd.config.icnHelp,
     isWindow: true,
     constrainHeader: true,
     minimizable: true,

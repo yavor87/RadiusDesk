@@ -7,6 +7,7 @@ Ext.define('Rd.view.permanentUsers.winVoucherPassword', {
     width:    350,
     height:   250,
     iconCls: 'rights',
+    glyph   : Rd.config.icnLock,
     initComponent: function() {
         var me = this;
         this.items = [
@@ -45,6 +46,7 @@ Ext.define('Rd.view.permanentUsers.winVoucherPassword', {
                         text: i18n('sOK'),
                         scale: 'large',
                         iconCls: 'b-next',
+                        glyph   : Rd.config.icnYes,   
                         formBind: true,
                         margin: '0 20 40 0'
                     }

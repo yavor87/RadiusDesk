@@ -101,6 +101,13 @@
     font-size:14px;
 }
 
+.x-toolbar .lblWizard {
+    color: #2F4078; 
+    font-size:16px;
+    padding: 5px;
+}
+
+
 
 /*Wallpaper selection */
 .thumb-wrap {
@@ -315,5 +322,19 @@
     filter:alpha(opacity=90); /* For IE8 and earlier */
 }
 
+.ux-filtered-column .x-column-header-inner {
+    background-image:url(../images/16x16/filter.png) !important;
+    background-repeat:no-repeat;
+    padding-left: 16px;
+}
+
+/* Treeview does not support Glyphs yet */
+.users {
+    background-image:url(../images/16x16/users.png) !important;
+}
+
+.user {
+    background-image:url(../images/16x16/user.png) !important;
+}
 
 

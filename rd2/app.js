@@ -31,7 +31,22 @@ Ext.namespace('Rd').config = {
     icnSpanner      : 57583,
     icnHome         : 57473,
     icnDynamic      : 57392,
-    incVoucher      : 57606
+    icnVoucher      : 57606,
+    icnPdf          : 57447,
+    icnCsv          : 57415,
+    icnNext         : 57370,
+    icnBack         : 57357,
+    icnReload       : 57374,
+    icnAdd          : 57537,
+    icnEdit         : 57524,
+    icnDelete       : 57610,
+    icnTime         : 57588,
+    icnKey          : 57485,
+    icnClose        : 57609,
+    icnHelp         : 57347,
+    icnLight        : 57487,
+    icnNote         : 57531,
+    icnExpand       : 57457
 };
 
 
