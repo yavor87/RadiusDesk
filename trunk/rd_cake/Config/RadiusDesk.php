@@ -99,6 +99,9 @@ $config['icnEdit']      = 57524;
 $config['icnDelete']    = 57610;
 $config['icnPdf']       = 57447;
 $config['icnCsv']       = 57415;
+$config['icnRadius']    = 57444;
+$config['icnLight']     = 57487;
+$config['icnNote']      = 57531;
 
 
 
