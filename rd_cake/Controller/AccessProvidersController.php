@@ -661,20 +661,20 @@ class AccessProvidersController extends AppController {
 
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',    'glyph' => Configure::read('icnAdd'),    'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',   'glyph' => Configure::read('icnEdit'),   'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
                     
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-note',     'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-note',    'glyph' => Configure::read('icnNote'), 'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph' => Configure::read('icnCsv'), 'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-password','scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
-                    array('xtype' => 'button', 'iconCls' => 'b-disable', 'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable'))
+                    array('xtype' => 'button', 'iconCls' => 'b-password', 'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
+                    array('xtype' => 'button', 'iconCls' => 'b-disable',  'glyph' => Configure::read('icnLight'),'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable'))
                
                 ))
             );
@@ -690,7 +690,8 @@ class AccessProvidersController extends AppController {
             $base   = "Access Providers/Controllers/AccessProviders/";
             array_push($action_group,array(  
                 'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+                'iconCls'   => 'b-reload',
+                'glyph'     => Configure::read('icnReload'),  
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
                 'tooltip'   => __('Reload')));
@@ -699,7 +700,8 @@ class AccessProvidersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',     
+                    'iconCls'   => 'b-add',  
+                    'glyph'     => Configure::read('icnAdd'),
                     'scale'     => 'large', 
                     'itemId'    => 'add',      
                     'tooltip'   => __('Add')));
@@ -708,7 +710,8 @@ class AccessProvidersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'delete')){
                  array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',  
+                    'iconCls'   => 'b-delete',
+                    'glyph'     => Configure::read('icnDelete'), 
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
                     'tooltip'   => __('Delete')));
@@ -718,7 +721,8 @@ class AccessProvidersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',    
+                    'iconCls'   => 'b-edit',
+                    'glyph'     => Configure::read('icnEdit'),    
                     'scale'     => 'large', 
                     'itemId'    => 'edit',    
                     'tooltip'   => __('Edit')));
@@ -727,7 +731,8 @@ class AccessProvidersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',     
+                        'iconCls'   => 'b-note',
+                        'glyph'     => Configure::read('icnNote'),    
                         'scale'     => 'large', 
                         'itemId'    => 'note',      
                         'tooltip'   => __('Add Notes')));
@@ -736,7 +741,8 @@ class AccessProvidersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',     
+                    'iconCls'   => 'b-csv',
+                    'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
@@ -746,6 +752,7 @@ class AccessProvidersController extends AppController {
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-password',
+                    'glyph'     => Configure::read('icnLock'),
                     'scale'     => 'large', 
                     'itemId'    => 'password', 
                     'tooltip'   => __('Change Password')));
@@ -754,7 +761,8 @@ class AccessProvidersController extends AppController {
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base.'enable_disable')){      
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-disable', 
+                    'iconCls'   => 'b-disable',
+                    'glyph'     => Configure::read('icnLight'),
                     'scale'     => 'large', 
                     'itemId'    => 'enable_disable',
                     'tooltip'   => __('Enable / Disable')));
