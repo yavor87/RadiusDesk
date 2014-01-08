@@ -25,14 +25,14 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
         me.features = [filters];
 
         me.columns  = [
-            {xtype: 'rownumberer'},
+            {xtype: 'rownumberer', stateId: 'StateGridAccessProviders1'},
             {
                 text        : i18n('sOwner'),
                 sortable    : true,
                 flex        : 1,
                 dataIndex   : 'owner',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders2'
             },
             {
                 text        : i18n('sUsername'),
@@ -40,32 +40,32 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 flex        : 1,
                 dataIndex   : 'username',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders3'
             },
             {
                 text        : i18n('sName'),
                 dataIndex   : 'name',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders4'
             },
             {
                 text        : i18n('sSurname'),
                 dataIndex   : 'surname',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders5'
             },
             {
                 text        : i18n('sPhone'),
                 dataIndex   : 'phone',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders6'
             },
             {
                 text        : i18n('s_email'),
                 flex        : 1,
                 dataIndex   : 'email',
                 tdCls       : 'gridTree',
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridAccessProviders7'
             },
             { 
                 text        : i18n('sMonitor'),  
@@ -75,7 +75,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                                 "<tpl if='monitor == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'monitor',
-                filter      : {type: 'boolean'}
+                filter      : {type: 'boolean'}, stateId: 'StateGridAccessProviders8'
             },
             { 
                 text        : i18n('sActive'),  
@@ -85,7 +85,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                                 "<tpl if='active == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'}
+                filter      : { type: 'boolean'}, stateId: 'StateGridAccessProviders9'
             },
              { 
                 text    : i18n('sNotes'),
@@ -95,7 +95,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes'
+                dataIndex: 'notes', stateId: 'StateGridAccessProviders10'
             }      
         ]; 
 

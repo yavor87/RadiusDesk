@@ -198,6 +198,82 @@
     font-size:12px;
 }
 
+/* EXP for check column */
+.x-grid-cell-checkcolumn .x-grid-cell-inner {
+    padding-top: 4px;
+    padding-bottom: 2px;
+    line-height: 14px;
+}
+.x-grid-with-row-lines .x-grid-cell-checkcolumn .x-grid-cell-inner {
+    padding-top: 3px;
+}
+
+.x-grid-checkheader {
+/*
+    width: 13px;
+    height: 13px;
+    background-image: url('../images/checkbox.gif');
+    background-repeat: no-repeat;
+    background-color: transparent;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    display: block;
+    margin: auto;
+*/
+    width: 17px;
+    height: 17px;
+    background-image: url('../images/16x16/no.png');
+    background-repeat: no-repeat;
+    background-color: transparent;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    display: block;
+    margin: auto;
+
+}
+
+.x-grid-checkheader-checked {
+   /* background-position: 0 -13px;*/
+    background-image:url(../images/16x16/yes.png);
+}
+
+.x-grid-checkheader-disabled {
+    background-position: -39px 0;
+}
+
+.x-grid-checkheader-checked-disabled {
+    background-position: -39px -13px;
+}
+
+.x-grid-checkheader-editor .x-form-cb-wrap {
+    text-align: center;
+}
+
+/* EXP column display yes/no */
+.noRight {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #f6cecf;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 2px 2px 2px 10px;
+    color: #6b032f;
+    font-size:12px;
+}
+
+.hasRight {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    background: #d4e0ce;
+    border: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 2px 2px 2px 10px;
+    color: #1e5304;
+    font-size:12px;
+}
+
 /* Note rather replace the .hasRight and .noRight with a more generic class eg. red or green */
 
 .fieldRed {
@@ -336,5 +412,75 @@
 .user {
     background-image:url(../images/16x16/user.png) !important;
 }
+
+.list {
+    background-image:url(../images/16x16/list.png) !important;
+}
+
+/*----------------------------------------------------
+    FIN: Desktop DataView
+*/
+
+.ux-wallpaper {
+    background-color: #3d71b8;
+}
+
+
+.ux-desktop-shortcut {
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
+    margin: 8px;
+    width: 70px;
+}
+
+.ux-desktop-shortcut-icon {
+    width: 48px;
+    height: 48px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+}
+
+.ux-desktop-shortcut-text {
+    font: normal 10px tahoma,arial,verdana,sans-serif;
+    text-decoration: none;
+    padding-top: 5px;
+    color: white;
+}
+
+.x-view-over .ux-desktop-shortcut-text {
+    text-decoration: underline;
+}
+
+.ux-desktop-shortcut.x-view-over {
+    background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
+    background: rgba(54, 25, 25, .5);
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    border: 1px solid #2F4078;
+}
+
+
+/* Fin Desktop shortcuts */
+.vouchers-shortcut {
+    background-image: url(../images/48x48/vouchers.png);
+}
+
+.byod-shortcut {
+    background-image: url(../images/48x48/devices.png);
+}
+
+.users-shortcut {
+    background-image: url(../images/48x48/users.png);
+}
+
+.activity-shortcut {
+    background-image: url(../images/48x48/activity.png);
+}
+
+.password-shortcut {
+    background-image: url(../images/48x48/key.png);
+}
+
 
 

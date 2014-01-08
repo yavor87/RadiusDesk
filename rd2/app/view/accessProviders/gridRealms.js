@@ -8,7 +8,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
     requires:   ['Rd.view.components.advCheckColumn'],
     ap_id:  null,
     columns: [
-        {xtype: 'rownumberer'},
+        {xtype: 'rownumberer', stateId: 'StateGridApRealms1'},
         { text: i18n('sRealm'),    dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
         {
             xtype: 'advCheckColumn',
@@ -26,7 +26,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     cls.push(cssPrefix + 'grid-checkheader-disabled');
                 }
                 return '<div class="' + cls.join(' ') + '">&#160;</div>';
-            }
+            }, stateId: 'StateGridApRealms2'
         },
         {
             xtype: 'advCheckColumn',
@@ -45,7 +45,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     cls.push(cssPrefix + 'grid-checkheader-disabled');
                 }
                 return '<div class="' + cls.join(' ') + '">&#160;</div>';
-            }
+            }, stateId: 'StateGridApRealms3'
         },
         {
             xtype: 'advCheckColumn',
@@ -64,7 +64,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     cls.push(cssPrefix + 'grid-checkheader-disabled');
                 }
                 return '<div class="' + cls.join(' ') + '">&#160;</div>';
-            }
+            }, stateId: 'StateGridApRealms4'
         },
         {
             xtype: 'advCheckColumn',
@@ -82,7 +82,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     cls.push(cssPrefix + 'grid-checkheader-disabled');
                 }
                 return '<div class="' + cls.join(' ') + '">&#160;</div>';
-            }
+            }, stateId: 'StateGridApRealms5'
         }
     ],
     tbar: [
