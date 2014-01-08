@@ -1,31 +1,31 @@
-Ext.define('Rd.controller.cRealms', {
+Ext.define('Rd.controller.cProfiles', {
     extend: 'Ext.app.Controller',
     actionIndex: function(){
 
         var me = this;
         var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('realmsWin');
+        var win = desktop.getWindow('profilesWin');
         if(!win){
             win = desktop.createWindow({
-                id: 'realmsWin',
-               // title:i18n('sRealms_manager'),
-                btnText:i18n('sRealms_manager'),
+                id: 'profilesWin',
+                //title: i18n('sProfiles_manager'),
+                btnText: i18n('sProfiles_manager'),
                 width:800,
                 height:400,
-                iconCls: 'realms',
-                glyph  : Rd.config.icnRealm,
+                iconCls: 'profiles',
+                glyph: Rd.config.icnProfile,
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
                 layout: 'border',
                 stateful: true,
-                stateId: 'realmsWin',
+                stateId: 'profilesWin',
                 items: [
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading:i18n('sRealms'),
-                        image:  'resources/images/48x48/realms.png'
+                        heading: i18n('sProfiles_manager'),
+                        image:  'resources/images/48x48/profiles.png'
                     },
                     {
                         region  : 'center',
@@ -38,7 +38,8 @@ Ext.define('Rd.controller.cRealms', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', 'xtype':'gridRealms','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : 'Home', xtype: 'gridProfiles','glyph': Rd.config.icnHome}}
+            
                         ]
                     }
                 ]
@@ -47,149 +48,184 @@ Ext.define('Rd.controller.cRealms', {
         desktop.restoreWindow(win);    
         return win;
     },
+
     views:  [
-        'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
-        'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','realms.pnlRealmDetail',
-        'realms.pnlRealmLogo',              'components.pnlUsageGraph'
+        'components.pnlBanner',             'profiles.gridProfiles',    'profiles.winProfileAddWizard',
+        'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd',
+        'profiles.winComponentManage'
     ],
-    stores: ['sRealms','sAccessProvidersTree'],
-    models: ['mRealm','mAccessProviderTree', 'mUserStat'],
+    stores: ['sProfiles', 'sAccessProvidersTree', 'sProfileComponents'],
+    models: ['mProfile',  'mAccessProviderTree'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/realms/add.json',
-        urlEdit:            '/cake2/rd_cake/realms/edit.json',
-        urlDelete:          '/cake2/rd_cake/realms/delete.json',
+        urlAdd:             '/cake2/rd_cake/profiles/add.json',
+        urlEdit:            '/cake2/rd_cake/profiles/edit.json',
+        urlDelete:          '/cake2/rd_cake/profiles/delete.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv:       '/cake2/rd_cake/realms/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/realms/note_add.json',
-        urlViewRealmDetail: '/cake2/rd_cake/realms/view.json',
-        urlLogoBase:        '/cake2/rd_cake/webroot/img/realms/',
-        urlUploadLogo:      '/cake2/rd_cake/realms/upload_logo/'
+        urlExportCsv:       '/cake2/rd_cake/profiles/export_csv',
+        urlNoteAdd:         '/cake2/rd_cake/profiles/note_add.json',
+        urlManageComponents:'/cake2/rd_cake/profiles/manage_components.json'
     },
     refs: [
-         {  ref:    'gridRealms',           selector:   'gridRealms'},
-         {  ref:    'gridAdvancedRealms',   selector:   'gridAdvancedRealms'},
-         { ref:     'grid',                 selector:   'gridRealms'}
+        {  ref: 'grid',  selector:   'gridProfiles'}       
     ],
     init: function() {
-        me = this;
+        var me = this;
         if (me.inited) {
             return;
         }
         me.inited = true;
 
-        me.getStore('sRealms').addListener('load',me.onStoreRealmsLoaded, me);
+        me.getStore('sProfiles').addListener('load',me.onStoreProfilesLoaded, me);
         me.control({
-            'gridRealms #reload': {
+            'gridProfiles #reload': {
                 click:      me.reload
-            },
-            'gridRealms #add': {
+            }, 
+            'gridProfiles #add'   : {
                 click:      me.add
             },
-            'gridRealms #delete': {
+            'gridProfiles #delete'   : {
                 click:      me.del
             },
-            'gridRealms #edit': {
+            'gridProfiles #edit'   : {
                 click:      me.edit
             },
-            'gridRealms #note'   : {
+            'gridProfiles #note'   : {
                 click:      me.note
             },
-            'gridRealms #csv'  : {
+            'gridProfiles #csv'  : {
                 click:      me.csvExport
             },
-            'gridRealms'   : {
-                itemclick:  me.gridClick
+            'gridProfiles'   : {
+                select:      me.select
             },
-            'winRealmAddWizard #btnTreeNext' : {
+            'winProfileAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
             },
-            'winRealmAddWizard #btnRealmDetailPrev' : {
-                click:  me.btnRealmDetailPrev
+            'winProfileAddWizard #btnDataPrev' : {
+                click:  me.btnDataPrev
             },
-            'winRealmAddWizard #save' : {
-                click:  me.addSubmit
+            'winProfileAddWizard #btnDataNext' : {
+                click:  me.btnDataNext
             },
-            'pnlRealm pnlRealmDetail #save' : {
-                click:  me.editSubmit
-            },
-            '#realmsWin':   {
-                afterrender: me.onStoreRealmsLoaded //Prime it initially
-            },
-            '#winCsvColumnSelectRealms #save': {
+            '#winCsvColumnSelectProfiles #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=realms] #reload' : {
+            'gridNote[noteForGrid=profiles] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote[noteForGrid=realms] #add' : {
+            'gridNote[noteForGrid=profiles] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote[noteForGrid=realms] #delete' : {
+            'gridNote[noteForGrid=profiles] #delete' : {
                 click:  me.noteDelete
             },
-            'gridNote[noteForGrid=realms]' : {
+            'gridNote[noteForGrid=profiles]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=realms] #btnTreeNext' : {
+            'winNoteAdd[noteForGrid=profiles] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=realms] #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=profiles] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=realms] #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=profiles] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
-            'pnlRealm #tabDetail': {
-                beforerender:   me.tabDetailActivate,
-                activate:       me.tabDetailActivate
+            'winComponentManage #save' : {
+                click:  me.btnComponentManageSave
             },
-            'pnlRealm #tabLogo': {
-                activate:       me.tabLogoActivate
-            },
-            'pnlRealm #tabLogo #save': {
-                click:       me.logoSave
-            },
-            'pnlRealm #tabLogo #cancel': {
-                click:       me.logoCancel
-            },
-            'pnlRealm #pnlUsageGraphs #daily' : {
-                activate:      me.loadGraph
-            },
-            'pnlRealm #pnlUsageGraphs #daily #reload' : {
-                click:      me.reloadDailyGraph
-            },
-            'pnlRealm #pnlUsageGraphs #daily #day' : {
-                change:      me.changeDailyGraph
-            },
-            'pnlRealm #pnlUsageGraphs #weekly' : {
-                activate:      me.loadGraph
-            },
-            'pnlRealm #pnlUsageGraphs #weekly #reload' : {
-                click:      me.reloadWeeklyGraph
-            },
-            'pnlRealm #pnlUsageGraphs #weekly #day' : {
-                change:      me.changeWeeklyGraph
-            },
-            'pnlRealm #pnlUsageGraphs #monthly' : {
-                activate:      me.loadGraph
-            },
-            'pnlRealm #pnlUsageGraphs #monthly #reload' : {
-                click:      me.reloadMonthlyGraph
-            },
-            'pnlRealm #pnlUsageGraphs #monthly #day' : {
-                change:      me.changeMonthlyGraph
-            }  
-        });;
+            'winComponentManage radiogroup' : {
+                change: me.radioComponentManage
+            }
+        });
     },
     reload: function(){
         var me =this;
         me.getGrid().getSelectionModel().deselectAll(true);
         me.getGrid().getStore().load();
     },
-    gridClick:  function(grid, record, item, index, event){
-        var me                  = this;
-        me.selectedRecord = record;
+    add: function(button){
+        
+        var me = this;
+        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
+        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
+        //simply show the nas connection typer selection 
+        //if it does have, we will show the tree to select an access provider.
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                        
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                            var w = Ext.widget('winProfileAddWizard',{id:'winProfileAddWizardId'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                            var w = Ext.widget('winProfileAddWizard',
+                                {id:'winProfileAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                            );
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+
+    },
+    btnTreeNext: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winProfileAddWizard');
+            win.down('#owner').setValue(sr.get('username'));
+            win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnData');
+        }else{
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnDataPrev:  function(button){
+        var me      = this;
+        var win     = button.up('winProfileAddWizard');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnDataNext:  function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAdd,
+            success: function(form, action) {
+                win.close();
+                me.getStore('sProfiles').load();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    select: function(grid,record){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+
         //Dynamically update the top toolbar
         tb = me.getGrid().down('toolbar[dock=top]');
 
@@ -215,94 +251,7 @@ Ext.define('Rd.controller.cRealms', {
             }
         }
     },
-    add: function(button){
-        var me = this;
-        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
-        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will simply show the add window
-        //if it does have, we will show the add wizard.
-
-        Ext.Ajax.request({
-            url: me.urlApChildCheck,
-            method: 'GET',
-            success: function(response){
-                var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){
-                    if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
-                            var w = Ext.widget('winRealmAddWizard',
-                            {
-                                id          :'winRealmAddWizardId'
-                            });
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
-                    }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
-                            var w   = Ext.widget('winRealmAddWizard',
-                            {
-                                id          : 'winRealmAddWizardId',
-                                startScreen : 'scrnData',
-                                user_id     : '0',
-                                owner       : i18n('sLogged_in_user'),
-                                no_tree     : true
-                            });
-                            me.application.runAction('cDesktop','Add',w);       
-                        }
-                    }
-                }   
-            },
-            scope: me
-        });
-    },
-    btnTreeNext: function(button){
-        var me = this;
-        var tree = button.up('treepanel');
-        //Get selection:
-        var sr = tree.getSelectionModel().getLastSelected();
-        if(sr){    
-            var win = button.up('winRealmAddWizard');
-            win.down('#owner').setValue(sr.get('username'));
-            win.down('#user_id').setValue(sr.getId());
-            win.getLayout().setActiveItem('scrnData');
-        }else{
-            Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_owner'),
-                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }
-    },
-    btnRealmDetailPrev: function(button){
-        var me = this;
-        var win = button.up('winRealmAddWizard');
-        win.getLayout().setActiveItem('scrnApTree');
-    },
-    addSubmit: function(button){
-        var me      = this;
-        var win     = button.up('window');
-        var form    = win.down('form');
-        form.submit({
-            clientValidation: true,
-            url: me.urlAdd,
-            success: function(form, action) {
-                win.close();
-                me.getStore('sRealms').load();
-                Ext.ux.Toaster.msg(
-                    i18n('sNew_item_created'),
-                    i18n('sItem_created_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            //Focus on the first tab as this is the most likely cause of error 
-            failure: function(form,action){
-                var tp = win.down('tabpanel');
-                tp.setActiveTab(0);
-                Ext.ux.formFail(form,action)
-            }
-        });
-    },
-    del:   function(button){
+    del:   function(){
         var me      = this;     
         //Find out if there was something selected
         if(me.getGrid().getSelectionModel().getCount() == 0){
@@ -315,7 +264,6 @@ Ext.define('Rd.controller.cRealms', {
         }else{
             Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
-                   
                     var selected    = me.getGrid().getSelectionModel().getSelection();
                     var list        = [];
                     Ext.Array.forEach(selected,function(item){
@@ -350,58 +298,87 @@ Ext.define('Rd.controller.cRealms', {
             });
         }
     },
+
     edit: function(button){
-        var me = this;  
+        var me      = this;
+        var grid    = button.up('grid');
         //Find out if there was something selected
-        if(me.getGrid().getSelectionModel().getCount() == 0){
+        if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item'),
+                        i18n('sFirst_select_an_item_to_edit'),
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            //Check if the node is not already open; else open the node:
-            var tp      = me.getGrid().up('tabpanel');
-            var sr      = me.getGrid().getSelectionModel().getLastSelected();
-            var id      = sr.getId();
-            var tab_id  = 'realmTab_'+id;
-            var nt      = tp.down('#'+tab_id);
-            if(nt){
-                tp.setActiveTab(tab_id); //Set focus on  Tab
-                return;
-            }
-
-            var tab_name = me.selectedRecord.get('name');
-            //Tab not there - add one
-            tp.add({ 
-                title :     tab_name,
-                itemId:     tab_id,
-                closable:   true,
-                iconCls:    'edit', 
-                layout:     'fit', 
-                items:      {'xtype' : 'pnlRealm',realm_id: id}
-            });
-            tp.setActiveTab(tab_id); //Set focus on Add Tab
-/*            //Load the record:
-            nt  = tp.down('#'+tab_id);
-            var f   = nt.down('frmRealmDetail');
-            f.loadRecord(sr);    //Load the record
-            f.down('#owner').setValue(sr.get('owner')); 
-*/  
+            if(!me.application.runAction('cDesktop','AlreadyExist','winComponentManageId')){
+                var w = Ext.widget('winComponentManage',{id:'winComponentManageId'});
+                me.application.runAction('cDesktop','Add',w);       
+            }    
         }
     },
-    editSubmit: function(button){
+
+    radioComponentManage: function(rbg){
         var me      = this;
-        var form    = button.up('form');
+        var form    = rbg.up('form');
+        var cmb     = form.down('combo');
+        var prior   = form.down('numberfield');
+
+        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
+            cmb.setVisible(true);
+            cmb.setDisabled(false);
+        }else{
+            cmb.setVisible(false);
+            cmb.setDisabled(true);
+        }
+
+        if(rbg.getValue().rb == 'add'){
+            prior.setVisible(true);
+            prior.setDisabled(false);
+        }else{
+            prior.setVisible(false);
+            prior.setDisabled(true);
+        }
+    },
+
+    btnComponentManageSave: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        var cmb     = form.down('combo');
+        var rbg     = form.down('radiogroup');
+
+        //For these two we need to have a value selected
+        if((rbg.getValue().rb == 'add')||(rbg.getValue().rb == 'remove')){
+            if(cmb.getValue() == null){
+                Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sSelect_a_component_to_add_or_remove'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+                 return;
+            } 
+        }
+
+        var extra_params    = {};
+        var s               = me.getGrid().getSelectionModel().getSelection();
+        Ext.Array.each(s,function(record){
+            var r_id = record.getId();
+            extra_params[r_id] = r_id;
+        });
+
+        //Checks passed fine...      
         form.submit({
             clientValidation: true,
-            url: me.urlEdit,
+            url: me.urlManageComponents,
+            params: extra_params,
             success: function(form, action) {
-                me.getStore('sRealms').load();
+                win.close();
+                me.getGrid().getStore().load();
                 Ext.ux.Toaster.msg(
-                    i18n('sItem_updated'),
-                    i18n('sItem_updated_fine'),
+                    i18n('sProfiles_modified'),
+                    i18n('sProfiles_modified_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -409,13 +386,12 @@ Ext.define('Rd.controller.cRealms', {
             failure: Ext.ux.formFail
         });
     },
-    onStoreRealmsLoaded: function() {
-        var me = this;
-        var count = me.getStore('sRealms').getTotalCount();
-        me.getGridRealms().down('#count').update({count: count});
+    onStoreProfilesLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sProfiles').getTotalCount();
+        me.getGrid().down('#count').update({count: count});
     },
-
-     csvExport: function(button,format) {
+    csvExport: function(button,format) {
         var me          = this;
         var columns     = me.getGrid().columns;
         var col_list    = [];
@@ -426,8 +402,8 @@ Ext.define('Rd.controller.cRealms', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectRealms')){
-            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectRealms',columns: col_list});
+        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectProfiles')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectProfiles',columns: col_list});
             me.application.runAction('cDesktop','Add',w);         
         }
     },
@@ -507,12 +483,12 @@ Ext.define('Rd.controller.cRealms', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealms'+sr.getId())){
+                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfiles'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
-                            id          : 'winNoteRealms'+sr.getId(),
+                            id          : 'winNoteProfiles'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'realms',
+                            noteForGrid : 'profiles',
                             noteForName : sr.get('name')
                         });
                     me.application.runAction('cDesktop','Add',w);       
@@ -528,7 +504,6 @@ Ext.define('Rd.controller.cRealms', {
     noteAdd: function(button){
         var me      = this;
         var grid    = button.up('gridNote');
-
         //See how the wizard should be displayed:
         Ext.Ajax.request({
             url: me.urlApChildCheck,
@@ -537,10 +512,10 @@ Ext.define('Rd.controller.cRealms', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteRealmsAdd'+grid.noteForId,
+                                id          : 'winNoteProfilesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
@@ -548,10 +523,10 @@ Ext.define('Rd.controller.cRealms', {
                             me.application.runAction('cDesktop','Add',w);       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
-                                id          : 'winNoteRealmsAdd'+grid.noteForId,
+                                id          : 'winNoteProfilesAdd'+grid.noteForId,
                                 noteForId   : grid.noteForId,
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid,
@@ -611,6 +586,8 @@ Ext.define('Rd.controller.cRealms', {
     btnNoteAddNext: function(button){
         var me      = this;
         var win     = button.up('winNoteAdd');
+        console.log(win.noteForId);
+        console.log(win.noteForGrid);
         win.refreshGrid.getStore().load();
         var form    = win.down('form');
         form.submit({
@@ -670,136 +647,5 @@ Ext.define('Rd.controller.cRealms', {
                 }
             });
         }
-    },
-    tabDetailActivate : function(tab){
-        var me      = this;
-        var form    = tab.down('form');
-        var realm_id= tab.up('pnlRealm').realm_id;
-        form.load({url:me.urlViewRealmDetail, method:'GET',params:{realm_id:realm_id}});
-    },
-    tabLogoActivate: function(tab){
-        var me      = this;
-        var pnl_n   = tab.up('pnlNas');
-        var realm_id= tab.up('pnlRealm').realm_id;
-        var p_img   = tab.down('#pnlImg');
-        Ext.Ajax.request({
-            url: me.urlViewRealmDetail,
-            method: 'GET',
-            params: {realm_id : realm_id },
-            success: function(response){
-                var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){
-                    var img_url = me.urlLogoBase+jsonData.data.icon_file_name;
-                    p_img.update({image:img_url});
-                }   
-            },
-            scope: me
-        });
-    },
-    logoSave: function(button){
-        var me      = this;
-        var form    = button.up('form');
-        var pnl_r   = form.up('pnlRealm');
-        var p_form  = form.up('panel');
-        var p_img   = p_form.down('#pnlImg');
-        form.submit({
-            clientValidation: true,
-            waitMsg: 'Uploading your photo...',
-            url: me.urlUploadLogo,
-            params: {'id' : pnl_r.realm_id },
-            success: function(form, action) {              
-                if(action.result.success){ 
-                    var new_img = action.result.icon_file_name;    
-                    var img_url = me.urlLogoBase+new_img;
-                    p_img.update({image:img_url});
-                } 
-                Ext.ux.Toaster.msg(
-                    i18n('sItem_updated'),
-                    i18n('sItem_updated_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
-    },
-    logoCancel: function(button){
-        var me      = this;
-        var form    = button.up('form');
-        form.getForm().reset();
-    },
-    loadGraph: function(tab){
-        var me  = this;
-        tab.down("chart").setLoading(true);
-        //Get the value of the Day:
-        var day = tab.down('#day');
-        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
-        me.reloadChart(tab);
-    },
-    reloadDailyGraph: function(btn){
-        var me  = this;
-        tab     = btn.up("#daily");
-        me.reloadChart(tab);
-    },
-    changeDailyGraph: function(d,new_val, old_val){
-        var me      = this;
-        var tab     = d.up("#daily");
-        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
-        me.reloadChart(tab);
-    },
-    reloadWeeklyGraph: function(btn){
-        var me  = this;
-        tab     = btn.up("#weekly");
-        me.reloadChart(tab);
-    },
-    changeWeeklyGraph: function(d,new_val, old_val){
-        var me      = this;
-        var tab     = d.up("#weekly");
-        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
-        me.reloadChart(tab);
-    },
-    reloadMonthlyGraph: function(btn){
-        var me  = this;
-        tab     = btn.up("#monthly");
-        me.reloadChart(tab);
-    },
-    changeMonthlyGraph: function(d,new_val, old_val){
-        var me      = this;
-        var tab     = d.up("#monthly");
-        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
-        me.reloadChart(tab);
-    },
-    reloadChart: function(tab){
-        var me      = this;
-        var chart   = tab.down("chart");
-        chart.setLoading(true); //Mask it
-        chart.getStore().load({
-            scope: me,
-            callback: function(records, operation, success) {
-                chart.setLoading(false);
-                if(success){
-                    Ext.ux.Toaster.msg(
-                            "Graph fetched",
-                            "Graph detail fetched OK",
-                            Ext.ux.Constants.clsInfo,
-                            Ext.ux.Constants.msgInfo
-                        );
-                    //-- Show totals
-                    var rawData     = chart.getStore().getProxy().getReader().rawData;
-                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
-                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
-                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
-                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
-
-                }else{
-                    Ext.ux.Toaster.msg(
-                            "Problem fetching graph",
-                            "Problem fetching graph detail",
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                } 
-            }
-        });   
     }
 });

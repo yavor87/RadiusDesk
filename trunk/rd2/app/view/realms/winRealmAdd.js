@@ -11,6 +11,7 @@ Ext.define('Rd.view.realms.winRealmAdd', {
     border:     false,
     layout:     'card',
     iconCls:    'add',
+    glyph:      Rd.config.icnAdd,
     defaults: {
             border: false
     },

@@ -3,6 +3,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
     alias: 'widget.pnlRealm',
     border: false,
     realm_id: null,
+    plain   : true,
     initComponent: function(){
         var me = this;
         me.items = [

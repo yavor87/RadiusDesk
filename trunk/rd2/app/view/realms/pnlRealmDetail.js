@@ -193,6 +193,7 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                         text: i18n('sSave'),
                         scale: 'large',
                         iconCls: 'b-save',
+                        glyph:      Rd.config.icnYes,
                         margin: Rd.config.buttonMargin
                     }
                 ]
