@@ -38,7 +38,7 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
         })];
 
         me.columns = [
-            {xtype: 'rownumberer'},
+            {xtype: 'rownumberer',stateId: 'StateGridVoucherPrivate1'},
             {
                 header: i18n('sType'),
                 dataIndex: 'type',
@@ -66,9 +66,10 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
                     }else{
                         return i18n('sReply');
                     }
-                }
+                },
+                stateId: 'StateGridVoucherPrivate2'
             },
-            { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1},
+            { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1, stateId: 'StateGridVoucherPrivate3'},
             {
                 header: i18n('sOperator'),
                 dataIndex: 'op',
@@ -99,7 +100,8 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
                         metaData.tdCls = 'gridTree';
                     }
                     return value;
-                }
+                },
+                stateId: 'StateGridVoucherPrivate4'
             },
             { 
                 text: i18n('sValue'),        dataIndex: 'value', flex: 1,
@@ -112,6 +114,7 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
                     }
                     return value;
                 }
+                stateId: 'StateGridVoucherPrivate5'
             }
         ];
 

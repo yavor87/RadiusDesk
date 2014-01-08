@@ -62,6 +62,7 @@ Ext.define('Rd.controller.cVouchers', {
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/vouchers/add.json',
+        urlDelete:          '/cake2/rd_cake/vouchers/delete.json',
         urlViewBasic:       '/cake2/rd_cake/vouchers/view_basic_info.json',
         urlEditBasic:       '/cake2/rd_cake/vouchers/edit_basic_info.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
@@ -398,7 +399,7 @@ Ext.define('Rd.controller.cVouchers', {
                         Ext.Array.push(list,{'id' : id});
                     });
                     Ext.Ajax.request({
-                        url: '/cake2/rd_cake/vouchers/delete.json',
+                        url: me.urlDelete,
                         method: 'POST',          
                         jsonData: list,
                         success: function(batch,options){console.log('success');
