@@ -47,7 +47,15 @@ Ext.namespace('Rd').config = {
     icnLight        : 57487,
     icnNote         : 57531,
     icnExpand       : 57457,
-    icnRealm        : 57557
+    icnRealm        : 57557,
+    icnFolder       : 57463,
+    icnTags         : 57592,
+    icnComponent    : 57544,
+    incProfile      : 57468,
+    icnRadius       : 57444,
+    icnNas          : 57589,
+    icnMap          : 57645,
+    icnSnapshot     : 57400
 };
 
 

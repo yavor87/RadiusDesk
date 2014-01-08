@@ -28,14 +28,14 @@ Ext.define('Rd.view.realms.gridRealms' ,{
         me.features = [filters];
 
         me.columns  = [
-            {xtype: 'rownumberer'},
-            { text: i18n('sOwner'),    dataIndex: 'owner',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: i18n('sName'),     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'}},
-            { text: i18n('sPhone'),    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: i18n('sFax'),      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: i18n('s_email'),   dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
-            { text: i18n('sURL'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true},
+            {xtype: 'rownumberer',stateId: 'StateGridRealms1'},
+            { text: i18n('sOwner'),    dataIndex: 'owner',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},stateId: 'StateGridRealms2'},
+            { text: i18n('sName'),     dataIndex: 'name',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},stateId: 'StateGridRealms3'},
+            { text: i18n('sPhone'),    dataIndex: 'phone',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms4'},
+            { text: i18n('sFax'),      dataIndex: 'fax',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms5'},
+            { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms6'},
+            { text: i18n('s_email'),   dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms7'},
+            { text: i18n('sURL'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms8'},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  
@@ -47,7 +47,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 dataIndex: 'available_to_siblings',
                     filter  : {
                         type: 'boolean'    
-                }
+                },stateId: 'StateGridRealms9'
             },
             { 
                 text    : i18n('sNotes'),
@@ -57,7 +57,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes'
+                dataIndex: 'notes',stateId: 'StateGridRealms10'
             }
         ];
 

@@ -26,6 +26,7 @@ Ext.define('Rd.view.realms.frmDetail', {
                     text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
+                    glyph:      Rd.config.icnBack,
                     margin: '0 20 40 0'
                 },
                 {
@@ -33,6 +34,7 @@ Ext.define('Rd.view.realms.frmDetail', {
                     text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
+                    glyph:      Rd.config.icnYes,
                     formBind: true,
                     margin: '0 20 40 0'
                 }
@@ -45,6 +47,7 @@ Ext.define('Rd.view.realms.frmDetail', {
                     text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
+                    glyph:      Rd.config.icnYes,
                     formBind: true,
                     margin: '0 20 40 0'
                 }

@@ -2,7 +2,7 @@ Ext.define('Rd.store.sProfileComponents', {
     extend: 'Ext.data.Store',
     model: 'Rd.model.mProfileComponent',
     //To make it load AJAXly from the server specify the follown 3 attributes
-    buffered: true,
+    buffered: false, //Do this as a temporary fix for 4.2.1
     leadingBufferZone: 150, 
     pageSize: 50,
     //To force server side sorting:

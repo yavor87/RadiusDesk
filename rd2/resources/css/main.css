@@ -80,6 +80,14 @@
 /*-- End Logo --*/
 
 /*-- Label experiment --*/
+.lblRdCheck {
+    color: #2F4078; 
+    font-size:16px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
 .lblRdReq {
     color: #2F4078; 
     font-size:16px;

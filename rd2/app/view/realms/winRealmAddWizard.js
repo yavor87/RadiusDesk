@@ -11,6 +11,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
     border:     false,
     layout:     'card',
     iconCls:    'add',
+    glyph:      Rd.config.icnAdd,
     autoShow:   false,
     startScreen:'scrnApTree',
     owner:      '',
@@ -80,6 +81,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
                     text: i18n('sPrev'),
                     scale: 'large',
                     iconCls: 'b-prev',
+                    glyph:      Rd.config.icnBack,
                     margin: Rd.config.buttonMargin
                 },
                 {
@@ -87,6 +89,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
                     text: i18n('sOK'),
                     scale: 'large',
                     iconCls: 'b-btn_ok',
+                    glyph:      Rd.config.icnYes,
                     formBind: true,
                     margin: Rd.config.buttonMargin
                 }

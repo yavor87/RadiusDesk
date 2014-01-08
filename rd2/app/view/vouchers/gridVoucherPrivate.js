@@ -113,7 +113,7 @@ Ext.define('Rd.view.vouchers.gridVoucherPrivate' ,{
                         metaData.tdCls = 'gridTree';
                     }
                     return value;
-                }
+                },
                 stateId: 'StateGridVoucherPrivate5'
             }
         ];
