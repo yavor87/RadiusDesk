@@ -234,56 +234,56 @@ class DesktopController extends AppController {
           //  array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers'),
           //  array(  'text'  => __('Permanent users'),       'iconCls' => 'group'),
           //  array(  'text'  => __('Accounting'),            'iconCls' => 'accounting'),
-            array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'glyph' => 57557 ,'menu'  =>
+            array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'glyph' => Configure::read('icnRealm') ,'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('Access Providers') ,'iconCls' => 'key',     'itemId' => 'cAccessProviders'),
-                        array('text' => __('Realms') ,          'iconCls' => 'realms',  'itemId' => 'cRealms'),
+                        array('text' => __('Access Providers') ,'iconCls' => 'key',  'glyph' => Configure::read('icnKey'),   'itemId' => 'cAccessProviders'),
+                        array('text' => __('Realms') ,          'iconCls' => 'realms','glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'),
                     )
                 )
             ),
         //    array(  'text'  => __('Profiles'),              'iconCls' => 'profiles'),
           //  array(  'text'  => __('Activity/Stats'),        'iconCls' => 'stats'),
-            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'glyph' => 57589, 'menu'  =>
+            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('NAS Devices') ,     'iconCls' => 'nas',   'itemId' => 'cNas'),
-                        array('text' => __('NAS Device tags') , 'iconCls' => 'tags',  'itemId' => 'cTags'),
+                        array('text' => __('NAS Devices') ,     'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'),
+                        array('text' => __('NAS Device tags') , 'iconCls' => 'tags','glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'),
                     )
                 )
             ),
-            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles', 'glyph' => 57468, 'menu'  =>
+            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles', 'glyph' => Configure::read('icnProfile'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('Profile Components') ,  'iconCls' => 'components',  'itemId' => 'cProfileComponents'),
-                        array('text' => __('Profiles') ,            'iconCls' => 'profiles',    'itemId' => 'cProfiles'),
+                        array('text' => __('Profile Components') ,  'iconCls' => 'components', 'glyph' => Configure::read('icnComponent'),  'itemId' => 'cProfileComponents'),
+                        array('text' => __('Profiles') ,            'iconCls' => 'profiles',   'glyph' => Configure::read('icnProfile'), 'itemId' => 'cProfiles'),
                     )
                 )
             ),
-            array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'glyph' => 57487 ,'menu'  =>
+            array(  'text'  => __('Tools'),  'iconCls' => 'tools', 'glyph' => Configure::read('icnLight'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity',        'itemId' => 'cActivityMonitor'),
-                        array(  'text'  => __('RADIUS client'),         'iconCls' => 'radius_client',   'itemId' => 'cRadiusClient'),
-                        array(  'text'  => __('Logfile viewer'),        'iconCls' => 'logfile_viewer',  'itemId' => 'cLogViewer'),
-                        array(  'text'  => __('Debug output'),          'iconCls' => 'debug',           'itemId' => 'cDebug'), 
-                        array(  'text'  => __('Translation manager'),   'iconCls' => 'translate',       'itemId' => 'cI18n'),
-                        array(  'text'  => __('Rights manager'),        'iconCls' => 'rights',          'itemId' => 'cAcos'),  
+                        array(  'text'  => __('Activity monitor'),  'iconCls' => 'activity',        'glyph' => Configure::read('icnActivity'), 'itemId' => 'cActivityMonitor'),
+                        array(  'text'  => __('RADIUS client'),     'iconCls' => 'radius_client',   'glyph' => Configure::read('icnRadius'),'itemId' => 'cRadiusClient'),
+                        array(  'text'  => __('Logfile viewer'),    'iconCls' => 'logfile_viewer',  'glyph' => Configure::read('icnLog'), 'itemId' => 'cLogViewer'),
+                        array(  'text'  => __('Debug output'),      'iconCls' => 'debug',           'glyph' => Configure::read('icnBug'), 'itemId' => 'cDebug'), 
+                        array(  'text'  => __('Translation manager'), 'iconCls' => 'translate',       'glyph' => Configure::read('icnTranslate'),'itemId' => 'cI18n'),
+                        array(  'text'  => __('Rights manager'),    'iconCls' => 'rights',          'glyph' => Configure::read('icnKey'), 'itemId' => 'cAcos'),  
                     )
                 )
             ),
-            array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers', 'glyph' => 57606,   'itemId' => 'cVouchers'),
-            array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',    'glyph' => 57619,   'itemId' => 'cPermanentUsers'),
-            array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',  'glyph' => 57432,  'itemId' => 'cDevices'),
+            array(  'text'  => __('Vouchers'),        'iconCls' => 'vouchers','glyph' => Configure::read('icnVoucher'), 'itemId' => 'cVouchers'),
+            array(  'text'  => __('Permanent Users'), 'iconCls' => 'users',   'glyph' => Configure::read('icnUser'),'itemId' => 'cPermanentUsers'),
+            array(  'text'  => __('BYOD Manager'),    'iconCls' => 'devices', 'glyph' => Configure::read('icnDevice'),  'itemId' => 'cDevices'),
         );
 
         //Optional experimental stuff 
         if(Configure::read('experimental.active') == true){
-            array_push($menus,array(  'text'  => __('Auto Setup'),            'iconCls' => 'setup',       'itemId' => 'cAutoSetups'));
+            array_push($menus,array(  'text'  => __('Auto Setup'), 'iconCls' => 'setup', 'glyph' => Configure::read('icnConfigure'), 'itemId' => 'cAutoSetups'));
         }
 
-        array_push($menus,array(  'text'  => __('MESHdesk'),            'iconCls' => 'mesh',   'glyph' => 57460,    'itemId' => 'cMeshes'));
-        array_push($menus,array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages', 'glyph' => 57392, 'itemId' => 'cDynamicDetails'));
+        array_push($menus,array(  'text'  => __('MESHdesk'),           'iconCls' => 'mesh',  'glyph' => Configure::read('icnMesh'), 'itemId' => 'cMeshes'));
+        array_push($menus,array(  'text'  => __('Dynamic login pages'),'iconCls' => 'dynamic_pages', 'glyph' => Configure::read('icnDynamic'), 'itemId' => 'cDynamicDetails'));
 
         return $menus;
     }
@@ -305,28 +305,28 @@ class DesktopController extends AppController {
                 //___Check the sub-menu rights___:
                 $sm_r_p = array();
                 if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."AccessProviders/index")){
-                    array_push($sm_r_p, array('text' => __('Access Providers') ,'iconCls' => 'key',     'itemId' => 'cAccessProviders'));
+                    array_push($sm_r_p, array('text' => __('Access Providers') ,'iconCls' => 'key', 'glyph' => Configure::read('icnKey'),    'itemId' => 'cAccessProviders'));
                 }
                 //Then the one we checked for ... realms
-                array_push($sm_r_p, array('text' => __('Realms') , 'iconCls' => 'realms',  'itemId' => 'cRealms'));
+                array_push($sm_r_p, array('text' => __('Realms') , 'iconCls' => 'realms', 'glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'));
                 //___ END Sub Menu___
 
-            array_push($menu, array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'menu'  => array('items' =>$sm_r_p)));     
+            array_push($menu, array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms', 'glyph' => Configure::read('icnRealm'), 'menu'  => array('items' =>$sm_r_p)));     
         }
 
         //____ NAS devices _____
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){    //Required to show the NAS Devices menu item
 
             $sm_nas_devices = array();
-            array_push($sm_nas_devices, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'itemId' => 'cNas'));
+            array_push($sm_nas_devices, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'));
 
             //___Check the sub-menu rights___:
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Tags/index")){
-                array_push($sm_nas_devices, array(  'text'  => __('NAS Device tags'),   'iconCls' => 'tags', 'itemId' => 'cTags'));
+                array_push($sm_nas_devices, array(  'text'  => __('NAS Device tags'),   'iconCls' => 'tags', 'glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'));
             } 
             //___ END Sub Menu___
 
-            array_push($menu, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas',  'menu'  => array('items' =>$sm_nas_devices)));     
+            array_push($menu, array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'), 'menu'  => array('items' =>$sm_nas_devices)));     
         }
 
         //____ Profiles _____
@@ -336,22 +336,22 @@ class DesktopController extends AppController {
 
             //___Check the sub-menu rights___:
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ProfileComponents/index")){
-                array_push($sm_profiles, array('text' => __('Profile Components') ,  'iconCls' => 'components',  'itemId' => 'cProfileComponents'));
+                array_push($sm_profiles, array('text' => __('Profile Components') ,  'iconCls' => 'components', 'glyph' => Configure::read('icnComponent'), 'itemId' => 'cProfileComponents'));
             } 
             //___ END Sub Menu___
 
-            array_push($sm_profiles, array('text' => __('Profiles') ,  'iconCls' => 'profiles', 'itemId' => 'cProfiles'));
+            array_push($sm_profiles, array('text' => __('Profiles') ,  'iconCls' => 'profiles', 'glyph' => Configure::read('icnProfile'),'itemId' => 'cProfiles'));
 
-            array_push($menu, array(  'text'  => __('Profiles'),  'iconCls' => 'profiles',  'menu'  => array('items' =>$sm_profiles)));     
+            array_push($menu, array(  'text'  => __('Profiles'),  'iconCls' => 'profiles', 'glyph' => Configure::read('icnProfile'),  'menu'  => array('items' =>$sm_profiles)));     
         }
 
         //____ Tools ____
         array_push($menu,
-             array(  'text'  => __('Tools'),  'iconCls' => 'tools',  'menu'  =>
+             array(  'text'  => __('Tools'),  'iconCls' => 'tools', 'glyph' => Configure::read('icnLight'),  'menu'  =>
                      array( 'items' =>
                         array(
-                            array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity',        'itemId' => 'cActivityMonitor'),
-                            array(  'text'  => __('RADIUS client'),         'iconCls' => 'radius_client',   'itemId' => 'cRadiusClient'),                          
+                            array(  'text'  => __('Activity monitor'),      'iconCls' => 'activity', 'glyph' => Configure::read('icnActivity'),       'itemId' => 'cActivityMonitor'),
+                            array(  'text'  => __('RADIUS client'),         'iconCls' => 'radius_client', 'glyph' => Configure::read('icnRadius'),  'itemId' => 'cRadiusClient'),                          
                         )
                     )
                 )
@@ -360,25 +360,25 @@ class DesktopController extends AppController {
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
             array_push($menu,
-                array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers',    'itemId' => 'cVouchers')
+                array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers', 'glyph' => Configure::read('icnVoucher'),   'itemId' => 'cVouchers')
             );
         }
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
             array_push($menu,
-                array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',       'itemId' => 'cPermanentUsers')
+                array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',  'glyph' => Configure::read('icnUser'),      'itemId' => 'cPermanentUsers')
             );
         }
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
             array_push($menu,
-                array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',     'itemId' => 'cDevices')
+                array(  'text'  => __('BYOD Manager'),          'iconCls' => 'devices',  'glyph' => Configure::read('icnDevice'),   'itemId' => 'cDevices')
             );
         }
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
             array_push($menu,
-                array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages','itemId' => 'cDynamicDetails')
+                array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages', 'glyph' => Configure::read('icnDynamic'),'itemId' => 'cDynamicDetails')
             );
         }
         return $menu;

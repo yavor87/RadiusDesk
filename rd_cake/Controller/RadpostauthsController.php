@@ -258,7 +258,7 @@ class RadpostauthsController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -273,7 +273,7 @@ class RadpostauthsController extends AppController {
                     ) 
                 )),
                 array('xtype' => 'buttongroup', 'width'=> 75 ,'title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv', 'glyph'     => Configure::read('icnCsv'),    'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                
             );
@@ -289,7 +289,8 @@ class RadpostauthsController extends AppController {
             //Reload
             array_push($action_group,array( 
                 'xtype'     =>  'splitbutton',  
-                'iconCls'   => 'b-reload',   
+                'iconCls'   => 'b-reload',
+                'glyph'     => Configure::read('icnReload'),   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
                 'tooltip'   => _('Reload'),
@@ -307,7 +308,8 @@ class RadpostauthsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',     
+                    'iconCls'   => 'b-csv',
+                    'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));

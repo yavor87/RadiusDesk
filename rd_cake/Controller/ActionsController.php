@@ -151,9 +151,9 @@ class ActionsController extends AppController {
 
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',  'scale' => 'large', 'itemId' => 'add',   'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',    'glyph' => Configure::read('icnAdd'),  'scale' => 'large', 'itemId' => 'add',   'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                 ))  
             );
         }
@@ -167,7 +167,8 @@ class ActionsController extends AppController {
 
             array_push($action_group,array(  
                 'xtype'     => 'button',
-                'iconCls'   => 'b-reload',  
+                'iconCls'   => 'b-reload', 
+                'glyph'     => Configure::read('icnReload'), 
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
                 'tooltip'   => __('Reload')));
@@ -176,7 +177,8 @@ class ActionsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'add')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',  
+                    'iconCls'   => 'b-add', 
+                    'glyph'     => Configure::read('icnAdd'), 
                     'scale'     => 'large', 
                     'itemId'    => 'add',
                     'disabled'  => false,   
@@ -188,7 +190,8 @@ class ActionsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',  
+                    'iconCls'   => 'b-delete', 
+                    'glyph'     => Configure::read('icnDelete'), 
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
                     'disabled'  => false,   
