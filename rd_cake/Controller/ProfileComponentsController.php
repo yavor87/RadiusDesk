@@ -850,19 +850,21 @@ class ProfileComponentsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
-                //Strings
-                if($f->type == 'string'){
-                    if($f->field == 'owner'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
-                    }else{
-                        $col = $this->modelClass.'.'.$f->field;
-                        array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                if(isset($f->type)){
+                    //Strings
+                    if($f->type == 'string'){
+                        if($f->field == 'owner'){
+                            array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                        }else{
+                            $col = $this->modelClass.'.'.$f->field;
+                            array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
+                        }
                     }
-                }
-                //Bools
-                if($f->type == 'boolean'){
-                     $col = $this->modelClass.'.'.$f->field;
-                     array_push($c['conditions'],array("$col" => $f->value));
+                    //Bools
+                    if($f->type == 'boolean'){
+                         $col = $this->modelClass.'.'.$f->field;
+                         array_push($c['conditions'],array("$col" => $f->value));
+                    }
                 }
             }
         }
