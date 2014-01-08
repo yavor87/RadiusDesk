@@ -102,9 +102,31 @@ $config['icnCsv']       = 57415;
 $config['icnRadius']    = 57444;
 $config['icnLight']     = 57487;
 $config['icnNote']      = 57531;
-
-
-
+$config['icnKey']       = 57485;
+$config['icnRealm']     = 57557;
+$config['icnNas']       = 57589;
+$config['icnTag']       = 57592;
+$config['icnProfile']   = 57468;
+$config['icnComponent'] = 57544;
+$config['icnLight']     = 57487;
+$config['icnActivity']  = 57408;
+$config['icnLog']       = 57438;
+$config['icnTranslate'] = 57466;
+$config['icnConfigure'] = 57583;
+$config['icnUser']      = 57618;
+$config['icnVoucher']   = 57606;
+$config['icnDevice']    = 57432;
+$config['icnMesh']      = 57460;
+$config['icnBug']       = 57344;
+$config['icnMobile']    = 57431;
+$config['icnDesktop']   = 57429;
+$config['icnView']      = 57540;
+$config['icnMeta']      = 57630;
+$config['icnMap']       = 57645;
+$config['icnConnect']   = 57489;
+$config['icnGraph']     = 57410;
+$config['icnKick']      = 57535;
+$config['icnClose']     = 57609;
 
 //===== MESHdesk ======
 //== Encryption types ==
