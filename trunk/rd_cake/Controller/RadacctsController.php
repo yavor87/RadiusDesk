@@ -380,7 +380,7 @@ class RadacctsController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'), 'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -395,7 +395,8 @@ class RadacctsController extends AppController {
                     ),
                     array(
                             'xtype'         => 'button', 
-                            'iconCls'       => 'b-connect',     
+                            'iconCls'       => 'b-connect',
+                            'glyph'         => Configure::read('icnConnect'),      
                             'scale'         => 'large',
                             'itemId'        => 'connected',
                             'enableToggle'  => true,
@@ -404,12 +405,12 @@ class RadacctsController extends AppController {
                     )     
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
-                    array('xtype' => 'button', 'iconCls' => 'b-graph',   'scale' => 'large', 'itemId' => 'graph',    'tooltip'=> __('Usage graph')),
+                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph'     => Configure::read('icnCsv'), 'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'iconCls' => 'b-graph',   'glyph'     => Configure::read('icnGraph'), 'scale' => 'large', 'itemId' => 'graph',    'tooltip'=> __('Usage graph')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-kick', 'scale' => 'large', 'itemId' => 'kick', 'tooltip'=> __('Kick user off')),
-                    array('xtype' => 'button', 'iconCls' => 'b-close','scale' => 'large', 'itemId' => 'close','tooltip'=> __('Close session')),
+                    array('xtype' => 'button', 'iconCls' => 'b-kick', 'glyph'     => Configure::read('icnKick'),'scale' => 'large', 'itemId' => 'kick', 'tooltip'=> __('Kick user off')),
+                    array('xtype' => 'button', 'iconCls' => 'b-close', 'glyph'     => Configure::read('icnClose'),'scale' => 'large', 'itemId' => 'close','tooltip'=> __('Close session')),
                 )) 
                
             );
@@ -426,7 +427,8 @@ class RadacctsController extends AppController {
             //Reload
             array_push($action_group,array( 
                 'xtype'     =>  'splitbutton',  
-                'iconCls'   => 'b-reload',   
+                'iconCls'   => 'b-reload',
+                'glyph'     => Configure::read('icnReload'),   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
                 'tooltip'   => _('Reload'),
@@ -441,7 +443,8 @@ class RadacctsController extends AppController {
 
             array_push($action_group,array(
                 'xtype'         => 'button', 
-                'iconCls'       => 'b-connect',     
+                'iconCls'       => 'b-connect',
+                'glyph'         => Configure::read('icnConnect'),     
                 'scale'         => 'large',
                 'itemId'        => 'connected',
                 'enableToggle'  => true,
@@ -453,7 +456,8 @@ class RadacctsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',     
+                    'iconCls'   => 'b-csv',
+                    'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
@@ -461,7 +465,8 @@ class RadacctsController extends AppController {
 
           array_push($document_group,array(
                 'xtype'     => 'button', 
-                'iconCls'   => 'b-graph',     
+                'iconCls'   => 'b-graph',
+                'glyph'     => Configure::read('icnGraph'),     
                 'scale'     => 'large', 
                 'itemId'    => 'graph',      
                 'tooltip'   => __('Usage graph')));
@@ -470,7 +475,8 @@ class RadacctsController extends AppController {
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'kick_active')){ 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-kick', 
+                    'iconCls'   => 'b-kick',
+                    'glyph'     => Configure::read('icnKick'), 
                     'scale'     => 'large', 
                     'itemId'    => 'kick', 
                     'tooltip'   => __('Kick user off')));
@@ -479,7 +485,8 @@ class RadacctsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'close_open')){ 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-close', 
+                    'iconCls'   => 'b-close',
+                    'glyph'     => Configure::read('icnClose'), 
                     'scale'     => 'large', 
                     'itemId'    => 'close', 
                     'tooltip'   => __('Close session')));
