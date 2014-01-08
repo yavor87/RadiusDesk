@@ -1519,7 +1519,7 @@ class NasController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Nas'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-meta_edit','glyph'     => Configure::read('icnMeta'),'scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
+                    array('xtype' => 'button', 'iconCls' => 'b-meta_edit','glyph'     => Configure::read('icnTag'),'scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
                     array('xtype' => 'button', 'iconCls' => 'b-map',     'glyph'     => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
                 )) 
             );
