@@ -51,11 +51,25 @@ Ext.namespace('Rd').config = {
     icnFolder       : 57463,
     icnTags         : 57592,
     icnComponent    : 57544,
-    incProfile      : 57468,
+    icnProfile      : 57468,
     icnRadius       : 57444,
     icnNas          : 57589,
     icnMap          : 57645,
-    icnSnapshot     : 57400
+    icnSnapshot     : 57400,
+    icnActivity     : 57408,
+    icnGraph        : 57410,
+    icnHistory      : 57628,
+    icnClear        : 57552,
+    icnStart        : 57604,
+    icnStop         : 57608,
+    icnLog          : 57438,
+    icnBug          : 57344,
+    icnTranslate    : 57466,
+    icnCopy         : 57590,
+    icnMeta         : 57630,
+    icnFlag         : 57454,
+    icnCountry      : 57645,
+    icnLanguage     : 57516
 };
 
 
