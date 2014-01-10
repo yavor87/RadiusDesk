@@ -7,6 +7,7 @@ Ext.define('Rd.view.dynamicDetails.winPairEdit', {
     width:    400,
     height:   350,
     iconCls: 'edit',
+    glyph: Rd.config.icnEdit,
     dynamic_detail_id: undefined,
     grid:  undefined,
     items:  {
@@ -63,6 +64,7 @@ Ext.define('Rd.view.dynamicDetails.winPairEdit', {
                 text: i18n('sSave'),
                 scale: 'large',
                 iconCls: 'b-save',
+                glyph: Rd.config.icnYes,
                 margin: Rd.config.buttonMargin
             }
         ]

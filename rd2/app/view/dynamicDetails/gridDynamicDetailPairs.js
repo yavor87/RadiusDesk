@@ -18,10 +18,10 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetailPairs' ,{
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     columns: [
-            {xtype: 'rownumberer'},
-            { text: i18n('sName'),          dataIndex: 'name',      tdCls: 'gridTree', flex: 1},
-            { text: i18n('sValue'),         dataIndex: 'value',     tdCls: 'gridTree', flex: 1},
-            { text: i18n('sPriority'),      dataIndex: 'priority',  tdCls: 'gridTree', flex: 1}
+            {xtype: 'rownumberer',stateId: 'StateGridDynamicDetailPairs1'},
+            { text: i18n('sName'),          dataIndex: 'name',      tdCls: 'gridTree', flex: 1,stateId: 'StateGridDynamicDetailPairs2'},
+            { text: i18n('sValue'),         dataIndex: 'value',     tdCls: 'gridTree', flex: 1,stateId: 'StateGridDynamicDetailPairs3'},
+            { text: i18n('sPriority'),      dataIndex: 'priority',  tdCls: 'gridTree', flex: 1,stateId: 'StateGridDynamicDetailPairs4'}
     ],
     initComponent: function(){
         var me      = this;

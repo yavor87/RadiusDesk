@@ -7,6 +7,7 @@ Ext.define('Rd.view.dynamicDetails.winPageAdd', {
     width:    600,
     height:   450,
     iconCls: 'add',
+    glyph: Rd.config.icnAdd,
     dynamic_detail_id: undefined,
     grid:  undefined,
     items:  {
@@ -50,6 +51,7 @@ Ext.define('Rd.view.dynamicDetails.winPageAdd', {
                 text: i18n('sSave'),
                 scale: 'large',
                 iconCls: 'b-save',
+                glyph: Rd.config.icnYes,
                 margin: Rd.config.buttonMargin
             }
         ]
