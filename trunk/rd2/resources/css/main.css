@@ -413,11 +413,11 @@
 }
 
 /* Treeview does not support Glyphs yet */
-.users {
+.x-grid-cell-inner-treecolumn .users {
     background-image:url(../images/16x16/users.png) !important;
 }
 
-.user {
+.x-grid-cell-inner-treecolumn .user {
     background-image:url(../images/16x16/user.png) !important;
 }
 

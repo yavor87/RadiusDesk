@@ -156,7 +156,7 @@ Ext.define('Rd.library.lTaskBar', {
             width: 140,
             margins: '0 2 0 3',
             scale: 'medium',
-            text: Ext.util.Format.ellipsis(text, 15),
+            text: Ext.util.Format.ellipsis(text, 13),
             listeners: {
                 click: this.onWindowBtnClick,
                 scope: this

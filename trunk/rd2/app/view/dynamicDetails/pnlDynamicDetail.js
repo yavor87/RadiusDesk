@@ -3,6 +3,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
     alias: 'widget.pnlDynamicDetail',
     border: false,
     dynamic_detail_id: null,
+    plain   : true,
     initComponent: function(){
         var me = this;
         me.items = [

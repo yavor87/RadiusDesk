@@ -28,14 +28,17 @@ Ext.define('Rd.controller.cDynamicDetails', {
                     },
                     {
                         region  : 'center',
-                        xtype   : 'tabpanel',
+                        xtype   : 'panel',
                         layout  : 'fit',
-                        plain   : true,
-                        items: [
-                            { 'title' : 'Home', 'xtype':'gridDynamicDetails', 'glyph': Rd.config.icnHome}
-                        ],
-                        margins : '0 0 0 0',
-                        border  : false
+                        border  : false,
+                        items   : [{
+                            xtype   : 'tabpanel',
+                            layout  : 'fit',
+                            margins : '0 0 0 0',
+                            border  : true,
+                            plain   : true,
+                            items   : { 'title' : 'Home', 'xtype':'gridDynamicDetails','glyph': Rd.config.icnHome}}
+                        ]
                     }
                 ]
             });
@@ -57,6 +60,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
         urlEdit:            '/cake2/rd_cake/dynamic_details/edit.json',
+        urlDelete:          '/cake2/rd_cake/dynamic_details/delete.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/dynamic_details/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/dynamic_details/note_add.json',
@@ -73,7 +77,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlPreviewDesktop:  '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html'
     },
     refs: [
-         {  ref:    'gridDynamicDetails',           selector:   'gridDynamicDetails'}
+         {  ref:    'grid',           selector:   'gridDynamicDetails'}
     ],
     init: function() {
         var me = this;
@@ -242,13 +246,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
     },
     reload: function(){
         var me =this;
+        me.getGrid().getSelectionModel().deselectAll(true);
         me.getStore('sDynamicDetails').load();
     },
     gridClick:  function(grid, record, item, index, event){
         var me                  = this;
         me.selectedRecord = record;
         //Dynamically update the top toolbar
-        tb = me.getGridDynamicDetails().down('toolbar[dock=top]');
+        tb = me.getGrid().down('toolbar[dock=top]');
 
         var edit = record.get('update');
         if(edit == true){
@@ -373,7 +378,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     del:   function(button){
         var me      = this;     
         //Find out if there was something selected
-        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item_to_delete'),
@@ -383,25 +388,34 @@ Ext.define('Rd.controller.cDynamicDetails', {
         }else{
             Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
                 if(val== 'yes'){
-                    me.getGridDynamicDetails().getStore().remove(me.getGridDynamicDetails().getSelectionModel().getSelection());
-                    me.getGridDynamicDetails().getStore().sync({
-                        success: function(batch,options){
+
+                    var selected    = me.getGrid().getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+                    Ext.Ajax.request({
+                        url: me.urlDelete,
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){console.log('success');
                             Ext.ux.Toaster.msg(
                                 i18n('sItem_deleted'),
                                 i18n('sItem_deleted_fine'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
                             );
-                            me.onStoreDynamicDetailsLoaded();   //Update the count   
-                        },
-                        failure: function(batch,options,c,d){
+                            me.reload(); //Reload from server
+                        },                                    
+                        failure: function(batch,options){
                             Ext.ux.Toaster.msg(
                                 i18n('sProblems_deleting_item'),
                                 batch.proxy.getReader().rawData.message.message,
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
-                            me.getGridDynamicDetails().getStore().load(); //Reload from server since the sync was not good
+                            me.reload(); //Reload from server
                         }
                     });
 
@@ -412,7 +426,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     edit: function(button){
         var me = this;  
         //Find out if there was something selected
-        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -421,8 +435,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
             );
         }else{
             //Check if the node is not already open; else open the node:
-            var tp      = me.getGridDynamicDetails().up('tabpanel');
-            var sr      = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
             var id      = sr.getId();
             var tab_id  = 'dynamicDetailTab_'+id;
             var nt      = tp.down('#'+tab_id);
@@ -465,12 +479,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
     onStoreDynamicDetailsLoaded: function() {
         var me = this;
         var count = me.getStore('sDynamicDetails').getTotalCount();
-        me.getGridDynamicDetails().down('#count').update({count: count});
+        me.getGrid().down('#count').update({count: count});
     },
 
     csvExport: function(button,format) {
         var me          = this;
-        var columns     = me.getGridDynamicDetails().columns;
+        var columns     = me.getGrid().columns;
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
             if(item.dataIndex != ''){
@@ -515,7 +529,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
             var f_count     = 0;
             var f_found     = false;
             var filter_json ='';
-            me.getGridDynamicDetails().filters.filters.each(function(item) {
+            me.getGrid().filters.filters.each(function(item) {
                 if (item.active) {
                     f_found         = true;
                     var ser_item    = item.serialize();
@@ -539,7 +553,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     note: function(button,format) {
         var me      = this;    
         //Find out if there was something selected
-        var sel_count = me.getGridDynamicDetails().getSelectionModel().getCount();
+        var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
@@ -558,7 +572,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
             }else{
 
                 //Determine the selected record:
-                var sr = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+                var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
                 if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicDetails'+sr.getId())){
                     var w = Ext.widget('winNote',
@@ -1213,7 +1227,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     previewMobile: function(b){
         var me          = this;
         //Find out if there was something selected
-        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -1221,7 +1235,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(me.getGridDynamicDetails().getSelectionModel().getCount() > 1){
+            if(me.getGrid().getSelectionModel().getCount() > 1){
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -1229,7 +1243,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                var record = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+                var record = me.getGrid().getSelectionModel().getLastSelected();
                 window.open(me.urlPreviewMobile+"?dynamic_id="+record.getId())
             }         
         }
@@ -1237,7 +1251,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
     previewDesktop: function(b){
          var me          = this;
         //Find out if there was something selected
-        if(me.getGridDynamicDetails().getSelectionModel().getCount() == 0){
+        if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -1245,7 +1259,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(me.getGridDynamicDetails().getSelectionModel().getCount() > 1){
+            if(me.getGrid().getSelectionModel().getCount() > 1){
                 Ext.ux.Toaster.msg(
                         i18n('sLimit_the_selection'),
                         i18n('sSelection_limited_to_one'),
@@ -1253,7 +1267,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                var record = me.getGridDynamicDetails().getSelectionModel().getLastSelected();
+                var record = me.getGrid().getSelectionModel().getLastSelected();
                 window.open(me.urlPreviewDesktop+"?dynamic_id="+record.getId())
             }         
         }

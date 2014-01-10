@@ -7,6 +7,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
     width:    400,
     height:   300,
     iconCls: 'edit',
+    glyph: Rd.config.icnEdit,
     dynamic_detail_id: undefined,
     data_view:  undefined,
     items:  {
@@ -57,8 +58,9 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                 name: 'photo',
                 buttonText: '',
                 buttonConfig: {
-                    iconCls: 'upload-icon'
-                }
+                    iconCls: 'upload-icon',
+                    glyph: Rd.config.icnFolder
+                }  
             }          
         ],
         buttons: [
@@ -68,6 +70,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                 text: i18n('sSave'),
                 scale: 'large',
                 iconCls: 'b-save',
+                glyph: Rd.config.icnYes,
                 margin: Rd.config.buttonMargin
             },
             {
@@ -75,6 +78,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                 text: i18n('sCancel'),
                 scale: 'large',
                 iconCls: 'b-close',
+                glyph: Rd.config.icnClose,
                 margin: Rd.config.buttonMargin
             }
         ]

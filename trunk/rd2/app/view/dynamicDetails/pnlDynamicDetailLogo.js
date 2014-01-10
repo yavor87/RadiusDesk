@@ -60,8 +60,9 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailLogo', {
                                 name: 'photo',
                                 buttonText: '',
                                 buttonConfig: {
-                                    iconCls: 'upload-icon'
-                                }
+                                    iconCls: 'upload-icon',
+                                    glyph: Rd.config.icnFolder
+                                }   
                             }          
                         ],
                         buttons: [
@@ -71,6 +72,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailLogo', {
                                 text: i18n('sSave'),
                                 scale: 'large',
                                 iconCls: 'b-save',
+                                glyph: Rd.config.icnYes,
                                 margin: Rd.config.buttonMargin
                             },
                             {
@@ -78,6 +80,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailLogo', {
                                 text: i18n('sCancel'),
                                 scale: 'large',
                                 iconCls: 'b-close',
+                                glyph: Rd.config.icnClose,
                                 margin: Rd.config.buttonMargin
                             }
                         ]

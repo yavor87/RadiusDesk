@@ -1,9 +1,9 @@
-Ext.define('Rd.view.permanentUsers.gridUserRadpostauths' ,{
+Ext.define('Rd.view.devices.gridDeviceRadpostauths' ,{
     extend:'Ext.grid.Panel',
-    alias : 'widget.gridUserRadpostauths',
+    alias : 'widget.gridDeviceRadpostauths',
     multiSelect: true,
     stateful: true,
-    stateId: 'StateGridUserRadpostauths',
+    stateId: 'StateGridDeviceRadpostauths',
     stateEvents:['groupclick','columnhide'],
     border: false,
     requires: [
@@ -12,14 +12,14 @@ Ext.define('Rd.view.permanentUsers.gridUserRadpostauths' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/permanent_users/menu_for_authentication_data.json',
+    urlMenu: '/cake2/rd_cake/devices/menu_for_authentication_data.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     columns: [
-        {xtype: 'rownumberer',stateId: 'StateGridUserRadpostauths1'},
-        { text: i18n('sUsername'),      dataIndex: 'username',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadpostauths2'},
-        { text: i18n('sPassword'),      dataIndex: 'pass',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadpostauths3'},
+        {xtype: 'rownumberer',stateId: 'StateGridDeviceRadpostauths1'},
+        { text: i18n('sUsername'),      dataIndex: 'username',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDeviceRadpostauths2'},
+        { text: i18n('sPassword'),      dataIndex: 'pass',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDeviceRadpostauths3'},
         { 
             text            : i18n('sReply'),         
             dataIndex       : 'reply',         
@@ -32,11 +32,10 @@ Ext.define('Rd.view.permanentUsers.gridUserRadpostauths' ,{
                             '<tpl else>',
                             '{reply}',
                             '</tpl>'
-                        ),
-            stateId: 'StateGridUserRadpostauths4'
+                        ),stateId: 'StateGridDeviceRadpostauths4'
         },
-        { text: i18n('sNasname'),       dataIndex: 'nasname',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadpostauths5'},
-        { text: i18n('sDate'),          dataIndex: 'authdate',      tdCls: 'gridTree', flex: 1,filter: {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridUserRadpostauths6'}
+        { text: i18n('sNasname'),       dataIndex: 'nasname',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDeviceRadpostauths5'},
+        { text: i18n('sDate'),          dataIndex: 'authdate',      tdCls: 'gridTree', flex: 1,filter: {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridDeviceRadpostauths6'}
     ],
     username: 'nobody', //dummy value
     initComponent: function(){

@@ -17,12 +17,12 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     columns: [
-            {xtype: 'rownumberer'},
-            { text: i18n('sOwner'),         dataIndex: 'user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sMAC_address'),   dataIndex: 'name',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
-            { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
-            { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false},
+            {xtype: 'rownumberer',stateId: 'StateGridUserRadaccts1'},
+            { text: i18n('sOwner'),         dataIndex: 'user',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts2'},
+            { text: i18n('sMAC_address'),   dataIndex: 'name',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts3'},
+            { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts4'},
+            { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridUserRadaccts5'},
+            { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridUserRadaccts6'},
             { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 
@@ -31,7 +31,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                                 "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'}
+                filter      : { type: 'boolean'},stateId: 'StateGridUserRadaccts7'
             },
             {
                 text        : i18n('sLast_accept_time'),
@@ -47,7 +47,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_accept_nas',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'}
+                filter      : {type: 'string'}, stateId: 'StateGridUserRadaccts8'
             },
             {
                 text        : i18n('sLast_reject_time'),
@@ -55,7 +55,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'}
+                filter      : {type: 'date'}, stateId: 'StateGridUserRadaccts9'
             },
             {
                 text        : i18n('sLast_reject_nas'),
@@ -63,7 +63,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_reject_nas',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'}
+                filter      : {type: 'string'},stateId: 'StateGridUserRadaccts10'
             },
             {
                 text        : i18n('sLast_reject_message'),
@@ -71,7 +71,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_reject_message',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'}
+                filter      : {type: 'string'},stateId: 'StateGridUserRadaccts11'
             },
             {
                 header      : i18n('sData_used'),
@@ -93,7 +93,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                     }else{
                         return "N/A";
                     }
-                }
+                },stateId: 'StateGridUserRadaccts12'
             },
             {
                 header      : i18n('sTime_used'),
@@ -115,7 +115,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                     }else{
                         return "N/A";
                     }
-                }
+                },stateId: 'StateGridUserRadaccts13'
             },
             { 
                 text    : i18n('sNotes'),
@@ -125,7 +125,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes'
+                dataIndex: 'notes',stateId: 'StateGridUserRadaccts14'
             }      
     ],
     username: 'nobody', //dummy value

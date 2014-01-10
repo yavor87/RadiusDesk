@@ -69,7 +69,10 @@ Ext.namespace('Rd').config = {
     icnMeta         : 57630,
     icnFlag         : 57454,
     icnCountry      : 57645,
-    icnLanguage     : 57516
+    icnLanguage     : 57516,
+    icnUser         : 57618,
+    icnDevice       : 57432,
+    icnMesh         : 57460
 };
 
 

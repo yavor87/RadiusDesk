@@ -18,9 +18,9 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetailPages' ,{
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     columns: [
-            {xtype: 'rownumberer'},
-            { text: i18n('sName'),          dataIndex: 'name',      tdCls: 'gridTree', width: 200},
-            { text: i18n('sContent'),       dataIndex: 'content',   tdCls: 'gridTree', flex: 1}
+            {xtype: 'rownumberer',stateId: 'StateGridDynamicDetailPages1'},
+            { text: i18n('sName'),          dataIndex: 'name',      tdCls: 'gridTree', width: 200,stateId: 'StateGridDynamicDetailPages2'},
+            { text: i18n('sContent'),       dataIndex: 'content',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridDynamicDetailPages3'}
     ],
     initComponent: function(){
         var me      = this;

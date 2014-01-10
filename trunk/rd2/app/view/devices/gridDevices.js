@@ -1,10 +1,10 @@
-Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
+Ext.define('Rd.view.devices.gridDevices' ,{
     extend:'Ext.grid.Panel',
-    alias : 'widget.gridPermanentUsers',
+    alias : 'widget.gridDevices',
     multiSelect: true,
-    store : 'sPermanentUsers',
+    store : 'sDevices',
     stateful: true,
-    stateId: 'StateGridPermanentUsers',
+    stateId: 'StateGridDevices',
     stateEvents:['groupclick','columnhide'],
     border: false,
     requires: [
@@ -13,9 +13,9 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/permanent_users/menu_for_grid.json',
+    urlMenu: '/cake2/rd_cake/devices/menu_for_grid.json',
     bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
+        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }  
     ],
     initComponent: function(){
         var me      = this;
@@ -28,51 +28,13 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
         me.features = [filters];
 
         me.columns  = [
-            {xtype: 'rownumberer',stateId: 'StateGridPermanentUsers1'},
-            { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers2'},
-            { text: i18n('sUsername'),     dataIndex: 'username',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers3'},
-            { text: i18n('sAuth_type'),    dataIndex: 'auth_type',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers4'},
-            { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridPermanentUsers5'},
-            { text: i18n('sProfile'),      dataIndex: 'profile',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridPermanentUsers6'},
-            {
-                text        : i18n('sName'),
-                flex        : 1,
-                dataIndex   : 'name',
-                tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers7'
-            },
-            {
-                text        : i18n('sSurname'),
-                flex        : 1,
-                dataIndex   : 'surname',
-                tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers8'
-            },
-            {
-                text        : i18n('sPhone'),
-                dataIndex   : 'phone',
-                tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers9'
-            },
-            {
-                text        : i18n('s_email'),
-                flex        : 1,
-                dataIndex   : 'email',
-                tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers10'
-            },
-            {
-                text        : i18n('sAddress'),
-                flex        : 1,
-                dataIndex   : 'address',
-                tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers11'
-            },
+            {xtype: 'rownumberer',stateId: 'StateGridDevices1'},
+            { text: i18n('sOwner'),         dataIndex: 'user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices2'},
+            { text: i18n('sMAC_address'),   dataIndex: 'name',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices3'},
+            { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices4'},
+           // { text: i18n('sVendor'),        dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},
+            { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridDevices5'},
+            { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridDevices6'},
             { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 
@@ -81,7 +43,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                                 "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'},stateId: 'StateGridPermanentUsers12'
+                filter      : { type: 'boolean'},stateId: 'StateGridDevices7'
             },
             {
                 text        : i18n('sLast_accept_time'),
@@ -89,7 +51,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridPermanentUsers13'
+                filter      : {type: 'date'},stateId: 'StateGridDevices8'
             },
             {
                 text        : i18n('sLast_accept_nas'),
@@ -97,7 +59,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_accept_nas',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers14'
+                filter      : {type: 'string'},stateId: 'StateGridDevices9'
             },
             {
                 text        : i18n('sLast_reject_time'),
@@ -105,7 +67,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridPermanentUsers15'
+                filter      : {type: 'date'},stateId: 'StateGridDevices10'
             },
             {
                 text        : i18n('sLast_reject_nas'),
@@ -113,7 +75,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_reject_nas',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers16'
+                filter      : {type: 'string'},stateId: 'StateGridDevices11'
             },
             {
                 text        : i18n('sLast_reject_message'),
@@ -121,7 +83,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_reject_message',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'string'},stateId: 'StateGridPermanentUsers17'
+                filter      : {type: 'string'},stateId: 'StateGridDevices12'
             },
             {
                 header      : i18n('sData_used'),
@@ -143,7 +105,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                     }else{
                         return "N/A";
                     }
-                },stateId: 'StateGridPermanentUsers19'
+                },stateId: 'StateGridDevices13'
             },
             {
                 header      : i18n('sTime_used'),
@@ -165,7 +127,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                     }else{
                         return "N/A";
                     }
-                },stateId: 'StateGridPermanentUsers19'
+                },stateId: 'StateGridDevices14'
             },
             { 
                 text    : i18n('sNotes'),
@@ -175,7 +137,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridPermanentUsers20'
+                dataIndex: 'notes',stateId: 'StateGridDevices15'
             }      
         ];
 
