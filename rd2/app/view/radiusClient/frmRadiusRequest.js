@@ -4,15 +4,19 @@ Ext.define('Rd.view.radiusClient.frmRadiusRequest', {
     autoScroll  : true,
     autoCreate  : true,
     frame       : true,
+    layout      : 'anchor',
+    defaults    : {
+        anchor: '100%'
+    },
     fieldDefaults: {
         msgTarget       : 'under',
         labelClsExtra   : 'lblRd',
         labelAlign      : 'left',
         labelSeparator  : '',
-        margin          : Rd.config.fieldMargin,
-        labelWidth      : Rd.config.labelWidth,
-        maxWidth        : Rd.config.maxWidth,
-        width           : 400 
+        margin          : Rd.config.fieldMargin
+     //   labelWidth      : Rd.config.labelWidth,
+      //  maxWidth        : Rd.config.maxWidth,
+      //  width           : 400 
     },
     requires: [
         'Rd.view.radiusClient.cmbRequestType',  'Rd.view.radiusClient.cmbUserType', 'Rd.view.components.cmbPermanentUser',

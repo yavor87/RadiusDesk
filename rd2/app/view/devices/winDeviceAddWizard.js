@@ -5,7 +5,7 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
     draggable:  false,
     resizable:  false,
     title:      i18n('sNew_device'),
-    width:      400,
+    width:      500,
     height:     500,
     plain:      true,
     border:     false,

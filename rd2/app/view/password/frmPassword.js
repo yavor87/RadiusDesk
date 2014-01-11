@@ -5,15 +5,19 @@ Ext.define('Rd.view.password.frmPassword', {
     autoCreate  : true,
     //frame       : true,
     border      : false,
+    layout      : 'anchor',
+    defaults    : {
+        anchor: '100%'
+    },
     fieldDefaults: {
         msgTarget       : 'under',
         labelClsExtra   : 'lblRd',
         labelAlign      : 'left',
         labelSeparator  : '',
         margin          : Rd.config.fieldMargin,
-        labelWidth      : Rd.config.labelWidth,
-        maxWidth        : 450,
-        width           : 450 
+        labelWidth      : Rd.config.labelWidth
+      //  maxWidth        : 450,
+      //  width           : 450 
     },
     requires: [
         'Rd.view.components.cmbPermanentUser'

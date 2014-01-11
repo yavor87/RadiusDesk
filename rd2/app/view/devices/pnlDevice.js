@@ -22,7 +22,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
             items:  { 
                 xtype   :  'form',
                 height  : '100%', 
-                width   :  400,
+                width   :  500,
                 layout  : 'anchor',
                 autoScroll:true,
                 frame   : true,
