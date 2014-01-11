@@ -33,7 +33,8 @@ Ext.define('Rd.view.debugOutput.pnlViewDebug', {
                 emptyText   : i18n("sAny_NAS_device"), 
                 forceSelection: false, 
                 allowBlank  : true, 
-                labelWidth  : 120
+                labelWidth  : 120,
+                width       : 400
             },
             { xtype: 'tbspacer',width: 10 },
             {

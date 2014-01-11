@@ -11,6 +11,7 @@ Ext.define('Rd.view.components.cmbNas', {
     allowBlank: false,
     mode: 'local',
     name: 'profile_id',
+    pageSize        : 1, // The value of the number is ignore -- it is essentially coerced to a boolean, and if true, the paging toolbar is displayed.
     labelClsExtra: 'lblRd',
     listConfig: {
         getInnerTpl: function () {
@@ -24,9 +25,9 @@ Ext.define('Rd.view.components.cmbNas', {
         var me= this;
         var s = Ext.create('Ext.data.Store', {
             model: 'Rd.model.mNas',
-            buffered: true,
-            leadingBufferZone: 25, 
-            pageSize: 25,
+            buffered: false,
+            //leadingBufferZone: 25, 
+           // pageSize: 25,
             //To force server side sorting:
             remoteSort: true,
             proxy: {

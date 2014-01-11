@@ -19,7 +19,7 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
                         ]
             }
         },
-        { xtype: 'cmbNas', allowBlank: true }
+        { xtype: 'cmbNas', allowBlank: true, width: 400 }
     ],
     bbar: [
         {   xtype: 'component', itemId: 'status',   tpl: 'Status: {mesg}',   style: 'margin-right:5px', cls: 'lblYfi' }

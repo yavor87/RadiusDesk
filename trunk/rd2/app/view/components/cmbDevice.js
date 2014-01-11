@@ -12,15 +12,16 @@ Ext.define('Rd.view.components.cmbDevice', {
     queryMode       : 'remote',
     mode            : 'remote',
     name            : 'device_id',
+    pageSize        : 1, // The value of the number is ignore -- it is essentially coerced to a boolean, and if true, the paging toolbar is displayed.
     labelClsExtra: 'lblRd',
     initComponent: function() {
         var me= this;
         var s = Ext.create('Ext.data.Store', {
             model: 'Rd.model.mDevice',
             //To make it load AJAXly from the server specify the follown 3 attributes
-            buffered: true,
-            leadingBufferZone: 150, 
-            pageSize: 50,
+            buffered: false,
+           // leadingBufferZone: 150, 
+          //  pageSize: 50,
             //To force server side sorting:
             remoteSort: true,
             proxy: {

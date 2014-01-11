@@ -4,7 +4,7 @@ Ext.define('Rd.view.nas.winMapNasAdd', {
     title : i18n('sAdd_a_marker'),
     layout: 'fit',
     autoShow: false,
-    width:    350,
+    width:    500,
     height:   300,
     iconCls: 'note',
     glyph: Rd.config.icnNote,
