@@ -50,10 +50,10 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
-        'sNodes', 
+        'sNodes' 
     ],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  ,  'mMeshExit', 'mMeshEntryPoint',  
-        'mNode',
+        'mNode'
     ],
     selectedRecord: null,
     config      : {
@@ -73,7 +73,7 @@ Ext.define('Rd.controller.cMeshes', {
         urlEditNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_edit.json',
         urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
-        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
+        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json'
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'},
@@ -206,7 +206,7 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshEditNode #save': {
                 click: me.btnEditNodeSave
-            },
+            }
         });
     },
     winClose:   function(){

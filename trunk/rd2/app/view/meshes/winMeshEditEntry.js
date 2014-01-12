@@ -75,13 +75,13 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                     itemId  : 'id',
                                     xtype   : 'textfield',
                                     name    : "id",
-                                    hidden  : true,
+                                    hidden  : true
                                 }, 
                                 {
                                     itemId  : 'mesh_id',
                                     xtype   : 'textfield',
                                     name    : "mesh_id",
-                                    hidden  : true,
+                                    hidden  : true
                                 }, 
                                 {
                                     xtype       : 'textfield',
@@ -129,7 +129,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 { 
                                     xtype           : 'cmbEncryptionOptions', 
                                     labelClsExtra   : 'lblRdReq',
-                                    allowBlank      : false, 
+                                    allowBlank      : false 
                                 },
                                 {
                                     xtype       : 'textfield',

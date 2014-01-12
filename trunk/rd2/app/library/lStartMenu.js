@@ -49,7 +49,7 @@ Ext.define('Rd.library.lStartMenu', {
             dock    : 'right',
             cls     : 'ux-start-menu-toolbar',
             vertical: true,
-            width   : 100,
+            width   : 100
         }, me.toolConfig));
 
         me.toolbar.layout.align = 'stretch';

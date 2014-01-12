@@ -146,7 +146,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                             text    : i18n('sSave'),
                             scale   : 'large',
                             iconCls : 'b-save',
-                            glyph   : Rd.config.icnYes,
+                            glyph   : Rd.config.icnYes
                         },
                         {
                             xtype   : 'button',
@@ -154,7 +154,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                             text    : i18n('sCancel'),
                             scale   : 'large',
                             iconCls : 'b-close',
-                            glyph   : Rd.config.icnClose,
+                            glyph   : Rd.config.icnClose
                         },
                         {
                             xtype   : 'button',
@@ -162,7 +162,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                             text    : i18n('sDelete'),
                             scale   : 'large',
                             iconCls : 'b-delete',
-                            glyph   : Rd.config.icnDelete,
+                            glyph   : Rd.config.icnDelete
                         }  
                     ],
                     renderTo: c

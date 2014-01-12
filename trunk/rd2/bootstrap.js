@@ -8,7 +8,10 @@ Ext.Loader.addClassPathMappings({
   "Ext": "ext/src",
   "Ext.Msg": "ext/src/window/MessageBox.js",
   "Ext.rtl.EventObjectImpl": "ext/src/rtl/EventObject.js",
-  "Rd": "app"
+  "Ext.ux.desktop.TrayClock": "app/library/lTaskBar.js",
+  "ExtThemeNeptune": "ext/packages/ext-theme-neptune/overrides",
+  "Rd": "app",
+  "Rd.view.logViewer.pnlViewFile": "app/view/debugOutput/pnlViewFile.js"
 });
 Ext.ClassManager.addNameAlternateMappings({
   "Ext.AbstractComponent": [],
@@ -782,6 +785,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.ux.dd.CellFieldDropZone": [],
   "Ext.ux.dd.PanelFieldDragZone": [],
+  "Ext.ux.desktop.TrayClock": [],
   "Ext.ux.event.Driver": [],
   "Ext.ux.event.Maker": [],
   "Ext.ux.event.Player": [],
@@ -827,10 +831,312 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.window.Window": [
     "Ext.Window"
   ],
+  "ExtThemeNeptune.Component": [],
+  "ExtThemeNeptune.container.ButtonGroup": [],
+  "ExtThemeNeptune.form.field.HtmlEditor": [],
+  "ExtThemeNeptune.grid.RowEditor": [],
+  "ExtThemeNeptune.grid.column.RowNumberer": [],
+  "ExtThemeNeptune.layout.component.Dock": [],
+  "ExtThemeNeptune.menu.Menu": [],
+  "ExtThemeNeptune.menu.Separator": [],
+  "ExtThemeNeptune.panel.Panel": [],
+  "ExtThemeNeptune.panel.Table": [],
+  "ExtThemeNeptune.panel.Tool": [],
+  "ExtThemeNeptune.picker.Month": [],
+  "ExtThemeNeptune.resizer.Splitter": [],
+  "ExtThemeNeptune.tab.Tab": [],
+  "ExtThemeNeptune.toolbar.Paging": [],
+  "ExtThemeNeptune.toolbar.Toolbar": [],
   "Rd.Application": [],
   "Rd.controller.Main": [],
+  "Rd.controller.cAccessProviders": [],
+  "Rd.controller.cAcos": [],
+  "Rd.controller.cActivityMonitor": [],
+  "Rd.controller.cAutoSetups": [],
+  "Rd.controller.cDebug": [],
+  "Rd.controller.cDesktop": [],
+  "Rd.controller.cDevices": [],
+  "Rd.controller.cDynamicDetails": [],
+  "Rd.controller.cI18n": [],
+  "Rd.controller.cLogViewer": [],
+  "Rd.controller.cLogin": [],
+  "Rd.controller.cMeshes": [],
+  "Rd.controller.cNas": [],
+  "Rd.controller.cPassword": [],
+  "Rd.controller.cPermanentUsers": [],
+  "Rd.controller.cProfileComponents": [],
+  "Rd.controller.cProfiles": [],
+  "Rd.controller.cRadiusClient": [],
+  "Rd.controller.cRealms": [],
+  "Rd.controller.cStartup": [],
+  "Rd.controller.cTags": [],
+  "Rd.controller.cVouchers": [],
+  "Rd.library.lStartMenu": [],
+  "Rd.library.lTaskBar": [],
+  "Rd.model.mAccessProvider": [],
+  "Rd.model.mAccessProviderGrid": [],
+  "Rd.model.mAccessProviderTree": [],
+  "Rd.model.mAco": [],
+  "Rd.model.mAction": [],
+  "Rd.model.mApRealms": [],
+  "Rd.model.mApRight": [],
+  "Rd.model.mApUserRight": [],
+  "Rd.model.mAttribute": [],
+  "Rd.model.mAutoSetup": [],
+  "Rd.model.mDesktopShortcut": [],
+  "Rd.model.mDevice": [],
+  "Rd.model.mDynamicAttribute": [],
+  "Rd.model.mDynamicDetail": [],
+  "Rd.model.mDynamicPage": [],
+  "Rd.model.mDynamicPair": [],
+  "Rd.model.mDynamicPhoto": [],
+  "Rd.model.mEncryptionOption": [],
+  "Rd.model.mGenericList": [],
+  "Rd.model.mI18nCountry": [],
+  "Rd.model.mI18nJsPhrase": [],
+  "Rd.model.mI18nKey": [],
+  "Rd.model.mI18nLanguage": [],
+  "Rd.model.mI18nMeta": [],
+  "Rd.model.mI18nPhpPhrase": [],
+  "Rd.model.mMesh": [],
+  "Rd.model.mMeshEntry": [],
+  "Rd.model.mMeshEntryPoint": [],
+  "Rd.model.mMeshExit": [],
+  "Rd.model.mNaState": [],
+  "Rd.model.mNas": [],
+  "Rd.model.mNasType": [],
+  "Rd.model.mNode": [],
+  "Rd.model.mNote": [],
+  "Rd.model.mPdfFormat": [],
+  "Rd.model.mPermanentUser": [],
+  "Rd.model.mPrivateAttribute": [],
+  "Rd.model.mProfile": [],
+  "Rd.model.mProfileComponent": [],
+  "Rd.model.mProfileComponentEdit": [],
+  "Rd.model.mRadacct": [],
+  "Rd.model.mRadpostauth": [],
+  "Rd.model.mRealm": [],
+  "Rd.model.mRealmForNasOwner": [],
+  "Rd.model.mRealms": [],
+  "Rd.model.mTag": [],
+  "Rd.model.mTemplate": [],
+  "Rd.model.mTemplateEdit": [],
+  "Rd.model.mUserStat": [],
+  "Rd.model.mVendor": [],
+  "Rd.model.mVoucher": [],
+  "Rd.model.mWallpaper": [],
+  "Rd.patch.ExtJS421Patch": [],
+  "Rd.patch.selection.Model": [],
+  "Rd.patch.view.Table": [],
+  "Rd.store.sAccessProvidersGrid": [],
+  "Rd.store.sAccessProvidersTree": [],
+  "Rd.store.sAcos": [],
+  "Rd.store.sApRights": [],
+  "Rd.store.sAttributes": [],
+  "Rd.store.sAutoSetups": [],
+  "Rd.store.sCountries": [],
+  "Rd.store.sDesktopShortcuts": [],
+  "Rd.store.sDevices": [],
+  "Rd.store.sDynamicAttributes": [],
+  "Rd.store.sDynamicDetails": [],
+  "Rd.store.sEncryptionOptions": [],
+  "Rd.store.sI18nJsPhrases": [],
+  "Rd.store.sI18nPhpPhrases": [],
+  "Rd.store.sI18nPhraseKeys": [],
+  "Rd.store.sJustLanguages": [],
+  "Rd.store.sLanguages": [],
+  "Rd.store.sMeshEntries": [],
+  "Rd.store.sMeshEntryPoints": [],
+  "Rd.store.sMeshExits": [],
+  "Rd.store.sMeshes": [],
+  "Rd.store.sNas": [],
+  "Rd.store.sNasTypes": [],
+  "Rd.store.sNodes": [],
+  "Rd.store.sPdfFormats": [],
+  "Rd.store.sPermanentUsers": [],
+  "Rd.store.sProfileComponents": [],
+  "Rd.store.sProfiles": [],
+  "Rd.store.sRadaccts": [],
+  "Rd.store.sRadpostauths": [],
+  "Rd.store.sRealms": [],
+  "Rd.store.sTags": [],
+  "Rd.store.sVendors": [],
+  "Rd.store.sVouchers": [],
+  "Rd.store.sWallpapers": [],
   "Rd.view.Main": [],
-  "Rd.view.Viewport": []
+  "Rd.view.Viewport": [],
+  "Rd.view.accessProviders.gridAccessProviders": [],
+  "Rd.view.accessProviders.gridRealms": [],
+  "Rd.view.accessProviders.pnlAccessProvider": [],
+  "Rd.view.accessProviders.pnlAccessProviderDetail": [],
+  "Rd.view.accessProviders.treeAccessProviders": [],
+  "Rd.view.accessProviders.treeApUserRights": [],
+  "Rd.view.accessProviders.winApAddWizard": [],
+  "Rd.view.accessProviders.winDetail": [],
+  "Rd.view.acos.treeAco": [],
+  "Rd.view.acos.treeApRights": [],
+  "Rd.view.acos.winAcoAdd": [],
+  "Rd.view.acos.winAcoEdit": [],
+  "Rd.view.activityMonitor.gridRadaccts": [],
+  "Rd.view.activityMonitor.gridRadpostauths": [],
+  "Rd.view.activityMonitor.pnlRadius": [],
+  "Rd.view.autoSetups.gridAutoSetups": [],
+  "Rd.view.autoSetups.pnlAutoSetup": [],
+  "Rd.view.autoSetups.pnlAutoSetupSettings": [],
+  "Rd.view.autoSetups.winAutoSetupAddWizard": [],
+  "Rd.view.components.advCheckColumn": [],
+  "Rd.view.components.ajaxCheckbox": [],
+  "Rd.view.components.ajaxToolbar": [],
+  "Rd.view.components.chrtBasicPie": [],
+  "Rd.view.components.cmbAttribute": [],
+  "Rd.view.components.cmbCap": [],
+  "Rd.view.components.cmbDevice": [],
+  "Rd.view.components.cmbNas": [],
+  "Rd.view.components.cmbPermanentUser": [],
+  "Rd.view.components.cmbProfile": [],
+  "Rd.view.components.cmbRealm": [],
+  "Rd.view.components.cmbVendor": [],
+  "Rd.view.components.cmbVoucher": [],
+  "Rd.view.components.cmpImg": [],
+  "Rd.view.components.compWallpaper": [],
+  "Rd.view.components.gridNote": [],
+  "Rd.view.components.pnlAccessProvidersTree": [],
+  "Rd.view.components.pnlBanner": [],
+  "Rd.view.components.pnlGMap": [],
+  "Rd.view.components.pnlUsageGraph": [],
+  "Rd.view.components.pnlUsageGraphs": [],
+  "Rd.view.components.vCmbCountries": [],
+  "Rd.view.components.vCmbJustLanguages": [],
+  "Rd.view.components.vCmbLanguages": [],
+  "Rd.view.components.vLanguagesCmb": [],
+  "Rd.view.components.winCsvColumnSelect": [],
+  "Rd.view.components.winEnableDisable": [],
+  "Rd.view.components.winHelp": [],
+  "Rd.view.components.winNote": [],
+  "Rd.view.components.winNoteAdd": [],
+  "Rd.view.components.winPdf": [],
+  "Rd.view.debugOutput.pnlViewDebug": [],
+  "Rd.view.desktop.pnlDesktop": [],
+  "Rd.view.desktop.winDesktopSettings": [],
+  "Rd.view.desktop.winPasswordChanger": [],
+  "Rd.view.devices.gridDevicePrivate": [],
+  "Rd.view.devices.gridDeviceRadaccts": [],
+  "Rd.view.devices.gridDeviceRadpostauths": [],
+  "Rd.view.devices.gridDevices": [],
+  "Rd.view.devices.pnlDevice": [],
+  "Rd.view.devices.winDeviceAddWizard": [],
+  "Rd.view.dynamicDetails.frmDetail": [],
+  "Rd.view.dynamicDetails.gridDynamicDetailPages": [],
+  "Rd.view.dynamicDetails.gridDynamicDetailPairs": [],
+  "Rd.view.dynamicDetails.gridDynamicDetails": [],
+  "Rd.view.dynamicDetails.pnlDynamicDetail": [],
+  "Rd.view.dynamicDetails.pnlDynamicDetailDetail": [],
+  "Rd.view.dynamicDetails.pnlDynamicDetailLogo": [],
+  "Rd.view.dynamicDetails.pnlDynamicDetailPhoto": [],
+  "Rd.view.dynamicDetails.winDynamicDetailAddWizard": [],
+  "Rd.view.dynamicDetails.winPageAdd": [],
+  "Rd.view.dynamicDetails.winPageEdit": [],
+  "Rd.view.dynamicDetails.winPairAdd": [],
+  "Rd.view.dynamicDetails.winPairEdit": [],
+  "Rd.view.dynamicDetails.winPhotoAdd": [],
+  "Rd.view.dynamicDetails.winPhotoEdit": [],
+  "Rd.view.i18n.gridJavascriptPhrases": [],
+  "Rd.view.i18n.gridPhpPhrases": [],
+  "Rd.view.i18n.vCmbPhraseKeys": [],
+  "Rd.view.i18n.vPanI18n": [],
+  "Rd.view.i18n.vWinCountryDel": [],
+  "Rd.view.i18n.vWinCountryEdit": [],
+  "Rd.view.i18n.vWinI18n": [],
+  "Rd.view.i18n.vWinKeyAdd": [],
+  "Rd.view.i18n.vWinKeyEdit": [],
+  "Rd.view.i18n.vWinLanguageAdd": [],
+  "Rd.view.i18n.vWinLanguageCopy": [],
+  "Rd.view.i18n.vWinLanguageDel": [],
+  "Rd.view.i18n.vWinLanguageEdit": [],
+  "Rd.view.i18n.vWinLanguagesEdit": [],
+  "Rd.view.i18n.winPhpAdd": [],
+  "Rd.view.i18n.winPhpComment": [],
+  "Rd.view.i18n.winPhpCopy": [],
+  "Rd.view.i18n.winPhpEdit": [],
+  "Rd.view.i18n.winPhpMeta": [],
+  "Rd.view.logViewer.pnlViewFile": [],
+  "Rd.view.logViewer.winRadiusInfo": [],
+  "Rd.view.login.pnlAboutMenu": [],
+  "Rd.view.login.pnlLogin": [],
+  "Rd.view.meshes.cmbEncryptionOptions": [],
+  "Rd.view.meshes.cmbEntryPoints": [],
+  "Rd.view.meshes.cmbHardwareOptions": [],
+  "Rd.view.meshes.cmbMeshEntryPoints": [],
+  "Rd.view.meshes.cmbStaticEntries": [],
+  "Rd.view.meshes.cmbStaticExits": [],
+  "Rd.view.meshes.gridMeshEntries": [],
+  "Rd.view.meshes.gridMeshExits": [],
+  "Rd.view.meshes.gridMeshes": [],
+  "Rd.view.meshes.gridNodes": [],
+  "Rd.view.meshes.pnlMeshSettings": [],
+  "Rd.view.meshes.pnlNodeCommonSettings": [],
+  "Rd.view.meshes.winMeshAddEntry": [],
+  "Rd.view.meshes.winMeshAddExit": [],
+  "Rd.view.meshes.winMeshAddNode": [],
+  "Rd.view.meshes.winMeshAddWizard": [],
+  "Rd.view.meshes.winMeshEdit": [],
+  "Rd.view.meshes.winMeshEditEntry": [],
+  "Rd.view.meshes.winMeshEditExit": [],
+  "Rd.view.nas.cmbNasTypes": [],
+  "Rd.view.nas.frmNasBasic": [],
+  "Rd.view.nas.gridNas": [],
+  "Rd.view.nas.gridNasActions": [],
+  "Rd.view.nas.gridNasAvailability": [],
+  "Rd.view.nas.gridRealmsForNasOwner": [],
+  "Rd.view.nas.pnlNas": [],
+  "Rd.view.nas.pnlNasDynamic": [],
+  "Rd.view.nas.pnlNasNas": [],
+  "Rd.view.nas.pnlNasOpenVpn": [],
+  "Rd.view.nas.pnlNasPhoto": [],
+  "Rd.view.nas.pnlNasPptp": [],
+  "Rd.view.nas.pnlRealmsForNasOwner": [],
+  "Rd.view.nas.winMapNasAdd": [],
+  "Rd.view.nas.winMapPreferences": [],
+  "Rd.view.nas.winNasActionAdd": [],
+  "Rd.view.nas.winNasAddWizard": [],
+  "Rd.view.nas.winTagManage": [],
+  "Rd.view.password.frmPassword": [],
+  "Rd.view.permanentUsers.gridPermanentUsers": [],
+  "Rd.view.permanentUsers.gridUserDevices": [],
+  "Rd.view.permanentUsers.gridUserPrivate": [],
+  "Rd.view.permanentUsers.gridUserRadaccts": [],
+  "Rd.view.permanentUsers.gridUserRadpostauths": [],
+  "Rd.view.permanentUsers.pnlPermanentUser": [],
+  "Rd.view.permanentUsers.winPermanentUserAddWizard": [],
+  "Rd.view.permanentUsers.winPermanentUserPassword": [],
+  "Rd.view.profileComponents.gridProfileComponent": [],
+  "Rd.view.profileComponents.gridProfileComponents": [],
+  "Rd.view.profileComponents.winProfileComponentAddWizard": [],
+  "Rd.view.profiles.gridProfiles": [],
+  "Rd.view.profiles.winComponentManage": [],
+  "Rd.view.profiles.winProfileAddWizard": [],
+  "Rd.view.radiusClient.cmbRequestType": [],
+  "Rd.view.radiusClient.cmbUserType": [],
+  "Rd.view.radiusClient.frmRadiusRequest": [],
+  "Rd.view.radiusClient.pnlRadiusReply": [],
+  "Rd.view.realms.frmDetail": [],
+  "Rd.view.realms.gridRealms": [],
+  "Rd.view.realms.pnlRealm": [],
+  "Rd.view.realms.pnlRealmDetail": [],
+  "Rd.view.realms.pnlRealmLogo": [],
+  "Rd.view.realms.winRealmAdd": [],
+  "Rd.view.realms.winRealmAddWizard": [],
+  "Rd.view.tags.gridTags": [],
+  "Rd.view.tags.winTagAddWizard": [],
+  "Rd.view.tags.winTagEdit": [],
+  "Rd.view.vouchers.cmbPdfFormats": [],
+  "Rd.view.vouchers.gridVoucherPrivate": [],
+  "Rd.view.vouchers.gridVoucherRadaccts": [],
+  "Rd.view.vouchers.gridVouchers": [],
+  "Rd.view.vouchers.pnlVoucher": [],
+  "Rd.view.vouchers.winVoucherAddWizard": [],
+  "Rd.view.vouchers.winVoucherPassword": [],
+  "Rd.view.vouchers.winVoucherPdf": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1744,6 +2050,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.ux.dd.CellFieldDropZone": [],
   "Ext.ux.dd.PanelFieldDragZone": [],
+  "Ext.ux.desktop.TrayClock": [
+    "widget.trayclock"
+  ],
   "Ext.ux.event.Driver": [],
   "Ext.ux.event.Maker": [],
   "Ext.ux.event.Player": [],
@@ -1817,17 +2126,682 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.window.Window": [
     "widget.window"
   ],
+  "ExtThemeNeptune.Component": [],
+  "ExtThemeNeptune.container.ButtonGroup": [],
+  "ExtThemeNeptune.form.field.HtmlEditor": [],
+  "ExtThemeNeptune.grid.RowEditor": [],
+  "ExtThemeNeptune.grid.column.RowNumberer": [],
+  "ExtThemeNeptune.layout.component.Dock": [],
+  "ExtThemeNeptune.menu.Menu": [],
+  "ExtThemeNeptune.menu.Separator": [],
+  "ExtThemeNeptune.panel.Panel": [],
+  "ExtThemeNeptune.panel.Table": [],
+  "ExtThemeNeptune.panel.Tool": [],
+  "ExtThemeNeptune.picker.Month": [],
+  "ExtThemeNeptune.resizer.Splitter": [],
+  "ExtThemeNeptune.tab.Tab": [],
+  "ExtThemeNeptune.toolbar.Paging": [],
+  "ExtThemeNeptune.toolbar.Toolbar": [],
   "Rd.Application": [],
   "Rd.controller.Main": [],
+  "Rd.controller.cAccessProviders": [],
+  "Rd.controller.cAcos": [],
+  "Rd.controller.cActivityMonitor": [],
+  "Rd.controller.cAutoSetups": [],
+  "Rd.controller.cDebug": [],
+  "Rd.controller.cDesktop": [],
+  "Rd.controller.cDevices": [],
+  "Rd.controller.cDynamicDetails": [],
+  "Rd.controller.cI18n": [],
+  "Rd.controller.cLogViewer": [],
+  "Rd.controller.cLogin": [],
+  "Rd.controller.cMeshes": [],
+  "Rd.controller.cNas": [],
+  "Rd.controller.cPassword": [],
+  "Rd.controller.cPermanentUsers": [],
+  "Rd.controller.cProfileComponents": [],
+  "Rd.controller.cProfiles": [],
+  "Rd.controller.cRadiusClient": [],
+  "Rd.controller.cRealms": [],
+  "Rd.controller.cStartup": [],
+  "Rd.controller.cTags": [],
+  "Rd.controller.cVouchers": [],
+  "Rd.library.lStartMenu": [
+    "widget.pnlStartMenu"
+  ],
+  "Rd.library.lTaskBar": [
+    "widget.taskbar"
+  ],
+  "Rd.model.mAccessProvider": [],
+  "Rd.model.mAccessProviderGrid": [],
+  "Rd.model.mAccessProviderTree": [],
+  "Rd.model.mAco": [],
+  "Rd.model.mAction": [],
+  "Rd.model.mApRealms": [],
+  "Rd.model.mApRight": [],
+  "Rd.model.mApUserRight": [],
+  "Rd.model.mAttribute": [],
+  "Rd.model.mAutoSetup": [],
+  "Rd.model.mDesktopShortcut": [],
+  "Rd.model.mDevice": [],
+  "Rd.model.mDynamicAttribute": [],
+  "Rd.model.mDynamicDetail": [],
+  "Rd.model.mDynamicPage": [],
+  "Rd.model.mDynamicPair": [],
+  "Rd.model.mDynamicPhoto": [],
+  "Rd.model.mEncryptionOption": [],
+  "Rd.model.mGenericList": [],
+  "Rd.model.mI18nCountry": [],
+  "Rd.model.mI18nJsPhrase": [],
+  "Rd.model.mI18nKey": [],
+  "Rd.model.mI18nLanguage": [],
+  "Rd.model.mI18nMeta": [],
+  "Rd.model.mI18nPhpPhrase": [],
+  "Rd.model.mMesh": [],
+  "Rd.model.mMeshEntry": [],
+  "Rd.model.mMeshEntryPoint": [],
+  "Rd.model.mMeshExit": [],
+  "Rd.model.mNaState": [],
+  "Rd.model.mNas": [],
+  "Rd.model.mNasType": [],
+  "Rd.model.mNode": [],
+  "Rd.model.mNote": [],
+  "Rd.model.mPdfFormat": [],
+  "Rd.model.mPermanentUser": [],
+  "Rd.model.mPrivateAttribute": [],
+  "Rd.model.mProfile": [],
+  "Rd.model.mProfileComponent": [],
+  "Rd.model.mProfileComponentEdit": [],
+  "Rd.model.mRadacct": [],
+  "Rd.model.mRadpostauth": [],
+  "Rd.model.mRealm": [],
+  "Rd.model.mRealmForNasOwner": [],
+  "Rd.model.mRealms": [],
+  "Rd.model.mTag": [],
+  "Rd.model.mTemplate": [],
+  "Rd.model.mTemplateEdit": [],
+  "Rd.model.mUserStat": [],
+  "Rd.model.mVendor": [],
+  "Rd.model.mVoucher": [],
+  "Rd.model.mWallpaper": [],
+  "Rd.patch.ExtJS421Patch": [],
+  "Rd.patch.selection.Model": [],
+  "Rd.patch.view.Table": [],
+  "Rd.store.sAccessProvidersGrid": [],
+  "Rd.store.sAccessProvidersTree": [],
+  "Rd.store.sAcos": [],
+  "Rd.store.sApRights": [],
+  "Rd.store.sAttributes": [],
+  "Rd.store.sAutoSetups": [],
+  "Rd.store.sCountries": [],
+  "Rd.store.sDesktopShortcuts": [],
+  "Rd.store.sDevices": [],
+  "Rd.store.sDynamicAttributes": [],
+  "Rd.store.sDynamicDetails": [],
+  "Rd.store.sEncryptionOptions": [],
+  "Rd.store.sI18nJsPhrases": [],
+  "Rd.store.sI18nPhpPhrases": [],
+  "Rd.store.sI18nPhraseKeys": [],
+  "Rd.store.sJustLanguages": [],
+  "Rd.store.sLanguages": [],
+  "Rd.store.sMeshEntries": [],
+  "Rd.store.sMeshEntryPoints": [],
+  "Rd.store.sMeshExits": [],
+  "Rd.store.sMeshes": [],
+  "Rd.store.sNas": [],
+  "Rd.store.sNasTypes": [],
+  "Rd.store.sNodes": [],
+  "Rd.store.sPdfFormats": [],
+  "Rd.store.sPermanentUsers": [],
+  "Rd.store.sProfileComponents": [],
+  "Rd.store.sProfiles": [],
+  "Rd.store.sRadaccts": [],
+  "Rd.store.sRadpostauths": [],
+  "Rd.store.sRealms": [],
+  "Rd.store.sTags": [],
+  "Rd.store.sVendors": [],
+  "Rd.store.sVouchers": [],
+  "Rd.store.sWallpapers": [],
   "Rd.view.Main": [
     "widget.app-main"
   ],
-  "Rd.view.Viewport": []
+  "Rd.view.Viewport": [
+    "widget.vp"
+  ],
+  "Rd.view.accessProviders.gridAccessProviders": [
+    "widget.gridAccessProviders"
+  ],
+  "Rd.view.accessProviders.gridRealms": [
+    "widget.gridApRealms"
+  ],
+  "Rd.view.accessProviders.pnlAccessProvider": [
+    "widget.pnlAccessProvider"
+  ],
+  "Rd.view.accessProviders.pnlAccessProviderDetail": [
+    "widget.pnlAccessProviderDetail"
+  ],
+  "Rd.view.accessProviders.treeAccessProviders": [
+    "widget.treeAccessProviders"
+  ],
+  "Rd.view.accessProviders.treeApUserRights": [
+    "widget.treeApUserRights"
+  ],
+  "Rd.view.accessProviders.winApAddWizard": [
+    "widget.winApAddWizard"
+  ],
+  "Rd.view.accessProviders.winDetail": [
+    "widget.winAccessProviderDetail"
+  ],
+  "Rd.view.acos.treeAco": [
+    "widget.treeAco"
+  ],
+  "Rd.view.acos.treeApRights": [
+    "widget.treeApRights"
+  ],
+  "Rd.view.acos.winAcoAdd": [
+    "widget.winAcoAdd"
+  ],
+  "Rd.view.acos.winAcoEdit": [
+    "widget.winAcoEdit"
+  ],
+  "Rd.view.activityMonitor.gridRadaccts": [
+    "widget.gridRadaccts"
+  ],
+  "Rd.view.activityMonitor.gridRadpostauths": [
+    "widget.gridRadpostauths"
+  ],
+  "Rd.view.activityMonitor.pnlRadius": [
+    "widget.pnlRadius"
+  ],
+  "Rd.view.autoSetups.gridAutoSetups": [
+    "widget.gridAutoSetups"
+  ],
+  "Rd.view.autoSetups.pnlAutoSetup": [
+    "widget.pnlAutoSetup"
+  ],
+  "Rd.view.autoSetups.pnlAutoSetupSettings": [
+    "widget.pnlAutoSetupSettings"
+  ],
+  "Rd.view.autoSetups.winAutoSetupAddWizard": [
+    "widget.winAutoSetupAddWizard"
+  ],
+  "Rd.view.components.advCheckColumn": [
+    "widget.advCheckColumn"
+  ],
+  "Rd.view.components.ajaxCheckbox": [
+    "widget.ajaxCheckbox"
+  ],
+  "Rd.view.components.ajaxToolbar": [
+    "widget.ajaxToolbar"
+  ],
+  "Rd.view.components.chrtBasicPie": [],
+  "Rd.view.components.cmbAttribute": [
+    "widget.cmbAttribute"
+  ],
+  "Rd.view.components.cmbCap": [
+    "widget.cmbCap"
+  ],
+  "Rd.view.components.cmbDevice": [
+    "widget.cmbDevice"
+  ],
+  "Rd.view.components.cmbNas": [
+    "widget.cmbNas"
+  ],
+  "Rd.view.components.cmbPermanentUser": [
+    "widget.cmbPermanentUser"
+  ],
+  "Rd.view.components.cmbProfile": [
+    "widget.cmbProfile"
+  ],
+  "Rd.view.components.cmbRealm": [
+    "widget.cmbRealm"
+  ],
+  "Rd.view.components.cmbVendor": [
+    "widget.cmbVendor"
+  ],
+  "Rd.view.components.cmbVoucher": [
+    "widget.cmbVoucher"
+  ],
+  "Rd.view.components.cmpImg": [
+    "widget.cmpImg"
+  ],
+  "Rd.view.components.compWallpaper": [
+    "widget.compWallpaper"
+  ],
+  "Rd.view.components.gridNote": [
+    "widget.gridNote"
+  ],
+  "Rd.view.components.pnlAccessProvidersTree": [
+    "widget.pnlAccessProvidersTree"
+  ],
+  "Rd.view.components.pnlBanner": [
+    "widget.pnlBanner"
+  ],
+  "Rd.view.components.pnlGMap": [
+    "widget.pnlGMap"
+  ],
+  "Rd.view.components.pnlUsageGraph": [
+    "widget.pnlUsageGraph"
+  ],
+  "Rd.view.components.pnlUsageGraphs": [
+    "widget.pnlUsageGraphs"
+  ],
+  "Rd.view.components.vCmbCountries": [
+    "widget.cmbCountries"
+  ],
+  "Rd.view.components.vCmbJustLanguages": [
+    "widget.cmbJustLanguages"
+  ],
+  "Rd.view.components.vCmbLanguages": [
+    "widget.cmbLanguages"
+  ],
+  "Rd.view.components.vLanguagesCmb": [
+    "widget.cmbLanguage"
+  ],
+  "Rd.view.components.winCsvColumnSelect": [
+    "widget.winCsvColumnSelect"
+  ],
+  "Rd.view.components.winEnableDisable": [
+    "widget.winEnableDisable"
+  ],
+  "Rd.view.components.winHelp": [
+    "widget.winHelp"
+  ],
+  "Rd.view.components.winNote": [
+    "widget.winNote"
+  ],
+  "Rd.view.components.winNoteAdd": [
+    "widget.winNoteAdd"
+  ],
+  "Rd.view.components.winPdf": [
+    "widget.winPdf"
+  ],
+  "Rd.view.debugOutput.pnlViewDebug": [
+    "widget.pnlViewDebug"
+  ],
+  "Rd.view.desktop.pnlDesktop": [
+    "widget.pnlDesktop"
+  ],
+  "Rd.view.desktop.winDesktopSettings": [
+    "widget.winDesktopSettings"
+  ],
+  "Rd.view.desktop.winPasswordChanger": [
+    "widget.winPasswordChanger"
+  ],
+  "Rd.view.devices.gridDevicePrivate": [
+    "widget.gridDevicePrivate"
+  ],
+  "Rd.view.devices.gridDeviceRadaccts": [
+    "widget.gridDeviceRadaccts"
+  ],
+  "Rd.view.devices.gridDeviceRadpostauths": [
+    "widget.gridDeviceRadpostauths"
+  ],
+  "Rd.view.devices.gridDevices": [
+    "widget.gridDevices"
+  ],
+  "Rd.view.devices.pnlDevice": [
+    "widget.pnlDevice"
+  ],
+  "Rd.view.devices.winDeviceAddWizard": [
+    "widget.winDeviceAddWizard"
+  ],
+  "Rd.view.dynamicDetails.frmDetail": [
+    "widget.frmDynamicDetailDetail"
+  ],
+  "Rd.view.dynamicDetails.gridDynamicDetailPages": [
+    "widget.gridDynamicDetailPages"
+  ],
+  "Rd.view.dynamicDetails.gridDynamicDetailPairs": [
+    "widget.gridDynamicDetailPairs"
+  ],
+  "Rd.view.dynamicDetails.gridDynamicDetails": [
+    "widget.gridDynamicDetails"
+  ],
+  "Rd.view.dynamicDetails.pnlDynamicDetail": [
+    "widget.pnlDynamicDetail"
+  ],
+  "Rd.view.dynamicDetails.pnlDynamicDetailDetail": [
+    "widget.pnlDynamicDetailDetail"
+  ],
+  "Rd.view.dynamicDetails.pnlDynamicDetailLogo": [
+    "widget.pnlDynamicDetailLogo"
+  ],
+  "Rd.view.dynamicDetails.pnlDynamicDetailPhoto": [
+    "widget.pnlDynamicDetailPhoto"
+  ],
+  "Rd.view.dynamicDetails.winDynamicDetailAddWizard": [
+    "widget.winDynamicDetailAddWizard"
+  ],
+  "Rd.view.dynamicDetails.winPageAdd": [
+    "widget.winPageAdd"
+  ],
+  "Rd.view.dynamicDetails.winPageEdit": [
+    "widget.winPageEdit"
+  ],
+  "Rd.view.dynamicDetails.winPairAdd": [
+    "widget.winPairAdd"
+  ],
+  "Rd.view.dynamicDetails.winPairEdit": [
+    "widget.winPairEdit"
+  ],
+  "Rd.view.dynamicDetails.winPhotoAdd": [
+    "widget.winPhotoAdd"
+  ],
+  "Rd.view.dynamicDetails.winPhotoEdit": [
+    "widget.winPhotoEdit"
+  ],
+  "Rd.view.i18n.gridJavascriptPhrases": [
+    "widget.gridJavascriptPhrases"
+  ],
+  "Rd.view.i18n.gridPhpPhrases": [
+    "widget.gridPhpPhrases"
+  ],
+  "Rd.view.i18n.vCmbPhraseKeys": [
+    "widget.cmbPhraseKeys"
+  ],
+  "Rd.view.i18n.vPanI18n": [
+    "widget.i18nP"
+  ],
+  "Rd.view.i18n.vWinCountryDel": [
+    "widget.delCountryW"
+  ],
+  "Rd.view.i18n.vWinCountryEdit": [
+    "widget.vWinCountryEdit"
+  ],
+  "Rd.view.i18n.vWinI18n": [
+    "widget.i18nW"
+  ],
+  "Rd.view.i18n.vWinKeyAdd": [
+    "widget.addKeyW"
+  ],
+  "Rd.view.i18n.vWinKeyEdit": [
+    "widget.editKeyW"
+  ],
+  "Rd.view.i18n.vWinLanguageAdd": [
+    "widget.addLanguageW"
+  ],
+  "Rd.view.i18n.vWinLanguageCopy": [
+    "widget.vWinLanguageCopy"
+  ],
+  "Rd.view.i18n.vWinLanguageDel": [
+    "widget.delLanguageW"
+  ],
+  "Rd.view.i18n.vWinLanguageEdit": [
+    "widget.vWinLanguageEdit"
+  ],
+  "Rd.view.i18n.vWinLanguagesEdit": [
+    "widget.editLanguagesW"
+  ],
+  "Rd.view.i18n.winPhpAdd": [
+    "widget.winPhpAdd"
+  ],
+  "Rd.view.i18n.winPhpComment": [
+    "widget.winPhpComment"
+  ],
+  "Rd.view.i18n.winPhpCopy": [
+    "widget.winPhpCopy"
+  ],
+  "Rd.view.i18n.winPhpEdit": [
+    "widget.winPhpEdit"
+  ],
+  "Rd.view.i18n.winPhpMeta": [
+    "widget.winPhpMeta"
+  ],
+  "Rd.view.logViewer.pnlViewFile": [
+    "widget.pnlViewDebug"
+  ],
+  "Rd.view.logViewer.winRadiusInfo": [
+    "widget.winRadiusInfo"
+  ],
+  "Rd.view.login.pnlAboutMenu": [
+    "widget.pnlAboutMenu"
+  ],
+  "Rd.view.login.pnlLogin": [
+    "widget.pnlLogin"
+  ],
+  "Rd.view.meshes.cmbEncryptionOptions": [
+    "widget.cmbEncryptionOptions"
+  ],
+  "Rd.view.meshes.cmbEntryPoints": [
+    "widget.cmbEntryPoints"
+  ],
+  "Rd.view.meshes.cmbHardwareOptions": [
+    "widget.cmbHardwareOptions"
+  ],
+  "Rd.view.meshes.cmbMeshEntryPoints": [
+    "widget.cmbMeshEntryPoints"
+  ],
+  "Rd.view.meshes.cmbStaticEntries": [
+    "widget.cmbStaticEntries"
+  ],
+  "Rd.view.meshes.cmbStaticExits": [
+    "widget.cmbStaticExits"
+  ],
+  "Rd.view.meshes.gridMeshEntries": [
+    "widget.gridMeshEntries"
+  ],
+  "Rd.view.meshes.gridMeshExits": [
+    "widget.gridMeshExits"
+  ],
+  "Rd.view.meshes.gridMeshes": [
+    "widget.gridMeshes"
+  ],
+  "Rd.view.meshes.gridNodes": [
+    "widget.gridNodes"
+  ],
+  "Rd.view.meshes.pnlMeshSettings": [
+    "widget.pnlMeshSettings"
+  ],
+  "Rd.view.meshes.pnlNodeCommonSettings": [
+    "widget.pnlNodeCommonSettings"
+  ],
+  "Rd.view.meshes.winMeshAddEntry": [
+    "widget.winMeshAddEntry"
+  ],
+  "Rd.view.meshes.winMeshAddExit": [
+    "widget.winMeshAddExit"
+  ],
+  "Rd.view.meshes.winMeshAddNode": [
+    "widget.winMeshAddNode"
+  ],
+  "Rd.view.meshes.winMeshAddWizard": [
+    "widget.winMeshAddWizard"
+  ],
+  "Rd.view.meshes.winMeshEdit": [
+    "widget.winMeshEdit"
+  ],
+  "Rd.view.meshes.winMeshEditEntry": [
+    "widget.winMeshEditEntry"
+  ],
+  "Rd.view.meshes.winMeshEditExit": [
+    "widget.winMeshEditExit"
+  ],
+  "Rd.view.nas.cmbNasTypes": [
+    "widget.cmbNasTypes"
+  ],
+  "Rd.view.nas.frmNasBasic": [
+    "widget.frmNasBasic"
+  ],
+  "Rd.view.nas.gridNas": [
+    "widget.gridNas"
+  ],
+  "Rd.view.nas.gridNasActions": [
+    "widget.gridNasActions"
+  ],
+  "Rd.view.nas.gridNasAvailability": [
+    "widget.gridNasAvailability"
+  ],
+  "Rd.view.nas.gridRealmsForNasOwner": [
+    "widget.gridRealmsForNasOwner"
+  ],
+  "Rd.view.nas.pnlNas": [
+    "widget.pnlNas"
+  ],
+  "Rd.view.nas.pnlNasDynamic": [
+    "widget.pnlNasDynamic"
+  ],
+  "Rd.view.nas.pnlNasNas": [
+    "widget.pnlNasNas"
+  ],
+  "Rd.view.nas.pnlNasOpenVpn": [
+    "widget.pnlNasOpenVpn"
+  ],
+  "Rd.view.nas.pnlNasPhoto": [
+    "widget.pnlNasPhoto"
+  ],
+  "Rd.view.nas.pnlNasPptp": [
+    "widget.pnlNasPptp"
+  ],
+  "Rd.view.nas.pnlRealmsForNasOwner": [
+    "widget.pnlRealmsForNasOwner"
+  ],
+  "Rd.view.nas.winMapNasAdd": [
+    "widget.winMapNasAdd"
+  ],
+  "Rd.view.nas.winMapPreferences": [
+    "widget.winMapPreferences"
+  ],
+  "Rd.view.nas.winNasActionAdd": [
+    "widget.winNasActionAdd"
+  ],
+  "Rd.view.nas.winNasAddWizard": [
+    "widget.winNasAddWizard"
+  ],
+  "Rd.view.nas.winTagManage": [
+    "widget.winTagManage"
+  ],
+  "Rd.view.password.frmPassword": [
+    "widget.frmPassword"
+  ],
+  "Rd.view.permanentUsers.gridPermanentUsers": [
+    "widget.gridPermanentUsers"
+  ],
+  "Rd.view.permanentUsers.gridUserDevices": [
+    "widget.gridUserDevices"
+  ],
+  "Rd.view.permanentUsers.gridUserPrivate": [
+    "widget.gridUserPrivate"
+  ],
+  "Rd.view.permanentUsers.gridUserRadaccts": [
+    "widget.gridUserRadaccts"
+  ],
+  "Rd.view.permanentUsers.gridUserRadpostauths": [
+    "widget.gridUserRadpostauths"
+  ],
+  "Rd.view.permanentUsers.pnlPermanentUser": [
+    "widget.pnlPermanentUser"
+  ],
+  "Rd.view.permanentUsers.winPermanentUserAddWizard": [
+    "widget.winPermanentUserAddWizard"
+  ],
+  "Rd.view.permanentUsers.winPermanentUserPassword": [
+    "widget.winPermanentUserPassword"
+  ],
+  "Rd.view.profileComponents.gridProfileComponent": [
+    "widget.gridProfileComponent"
+  ],
+  "Rd.view.profileComponents.gridProfileComponents": [
+    "widget.gridProfileComponents"
+  ],
+  "Rd.view.profileComponents.winProfileComponentAddWizard": [
+    "widget.winProfileComponentAddWizard"
+  ],
+  "Rd.view.profiles.gridProfiles": [
+    "widget.gridProfiles"
+  ],
+  "Rd.view.profiles.winComponentManage": [
+    "widget.winComponentManage"
+  ],
+  "Rd.view.profiles.winProfileAddWizard": [
+    "widget.winProfileAddWizard"
+  ],
+  "Rd.view.radiusClient.cmbRequestType": [
+    "widget.cmbRequestType"
+  ],
+  "Rd.view.radiusClient.cmbUserType": [
+    "widget.cmbUserType"
+  ],
+  "Rd.view.radiusClient.frmRadiusRequest": [
+    "widget.frmRadiusRequest"
+  ],
+  "Rd.view.radiusClient.pnlRadiusReply": [
+    "widget.pnlRadiusReply"
+  ],
+  "Rd.view.realms.frmDetail": [
+    "widget.frmRealmDetail"
+  ],
+  "Rd.view.realms.gridRealms": [
+    "widget.gridRealms"
+  ],
+  "Rd.view.realms.pnlRealm": [
+    "widget.pnlRealm"
+  ],
+  "Rd.view.realms.pnlRealmDetail": [
+    "widget.pnlRealmDetail"
+  ],
+  "Rd.view.realms.pnlRealmLogo": [
+    "widget.pnlRealmLogo"
+  ],
+  "Rd.view.realms.winRealmAdd": [
+    "widget.winRealmAdd"
+  ],
+  "Rd.view.realms.winRealmAddWizard": [
+    "widget.winRealmAddWizard"
+  ],
+  "Rd.view.tags.gridTags": [
+    "widget.gridTags"
+  ],
+  "Rd.view.tags.winTagAddWizard": [
+    "widget.winTagAddWizard"
+  ],
+  "Rd.view.tags.winTagEdit": [
+    "widget.winTagEdit"
+  ],
+  "Rd.view.vouchers.cmbPdfFormats": [
+    "widget.cmbPdfFormats"
+  ],
+  "Rd.view.vouchers.gridVoucherPrivate": [
+    "widget.gridVoucherPrivate"
+  ],
+  "Rd.view.vouchers.gridVoucherRadaccts": [
+    "widget.gridVoucherRadaccts"
+  ],
+  "Rd.view.vouchers.gridVouchers": [
+    "widget.gridVouchers"
+  ],
+  "Rd.view.vouchers.pnlVoucher": [
+    "widget.pnlVoucher"
+  ],
+  "Rd.view.vouchers.winVoucherAddWizard": [
+    "widget.winVoucherAddWizard"
+  ],
+  "Rd.view.vouchers.winVoucherPassword": [
+    "widget.winVoucherPassword"
+  ],
+  "Rd.view.vouchers.winVoucherPdf": [
+    "widget.winVoucherPdf"
+  ]
 });
 Ext.setVersion("ext-theme-base", "4.2.1");
-Ext.setVersion("ext-theme-classic", "4.2.1");
-Ext.setVersion("ext-theme-neutral", "4.2.1");
 Ext.setVersion("ext-theme-neptune", "4.2.1");
+Ext.setVersion("ext-theme-neutral", "4.2.1");
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/Component.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/panel/Panel.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/toolbar/Toolbar.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/layout/component/Dock.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/container/ButtonGroup.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/toolbar/Paging.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/picker/Month.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/form/field/HtmlEditor.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/panel/Table.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/grid/RowEditor.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/grid/column/RowNumberer.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/resizer/Splitter.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/menu/Menu.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/menu/Separator.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/panel/Tool.js");;
+Ext.Loader.loadScript("ext/packages/ext-theme-neptune/overrides/tab/Tab.js");;
 /**
  * Sencha Blink - Development
  * @author Jacky Nguyen <jacky@sencha.com>

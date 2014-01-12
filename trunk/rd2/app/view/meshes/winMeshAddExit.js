@@ -220,7 +220,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                     minValue    : 0,
                                     labelClsExtra: 'lblRdReq',
                                     allowBlank  : false,
-                                    blankText   : i18n("sSupply_a_value"),
+                                    blankText   : i18n("sSupply_a_value")
                                 },
                                 cmbConnectWith
                             ]

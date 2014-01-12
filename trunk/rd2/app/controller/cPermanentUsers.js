@@ -81,7 +81,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
     refs: [
         {  ref: 'grid',         selector:   'gridPermanentUsers'},
-        {  ref: 'privateGrid',  selector:   'gridUserPrivate'},        
+        {  ref: 'privateGrid',  selector:   'gridUserPrivate'}        
     ],
     init: function() {
         var me = this;

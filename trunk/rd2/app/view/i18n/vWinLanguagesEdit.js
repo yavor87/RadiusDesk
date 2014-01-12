@@ -76,7 +76,7 @@ Ext.define('Rd.view.i18n.vWinLanguagesEdit', {
                         formBind:true,
                         margin: '0 20 40 0',
                         iconCls:'b-next',
-                        glyph: Rd.config.icnNext,
+                        glyph: Rd.config.icnNext
                     }
                 ]
         });

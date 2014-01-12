@@ -1,4 +1,4 @@
-Ext.define('Rd.view.permanentUsers.winVoucherPassword', {
+Ext.define('Rd.view.vouchers.winVoucherPassword', {
     extend: 'Ext.window.Window',
     alias : 'widget.winVoucherPassword',
     title : i18n('sChange_password'),
