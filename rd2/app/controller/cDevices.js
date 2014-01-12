@@ -79,7 +79,7 @@ Ext.define('Rd.controller.cDevices', {
     },
     refs: [
         {  ref: 'grid',         selector:   'gridDevices'},
-        {  ref: 'privateGrid',  selector:   'gridDevicePrivate'},      
+        {  ref: 'privateGrid',  selector:   'gridDevicePrivate'}     
     ],
     init: function() {
         var me = this;

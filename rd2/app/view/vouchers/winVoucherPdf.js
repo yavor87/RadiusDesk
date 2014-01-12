@@ -1,4 +1,4 @@
-Ext.define('Rd.view.permanentUsers.winVoucherPdf', {
+Ext.define('Rd.view.vouchers.winVoucherPdf', {
     extend: 'Ext.window.Window',
     alias : 'widget.winVoucherPdf',
     title : i18n('sGenerate_pdf'),
@@ -22,7 +22,7 @@ Ext.define('Rd.view.permanentUsers.winVoucherPdf', {
                 xtype           : 'cmbPdfFormats', 
                 name            : 'language',
                 labelClsExtra   : 'lblRdReq',
-                allowBlank      : false, 
+                allowBlank      : false 
             },
             { 
                 xtype           : 'cmbLanguages', 

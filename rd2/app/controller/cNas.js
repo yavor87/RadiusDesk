@@ -99,7 +99,7 @@ Ext.define('Rd.controller.cNas', {
     refs: [
         {  ref: 'gridNas',  selector:   'gridNas'},
         {  ref: 'pnlGMap',  selector:   'pnlGMap'},
-        {  ref: 'grid',     selector:   'gridNas'},       
+        {  ref: 'grid',     selector:   'gridNas'}      
     ],
     init: function() {
         var me = this;

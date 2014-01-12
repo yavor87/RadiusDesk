@@ -1,4 +1,4 @@
-Ext.define('Rd.view.voucher.pnlVoucher', {
+Ext.define('Rd.view.vouchers.pnlVoucher', {
     extend: 'Ext.tab.Panel',
     alias: 'widget.pnlVoucher',
     border: false,

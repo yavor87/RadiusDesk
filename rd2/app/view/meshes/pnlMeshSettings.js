@@ -75,7 +75,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                         minValue    : 1,
                         labelClsExtra: 'lblRdReq',
                         allowBlank  : false,
-                        blankText   : i18n("sSupply_a_value"),
+                        blankText   : i18n("sSupply_a_value")
                     },
                     {
                         xtype       : 'numberfield',
@@ -87,7 +87,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                         minValue    : 1,
                         labelClsExtra: 'lblRdReq',
                         allowBlank  : false,
-                        blankText   : i18n("sSupply_a_value"),
+                        blankText   : i18n("sSupply_a_value")
                     }  
                 ],
                 buttons: [

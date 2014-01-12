@@ -94,7 +94,7 @@ Ext.define('Rd.view.meshes.gridMeshEntries' ,{
             },
             { text: 'Hidden',               dataIndex: 'hidden',        tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries4'},
             { text: 'Client isolation',     dataIndex: 'isolate',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries5'},
-            { text: 'Apply to all nodes',   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries6'},
+            { text: 'Apply to all nodes',   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries6'}
         ];
         me.callParent(arguments);
     }
