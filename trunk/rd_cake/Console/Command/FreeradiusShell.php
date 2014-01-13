@@ -33,8 +33,11 @@ class FreeradiusShell extends AppShell {
                 $last_save  = $n_q_r[0]['m'];
                 if($last_save > $last_restart){
                     $this->out("<info>More recent NAS table entry than last restart -> Restart FreeRADIUS</info>");
-                    $restart_string = "sudo /etc/init.d/radiusd restart";
-                    system($restart_string);
+                   // $restart_string = "sudo /etc/init.d/radiusd restart";
+                   // system($restart_string);
+                    //Change this so that cron can run as www-data
+                    exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
+                    exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
                     //Update the entry to the latest timestamp
                     $this->Check->id = $q_r['Check']['id'];
                     $this->Check->save();
