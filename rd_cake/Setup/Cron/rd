@@ -8,7 +8,7 @@
 */2 * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Removeduplicates >> /dev/null 2>&1
 
 #Every 10 minutes to keep it stable
-*/10 * * * * root /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Freeradius >> /dev/null 2>&1
+*/10 * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake Freeradius >> /dev/null 2>&1
 
 #Every 10 minutes check the auto add table to assign devices to users with this feature enabled
 */10 * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake AutoAddDevices >> /dev/null 2>&1
