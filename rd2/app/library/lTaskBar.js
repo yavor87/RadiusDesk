@@ -15,7 +15,7 @@ Ext.define('Rd.library.lTaskBar', {
      * @cfg {String} startBtnText
      * The text for the Start Button.
      */
-    startBtnText: i18n('sMenu'),
+    startBtnText: '',
 
     initComponent: function () {
         var me = this;
@@ -32,6 +32,7 @@ Ext.define('Rd.library.lTaskBar', {
                 menu: me.startMenu,
                 menuAlign: 'bl-tl',
                 text: me.startBtnText,
+                itemId: 'startButton',
                 glyph:  Rd.config.icnMenu,
                 scale:  'medium'
             },'-',

@@ -2266,7 +2266,7 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.app-main"
   ],
   "Rd.view.Viewport": [
-    "widget.vp"
+    "widget.viewP"
   ],
   "Rd.view.accessProviders.gridAccessProviders": [
     "widget.gridAccessProviders"
