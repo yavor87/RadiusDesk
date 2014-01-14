@@ -7,7 +7,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
         if(!win){
             win = desktop.createWindow({
                 id: 'activityMonitorWin',
-                title: i18n('sActivity_monitor'),
+                //title: i18n('sActivity_monitor'),
+                btnText         : i18n('sActivity_monitor'),
                 width:800,
                 height:400,
                 iconCls: 'activity',
@@ -219,9 +220,11 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var interval= 30000; //default
         clearInterval(me.autoReloadAcct);   //Always clear
         b.setIconCls('b-reload_time');
-        
+        b.setGlyph(Rd.config.icnTime);
+
         if(n == 'mnuRefreshCancel'){
             b.setIconCls('b-reload');
+            b.setGlyph(Rd.config.icnReload);
             return;
         }
         

@@ -12,6 +12,7 @@ Ext.define('Rd.controller.cLogViewer', {
                 width:800,
                 height:400,
                 iconCls: 'logfile_viewer',
+                glyph: Rd.config.icnLog,
                 animCollapse:false,
                 border:false,
                 constrainHeader:true,
