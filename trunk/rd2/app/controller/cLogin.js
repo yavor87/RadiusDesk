@@ -7,8 +7,8 @@ Ext.define('Rd.controller.cLogin', {
         urlWallpaper: 'resources/images/wallpapers/7.jpg'
     },
     refs: [
-        { ref: 'vp',        selector: 'vp',         xtype: '',      autoCreate: true },
-        { ref: 'pnlLogin',  selector: 'pnlLogin',   xtype: '',      autoCreate: false}
+        { ref: 'viewP',         selector: 'viewP',          xtype: 'viewP',      autoCreate: true },
+        { ref: 'pnlLogin',      selector: 'pnlLogin',       xtype: 'pnlLogin',   autoCreate: false}
     ], 
    init: function() {
         me = this;
@@ -40,7 +40,7 @@ Ext.define('Rd.controller.cLogin', {
         me.getStore('sLanguages').loadData(me.application.getLanguages());
         
         var li = me.getView('login.pnlLogin').create({'url':me.config.urlWallpaper});
-        var vp = me.getVp();
+        var vp = me.getViewP();
         vp.removeAll(true);
         vp.add([li]);
 
@@ -67,7 +67,7 @@ Ext.define('Rd.controller.cLogin', {
                 //Add the token and language (the 3rd place where we can ser extraParams - remember each time we set it overrides!
                 Ext.Ajax.extraParams = {'token': action.result.data.token,'sel_language': me.application.getSelLanguage()};
 
-                me.getVp().removeAll(true);
+                me.getViewP().removeAll(true);
                 win.close();
                 me.application.runAction('cDesktop','Index');
             },
@@ -76,7 +76,7 @@ Ext.define('Rd.controller.cLogin', {
     },
     actionExit: function() {
         var me = this;
-        me.getVp().removeAll(true);     //Remove the current panel that fills the viewport
+        me.getViewP().removeAll(true);     //Remove the current panel that fills the viewport
 
         var desktop = this.application.getController('cDesktop');
         desktop.closeAllWindows();

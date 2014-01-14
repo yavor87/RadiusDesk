@@ -11,7 +11,7 @@ Ext.define('Rd.controller.cDesktop', {
         urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json'
     },
     models: ['mDesktopShortcut', 'mWallpaper'],
-    uses: [
+    requires: [
         'Ext.util.MixedCollection',
         'Ext.menu.Menu',
         'Ext.view.View', // dataview
@@ -20,7 +20,7 @@ Ext.define('Rd.controller.cDesktop', {
     ],
     stores: ['sDesktopShortcuts', 'sWallpapers'],  //This must be pulled from the back-end
     refs: [
-        {   ref: 'vp',  selector: '',   xtype: 'vp',    autoCreate: true},
+        {   ref: 'viewP',  selector: 'viewP',   xtype: 'viewP',    autoCreate: true},
         {   ref: 'pnlDesktop', selector: 'pnlDesktop', xtype: 'pnlDesktop' }
 
     ],
@@ -78,6 +78,7 @@ Ext.define('Rd.controller.cDesktop', {
             startConfig: {
                 title: user,
                 iconCls: cls,
+                glyph: Rd.config.icnBug,
                 height: 300,
                 menu: dd.menu,
                 toolConfig: {
@@ -108,7 +109,7 @@ Ext.define('Rd.controller.cDesktop', {
 
         //@@ Now we add the tasbar with it's accompanying menu
         dt.addDocked(me.taskbar);
-        var vp = me.getVp();
+        var vp = me.getViewP();
         vp.removeAll(true);
         vp.add([dt]);
 
@@ -122,6 +123,10 @@ Ext.define('Rd.controller.cDesktop', {
 
         //Add a reference to the desktop in the controller
         me.desktopView = dt;
+
+        //Set the menu button text:
+        var tb = me.getPnlDesktop();
+        tb.down('#startButton').setText(i18n('sMenu'));
     },
 
     createDesktopMenu: function () {
@@ -505,7 +510,7 @@ Ext.define('Rd.controller.cDesktop', {
     onLogout: function(b){
         var me = this;
         b.up('panel').close();
-        me.getVp().removeAll(true);
+        me.getViewP().removeAll(true);
         me.application.runAction('cLogin','Exit');
     },
     onSettings: function(b){
