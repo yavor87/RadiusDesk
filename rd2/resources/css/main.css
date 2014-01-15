@@ -160,6 +160,9 @@
     width: 100%;
     height: 100%;
     background-color: #aaf6be;
+    background-image: url('../images/gradients/green.png');
+    background-repeat: repeat-x;
+    background-color: transparent;
 }
 
 .banner h1{
