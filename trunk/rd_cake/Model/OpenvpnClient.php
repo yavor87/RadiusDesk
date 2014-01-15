@@ -70,7 +70,7 @@ class OpenvpnClient extends AppModel {
             //_______________ NEW ONE _______________
             //This is a new one.... lets see if we can re-use some ip
             $q_r = $this->find('first', array('order' => array('OpenvpnClient.subnet DESC', 'OpenvpnClient.peer1 DESC')));
-            if($q_r != ''){
+            if($q_r){
                 $top_subnet = $q_r['OpenvpnClient']['subnet'];
                 $top_peer1  = $q_r['OpenvpnClient']['peer1'];
                 if(($top_subnet == '')||($top_peer1 =='')){ //Return on empty values
