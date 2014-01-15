@@ -46,7 +46,7 @@ class DesktopController extends AppController {
                 'conditions'    => array('User.token' => $token)
             ));
 
-            if($q_r == ''){
+            if($q_r){
 
                 $this->set(array(
                     'errors'        => array('token'=>'invalid'),

@@ -1058,7 +1058,7 @@ class AutoMacsController extends AppController {
 
         $as = ClassRegistry::init('AutoSetup');
         $q_r = $as->find('first', array('order' => array('AutoSetup.value ASC'),'conditions' => array('AutoSetup.description' => 'tunnel_ip')));
-        if($q_r != ''){
+        if($q_r){
             $ip         = $q_r['AutoSetup']['value'];
             $next_ip    = $this->_get_next_ip($ip);           
             $not_available = true;
@@ -1403,7 +1403,7 @@ class AutoMacsController extends AppController {
 
         $tun_broadcast = Configure::read('experimental.openvpn.broadcast');
 
-        if($q_r != ''){
+        if($q_r){
 
             $tun_detail =
                 "file_name:\n".
