@@ -47,7 +47,7 @@
 /*-- Logo --*/
 #poweredby {
     position: absolute;
-    bottom: 50px;
+    bottom: 40px;
     right: 10px;
     z-index: 15000;
 
@@ -65,10 +65,11 @@
 #poweredby div {
     position: relative;
     width: 320px;
-    height:150px;
-    background-image: url(../images/logo.png);
-    background-repeat: no-repeat;
+    height:145px;
+  /*  background-image: url(../images/logo.png);
+    background-repeat: no-repeat;   */ 
 }
+
 
 /* The simple background image PNG does not work in IE6-8, but does in IE9 */
 .x-ie6 #poweredby div,
