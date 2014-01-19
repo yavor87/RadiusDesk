@@ -50,7 +50,8 @@
  */
 	Configure::write('Error', array(
 		'handler' => 'ErrorHandler::handleError',
-		'level' => E_ALL & ~E_DEPRECATED,
+		//'level' => E_ALL & ~E_DEPRECATED,             //Dirk 19.1.14 Do not report on strict errors!
+        'level' => E_ALL & ~E_STRICT & ~E_DEPRECATED,
 		'trace' => true
 	));
 
