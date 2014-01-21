@@ -8,12 +8,11 @@ Ext.define('Rd.controller.cDebug', {
         if(!win){
 
              //Do it this way to avoid a race condition
-            var vd = Ext.create('Rd.view.logViewer.pnlViewDebug',{
+            var vd = Ext.create('Rd.view.debugOutput.pnlViewDebug',{
                     region  : 'center',
                     layout  : 'fit',
                     margins : '0 0 0 0',
-                    border  : false,
-                    xtype   : 'pnlViewFile'
+                    border  : false
             });
 
             win = desktop.createWindow({

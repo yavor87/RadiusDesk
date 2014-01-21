@@ -12,8 +12,7 @@ Ext.define('Rd.controller.cLogViewer', {
                     region  : 'center',
                     layout  : 'fit',
                     margins : '0 0 0 0',
-                    border  : false,
-                    xtype   : 'pnlViewFile'
+                    border  : false
             });
 
             win = desktop.createWindow({
@@ -171,14 +170,14 @@ Ext.define('Rd.controller.cLogViewer', {
         me.socket = io.connect('http://'+host+':'+me.portWebSocket+'?token='+t);
         
         me.socket.on('connect', function() {
-          //  console.log('Connected to:', me.socket);
+            console.log('Connected to:', me.socket);
         });
 
         //Event binding
         me.socket.on('message', function(m) {
             if(Ext.isString(m)){    //Only strings...
                 var fb = i18n('sReceiving_new_logfile_data');
-               // console.log(fb);
+                console.log(fb);
                 me.getFile().down('#feedback').update({message: fb});
                 var new_t = m.split("\n");
                 var l = new_t.length-1;
