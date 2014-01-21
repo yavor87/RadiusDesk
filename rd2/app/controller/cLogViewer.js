@@ -6,15 +6,6 @@ Ext.define('Rd.controller.cLogViewer', {
         var desktop = this.application.getController('cDesktop');
         var win = desktop.getWindow('logViewerWin');
         if(!win){
-
-            //Do it this way to avoid a race condition
-            var vf = Ext.create('Rd.view.logViewer.pnlViewFile',{
-                    region  : 'center',
-                    layout  : 'fit',
-                    margins : '0 0 0 0',
-                    border  : false
-            });
-
             win = desktop.createWindow({
                 id: 'logViewerWin',
                 //title:i18n('sLogfile_viewer'),
@@ -36,15 +27,75 @@ Ext.define('Rd.controller.cLogViewer', {
                         heading:i18n('sLogfile_viewer'),
                         image:  'resources/images/48x48/logfile_viewer.png'
                     },
-                    vf //Add it here to avoid a race condition
+                    {
+                        region  : 'center',
+                        layout  : 'fit',
+                        margins : '0 0 0 0',
+                        border  : false,
+                        html    : '',
+                        autoScroll : true,
+                        border  : '5 5 5 5',
+                        bodyCls : 'fileViewer',
+                        itemId  : 'pnlViewFile',
+                        tbar: [
+                            { xtype: 'buttongroup', title: i18n('sAction'), items : [ 
+                                { 
+                                    xtype: 'button',  
+                                    iconCls: 'b-clear', 
+                                    glyph: Rd.config.icnClear,
+                                    scale: 'large', 
+                                    itemId: 'clear',    
+                                    tooltip:    i18n('sClear_screen')   
+                                }
+                                
+                            ]},
+                            { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), width:200, items : [ 
+                                { 
+                                    xtype: 'button',  
+                                    iconCls: 'b-start', 
+                                    glyph: Rd.config.icnStart, 
+                                    scale: 'large', 
+                                    itemId: 'start',    
+                                    tooltip:    i18n('sStart_FreeRADIUS'),
+                                    toggleGroup     : 'start_stop',
+                                    enableToggle    : true,
+                                    pressed         : true
+
+                                },
+                                { 
+                                    xtype: 'button',  
+                                    iconCls: 'b-stop', 
+                                    glyph: Rd.config.icnStop,  
+                                    scale: 'large', 
+                                    itemId: 'stop',     
+                                    tooltip:    i18n('sStop_FreeRADIUS'),
+                                    toggleGroup     : 'start_stop',
+                                    enableToggle    : true,
+                                    pressed         : false
+                                },
+                                { 
+                                    xtype: 'button',  
+                                    iconCls: 'b-btn_info', 
+                                    glyph: Rd.config.icnInfo,  
+                                    scale: 'large', 
+                                    itemId: 'info',     
+                                    tooltip:    i18n('sFreeRADIUS_info')
+                                }
+                            ]}
+                        ],
+                        bbar: [
+                            {   xtype: 'component', itemId: 'feedback',  tpl: '{message}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+                        ]
+                    }
                 ]
             });
+            win
         }
         desktop.restoreWindow(win);    
         return win;
     },
     views:  [
-        'components.pnlBanner', 'logViewer.pnlViewFile', 'logViewer.winRadiusInfo'
+        'components.pnlBanner', 'logViewer.winRadiusInfo'
     ],
     stores: [],
     models: [],
@@ -61,7 +112,7 @@ Ext.define('Rd.controller.cLogViewer', {
         portWebSocket:  '8000'
     },
     refs: [
-         {  ref:    'file', selector:   'pnlViewFile'}
+         {  ref:    'file', selector:   '#pnlViewFile'}
     ],
     init: function() {
         var me = this;
@@ -70,16 +121,16 @@ Ext.define('Rd.controller.cLogViewer', {
         }
         me.inited = true;
         me.control({
-            'pnlViewFile #clear': {
+            '#pnlViewFile #clear': {
                 click:      me.clear
             },
-            'pnlViewFile #start': {
+            '#pnlViewFile #start': {
                 click:      me.start
             },
-            'pnlViewFile #stop': {
+            '#pnlViewFile #stop': {
                 click:      me.stop
             },
-            'pnlViewFile #info': {
+            '#pnlViewFile #info': {
                 click:      me.info
             },
             '#logViewerWin'     : {
@@ -170,14 +221,14 @@ Ext.define('Rd.controller.cLogViewer', {
         me.socket = io.connect('http://'+host+':'+me.portWebSocket+'?token='+t);
         
         me.socket.on('connect', function() {
-            console.log('Connected to:', me.socket);
+          //  console.log('Connected to:', me.socket);
         });
 
         //Event binding
         me.socket.on('message', function(m) {
             if(Ext.isString(m)){    //Only strings...
                 var fb = i18n('sReceiving_new_logfile_data');
-                console.log(fb);
+               // console.log(fb);
                 me.getFile().down('#feedback').update({message: fb});
                 var new_t = m.split("\n");
                 var l = new_t.length-1;
@@ -197,7 +248,7 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     onShow: function(w){
         var me = this;
-        //console.log("Window show");
+        console.log("Window show");
         if(me.showFirstTime == undefined){
             me.showFirstTime = true;
             me.showDiv = me.getFile().body.dom;
@@ -219,7 +270,7 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     onRender: function(w){
         var me = this;
-        //console.log("Window Render");
+        console.log("Window Render");
         if(me.showFirstTime == true){
             me.renderFlag = true; 
         }
@@ -232,11 +283,11 @@ Ext.define('Rd.controller.cLogViewer', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                     if(jsonData.data.running == true){
-                        w.down('#start').toggle(true);
-                        w.down('#info').setDisabled(false);
+                        me.getFile().down('#start').toggle(true);
+                        me.getFile().down('#info').setDisabled(false);
                     }else{
-                        w.down('#stop').toggle(true);
-                        w.down('#info').setDisabled(true);
+                        me.getFile().down('#stop').toggle(true);
+                        me.getFile().down('#info').setDisabled(true);
                     } 
                 }   
             },
@@ -244,6 +295,7 @@ Ext.define('Rd.controller.cLogViewer', {
         });
     },
     onDestroy: function(w){
+        console.log("Window destroyed");
         var me = this;
         me.renderFlag = false;
         me.socket.disconnect();  

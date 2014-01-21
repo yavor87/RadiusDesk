@@ -3,7 +3,6 @@ Ext.define('Rd.view.logViewer.pnlViewFile', {
     alias   : 'widget.pnlViewFile',
     html    : '',
     autoScroll : true,
-    autoCreate: false,
     border  : '5 5 5 5',
     bodyCls : 'fileViewer',
     tbar: [
