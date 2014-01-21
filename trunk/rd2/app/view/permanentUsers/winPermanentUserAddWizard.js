@@ -134,6 +134,15 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     hidden  : true
                                 },
                                 {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : 'Create multiple users',
+                                    name        : 'multiple',
+                                    inputValue  : 'multiple',
+                                    checked     : false,
+                                    boxLabelCls : 'lblRdCheck',
+                                    itemId      : 'multiple'
+                                },
+                                {
                                     itemId      : 'owner',
                                     xtype       : 'displayfield',
                                     fieldLabel  : i18n('sOwner'),

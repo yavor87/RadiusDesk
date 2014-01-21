@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cPassword', {
             win = desktop.createWindow({
                 id          : 'passwordWin',
                // title       : "Password manager",
-                btnText     : "Password managerz",
+                btnText     : "Password manager",
                 width       : 450,
                 height      : 450,
                 resizable   : true,
