@@ -205,16 +205,17 @@ Ext.define('Rd.controller.cDesktop', {
     // Window context menu handlers
 
     onWindowMenuBeforeShow: function (menu) {
+        var me = this;
         var items = menu.items.items, win = menu.theWin;
+        me.menuWin = win; //Add this since me.windowMenu.theWin did now work correct with ExtJs 4.2.x
         items[0].setDisabled(win.maximized !== true && win.hidden !== true); // Restore
         items[1].setDisabled(win.minimized === true); // Minimize
         items[2].setDisabled(win.maximized === true || win.hidden === true); // Maximize
     },
 
-    onWindowMenuClose: function () {
-        var me = this, win = me.windowMenu.theWin;
-
-        win.close();
+    onWindowMenuClose: function (m) {
+        var me = this;
+        me.menuWin.close();
     },
 
     onWindowMenuHide: function (menu) {
@@ -222,22 +223,19 @@ Ext.define('Rd.controller.cDesktop', {
     },
 
     onWindowMenuMaximize: function () {
-        var me = this, win = me.windowMenu.theWin;
-
-        win.maximize();
-        win.toFront();
+        var me = this;
+        me.menuWin.maximize();
+        me.menuWin.toFront();
     },
 
     onWindowMenuMinimize: function () {
-        var me = this, win = me.windowMenu.theWin;
-
-        win.minimize();
+        var me = this;
+        me.menuWin.minimize();
     },
 
     onWindowMenuRestore: function () {
-        var me = this, win = me.windowMenu.theWin;
-
-        me.restoreWindow(win);
+        var me = this;
+        me.restoreWindow(me.menuWin);
     },
 
     //------------------------------------------------------

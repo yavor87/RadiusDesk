@@ -370,11 +370,14 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
+        var multi   = win.down('#multiple').getValue();
         form.submit({
             clientValidation: true,
             url: me.urlAdd,
             success: function(form, action) {
-                win.close();
+                if(multi != true){
+                    win.close(); //Multi keep open for next user
+                }
                 me.getStore('sPermanentUsers').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),

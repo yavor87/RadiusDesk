@@ -114,7 +114,7 @@ Ext.define('Rd.library.lTaskBar', {
     onQuickStartClick: function (btn) {
         console.log("Launching the thingy ",btn.module);
     },
-    
+ 
     onButtonContextMenu: function (e) {
         var me = this, t = e.getTarget(), btn = me.getWindowBtnFromEl(t);
         if (btn) {
