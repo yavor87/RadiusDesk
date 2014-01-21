@@ -6,6 +6,16 @@ Ext.define('Rd.controller.cLogViewer', {
         var desktop = this.application.getController('cDesktop');
         var win = desktop.getWindow('logViewerWin');
         if(!win){
+
+            //Do it this way to avoid a race condition
+            var vf = Ext.create('Rd.view.logViewer.pnlViewFile',{
+                    region  : 'center',
+                    layout  : 'fit',
+                    margins : '0 0 0 0',
+                    border  : false,
+                    xtype   : 'pnlViewFile'
+            });
+
             win = desktop.createWindow({
                 id: 'logViewerWin',
                 //title:i18n('sLogfile_viewer'),
@@ -27,13 +37,7 @@ Ext.define('Rd.controller.cLogViewer', {
                         heading:i18n('sLogfile_viewer'),
                         image:  'resources/images/48x48/logfile_viewer.png'
                     },
-                    {
-                        region  : 'center',
-                        layout  : 'fit',
-                        margins : '0 0 0 0',
-                        border  : false,
-                        xtype   : 'pnlViewFile' 
-                    }
+                    vf //Add it here to avoid a race condition
                 ]
             });
         }
@@ -229,11 +233,11 @@ Ext.define('Rd.controller.cLogViewer', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                     if(jsonData.data.running == true){
-                        me.getFile().down('#start').toggle(true);
-                        me.getFile().down('#info').setDisabled(false);
+                        w.down('#start').toggle(true);
+                        w.down('#info').setDisabled(false);
                     }else{
-                        me.getFile().down('#stop').toggle(true);
-                        me.getFile().down('#info').setDisabled(true);
+                        w.down('#stop').toggle(true);
+                        w.down('#info').setDisabled(true);
                     } 
                 }   
             },
@@ -241,7 +245,6 @@ Ext.define('Rd.controller.cLogViewer', {
         });
     },
     onDestroy: function(w){
-        //console.log("Window destroyed");
         var me = this;
         me.renderFlag = false;
         me.socket.disconnect();  
