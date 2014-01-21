@@ -6,6 +6,16 @@ Ext.define('Rd.controller.cDebug', {
         var desktop = this.application.getController('cDesktop');
         var win = desktop.getWindow('debugWin');
         if(!win){
+
+             //Do it this way to avoid a race condition
+            var vd = Ext.create('Rd.view.logViewer.pnlViewDebug',{
+                    region  : 'center',
+                    layout  : 'fit',
+                    margins : '0 0 0 0',
+                    border  : false,
+                    xtype   : 'pnlViewFile'
+            });
+
             win = desktop.createWindow({
                 id: 'debugWin',
                 //title:i18n('sDebug_output'),
@@ -27,13 +37,7 @@ Ext.define('Rd.controller.cDebug', {
                         heading:i18n('sDebug_output'),
                         image:  'resources/images/48x48/bug.png'
                     },
-                    {
-                        region  : 'center',
-                        layout  : 'fit',
-                        margins : '0 0 0 0',
-                        border  : false,
-                        xtype   : 'pnlViewDebug' 
-                    }
+                    vd
                 ]
             });
         }
