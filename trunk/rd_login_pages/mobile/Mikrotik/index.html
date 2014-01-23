@@ -75,7 +75,8 @@
                 c.onBtnDisconnectClick();
             });
 			
-
+            //Hide the remove mac button
+            $('#remove_mac').hide();
 
 			$('div.gallery-page')
 				.on('pageshow', function(e){
@@ -135,6 +136,7 @@
             <input type="password" name="Password" id="Password" required="required">
             <input type="checkbox" name="remember" id="remember" class="custom" />       
             <label for="remember">Remember me</label>
+            <a href="#" data-role="button" name='btn_remove_mac' id='remove_mac'>Remove me from realm</a>
         </div>
         <a href="#" data-role="button" name='btn_connect'>Login</a> 
     </div>
