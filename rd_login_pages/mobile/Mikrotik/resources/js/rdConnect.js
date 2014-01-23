@@ -196,6 +196,8 @@ var rdConnect = (function () {
             var msg = 'Authentication failure please try again'
             if(j.error_orig != undefined){
                 msg =j.error_orig;
+                console.log("Here we have "+msg);
+                $('#remove_mac').show();
             }
             showLoginError(msg);  
         }
