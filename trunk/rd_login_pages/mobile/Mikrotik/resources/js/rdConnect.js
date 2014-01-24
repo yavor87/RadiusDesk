@@ -24,6 +24,8 @@ var rdConnect = (function () {
     var sessionData     = undefined;
     var counter         = undefined;
 
+    var mac_username    = undefined;
+
     var index   = function(){
         if(mtStatusUrl == undefined){
             if(testForHotspot()){
@@ -164,6 +166,23 @@ var rdConnect = (function () {
         });
     }
 
+    var onBtnRemoveMac = function(){
+        var url = co.removeMacUrl
+        $.ajax({url: url , dataType: "json",timeout: 10000,date: {},data: {'mac':mac_username}})
+        .done(function(j){
+            console.log("Ajax call fine");
+            if(j.success == true){
+                showLoginError("Device "+mac_username+" removed from realm, please log in again");
+                $('#remove_mac').hide();
+            }else{
+                showLoginError(j.message);
+            }
+        })
+        .fail(function(){     
+            showLoginError('Problems encountered while trying to remove '+mac_username);
+        });
+    }
+
     var login =  function(){
         var urlLogin = $.getUrlVar('link_login_only');
         $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: 4000, data: {username: userName, password: password}})
@@ -196,8 +215,20 @@ var rdConnect = (function () {
             var msg = 'Authentication failure please try again'
             if(j.error_orig != undefined){
                 msg =j.error_orig;
-                console.log("Here we have "+msg);
-                $('#remove_mac').show();
+                //Test to see if it moans about the MAC
+                //var res = msg.match(/^User koos not registered/); //dummy
+                var res = msg.match(/^User ([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F]) belongs to realm/);   //Real one
+                if(res != null){
+                    //Get the MAC
+                    var mac = msg.match(/([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F])/);
+                   // var mac = msg.match(/koos/);
+                    mac_username = mac[0];            
+                    console.log("Here we have a match!!! ");
+                    $('#remove_mac').show();
+                }else{
+                    console.log("Here we have NOOOO match!!! ");
+                    $('#remove_mac').hide();
+                }
             }
             showLoginError(msg);  
         }
@@ -212,7 +243,8 @@ var rdConnect = (function () {
         index               : index,
         clearRefresh        : clearRefresh,
         onBtnConnectClick   : onBtnConnectClick,
-        onBtnDisconnectClick: onBtnDisconnectClick
+        onBtnDisconnectClick: onBtnDisconnectClick,
+        onBtnRemoveMac      : onBtnRemoveMac
     }   
   }
 })();

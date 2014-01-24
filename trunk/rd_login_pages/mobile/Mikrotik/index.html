@@ -35,7 +35,10 @@
             var thumb_h = 200;
             var thumb_w = 200;
             var scaler  = 'http://'+h+'/cake2/rd_cake/webroot/files/image.php';
+            
             var d       = rdDynamic({dynUrl: dynUrl, thumb_h: thumb_h, thumb_w: thumb_w, scaler: scaler},window.jQuery);
+            var removeMacUrl = "http://"+h+"/cake2/rd_cake/devices/remove_mac.json";
+
            // if(d.isHotspot()){
                 var i = d.addDynamicInfo();
           //  }else{
@@ -54,7 +57,7 @@
             });
             
             //______ Connect part ______
-            var c       = rdConnect({},window.jQuery);
+            var c       = rdConnect({removeMacUrl : removeMacUrl},window.jQuery);
             c.index();
             $('#Connect')
                 .on('pageshow', function(e){
@@ -71,12 +74,16 @@
                 c.onBtnConnectClick();
             });
 
-             $("a[name=btn_disconnect]").on('click',function(){
+            $("a[name=btn_disconnect]").on('click',function(){
                 c.onBtnDisconnectClick();
             });
 			
             //Hide the remove mac button
             $('#remove_mac').hide();
+
+            $("a[name=btn_remove_mac]").on('click',function(){
+                c.onBtnRemoveMac();
+            });
 
 			$('div.gallery-page')
 				.on('pageshow', function(e){
