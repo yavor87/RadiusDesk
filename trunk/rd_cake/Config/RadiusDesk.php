@@ -82,6 +82,10 @@ $config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/i
 $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
 
 
+//Set to true to allow  the user to remove their device out of the realm it has been assigned to
+$config['UserCanRemoveDevice']              = true;
+
+
 
 //==== Define glyphs -> We'll use glyphs insteadd of icons
 $config['icnLock']      = 57495;
