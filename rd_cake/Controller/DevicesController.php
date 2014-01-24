@@ -891,6 +891,37 @@ class DevicesController extends AppController {
 
     }
 
+    public function remove_mac(){
+
+        $success = false;
+        $message = '';
+
+        if(Configure::read('UserCanRemoveDevice') == true){
+            if(isset($this->request->query['mac'])){
+
+                $mac        = $this->request->query['mac'];
+                $item       = $this->{$this->modelClass}->findByName($mac);
+                if($item){
+                    $id   = $item['Device']['id'];
+                    $this->{$this->modelClass}->id = $id;
+                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                    $this->_delete_clean_up_device($mac);
+                    $success = true;
+                    $message = "Device $mac deleted fine";
+                }else{
+                    $message = "Device $mac not found";
+                }
+            }else{
+                $message = "Device to remove not specified";
+            }
+            $this->set(array(
+                'success'   => $success,
+                'message'   => $message,
+                '_serialize' => array('success', 'message')
+            ));
+        }
+    }
+
 
     public function note_index(){
 
