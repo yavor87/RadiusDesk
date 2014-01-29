@@ -87,6 +87,8 @@ class KickerComponent extends Component {
                 $rc = $this->radclient;
 
                 //Just send both to the device to be sure...
+                //Coova wants the device to be UC
+                $device_mac = strtoupper($device_mac);
 			    exec("echo \"User-Name = $device_mac\"  | $rc -r 2 -t 2 $nas_ip:$port 40 $secret",$output);
                 exec("echo \"User-Name = $username\"    | $rc -r 2 -t 2 $nas_ip:$port 40 $secret",$output);
                 //----------------------------------------------
