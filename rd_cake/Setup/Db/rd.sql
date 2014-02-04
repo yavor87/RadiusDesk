@@ -32,7 +32,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=307 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=308 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `acos` (
 
 LOCK TABLES `acos` WRITE;
 /*!40000 ALTER TABLE `acos` DISABLE KEYS */;
-INSERT INTO `acos` VALUES (29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,392),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',393,398),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,381),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',382,391),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',394,395),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',396,397),(35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',399,418),(42,32,NULL,NULL,'View users or vouchers not created self','',383,384),(43,31,NULL,NULL,'Vouchers','',3,30),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',31,76),(46,45,NULL,NULL,'index','',32,33),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',77,100),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',78,79),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',80,81),(61,58,NULL,NULL,'edit','',82,83),(62,58,NULL,NULL,'delete','',84,85),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',385,386),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',387,388),(65,58,NULL,NULL,'change_password','',86,87),(67,31,NULL,NULL,'Realms','',101,126),(68,67,NULL,NULL,'index','',102,103),(69,67,NULL,NULL,'add','',104,105),(70,67,NULL,NULL,'edit','',106,107),(71,67,NULL,NULL,'delete','',108,109),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',127,182),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',128,129),(104,102,NULL,NULL,'add','',130,131),(105,102,NULL,NULL,'edit','',132,133),(106,102,NULL,NULL,'delete','',134,135),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',183,202),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',184,185),(109,107,NULL,NULL,'add','',186,187),(110,107,NULL,NULL,'edit','',188,189),(111,107,NULL,NULL,'delete','',190,191),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',136,137),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',192,193),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',194,195),(115,107,NULL,NULL,'note_index','List notes',196,197),(116,107,NULL,NULL,'note_add','',198,199),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',200,201),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',138,139),(119,102,NULL,NULL,'note_index','List notes',140,141),(120,102,NULL,NULL,'note_add','',142,143),(121,102,NULL,NULL,'note_del','',144,145),(122,67,NULL,NULL,'export_csv','',110,111),(123,67,NULL,NULL,'index_for_filter','',112,113),(124,67,NULL,NULL,'note_index','',114,115),(125,67,NULL,NULL,'note_add','',116,117),(126,67,NULL,NULL,'note_del','',118,119),(127,58,NULL,NULL,'export_csv','',88,89),(128,58,NULL,NULL,'note_index','',90,91),(129,58,NULL,NULL,'note_add','',92,93),(130,58,NULL,NULL,'note_del','',94,95),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',203,208),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',204,205),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',206,207),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',209,246),(138,137,NULL,NULL,'index','',210,211),(142,35,'DynamicDetail',3,'SA Coast - Struisbaai',NULL,404,405),(146,35,'Realm',30,'Residence Inn',NULL,406,407),(148,35,'Realm',31,'Holiday Inn',NULL,408,409),(149,43,NULL,NULL,'add','',6,7),(150,43,NULL,NULL,'delete','',8,9),(151,31,NULL,NULL,'Desktop','',247,254),(152,151,NULL,NULL,'desktop_shortcuts','',248,249),(153,151,NULL,NULL,'change_password','',250,251),(154,151,NULL,NULL,'save_wallpaper_selection','',252,253),(155,35,'Realm',32,'Simpsons Home',NULL,410,411),(156,43,NULL,NULL,'view_basic_info','',10,11),(157,43,NULL,NULL,'edit_basic_info','',12,13),(158,43,NULL,NULL,'private_attr_index','',14,15),(159,43,NULL,NULL,'private_attr_add','',16,17),(160,43,NULL,NULL,'private_attr_edit','',18,19),(161,43,NULL,NULL,'private_attr_delete','',20,21),(162,43,NULL,NULL,'change_password','',22,23),(163,43,NULL,NULL,'export_csv','',24,25),(164,43,NULL,NULL,'export_pdf','',26,27),(165,67,NULL,NULL,'index_ap','',120,121),(166,31,NULL,NULL,'Profiles','',255,276),(167,166,NULL,NULL,'index','',256,257),(168,166,NULL,NULL,'index_ap','Dropdown list based on selected Access Provider owner',258,259),(169,166,NULL,NULL,'add','',260,261),(170,166,NULL,NULL,'manage_components','',262,263),(171,166,NULL,NULL,'delete','',264,265),(172,166,NULL,NULL,'index_for_filter','',266,267),(173,166,NULL,NULL,'note_index','',268,269),(174,166,NULL,NULL,'note_add','',270,271),(175,166,NULL,NULL,'note_del','',272,273),(176,31,NULL,NULL,'Radaccts','',277,288),(177,176,NULL,NULL,'export_csv','',278,279),(178,176,NULL,NULL,'index','',280,281),(179,176,NULL,NULL,'delete','',282,283),(180,176,NULL,NULL,'kick_active','',284,285),(181,176,NULL,NULL,'close_open','',286,287),(182,43,NULL,NULL,'delete_accounting_data','',28,29),(184,45,NULL,NULL,'add','',34,35),(185,45,NULL,NULL,'delete','',36,37),(186,45,NULL,NULL,'view_basic_info','',38,39),(187,45,NULL,NULL,'edit_basic_info','',40,41),(188,45,NULL,NULL,'view_personal_info','',42,43),(189,45,NULL,NULL,'edit_personal_info','',44,45),(190,45,NULL,NULL,'private_attr_index','',46,47),(191,45,NULL,NULL,'private_attr_add','',48,49),(192,45,NULL,NULL,'private_attr_edit','',50,51),(193,45,NULL,NULL,'private_attr_delete','',52,53),(194,45,NULL,NULL,'change_password','',54,55),(195,45,NULL,NULL,'enable_disable','',56,57),(196,45,NULL,NULL,'export_csv','',58,59),(197,45,NULL,NULL,'note_index','',60,61),(198,137,NULL,NULL,'add','',212,213),(199,137,NULL,NULL,'delete','',214,215),(200,137,NULL,NULL,'view_basic_info','',216,217),(201,137,NULL,NULL,'edit_basic_info','',218,219),(202,137,NULL,NULL,'private_attr_index','',220,221),(203,137,NULL,NULL,'private_attr_add','',222,223),(204,137,NULL,NULL,'private_attr_edit','',224,225),(205,137,NULL,NULL,'private_attr_delete','',226,227),(206,137,NULL,NULL,'enable_disable','',228,229),(207,137,NULL,NULL,'export_csv','',230,231),(208,137,NULL,NULL,'note_index','',232,233),(209,31,NULL,NULL,'FreeRadius','',289,294),(210,209,NULL,NULL,'test_radius','',290,291),(211,209,NULL,NULL,'index','Displays the stats of the FreeRADIUS server',292,293),(212,31,NULL,NULL,'Radpostauths','',295,304),(213,212,NULL,NULL,'index','',296,297),(214,212,NULL,NULL,'add','',298,299),(215,212,NULL,NULL,'delete','',300,301),(221,212,NULL,NULL,'export_csv','',302,303),(223,67,NULL,NULL,'update_na_realm','',122,123),(224,102,NULL,NULL,'add_direct','',146,147),(225,102,NULL,NULL,'add_open_vpn','',148,149),(226,102,NULL,NULL,'add_dynamic','',150,151),(227,102,NULL,NULL,'add_pptp','',152,153),(228,102,NULL,NULL,'view_openvpn','',154,155),(229,102,NULL,NULL,'edit_openvpn','',156,157),(230,102,NULL,NULL,'view_pptp','',158,159),(231,102,NULL,NULL,'edit_pptp','',160,161),(232,102,NULL,NULL,'view_dynamic','',162,163),(233,102,NULL,NULL,'edit_dynamic','',164,165),(234,102,NULL,NULL,'view_nas','',166,167),(235,102,NULL,NULL,'edit_nas','',168,169),(236,102,NULL,NULL,'view_photo','',170,171),(237,102,NULL,NULL,'upload_photo','',172,173),(238,102,NULL,NULL,'view_map_pref','',174,175),(239,102,NULL,NULL,'edit_map_pref','',176,177),(240,102,NULL,NULL,'delete_map','',178,179),(241,102,NULL,NULL,'edit_map','',180,181),(243,67,NULL,NULL,'view','',124,125),(244,35,'Realm',34,'Residence Inn',NULL,412,413),(245,35,'Realm',35,'College',NULL,414,415),(246,45,NULL,NULL,'restrict_list_of_devices','',62,63),(247,45,NULL,NULL,'edit_tracking','',64,65),(248,45,NULL,NULL,'view_tracking','',66,67),(249,45,NULL,NULL,'note_add','',68,69),(250,45,NULL,NULL,'note_del','',70,71),(251,137,NULL,NULL,'note_add','',234,235),(252,137,NULL,NULL,'note_del','',236,237),(253,137,NULL,NULL,'view_tracking','',238,239),(254,137,NULL,NULL,'edit_tracking','',240,241),(255,137,NULL,NULL,'note_add','',242,243),(256,137,NULL,NULL,'note_del','',244,245),(258,31,NULL,NULL,'ProfileComponents','',305,320),(259,258,NULL,NULL,'index','',306,307),(260,258,NULL,NULL,'add','',308,309),(261,258,NULL,NULL,'edit','',310,311),(262,258,NULL,NULL,'delete','',312,313),(263,258,NULL,NULL,'note_index','',314,315),(264,258,NULL,NULL,'note_add','',316,317),(265,258,NULL,NULL,'note_del','',318,319),(266,166,NULL,NULL,'export_csv','',274,275),(267,31,NULL,NULL,'NaStates','',321,326),(268,267,NULL,NULL,'index','',322,323),(269,267,NULL,NULL,'delete','',324,325),(271,58,NULL,NULL,'view','',96,97),(272,58,NULL,NULL,'enable_disable','',98,99),(275,31,NULL,NULL,'DynamicDetails','',327,372),(276,275,NULL,NULL,'export_csv','',328,329),(277,275,NULL,NULL,'index','',330,331),(278,275,NULL,NULL,'add','',332,333),(279,275,NULL,NULL,'edit','',334,335),(280,275,NULL,NULL,'delete','',336,337),(281,275,NULL,NULL,'view','',338,339),(282,275,NULL,NULL,'upload_logo','',340,341),(283,275,NULL,NULL,'index_photo','',342,343),(284,275,NULL,NULL,'upload_photo','',344,345),(285,275,NULL,NULL,'delete_photo','',346,347),(286,275,NULL,NULL,'edit_photo','',348,349),(287,275,NULL,NULL,'index_page','',350,351),(288,275,NULL,NULL,'add_page','',352,353),(289,275,NULL,NULL,'edit_page','',354,355),(290,275,NULL,NULL,'delete_page','',356,357),(291,275,NULL,NULL,'index_pair','',358,359),(292,275,NULL,NULL,'add_pair','',360,361),(293,275,NULL,NULL,'edit_pair','',362,363),(294,275,NULL,NULL,'delete_pair','',364,365),(295,275,NULL,NULL,'note_index','',366,367),(296,275,NULL,NULL,'note_add','',368,369),(297,275,NULL,NULL,'note_del','',370,371),(299,45,NULL,NULL,'auto_mac_on_off','',72,73),(300,32,NULL,NULL,'Password Manager Only','Enabling this option will allow the Access Provider ONLY access to the Password Manager applet',389,390),(301,45,NULL,NULL,'view_password','',74,75),(302,31,NULL,NULL,'Actions','',373,380),(303,302,NULL,NULL,'index','',374,375),(304,302,NULL,NULL,'add','',376,377),(305,302,NULL,NULL,'delete','',378,379),(306,35,'Realm',36,'realm_freddy',NULL,416,417);
+INSERT INTO `acos` VALUES (29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,392),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',393,398),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,381),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',382,391),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',394,395),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',396,397),(35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',399,420),(42,32,NULL,NULL,'View users or vouchers not created self','',383,384),(43,31,NULL,NULL,'Vouchers','',3,30),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',31,76),(46,45,NULL,NULL,'index','',32,33),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',77,100),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',78,79),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',80,81),(61,58,NULL,NULL,'edit','',82,83),(62,58,NULL,NULL,'delete','',84,85),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',385,386),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',387,388),(65,58,NULL,NULL,'change_password','',86,87),(67,31,NULL,NULL,'Realms','',101,126),(68,67,NULL,NULL,'index','',102,103),(69,67,NULL,NULL,'add','',104,105),(70,67,NULL,NULL,'edit','',106,107),(71,67,NULL,NULL,'delete','',108,109),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',127,182),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',128,129),(104,102,NULL,NULL,'add','',130,131),(105,102,NULL,NULL,'edit','',132,133),(106,102,NULL,NULL,'delete','',134,135),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',183,202),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',184,185),(109,107,NULL,NULL,'add','',186,187),(110,107,NULL,NULL,'edit','',188,189),(111,107,NULL,NULL,'delete','',190,191),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',136,137),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',192,193),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',194,195),(115,107,NULL,NULL,'note_index','List notes',196,197),(116,107,NULL,NULL,'note_add','',198,199),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',200,201),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',138,139),(119,102,NULL,NULL,'note_index','List notes',140,141),(120,102,NULL,NULL,'note_add','',142,143),(121,102,NULL,NULL,'note_del','',144,145),(122,67,NULL,NULL,'export_csv','',110,111),(123,67,NULL,NULL,'index_for_filter','',112,113),(124,67,NULL,NULL,'note_index','',114,115),(125,67,NULL,NULL,'note_add','',116,117),(126,67,NULL,NULL,'note_del','',118,119),(127,58,NULL,NULL,'export_csv','',88,89),(128,58,NULL,NULL,'note_index','',90,91),(129,58,NULL,NULL,'note_add','',92,93),(130,58,NULL,NULL,'note_del','',94,95),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',203,208),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',204,205),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',206,207),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',209,246),(138,137,NULL,NULL,'index','',210,211),(142,35,'DynamicDetail',3,'SA Coast - Struisbaai',NULL,404,405),(146,35,'Realm',30,'Residence Inn',NULL,406,407),(148,35,'Realm',31,'Holiday Inn',NULL,408,409),(149,43,NULL,NULL,'add','',6,7),(150,43,NULL,NULL,'delete','',8,9),(151,31,NULL,NULL,'Desktop','',247,254),(152,151,NULL,NULL,'desktop_shortcuts','',248,249),(153,151,NULL,NULL,'change_password','',250,251),(154,151,NULL,NULL,'save_wallpaper_selection','',252,253),(155,35,'Realm',32,'Simpsons Home',NULL,410,411),(156,43,NULL,NULL,'view_basic_info','',10,11),(157,43,NULL,NULL,'edit_basic_info','',12,13),(158,43,NULL,NULL,'private_attr_index','',14,15),(159,43,NULL,NULL,'private_attr_add','',16,17),(160,43,NULL,NULL,'private_attr_edit','',18,19),(161,43,NULL,NULL,'private_attr_delete','',20,21),(162,43,NULL,NULL,'change_password','',22,23),(163,43,NULL,NULL,'export_csv','',24,25),(164,43,NULL,NULL,'export_pdf','',26,27),(165,67,NULL,NULL,'index_ap','',120,121),(166,31,NULL,NULL,'Profiles','',255,276),(167,166,NULL,NULL,'index','',256,257),(168,166,NULL,NULL,'index_ap','Dropdown list based on selected Access Provider owner',258,259),(169,166,NULL,NULL,'add','',260,261),(170,166,NULL,NULL,'manage_components','',262,263),(171,166,NULL,NULL,'delete','',264,265),(172,166,NULL,NULL,'index_for_filter','',266,267),(173,166,NULL,NULL,'note_index','',268,269),(174,166,NULL,NULL,'note_add','',270,271),(175,166,NULL,NULL,'note_del','',272,273),(176,31,NULL,NULL,'Radaccts','',277,288),(177,176,NULL,NULL,'export_csv','',278,279),(178,176,NULL,NULL,'index','',280,281),(179,176,NULL,NULL,'delete','',282,283),(180,176,NULL,NULL,'kick_active','',284,285),(181,176,NULL,NULL,'close_open','',286,287),(182,43,NULL,NULL,'delete_accounting_data','',28,29),(184,45,NULL,NULL,'add','',34,35),(185,45,NULL,NULL,'delete','',36,37),(186,45,NULL,NULL,'view_basic_info','',38,39),(187,45,NULL,NULL,'edit_basic_info','',40,41),(188,45,NULL,NULL,'view_personal_info','',42,43),(189,45,NULL,NULL,'edit_personal_info','',44,45),(190,45,NULL,NULL,'private_attr_index','',46,47),(191,45,NULL,NULL,'private_attr_add','',48,49),(192,45,NULL,NULL,'private_attr_edit','',50,51),(193,45,NULL,NULL,'private_attr_delete','',52,53),(194,45,NULL,NULL,'change_password','',54,55),(195,45,NULL,NULL,'enable_disable','',56,57),(196,45,NULL,NULL,'export_csv','',58,59),(197,45,NULL,NULL,'note_index','',60,61),(198,137,NULL,NULL,'add','',212,213),(199,137,NULL,NULL,'delete','',214,215),(200,137,NULL,NULL,'view_basic_info','',216,217),(201,137,NULL,NULL,'edit_basic_info','',218,219),(202,137,NULL,NULL,'private_attr_index','',220,221),(203,137,NULL,NULL,'private_attr_add','',222,223),(204,137,NULL,NULL,'private_attr_edit','',224,225),(205,137,NULL,NULL,'private_attr_delete','',226,227),(206,137,NULL,NULL,'enable_disable','',228,229),(207,137,NULL,NULL,'export_csv','',230,231),(208,137,NULL,NULL,'note_index','',232,233),(209,31,NULL,NULL,'FreeRadius','',289,294),(210,209,NULL,NULL,'test_radius','',290,291),(211,209,NULL,NULL,'index','Displays the stats of the FreeRADIUS server',292,293),(212,31,NULL,NULL,'Radpostauths','',295,304),(213,212,NULL,NULL,'index','',296,297),(214,212,NULL,NULL,'add','',298,299),(215,212,NULL,NULL,'delete','',300,301),(221,212,NULL,NULL,'export_csv','',302,303),(223,67,NULL,NULL,'update_na_realm','',122,123),(224,102,NULL,NULL,'add_direct','',146,147),(225,102,NULL,NULL,'add_open_vpn','',148,149),(226,102,NULL,NULL,'add_dynamic','',150,151),(227,102,NULL,NULL,'add_pptp','',152,153),(228,102,NULL,NULL,'view_openvpn','',154,155),(229,102,NULL,NULL,'edit_openvpn','',156,157),(230,102,NULL,NULL,'view_pptp','',158,159),(231,102,NULL,NULL,'edit_pptp','',160,161),(232,102,NULL,NULL,'view_dynamic','',162,163),(233,102,NULL,NULL,'edit_dynamic','',164,165),(234,102,NULL,NULL,'view_nas','',166,167),(235,102,NULL,NULL,'edit_nas','',168,169),(236,102,NULL,NULL,'view_photo','',170,171),(237,102,NULL,NULL,'upload_photo','',172,173),(238,102,NULL,NULL,'view_map_pref','',174,175),(239,102,NULL,NULL,'edit_map_pref','',176,177),(240,102,NULL,NULL,'delete_map','',178,179),(241,102,NULL,NULL,'edit_map','',180,181),(243,67,NULL,NULL,'view','',124,125),(244,35,'Realm',34,'Residence Inn',NULL,412,413),(245,35,'Realm',35,'College',NULL,414,415),(246,45,NULL,NULL,'restrict_list_of_devices','',62,63),(247,45,NULL,NULL,'edit_tracking','',64,65),(248,45,NULL,NULL,'view_tracking','',66,67),(249,45,NULL,NULL,'note_add','',68,69),(250,45,NULL,NULL,'note_del','',70,71),(251,137,NULL,NULL,'note_add','',234,235),(252,137,NULL,NULL,'note_del','',236,237),(253,137,NULL,NULL,'view_tracking','',238,239),(254,137,NULL,NULL,'edit_tracking','',240,241),(255,137,NULL,NULL,'note_add','',242,243),(256,137,NULL,NULL,'note_del','',244,245),(258,31,NULL,NULL,'ProfileComponents','',305,320),(259,258,NULL,NULL,'index','',306,307),(260,258,NULL,NULL,'add','',308,309),(261,258,NULL,NULL,'edit','',310,311),(262,258,NULL,NULL,'delete','',312,313),(263,258,NULL,NULL,'note_index','',314,315),(264,258,NULL,NULL,'note_add','',316,317),(265,258,NULL,NULL,'note_del','',318,319),(266,166,NULL,NULL,'export_csv','',274,275),(267,31,NULL,NULL,'NaStates','',321,326),(268,267,NULL,NULL,'index','',322,323),(269,267,NULL,NULL,'delete','',324,325),(271,58,NULL,NULL,'view','',96,97),(272,58,NULL,NULL,'enable_disable','',98,99),(275,31,NULL,NULL,'DynamicDetails','',327,372),(276,275,NULL,NULL,'export_csv','',328,329),(277,275,NULL,NULL,'index','',330,331),(278,275,NULL,NULL,'add','',332,333),(279,275,NULL,NULL,'edit','',334,335),(280,275,NULL,NULL,'delete','',336,337),(281,275,NULL,NULL,'view','',338,339),(282,275,NULL,NULL,'upload_logo','',340,341),(283,275,NULL,NULL,'index_photo','',342,343),(284,275,NULL,NULL,'upload_photo','',344,345),(285,275,NULL,NULL,'delete_photo','',346,347),(286,275,NULL,NULL,'edit_photo','',348,349),(287,275,NULL,NULL,'index_page','',350,351),(288,275,NULL,NULL,'add_page','',352,353),(289,275,NULL,NULL,'edit_page','',354,355),(290,275,NULL,NULL,'delete_page','',356,357),(291,275,NULL,NULL,'index_pair','',358,359),(292,275,NULL,NULL,'add_pair','',360,361),(293,275,NULL,NULL,'edit_pair','',362,363),(294,275,NULL,NULL,'delete_pair','',364,365),(295,275,NULL,NULL,'note_index','',366,367),(296,275,NULL,NULL,'note_add','',368,369),(297,275,NULL,NULL,'note_del','',370,371),(299,45,NULL,NULL,'auto_mac_on_off','',72,73),(300,32,NULL,NULL,'Password Manager Only','Enabling this option will allow the Access Provider ONLY access to the Password Manager applet',389,390),(301,45,NULL,NULL,'view_password','',74,75),(302,31,NULL,NULL,'Actions','',373,380),(303,302,NULL,NULL,'index','',374,375),(304,302,NULL,NULL,'add','',376,377),(305,302,NULL,NULL,'delete','',378,379),(306,35,'Realm',36,'realm_freddy',NULL,416,417),(307,35,'DynamicDetail',4,'test',NULL,418,419);
 /*!40000 ALTER TABLE `acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3278 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3289 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `aros` (
 
 LOCK TABLES `aros` WRITE;
 /*!40000 ALTER TABLE `aros` DISABLE KEYS */;
-INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,18),(3117,NULL,'Group',10,NULL,19,190),(3118,3115,'User',44,NULL,2,3),(3154,3117,'User',70,NULL,20,21),(3155,3117,'User',71,NULL,22,23),(3156,3117,'User',72,NULL,24,25),(3157,3117,'User',73,NULL,26,27),(3158,3117,'User',74,NULL,28,29),(3159,3117,'User',75,NULL,30,31),(3160,3117,'User',76,NULL,32,33),(3161,3117,'User',77,NULL,34,35),(3162,3117,'User',78,NULL,36,37),(3165,3117,'User',81,NULL,38,39),(3166,3117,'User',82,NULL,40,41),(3167,3117,'User',83,NULL,42,43),(3168,3117,'User',84,NULL,44,45),(3169,3117,'User',85,NULL,46,47),(3170,3117,'User',86,NULL,48,49),(3171,3117,'User',87,NULL,50,51),(3172,3117,'User',88,NULL,52,53),(3173,3117,'User',89,NULL,54,55),(3175,3117,'User',91,NULL,56,57),(3176,3117,'User',92,NULL,58,59),(3177,3117,'User',93,NULL,60,61),(3178,3117,'User',94,NULL,62,63),(3179,3117,'User',95,NULL,64,65),(3180,3117,'User',96,NULL,66,67),(3181,3117,'User',97,NULL,68,69),(3182,3117,'User',98,NULL,70,71),(3183,3117,'User',99,NULL,72,73),(3184,3117,'User',100,NULL,74,75),(3185,3117,'User',101,NULL,76,77),(3186,3117,'User',102,NULL,78,79),(3187,3117,'User',103,NULL,80,81),(3188,3117,'User',104,NULL,82,83),(3189,3117,'User',105,NULL,84,85),(3190,3117,'User',106,NULL,86,87),(3191,3117,'User',107,NULL,88,89),(3192,3117,'User',108,NULL,90,91),(3193,3117,'User',109,NULL,92,93),(3194,3117,'User',110,NULL,94,95),(3195,3117,'User',111,NULL,96,97),(3196,3117,'User',112,NULL,98,99),(3197,3117,'User',113,NULL,100,101),(3198,3117,'User',114,NULL,102,103),(3199,3117,'User',115,NULL,104,105),(3200,3117,'User',116,NULL,106,107),(3201,3117,'User',117,NULL,108,109),(3202,3117,'User',118,NULL,110,111),(3203,3117,'User',119,NULL,112,113),(3204,3117,'User',120,NULL,114,115),(3205,3117,'User',121,NULL,116,117),(3206,3117,'User',122,NULL,118,119),(3207,3117,'User',123,NULL,120,121),(3208,3117,'User',124,NULL,122,123),(3209,3117,'User',125,NULL,124,125),(3210,3117,'User',126,NULL,126,127),(3211,3117,'User',127,NULL,128,129),(3212,3117,'User',128,NULL,130,131),(3213,3117,'User',129,NULL,132,133),(3214,3117,'User',130,NULL,134,135),(3215,3117,'User',131,NULL,136,137),(3216,3117,'User',132,NULL,138,139),(3217,3117,'User',133,NULL,140,141),(3218,3117,'User',134,NULL,142,143),(3219,3117,'User',135,NULL,144,145),(3220,3117,'User',136,NULL,146,147),(3221,3117,'User',137,NULL,148,149),(3222,3117,'User',138,NULL,150,151),(3223,3117,'User',139,NULL,152,153),(3224,3117,'User',140,NULL,154,155),(3225,3117,'User',141,NULL,156,157),(3226,3117,'User',142,NULL,158,159),(3227,3117,'User',143,NULL,160,161),(3228,3117,'User',144,NULL,162,163),(3229,3117,'User',145,NULL,164,165),(3230,3117,'User',146,NULL,166,167),(3231,3117,'User',147,NULL,168,169),(3232,3117,'User',148,NULL,170,171),(3233,3117,'User',149,NULL,172,173),(3234,3117,'User',150,NULL,174,175),(3235,3117,'User',151,NULL,176,177),(3236,3117,'User',152,NULL,178,179),(3244,NULL,'User',160,NULL,191,192),(3248,3116,'User',163,NULL,6,7),(3254,3116,'User',168,NULL,8,9),(3255,3116,'User',169,NULL,10,11),(3257,3117,'User',171,NULL,180,181),(3263,3117,'User',177,NULL,182,183),(3264,3116,'User',178,NULL,12,13),(3268,3116,'User',182,NULL,14,15),(3273,3117,'User',187,NULL,184,185),(3275,3117,'User',189,NULL,186,187),(3276,3116,'User',190,NULL,16,17),(3277,3117,'User',191,NULL,188,189);
+INSERT INTO `aros` VALUES (3115,NULL,'Group',8,NULL,1,4),(3116,NULL,'Group',9,NULL,5,18),(3117,NULL,'Group',10,NULL,19,188),(3118,3115,'User',44,NULL,2,3),(3154,3117,'User',70,NULL,20,21),(3155,3117,'User',71,NULL,22,23),(3156,3117,'User',72,NULL,24,25),(3157,3117,'User',73,NULL,26,27),(3158,3117,'User',74,NULL,28,29),(3159,3117,'User',75,NULL,30,31),(3160,3117,'User',76,NULL,32,33),(3161,3117,'User',77,NULL,34,35),(3162,3117,'User',78,NULL,36,37),(3165,3117,'User',81,NULL,38,39),(3166,3117,'User',82,NULL,40,41),(3167,3117,'User',83,NULL,42,43),(3168,3117,'User',84,NULL,44,45),(3169,3117,'User',85,NULL,46,47),(3170,3117,'User',86,NULL,48,49),(3171,3117,'User',87,NULL,50,51),(3172,3117,'User',88,NULL,52,53),(3173,3117,'User',89,NULL,54,55),(3175,3117,'User',91,NULL,56,57),(3176,3117,'User',92,NULL,58,59),(3177,3117,'User',93,NULL,60,61),(3178,3117,'User',94,NULL,62,63),(3179,3117,'User',95,NULL,64,65),(3180,3117,'User',96,NULL,66,67),(3181,3117,'User',97,NULL,68,69),(3182,3117,'User',98,NULL,70,71),(3183,3117,'User',99,NULL,72,73),(3184,3117,'User',100,NULL,74,75),(3185,3117,'User',101,NULL,76,77),(3186,3117,'User',102,NULL,78,79),(3187,3117,'User',103,NULL,80,81),(3188,3117,'User',104,NULL,82,83),(3189,3117,'User',105,NULL,84,85),(3190,3117,'User',106,NULL,86,87),(3191,3117,'User',107,NULL,88,89),(3192,3117,'User',108,NULL,90,91),(3193,3117,'User',109,NULL,92,93),(3194,3117,'User',110,NULL,94,95),(3195,3117,'User',111,NULL,96,97),(3196,3117,'User',112,NULL,98,99),(3197,3117,'User',113,NULL,100,101),(3198,3117,'User',114,NULL,102,103),(3199,3117,'User',115,NULL,104,105),(3200,3117,'User',116,NULL,106,107),(3201,3117,'User',117,NULL,108,109),(3202,3117,'User',118,NULL,110,111),(3203,3117,'User',119,NULL,112,113),(3204,3117,'User',120,NULL,114,115),(3205,3117,'User',121,NULL,116,117),(3206,3117,'User',122,NULL,118,119),(3207,3117,'User',123,NULL,120,121),(3208,3117,'User',124,NULL,122,123),(3209,3117,'User',125,NULL,124,125),(3210,3117,'User',126,NULL,126,127),(3211,3117,'User',127,NULL,128,129),(3212,3117,'User',128,NULL,130,131),(3213,3117,'User',129,NULL,132,133),(3214,3117,'User',130,NULL,134,135),(3215,3117,'User',131,NULL,136,137),(3216,3117,'User',132,NULL,138,139),(3217,3117,'User',133,NULL,140,141),(3218,3117,'User',134,NULL,142,143),(3219,3117,'User',135,NULL,144,145),(3220,3117,'User',136,NULL,146,147),(3221,3117,'User',137,NULL,148,149),(3222,3117,'User',138,NULL,150,151),(3223,3117,'User',139,NULL,152,153),(3224,3117,'User',140,NULL,154,155),(3225,3117,'User',141,NULL,156,157),(3226,3117,'User',142,NULL,158,159),(3227,3117,'User',143,NULL,160,161),(3228,3117,'User',144,NULL,162,163),(3229,3117,'User',145,NULL,164,165),(3230,3117,'User',146,NULL,166,167),(3231,3117,'User',147,NULL,168,169),(3232,3117,'User',148,NULL,170,171),(3233,3117,'User',149,NULL,172,173),(3234,3117,'User',150,NULL,174,175),(3235,3117,'User',151,NULL,176,177),(3236,3117,'User',152,NULL,178,179),(3244,NULL,'User',160,NULL,189,190),(3248,3116,'User',163,NULL,6,7),(3254,3116,'User',168,NULL,8,9),(3255,3116,'User',169,NULL,10,11),(3257,3117,'User',171,NULL,180,181),(3263,3117,'User',177,NULL,182,183),(3264,3116,'User',178,NULL,12,13),(3268,3116,'User',182,NULL,14,15),(3273,3117,'User',187,NULL,184,185),(3275,3117,'User',189,NULL,186,187),(3276,3116,'User',190,NULL,16,17);
 /*!40000 ALTER TABLE `aros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,7 +429,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'aa-aa-aa-aa-aa-aa','ll',1,NULL,NULL,NULL,NULL,NULL,187,'2013-09-10 13:20:30','2013-09-10 13:20:30',NULL,NULL);
+INSERT INTO `devices` VALUES (1,'aa-aa-aa-aa-aa-aa','ll',0,NULL,NULL,NULL,NULL,NULL,187,'2013-09-10 13:20:30','2014-01-10 10:58:57',NULL,NULL);
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -489,7 +489,7 @@ CREATE TABLE `dynamic_details` (
   `t_c_check` tinyint(1) NOT NULL DEFAULT '0',
   `t_c_url` char(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -498,7 +498,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-10-21 09:10:38',1,'http://www.radiusdesk.com');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-10-21 09:10:38',1,'http://www.radiusdesk.com'),(4,'test',0,'logo.jpg','','','','','','','','','','',0,0,44,'2014-01-05 18:23:49','2014-01-05 18:23:49',0,'');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -666,7 +666,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -675,7 +675,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (19,29,'Ones',0,1,1,'psk2','radiusdeskwhatwhat','','',0,'2013-12-10 14:21:52','2013-12-31 18:18:54'),(26,29,'Two',0,0,1,'none','','','',0,'2013-12-31 18:20:12','2013-12-31 18:20:12'),(27,29,'Three',0,0,1,'psk2','bigbigbigbig','','',0,'2013-12-31 20:44:07','2013-12-31 20:44:07');
+INSERT INTO `mesh_entries` VALUES (30,29,'Paul',0,0,1,'none','verysecure','','',0,'2014-01-01 08:12:28','2014-01-31 11:10:01'),(31,29,'Simon',0,0,1,'none','','','',0,'2014-01-01 08:12:42','2014-01-31 11:10:20'),(32,29,'RD POSZ',0,0,0,'wep','xdhdkkewioddd','','',0,'2014-01-01 08:18:59','2014-01-01 14:06:32');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -693,7 +693,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -702,7 +702,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (8,8,19,'2013-12-12 13:58:23','2013-12-12 13:58:23');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (18,8,31,'2014-01-01 08:51:40','2014-01-01 08:51:40'),(19,10,32,'2014-01-01 08:51:49','2014-01-01 08:51:49');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -717,13 +717,13 @@ CREATE TABLE `mesh_exits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mesh_id` int(11) DEFAULT NULL,
   `name` varchar(128) NOT NULL,
-  `type` enum('bridge','tagged_bridge','nat_dhcp','captive_portal') DEFAULT 'bridge',
+  `type` enum('bridge','tagged_bridge','nat','captive_portal') DEFAULT 'bridge',
   `auto_detect` tinyint(1) NOT NULL DEFAULT '0',
   `vlan` int(4) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -732,7 +732,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (8,29,'Corporate Guest VLAN','tagged_bridge',1,100,'2013-12-12 09:08:31','2013-12-12 13:58:23'),(9,29,'Corporate Data VLAN','tagged_bridge',1,101,'2013-12-12 09:09:14','2013-12-12 09:09:14'),(10,29,'Point of Sales VLAN','tagged_bridge',1,103,'2013-12-12 09:11:42','2013-12-26 10:35:51');
+INSERT INTO `mesh_exits` VALUES (8,29,'Corporate Guest VLAN','tagged_bridge',1,100,'2013-12-12 09:08:31','2014-01-01 08:51:40'),(9,29,'Corporate Data VLAN','tagged_bridge',1,101,'2013-12-12 09:09:14','2014-02-03 11:50:43'),(10,29,'Point of Sales VLAN','tagged_bridge',1,103,'2013-12-12 09:11:42','2014-01-01 08:51:49');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -791,7 +791,7 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-INSERT INTO `mesh_settings` VALUES (8,29,1,0,0,0,1,5000,20,'2013-12-26 10:12:37','2013-12-26 10:13:32');
+INSERT INTO `mesh_settings` VALUES (8,29,1,0,0,0,1,5000,20,'2013-12-26 10:12:37','2014-01-10 12:59:27');
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1018,7 +1018,7 @@ CREATE TABLE `node_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1027,7 +1027,7 @@ CREATE TABLE `node_mesh_entries` (
 
 LOCK TABLES `node_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `node_mesh_entries` DISABLE KEYS */;
-INSERT INTO `node_mesh_entries` VALUES (10,71,21,'2013-12-31 08:31:04','2013-12-31 08:31:04');
+INSERT INTO `node_mesh_entries` VALUES (11,73,32,'2014-01-01 13:45:21','2014-01-01 13:45:21');
 /*!40000 ALTER TABLE `node_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1045,7 +1045,7 @@ CREATE TABLE `node_mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1086,7 +1086,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (10,29,'verysecure',101,1,6,44,120,600,'2013-12-30 12:01:42','2013-12-31 15:25:47');
+INSERT INTO `node_settings` VALUES (10,29,'verysecure',99,1,11,44,120,600,'2013-12-30 12:01:42','2014-01-24 21:00:42');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1114,7 +1114,7 @@ CREATE TABLE `nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1123,7 +1123,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (71,29,'B-9-Reception','Node @ reception','A8-40-41-13-60-E3','dragino2',91,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2013-12-31 08:31:04','2013-12-31 08:31:04'),(72,29,'B-9-Workshop-1','Node in workshop','A8-40-41-13-60-E4','dragino2',51,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2013-12-31 08:48:31','2013-12-31 08:48:31');
+INSERT INTO `nodes` VALUES (73,29,'Node One','Node @ Reception','A8-40-41-13-60-E3','dragino2',91,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2014-01-01 13:45:21','2014-01-01 13:45:21'),(74,29,'two','two','A8-40-41-13-60-E4','dragino2',50,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2014-01-10 13:00:22','2014-01-10 13:00:22'),(75,29,'openMeshTest1','openMeshTest1','ac-86-74-10-03-08','om2p',50,'10.5.5.3',NULL,0,NULL,NULL,'logo.jpg','2014-01-24 19:47:39','2014-01-24 19:47:39'),(76,29,'openMeshTest2','openMeshTest2','ac-86-74-10-03-10','om2p',50,'10.5.5.4',NULL,0,NULL,NULL,'logo.jpg','2014-01-31 12:33:45','2014-01-31 12:33:45');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1142,7 +1142,7 @@ CREATE TABLE `notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1151,7 +1151,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42');
+INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'This is a note',1,182,'2014-01-07 22:12:23','2014-01-07 22:12:23');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1430,7 +1430,7 @@ CREATE TABLE `radacct` (
 
 LOCK TABLES `radacct` WRITE;
 /*!40000 ALTER TABLE `radacct` DISABLE KEYS */;
-INSERT INTO `radacct` VALUES (1,'1378497101_test','fed983dc1928b849','dvdwalt','','Residence Inn','127.0.0.1','Not in request','','','2013-09-06 21:51:42','2013-09-06 21:51:42',10,'','','',10,10,'','','User-Request','','','',0,0,''),(2,'1380968512_test','102b5af981558dc8','rviljoen','','Residence Inn','127.0.0.1','Not in request','','','2013-10-05 12:21:53','2013-10-05 12:21:53',10,'','','',10,10,'','','User-Request','','','',0,0,'');
+INSERT INTO `radacct` VALUES (2,'1380968512_test','102b5af981558dc8','rviljoen','','Residence Inn','127.0.0.1','Not in request','','','2013-10-05 12:21:53','2013-10-05 12:21:53',10,'','','',10,10,'','','User-Request','','','',0,0,'');
 /*!40000 ALTER TABLE `radacct` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1477,7 +1477,7 @@ CREATE TABLE `radcheck` (
   `value` varchar(253) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=8672 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9007 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1486,7 +1486,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8357,'dvdwalt','Rd-Account-Disabled',':=','0'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8471,'rviljoen','Rd-User-Type',':=','user'),(8472,'rviljoen','Rd-Realm',':=','Residence Inn'),(8473,'rviljoen','User-Profile',':=','Data-Standard-1G'),(8474,'rviljoen','Rd-Cap-Type-Data',':=','hard'),(8475,'rviljoen','Rd-Account-Disabled',':=','0'),(8476,'rviljoen','Rd-Not-Track-Auth',':=','1'),(8481,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(8482,'aa-aa-aa-aa-aa-aa','Rd-User-Type',':=','device'),(8483,'aa-aa-aa-aa-aa-aa','Rd-Realm',':=','Residence Inn'),(8484,'aa-aa-aa-aa-aa-aa','Rd-Device-Owner',':=','dvdwalt'),(8485,'aa-aa-aa-aa-aa-aa','User-Profile',':=','Time-Standard-1Hour'),(8486,'aa-aa-aa-aa-aa-aa','Rd-Cap-Type-Time',':=','hard'),(8487,'aa-aa-aa-aa-aa-aa','Rd-Account-Disabled',':=','0'),(8488,'aa-aa-aa-aa-aa-aa','Rd-Not-Track-Auth',':=','1'),(8531,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(8532,'dvdwalt','Rd-Realm',':=','College'),(8533,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(8573,'rviljoen','Cleartext-Password',':=','koos'),(8574,'rviljoen','Expiration',':=','25 Oct 2013'),(8575,'rviljoen','Rd-Account-Activation-Time',':=','5 Oct 2013'),(8588,'000001','Cleartext-Password',':=','bN3'),(8589,'000001','Rd-User-Type',':=','voucher'),(8590,'000001','Rd-Realm',':=','Residence Inn'),(8591,'000001','User-Profile',':=','Data-Standard-1G'),(8592,'000001','Rd-Voucher',':=','3-00-00-00'),(8597,'000002','Cleartext-Password',':=','wxs'),(8598,'000002','Rd-User-Type',':=','voucher'),(8599,'000002','Rd-Realm',':=','realm_freddy'),(8600,'000002','User-Profile',':=','Time-Standard-1Hour'),(8601,'000003','Cleartext-Password',':=','GzD'),(8602,'000003','Rd-User-Type',':=','voucher'),(8603,'000003','Rd-Realm',':=','realm_freddy'),(8604,'000003','User-Profile',':=','Time-Standard-1Hour'),(8605,'000004','Cleartext-Password',':=','f57'),(8606,'000004','Rd-User-Type',':=','voucher'),(8607,'000004','Rd-Realm',':=','realm_freddy'),(8608,'000004','User-Profile',':=','Time-Standard-1Hour'),(8609,'000005','Cleartext-Password',':=','jf3'),(8610,'000005','Rd-User-Type',':=','voucher'),(8611,'000005','Rd-Realm',':=','realm_freddy'),(8612,'000005','User-Profile',':=','Time-Standard-1Hour'),(8613,'000006','Cleartext-Password',':=','Hp0'),(8614,'000006','Rd-User-Type',':=','voucher'),(8615,'000006','Rd-Realm',':=','realm_freddy'),(8616,'000006','User-Profile',':=','Time-Standard-1Hour'),(8617,'000007','Cleartext-Password',':=','Tx7'),(8618,'000007','Rd-User-Type',':=','voucher'),(8619,'000007','Rd-Realm',':=','realm_freddy'),(8620,'000007','User-Profile',':=','Time-Standard-1Hour'),(8621,'000008','Cleartext-Password',':=','j9T'),(8622,'000008','Rd-User-Type',':=','voucher'),(8623,'000008','Rd-Realm',':=','realm_freddy'),(8624,'000008','User-Profile',':=','Time-Standard-1Hour'),(8625,'000009','Cleartext-Password',':=','vJ3'),(8626,'000009','Rd-User-Type',':=','voucher'),(8627,'000009','Rd-Realm',':=','realm_freddy'),(8628,'000009','User-Profile',':=','Time-Standard-1Hour'),(8629,'000010','Cleartext-Password',':=','16k'),(8630,'000010','Rd-User-Type',':=','voucher'),(8631,'000010','Rd-Realm',':=','realm_freddy'),(8632,'000010','User-Profile',':=','Time-Standard-1Hour'),(8633,'000011','Cleartext-Password',':=','PFs'),(8634,'000011','Rd-User-Type',':=','voucher'),(8635,'000011','Rd-Realm',':=','realm_freddy'),(8636,'000011','User-Profile',':=','Time-Standard-1Hour'),(8637,'000012','Cleartext-Password',':=','hwP'),(8638,'000012','Rd-User-Type',':=','voucher'),(8639,'000012','Rd-Realm',':=','realm_freddy'),(8640,'000012','User-Profile',':=','Time-Standard-1Hour'),(8641,'000013','Cleartext-Password',':=','61N'),(8642,'000013','Rd-User-Type',':=','voucher'),(8643,'000013','Rd-Realm',':=','realm_freddy'),(8644,'000013','User-Profile',':=','Time-Standard-1Hour'),(8646,'000014','Rd-User-Type',':=','voucher'),(8649,'000014','User-Profile',':=','Time-Standard-1Hour'),(8650,'000014','Rd-Realm',':=','realm_freddy'),(8651,'000014','Cleartext-Password',':=','gonow'),(8652,'koos','Cleartext-Password',':=','koos'),(8653,'koos','Rd-User-Type',':=','user'),(8658,'koos','Rd-Not-Track-Auth',':=','1'),(8660,'koos','Rd-Account-Disabled',':=','0'),(8664,'koos','User-Profile',':=','Data-Standard-1G'),(8665,'koos','Rd-Realm',':=','realm_freddy'),(8666,'koos','Rd-Cap-Type-Data',':=','hard'),(8667,'000015','Cleartext-Password',':=','z3s'),(8668,'000015','Rd-User-Type',':=','voucher'),(8669,'000015','Rd-Realm',':=','College'),(8670,'000015','User-Profile',':=','Time-Standard-1Hour'),(8671,'000015','Rd-Voucher',':=','1-00-00-00');
+INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8471,'rviljoen','Rd-User-Type',':=','user'),(8472,'rviljoen','Rd-Realm',':=','Residence Inn'),(8473,'rviljoen','User-Profile',':=','Data-Standard-1G'),(8474,'rviljoen','Rd-Cap-Type-Data',':=','hard'),(8475,'rviljoen','Rd-Account-Disabled',':=','0'),(8476,'rviljoen','Rd-Not-Track-Auth',':=','1'),(8482,'aa-aa-aa-aa-aa-aa','Rd-User-Type',':=','device'),(8483,'aa-aa-aa-aa-aa-aa','Rd-Realm',':=','Residence Inn'),(8484,'aa-aa-aa-aa-aa-aa','Rd-Device-Owner',':=','dvdwalt'),(8485,'aa-aa-aa-aa-aa-aa','User-Profile',':=','Time-Standard-1Hour'),(8486,'aa-aa-aa-aa-aa-aa','Rd-Cap-Type-Time',':=','hard'),(8488,'aa-aa-aa-aa-aa-aa','Rd-Not-Track-Auth',':=','1'),(8531,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(8532,'dvdwalt','Rd-Realm',':=','College'),(8533,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(8740,'000032','Cleartext-Password',':=','G1P'),(8741,'000032','Rd-User-Type',':=','voucher'),(8742,'000032','Rd-Realm',':=','Residence Inn'),(8743,'000032','User-Profile',':=','Time-Standard-1Hour'),(8756,'000036','Cleartext-Password',':=','Fc1'),(8757,'000036','Rd-User-Type',':=','voucher'),(8758,'000036','Rd-Realm',':=','Residence Inn'),(8759,'000036','User-Profile',':=','Time-Standard-1Hour'),(8816,'000051','Cleartext-Password',':=','R6d'),(8817,'000051','Rd-User-Type',':=','voucher'),(8818,'000051','Rd-Realm',':=','College'),(8819,'000051','User-Profile',':=','Time-Standard-1Hour'),(8840,'000052','Cleartext-Password',':=','Jcw'),(8841,'000052','Rd-User-Type',':=','voucher'),(8842,'000052','Rd-Realm',':=','Residence Inn'),(8843,'000052','User-Profile',':=','Time-Standard-1Hour'),(8845,'000053','Cleartext-Password',':=','0pd'),(8846,'000053','Rd-User-Type',':=','voucher'),(8847,'000053','Rd-Realm',':=','Residence Inn'),(8848,'000053','User-Profile',':=','Time-Standard-1Hour'),(8849,'000054','Cleartext-Password',':=','hcf'),(8850,'000054','Rd-User-Type',':=','voucher'),(8851,'000054','Rd-Realm',':=','Residence Inn'),(8852,'000054','User-Profile',':=','Time-Standard-1Hour'),(8853,'000055','Cleartext-Password',':=','pwz'),(8854,'000055','Rd-User-Type',':=','voucher'),(8855,'000055','Rd-Realm',':=','Residence Inn'),(8856,'000055','User-Profile',':=','Time-Standard-1Hour'),(8857,'000056','Cleartext-Password',':=','F4t'),(8858,'000056','Rd-User-Type',':=','voucher'),(8859,'000056','Rd-Realm',':=','Residence Inn'),(8860,'000056','User-Profile',':=','Time-Standard-1Hour'),(8861,'000057','Cleartext-Password',':=','w1t'),(8862,'000057','Rd-User-Type',':=','voucher'),(8863,'000057','Rd-Realm',':=','Residence Inn'),(8864,'000057','User-Profile',':=','Time-Standard-1Hour'),(8865,'000058','Cleartext-Password',':=','3w0'),(8866,'000058','Rd-User-Type',':=','voucher'),(8867,'000058','Rd-Realm',':=','Residence Inn'),(8868,'000058','User-Profile',':=','Time-Standard-1Hour'),(8869,'000059','Cleartext-Password',':=','dxh'),(8870,'000059','Rd-User-Type',':=','voucher'),(8871,'000059','Rd-Realm',':=','Residence Inn'),(8872,'000059','User-Profile',':=','Time-Standard-1Hour'),(8873,'000060','Cleartext-Password',':=','05w'),(8874,'000060','Rd-User-Type',':=','voucher'),(8875,'000060','Rd-Realm',':=','Residence Inn'),(8876,'000060','User-Profile',':=','Time-Standard-1Hour'),(8877,'000061','Cleartext-Password',':=','Q81'),(8878,'000061','Rd-User-Type',':=','voucher'),(8879,'000061','Rd-Realm',':=','Residence Inn'),(8880,'000061','User-Profile',':=','Time-Standard-1Hour'),(8881,'000062','Cleartext-Password',':=','Dg4'),(8882,'000062','Rd-User-Type',':=','voucher'),(8883,'000062','Rd-Realm',':=','Residence Inn'),(8884,'000062','User-Profile',':=','Time-Standard-1Hour'),(8885,'000062','Rd-Device-Owner',':=','Replace this value'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(8911,'aa-aa-aa-aa-aa-aa','Rd-Account-Disabled',':=','1'),(8918,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(8922,'rviljoen','Cleartext-Password',':=','rviljoen'),(8923,'rviljoen','Expiration',':=','21 Jan 2014'),(8924,'rviljoen','Rd-Account-Activation-Time',':=','10 Jan 2014');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1568,7 +1568,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1577,7 +1577,6 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
-INSERT INTO `radpostauth` VALUES (1,'000014','realm_freddy','gonow','Access-Accept','127.0.0.1','2013-10-26 17:48:35'),(2,'000014','realm_freddy','gonow','Access-Accept','127.0.0.1','2013-10-26 17:48:36');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1698,7 +1697,7 @@ CREATE TABLE `realms` (
 
 LOCK TABLES `realms` WRITE;
 /*!40000 ALTER TABLE `realms` DISABLE KEYS */;
-INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','','','','','','','','','','',0,0,44,'2013-08-24 22:18:31','2013-08-24 22:19:52'),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47'),(36,'realm_freddy',1,'logo.jpg','','','','','','','','','','',0,0,190,'2013-10-25 21:15:54','2013-10-25 21:15:54');
+INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','','','','','','','','','','',0,0,44,'2013-08-24 22:18:31','2014-01-08 15:20:40'),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47'),(36,'realm_freddy',1,'logo.jpg','','','','','','','','','','',0,0,190,'2013-10-25 21:15:54','2013-10-25 21:15:54');
 /*!40000 ALTER TABLE `realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1854,7 +1853,7 @@ CREATE TABLE `user_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1863,6 +1862,7 @@ CREATE TABLE `user_notes` (
 
 LOCK TABLES `user_notes` WRITE;
 /*!40000 ALTER TABLE `user_notes` DISABLE KEYS */;
+INSERT INTO `user_notes` VALUES (1,182,77,'2014-01-07 22:12:23','2014-01-07 22:12:23');
 /*!40000 ALTER TABLE `user_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1890,7 +1890,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','1.jpg','2013-04-06 13:51:50','2013-12-10 10:07:55'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','14.jpg','2013-04-06 13:51:50','2014-01-19 12:54:12'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1963,7 +1963,7 @@ CREATE TABLE `users` (
   `perc_time_used` int(6) DEFAULT NULL,
   `perc_data_used` int(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1972,7 +1972,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,12,'2012-12-10 13:14:13','2013-10-21 10:22:54',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2013-10-21 10:22:54',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','522a3240-d3dc-4d55-b807-3b3903662c24','','','','','','sql',1,0,'2013-10-05 21:06:40','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,6,7,'2013-09-04 10:51:36','2013-10-21 10:22:54',NULL,NULL),(189,'rviljoen','d130baf00734e6ea7d6d9333742d11d4f24d7db7','524feaae-a50c-421e-bb36-0ac403662c24','','','','','','sql',1,0,'2013-10-05 12:21:53','2013-11-11 08:44:59','127.0.0.1','127.0.0.1','Your account has expired=2C rviljoen=0D=0A',4,10,4,182,3,4,'2013-09-06 17:55:54','2013-10-21 10:22:54',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,8,11,'2013-10-25 11:22:19','2013-10-26 20:17:48',NULL,NULL),(191,'koos','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c010b-ea44-4dca-ade0-052e03662c24','','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,10,4,190,9,10,'2013-10-26 19:51:07','2013-10-26 19:54:16',NULL,NULL);
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-02-01 13:33:46',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2014-02-01 13:33:46',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','52cfdc88-0388-44e3-b7b5-3bcfc0a80167','','','','','','sql',1,0,'2014-01-10 09:52:12','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,6,7,'2013-09-04 10:51:36','2014-02-01 13:33:46',NULL,NULL),(189,'rviljoen','f0fe3454c17b15bcd222188023ecb9fcf1d96b51','52cfdc98-e380-40a6-a67e-3bd3c0a80167','','','','','','sql',1,0,'2013-10-05 12:21:53','2014-01-09 09:36:05','127.0.0.1','127.0.0.1','Your account has expired=2C rviljoen=0D=0A',4,10,4,182,3,4,'2013-09-06 17:55:54','2014-02-01 13:33:46',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,8,9,'2013-10-25 11:22:19','2014-02-01 13:33:46',NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1999,7 +1999,7 @@ CREATE TABLE `vouchers` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2008,7 +2008,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (4,'000001','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,182,'2013-10-11 11:03:15','2013-10-11 11:03:15'),(6,'000002','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:24','2013-10-26 19:47:24'),(7,'000003','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:24','2013-10-26 19:47:24'),(8,'000004','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(9,'000005','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(10,'000006','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(11,'000007','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(12,'000008','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(13,'000009','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(14,'000010','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(15,'000011','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(16,'000012','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(17,'000013','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:25'),(18,'000014','test','new',NULL,NULL,'2013-10-26 19:48:37',NULL,'127.0.0.1',NULL,NULL,190,'2013-10-26 19:47:25','2013-10-26 19:47:38'),(19,'000015','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2013-11-11 11:04:51','2013-11-11 11:04:51');
+INSERT INTO `vouchers` VALUES (36,'000032','TT','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-05 23:01:03','2014-01-05 23:01:03'),(40,'000036','TT','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-05 23:01:03','2014-01-05 23:01:03'),(55,'000051','test','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 14:32:36','2014-01-06 14:32:36'),(61,'000052','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 14:41:58','2014-01-06 14:41:58'),(62,'000053','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:23','2014-01-06 21:58:23'),(63,'000054','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:23','2014-01-06 21:58:23'),(64,'000055','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:23','2014-01-06 21:58:23'),(65,'000056','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:23','2014-01-06 21:58:23'),(66,'000057','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24'),(67,'000058','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24'),(68,'000059','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24'),(69,'000060','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24'),(70,'000061','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24'),(71,'000062','b','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-01-06 21:58:24','2014-01-06 21:58:24');
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2021,4 +2021,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-12-31 21:06:22
+-- Dump completed on 2014-02-03 11:54:19
