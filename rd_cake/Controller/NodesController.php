@@ -14,6 +14,7 @@ class NodesController extends AppController {
         if(isset($this->request->query['mac'])){
 
             $mac    = $this->request->query['mac'];
+           // $mac    = 'AC-86-74-10-03-10'; //manual override
             $node   = ClassRegistry::init('Node');
             $mesh   = ClassRegistry::init('Mesh');
             $node->contain();
@@ -28,7 +29,14 @@ class NodesController extends AppController {
 
                 $m['NodeDetail'] = $q_r['Node'];
                 //print_r($m);
-                $json = $this->_build_json($m);
+                $gw = false;
+                if(isset($this->request->query['gateway'])){
+                    if($this->request->query['gateway'] == 'true'){
+                        $gw = true;
+                    }
+                }
+                
+                $json = $this->_build_json($m,$gw);
                 $this->set(array(
                     'config_settings'   => $json['config_settings'],
                     'timestamp'         => $json['timestamp'],
@@ -56,7 +64,7 @@ class NodesController extends AppController {
     }
 
 
-    private function  _build_json($mesh){
+    private function  _build_json($mesh,$gateway = false){
 
         //Basic structure
         $json = array();
@@ -66,7 +74,7 @@ class NodesController extends AppController {
         $json['config_settings']['network']     = array();
 
         //============ Network ================
-        $net_return         = $this->_build_network($mesh);
+        $net_return         = $this->_build_network($mesh,$gateway);
         $json_network       = $net_return[0];
         $json['config_settings']['network'] = $json_network;
 
@@ -74,13 +82,19 @@ class NodesController extends AppController {
         $entry_data         = $net_return[1];
         $json_wireless      = $this->_build_wireless($mesh,$entry_data);
         $json['config_settings']['wireless'] = $json_wireless;
-        
+
+        //========== Gateway or NOT? ======
+        if($gateway){   
+            $json['config_settings']['gateways'] =$net_return[2];
+        }
+
         return $json; 
     }
 
-    private function _build_network($mesh){
+    private function _build_network($mesh,$gateway = false){
 
         $network = array();
+        $nat_data= array();
         //loopback if
         array_push( $network,
             array(
@@ -151,6 +165,7 @@ class NodesController extends AppController {
             $type                   = $me['type'];
             $vlan                   = $me['vlan'];
 
+            //This is used to fetch info eventually about the entry points
             if(count($me['MeshExitMeshEntry']) >= 0){
                 $has_entries_attached = true;
                 foreach($me['MeshExitMeshEntry'] as $entry){
@@ -159,11 +174,59 @@ class NodesController extends AppController {
             }
             
             if($has_entries_attached){
+
+                //print($type);
                 //If type == tagged_bridge and it is a gateway; bridge it with a tagged ethernet IF
-                if($type == 'tagged_bridge'){
+                if(($type == 'tagged_bridge')&&($gateway)){
                     $interfaces =  "bat0.".$start_number." eth0.".$vlan." eth1.".$vlan;
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge"
+                        ))
+                    );
+
+                }elseif($type == 'nat'){
+                    if($gateway==true){
+                        $interfaces =  "bat0.".$start_number;
+                        array_push($network,
+                            array(
+                                "interface"    => "$if_name",
+                                "options"   => array(
+                                    "ifname"    => $interfaces,
+                                    "type"      => "bridge",
+                                    'ipaddr'    =>  "10.200.".(100+$start_number).".1",
+                                    'netmask'   =>  "255.255.255.0",
+                                    'proto'     => 'static'
+                            ))
+                        );
+                        //Push the nat data
+                        array_push($nat_data,$if_name);
+
+                    }else{
+                        $interfaces =  "bat0.".$start_number;
+                        array_push($network,
+                            array(
+                                "interface"    => "$if_name",
+                                "options"   => array(
+                                    "ifname"    => $interfaces,
+                                    "type"      => "bridge" 
+                            ))
+                        );
+                    }
+
                 }else{
                     $interfaces =  "bat0.".$start_number;
+                    array_push($network,
+                    array(
+                        "interface"    => "$if_name",
+                        "options"   => array(
+                            "ifname"    => $interfaces,
+                            "type"      => "bridge"
+                       )
+                    ));
                 }
                 array_push($network,
                     array(
@@ -178,7 +241,7 @@ class NodesController extends AppController {
         }
         //print_r($entry_point_data);
 
-        return array($network,$entry_point_data);
+        return array($network,$entry_point_data,$nat_data);
     }
 
 
@@ -228,7 +291,7 @@ class NodesController extends AppController {
                         "network"       => $one,
                         "ssid"          => "meshdesk_config",
                         "key"           => "radiusdesk",
-                        "hidden"        => "1"
+                        "hidden"        => "0"
                    )
                 ));
 
