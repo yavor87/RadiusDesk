@@ -1,0 +1,31 @@
+
+config fallback
+	option ap 'md_admin'
+	option key 'meshdesk'
+	option timeout '240'
+	option gaan 'groot'
+
+config internet 'internet1'
+	option dns 'radiusdev.webage.co'
+	option ip '192.168.99.1'
+	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
+	option protocol 'http'
+
+config wifi-client 'wifi_client'
+	option ssid 'linksys'
+	option encryption 'psk2'
+	option device 'radio0'
+	option mode 'sta'
+	option network 'client'
+	option key 'lekkerlekker'
+
+config settings 'settings'
+	option lan_up_file '/tmp/lan_up'
+	option lan_down_file '/tmp/lan_down'
+	option wifi_up_file '/tmp/wifi_up'
+	option wifi_down_file '/tmp/wifi_down'
+	option lan_timeout '20'
+	option wifi_timeout '20'
+	option config_file '/etc/MESHdesk/configs/current.json'
+	option previous_config_file '/etc/MESHdesk/configs/previous.json'
+
