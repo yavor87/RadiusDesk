@@ -291,7 +291,7 @@ class NodesController extends AppController {
                         "network"       => $one,
                         "ssid"          => "meshdesk_config",
                         "key"           => "radiusdesk",
-                        "hidden"        => "0"
+                        "hidden"        => "1"
                    )
                 ));
 
