@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+# ============================================
+# == Coova Chilli Startup Script =============
+# == Hardware: Ubiquity PicoStation2 =========
+# == OpenWRT version 12.09 ===================
+# == Date 2013-07-03 =========================
+# ============================================
+ 
+START=10
+STOP=10
+DIR='/etc/MESHdesk'
+
+start() {
+    	echo start
+    	cd $DIR	
+    	./a.lua &
+}
+
+stop() {
+    echo stop
+    killall /etc/MESHdesk/a.lua
+}

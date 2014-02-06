@@ -1,0 +1,16 @@
+
+config interface 'loopback'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+	option ifname 'lo'
+	option type 'bridge'
+
+config interface 'lan'
+	option ifname 'eth0 eth1'
+	option type 'bridge'
+	option proto 'dhcp'
+
+config interface 'client'
+        option proto 'dhcp' 
+        
