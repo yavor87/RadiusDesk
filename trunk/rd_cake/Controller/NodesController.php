@@ -166,17 +166,23 @@ class NodesController extends AppController {
             $vlan                   = $me['vlan'];
 
             //This is used to fetch info eventually about the entry points
-            if(count($me['MeshExitMeshEntry']) >= 0){
+            if(count($me['MeshExitMeshEntry']) > 0){
                 $has_entries_attached = true;
                 foreach($me['MeshExitMeshEntry'] as $entry){
-                    array_push($entry_point_data,array('network' => $if_name,'entry_id' => $entry['mesh_entry_id']));
+                    if(($type == 'bridge')&&($gateway)){ //The gateway needs the entry points to be bridged to the LAN
+                        array_push($entry_point_data,array('network' => 'lan','entry_id' => $entry['mesh_entry_id']));
+                    }else{
+                        array_push($entry_point_data,array('network' => $if_name,'entry_id' => $entry['mesh_entry_id']));
+                    }
                 }
             }
             
-            if($has_entries_attached){
+            if($has_entries_attached == true){
 
-                //print($type);
-                //If type == tagged_bridge and it is a gateway; bridge it with a tagged ethernet IF
+                //=======================================
+                //========= GATEWAY NODES ===============
+                //=======================================
+
                 if(($type == 'tagged_bridge')&&($gateway)){
                     $interfaces =  "bat0.".$start_number." eth0.".$vlan." eth1.".$vlan;
                     array_push($network,
@@ -187,59 +193,60 @@ class NodesController extends AppController {
                                 "type"      => "bridge"
                         ))
                     );
+                    $start_number++;
+                    continue;   //We don't car about the other if's
+                }
 
-                }elseif($type == 'nat'){
-                    if($gateway==true){
-                        $interfaces =  "bat0.".$start_number;
-                        array_push($network,
-                            array(
-                                "interface"    => "$if_name",
-                                "options"   => array(
-                                    "ifname"    => $interfaces,
-                                    "type"      => "bridge",
-                                    'ipaddr'    =>  "10.200.".(100+$start_number).".1",
-                                    'netmask'   =>  "255.255.255.0",
-                                    'proto'     => 'static'
-                            ))
-                        );
-                        //Push the nat data
-                        array_push($nat_data,$if_name);
+                if(($type == 'nat')&&($gateway)){
 
-                    }else{
-                        $interfaces =  "bat0.".$start_number;
-                        array_push($network,
-                            array(
-                                "interface"    => "$if_name",
-                                "options"   => array(
-                                    "ifname"    => $interfaces,
-                                    "type"      => "bridge" 
-                            ))
-                        );
-                    }
-
-                }else{
                     $interfaces =  "bat0.".$start_number;
                     array_push($network,
-                    array(
-                        "interface"    => "$if_name",
-                        "options"   => array(
-                            "ifname"    => $interfaces,
-                            "type"      => "bridge"
-                       )
-                    ));
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge",
+                                'ipaddr'    =>  "10.200.".(100+$start_number).".1",
+                                'netmask'   =>  "255.255.255.0",
+                                'proto'     => 'static'
+                        ))
+                    );
+                    //Push the nat data
+                    array_push($nat_data,$if_name);
+                    $start_number++;
+                    continue; //We dont care about the other if's
                 }
-                array_push($network,
-                    array(
-                        "interface"    => "$if_name",
-                        "options"   => array(
-                            "ifname"    => $interfaces,
-                            "type"      => "bridge"
-                       )
-                    ));
-                $start_number++;
+
+                if(($type=='bridge')&&($gateway)){
+                    $current_interfaces = $network[1]['options']['ifname'];
+                    $interfaces =  "bat0.".$start_number;
+                    $network[1]['options']['ifname'] = $current_interfaces." ".$interfaces;
+                    $start_number++;
+                    continue; //We dont care about the other if's
+                }
+
+
+                //=======================================
+                //==== STANDARD NODES ===================
+                //=======================================
+
+                if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')){
+                    $interfaces =  "bat0.".$start_number;
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge" 
+                        ))
+                    );
+                    $start_number++;
+                    continue; //We dont care about the other if's
+                }
+
             }
         }
-        //print_r($entry_point_data);
+       // print_r($network);
 
         return array($network,$entry_point_data,$nat_data);
     }
