@@ -24,7 +24,15 @@ class NodesController extends AppController {
                // print_r($q_r);
                 $mesh_id        = $q_r['Node']['mesh_id'];
                 $this->NodeId   = $q_r['Node']['id'];
-                $mesh->contain('Node.NodeMeshEntry','Node.NodeMeshExit','MeshExit.MeshExitMeshEntry','MeshEntry','NodeSetting','MeshSetting');
+                $mesh->contain(
+                    'Node.NodeMeshEntry',
+                    'Node.NodeMeshExit',
+                    'MeshExit.MeshExitMeshEntry',
+                    'MeshEntry',
+                    'NodeSetting',
+                    'MeshSetting',
+                    'MeshExit.MeshExitCaptivePortal'
+                );
                 $m          = $mesh->findById($mesh_id);
 
                 $m['NodeDetail'] = $q_r['Node'];
@@ -95,6 +103,7 @@ class NodesController extends AppController {
 
         $network = array();
         $nat_data= array();
+        $captive_portal_data = array();
         //loopback if
         array_push( $network,
             array(
@@ -155,6 +164,10 @@ class NodesController extends AppController {
         //We create a data structure which will be used to add the entry points and bridge them with
         //The correct network defined here
         $entry_point_data = array();
+
+        
+
+     //   print_r($mesh['MeshExit']);
 
         //Add the auto-attach entry points
         foreach($mesh['MeshExit'] as $me){
@@ -230,7 +243,12 @@ class NodesController extends AppController {
                 //==== STANDARD NODES ===================
                 //=======================================
 
-                if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')){
+                if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')||($type =='captive_portal')){
+                    if($type =='captive_portal'){
+                        $a = $me['MeshExitCaptivePortal'];
+                        $a['hslan_if'] = $if_name;
+                        print_r($a);
+                    }
                     $interfaces =  "bat0.".$start_number;
                     array_push($network,
                         array(
@@ -248,7 +266,7 @@ class NodesController extends AppController {
         }
        // print_r($network);
 
-        return array($network,$entry_point_data,$nat_data);
+        return array($network,$entry_point_data,$nat_data,$captive_portal_data);
     }
 
 

@@ -773,13 +773,33 @@ class MeshesController extends AppController {
         }
 
        // print_r($this->request->data);
-      //  exit;
+       // exit;
 
         $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
         $exit           = ClassRegistry::init('MeshExit'); 
         $exit->create();
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
+
+            //===== Captive Portal ==========
+            if($this->request->data['type'] == 'captive_portal'){
+
+                $this->request->data['mesh_exit_id'] = $new_id;
+
+                $captive_portal = ClassRegistry::init('MeshExitCaptivePortal');
+                $captive_portal->create();
+                if(!($captive_portal->save($this->request->data))){
+                    $exit->delete($new_id, true); //Remove the newly created exit point since the captive portal add failed
+                    $this->set(array(
+                        'errors'    => $captive_portal->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                    return;
+                }
+            }
+            //==== End of Captive Portal ====
 
             //Add the entry points
             $count      = 0;
@@ -831,6 +851,34 @@ class MeshesController extends AppController {
 
             $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
             $exit           = ClassRegistry::init('MeshExit');
+
+
+            //===== Captive Portal ==========
+            //== First see if we can save the captive portal data ====
+            if($this->request->data['type'] == 'captive_portal'){
+
+                $captive_portal = ClassRegistry::init('MeshExitCaptivePortal');
+                $cp_data        = $this->request->data;
+                $mesh_exit_id   = $this->request->data['id'];
+                $q_r            = $captive_portal->find(
+                                    'first',array('conditions' => array('MeshExitCaptivePortal.mesh_exit_id' => $mesh_exit_id)));               
+                if($q_r){
+                    $cp_id = $q_r['MeshExitCaptivePortal']['id'];
+                    $cp_data['id'] = $cp_id;
+                    $captive_portal->id = $cp_id;
+                   // print_r($cp_data);
+                    if(!($captive_portal->save($cp_data))){
+                        $this->set(array(
+                            'errors'    => $captive_portal->validationErrors,
+                            'success'   => false,
+                            'message'   => array('message' => __('Could not create item')),
+                            '_serialize' => array('errors','success','message')
+                        ));
+                        return;
+                    }
+                }
+            }
+            //==== End of Captive Portal ====
 
             // If the form data can be validated and saved...
             if ($exit->save($this->request->data)) {
@@ -884,7 +932,7 @@ class MeshesController extends AppController {
         }
 
         $exit = ClassRegistry::init('MeshExit');
-        $exit->contain('MeshExitMeshEntry');
+        $exit->contain('MeshExitMeshEntry','MeshExitCaptivePortal');
 
         $id    = $this->request->query['exit_id'];
         $q_r   = $exit->findById($id);
@@ -895,10 +943,23 @@ class MeshesController extends AppController {
             array_push($q_r['MeshExit']['entry_points'],$i['id']);
         }
 
+        if($q_r['MeshExitCaptivePortal']){
+            $q_r['MeshExit']['radius_1']        = $q_r['MeshExitCaptivePortal']['0']['radius_1'];
+            $q_r['MeshExit']['radius_2']        = $q_r['MeshExitCaptivePortal']['0']['radius_2'];
+            $q_r['MeshExit']['radius_secret']   = $q_r['MeshExitCaptivePortal']['0']['radius_secret'];
+            $q_r['MeshExit']['radius_nasid']    = $q_r['MeshExitCaptivePortal']['0']['radius_nasid'];
+            $q_r['MeshExit']['uam_url']         = $q_r['MeshExitCaptivePortal']['0']['uam_url'];
+            $q_r['MeshExit']['uam_secret']      = $q_r['MeshExitCaptivePortal']['0']['uam_secret'];
+            $q_r['MeshExit']['walled_garden']   = $q_r['MeshExitCaptivePortal']['0']['walled_garden'];
+            $q_r['MeshExit']['swap_octets']     = $q_r['MeshExitCaptivePortal']['0']['swap_octets'];
+        }
+
+        $data = $q_r['MeshExit'];
+
       //  print_r($q_r);
 
         $this->set(array(
-            'data'     => $q_r['MeshExit'],
+            'data'     => $data,
             'success'   => true,
             '_serialize'=> array('success', 'data')
         ));
