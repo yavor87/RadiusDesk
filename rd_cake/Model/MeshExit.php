@@ -16,6 +16,12 @@ class MeshExit extends AppModel {
                 'dependent'     => true   
             )
     );
+
+    public $hasOne = array(
+            'MeshExitCaptivePortal' => array(
+                'dependent'     => true
+            )
+    );
 }
 
 ?>
