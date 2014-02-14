@@ -93,7 +93,8 @@ class NodesController extends AppController {
 
         //========== Gateway or NOT? ======
         if($gateway){   
-            $json['config_settings']['gateways'] =$net_return[2];
+            $json['config_settings']['gateways']        = $net_return[2]; //Gateways
+            $json['config_settings']['captive_portals'] = $net_return[3]; //Captive portals
         }
 
         return $json; 
@@ -133,7 +134,7 @@ class NodesController extends AppController {
             array(
                 "interface"    => "mesh",
                 "options"   => array(
-                    "ifname"    => "wlan0",
+                    "ifname"    => "mesh0",
                     "mtu"       => "1544",
                     "proto"     => "batadv",
                     "mesh"      => "bat0"
@@ -238,17 +239,36 @@ class NodesController extends AppController {
                     continue; //We dont care about the other if's
                 }
 
+                if(($type == 'captive_portal')&&($gateway)){
+
+                    //Add the captive portal's detail
+                    if($type =='captive_portal'){
+                        $a = $me['MeshExitCaptivePortal'];
+                        $a['hslan_if'] = 'br-'.$if_name;
+                        $a['network']  = $if_name;
+                        array_push($captive_portal_data,$a);             
+                    }
+
+                    $interfaces =  "bat0.".$start_number;
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge" 
+                        ))
+                    );
+                    $start_number++;
+                    continue; //We dont care about the other if's
+
+                }
+
 
                 //=======================================
                 //==== STANDARD NODES ===================
                 //=======================================
 
                 if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')||($type =='captive_portal')){
-                    if($type =='captive_portal'){
-                        $a = $me['MeshExitCaptivePortal'];
-                        $a['hslan_if'] = $if_name;
-                        print_r($a);
-                    }
                     $interfaces =  "bat0.".$start_number;
                     array_push($network,
                         array(
@@ -264,7 +284,6 @@ class NodesController extends AppController {
 
             }
         }
-       // print_r($network);
 
         return array($network,$entry_point_data,$nat_data,$captive_portal_data);
     }
@@ -297,6 +316,7 @@ class NodesController extends AppController {
                     "wifi-iface"   => "$zero",
                     "options"       => array(
                         "device"        => "radio0",
+                        "ifname"        => "mesh0",
                         "network"       => "mesh",
                         "mode"          => "adhoc",
                         "ssid"          => $ssid,
@@ -311,6 +331,7 @@ class NodesController extends AppController {
                     "wifi-iface"    => "$one",
                     "options"   => array(
                         "device"        => "radio0",
+                        "ifname"        => "$one"."0",
                         "mode"          => "ap",
                         "encryption"    => "psk-mixed",
                         "network"       => $one,
@@ -338,6 +359,7 @@ class NodesController extends AppController {
                                 "wifi-iface"    => "$if_name",
                                 "options"   => array(
                                     "device"        => "radio0",
+                                    "ifname"        => "$if_name"."0",
                                     "mode"          => "ap",
                                     "network"       => $epd['network'],
                                     "encryption"    => $me['encryption'],
@@ -368,6 +390,7 @@ class NodesController extends AppController {
                                                 "wifi-iface"    => "$if_name",
                                                 "options"   => array(
                                                     "device"        => "radio0",
+                                                    "ifname"        => "$if_name"."0",
                                                     "mode"          => "ap",
                                                     "network"       => $epd['network'],
                                                     "encryption"    => $me['encryption'],
