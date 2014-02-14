@@ -944,14 +944,14 @@ class MeshesController extends AppController {
         }
 
         if($q_r['MeshExitCaptivePortal']){
-            $q_r['MeshExit']['radius_1']        = $q_r['MeshExitCaptivePortal']['0']['radius_1'];
-            $q_r['MeshExit']['radius_2']        = $q_r['MeshExitCaptivePortal']['0']['radius_2'];
-            $q_r['MeshExit']['radius_secret']   = $q_r['MeshExitCaptivePortal']['0']['radius_secret'];
-            $q_r['MeshExit']['radius_nasid']    = $q_r['MeshExitCaptivePortal']['0']['radius_nasid'];
-            $q_r['MeshExit']['uam_url']         = $q_r['MeshExitCaptivePortal']['0']['uam_url'];
-            $q_r['MeshExit']['uam_secret']      = $q_r['MeshExitCaptivePortal']['0']['uam_secret'];
-            $q_r['MeshExit']['walled_garden']   = $q_r['MeshExitCaptivePortal']['0']['walled_garden'];
-            $q_r['MeshExit']['swap_octets']     = $q_r['MeshExitCaptivePortal']['0']['swap_octets'];
+            $q_r['MeshExit']['radius_1']        = $q_r['MeshExitCaptivePortal']['radius_1'];
+            $q_r['MeshExit']['radius_2']        = $q_r['MeshExitCaptivePortal']['radius_2'];
+            $q_r['MeshExit']['radius_secret']   = $q_r['MeshExitCaptivePortal']['radius_secret'];
+            $q_r['MeshExit']['radius_nasid']    = $q_r['MeshExitCaptivePortal']['radius_nasid'];
+            $q_r['MeshExit']['uam_url']         = $q_r['MeshExitCaptivePortal']['uam_url'];
+            $q_r['MeshExit']['uam_secret']      = $q_r['MeshExitCaptivePortal']['uam_secret'];
+            $q_r['MeshExit']['walled_garden']   = $q_r['MeshExitCaptivePortal']['walled_garden'];
+            $q_r['MeshExit']['swap_octets']     = $q_r['MeshExitCaptivePortal']['swap_octets'];
         }
 
         $data = $q_r['MeshExit'];
