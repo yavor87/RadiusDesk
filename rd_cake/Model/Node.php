@@ -55,7 +55,8 @@ class Node extends AppModel {
         }else{
             //_______________ NEW ONE _______________
             //This is a new one.... lets see if we can re-use some ip
-            $q_r = $this->find('first', array('order' => array('Node.ip ASC')));
+            $this_mesh_id = $this->data['Node']['mesh_id'];
+            $q_r = $this->find('first', array('order' => array('Node.ip ASC'),'conditions' => array('Node.mesh_id' => $this_mesh_id)));
             if($q_r){
                 $ip         = $q_r['Node']['ip'];
                 $mesh_id    = $q_r['Node']['mesh_id'];
