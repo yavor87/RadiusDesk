@@ -30,6 +30,11 @@ function rdGateway:disable()
 	self:__dhcpGwDisable()
 end
 
+function rdGateway:addNat(network)
+
+	self:__fwGwEnable(network,'no')
+end
+
 --[[--
 =========================================
 ========= Private methods =============== 
@@ -77,11 +82,12 @@ function rdGateway.__dhcpGwDisable(self)
 	self.x.commit('dhcp')
 end
 
-function rdGateway.__fwGwEnable(self,network)
+function rdGateway.__fwGwEnable(self,network,forward)
 	print("Enable gateway on firewall")
 	
 	--Some sane defaults
 	network 	= network or self.conf_zone
+	forward		= forward or "yes" -- default is to add the forward rule
 	
 	local no_config_zone = true
 	
@@ -133,7 +139,7 @@ function rdGateway.__fwGwEnable(self,network)
 				no_forwarding = false
 			end
 		end)
-	if(no_forwarding)then
+	if(no_forwarding and (forward == 'yes'))then -- Only if we specified to add a forward rule
 		local f = self.x.add('firewall', 'forwarding')
 		self.x.set('firewall',f,'src',network)
 		self.x.set('firewall',f,'dst','lan')

@@ -7,7 +7,8 @@ config fallback
 
 config internet 'internet1'
 	option dns 'radiusdev.webage.co'
-	option ip '192.168.99.1'
+	option ip '204.45.103.85'
+#	option ip '192.168.1.103'
 	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
 	option protocol 'http'
 
@@ -28,4 +29,8 @@ config settings 'settings'
 	option wifi_timeout '20'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
-
+	
+config captive_portal 'captive_portal'
+	option default_dns_1 '208.67.222.222'
+	option default_dns_2 '208.67.220.220'
+	 

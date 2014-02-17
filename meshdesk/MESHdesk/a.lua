@@ -259,8 +259,20 @@ function configure_device(config)
 	
 	  
         os.execute("/etc/init.d/network reload")
-        os.execute("batctl if add wlan0") 	-- The batman if does not always comes up
+        --os.execute("batctl if add wlan0") 	-- The batman if does not always comes up
         os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
+        
+        -- Check if there are perhaps some captive portals to set up once everything has been done --
+        sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+        if(o.config_settings.captive_portals ~= nil)then
+        	print("Doing Captive Portals")
+        	require("rdCoovaChilli")
+        	local a = rdCoovaChilli()
+        	a:createConfigs(o.config_settings.captive_portals)                  
+        	a:startPortals()	
+        	
+        end 
+        
 --]]--
 end
 
