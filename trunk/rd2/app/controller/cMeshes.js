@@ -785,7 +785,23 @@ Ext.define('Rd.controller.cMeshes', {
         var me      = this; 
         var form    = win.down('form');
         var exitId = win.exitId;
-        form.load({url:me.urlViewExit, method:'GET',params:{exit_id:exitId}});
+        form.load({
+            url         :me.urlViewExit, 
+            method      :'GET',
+            params      :{exit_id:exitId},
+            success     : function(a,b,c){
+                var t     = form.down("#type");
+                var t_val = t.getValue();
+                var vlan  = form.down('#vlan');
+                if(t_val == 'tagged_bridge'){
+                    vlan.setVisible(true);
+                    vlan.setDisabled(false);
+                }else{
+                    vlan.setVisible(false);
+                    vlan.setDisabled(true);
+                }
+            }
+        });
     },
     btnEditExitSave:  function(button){
         var me      = this;

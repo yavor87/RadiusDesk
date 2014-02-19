@@ -26,7 +26,7 @@ Ext.define('Rd.controller.cLogViewer', {
                         xtype:  'pnlBanner',
                         heading:i18n('sLogfile_viewer'),
                         image:  'resources/images/48x48/logfile_viewer.png'
-                    },
+                    },//We had to add this manually (not using pnlViewFile in ExtJS 4.2 since somehow it refused to create the item)
                     {
                         region  : 'center',
                         layout  : 'fit',
