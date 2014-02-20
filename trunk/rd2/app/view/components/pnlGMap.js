@@ -58,7 +58,7 @@ Ext.define('Rd.view.components.pnlGMap', {
                     if(me.marker_record.get('status') == 'down'){
                         var s = i18n("sDown");
                     }
-                    t_i_s           = s+" "+Ext.ux.secondsToHuman(record.get('status_time'));;
+                    t_i_s           = s+" "+Ext.ux.secondsToHuman(me.marker_record.get('status_time'));;
                 }
                 var d  = Ext.apply({
                     time_in_state   : t_i_s

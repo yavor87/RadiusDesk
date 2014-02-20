@@ -37,37 +37,37 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                         plain   : true,
                         items   : [
                                 {
-                                    title   :  'Entry points',
+                                    title   :  i18n('sEntry_points'),
                                     itemId  : 'tabEntryPoints',
                                     xtype   : 'gridMeshEntries',
                                     meshId  : me.getItemId()
                                 },
                                 {
-                                    title   :  'Mesh settings',
+                                    title   :  i18n('sMesh_settings'),
                                     itemId  : 'tabMeshSettings',
                                     xtype   : 'pnlMeshSettings',
                                     meshId  : me.getItemId()
                                 },
                                 {
-                                    title   :  'Exit points',
+                                    title   :  i18n('sExit_points'),
                                     itemId  : 'tabExitPoints',
                                     xtype   : 'gridMeshExits',
                                     meshId  : me.getItemId()
                                 },
                                 {
-                                    title       : 'Node settings',
+                                    title       : i18n('sNode_settings'),
                                     itemId      : 'tabNodeCommonSettings',
                                     xtype       : 'pnlNodeCommonSettings',
                                     meshId      : me.getItemId()   
                                 },
                                  {
-                                    title       : 'Nodes',
+                                    title       : i18n('sNodes'),
                                     itemId      : 'tabNodes',
                                     xtype       : 'gridNodes',
                                     meshId      : me.getItemId()     
                                 },
                                 {
-                                    title   :  'Map',
+                                    title   :  i18n('sMap'),
                                     itemId  : 'tabMap'
                                 }
                             ]

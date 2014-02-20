@@ -65,22 +65,22 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridMeshExitsId1'},
-            { text: 'Name',                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId2'},
-            { text: 'Type',                 dataIndex: 'type',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId3'},
+            { text: i18n('sName'),                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId2'},
+            { text: i18n('sType'),                 dataIndex: 'type',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId3'},
             { 
-                text    :   'Connects with',
+                text    :   i18n('sConnects_with'),
                 sortable: false,
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"gridRealm noRight\">No one</div></tpl>', //Warn them when available     to all
+                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"gridRealm noRight\">'+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
                             '<tpl for="connects_with">',     // interrogate the realms property within the data
                                 "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
                             '</tpl>'
                         ),
                 dataIndex: 'connects_with',stateId: 'StateGridMeshExitsId4'
             },  
-            { text: 'Auto-detect',          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId5'}
+            { text: i18n('sAuto_detect'),          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId5'}
         ];
         me.callParent(arguments);
     }

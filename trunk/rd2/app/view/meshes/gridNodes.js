@@ -24,7 +24,7 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
                 load: function(store, records, successful) {
                     if(!successful){
                         Ext.ux.Toaster.msg(
-                            'Error encountered',
+                            i18n('sError_encountered'),
                             store.getProxy().getReader().rawData.message.message,
                             Ext.ux.Constants.clsWarn,
                             Ext.ux.Constants.msgWarn
@@ -65,19 +65,19 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridNodes1'},
-            { text: 'Name',                     dataIndex: 'name',           tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes2'},
-            { text: 'Description',              dataIndex: 'description',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes3'},
-            { text: 'MAC Address',              dataIndex: 'mac',            tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes4'},
-            { text: 'Hardware',                 dataIndex: 'hardware',       tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes5'},
-            { text: 'Power',                    dataIndex: 'power',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes6'},
-            { text: 'IP Address',               dataIndex: 'ip',             tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes7'},
+            { text: i18n('sName'),              dataIndex: 'name',           tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes2'},
+            { text: i18n('sDescription'),       dataIndex: 'description',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes3'},
+            { text: i18n('sMAC_Address'),       dataIndex: 'mac',            tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes4'},
+            { text: i18n('sHardware'),          dataIndex: 'hardware',       tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes5'},
+            { text: i18n('sPower'),             dataIndex: 'power',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes6'},
+            { text: i18n('sIP_Address'),        dataIndex: 'ip',             tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes7'},
             { 
-                text    :   'Static entries',
+                text    :   i18n('sStatic_entries'),
                 sortable: false,
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(static_entries)"><div class=\"gridRealm noRight\">None</div></tpl>', 
+                            '<tpl if="Ext.isEmpty(static_entries)"><div class=\"gridRealm noRight\">'+i18n('sNone')+'</div></tpl>', 
                             '<tpl for="static_entries">',     
                                 "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
                             '</tpl>'
@@ -85,12 +85,12 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
                 dataIndex: 'static_entries',stateId: 'StateGridNodes8'
             }, 
             { 
-                text    :   'Static exits',
+                text    :   i18n('sStatic_exits'),
                 sortable: false,
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(static_exits)"><div class=\"gridRealm noRight\">None</div></tpl>', 
+                            '<tpl if="Ext.isEmpty(static_exits)"><div class=\"gridRealm noRight\">'+i18n('sNone')+'</div></tpl>', 
                             '<tpl for="static_exits">',     
                                 "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
                             '</tpl>'

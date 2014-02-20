@@ -4,9 +4,9 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'New mesh exit point',
+    title:      i18n('sNew_mesh_exit_point'),
     width:      400,
-    height:     500,
+    height:     550,
     plain:      true,
     border:     false,
     layout:     'card',
@@ -68,16 +68,16 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
         //If the bridge is already defined; we will not list it again
         if(found_bridge == true){
             var radios = [
-                        { boxLabel: 'Tagged Ethernet bridge',   name: 'exit_type', inputValue: 'tagged_bridge',checked: true},
-                        { boxLabel: 'NAT + DHCP',               name: 'exit_type', inputValue: 'nat' },
-                        { boxLabel: 'Captive Portal',           name: 'exit_type', inputValue: 'captive_portal' }
+                        { boxLabel: i18n('sTagged_Ethernet_bridge'),    name: 'exit_type', inputValue: 'tagged_bridge',checked: true},
+                        { boxLabel: i18n('sNAT_plus_DHCP'),             name: 'exit_type', inputValue: 'nat' },
+                        { boxLabel: i18n('sCaptive_Portal'),            name: 'exit_type', inputValue: 'captive_portal' }
                     ];
         }else{
             var radios = [
-                    { boxLabel: 'Ethernet bridge',          name: 'exit_type', inputValue: 'bridge',checked: true },
-                    { boxLabel: 'Tagged Ethernet bridge',   name: 'exit_type', inputValue: 'tagged_bridge'},
-                    { boxLabel: 'NAT + DHCP',               name: 'exit_type', inputValue: 'nat' },
-                    { boxLabel: 'Captive Portal',           name: 'exit_type', inputValue: 'captive_portal' }
+                    { boxLabel: i18n('sEthernet_bridge'),          name: 'exit_type', inputValue: 'bridge',checked: true },
+                    { boxLabel: i18n('sTagged_Ethernet_bridge'),   name: 'exit_type', inputValue: 'tagged_bridge'},
+                    { boxLabel: i18n('sNAT_plus_DHCP'),            name: 'exit_type', inputValue: 'nat' },
+                    { boxLabel: i18n('sCaptive_Portal'),           name: 'exit_type', inputValue: 'captive_portal' }
                 ];
         }
 
@@ -99,11 +99,11 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: 'Specify exit point type', cls: 'lblWizard' }
+                { xtype: 'tbtext', text: i18n('sSpecify_exit_point_type'), cls: 'lblWizard' }
             ],
             items:[{
                 xtype       : 'radiogroup',
-                fieldLabel  : 'Exit point type',
+                fieldLabel  : i18n('sExit_point_type'),
                 columns     : 1,
                 vertical    : true,
                 items       : radios
@@ -172,7 +172,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                     border  : false,
                     items   : [
                         { 
-                            'title'     : 'Common settings',
+                            'title'     : i18n('sCommon_settings'),
                             'layout'    : 'anchor',
                             itemId      : 'tabRequired',
                             defaults    : {
@@ -203,7 +203,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Auto-detect',
+                                    fieldLabel  : i18n('sAuto_detect'),
                                     name        : 'auto_detect',
                                     inputValue  : 'auto_detect',
                                     checked     : true,
@@ -213,7 +213,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                     xtype       : 'numberfield',
                                     name        : 'vlan',
                                     itemId      : 'vlan',
-                                    fieldLabel  : 'VLAN number',
+                                    fieldLabel  : i18n('sVLAN_number'),
                                     value       : 0,
                                     maxValue    : 4095,
                                     step        : 1,
@@ -226,7 +226,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                             ]
                         },
                         { 
-                            title       : 'Captive Portal settings',
+                            title       : i18n('sCaptive_Portal_settings'),
                             layout      : 'anchor',
                             disabled    : true,
                             itemId      : 'tabCaptivePortal',
@@ -237,7 +237,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                             items       : [         
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS server1',
+                                    fieldLabel  : i18n('sRADIUS_server1'),
                                     name        : 'radius_1',
                                     allowBlank  : false,
                                     blankText   : i18n('sSupply_a_value'),
@@ -245,35 +245,35 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS server2',
+                                    fieldLabel  : i18n('sRADIUS_server2'),
                                     name        : 'radius_2',
                                     allowBlank  : true,
                                     labelClsExtra: 'lblRd'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS secret',
+                                    fieldLabel  : i18n('sRADIUS_secret'),
                                     name        : 'radius_secret',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS NASID',
+                                    fieldLabel  : i18n('sRADIUS_NASID'),
                                     name        : 'radius_nasid',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'UAM URL',
+                                    fieldLabel  : i18n('sUAM_URL'),
                                     name        : 'uam_url',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'UAM Secret',
+                                    fieldLabel  : i18n('sUAM_Secret'),
                                     name        : 'uam_secret',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
@@ -281,7 +281,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                 {
                                     xtype       : 'textareafield',
                                     grow        : true,
-                                    fieldLabel  : 'Walled garden',
+                                    fieldLabel  : i18n('sWalled_garden'),
                                     name        : 'walled_garden',
                                     anchor      : '100%',
                                     allowBlank  : true,
@@ -289,9 +289,17 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                  },
                                  {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Swap octets',
+                                    fieldLabel  : i18n('sSwap_octets'),
                                     name        : 'swap_octet',
                                     inputValue  : 'swap_octet',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : i18n('sMAC_authentication'),
+                                    name        : 'mac_auth',
+                                    inputValue  : 'mac_auth',
                                     checked     : true,
                                     labelClsExtra: 'lblRdReq'
                                 }

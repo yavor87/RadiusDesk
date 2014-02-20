@@ -1,7 +1,7 @@
 Ext.define('Rd.view.meshes.cmbHardwareOptions', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbHardwareOptions',
-    fieldLabel      : 'Hardware model',
+    fieldLabel      : i18n('sHardware_model'),
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',

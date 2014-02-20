@@ -4,7 +4,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
     closable:   true,
     draggable:  true,
     resizable:  true,
-    title:      'Edit mesh exit point',
+    title:      i18n('sEdit_mesh_exit_point'),
     width:      400,
     height:     500,
     plain:      true,
@@ -77,7 +77,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                     border  : false,
                     items   : [
                         { 
-                            'title'     : 'Common settings',
+                            'title'     : i18n('sCommon_settings'),
                             'layout'    : 'anchor',
                             itemId      : 'tabRequired',
                             defaults    : {
@@ -114,7 +114,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Auto-detect',
+                                    fieldLabel  : i18n('sAuto_detect'),
                                     name        : 'auto_detect',
                                     inputValue  : 'auto_detect',
                                     checked     : true,
@@ -124,7 +124,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                     xtype       : 'numberfield',
                                     name        : 'vlan',
                                     itemId      : 'vlan',
-                                    fieldLabel  : 'VLAN number',
+                                    fieldLabel  : i18n('sVLAN_number'),
                                     value       : 0,
                                     maxValue    : 4095,
                                     step        : 1,
@@ -137,7 +137,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                             ]
                         },
                         { 
-                            title       : 'Captive Portal settings',
+                            title       : i18n('sCaptive_Portal_settings'),
                             layout      : 'anchor',
                             disabled    : true,
                             itemId      : 'tabCaptivePortal',
@@ -148,7 +148,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                             items       : [         
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS server1',
+                                    fieldLabel  : i18n('sRADIUS_server1'),
                                     name        : 'radius_1',
                                     allowBlank  : false,
                                     blankText   : i18n('sSupply_a_value'),
@@ -156,35 +156,35 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS server2',
+                                    fieldLabel  : i18n('sRADIUS_server2'),
                                     name        : 'radius_2',
                                     allowBlank  : true,
                                     labelClsExtra: 'lblRd'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS secret',
+                                    fieldLabel  : i18n('sRADIUS_secret'),
                                     name        : 'radius_secret',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS NASID',
+                                    fieldLabel  : i18n('sRADIUS_NASID'),
                                     name        : 'radius_nasid',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'UAM URL',
+                                    fieldLabel  : i18n('sUAM_URL'),
                                     name        : 'uam_url',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'UAM Secret',
+                                    fieldLabel  : i18n('sUAM_Secret'),
                                     name        : 'uam_secret',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq'
@@ -192,7 +192,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                 {
                                     xtype       : 'textareafield',
                                     grow        : true,
-                                    fieldLabel  : 'Walled garden',
+                                    fieldLabel  : i18n('sWalled_garden'),
                                     name        : 'walled_garden',
                                     anchor      : '100%',
                                     allowBlank  : true,
@@ -200,12 +200,20 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                  },
                                  {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Swap octets',
+                                    fieldLabel  : i18n('sSwap_octets'),
                                     name        : 'swap_octet',
                                     inputValue  : 'swap_octet',
                                     checked     : true,
                                     labelClsExtra: 'lblRdReq'
-                                } 
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : i18n('sMAC_authentication'),
+                                    name        : 'mac_auth',
+                                    inputValue  : 'mac_auth',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRdReq'
+                                }
                             ]
                         } 
                     ]

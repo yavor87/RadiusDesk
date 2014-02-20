@@ -27,7 +27,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'AP isolation',
+                        fieldLabel  : i18n('sAP_isolation'),
                         name        : 'ap',
                         inputValue  : 'ap',
                         checked     : true,
@@ -35,7 +35,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'Bridge Loop Avoidance',
+                        fieldLabel  : i18n('sBridge_Loop_Avoidance'),
                         name        : 'bl',
                         inputValue  : 'bl',
                         checked     : true,
@@ -43,7 +43,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'Aggregation',
+                        fieldLabel  : i18n('sAggregation'),
                         name        : 'ag',
                         inputValue  : 'ag',
                         checked     : true,
@@ -51,7 +51,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'Bonding',
+                        fieldLabel  : i18n('sBonding'),
                         name        : 'b',
                         inputValue  : 'b',
                         checked     : true,
@@ -59,7 +59,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'Fragmentation',
+                        fieldLabel  : i18n('sFragmentation'),
                         name        : 'f',
                         inputValue  : 'f',
                         checked     : true,
@@ -68,7 +68,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     {
                         xtype       : 'numberfield',
                         name        : 'it',
-                        fieldLabel  : 'OGM interval (ms)',
+                        fieldLabel  : i18n('sOGM_interval_br_ms_br',
                         value       : 1000,
                         maxValue    : 20000,
                         step        : 100,
@@ -80,7 +80,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     {
                         xtype       : 'numberfield',
                         name        : 'gatweway_switching',
-                        fieldLabel  : 'Gateway switching',
+                        fieldLabel  : i18n('sGateway_switching'),
                         value       : 20,
                         maxValue    : 255,
                         step        : 1,

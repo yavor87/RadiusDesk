@@ -4,7 +4,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     closable:   true,
     draggable:  true,
     resizable:  true,
-    title:      'New mesh node',
+    title:      i18n('sNew_mesh_node'),
     width:      400,
     height:     400,
     plain:      true,
@@ -84,7 +84,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                     },
                     {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Description',
+                        fieldLabel  : i18n('sDescription'),
                         name        : "description",
                         allowBlank  : true,
                         labelClsExtra: 'lblRd'
@@ -101,7 +101,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         minValue    : 1,
                         maxValue    : 100,
                         name        : 'power',
-                        fieldLabel  : 'TX Power (%)'
+                        fieldLabel  : i18n('sTX_Power_br_percent_br')'
                     },
                     {
                         xtype       : 'cmbStaticEntries',
