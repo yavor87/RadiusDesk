@@ -4,7 +4,7 @@ Ext.define('Rd.view.meshes.winMeshAddWizard', {
     closable:   true,
     draggable:  false,
     resizable:  false,
-    title:      'New mesh',
+    title:      i18n('sNew_mesh'),
     width:      400,
     height:     400,
     plain:      true,

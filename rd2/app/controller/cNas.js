@@ -773,6 +773,7 @@ Ext.define('Rd.controller.cNas', {
 
                     var ip = record.get('nasname');
                     var n  = record.get('shortname');
+                    console.log("Marker added "+ip+" name "+n)
                     var sel_marker = map_panel.addMarker({
                         lat: lat, 
                         lng: lng,
@@ -781,12 +782,15 @@ Ext.define('Rd.controller.cNas', {
                         title: ip,
                         listeners: {
                             click: function(e,f){
+                                console.log(record);
                                 me.markerClick(record,map_panel,sel_marker);   
                             },
                             dragend: function(){
+                                console.log(record);
                                 me.dragEnd(record,map_panel,sel_marker);
                             },
                             dragstart: function(){
+                                console.log(record);
                                 me.dragStart(record,map_panel,sel_marker);
                             }
                         }

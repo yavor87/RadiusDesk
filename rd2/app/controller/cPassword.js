@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cPassword', {
             win = desktop.createWindow({
                 id          : 'passwordWin',
                // title       : "Password manager",
-                btnText     : "Password manager",
+                btnText     : i18n('sPassword_manager'),
                 width       : 450,
                 height      : 450,
                 resizable   : true,
@@ -25,7 +25,7 @@ Ext.define('Rd.controller.cPassword', {
                     {
                         region: 'north',
                         xtype:  'pnlBanner',
-                        heading: "Password manager",
+                        heading: i18n('sPassword_manager'),
                         image:  'resources/images/48x48/key.png'
                     },
                     {
@@ -106,8 +106,8 @@ Ext.define('Rd.controller.cPassword', {
                     }
                    // me.chkAlwaysActiveChange(chk); //Refresh the view
                     Ext.ux.Toaster.msg(
-                        "Fetched password",
-                        "Password fetched for selected user",
+                        i18n('sFetched password'),
+                        i18n('sPassword_fetched_for_selected_user"),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );

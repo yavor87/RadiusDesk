@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cMeshes', {
             win = desktop.createWindow({
                 id      : 'meshWin',
                 //title   : 'MESHdesk overview',
-                btnText : 'MESHdesk overview',
+                btnText : i18n('sMESHdesk_overview'),
                 width   : 800,
                 height  : 400,
                 iconCls : 'mesh',
@@ -24,7 +24,7 @@ Ext.define('Rd.controller.cMeshes', {
                     {
                         region  : 'north',
                         xtype   : 'pnlBanner',
-                        heading : 'MESHdesk overview',
+                        heading : i18n('sMESHdesk_overview'),
                         image   : 'resources/images/48x48/mesh.png'
                     },
                     {
@@ -473,8 +473,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'New mesh entry point added',
-                    'New mesh enty point created fine',
+                    i18n('sNew_mesh_entry_point_added'),
+                    i18n('sNew_mesh_enty_point_created_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -513,7 +513,6 @@ Ext.define('Rd.controller.cMeshes', {
         }     
     },
     loadEntry: function(win){
-        console.log("Before show pappie");
         var me      = this; 
         var form    = win.down('form');
         var entryId = win.entryId;
@@ -530,8 +529,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'Mesh entry point updated',
-                    'Mesh enty point updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -596,8 +595,8 @@ Ext.define('Rd.controller.cMeshes', {
             params              : {mesh_id: meshId},
             success: function(form, action) {
                 Ext.ux.Toaster.msg(
-                    'Mesh settings updated',
-                    'Mesh settings updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -620,8 +619,8 @@ Ext.define('Rd.controller.cMeshes', {
         var entries_count   = win.down("gridMeshEntries").getStore().count();
         if(entries_count == 0){
             Ext.ux.Toaster.msg(
-                'No entry points defined',
-                'Please define some entry points first',
+                i18n('sNo_entry_points_defined'),
+                i18n('sDefine_some_entry_points_first'),
                 Ext.ux.Constants.clsWarn,
                 Ext.ux.Constants.msgWarn
             );
@@ -681,8 +680,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'New mesh exit point added',
-                    'New mesh exit point created fine',
+                    i18n('sItem_added'),
+                    i18n('sItem_added_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -814,8 +813,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'Mesh exit point updated',
-                    'Mesh exit point updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -840,8 +839,8 @@ Ext.define('Rd.controller.cMeshes', {
             params              : {mesh_id: meshId},
             success: function(form, action) {
                 Ext.ux.Toaster.msg(
-                    'Common node settings updated',
-                    'Common node settings updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -861,7 +860,6 @@ Ext.define('Rd.controller.cMeshes', {
         
         //Entry points present; continue 
         var store   = win.down("gridNodes").getStore();
-        console.log("Add a Node");
         if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
@@ -883,8 +881,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'New node added',
-                    'New node added fine',
+                    i18n('sItem_added'),
+                    i18n('sItem_added_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
@@ -979,8 +977,8 @@ Ext.define('Rd.controller.cMeshes', {
                 win.close();
                 win.store.load();
                 Ext.ux.Toaster.msg(
-                    'Node updated',
-                    'Node updated fine',
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );

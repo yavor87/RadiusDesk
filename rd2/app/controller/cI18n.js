@@ -709,7 +709,7 @@ Ext.define('Rd.controller.cI18n', {
     },
 
     phpAddSubmit: function(button){
-        var me       = this;
+        var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
         form.submit({

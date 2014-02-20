@@ -1,7 +1,7 @@
 Ext.define('Rd.view.meshes.cmbStaticExits', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbStaticExits',
-    fieldLabel      : 'Static exit points',
+    fieldLabel      : i18n('sStatic_exit_points'),
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',

@@ -555,3 +555,24 @@
     }
 }
 
+.mapDiv {
+    height: 250px;
+    width:  350px;
+    margin: 0px;
+}
+
+.divMapAction {
+    margin: 10px;
+    padding: 5px;
+}
+
+.lblMap {
+    width: 125px;
+    float: left;
+    text-align: left;
+    color: #676d76;
+    font-size:14px;
+    margin: 1px;
+}
+
+

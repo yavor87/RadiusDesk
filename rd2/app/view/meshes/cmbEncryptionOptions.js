@@ -1,7 +1,7 @@
 Ext.define('Rd.view.meshes.cmbEncryptionOptions', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbEncryptionOptions',
-    fieldLabel      : 'Encryption',
+    fieldLabel      : i18n('sEncryption'),
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',

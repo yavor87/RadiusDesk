@@ -65,36 +65,36 @@ Ext.define('Rd.view.meshes.gridMeshEntries' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer', stateId: 'StateGridMeshEntries1'},
-            { text: 'SSID',                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries2'},
+            { text: i18n("sSSID"),                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries2'},
             { 
-                text        : 'Encryption',   
+                text        : i18n("sEncryption"),   
                 dataIndex   : 'encryption',  
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 renderer    : function(value,metaData, record){
                     if(value == 'none'){                    
-                       return "None"
+                       return i18n("sNone")
                     }
                     if(value == 'wep'){
-                        return "WEP"
+                        return i18n("sWEP")
                     } 
                     if(value == 'psk'){
-                        return "WPA Personal"
+                        return i18n("sWPA_Personal")
                     } 
                     if(value == 'psk2'){
-                        return "WPA2 Personal"
+                        return i18n("sWPA2_Personal")
                     } 
                     if(value == 'wpa'){
-                        return "WPA Enterprise"
+                        return i18n("sWPA_Enterprise")
                     } 
                     if(value == 'wpa2'){
-                        return "WPA2 Enterprise"
+                        return i18n("sWPA2_Enterprise")
                     }             
                 }, stateId: 'StateGridMeshEntries3'
             },
-            { text: 'Hidden',               dataIndex: 'hidden',        tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries4'},
-            { text: 'Client isolation',     dataIndex: 'isolate',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries5'},
-            { text: 'Apply to all nodes',   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries6'}
+            { text: i18n("sHidden"),               dataIndex: 'hidden',        tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries4'},
+            { text: i18n("sClient_isolation"),     dataIndex: 'isolate',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries5'},
+            { text: i18n("sApply_to_all_nodes"),   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries6'}
         ];
         me.callParent(arguments);
     }

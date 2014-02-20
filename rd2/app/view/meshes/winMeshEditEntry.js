@@ -4,7 +4,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
     closable:   true,
     draggable:  true,
     resizable:  true,
-    title:      'Edit mesh entry point',
+    title:      i18n('sEdit_mesh_entry_point'),
     width:      400,
     height:     400,
     plain:      true,
@@ -63,7 +63,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                     border  : false,
                     items   : [
                         { 
-                            'title'     : 'Basic info',
+                            'title'     : i18n('sBasic_info'),
                             'layout'    : 'anchor',
                             itemId      : 'tabRequired',
                             defaults    : {
@@ -85,7 +85,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 }, 
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'SSID',
+                                    fieldLabel  : i18n('sSSID'),
                                     name        : 'name',
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value"),
@@ -93,7 +93,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Hidden',
+                                    fieldLabel  : i18n('sHidden'),
                                     name        : 'hidden',
                                     inputValue  : 'hidden',
                                     checked     : false,
@@ -101,7 +101,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Client isolation',
+                                    fieldLabel  : i18n('sClient_isolation'),
                                     name        : 'isolate',
                                     inputValue  : 'isolate',
                                     checked     : false,
@@ -109,7 +109,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 },
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Apply to all nodes',
+                                    fieldLabel  : i18n('sApply_to_all_nodes'),
                                     name        : 'apply_to_all',
                                     inputValue  : 'apply_to_all',
                                     checked     : false,
@@ -118,7 +118,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                             ]
                         },
                         { 
-                            'title'     : 'Encryption',
+                            'title'     : i18n('sEncryption'),
                             'layout'    : 'anchor',
                             itemId      : 'tabContact',
                             defaults    : {
@@ -133,7 +133,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'Key',
+                                    fieldLabel  : i18n('sKey'),
                                     name        : 'key',
                                     itemId      : 'key',
                                     allowBlank  : false,  
@@ -144,7 +144,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 }, 
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'RADIUS server',
+                                    fieldLabel  : i18n('sRADIUS_server'),
                                     name        : 'auth_server',
                                     itemId      : 'auth_server',
                                     allowBlank  : false,
@@ -155,7 +155,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'Shared secret',
+                                    fieldLabel  : i18n('sShared_secret'),
                                     name        : 'auth_secret',
                                     itemId      : 'auth_secret',
                                     allowBlank  : false,

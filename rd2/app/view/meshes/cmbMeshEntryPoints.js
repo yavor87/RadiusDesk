@@ -1,7 +1,7 @@
 Ext.define('Rd.view.meshes.cmbMeshEntryPoints', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbMeshEntryPoints',
-    fieldLabel      : 'Connects with',
+    fieldLabel      : i18n('sConnects_with'),
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',
