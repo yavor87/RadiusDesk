@@ -288,11 +288,6 @@ msgstr ""
 msgid "Supply a name for the icon file"
 msgstr ""
 
-#: Model/Group.php:validation for field name
-#: Model/User.php:validation for field username;validation for field password
-msgid "notempty"
-msgstr ""
-
 #: Model/Language.php:validation for field name
 msgid "Language name is required"
 msgstr ""
@@ -333,48 +328,195 @@ msgstr ""
 #: Manual add
 msgid "Permanent Users"
 msgstr ""
+
 #: Manual add
 msgid "Vouchers"
 msgstr ""
+
 #: Manual add
 msgid "BYOD Manager"
 msgstr ""
+
 #: Manual add
 msgid "Activity monitor"
 msgstr ""
+
 #: Manual add
 msgid "Internet Access Voucher"
 msgstr ""
+
 #: Manual add
 msgid "Address"
 msgstr ""
+
 #: Manual add
 msgid "Contact Detail"
 msgstr ""
+
 #: Manual add
 msgid "phone"
 msgstr ""
+
 #: Manual add
 msgid "fax"
 msgstr ""
+
 #: Manual add
 msgid "cell"
 msgstr ""
+
 #: Manual add
 msgid "Username"
 msgstr ""
+
 #: Manual add
 msgid "Password"
 msgstr ""
+
 #: Manual add
 msgid "days from first log-in"
 msgstr ""
+
 #: Manual add
 msgid "day from first log-in"
 msgstr ""
+
 #: Manual add
 msgid "Valid for"
 msgstr ""
+
 #: Manual add
 msgid "Expiry date"
 msgstr ""
+
+#: Manual add
+msgid "Dynamic Login Pages"
+msgstr ""
+
+#: Manual add
+msgid "Tools"
+msgstr ""
+
+#: Manual add
+msgid "Profiles"
+msgstr ""
+#: Manual add
+msgid "RADIUS client"
+msgstr ""
+
+#: Manual add
+msgid "Logfile viewer"
+msgstr ""
+
+#: Manual add
+msgid "Debug output"
+msgstr ""
+
+#: Manual add
+msgid "Translation manager"
+msgstr ""
+
+#: Manual add
+msgid "Rights manager"
+msgstr ""
+
+#: Manual add
+msgid "Profile Components"
+msgstr ""
+
+#: Manual add
+msgid "Profiles"
+msgstr ""
+
+#: Manual add
+msgid "Extra actions"
+msgstr ""
+
+#: Manual add
+msgid "Enable / Disable"
+msgstr ""
+
+#: Manual add
+msgid "Test RADIUS"
+msgstr ""
+
+#: Manual add
+msgid "Close session"
+msgstr ""
+
+#: Manual add
+msgid "Kick user off"
+msgstr ""
+
+#: Manual add
+msgid "Usage graph"
+msgstr ""
+
+#: Manual add
+msgid "Show only currently connected"
+msgstr ""
+
+#: Manual add
+msgid "Change password"
+msgstr ""
+
+#: Manual add
+msgid "Password manager"
+msgstr ""
+
+#: Manual add
+msgid "BYOD manager"
+msgstr ""
+
+#: Manual add
+msgid "Export to PDF"
+msgstr ""
+
+#: Manual add
+msgid "Usage graphs"
+msgstr ""
+
+#: Manual add
+msgid "Heartbeat actions"
+msgstr ""
+
+#: Manual add
+msgid "Availability"
+msgstr ""
+
+#: Manual add
+msgid "Photo"
+msgstr ""
+
+#: Manual add
+msgid "Daily"
+msgstr ""
+
+#: Manual add
+msgid "Weekly"
+msgstr ""
+
+#: Manual add
+msgid "Monthly"
+msgstr ""
+
+#: Manual add
+msgid "Reload every"
+msgstr ""
+
+#: Manual add
+msgid "30 seconds"
+msgstr ""
+
+#: Manual add
+msgid "1 minute"
+msgstr ""
+
+#: Manual add
+msgid "5 minutes"
+msgstr ""
+
+#: Manual add
+msgid "Stop auto reload"
+msgstr ""
+

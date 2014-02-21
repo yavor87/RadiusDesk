@@ -16,290 +16,285 @@ msgstr ""
 
 #: Config/RadiusDesk.php:12
 msgid "Direct (Fixed IP)"
-msgstr ""
+msgstr "Directa (IP fija)"
 
 #: Config/RadiusDesk.php:13
 msgid "OpenVPN"
-msgstr ""
+msgstr "En OpenVPN"
 
 #: Config/RadiusDesk.php:14
 msgid "PPTP"
-msgstr ""
+msgstr "PPTP"
 
 #: Config/RadiusDesk.php:15
 msgid "Dynamic Client"
-msgstr ""
+msgstr "Cliente Dinámico"
 
 #: Controller/AccessProvidersController.php:250;350
 #: Controller/NasController.php:683;783
 #: Controller/RealmsController.php:720;797
 #: Controller/TagsController.php:420;497
 msgid "Action"
-msgstr ""
+msgstr "Acción"
 
 #: Controller/AccessProvidersController.php:251;282
 #: Controller/NasController.php:684;712
 #: Controller/RealmsController.php:721;746
 #: Controller/TagsController.php:421;446
 msgid "Reload"
-msgstr ""
+msgstr "Volver a cargar"
 
 #: Controller/AccessProvidersController.php:252;291
 #: Controller/NasController.php:685;721
 #: Controller/RealmsController.php:722;755
 #: Controller/TagsController.php:422;455
 msgid "Add"
-msgstr ""
+msgstr "Agregar"
 
 #: Controller/AccessProvidersController.php:253;301
 #: Controller/NasController.php:686;731
 #: Controller/RealmsController.php:723;765
 #: Controller/TagsController.php:423;465
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: Controller/AccessProvidersController.php:255;312
 #: Controller/NasController.php:687;742
 #: Controller/RealmsController.php:724;776
 #: Controller/TagsController.php:424;476
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: Controller/AccessProvidersController.php:258;351
 #: Controller/NasController.php:689;784
 #: Controller/RealmsController.php:726;798
 #: Controller/TagsController.php:426;498
 msgid "Document"
-msgstr ""
+msgstr "Documento"
 
 #: Controller/AccessProvidersController.php:259
 #: Controller/NasController.php:690
 #: Controller/RealmsController.php:727
 #: Controller/TagsController.php:427
 msgid "Add notes"
-msgstr ""
+msgstr "Agregar notas"
 
 #: Controller/AccessProvidersController.php:260;330
 #: Controller/NasController.php:691;760
 #: Controller/RealmsController.php:728;794
 #: Controller/TagsController.php:428;494
 msgid "Export CSV"
-msgstr ""
+msgstr "Exportar CSV"
 
 #: Controller/AccessProvidersController.php:262;352
 msgid "Access Provider"
-msgstr ""
+msgstr "Proveedor de acceso"
 
 #: Controller/AccessProvidersController.php:263;338
 msgid "Expand"
-msgstr ""
+msgstr "Ampliar"
 
 #: Controller/AccessProvidersController.php:264;346
 msgid "Change Password"
-msgstr ""
+msgstr "Cambiar la contraseña"
 
 #: Controller/AccessProvidersController.php:321
 #: Controller/NasController.php:751
 #: Controller/RealmsController.php:785
 #: Controller/TagsController.php:485
 msgid "Add Notes"
-msgstr ""
+msgstr "Agregar notas"
 
 #: Controller/AcosRightsController.php:168
 msgid "Not allowed to change root node"
-msgstr ""
+msgstr "No se permite cambiar nodo raíz"
 
 #: Controller/CountriesController.php:49
 msgid "Problem adding country"
-msgstr ""
+msgstr "Problema al añadir país"
 
 #: Controller/DesktopController.php:30
 msgid "Confirm this name"
-msgstr ""
+msgstr "Confirmar este nombre"
 
 #: Controller/DesktopController.php:30
 msgid "Type the password again"
-msgstr ""
+msgstr "Vuelva a escribir la contraseña"
 
 #: Controller/DesktopController.php:32
 msgid "Authentication failed"
-msgstr ""
+msgstr "Error en la autenticación"
 
 #: Controller/DesktopController.php:112;152
 msgid "Realms and Providers"
-msgstr ""
+msgstr "Reinos y Proveedores"
 
 #: Controller/DesktopController.php:115;146
 msgid "Access Providers"
-msgstr ""
+msgstr "Proveedores de Acceso"
 
 #: Controller/DesktopController.php:116;149
 msgid "Realms"
-msgstr ""
+msgstr "Reinos"
 
 #: Controller/DesktopController.php:122;125;159;167
 msgid "NAS Devices"
-msgstr ""
+msgstr "Los dispositivos NAS"
 
 #: Controller/DesktopController.php:126;163
 msgid "NAS Device tags"
-msgstr ""
+msgstr "Etiquetas Dispositivo NAS"
 
 #: Controller/DesktopController.php:130
 msgid "Translation manager"
-msgstr ""
+msgstr "Gestor de Traducción"
 
 #: Controller/DesktopController.php:131
 msgid "Rights manager"
-msgstr ""
+msgstr "Administrador de derechos"
 
 #: Controller/GroupsController.php:30;62;90
 msgid "Invalid group"
-msgstr ""
+msgstr "Grupo no válido"
 
 #: Controller/GroupsController.php:44;66
 msgid "The group has been saved"
-msgstr ""
+msgstr "El grupo se ha guardado"
 
 #: Controller/GroupsController.php:47;69
 msgid "The group could not be saved. Please, try again."
-msgstr ""
+msgstr "El grupo de trabajo no pudo ser salvado. Por favor, inténtelo de nuevo."
 
 #: Controller/GroupsController.php:93
 msgid "Group deleted"
-msgstr ""
+msgstr "Grupo eliminado"
 
 #: Controller/GroupsController.php:96
 msgid "Group was not deleted"
-msgstr ""
+msgstr "Grupo no se ha suprimido"
 
 #: Controller/NasController.php:319
 #: Controller/TagsController.php:248
 msgid "Could not create item"
-msgstr ""
+msgstr "No se ha podido crear tema"
 
 #: Controller/NasController.php:398
 msgid "Single item"
-msgstr ""
+msgstr "Único elemento"
 
 #: Controller/NasController.php:481
 msgid "Could not create note"
-msgstr ""
+msgstr "No se ha podido crear nota"
 
 #: Controller/NasController.php:564
 #: Controller/TagsController.php:340
 msgid "Could not delete some items"
-msgstr ""
+msgstr "No se puede eliminar algunos elementos"
 
 #: Controller/NasController.php:693;785
 msgid "Nas"
-msgstr ""
+msgstr "Nas"
 
 #: Controller/NasController.php:694;770
 msgid "Manage tags"
-msgstr ""
+msgstr "Administrar etiquetas"
 
 #: Controller/NasController.php:695
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: Controller/NasController.php:778
 msgid "Maps"
-msgstr ""
+msgstr "Mapas"
 
 #: Controller/NasController.php:818
 #: Controller/RealmsController.php:829
 msgid "orphaned"
-msgstr ""
+msgstr "huérfanos"
 
 #: Controller/PhpPhrasesController.php:371
 msgid "The file default.po is missing for"
-msgstr ""
+msgstr "El archivo default.po falta de"
 
 #: Controller/PhpPhrasesController.php:391
 msgid "No language specified"
-msgstr ""
+msgstr "No hay idioma especificado"
 
 #: Controller/PhraseKeysController.php:41
 #: Controller/PhraseValuesController.php:145
 msgid "Could not create key"
-msgstr ""
+msgstr "No se puede crear la clave"
 
 #: Controller/TagsController.php:279
 msgid "Could not update item"
-msgstr ""
+msgstr "No se pudo actualizar tema"
 
 #: Controller/UsersController.php:18
 msgid "Invalid user"
-msgstr ""
+msgstr "Usuario no válido"
 
 #: Controller/UsersController.php:22
 msgid "User deleted"
-msgstr ""
+msgstr "Borra el usuario"
 
 #: Controller/UsersController.php:25
 msgid "User was not deleted"
-msgstr ""
+msgstr "Usuario no se ha suprimido"
 
 #: Controller/Component/TokenAclComponent.php:28
 msgid "You do not have rights for this action"
-msgstr ""
+msgstr "No tiene derechos para esta acción"
 
 #: Controller/Component/TokenAuthComponent.php:28
 msgid "Token in wrong format"
-msgstr ""
+msgstr "Ficha en formato incorrecto"
 
 #: Controller/Component/TokenAuthComponent.php:34
 msgid "Token missing"
-msgstr ""
+msgstr "Falta Token"
 
 #: Controller/Component/TokenAuthComponent.php:59
 msgid "No user for token"
-msgstr ""
+msgstr "Ningún usuario de token"
 
 #: Controller/Component/TokenAuthComponent.php:64
 msgid "Account disabled"
-msgstr ""
+msgstr "Cuenta desactivada"
 
 #: Model/Country.php:validation for field name
 #: Model/Language.php:validation for field name
 msgid "You already have an entry"
-msgstr ""
+msgstr "Ya tiene una entrada"
 
 #: Model/Country.php:validation for field name
 msgid "Country name is required"
-msgstr ""
+msgstr "Nombre del país es necesario"
 
 #: Model/Country.php:validation for field iso_code
 #: Model/Language.php:validation for field iso_code
 msgid "ISO code is required"
-msgstr ""
+msgstr "Se requiere un código ISO"
 
 #: Model/Country.php:validation for field iso_code
 msgid "Iso codes can not be more than two characters"
-msgstr ""
+msgstr "Los códigos Iso no puede tener más de dos caracteres"
 
 #: Model/Country.php:validation for field iso_code
 #: Model/Language.php:validation for field iso_code
 msgid "Minimum length of 2 characters"
-msgstr ""
+msgstr "Longitud mínima de 2 caracteres"
 
 #: Model/Country.php:validation for field icon_file
 msgid "Supply a name for the icon file"
-msgstr ""
-
-#: Model/Group.php:validation for field name
-#: Model/User.php:validation for field username;validation for field password
-msgid "notempty"
-msgstr ""
+msgstr "Especifique un nombre para el archivo de icono"
 
 #: Model/Language.php:validation for field name
 msgid "Language name is required"
-msgstr ""
+msgstr "Es necesario el nombre Idioma"
 
 #: Model/Language.php:validation for field iso_code
 msgid "Maximum lenght of 2 characters"
-msgstr ""
+msgstr "Longitud máxima de 2 caracteres"
 
 #: Model/Na.php:validation for field nasname;validation for field shortname
 #: Model/Note.php:validation for field note
@@ -309,72 +304,221 @@ msgstr ""
 #: Model/Realm.php:validation for field name
 #: Model/Tag.php:validation for field name
 msgid "Value is required"
-msgstr ""
+msgstr "Es necesario el valor"
 
 #: Model/Na.php:validation for field nasname;validation for field shortname
 #: Model/OpenvpnClient.php:validation for field username
 #: Model/Realm.php:validation for field name
 #: Model/Tag.php:validation for field name
 msgid "This name is already taken"
-msgstr ""
+msgstr "Este nombre ya está en uso"
 
 #: Model/PhraseKey.php:validation for field name
 msgid "This key is already defined"
-msgstr ""
+msgstr "Esta clave ya está definida"
 
 #: Model/User.php:validation for field group_id
 msgid "numeric"
-msgstr ""
+msgstr "valor numérico"
 
 #: webroot/test.php:87
 msgid "Debug setting does not allow access to this url."
-msgstr ""
+msgstr "Configuración de depuración no permite el acceso a esta dirección url."
 
 #: Manual add
 msgid "Permanent Users"
-msgstr ""
+msgstr "Los usuarios permanentes"
+
 #: Manual add
 msgid "Vouchers"
-msgstr ""
+msgstr "Vales"
+
 #: Manual add
 msgid "BYOD Manager"
-msgstr ""
+msgstr "Administrador BYOD"
+
 #: Manual add
 msgid "Activity monitor"
-msgstr ""
+msgstr "Monitor de Actividad"
+
 #: Manual add
 msgid "Internet Access Voucher"
-msgstr ""
+msgstr "Acceso a Internet vale"
+
 #: Manual add
 msgid "Address"
-msgstr ""
+msgstr "Dirección"
+
 #: Manual add
 msgid "Contact Detail"
-msgstr ""
+msgstr "Detalles de contacto"
+
 #: Manual add
 msgid "phone"
-msgstr ""
+msgstr "teléfono"
+
 #: Manual add
 msgid "fax"
-msgstr ""
+msgstr "fax"
+
 #: Manual add
 msgid "cell"
-msgstr ""
+msgstr "celda"
+
 #: Manual add
 msgid "Username"
-msgstr ""
+msgstr "Usuario"
+
 #: Manual add
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
+
 #: Manual add
 msgid "days from first log-in"
-msgstr ""
+msgstr "días después de su primer inicio de sesión en"
+
 #: Manual add
 msgid "day from first log-in"
-msgstr ""
+msgstr "desde el primer día de sesión"
+
 #: Manual add
 msgid "Valid for"
-msgstr ""
+msgstr "Válido para"
+
 #: Manual add
 msgid "Expiry date"
-msgstr ""
+msgstr "Fecha de caducidad"
+
+#: Manual add
+msgid "Dynamic Login Pages"
+msgstr "Páginas de inicio dinámica"
+
+#: Manual add
+msgid "Tools"
+msgstr "Herramientas"
+
+#: Manual add
+msgid "Profiles"
+msgstr "Perfiles"
+
+#: Manual add
+msgid "RADIUS client"
+msgstr "Cliente RADIUS"
+
+#: Manual add
+msgid "Logfile viewer"
+msgstr "Visor del Archivo"
+
+#: Manual add
+msgid "Debug output"
+msgstr "Salida de depuración"
+
+#: Manual add
+msgid "Translation manager"
+msgstr "Translation manager"
+
+#: Manual add
+msgid "Rights manager"
+msgstr "Administrador de derechos"
+
+#: Manual add
+msgid "Profile Components"
+msgstr "Componentes del perfil"
+
+#: Manual add
+msgid "Profiles"
+msgstr "Perfiles"
+
+#: Manual add
+msgid "Extra actions"
+msgstr "Las acciones adicionales"
+
+#: Manual add
+msgid "Enable / Disable"
+msgstr "Activar / Desactivar"
+
+#: Manual add
+msgid "Test RADIUS"
+msgstr "RADIUS Prueba"
+
+#: Manual add
+msgid "Close session"
+msgstr "Cerrar la sesión"
+
+#: Manual add
+msgid "Kick user off"
+msgstr "Kick off usuario"
+
+#: Manual add
+msgid "Usage graph"
+msgstr "Gráfico Uso"
+
+#: Manual add
+msgid "Show only currently connected"
+msgstr "Mostrar sólo está conectado"
+
+#: Manual add
+msgid "Change password"
+msgstr "Cambiar la contraseña"
+
+#: Manual add
+msgid "Password manager"
+msgstr "Password manager"
+
+#: Manual add
+msgid "BYOD manager"
+msgstr "BYOD manager"
+
+#: Manual add
+msgid "Export to PDF"
+msgstr "Exportar a PDF"
+
+#: Manual add
+msgid "Usage graphs"
+msgstr "Gráficos Uso"
+
+#: Manual add
+msgid "Heartbeat actions"
+msgstr "Acciones Latido"
+
+#: Manual add
+msgid "Availability"
+msgstr "Disponibilidad"
+
+#: Manual add
+msgid "Photo"
+msgstr "Foto"
+
+#: Manual add
+msgid "Daily"
+msgstr "Diario"
+
+#: Manual add
+msgid "Weekly"
+msgstr "Semanalmente"
+
+#: Manual add
+msgid "Monthly"
+msgstr "Mensual"
+
+#: Manual add
+msgid "Reload every"
+msgstr "Volver a cargar cada"
+
+#: Manual add
+msgid "30 seconds"
+msgstr "30 Segundos"
+
+#: Manual add
+msgid "1 minute"
+msgstr "1 Minuto"
+
+#: Manual add
+msgid "5 minutes"
+msgstr "5 Minutos"
+
+#: Manual add
+msgid "Stop auto reload"
+msgstr "Detener recarga automática"
+
+
