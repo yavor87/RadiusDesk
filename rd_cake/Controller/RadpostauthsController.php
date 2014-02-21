@@ -258,7 +258,7 @@ class RadpostauthsController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -293,7 +293,7 @@ class RadpostauthsController extends AppController {
                 'glyph'     => Configure::read('icnReload'),   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => _('Reload'),
+                'tooltip'   => __('Reload'),
                 'menu'      => array(             
                     'items'     => array( 
                                     '<b class="menu-title">Reload every:</b>',            

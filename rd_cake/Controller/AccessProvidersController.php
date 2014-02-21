@@ -673,7 +673,7 @@ class AccessProvidersController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph' => Configure::read('icnCsv'), 'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-password', 'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
+                    array('xtype' => 'button', 'iconCls' => 'b-password', 'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change Password')),
                     array('xtype' => 'button', 'iconCls' => 'b-disable',  'glyph' => Configure::read('icnLight'),'scale' => 'large', 'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable'))
                
                 ))

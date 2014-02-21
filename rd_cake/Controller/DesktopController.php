@@ -389,7 +389,7 @@ class DesktopController extends AppController {
         $items = array();
         array_push($items, array( 'name' => __('Vouchers'), 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         array_push($items, array( 'name'    => __('Permanent Users'), 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
-        array_push($items, array( 'name'    => __('BYOD manager'), 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        array_push($items, array( 'name'    => __('BYOD Manager'), 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
         array_push($items, array( 'name'    => __('Activity monitor'), 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
         array_push($items, array( 'name'    => __('Password manager'), 'iconCls' => 'password-shortcut', 'controller' => 'cPassword'));
         return $items;
@@ -420,7 +420,7 @@ class DesktopController extends AppController {
         }
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
-            array_push($items, array( 'name'    => 'BYOD manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+            array_push($items, array( 'name'    => 'BYOD Manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
         }
 
         array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));

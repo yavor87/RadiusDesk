@@ -1087,7 +1087,7 @@ class VouchersController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -1130,7 +1130,7 @@ class VouchersController extends AppController {
                 'glyph'     => Configure::read('icnReload'),
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => _('Reload'),
+                'tooltip'   => __('Reload'),
                 'menu'      => array(             
                     'items'     => array( 
                                     '<b class="menu-title">Reload every:</b>',            
@@ -1243,7 +1243,7 @@ class VouchersController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
                         array('xtype' => 'button',  'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
@@ -1254,7 +1254,7 @@ class VouchersController extends AppController {
             $id   = $user['id'];
             $actions = array();
             array_push($actions,
-                array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload'))
+                array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload'))
             );
 
            

@@ -1156,7 +1156,7 @@ class NasController extends AppController {
             'tabPosition' => 'bottom',
             'items'     => array(
                 array(
-                    'title'   => "Daily",
+                    'title'   => __('Daily'),
                     'itemId'  => "daily",
                     'xtype'   => 'pnlUsageGraph',
                     'span'    => 'daily',
@@ -1165,7 +1165,7 @@ class NasController extends AppController {
                     'type'    => 'nas'
                 ),
                 array(
-                    'title'   => "Weekly",
+                    'title'   => __("Weekly"),
                     'itemId'  => "weekly",
                     'xtype'   => 'pnlUsageGraph',
                     'span'    => 'weekly',
@@ -1174,7 +1174,7 @@ class NasController extends AppController {
                     'type'    => 'nas'
                 ),
                 array(
-                    'title'   => "Monthly",
+                    'title'   => __("Monthly"),
                     'itemId'  => "monthly",
                     'xtype'   => 'pnlUsageGraph',
                     'span'    => 'monthly',
@@ -1496,15 +1496,15 @@ class NasController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload',   'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
-                                    '<b class="menu-title">Reload every:</b>',
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
                                   //  array( 'text'   => _('Cancel auto reload'),   'itemId' => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true ),
-                                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
-                                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
-                                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
-                                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
                                    
                                 )
                             )
