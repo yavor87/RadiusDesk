@@ -449,7 +449,7 @@ class PhpPhrasesController extends AppController {
         $comment = "#: $comment";
         array_push($lines,"$comment\n");
         array_push($lines,"msgid \"$msgid\"\n");
-        array_push($lines,"msgstr \"$msgstr\"\n");
+        array_push($lines,"msgstr \"$msgstr\"\n\n");
 
         $filename = $this->_get_file_name();
         file_put_contents($filename,$lines);    //Commit the change

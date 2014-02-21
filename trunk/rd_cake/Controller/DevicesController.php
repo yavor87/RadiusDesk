@@ -1133,15 +1133,15 @@ class DevicesController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => _('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
-                                    '<b class="menu-title">Reload every:</b>',
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
                                   //  array( 'text'   => _('Cancel auto reload'),   'itemId' => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true ),
-                                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
-                                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
-                                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
-                                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
                                    
                                 )
                             )
@@ -1176,14 +1176,14 @@ class DevicesController extends AppController {
                 'glyph'     => Configure::read('icnReload'),  
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => _('Reload'),
+                'tooltip'   => __('Reload'),
                 'menu'      => array(             
                     'items'     => array( 
-                                    '<b class="menu-title">Reload every:</b>',            
-                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
-                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
-                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
-                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
+                                    '<b class="menu-title">'.__('Reload every').':</b>',            
+                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )                                  
                 ))));
 
             //Add
@@ -1293,7 +1293,7 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
                         array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
@@ -1302,7 +1302,7 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
                         array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
@@ -1331,7 +1331,7 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
                         array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
@@ -1340,7 +1340,7 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //Ap
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => _('Reload')),
+                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
                         array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );

@@ -750,14 +750,14 @@ class AutoMacsController extends AppController {
                             'glyph'     => Configure::read('icnReload'),   
                             'scale'     => 'large', 
                             'itemId'    => 'reload',   
-                            'tooltip'   => _('Reload'),
+                            'tooltip'   => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
-                                    '<b class="menu-title">Reload every:</b>',
-                                    array( 'text'  => _('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
-                                    array( 'text'  => _('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
-                                    array( 'text'  => _('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
-                                    array( 'text'  => _('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
                                   
                                 )
                             )
