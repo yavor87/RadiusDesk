@@ -70,7 +70,7 @@ class TranslationShell extends AppShell {
         foreach($contents as $i){
             $items          = explode('|',$i);
             $phrase_key_id  = $items[0];
-            $phrase         = rtrim($items[1]);
+            $phrase         = rtrim($items[2]);
             print("Finding $phrase_key_id $l_id $c_id");
             //See if there is already an enry for this
             $this->PhraseValue->contain();
@@ -112,6 +112,7 @@ class TranslationShell extends AppShell {
                 $this->out("<info>Country========= $country  ($c_id)</info>");
                 $this->out("<info>Phrase_key_id=== $phrase_key_id </info>");
             }
+            sleep(1);
         }
     }
 }
