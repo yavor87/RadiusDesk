@@ -13,7 +13,7 @@ Ext.define('Rd.view.components.pnlUsageGraph', {
             { xtype: 'button',  iconCls: 'b-reload', glyph   : Rd.config.icnReload,   scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
             {
                 xtype       : 'datefield',
-                fieldLabel  : 'Day',
+                fieldLabel  : i18n('sDay'),
                 name        : 'day',
                 itemId      : 'day',
                 value       : new Date(),

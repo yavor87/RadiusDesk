@@ -6,7 +6,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
     resizable:  true,
     title:      i18n('sEdit_mesh_exit_point'),
     width:      400,
-    height:     500,
+    height:     400,
     plain:      true,
     border:     false,
     layout:     'fit',

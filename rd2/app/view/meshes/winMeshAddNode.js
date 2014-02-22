@@ -101,7 +101,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         minValue    : 1,
                         maxValue    : 100,
                         name        : 'power',
-                        fieldLabel  : i18n('sTX_Power_br_percent_br')'
+                        fieldLabel  : i18n('sTX_Power_br_percent_br')
                     },
                     {
                         xtype       : 'cmbStaticEntries',

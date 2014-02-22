@@ -39,7 +39,7 @@ Ext.define('Rd.controller.cVouchers', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', xtype: 'gridVouchers','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), xtype: 'gridVouchers','glyph': Rd.config.icnHome}}
                         ]
                     }
                 ]

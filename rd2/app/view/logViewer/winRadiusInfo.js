@@ -4,7 +4,7 @@ Ext.define('Rd.view.logViewer.winRadiusInfo', {
     closable:   true,
     draggable:  true,
     resizable:  false,
-    title:      'FreeRADIUS info',
+    title:      i18n('sFreeRADIUS_info'),
     width:      380,
     height:     380,
     plain:      true,
@@ -37,11 +37,11 @@ Ext.define('Rd.view.logViewer.winRadiusInfo', {
         });
 
         var gClients = Ext.create('Ext.grid.Panel', {
-            title: 'Clients',
+            title: i18n('sClients'),
             store: Ext.data.StoreManager.lookup('frClientsStore'),
             columns: [
                 {xtype: 'rownumberer'},
-                { text: 'Name',  dataIndex: 'name',flex: 1 }
+                { text: i18n('sName'),  dataIndex: 'name',flex: 1 }
             ],
             bbar: [
                 {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
@@ -66,11 +66,11 @@ Ext.define('Rd.view.logViewer.winRadiusInfo', {
         });
 
         var gModules = Ext.create('Ext.grid.Panel', {
-            title: 'Modules',
+            title: i18n('sModules'),
             store: Ext.data.StoreManager.lookup('frModulesStore'),
             columns: [
                 {xtype: 'rownumberer'},
-                { text: 'Name',  dataIndex: 'name',flex: 1 }
+                { text: i18n('sName'),  dataIndex: 'name',flex: 1 }
             ],
             bbar: [
                 {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
@@ -88,13 +88,13 @@ Ext.define('Rd.view.logViewer.winRadiusInfo', {
             plain   : true,
             items   : [
                 { 
-                    'title' : 'General', 
+                    'title' : i18n('sGeneral'), 
                     xtype   : 'panel',
                     tpl     : new Ext.XTemplate(
                                 "<tpl>",
                                     "<div style='padding:5px; margin: 5px;'>",
-                                        "<div class=\"lblYfi\">Uptime</div><div class=\"txtGrey\">{uptime}</div>",
-                                        "<div class=\"lblYfi\">Version</div><div class=\"txtGrey\">{version}</div>",
+                                        "<div class=\"lblYfi\">"+i18n('sUptime')+"</div><div class=\"txtGrey\">{uptime}</div>",
+                                        "<div class=\"lblYfi\">"+i18n('sVersion')+"</div><div class=\"txtGrey\">{version}</div>",
                                     "</div>",
                                 "</tpl>"
                     ),

@@ -30,7 +30,7 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                 items       : [
                     {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Password',
+                        fieldLabel  : i18n('sPassword'),
                         name        : 'password',
                         allowBlank  : false,
                         blankText   : i18n("sSupply_a_value"),
@@ -43,11 +43,11 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                         minValue    : 1,
                         maxValue    : 99,
                         name        : 'power',
-                        fieldLabel  : 'TX Power (%)'
+                        fieldLabel  : i18n('sTX_Power_br_percent_br')
                     },
                     {
                         xtype       : 'checkbox',      
-                        fieldLabel  : 'Apply power to all nodes',
+                        fieldLabel  : i18n('sApply_power_to_all_nodes'),
                         name        : 'all_power',
                         inputValue  : 'all_power',
                         checked     : true,

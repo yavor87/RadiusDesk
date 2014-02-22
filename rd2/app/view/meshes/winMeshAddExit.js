@@ -6,7 +6,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
     resizable:  false,
     title:      i18n('sNew_mesh_exit_point'),
     width:      400,
-    height:     550,
+    height:     400,
     plain:      true,
     border:     false,
     layout:     'card',

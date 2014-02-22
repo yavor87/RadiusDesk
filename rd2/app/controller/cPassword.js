@@ -107,7 +107,7 @@ Ext.define('Rd.controller.cPassword', {
                    // me.chkAlwaysActiveChange(chk); //Refresh the view
                     Ext.ux.Toaster.msg(
                         i18n('sFetched password'),
-                        i18n('sPassword_fetched_for_selected_user"),
+                        i18n('sPassword_fetched_for_selected_user'),
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );

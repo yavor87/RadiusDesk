@@ -25,7 +25,7 @@ Ext.define('Rd.library.lStartMenu', {
     // This is combined with changing the align property of the menu's layout from the
     // typical 'stretchmax' to 'stretch' which allows the the items to fill the menu
     // area.
-    width: 300,
+    width: 320,
 
     initComponent: function() {
         var me = this, menu = me.menu;

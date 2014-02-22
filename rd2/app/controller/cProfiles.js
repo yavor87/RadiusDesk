@@ -38,7 +38,7 @@ Ext.define('Rd.controller.cProfiles', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', xtype: 'gridProfiles','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), xtype: 'gridProfiles','glyph': Rd.config.icnHome}}
             
                         ]
                     }

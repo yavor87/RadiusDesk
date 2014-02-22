@@ -68,7 +68,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     {
                         xtype       : 'numberfield',
                         name        : 'it',
-                        fieldLabel  : i18n('sOGM_interval_br_ms_br',
+                        fieldLabel  : i18n('sOGM_interval_br_ms_br'),
                         value       : 1000,
                         maxValue    : 20000,
                         step        : 100,

@@ -192,7 +192,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
             username: me.d_name
         },
         { 
-            title   : 'Usage graphs', 
+            title   : i18n('sUsage_graphs'), 
             layout  : 'fit',
             xtype   : 'tabpanel',
             itemId  : 'pnlUsageGraphs',
@@ -202,7 +202,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
             tabPosition: 'bottom',
             items   :   [
                 {
-                    title   : "Daily",
+                    title   : i18n('sDaily'),
                     itemId  : "daily",
                     xtype   : 'pnlUsageGraph',
                     span    : 'daily',
@@ -211,7 +211,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
                     type    : 'device'
                 },
                 {
-                    title   : "Weekly",
+                    title   : i18n('sWeekly'),
                     itemId  : "weekly",
                     xtype   : 'pnlUsageGraph',
                     span    : 'weekly',
@@ -220,7 +220,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
                     type    : 'device'
                 },
                 {
-                    title   : "Monthly",
+                    title   : i18n('sMonthly'),
                     itemId  : "monthly",
                     layout  : 'fit',
                     xtype   : 'pnlUsageGraph',

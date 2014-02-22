@@ -37,7 +37,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', xtype: 'gridPermanentUsers','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), xtype: 'gridPermanentUsers','glyph': Rd.config.icnHome}}
                         ]
                     }
                 ]
