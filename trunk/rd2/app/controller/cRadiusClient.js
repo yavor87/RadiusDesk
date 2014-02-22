@@ -85,12 +85,12 @@ Ext.define('Rd.controller.cRadiusClient', {
                         border  : false,
                         items   : [ 
                             {
-                                title       : 'Request',
+                                title       : i18n('sRequest'),
                                 flex        : 1,
                                 xtype       : 'frmRadiusRequest'
                             },
                             {
-                                title       : 'Reply',
+                                title       : i18n('sReply'),
                                 flex        : 1,
                                 xtype       : 'pnlRadiusReply'
                             }

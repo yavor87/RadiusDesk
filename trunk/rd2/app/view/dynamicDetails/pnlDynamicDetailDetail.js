@@ -184,7 +184,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
                                 ]
                             },
                             { 
-                            'title'     : "T&C",
+                            'title'     : i18n('sT_and_C'),
                             'layout'    : 'anchor',
                             itemId      : 'tabTc',
                             defaults    : {
@@ -194,7 +194,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
                             items       : [         
                                 {
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : "Compulsory",
+                                    fieldLabel  : i18n('sCompulsory'),
                                     itemId      : 'chkTc',
                                     name        : 't_c_check',
                                     inputValue  : 't_c_check',
@@ -203,7 +203,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
                                 },
                                 {
                                     xtype       : 'textfield',
-                                    fieldLabel  : "URL",
+                                    fieldLabel  : i18n('sURL'),
                                     itemId      : 'txtTcUrl',
                                     name        : "t_c_url",
                                     disabled    : true,

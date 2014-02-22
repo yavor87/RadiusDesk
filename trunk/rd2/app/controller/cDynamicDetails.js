@@ -37,7 +37,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', 'xtype':'gridDynamicDetails','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), 'xtype':'gridDynamicDetails','glyph': Rd.config.icnHome}}
                         ]
                     }
                 ]

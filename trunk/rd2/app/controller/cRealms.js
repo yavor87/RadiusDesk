@@ -38,7 +38,7 @@ Ext.define('Rd.controller.cRealms', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', 'xtype':'gridRealms','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), 'xtype':'gridRealms','glyph': Rd.config.icnHome}}
                         ]
                     }
                 ]

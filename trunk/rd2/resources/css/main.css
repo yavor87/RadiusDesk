@@ -576,3 +576,65 @@
 }
 
 
+/*--- Translator applet ---*/
+td.grdBold div{
+    font-weight: bold;
+}
+
+td.grdGrey div{
+    color: #4b4b4b;
+}
+
+td.grdItalic div{
+    font-style:italic;
+}
+
+td.grdEditable div {
+    border: 1px solid #a9bfd3;
+}
+
+.regMsg {
+    margin: 15px;
+    font-size:16px;
+    color: #6b6a72;
+}
+
+.bodyCls {
+    background-color: white;
+}
+
+.new {
+    background-color: #12f6f9;
+    font-style:italic;
+    font-size:12px;
+}
+
+
+.combo-wrapper {
+    border: 1px solid #ccc;
+    padding: 2px;
+}
+.combo-country {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.combo-country img{
+    float: right;
+}
+.combo-language {
+    font-size: 12px;
+    color: #666666;
+}
+
+.combo-main {
+    font-weight: bold;
+    font-size:14px;
+}
+
+.combo-detail {
+    color: #392bef;
+    font-size:12px;
+}
+
+

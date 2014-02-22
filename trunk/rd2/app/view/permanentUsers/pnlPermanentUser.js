@@ -264,7 +264,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             username: me.pu_name
         },
         { 
-            title   : 'Usage graphs', 
+            title   : i18n('sUsage_graphs'), 
             layout  : 'fit',
             xtype   : 'tabpanel',
             itemId  : 'pnlUsageGraphs',
@@ -274,7 +274,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             tabPosition: 'bottom',
             items   :   [
                 {
-                    title   : "Daily",
+                    title   : i18n('sDaily'),
                     itemId  : "daily",
                     xtype   : 'pnlUsageGraph',
                     span    : 'daily',
@@ -283,7 +283,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                     type    : 'permanent'
                 },
                 {
-                    title   : "Weekly",
+                    title   : i18n('sWeekly'),
                     itemId  : "weekly",
                     xtype   : 'pnlUsageGraph',
                     span    : 'weekly',
@@ -292,7 +292,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                     type    : 'permanent'
                 },
                 {
-                    title   : "Monthly",
+                    title   : i18n('sMonthly'),
                     itemId  : "monthly",
                     layout  : 'fit',
                     xtype   : 'pnlUsageGraph',

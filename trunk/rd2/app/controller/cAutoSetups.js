@@ -38,7 +38,7 @@ Ext.define('Rd.controller.cAutoSetups', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
-                            items   : { 'title' : 'Home', xtype: 'gridAutoSetups','glyph': Rd.config.icnHome}}
+                            items   : { 'title' : i18n('sHome'), xtype: 'gridAutoSetups','glyph': Rd.config.icnHome}}
                         ]
                     }
                 ]

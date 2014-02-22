@@ -113,7 +113,7 @@ Ext.define('Rd.view.vouchers.pnlVoucher', {
             username: me.v_name
         },
         { 
-                title   : 'Usage graphs', 
+                title   : i18n('sUsage_graphs'), 
                 layout  : 'fit',
                 xtype   : 'tabpanel',
                 itemId  : 'pnlUsageGraphs',
@@ -123,7 +123,7 @@ Ext.define('Rd.view.vouchers.pnlVoucher', {
                 tabPosition: 'bottom',
                 items   :   [
                     {
-                        title   : "Daily",
+                        title   : i18n('sDaily'),
                         itemId  : "daily",
                         xtype   : 'pnlUsageGraph',
                         span    : 'daily',
@@ -132,7 +132,7 @@ Ext.define('Rd.view.vouchers.pnlVoucher', {
                         type    : 'voucher'
                     },
                     {
-                        title   : "Weekly",
+                        title   : i18n('sWeekly'),
                         itemId  : "weekly",
                         xtype   : 'pnlUsageGraph',
                         span    : 'weekly',
@@ -141,7 +141,7 @@ Ext.define('Rd.view.vouchers.pnlVoucher', {
                         type    : 'voucher'
                     },
                     {
-                        title   : "Monthly",
+                        title   : i18n('sMonthly'),
                         itemId  : "monthly",
                         layout  : 'fit',
                         xtype   : 'pnlUsageGraph',

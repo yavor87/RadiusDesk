@@ -36,7 +36,7 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
 
         me.items = [{
                 xtype: 'panel',
-                title: 'Authentication',
+                title: i18n('sAuthentication'),
                 autoScroll: true,
                 flex: 2,
                 layout: {
@@ -47,7 +47,7 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
                 items: [ auth_basic, auth_detail ]
             },{
                 xtype: 'panel',
-                title: 'Accounting',
+                title: i18n('sAccounting'),
                 autoScroll: true,
                 flex: 1,
                 layout: {

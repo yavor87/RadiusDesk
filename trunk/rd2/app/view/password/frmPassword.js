@@ -49,15 +49,15 @@ Ext.define('Rd.view.password.frmPassword', {
             },
             {
                 xtype       : 'displayfield',
-                value       : '(select user first)',
-                fieldLabel  : 'Current password',
+                value       : i18n('s_br_select_user_first_br'),
+                fieldLabel  : i18n('sCurrent_password'),
                 fieldCls    : 'green_round',
                 itemId          : 'currentPwd'
             },
             {
                 xtype       : 'textfield',
                 name        : 'password',
-                fieldLabel  : 'New password',
+                fieldLabel  : i18n('sNew_password'),
                 allowBlank  : false,
                 minLength   : 4
             },

@@ -19,7 +19,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
                 xtype   : 'pnlRealmLogo'
             },
             { 
-                title   : 'Usage graphs', 
+                title   : i18n('sUsage_graphs'), 
                 layout  : 'fit',
                 xtype   : 'tabpanel',
                 itemId  : 'pnlUsageGraphs',
@@ -29,7 +29,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
                 tabPosition: 'bottom',
                 items   :   [
                     {
-                        title   : "Daily",
+                        title   : i18n('sDaily'),
                         itemId  : "daily",
                         xtype   : 'pnlUsageGraph',
                         span    : 'daily',
@@ -38,7 +38,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
                         type    : 'realm'
                     },
                     {
-                        title   : "Weekly",
+                        title   : i18n('sWeekly'),
                         itemId  : "weekly",
                         xtype   : 'pnlUsageGraph',
                         span    : 'weekly',
@@ -47,7 +47,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
                         type    : 'realm'
                     },
                     {
-                        title   : "Monthly",
+                        title   : i18n('sMonthly'),
                         itemId  : "monthly",
                         layout  : 'fit',
                         xtype   : 'pnlUsageGraph',
