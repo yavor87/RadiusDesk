@@ -260,6 +260,7 @@ function configure_device(config)
 	  
         os.execute("/etc/init.d/network reload")
         --os.execute("batctl if add wlan0") 	-- The batman if does not always comes up
+	sleep(5)
         os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
         
         -- Check if there are perhaps some captive portals to set up once everything has been done --
