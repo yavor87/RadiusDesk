@@ -86,6 +86,20 @@ $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/
 $config['UserCanRemoveDevice']              = true;
 
 
+//========== WORK IN PROGRES =============
+$config['financials']['vouchers']['a'][0] = array('id'=> 'dat_175m',  'name' => '175MB',  'price' => '129.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][1] = array('id'=> 'dat_400m',  'name' => '400MB',  'price' => '165.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][2] = array('id'=> 'dat_500m',  'name' => '500MB',  'price' => '185.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][3] = array('id'=> 'dat_800m',  'name' => '800MB',  'price' => '269.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][4] = array('id'=> 'dat_1024m', 'name' => '1024MB', 'price' => '285.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][5] = array('id'=> 'dat_1536m', 'name' => '1536MB', 'price' => '369.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][6] = array('id'=> 'dat_2048m', 'name' => '2048MB', 'price' => '385.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][7] = array('id'=> 'dat_2560m', 'name' => '2560MB', 'price' => '469.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][8] = array('id'=> 'dat_3072m', 'name' => '3072MB', 'price' => '565.00','currency' => 'R', 'position' => 'pre');
+$config['financials']['vouchers']['a'][9] = array('id'=> 'dat_5120m', 'name' => '5120MB', 'price' => '945.00','currency' => 'R', 'position' => 'pre');
+
+
+//======== END WORK IN PROGRESS ==========
 
 //==== Define glyphs -> We'll use glyphs insteadd of icons
 $config['icnLock']      = 57495;
