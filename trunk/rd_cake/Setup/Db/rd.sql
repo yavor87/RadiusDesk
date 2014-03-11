@@ -499,7 +499,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-10-21 09:10:38',1,'http://www.radiusdesk.com'),(4,'test',0,'logo.jpg','','','','','','','','','','',0,0,44,'2014-01-05 18:23:49','2014-01-05 18:23:49',0,'');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-10-21 09:10:38',1,'http://www.radiusdesk.com'),(4,'test',0,'1393375001.jpg','','','','','','','','','','',0,0,44,'2014-01-05 18:23:49','2014-02-26 02:36:41',0,'');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -589,6 +589,48 @@ LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
 INSERT INTO `dynamic_photos` VALUES (16,3,'Animals Welcome','Nice long beaches to go for a walk','1369745727.jpg','2013-05-28 14:55:27','2013-05-28 14:55:27'),(17,3,'Fresh fish daily','The best yellowtail in South Africa','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01'),(18,3,'Whiskey on the rocks?','.... or your favourite softdrink','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04'),(19,3,'Castles in the sand','Lots of sand for the kids to play in','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30'),(20,3,'Rocks rocks rocks','Nature\'s own obstacle course  ','1369746199.jpg','2013-05-28 15:03:19','2013-05-28 15:03:19'),(21,3,'And a road of my own','With the city and the rat race behind me','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04'),(22,3,'Sounds of the sea','Where land and water meet','1369746423.jpg','2013-05-28 15:07:03','2013-05-28 15:07:03');
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_payu_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_payu_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_payu_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `merchant_reference` varchar(64) NOT NULL,
+  `payu_reference` varchar(64) NOT NULL,
+  `transaction_type` enum('RESERVE','FINALISE','PAYMENT','EFFECT_STAGING','CREDIT','RESERVE_CANCEL','REGISTER_LINK') DEFAULT 'PAYMENT',
+  `transaction_state` enum('NEW','PROCESSING','SUCCESSFUL','FAILED') DEFAULT 'NEW',
+  `result_code` int(11) DEFAULT NULL,
+  `result_message` varchar(255) DEFAULT NULL,
+  `display_message` varchar(255) DEFAULT NULL,
+  `merchant_user_id` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `regional_id` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `amount_in_cents` int(11) NOT NULL,
+  `currency_code` varchar(255) DEFAULT 'ZAR',
+  `description` varchar(255) NOT NULL,
+  `product_code` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_payu_transactions`
+--
+
+LOCK TABLES `fin_payu_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_payu_transactions` DISABLE KEYS */;
+INSERT INTO `fin_payu_transactions` VALUES (1,'1394549753','146344301661','PAYMENT','',999,'PayU Timeout','',NULL,NULL,NULL,NULL,NULL,NULL,94500,'ZAR','5120MB Internet voucher','dat_5120m','2014-03-11 16:55:55','2014-03-11 16:55:55'),(2,'1394568726','146407795408','PAYMENT','SUCCESSFUL',0,'Successful','Successful',NULL,NULL,NULL,NULL,NULL,NULL,12900,'ZAR','175MB Internet voucher','dat_175m','2014-03-11 22:12:09','2014-03-11 22:39:34');
+/*!40000 ALTER TABLE `fin_payu_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2055,4 +2097,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-24 13:18:04
+-- Dump completed on 2014-03-11 22:49:33
