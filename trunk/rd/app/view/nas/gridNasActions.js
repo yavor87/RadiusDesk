@@ -55,7 +55,8 @@ Ext.define('Rd.view.nas.gridNasActions' ,{
                 },
                 api: {
                     destroy  : '/cake2/rd_cake/actions/delete.json'
-                }
+                },
+                simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },
             listeners: {
                 load: function(store, records, successful) {      
