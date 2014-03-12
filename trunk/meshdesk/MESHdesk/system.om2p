@@ -1,0 +1,32 @@
+
+config system
+	option hostname 'OpenWrt'
+	option timezone 'UTC'
+
+config timeserver 'ntp'
+	list server '0.openwrt.pool.ntp.org'
+	list server '1.openwrt.pool.ntp.org'
+	list server '2.openwrt.pool.ntp.org'
+	list server '3.openwrt.pool.ntp.org'
+	option enable_server '0'
+
+config led 'led_port1'
+	option name 'port1'
+	option sysfs 'om2p:blue:wan'
+	option trigger 'netdev'
+	option dev 'eth0'
+	option mode 'link tx rx'
+
+config led 'led_port2'
+	option name 'port2'
+	option sysfs 'om2p:blue:lan'
+	option trigger 'netdev'
+	option dev 'eth1'
+	option mode 'link tx rx'
+
+config led 'led_wifi'           
+        option name 'wifi'      
+        option sysfs 'om2p:green:wifi'
+        option trigger 'netdev'
+        option dev 'bat0'     
+        option mode 'link tx rx'
