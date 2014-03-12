@@ -153,7 +153,7 @@ function wait_for_wifi()
 		
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= lan_timeout)then
-			print("LAN is not coming up. Try the WiFi")
+			print("WiFi is not coming up. Try the previous settings")
 			loop=false --This will break the loop
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
@@ -263,7 +263,8 @@ function configure_device(config)
         os.execute("/etc/init.d/network reload")
         --os.execute("batctl if add wlan0") 	-- The batman if does not always comes up
 	sleep(5)
-        os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
+       -- os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
+        
         
         -- Check if there are perhaps some captive portals to set up once everything has been done --
         sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
@@ -277,7 +278,8 @@ function configure_device(config)
         end
         
         -- Do the LED's we have configured in /etc/config/system
-        os.execute("/etc/init.d/led start")
+        os.execute("ifconfig bat0 up") 	--On the pico's it goes down
+        --os.execute("/etc/init.d/led start")
         
 --]]--
 end
