@@ -84,7 +84,7 @@ function wait_for_lan()
 	if(lan_is_up)then
 		os.execute("/etc/MESHdesk/main_led.lua start b")
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
-		--sleep(10)
+		sleep(10)
 		try_settings_through_lan()
 	else
 		wait_for_wifi()		
@@ -272,7 +272,10 @@ function configure_device(config)
         	a:createConfigs(o.config_settings.captive_portals)                  
         	a:startPortals()	
         	
-        end 
+        end
+        
+        -- Do the LED's we have configured in /etc/config/system
+        os.execute("/etc/init.d/led start")
         
 --]]--
 end

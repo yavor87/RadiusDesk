@@ -1,7 +1,10 @@
 local rdNetwork = {}
 
+-- Hardware with two ethernet interfaces
+--local dhcp_file="/etc/MESHdesk/configs/dhcp_network_two_eth"
 
-local dhcp_file="/etc/MESHdesk/configs/dhcp_network_two_eth"
+-- Hardware with one ethernet interface
+local dhcp_file="/etc/MESHdesk/configs/dhcp_network_one_eth"
 
 -- DHCP start Network
 function rdNetwork.dhcpStart()
