@@ -162,6 +162,8 @@ function wait_for_wifi()
 	
 	--See what happended and how we should handle it
 	if(wifi_is_up)then
+		-- sleep at least 10 seconds to make sure it got a DHCP addy
+		sleep(10)
 		print("Wifi is up try to get the settings through WiFi")
 		try_settings_through_wifi()
 	else
