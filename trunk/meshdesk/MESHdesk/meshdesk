@@ -25,12 +25,25 @@ config settings 'settings'
 	option lan_down_file '/tmp/lan_down'
 	option wifi_up_file '/tmp/wifi_up'
 	option wifi_down_file '/tmp/wifi_down'
-	option lan_timeout '20'
-	option wifi_timeout '20'
+	option lan_timeout '120'
+	option wifi_timeout '100'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
+	option hardware 'pico2'
 	
 config captive_portal 'captive_portal'
 	option default_dns_1 '208.67.222.222'
 	option default_dns_2 '208.67.220.220'
-	 
+	
+#Hardware specific settings here:	
+config hardware 'pico2'
+	option morse_led "/sys/class/leds/gpio4/brightness"
+	option mesh_led	 "/sys/class/leds/gpio1/brightness"
+	
+config hardware 'om2p'
+	option morse_led "/sys/class/leds/om2p\:blue\:lan/brightness"
+	
+config hardware 'dragino'
+	option morse_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	
+
