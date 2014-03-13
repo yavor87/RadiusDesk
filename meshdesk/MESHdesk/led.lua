@@ -6,15 +6,16 @@ package.path = "libs/?.lua;" .. package.path
 --The default
 local what_to_flash=arg[1]
 if (what_to_flash == nil)then
-	what_to_flash = a
+	what_to_flash = "a"
 end
 
 if(what_to_flash == 'stop')then
-	local l = require("rdLeds")
-	l.clearLed()
+	require("rdMorse")
+	o_m = rdMorse()
+	o_m:clearLed()
 else
-
-	local l = require("rdLeds")                             
-	l.flash(what_to_flash)
+	require("rdMorse")
+	o_m = rdMorse()
+	o_m:startFlash(what_to_flash)
 end    
 

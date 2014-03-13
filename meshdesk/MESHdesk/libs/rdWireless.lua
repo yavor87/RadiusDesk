@@ -10,6 +10,9 @@ function newWireless()
         os.execute("uci commit wireless")
 end    
 
+function rdWireless.newWireless()
+	newWireless()
+end
 
 function rdWireless.connectClient()
 

@@ -9,6 +9,7 @@ Startup script to get the config of the device from the config server
 -- Include libraries
 package.path = "libs/?.lua;" .. package.path
 require "socket"
+require("rdLogger")
 
 
 function fetch_config_value(item)
@@ -26,8 +27,20 @@ sleep_time		= 1
 config_file		= fetch_config_value('meshdesk.settings.config_file')
 lan_timeout		= tonumber(fetch_config_value('meshdesk.settings.lan_timeout'))
 wifi_timeout		= tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
+debug			= true
+l			= rdLogger()
 
--- Some general functions --
+
+--======================================
+---- Some general functions ------------
+--======================================
+
+function log(m,p)
+	if(debug)then
+		l:log(m,p)
+	end
+end
+
 function sleep(sec)
     socket.select(nil, nil, sec)
 end
@@ -50,15 +63,22 @@ function readAll(file)
         return content                     
 end
 
+--==============================
 -- End Some general functions --
+--==============================
 
 -- Start-up function --
 function wait_for_lan()
 	-- LAN we flash "A"
+	log("Starting LAN wait")
 	os.execute("/etc/MESHdesk/main_led.lua start a")
 	local start_time=os.time()
 	local loop=true
 	local lan_is_up=false
+	
+	--Do a clean start with the wireless--
+	local wireless = require("rdWireless")
+	wireless.newWireless()	
 	
 	local w = require("rdNetwork")                                            
 	w.dhcpStart()
@@ -73,16 +93,28 @@ function wait_for_lan()
 		end
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= lan_timeout)then
+			log("LAN is not coming up. Try the WiFi")
 			print("LAN is not coming up. Try the WiFi")
 			loop=false --This will break the loop
 		else
+			
+			log("Waiting for LAN to come up now for " .. time_diff .. " seconds")
 			print("Waiting for LAN to come up now for " .. time_diff .. " seconds")
+		end
+		
+		--If it happens that the LAN comes up the time may be adjusted by a large amount due to NTP.
+		--Then we can assume the LAN is up as set the flag
+		--TODO This will be large on second runs! - fix this
+		if(os.time() > 4000)then
+			log('Detected a very lage value for os time ausme the LAN and NTP working')
+			lan_is_up = true
 		end
 	end
 	
 	--See what happended and how we should handle it
 	if(lan_is_up)then
 		os.execute("/etc/MESHdesk/main_led.lua start b")
+		log("sleep at least 10 seconds to make sure it got a DHCP addy")
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
 		try_settings_through_lan()
@@ -101,8 +133,9 @@ function did_lan_came_up()
 	end
 end
 
-function try_settings_through_lan()
-	print("LAN up; now try fetch the settings")
+function try_settings_through_lan() 
+	log("LAN up now try fetch the settings")
+	print("LAN up now try fetch the settings")
 	
 	-- See if we can ping it
 	local server = fetch_config_value('meshdesk.internet1.ip')
@@ -110,6 +143,7 @@ function try_settings_through_lan()
 	local lan_config_fail=true                                          
 	if(c.pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
+		log("Ping os server was OK try to fetch the settings")
 --		local id	= "A8-40-41-13-60-E3"
 		local id	= getMac('eth0')
 		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
@@ -120,8 +154,11 @@ function try_settings_through_lan()
 			print("Cool, settings gekry")
 			lan_config_fail=false
 		end
+	else 
+		log("Ping os server was NOT OK!")
 	end
 	if(lan_config_fail)then	
+		log("Could not fetch settings through LAN")
 		wait_for_wifi()
 	else
 		--flash D--
@@ -158,6 +195,12 @@ function wait_for_wifi()
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
 		end
+		--If it happens that the WIFI comes up the time may be adjusted by a large amount due to NTP.
+		--Then we can assume the WIFI is up as set the flag
+		if(os.time() > 4000)then
+			log('Detected a very lage value for os time assume the WiFi client and NTP working')
+			wifi_is_up = true
+		end
 	end
 	
 	--See what happended and how we should handle it
@@ -173,7 +216,7 @@ function wait_for_wifi()
 end
 
 function try_settings_through_wifi()
-	print("Wifi up; now try fetch the settings")
+	print("Wifi up now try fetch the settings")
 	
 	-- See if we can ping it
 	local server = fetch_config_value('meshdesk.internet1.ip')
@@ -261,7 +304,7 @@ function configure_device(config)
 	
 	  
         os.execute("/etc/init.d/network reload")
-        --os.execute("batctl if add wlan0") 	-- The batman if does not always comes up
+        os.execute("batctl if add mesh0") 	-- The batman if does not always comes up
 	sleep(5)
        -- os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
         
