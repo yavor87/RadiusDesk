@@ -3,13 +3,17 @@
 start_stop = arg[1]
 what_to_flash = arg[2]
 
+-- Include libraries
+package.path = "libs/?.lua;" .. package.path
+--External programs object
+require("rdExternal")
+ext = rdExternal()
+
 if((start_stop == nil)or(start_stop == 'start'))then
-	os.execute("killall led.lua")
-	os.execute("/etc/MESHdesk/led.lua " .. what_to_flash .. " &")
+	ext:startOne("/etc/MESHdesk/led.lua " .. what_to_flash .. " &","led.lua")
 end
 
 if(start_stop == 'stop')then
-	os.execute("killall led.lua")
-	os.execute("/etc/MESHdesk/led.lua stop &")
+	ext:startOne("/etc/MESHdesk/led.lua stop &","led.lua")
 end
 
