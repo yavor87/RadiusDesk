@@ -10,6 +10,9 @@ Startup script to get the config of the device from the config server
 package.path = "libs/?.lua;" .. package.path
 require "socket"
 require("rdLogger")
+--External programs object
+require("rdExternal")
+
 
 
 function fetch_config_value(item)
@@ -29,6 +32,7 @@ lan_timeout		= tonumber(fetch_config_value('meshdesk.settings.lan_timeout'))
 wifi_timeout		= tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
 debug			= true
 l			= rdLogger()
+ext 			= rdExternal()
 
 
 --======================================
@@ -69,6 +73,9 @@ end
 
 -- Start-up function --
 function wait_for_lan()
+	--kill potential existing batman_neighbours.lua instance
+	ext:stop('batman_neighbours.lui')	
+
 	-- LAN we flash "A"
 	log("Starting LAN wait")
 	os.execute("/etc/MESHdesk/main_led.lua start a")
@@ -105,8 +112,9 @@ function wait_for_lan()
 		--If it happens that the LAN comes up the time may be adjusted by a large amount due to NTP.
 		--Then we can assume the LAN is up as set the flag
 		--TODO This will be large on second runs! - fix this
-		if(os.time() > 4000)then
+		if((os.time() > 4000) and (start_time < 4000))then
 			log('Detected a very lage value for os time ausme the LAN and NTP working')
+			loop = false
 			lan_is_up = true
 		end
 	end
@@ -169,6 +177,7 @@ end
 
 function wait_for_wifi()
 	-- WiFi we flash "C"
+	log("Try settings through WiFi network")
 	os.execute("/etc/MESHdesk/main_led.lua start c")
 	
 	-- Start the WiF interface
@@ -191,14 +200,16 @@ function wait_for_wifi()
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= lan_timeout)then
 			print("WiFi is not coming up. Try the previous settings")
+			log("WiFi is not coming up. Try the previous settings")
 			loop=false --This will break the loop
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
 		end
 		--If it happens that the WIFI comes up the time may be adjusted by a large amount due to NTP.
 		--Then we can assume the WIFI is up as set the flag
-		if(os.time() > 4000)then
+		if((os.time() > 4000) and (start_time < 4000))then
 			log('Detected a very lage value for os time assume the WiFi client and NTP working')
+			loop = false
 			wifi_is_up = true
 		end
 	end
@@ -208,15 +219,18 @@ function wait_for_wifi()
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
 		print("Wifi is up try to get the settings through WiFi")
+		log("Wifi is up try to get the settings through WiFi")
 		try_settings_through_wifi()
 	else
 		print("Settings could not be fetched through WiFi see if older ones exists")
+		log("Settings could not be fetched through WiFi see if older ones exists")
 		check_for_previous_settings()
 	end
 end
 
 function try_settings_through_wifi()
 	print("Wifi up now try fetch the settings")
+	log("Wifi up now try fetch the settings")
 	
 	-- See if we can ping it
 	local server = fetch_config_value('meshdesk.internet1.ip')
@@ -224,6 +238,7 @@ function try_settings_through_wifi()
 	local wifi_config_fail=true                                          
 	if(c.pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
+		log("Ping os server was OK try to fetch the settings")
 --		local id	="A8-40-41-13-60-E3"
 		local id	= getMac('eth0')
 		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
@@ -237,6 +252,7 @@ function try_settings_through_wifi()
 	end
 	if(wifi_config_fail)then	
 		print("Failed to get settings through Wi-Fi see if older ones exists")
+		log("Failed to get settings through Wi-Fi see if older ones exists")
 		check_for_previous_settings()
 	else
 		--flash D--
@@ -323,6 +339,8 @@ function configure_device(config)
         -- Do the LED's we have configured in /etc/config/system
         os.execute("ifconfig bat0 up") 	--On the pico's it goes down
         --os.execute("/etc/init.d/led start")
+        log('Starting Batman neighbour scan')
+        ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
         
 --]]--
 end
