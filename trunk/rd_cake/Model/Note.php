@@ -36,5 +36,6 @@ class Note extends AppModel {
         'ProfileComponentNote'  => array('dependent'    => true),
         'DynamicDetailNote'     => array('dependent'    => true),
         'AutoMacNote'           => array('dependent'    => true),
+        'MeshNote'              => array('dependent'    => true)
     );
 }
