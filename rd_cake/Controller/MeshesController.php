@@ -374,7 +374,7 @@ class MeshesController extends AppController {
         }
 	}
 
-/*
+
     public function note_index(){
 
         //__ Authentication + Authorization __
@@ -390,7 +390,7 @@ class MeshesController extends AppController {
             $q_r    = $this->{$this->modelClass}->{$this->itemNote}->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('ProfileNote.profile_id' => $pc_id)
+                    'conditions'    => array('MeshNote.mesh_id' => $pc_id)
                 )
             );
             foreach($q_r as $i){
@@ -444,8 +444,8 @@ class MeshesController extends AppController {
         //print_r($this->request->data);
         if ($this->{$this->modelClass}->{$this->itemNote}->Note->save($this->request->data)) {
             $d                      = array();
-            $d['ProfileNote']['profile_id']   = $this->request->data['for_id'];
-            $d['ProfileNote']['note_id'] = $this->{$this->modelClass}->ProfileNote->Note->id;
+            $d['MeshNote']['mesh_id']   = $this->request->data['for_id'];
+            $d['MeshNote']['note_id'] = $this->{$this->modelClass}->MeshNote->Note->id;
             $this->{$this->modelClass}->{$this->itemNote}->create();
             if ($this->{$this->modelClass}->{$this->itemNote}->save($d)) {
                 $success = true;
@@ -494,8 +494,8 @@ class MeshesController extends AppController {
                     $fail_flag = true;
                 }
             }else{
-                $this->{$this->modelClass}->ProfileNote->Note->id = $this->data['id'];
-                $this->{$this->modelClass}->ProfileNote->Note->delete($this->data['id'],true);
+                $this->{$this->modelClass}->MeshNote->Note->id = $this->data['id'];
+                $this->{$this->modelClass}->MeshNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
@@ -531,9 +531,6 @@ class MeshesController extends AppController {
             ));
         }
     }
-
-*/
-
     //======= MESH entries ============
     public function mesh_entries_index(){
 

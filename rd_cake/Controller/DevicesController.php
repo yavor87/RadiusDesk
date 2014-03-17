@@ -148,6 +148,7 @@ class DevicesController extends AppController {
             //Find the realm and profile names
             $realm  = 'not defined';
             $profile= 'not defined';
+            $p_id=0;
 
             foreach($i['Radcheck'] as $rc){
                 if($rc['attribute'] == 'User-Profile'){
@@ -157,6 +158,7 @@ class DevicesController extends AppController {
                         $p->contain();
                         $q_r = $p->findByName($profile);
                         $profiles[$profile] = $q_r['Profile']['id'];
+                        $p_id = $q_r['Profile']['id'];
                     }
                 }
                 if($rc['attribute'] == 'Rd-Realm'){
@@ -183,7 +185,8 @@ class DevicesController extends AppController {
                     'description'   => $i['Device']['description'], 
                     'realm'         => $realm,
                     'profile'       => $profile,
-                    'profile_id'    => $profiles[$profile],
+                    //'profile_id'    => $profiles[$profile],
+                    'profile_id'    => $p_id,
                     'perc_time_used'=> $i['Device']['perc_time_used'],
                     'perc_data_used'=> $i['Device']['perc_data_used'],
                     'active'        => $i['Device']['active'],
