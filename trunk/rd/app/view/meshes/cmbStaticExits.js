@@ -14,6 +14,7 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
     value           : 0,
     labelClsExtra   : 'lblRd',
     meshId          : '' ,
+    nodeId          : '',
     initComponent: function(){
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
@@ -22,7 +23,7 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                extraParams: { 'mesh_id' : me.meshId }, 
+                extraParams: { 'mesh_id' : me.meshId, 'node_id' : me.nodeId }, 
                 url     : '/cake2/rd_cake/meshes/static_exit_options.json',
                 reader: {
                     type: 'json',

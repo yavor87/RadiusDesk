@@ -48,7 +48,7 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
-        'components.winNote',       'components.winNoteAdd'
+        'components.winNote',       'components.winNoteAdd',    'meshes.winMeshEditNode'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
         'sNodes' 
@@ -958,7 +958,7 @@ Ext.define('Rd.controller.cMeshes', {
         var me      = this;
         var win     = button.up("winMeshEdit");
         var store   = win.down("gridNodes").getStore();
-
+        console.log("gooi 2");
         if(win.down("gridNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
@@ -970,15 +970,13 @@ Ext.define('Rd.controller.cMeshes', {
             var sr      = win.down("gridNodes").getSelectionModel().getLastSelected();
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
-            var type    = sr.get('type');
             if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
                 var w = Ext.widget('winMeshEditNode',
                 {
                     id          :'winMeshEditNodeId',
                     store       : store,
-                    exitId      : id,
-                    meshId      : meshId,
-                    type        : type
+                    nodeId      : id,
+                    meshId      : meshId
                 });
                 me.application.runAction('cDesktop','Add',w);         
             }

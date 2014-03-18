@@ -2,6 +2,7 @@ Ext.define('Rd.model.mNode', {
     extend: 'Ext.data.Model',
     fields: [
          {name: 'id',               type: 'int'     },
+         {name: 'mesh_id',          type: 'int'     },
          {name: 'name',             type: 'string'  },
          {name: 'description',      type: 'string'  },
          {name: 'mac',              type: 'string'  },
