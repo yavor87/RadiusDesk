@@ -146,6 +146,9 @@ class MeshesController extends AppController {
         $items      = array();
 
         foreach($q_r as $i){
+
+           // print_r($i);
+
             //Create notes flag
             $notes_flag  = false;
             foreach($i['MeshNote'] as $nn){
@@ -162,12 +165,18 @@ class MeshesController extends AppController {
             //Add the components (already from the highest priority
             $components = array();
           
+            $node_count = count($i['Node']);
+            $nodes_up   = $node_count;
+            $nodes_down = 10;
 
             array_push($items,array(
                 'id'                    => $i['Mesh']['id'], 
                 'name'                  => $i['Mesh']['name'],
                 'ssid'                  => $i['Mesh']['ssid'],
                 'bssid'                 => $i['Mesh']['bssid'],
+                'node_count'            => $node_count,
+                'nodes_up'              => $nodes_up,
+                'nodes_down'            => $nodes_down,
                 'owner'                 => $owner_tree, 
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
@@ -1136,34 +1145,30 @@ class MeshesController extends AppController {
             ));
         }
     }
-/*
-    public function mesh_exit_edit(){
 
+    public function mesh_node_edit(){
 
         if ($this->request->is('post')) {
 
-            $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
-            $exit           = ClassRegistry::init('MeshExit');
-
-            // If the form data can be validated and saved...
-            if ($exit->save($this->request->data)) {
+            $static_entry   = ClassRegistry::init('NodeMeshEntry');
+            $static_exit    = ClassRegistry::init('NodeMeshExit');
+            $node           = ClassRegistry::init('Node');
+     
+            if ($node->save($this->request->data)) {
+                $new_id = $node->id;
 
                 //Add the entry points
                 $count      = 0;
                 $entry_ids  = array();
                 $empty_flag = false;
-                $new_id     = $this->request->data['id'];
 
-                //Clear previous ones first:
-                $entry_point->deleteAll(array('MeshExitMeshEntry.mesh_exit_id' => $new_id), false);
-
-                if (array_key_exists('entry_points', $this->request->data)) {
-                    foreach($this->request->data['entry_points'] as $e){
-                        if($this->request->data['entry_points'][$count] == 0){
+                if (array_key_exists('static_entries', $this->request->data)) {
+                    foreach($this->request->data['static_entries'] as $e){
+                        if($this->request->data['static_entries'][$count] == 0){
                             $empty_flag = true;
                             break;
                         }else{
-                            array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                            array_push($entry_ids,$this->request->data['static_entries'][$count]);
                         }
                         $count++;
                     }
@@ -1171,12 +1176,40 @@ class MeshesController extends AppController {
 
                 //Only if empty was not specified
                 if((!$empty_flag)&&(count($entry_ids)>0)){
-                    $entry_point->create();
+                    $static_entry->create();
                     $data = array();
                     foreach($entry_ids as $id){
-                        $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
-                        $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
-                        $entry_point->save($data);
+                        $data['NodeMeshEntry']['node_id']       = $new_id;
+                        $data['NodeMeshEntry']['mesh_entry_id'] = $id;
+                        $static_entry->save($data);
+                    }
+                }
+
+                //Add the exit points
+                $count      = 0;
+                $exit_ids  = array();
+                $e_flag = false;
+
+                if (array_key_exists('static_exits', $this->request->data)) {
+                    foreach($this->request->data['static_exits'] as $e){
+                        if($this->request->data['static_exits'][$count] == 0){
+                            $e_flag = true;
+                            break;
+                        }else{
+                            array_push($entry_ids,$this->request->data['static_exits'][$count]);
+                        }
+                        $count++;
+                    }
+                }
+
+                //Only if empty was not specified
+                if((!$e_flag)&&(count($exit_ids)>0)){
+                    $static_exit->create();
+                    $data = array();
+                    foreach($entry_ids as $id){
+                        $data['NodeMeshExit']['node_id']       = $new_id;
+                        $data['NodeMeshExit']['mesh_exit_id']  = $id;
+                        $static_exit->save($data);
                     }
                 }
 
@@ -1184,39 +1217,40 @@ class MeshesController extends AppController {
                     'success' => true,
                     '_serialize' => array('success')
                 ));
+            }else{
+                $message = 'Error';
+                $this->set(array(
+                    'errors'    => $node->validationErrors,
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not create item')),
+                    '_serialize' => array('errors','success','message')
+                ));
             }
         } 
     }
 
-    public function mesh_exit_view(){
+    public function mesh_node_view(){
 
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
 
-        $exit = ClassRegistry::init('MeshExit');
-        $exit->contain('MeshExitMeshEntry');
+        $node = ClassRegistry::init('Node');
 
-        $id    = $this->request->query['exit_id'];
-        $q_r   = $exit->findById($id);
-
-        //entry_points
-        $q_r['MeshExit']['entry_points'] = array();
-        foreach($q_r['MeshExitMeshEntry'] as $i){
-            array_push($q_r['MeshExit']['entry_points'],$i['id']);
-        }
-
-      //  print_r($q_r);
+        $id    = $this->request->query['node_id'];
+        $q_r   = $node->findById($id);
+ 
+       // print_r($q_r);
 
         $this->set(array(
-            'data'     => $q_r['MeshExit'],
+            'data'      => $q_r['Node'],
             'success'   => true,
             '_serialize'=> array('success', 'data')
         ));
     }
 
-    public function mesh_exit_delete(){
+    public function mesh_node_delete(){
 
        if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -1230,16 +1264,16 @@ class MeshesController extends AppController {
 
         $user_id    = $user['id'];
         $fail_flag  = false;
-        $exit       = ClassRegistry::init('MeshExit'); 
+        $node       = ClassRegistry::init('Node'); 
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id']; 
-            $exit->id = $this->data['id'];
-            $exit->delete($exit->id, true);
+            $node->id = $this->data['id'];
+            $node->delete($node->id, true);
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
-                    $exit->id = $d['id'];
-                    $exit->delete($exit->id, true);
+                    $node->id = $d['id'];
+                    $node->delete($node->id, true);
             }
         }  
         $this->set(array(
@@ -1247,7 +1281,7 @@ class MeshesController extends AppController {
             '_serialize' => array('success')
         ));
     }
-*/
+
     //==== END Mesh nodes ======
 
    public function mesh_entry_points(){
@@ -1714,6 +1748,7 @@ class MeshesController extends AppController {
         $c['contain']   = array(
                             'MeshNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'User',
+                            'Node'
                         );
 
         //===== SORT =====
