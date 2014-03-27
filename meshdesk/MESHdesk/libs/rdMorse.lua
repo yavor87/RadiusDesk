@@ -21,6 +21,11 @@ function rdMorse:rdMorse()
 	self.long	= self.short*3	--3units
 	self.pause	= self.short*6  --7 units but we subtract one short to only have 6 since our loop is padded with a short
 	
+	--Some boards has 1 as on  others has 0. This is the default 1 for on and 0 for off
+	self.on		= '1'
+	self.off	= '0'
+	
+	
 	--Alpha characters
 	self.a		= ". _"
 	self.b		= "_ . . ."
@@ -52,6 +57,10 @@ function rdMorse:rdMorse()
 		function(a)
 			if(a['.name'] == hardware)then
 				self.led = a['morse_led']
+				if(a['swap_on_off'] == '1')then
+					print("Swapping on and off")
+					self:swapOnOff()
+				end
 			end	
 		end)
 	
@@ -59,6 +68,22 @@ end
         
 function rdMorse:getVersion()
 	return self.version
+end
+
+function rdMorse:swapOnOff()
+	--on
+	if(self.on == '1')then
+		self.on = '0'
+	else
+		self.on = '1'
+	end
+	
+	--off
+	if(self.off == '1')then
+		self.off = '0'
+	else 
+		self.off = '1'
+	end
 end
 
 function rdMorse:setLed(l)
@@ -70,7 +95,7 @@ function rdMorse:getLed()
 end
 
 function rdMorse:clearLed()
-        os.execute('echo 0 > ' .. self.led )
+        os.execute('echo ' .. self.off .. ' > ' .. self.led )
 end   
 
 function rdMorse:startFlash(item)
@@ -116,15 +141,15 @@ function rdMorse._sleep(self,time)
 end
 
 function rdMorse._short(self)
-	os.execute('echo 1 > ' .. self.led )
+	os.execute('echo ' .. self.on .. ' > ' .. self.led )
 	self:_sleep(self.short)
-	os.execute('echo 0 > ' .. self.led )
+	os.execute('echo ' .. self.off ..' > ' .. self.led )
 	self:_sleep(self.short)
 end
 
 function rdMorse._long(self)
-	os.execute('echo 1 > ' .. self.led )
+	os.execute('echo ' .. self.on .. ' > ' .. self.led )
 	self:_sleep(self.long)
-	os.execute('echo 0 > ' .. self.led )
+	os.execute('echo ' .. self.off .. ' > ' .. self.led )
 	self:_sleep(self.short)
 end

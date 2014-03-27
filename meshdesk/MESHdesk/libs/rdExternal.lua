@@ -35,8 +35,8 @@ function rdExternal:stop(program)
 	end
 end
 
-function rdExternal:getOutput(program)
-	local handle = io.popen('pidof '.. program)                                      
+function rdExternal:getOutput(command)
+	local handle = io.popen(command)                                      
         local result = handle:read("*a")                                                 
         handle:close()  
 	return result
