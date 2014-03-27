@@ -7,7 +7,7 @@ config fallback
 
 config internet 'internet1'
 	option dns 'radiusdev.webage.co'
-	option ip '204.45.103.85'
+	option ip '188.226.185.234'
 #	option ip '192.168.1.103'
 	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
 	option protocol 'http'
@@ -29,7 +29,7 @@ config settings 'settings'
 	option wifi_timeout '100'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
-	option hardware 'pico2'
+	option hardware 'dragino'
 	
 config captive_portal 'captive_portal'
 	option default_dns_1 '208.67.222.222'
@@ -44,6 +44,7 @@ config hardware 'om2p'
 	option morse_led "/sys/class/leds/om2p\:blue\:lan/brightness"
 	
 config hardware 'dragino'
-	option morse_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
+	option swap_on_off "1"
 	
 
