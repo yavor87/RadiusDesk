@@ -4,7 +4,13 @@ Ext.define('CoovaChilli.view.pnlNotHotspot', {
     border      : false,
     bodyPadding : 20,
     layout      : 'fit',
-    html        : '<h2>Not a hotspot</h2>',
+    html        : [
+        "<div class='rdCenter'>",
+        "<h2>Not a hotspot!</h2>",
+        "<div class='rdDescription'>",
+        "This panel will dispaly a login form when you are connecting from a <b>CoovaChilli</b> Captive portal",
+        "</div></div>"
+    ],
     initComponent: function() {
         this.callParent(arguments);   
     }

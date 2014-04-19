@@ -21,9 +21,10 @@ Ext.Loader.setConfig({enabled:true,disableCaching: false});
 var infoServer= "http://"+document.location.hostname;
 
 Ext.application({
-    name    : 'CoovaChilli',
-    extend  : 'CoovaChilli.Application',
-    autoCreateViewport: true,
+    name                : 'CoovaChilli',
+    extend              : 'CoovaChilli.Application',
+    autoCreateViewport  : true,
+    controllers         : ['Desktop'],
 
     //____Configuration settings comes here____:
     config: {
@@ -32,19 +33,11 @@ Ext.application({
         urlUsage    : infoServer+'/c2/yfi_cake/third_parties/json_usage_check',
         urlBase     : infoServer,
         noStatus    : false,
-        redirectTo  : "http://google.com"
+        redirectTo  : "http://google.com",
+        urlScaler   : '/cake2/rd_cake/webroot/files/image.php'
     },
     //____ End of Configuration settings _____
-    showHelp: false,
-    //This is an enhancement which will auto appen the user's realm when they log in etc.
-    realm: {
-        name: false,
-        auto_append: false,
-        append: true
-    },
 
-    //We put the active window property at the application level in order to have a central place to set and get it
-    activeWindow: undefined,
     init: function(){
         var me = this;
         me.addConstants();
@@ -73,10 +66,8 @@ Ext.application({
                 }
             });
         });
-
         // Run the fade 500 milliseconds after launch.
         task.delay(500);
-        this.getController('Desktop').startUp();
     },
     addConstants: function(){
 
@@ -134,7 +125,8 @@ Ext.application({
             icnDevice       : 57432,
             icnMesh         : 57460,
             icnShop         : 57554,
-            icnConnect      : 57489
+            icnConnect      : 57489,
+            icnOptions      : 57596
         };
     }
 });
