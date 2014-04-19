@@ -5,6 +5,13 @@ Ext.define('CoovaChilli.view.pnlConnect', {
     border: false,
     requires: ['Ext.toolbar.TextItem'],
     initComponent: function() {
+
+        var me = this;
+        var t_c_hidden = true;
+        if(me.jsonData.detail.t_c_check == true){
+            t_c_hidden = false;
+        } 
+        console.log(me.jsonData.detail.t_c_check);
         this.items = [
             {
                 xtype       : 'form',
@@ -48,14 +55,31 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                     },
                     {
                         xtype       : 'displayfield',
+                        fieldLabel  : 'Terms & Conditions',
+                        labelStyle  : 'font-weight: bold; color: blue; font-size:120%;',
+                        fieldStyle  : 'color: #888282; font-style:italic; font-size:120%;',
+                        value       : "<a href='"+me.jsonData.detail.t_c_url+"' target='_blank'>"+me.jsonData.detail.t_c_url+"</a>",
+                        hidden      : t_c_hidden
+                    },
+                    {
+                        boxLabel  : 'Accept T&C',
+                        name      : 'chkTcCheck',
+                        inputValue: 'chkTcCheck',
+                        labelAlign: 'right',
+                        xtype     : 'checkbox',
+                        itemId    : 'chkTcCheck',
+                        padding   : '0 0 0 0',
+                        hidden    : t_c_hidden
+                    },
+                    {
+                        xtype       : 'displayfield',
                         fieldLabel  : 'Error',
                         labelStyle  : 'font-weight: bold; color: red; font-size:120%;',
                         fieldStyle  : 'color: #888282; font-style:italic; font-size:120%;',
                         itemId      : 'inpErrorDisplay',
-                        name        : 'home_score',
                         value       : '',
                         hidden      : true
-                    }
+                    } 
                 ],
                 buttons : [
             '->',

@@ -300,6 +300,15 @@ Ext.define('CoovaChilli.controller.Desktop', {
     },
     onBtnConnectClick: function(b){  //Get the latest challenge and continue from there onwards....
         var me = this;
+
+        //Check if they need to accept T&C
+        if(b.up('pnlConnect').down('#chkTcCheck').isHidden() == false){
+            if(b.up('pnlConnect').down('#chkTcCheck').getValue() == false){
+                me.showLoginError('First accept T&C');
+                return;
+            }
+        }
+
         //Set a body mask telling the people we are connecting 
         b.up('pnlConnect').setLoading('Connecting....');
 
