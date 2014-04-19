@@ -85,29 +85,26 @@ Ext.define('CoovaChilli.view.pnlStatus', {
             items: i
         },
         {
-            xtype: 'button',
-            text: 'Go onto Internet',
-            margin: '5 5 5 5',
-            href: "http://google.com",
-            hrefTarget: "_blank",
-            scale: 'medium',
-            cls: 'topButton',
+            xtype       : 'button',
+            text        : 'Go onto Internet',
+            itemId      : 'btnGoInternet',
+            margin      : '5 5 5 5',
+            scale       : 'medium',
+            cls         : 'topButton',
             componentCls: 'ttt'
         },
         {
-            xtype:  'component',
-            html:   '<div>OR</div>',
-            baseCls: 'cntrOR',
-            cls: 'cntrOR'
+            xtype       :  'component',
+            html        :  '<div>OR</div>',
+            baseCls     : 'cntrOR',
+            cls         : 'cntrOR'
         },
         {
-            xtype: 'button',
-            text: 'Disconnect',
-            itemId: 'btnDisconnect',
-            margin: '5 5 5 5',
-            href: "http://1.0.0.0",
-            hrefTarget: "_self",
-            scale: 'medium',
+            xtype       : 'button',
+            text        : 'Disconnect',
+            itemId      : 'btnDisconnect',
+            margin      : '5 5 5 5',
+            scale       : 'medium',
             componentCls: 'ttt'
         }
         ];
