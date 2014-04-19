@@ -138,11 +138,7 @@ Ext.define('CoovaChilli.controller.cMain', {
     //---------------------------------------
     onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....
         var me = this;
-        Ext.Viewport.setMasked({
-            xtype: 'loadmask',
-            message: 'Connecting....'
-        });
-
+    
         me.userName = me.getFrmConnect().down('#inpUsername').getValue();
         me.password = me.getFrmConnect().down('#inpPassword').getValue();
         me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
@@ -151,6 +147,20 @@ Ext.define('CoovaChilli.controller.cMain', {
             me.showLoginError('Some required values missing');
             return;
         }
+
+        //Check if they need to accept T&C
+        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+            if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
+                me.showLoginError('First accept T&C');
+                return;
+            }
+        }
+
+        Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Connecting....'
+        });
+
 
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({

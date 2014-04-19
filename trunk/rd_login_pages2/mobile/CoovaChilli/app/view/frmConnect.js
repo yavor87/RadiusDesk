@@ -13,6 +13,13 @@ Ext.define('CoovaChilli.view.frmConnect', {
     constructor: function(config) {
         var me          = this;
         var scaler_url = CoovaChilli.config.Config.getUrlScaler();
+
+         var t_c_hidden = true;
+        if(config.jsonData.detail.t_c_check == true){
+            t_c_hidden = false;
+        } 
+
+
         var fs = Ext.create('Ext.form.FieldSet',{
                 title       : 'Credentials',
                 instructions: 'Scroll down to see all fields',
@@ -46,7 +53,21 @@ Ext.define('CoovaChilli.view.frmConnect', {
                         name    : 'remember_me',
                         label   : 'Remember me',
                         itemId  : 'inpRememberMe'
+                    },
+                    {
+                        itemId  : 'lblTC',
+                        xtype   : 'label',
+                        html    : "<b>T&C:</b> <a href='"+config.jsonData.detail.t_c_url+"' target='_blank'>"+config.jsonData.detail.t_c_url+"</a>",
+                        hidden  : t_c_hidden
+                    },
+                    {
+                        label   : 'Accept T&C',
+                        name    : 'chkTcCheck',
+                        xtype   : 'checkboxfield',
+                        itemId  : 'chkTcCheck',
+                        hidden  : t_c_hidden
                     }
+                    
                 ]
         });
 
