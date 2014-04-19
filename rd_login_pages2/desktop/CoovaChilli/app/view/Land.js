@@ -55,7 +55,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                             {
                                 xtype       : 'pnlConnect',
                                 itemId      : 'pnlConnect',
-                                hidden      : true
+                                hidden      : true,
+                                jsonData    : me.jsonData
                             },
                             {   
                                 xtype       : 'pnlStatus',
