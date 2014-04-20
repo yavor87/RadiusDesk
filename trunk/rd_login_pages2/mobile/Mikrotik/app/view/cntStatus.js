@@ -1,4 +1,4 @@
-Ext.define('CoovaChilli.view.cntStatus', {
+Ext.define('Mikrotik.view.cntStatus', {
     extend: 'Ext.Container',
     xtype: 'cntStatus',
     requires: [
@@ -18,14 +18,13 @@ Ext.define('CoovaChilli.view.cntStatus', {
                         itemId: 'cntSession',
                         tpl: [
                                 '<div class="rdWrapper">',
-                                '<div><div class="item">Idle Time</div><div class="value">{idletime}</div></div>',
-                                '<div class="alternate"><div class="item">Session Time</div><div class="value">{sessiontime}</div></div>',
-                                '<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
-                                '<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
-                                '<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
+                                '<div><div class="item">Username</div><div class="value">{username}</div></div>',
+                                '<div class="alternate"><div class="item">Session Time</div><div class="value">{uptime}</div></div>',
+                                '<div><div class="item">Data in</div><div class="value">{bytes_in_nice}</div></div>',
+                                '<div class="alternate"><div class="item">Data out</div><div class="value">{bytes_out_nice}</div></div>',
                                 '</div>'
                         ],
-                        data : {'idletime': 30, 'sessiontime': 50,'data_in': 100, 'data_out' : 200, 'data_total' : 300, 'sessiontime': 30},
+                        data : {'username': '', 'uptime': 50,'bytes_in_nice': 100, 'bytes_out_nice' : 200 },
                         xtype:  'container'
                     },
                     { xtype     : 'spacer', flex: 1 }

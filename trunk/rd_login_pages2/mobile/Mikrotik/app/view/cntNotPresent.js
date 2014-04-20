@@ -1,4 +1,4 @@
-Ext.define('CoovaChilli.view.cntNotPresent', {
+Ext.define('Mikrotik.view.cntNotPresent', {
     extend: 'Ext.Container',
     xtype: 'main',
     config: {
