@@ -21,6 +21,9 @@ Ext.define('Mikrotik.controller.cMain', {
             'frmConnect #btnConnect': {
                 tap: 'onBtnConnectTap'
             },
+            'frmConnect #btnRemoveMac': {
+                tap: 'onBtnRemoveMacTap'
+            },
             'cntPhotos #datThumb': {
                 itemtap: 'onThumbTap'
             },
@@ -165,7 +168,7 @@ Ext.define('Mikrotik.controller.cMain', {
     doLogin: function(){
 
         var me      = this;
-      //FIXME  var btnMac  = me.getConnect().down('#btnRemoveMac');
+        var btnMac  = me.getFrmConnect().down('#btnRemoveMac');
 
         var xtraParams = { 
             'username': me.userName,
@@ -200,18 +203,15 @@ Ext.define('Mikrotik.controller.cMain', {
 
                         msg     = j.error_orig;
                         var res = msg.match(/^User ([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F]) belongs to realm/);   //Real one
-/*FIXME                  if(res != null){
+                        if(res != null){
                             //Get the MAC
-
                             var mac = msg.match(/([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F])/);
                             me.mac_username = mac[0];            
-                            btnMac.setVisible(true);
+                            btnMac.show();
 
                         }else{
-                            btnMac.setVisible(false);
+                            btnMac.hide();
                         }
-*/
-
                     }
                     me.showLoginError(msg);
                 }      
@@ -234,9 +234,30 @@ Ext.define('Mikrotik.controller.cMain', {
         error.show();     //Display
         error.setData({msg:msg});
     },
+
+    onBtnRemoveMacTap : function(button){
+        var me  = this;
+        Ext.Ajax.request({
+            url     : Mikrotik.config.Config.getRemoveMacUrl(),
+            params  : {'mac': me.mac_username},
+            method  : 'GET',
+            success : function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    me.showLoginError("Device "+me.mac_username+" removed from realm, please log in again");
+                    //Hide yourself button:
+                    button.hide(); 
+                }else{
+                    showLoginError(jsonData.message);
+                }       
+            },
+            failure: function(){
+                showLoginError('Problems encountered while trying to remove '+me.mac_username);
+            },
+            scope: me
+        });
+    },
     //-----------------------------------------
-
-
 
     showNotHotspot: function(){
         var me = this;
