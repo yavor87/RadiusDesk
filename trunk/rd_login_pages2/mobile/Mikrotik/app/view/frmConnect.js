@@ -92,6 +92,12 @@ Ext.define('Mikrotik.view.frmConnect', {
                         iconCls : 'arrow_right',
                         itemId  : 'btnConnect'
                     },
+                    {
+                        text    : 'Remove me from realm',
+                        itemId  : 'btnRemoveMac',
+                        ui      : 'decline',
+                        hidden  : true
+                    },
                     { xtype     : 'spacer' }
                 ]
             }];
