@@ -23,7 +23,7 @@ Ext.define('CoovaChilli.view.cntStatus', {
                                 '<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
                                 '<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
                                 '<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
-                                '</div>'
+                                '</div>' 
                         ],
                         data : {'idletime': 30, 'sessiontime': 50,'data_in': 100, 'data_out' : 200, 'data_total' : 300, 'sessiontime': 30},
                         xtype:  'container'
