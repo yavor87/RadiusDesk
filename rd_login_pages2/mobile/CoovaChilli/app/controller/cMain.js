@@ -46,7 +46,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     sessionData : undefined,
 
-    retryCount  : 20, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : undefined,
@@ -83,9 +83,17 @@ Ext.define('CoovaChilli.controller.cMain', {
         //Load the main view
         Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{'jsonData':jsonData}));
 
+        //Change the page's title
+        document.title = jsonData.detail.name;
+
         if(me.uamIp == undefined){
             if(me.testForHotspot()){
-                //It is a hotspot, now check if connected or not...   
+                //It is a hotspot, now check if connected or not...
+                Ext.Viewport.setMasked({
+                    xtype: 'loadmask',
+                    message: 'Fetching connection status...'
+                });
+                me.showConnect();   
                 me.coovaRefresh();
             }else{
                 me.showNotHotspot()
@@ -165,7 +173,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url: urlStatus,
-            timeout: 3000,
+            timeout: Mikrotik.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             success: function(j){
                 me.currentRetry = 0;
@@ -219,7 +227,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
         Ext.data.JsonP.request({
             url: urlLogin,
-            timeout: 3000,
+            timeout: Mikrotik.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             params: {
                 username: me.userName,
@@ -275,6 +283,15 @@ Ext.define('CoovaChilli.controller.cMain', {
         error.show();     //Display
         error.setData({msg:msg});
     },
+
+    clearLoginError: function(){
+        var me = this;
+        Ext.Viewport.setMasked(false);
+        var error = me.getFrmConnect().down('#lblInpErrorDisplay');
+        error.hide();     //Display
+        error.setData({msg:''});
+    },
+
     //-----------------------------------------
 
 
@@ -302,7 +319,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlStatus   = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url             : urlStatus,
-            timeout         : 3000,
+            timeout         : Mikrotik.config.Config.getJsonTimeout(),
             callbackKey     : 'callback',
             success         : function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
@@ -316,6 +333,7 @@ Ext.define('CoovaChilli.controller.cMain', {
                             me.password     = Ext.util.Cookies.get('coovaPw');
                             me.encPwd(j.challenge);
                     } 
+                    me.clearLoginError();
                     me.showConnect();
                 }
 
@@ -388,7 +406,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlLogoff = 'http://'+me.uamIp+':'+me.uamPort+'/json/logoff';
         Ext.data.JsonP.request({
             url: urlLogoff,
-            timeout: 3000,
+            timeout: Mikrotik.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             success: function (){
                 me.currentRetry = 0;
