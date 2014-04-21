@@ -28,7 +28,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 20, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry    : 0,
 
     userName        : undefined,
@@ -66,7 +66,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var urlLogoff = 'http://'+me.uamIp+':'+me.uamPort+'/json/logoff';
         Ext.data.JsonP.request({
             url: urlLogoff,
-            timeout: 3000,
+            timeout: me.application.config.jsonTimeout,
             callbackKey: 'callback',
             success: function (){
                 me.currentRetry = 0;
@@ -147,7 +147,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         if(me.uamIp == undefined){
             if(me.testForHotspot()){
-                //It is a hotspot, now check if connected or not...   
+                //It is a hotspot, now check if connected or not...
+                me.getConnect().setLoading('Fetching connection status...');
+                me.showConnect();   
                 me.coovaRefresh();
             }else{
                 me.showNotHotspot()
@@ -210,7 +212,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url: urlStatus,
-            timeout: 3000,
+            timeout: me.application.config.jsonTimeout,
             callbackKey: 'callback',
             success: function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
@@ -227,6 +229,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
                             me.password     = Ext.util.Cookies.get('coovaPw');
                             me.encPwd(j.challenge);
                     } 
+                    me.clearLoginError();
                     me.showConnect();
                 }
 
@@ -320,7 +323,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url: urlStatus,
-            timeout: 3000,
+            timeout: me.application.config.jsonTimeout,
             callbackKey: 'callback',
             success: function(j){
                 me.currentRetry = 0;
@@ -375,7 +378,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
         Ext.data.JsonP.request({
             url: urlLogin,
-            timeout: 3000,
+            timeout: me.application.config.jsonTimeout,
             callbackKey: 'callback',
             params: {
                 username: me.userName,
@@ -431,6 +434,15 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var error = me.getConnect().down('#inpErrorDisplay');
         error.setVisible(true);     //Display
         error.setValue(msg);
+    },
+
+    clearLoginError: function(){
+        var me = this;
+        me.getConnect().setLoading(false);
+        me.getStatus().setLoading(false);
+        var error = me.getConnect().down('#inpErrorDisplay');
+        error.setVisible(false);     //Display
+        error.setValue('');
     },
 
     //============ SHORTcuts =====
