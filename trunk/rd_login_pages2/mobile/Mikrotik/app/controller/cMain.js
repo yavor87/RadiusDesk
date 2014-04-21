@@ -37,19 +37,14 @@ Ext.define('Mikrotik.controller.cMain', {
             'frmConnect'
         ] 
     },
-    uamIp       : undefined,   //ip of mt hotspot
-    uamPort     : undefined, //port of mt hotspot
-
+ 
     counter     : undefined, //refresh counter's id
     timeUntilStatus:20, //interval to refresh
     refreshInterval:20, //ditto
 
-    firstTime   : true,
-    noPopUp     : true,
-
     sessionData : undefined,
 
-    retryCount  : 20, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : undefined,
@@ -97,10 +92,18 @@ Ext.define('Mikrotik.controller.cMain', {
         //Load the main view
         Ext.Viewport.add(Ext.create('Mikrotik.view.tabMain',{'jsonData':jsonData}));
 
+        //Change the page's title
+        document.title = jsonData.detail.name;
+
         //See how we were called...  
         if(me.mtServer == undefined){
             if(me.testForHotspot()){
                 //It is a hotspot, now check if connected or not...
+                Ext.Viewport.setMasked({
+                    xtype: 'loadmask',
+                    message: 'Fetching connection status...'
+                });
+                me.showConnect();
                 me.mtRefresh();
             }else{
                 me.showNotHotspot()
@@ -179,7 +182,7 @@ Ext.define('Mikrotik.controller.cMain', {
             url         : me.queryObj.link_login_only,
             callbackKey : 'var',
             params      : xtraParams,
-            timeout     : 10000,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
             success: function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
 
@@ -228,11 +231,18 @@ Ext.define('Mikrotik.controller.cMain', {
 
     showLoginError: function(msg){
         var me = this;
-        ///Ext.getBody().unmask();
         Ext.Viewport.setMasked(false);
         var error = me.getFrmConnect().down('#lblInpErrorDisplay');
         error.show();     //Display
         error.setData({msg:msg});
+    },
+
+    clearLoginError: function(){
+        var me = this;
+        Ext.Viewport.setMasked(false);
+        var error = me.getFrmConnect().down('#lblInpErrorDisplay');
+        error.hide();     //Display
+        error.setData({msg:''});
     },
 
     onBtnRemoveMacTap : function(button){
@@ -282,7 +292,7 @@ Ext.define('Mikrotik.controller.cMain', {
         var me = this;   
         Ext.data.JsonP.request({
             url         : me.queryObj.link_status,
-            timeout     : 3000,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
             callbackKey : 'var',
             success     : function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
@@ -295,10 +305,11 @@ Ext.define('Mikrotik.controller.cMain', {
                             me.password     = Ext.util.Cookies.get('mtPw');
                             me.doLogin();
                     } 
+                    me.clearLoginError();
                     me.showConnect();
                 }
 
-                if(j.clientState == 1){
+                if(j.logged_in == 'yes'){
                     if(Mikrotik.config.Config.getNoStatus() == true){
                         window.location=Mikrotik.config.Config.getRedirectTo();
                     }else{
@@ -358,7 +369,7 @@ Ext.define('Mikrotik.controller.cMain', {
 
         Ext.data.JsonP.request({
             url         : me.queryObj.link_logout,
-            timeout     : 3000,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
             callbackKey : 'var',
             success: function (){
                 me.currentRetry = 0;

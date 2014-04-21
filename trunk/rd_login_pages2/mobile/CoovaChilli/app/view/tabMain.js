@@ -91,7 +91,34 @@ Ext.define('CoovaChilli.view.tabMain', {
                 itemId      : 'cntAbout',
                 layout      : 'fit',
                 scrollable  : false         
-            }
+            }/*, 
+            {
+                title   : 'Online shop',
+                xtype   : 'container',
+                iconCls : 'compose',
+                layout  : 'hbox',
+                scrollable: {
+                    direction: 'vertical',
+                    directionLock: true
+                }, 
+                items: [
+                    { xtype     : 'spacer', flex: 1 },
+                    {
+                       html  : [
+                                '<div class="rdWrapper">'+
+                                "<h2>Your Payment gateway here!</h2>"+
+                                "<div class='imgAbout'><img src='resources/images/paypal.png' /></div>"+
+                                "<div class='rdDescription'>"+
+                                "For custom payment gateway integration contact the developers of <b>RADIUSdesk</b><br>"+
+                                "<a href='http://www.radiusdesk.com/getting_started/contact_us' target='_blank'>"+
+                                "http://www.radiusdesk.com/getting_started/contact_us</a>"+
+                                "</div></div>"
+                        ], 
+                        xtype:  'container'
+                    },
+                    { xtype     : 'spacer', flex: 1 }
+                ]
+            }*/
         ];
 
         me.callParent([config]);

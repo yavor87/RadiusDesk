@@ -7,7 +7,8 @@ Ext.define('CoovaChilli.config.Config', {
         urlBase     : 'http://'+document.location.hostname,
         noStatus    : false,
         redirectTo  : "http://google.com",
-        urlScaler   : '/cake2/rd_cake/webroot/files/image.php'
+        urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
+        jsonTimeout : 10000
     },
  
     constructor: function(config) {
