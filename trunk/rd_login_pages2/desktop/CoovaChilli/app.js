@@ -34,7 +34,8 @@ Ext.application({
         urlBase     : infoServer,
         noStatus    : false,
         redirectTo  : "http://google.com",
-        urlScaler   : '/cake2/rd_cake/webroot/files/image.php'
+        urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
+        jsonTimeout : 10000
     },
     //____ End of Configuration settings _____
 

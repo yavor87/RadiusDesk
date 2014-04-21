@@ -1,4 +1,4 @@
-Ext.define('CoovaChilli.view.Land' ,{
+Ext.define('Mikrotik.view.Land' ,{
     extend: 'Ext.panel.Panel',
     alias: 'widget.land',
     layout: {
@@ -8,14 +8,14 @@ Ext.define('CoovaChilli.view.Land' ,{
     border: false,
     margins: '0 0 0 0',
     requires: [
-        'CoovaChilli.view.pnlConnect',
-        'CoovaChilli.view.pnlStatus',
-        'CoovaChilli.view.pnlNotHotspot',
+        'Mikrotik.view.pnlConnect',
+        'Mikrotik.view.pnlStatus',
+        'Mikrotik.view.pnlNotHotspot',
         'Ext.XTemplate',
         'Ext.view.View',
         'Ext.data.Store',
-        'CoovaChilli.view.pnlPhotos',
-        'CoovaChilli.view.pnlAbout'
+        'Mikrotik.view.pnlPhotos',
+        'Mikrotik.view.pnlAbout'
     ],
     initComponent: function() { 
         var me      = this;
@@ -27,6 +27,7 @@ Ext.define('CoovaChilli.view.Land' ,{
         },me);
 
         me.items    = [
+/*
             {       
                 height      : 90,
                 bodyStyle   :{"background-color":"#2a2a2a"}, 
@@ -36,7 +37,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                 }, 
                 items   : { xtype: 'image', src: 'resources/images/logo.png', 'height': 90 } 
             },
-/*            {       
+*/
+            {       
                 height  : 75, 
                 layout  : {
                     type    : 'fit',
@@ -44,7 +46,6 @@ Ext.define('CoovaChilli.view.Land' ,{
                 xtype   : 'image', 
                 src     : 'resources/images/banner.png'
             },
-*/
             {
                 layout  : {
                     type    : 'hbox',
@@ -59,7 +60,7 @@ Ext.define('CoovaChilli.view.Land' ,{
                         border              : true,
                         collapsible         : true,
                         collapseDirection   : 'left',
-                        glyph               : CoovaChilli.config.icnConnect,
+                        glyph               : Mikrotik.config.icnConnect,
                         items       :   [
                             {
                                 xtype       : 'pnlConnect',
@@ -98,24 +99,24 @@ Ext.define('CoovaChilli.view.Land' ,{
                         collapsible         : true,
                         collapseDirection   : 'left',
                         border              : true,
-                        glyph               : CoovaChilli.config.icnOptions,
+                        glyph               : Mikrotik.config.icnOptions,
                         items               : [
                             {
                                 title       : 'About',
-                                glyph       : CoovaChilli.config.icnInfo,
+                                glyph       : Mikrotik.config.icnInfo,
                                 xtype       : 'pnlAbout',
                                 data        : me.jsonData.detail,
                                 autoScroll  : true
                             },
                             {
                                 title       : 'Help',
-                                glyph       : CoovaChilli.config.icnHelp,
+                                glyph       : Mikrotik.config.icnHelp,
                                 html        : html_string,
                                 autoScroll  : true
-                            },
+                            }/*,
                             {
                                 title       : 'Online shop',
-                                glyph       : CoovaChilli.config.icnShop,
+                                glyph       : Mikrotik.config.icnShop,
                                 html        : [
                                     "<div class='rdCenter'>",
                                     "<h2>Your Payment gateway here!</h2>",
@@ -126,8 +127,7 @@ Ext.define('CoovaChilli.view.Land' ,{
                                     "http://www.radiusdesk.com/getting_started/contact_us</a>",
                                     "</div></div>"
                                 ]
-                            }
-
+                            }*/
                         ]
                     }
                 ]
