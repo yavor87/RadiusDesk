@@ -145,6 +145,8 @@ $config['icnConnect']   = 57489;
 $config['icnGraph']     = 57410;
 $config['icnKick']      = 57535;
 $config['icnClose']     = 57609;
+$config['icnFinance']   = 57586;
+$config['icnOnlineShop']= 57554;
 
 //===== MESHdesk ======
 //== Encryption types ==
