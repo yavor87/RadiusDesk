@@ -406,16 +406,16 @@ class FinPaypalTransactionsController extends AppController {
             );
 
             $trans_data                                     = array();
-            $trans_data['FinPayPalTransaction']             = array();
-            $trans_data['FinPayPalTransaction']['user_id']  = $this->paypal_user_id;
+            $trans_data['user_id']  = $this->paypal_user_id;
             foreach($list_of_fields as $field){
                 if (array_key_exists($field, $_POST) == true) {
-                    $trans_data['FinPayPalTransaction']["$field"] = $_POST["$field"];
+                    $trans_data["$field"] = $_POST["$field"];
                 }
             }
-            $q_r = $this->find('first', array('conditions' => array('FinPayPalTransaction.txn_id' => $txn_id)));
+            $txn_id = $_POST['txn_id'];
+            $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPaypalTransaction.txn_id' => $txn_id)));
             if($q_r){
-                $trans_data['FinPayPalTransaction']['id'] = $q_r['FinPayPalTransaction']['id'];
+                $trans_data['id'] = $q_r['id'];
                 $this->{$this->modelClass}->save($trans_data);
             }else{   
                 $this->{$this->modelClass}->save($trans_data);
