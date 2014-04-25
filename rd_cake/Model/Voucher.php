@@ -26,6 +26,11 @@ class Voucher extends AppModel {
         )
 	);
 
+    public $hasOne = array(
+        'FinPayPalTransaction'   => array(
+            'dependent'     => true   
+        )
+    );
 
     public $hasMany = array(
         'Radcheck' => array(
