@@ -272,6 +272,25 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+            //Finances
+            array(  'text'  => __('Finances'),  'iconCls' => 'realms',  'glyph' => Configure::read('icnFinance') ,'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array(
+                            'text'      => __('Paypal'),
+                            'iconCls'   => 'key',  
+                            'glyph'     => Configure::read('icnOnlineShop'),
+                            'itemId'    => 'cFinPaypalTransactions'
+                        ),
+                        array(
+                            'text'      => __('PayU'), 
+                            'iconCls'   => 'realms',
+                            'glyph'     => Configure::read('icnOnlineShop'), 
+                            'itemId'    => 'cFinPayUTransactions'
+                        ),
+                    )
+                )
+            ),
             array(  'text'  => __('Vouchers'),        'iconCls' => 'vouchers','glyph' => Configure::read('icnVoucher'), 'itemId' => 'cVouchers'),
             array(  'text'  => __('Permanent Users'), 'iconCls' => 'users',   'glyph' => Configure::read('icnUser'),'itemId' => 'cPermanentUsers'),
             array(  'text'  => __('BYOD Manager'),    'iconCls' => 'devices', 'glyph' => Configure::read('icnDevice'),  'itemId' => 'cDevices'),

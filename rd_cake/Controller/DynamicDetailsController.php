@@ -72,9 +72,14 @@ class DynamicDetailsController extends AppController {
             $items['detail']['t_c_url']         = $q_r['DynamicDetail']['t_c_url'];
         }
 
+        $success = true;
+        if(count($items) == 0){ //Not found
+            $success = false;
+        }
+
         $this->set(array(
             'data' => $items,
-            'success' => true,
+            'success' => $success,
             '_serialize' => array('data','success')
         ));
 
