@@ -192,7 +192,8 @@ Ext.application({
             icnLanguage     : 57516,
             icnUser         : 57618,
             icnDevice       : 57432,
-            icnMesh         : 57460
+            icnMesh         : 57460,
+            icnOnlineShop   : 57554
         };
     },
     addUx: function(){
