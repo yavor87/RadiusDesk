@@ -3,7 +3,7 @@ Ext.define('Rd.model.mFinPaypalTransaction', {
     fields: [
          {name: 'id',           type: 'int'     },
          {name: 'txn_id',       type: 'string'  },
-         {name: 'owner',        type: 'string'  },
+         {name: 'user',         type: 'string'  },
          {name: 'user_id',      type: 'int'  },
          {name: 'voucher_name', type: 'string'  },
          {name: 'voucher_id',   type: 'int'  },
