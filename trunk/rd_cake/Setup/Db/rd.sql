@@ -61,7 +61,7 @@ CREATE TABLE `actions` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,6 +70,7 @@ CREATE TABLE `actions` (
 
 LOCK TABLES `actions` WRITE;
 /*!40000 ALTER TABLE `actions` DISABLE KEYS */;
+INSERT INTO `actions` VALUES (1,62,'execute','ls','awaiting','2014-03-12 08:17:26','2014-03-12 08:17:26');
 /*!40000 ALTER TABLE `actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -499,7 +500,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2013-10-21 09:10:38',1,'http://www.radiusdesk.com'),(4,'test',0,'1393375001.jpg','','','','','','','','','','',0,0,44,'2014-01-05 18:23:49','2014-02-26 02:36:41',0,'');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,'2013-05-23 09:57:09','2014-04-19 12:49:59',1,'http://www.radiusdesk.com'),(4,'test',0,'1393375001.jpg','','','','','','','','','','',0,0,44,'2014-01-05 18:23:49','2014-02-26 02:36:41',0,'');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -589,6 +590,102 @@ LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
 INSERT INTO `dynamic_photos` VALUES (16,3,'Animals Welcome','Nice long beaches to go for a walk','1369745727.jpg','2013-05-28 14:55:27','2013-05-28 14:55:27'),(17,3,'Fresh fish daily','The best yellowtail in South Africa','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01'),(18,3,'Whiskey on the rocks?','.... or your favourite softdrink','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04'),(19,3,'Castles in the sand','Lots of sand for the kids to play in','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30'),(20,3,'Rocks rocks rocks','Nature\'s own obstacle course  ','1369746199.jpg','2013-05-28 15:03:19','2013-05-28 15:03:19'),(21,3,'And a road of my own','With the city and the rat race behind me','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04'),(22,3,'Sounds of the sea','Where land and water meet','1369746423.jpg','2013-05-28 15:07:03','2013-05-28 15:07:03');
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_paypal_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_paypal_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_paypal_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_paypal_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_paypal_transaction_notes`
+--
+
+LOCK TABLES `fin_paypal_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_paypal_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_paypal_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_paypal_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_paypal_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_paypal_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `voucher_id` int(11) DEFAULT NULL,
+  `top_up_id` int(11) DEFAULT NULL,
+  `business` varchar(255) NOT NULL,
+  `txn_id` varchar(20) NOT NULL,
+  `option_name1` varchar(255) DEFAULT NULL,
+  `option_selection1` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `item_number` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `payer_email` varchar(255) DEFAULT NULL,
+  `payer_id` varchar(255) DEFAULT NULL,
+  `payer_status` varchar(255) DEFAULT NULL,
+  `payment_gross` decimal(10,2) NOT NULL,
+  `mc_gross` decimal(10,2) NOT NULL,
+  `mc_fee` decimal(10,2) NOT NULL,
+  `mc_currency` varchar(255) DEFAULT 'GBP',
+  `payment_date` varchar(255) NOT NULL,
+  `payment_status` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_paypal_transactions`
+--
+
+LOCK TABLES `fin_paypal_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_paypal_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_paypal_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_payu_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_payu_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_payu_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_payu_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_payu_transaction_notes`
+--
+
+LOCK TABLES `fin_payu_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_payu_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_payu_transaction_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -709,7 +806,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -718,7 +815,6 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (36,29,'Network broken',0,0,1,'none','','','',0,'2014-02-11 21:30:20','2014-02-14 12:16:57'),(37,29,'Network error',0,0,1,'none','','','',0,'2014-02-11 22:47:33','2014-02-14 12:17:13'),(38,29,'Pik Botha',0,0,1,'none','','','',0,'2014-02-14 10:35:04','2014-02-14 10:35:04'),(43,31,'MWEB',0,1,1,'none','','','',0,'2014-02-18 15:28:38','2014-02-18 15:28:38');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -743,7 +839,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -752,7 +848,6 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (27,23,'192.168.1.103','','testing123','cp1','http://192.168.1.103/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','',0,'2014-02-11 21:31:59','2014-02-13 22:29:54'),(28,24,'192.168.1.103','','testing123','cp2','http://192.168.1.103/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','192.168.1.103',0,'2014-02-11 22:49:10','2014-02-13 00:59:07');
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -770,7 +865,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -779,7 +874,6 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (46,24,37,'2014-02-13 00:59:07','2014-02-13 00:59:07'),(48,23,36,'2014-02-13 22:29:54','2014-02-13 22:29:54'),(50,26,43,'2014-02-19 08:20:33','2014-02-19 08:20:33');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -800,7 +894,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -809,7 +903,6 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (23,29,'cp1','captive_portal',1,1,'2014-02-11 21:31:59','2014-02-13 22:29:54'),(24,29,'cp2','captive_portal',1,1,'2014-02-11 22:49:10','2014-02-13 00:59:07'),(25,29,'lan_br','bridge',1,3,'2014-02-12 23:47:17','2014-02-14 12:17:27'),(26,31,'dhcp_1','nat',1,NULL,'2014-02-18 15:29:50','2014-02-19 08:20:32'),(27,31,'br','bridge',1,NULL,'2014-02-19 08:33:43','2014-02-19 08:33:43');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -859,7 +952,7 @@ CREATE TABLE `mesh_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -868,7 +961,6 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-INSERT INTO `mesh_settings` VALUES (8,29,1,0,0,0,1,5000,20,'2013-12-26 10:12:37','2014-01-10 12:59:27');
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,7 +980,7 @@ CREATE TABLE `meshes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -897,7 +989,6 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (29,'Mega Store - Bloemfontein','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2013-11-18 11:38:39','2013-11-18 11:38:39'),(30,'Mega Store - Pretoria','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2013-11-18 14:39:36','2013-11-18 14:39:36'),(31,'Hannes','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-02-15 10:43:15','2014-02-15 10:43:15');
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1055,7 +1146,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','one','one','Mikrotik-Heartbeat',NULL,'one','','AB-AB-AB-AB-AB-AB','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','one','heartbeat',600,300,'2013-12-28 13:32:54',0,3600,0,-25.7382839171877,28.301797389651,'logo.jpg',182,'2013-10-24 13:08:04','2014-02-19 12:32:53'),(61,'10.120.0.2','cp1','','other',NULL,'testing123',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cp1','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:54:10','2014-02-13 21:54:10'),(62,'10.120.0.3','cp2','','other',NULL,'testing123',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cp2','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:54:52','2014-02-19 12:09:39'),(63,'192.168.1.111','wip1','','other',NULL,'testing123',NULL,NULL,'RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:56:55','2014-02-13 21:56:55');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','one','one','Mikrotik-Heartbeat',NULL,'one','','AB-AB-AB-AB-AB-AB','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','one','heartbeat',600,300,'2013-12-28 13:32:54',0,3600,0,-25.7382839171877,28.301797389651,'logo.jpg',182,'2013-10-24 13:08:04','2014-02-19 12:32:53'),(61,'10.120.0.2','cp1','','other',NULL,'testing123',NULL,NULL,'RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cp1','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:54:10','2014-02-13 21:54:10'),(62,'10.120.0.3','cp2','','CoovaChilli-Heartbeat',NULL,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cp2','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:54:52','2014-03-12 08:16:40'),(63,'192.168.1.111','wip1','','other',NULL,'testing123',NULL,NULL,'RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2014-02-13 21:56:55','2014-02-13 21:56:55');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1153,7 +1244,7 @@ CREATE TABLE `node_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1162,7 +1253,6 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (10,29,'verysecure',99,1,11,44,120,600,'2013-12-30 12:01:42','2014-01-24 21:00:42');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1190,7 +1280,7 @@ CREATE TABLE `nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1199,7 +1289,6 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (77,29,'node1','node1','AC-86-74-10-03-08','om2p',50,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2014-02-07 12:24:12','2014-02-07 12:24:12');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1966,7 +2055,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','14.jpg','2013-04-06 13:51:50','2014-01-19 12:54:12'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2013-04-05 11:55:30'),(53,44,'map_type','ROADMAP','2013-04-05 11:30:19','2013-04-05 11:55:30'),(54,44,'map_lat','-25.737800696372','2013-04-05 11:30:19','2013-04-05 11:55:30'),(55,44,'map_lng','28.30269861188003','2013-04-05 11:30:19','2013-04-05 11:55:30'),(56,44,'wallpaper','10.jpg','2013-04-06 13:51:50','2014-03-12 10:04:55'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2048,7 +2137,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-02-01 13:33:46',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2014-02-01 13:33:46',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','52cfdc88-0388-44e3-b7b5-3bcfc0a80167','','','','','','sql',1,0,'2014-02-20 23:13:28','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,6,7,'2013-09-04 10:51:36','2014-02-01 13:33:46',NULL,NULL),(189,'rviljoen','f0fe3454c17b15bcd222188023ecb9fcf1d96b51','52cfdc98-e380-40a6-a67e-3bd3c0a80167','','','','','','sql',1,0,'2013-10-05 12:21:53','2014-02-21 16:22:04','127.0.0.1','127.0.0.1','Your account has expired=2C rviljoen=0D=0A',4,10,4,182,3,4,'2013-09-06 17:55:54','2014-02-01 13:33:46',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,8,9,'2013-10-25 11:22:19','2014-02-01 13:33:46',NULL,NULL);
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-02-01 13:33:46',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,5,'2013-08-28 11:31:14','2014-02-01 13:33:46',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','52cfdc88-0388-44e3-b7b5-3bcfc0a80167','','','','','','sql',1,0,'2014-02-20 23:13:28','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,6,7,'2013-09-04 10:51:36','2014-02-01 13:33:46',NULL,NULL),(189,'rviljoen','f0fe3454c17b15bcd222188023ecb9fcf1d96b51','52cfdc98-e380-40a6-a67e-3bd3c0a80167','','','','','','sql',1,0,'2013-10-05 12:21:53','2014-03-17 14:32:07','127.0.0.1','127.0.0.1','Your account has expired=2C rviljoen=0D=0A',4,10,4,182,3,4,'2013-09-06 17:55:54','2014-02-01 13:33:46',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,8,9,'2013-10-25 11:22:19','2014-02-01 13:33:46',NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2097,4 +2186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-11 22:49:33
+-- Dump completed on 2014-04-25 11:23:20
