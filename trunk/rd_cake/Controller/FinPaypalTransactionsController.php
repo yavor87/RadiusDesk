@@ -13,6 +13,39 @@ class FinPaypalTransactionsController extends AppController {
     //protected   $paypal_server = "https://www.paypal.com/cgi-bin/webscr"; //Production
     protected   $paypal_user_id = 44;
 
+    protected   $fields = array(
+        'txn_id',       'payer_email',  'mc_fee',       'business',
+        'first_name',   'item_number',  'item_name',    'option_selection1',
+        'last_name',    'payer_id',     'payer_status', 'payment_gross','mc_gross',
+        'payment_date', 'payment_status','mc_currency', 'option_name1', 'id',
+        'voucher_id'
+    );
+
+    protected $voucher_data = array(
+        'activate_on_login' => '1',
+        'days_valid'        => 2,
+        'expire'            => '05/31/2015',
+        'precede'           => '',
+        'profile_id'        => 7,
+        'pwd_length'        => 3,
+        'realm_id'          => 34,
+        'sel_language'      => '4_4',
+        'user_id'           => '44'
+    );
+    /*
+        activate_on_login	activate_on_login
+        days_valid	2
+        expire	05/31/2015
+        precede	
+        profile_id	7
+        pwd_length	3
+        quantity	1
+        realm_id	34
+        sel_language	4_4
+        token	52190fff-a800-48eb-b1f2-478bc0a80167
+        user_id	0
+*/
+
     public function index(){
 
         $user = $this->_ap_right_check();
@@ -46,6 +79,40 @@ class FinPaypalTransactionsController extends AppController {
 
         $items      = array();
 
+         foreach($q_r as $i){
+
+          //  print_r($i);
+            $row = array();
+            foreach($this->fields as $field){
+                if(array_key_exists($field,$i['FinPaypalTransaction'])){
+
+                    $row["$field"]= $i['FinPaypalTransaction']["$field"];
+                }
+            }
+
+            //Create notes flag
+            $notes_flag  = false;
+            foreach($i['FinPaypalTransactionNote'] as $nn){
+                if(!$this->_test_for_private_parent($nn['Note'],$user)){
+                    $notes_flag = true;
+                    break;
+                }
+            }
+
+            //Voucher id and name
+            if($i['Voucher']['id'] != null){
+                $row['voucher_id']      = $i['Voucher']['id'];
+                $row['voucher_name']    = $i['Voucher']['name'];
+            }
+
+            $row['notes']       = $notes_flag;
+            $row['user_id']     = $i['User']['id'];
+            $row['user']        = $i['User']['username'];
+
+            array_push($items,$row);
+
+        }
+
         //___ FINAL PART ___
         $this->set(array(
             'items' => $items,
@@ -58,6 +125,49 @@ class FinPaypalTransactionsController extends AppController {
     public function paypal_ipn(){
         $this->_confirm_paypal_ipn();
         exit;
+    }
+
+    public function email_voucher_details(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $v  = ClassRegistry::init('Voucher');
+        if($v->save($this->voucher_data)) {
+
+            $success_flag = true;
+            $v->id = null;
+
+        }else{
+
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $v->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+            return; //Get out of here!
+        }
+
+/*
+        App::uses('CakeEmail', 'Network/Email');
+        $Email = new CakeEmail();
+
+        $Email->config('gmail');
+
+        $Email->sender('dirkvanderwalt@gmail.com', 'Dirk van der Walt');
+        $Email->from(array('dirkvanderwalt@gmail.com' => 'Dirk van der Walt'));
+        $Email->to('dirkvanderwalt@gmail.com');
+        $Email->subject('About');
+        $Email->send('My message Gooi hom Pappie!!!');
+*/
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
     }
 
     public function note_index(){
@@ -129,8 +239,8 @@ class FinPaypalTransactionsController extends AppController {
         //print_r($this->request->data);
         if ($this->FinPaypalTransaction->FinPaypalTransactionNote->Note->save($this->request->data)) {
             $d                      = array();
-            $d['FinPaypalTransaction']['fin_paypal_transaction_id']   = $this->request->data['for_id'];
-            $d['FinPaypalTransaction']['note_id'] = $this->FinPaypalTransaction->FinPaypalTransactionNote->Note->id;
+            $d['FinPaypalTransactionNote']['fin_paypal_transaction_id']   = $this->request->data['for_id'];
+            $d['FinPaypalTransactionNote']['note_id'] = $this->FinPaypalTransaction->FinPaypalTransactionNote->Note->id;
             $this->FinPaypalTransaction->FinPaypalTransactionNote->create();
             if ($this->FinPaypalTransaction->FinPaypalTransactionNote->save($d)) {
                 $success = true;
@@ -217,6 +327,99 @@ class FinPaypalTransactionsController extends AppController {
         }
     }
 
+    //----- Menus ------------------------
+    public function menu_for_grid(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                     array( 
+                        'xtype'     =>  'splitbutton',  
+                        'iconCls'   => 'b-reload',
+                        'glyph'     => Configure::read('icnReload'),   
+                        'scale'     => 'large', 
+                        'itemId'    => 'reload',   
+                        'tooltip'   => __('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                   
+                                )
+                            )
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnCut'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'detach', 
+                        'tooltip'   => __('Detach voucher'),
+                        'disabled'  => true
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnAttach'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'attach', 
+                        'tooltip'   => __('Attach voucher'),
+                        'disabled'  => true
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnEmail'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'email', 
+                        'tooltip'   => __('e-Mail voucher'),
+                        'disabled'  => true
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnMobile'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'sms', 
+                        'tooltip'   => __('SMS voucher'),
+                        'disabled'  => true
+                    ),
+                )),
+                array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100, 'items' => array(
+                    array(
+                        'xtype'     => 'button',
+                        'glyph'     => Configure::read('icnNote'), 
+                        'scale'     => 'large',
+                        'itemId'    => 'note',
+                        'tooltip'   => __('Add Notes')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnCsv'),   
+                        'scale'     => 'large',
+                        'itemId'    => 'csv',      
+                        'tooltip'   => __('Export CSV')
+                    ),
+                ))     
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
     function _build_common_query($user){
 
         //Empty to start with
@@ -233,7 +436,7 @@ class FinPaypalTransactionsController extends AppController {
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'FinPaypalTransaction.txn_id';
+        $sort   = 'FinPaypalTransaction.created';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
@@ -405,7 +608,7 @@ class FinPaypalTransactionsController extends AppController {
                 'payment_date', 'payment_status','mc_currency', 'option_name1'
             );
 
-            $trans_data                                     = array();
+            $trans_data             = array();
             $trans_data['user_id']  = $this->paypal_user_id;
             foreach($list_of_fields as $field){
                 if (array_key_exists($field, $_POST) == true) {
@@ -414,16 +617,51 @@ class FinPaypalTransactionsController extends AppController {
             }
             $txn_id = $_POST['txn_id'];
             $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPaypalTransaction.txn_id' => $txn_id)));
+
             if($q_r){
                 $trans_data['id'] = $q_r['id'];
                 $this->{$this->modelClass}->save($trans_data);
+                $id = $q_r['id'];
             }else{   
                 $this->{$this->modelClass}->save($trans_data);
+                $id = $this->{$this->modelClass}->id;
             }
 
+            $payment_status = $_POST['payment_status'];
             if($payment_status == 'Completed'){
                 //Check if we perhaps have not already created a voucher for this transaction
+                $q_r = $this->{$this->modelClass}->findById($id);
+                if($q_r){
+                    if($q_r['voucher_id'] == ''){ //Voucher ID is empty
+                        //We need to create a voucher
+                        $v  = ClassRegistry::init('Voucher');
+                        if($v->save($this->voucher_data)) {
 
+                            $success_flag = true;
+                            $q = $v->findById($v->id);
+                            $voucher_name = $q['name'];
+                            $voucher_id   = $q['id'];
+                            //Update the transaction entry....
+                            $this->{$this->modelClass}->read(null, $id);
+                            $this->{$this->modelClass}->set(array(
+                                'voucher_name'  => $voucher_name,
+                                'voucher_id'    => $voucher_id
+                            ));
+                            $this->{$this->modelClass}->save();
+                        }else{
+/*
+                            $message = 'Error';
+                            $this->set(array(
+                                'errors'    => $v->validationErrors,
+                                'success'   => false,
+                                'message'   => array('message' => __('Could not create item')),
+                                '_serialize' => array('errors','success','message')
+                            ));
+                            return; //Get out of here!
+*/
+                        }    
+                    }
+                }
             }
 
             $file               = fopen("/tmp/paypal_feedback.txt","w");
@@ -438,6 +676,32 @@ class FinPaypalTransactionsController extends AppController {
             echo "The response from IPN was: <b>" .$res ."</b>";
         }
     }
+
+    private function _find_parents($id){
+
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($id);
+        $path_string= '';
+        if($q_r){
+
+            foreach($q_r as $line_num => $i){
+                $username       = $i['User']['username'];
+                if($line_num == 0){
+                    $path_string    = $username;
+                }else{
+                    $path_string    = $path_string.' -> '.$username;
+                }
+            }
+            if($line_num > 0){
+                return $username." (".$path_string.")";
+            }else{
+                return $username;
+            }
+        }else{
+            return __("orphaned");
+        }
+    }
+
 
 //-----------------------------------------------
 }
