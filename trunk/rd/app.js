@@ -193,7 +193,10 @@ Ext.application({
             icnUser         : 57618,
             icnDevice       : 57432,
             icnMesh         : 57460,
-            icnOnlineShop   : 57554
+            icnOnlineShop   : 57554,
+            icnEmail        : 57378,
+            icnAttach       : 57380,
+            icnCut          : 57551
         };
     },
     addUx: function(){

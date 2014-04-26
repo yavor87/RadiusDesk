@@ -6,14 +6,14 @@ Ext.define('Rd.view.finPaypalTransactions.gridPaypalTransactions' ,{
     stateful: true,
     stateId: 'StateGridPaypalTransactions',
     stateEvents:['groupclick','columnhide'],
-    border: false,
+    border: true,
     requires: [
         'Rd.view.components.ajaxToolbar'
     ],
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/profile_components/menu_for_grid.json',
+    urlMenu: '/cake2/rd_cake/fin_paypal_transactions/menu_for_grid.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
@@ -35,6 +35,7 @@ Ext.define('Rd.view.finPaypalTransactions.gridPaypalTransactions' ,{
                 dataIndex   : 'user',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPaypalTransactions2'
             },
@@ -62,6 +63,7 @@ Ext.define('Rd.view.finPaypalTransactions.gridPaypalTransactions' ,{
                 dataIndex   : 'business',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPaypalTransactions5'
             },
@@ -81,9 +83,140 @@ Ext.define('Rd.view.finPaypalTransactions.gridPaypalTransactions' ,{
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridPaypalTransactions6'
-            }
-            
+                stateId     : 'StateGridPaypalTransactions7'
+            },
+            { 
+
+                text        :'Item name', 
+                dataIndex   : 'item_name',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions8'
+            },
+            { 
+
+                text        :'Item number', 
+                dataIndex   : 'item_number',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions9'
+            },
+            { 
+
+                text        :'First name', 
+                dataIndex   : 'first_name',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions10'
+            },
+            { 
+
+                text        :'Last name', 
+                dataIndex   : 'last_name',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions11'
+            },
+            { 
+
+                text        :'Payer email', 
+                dataIndex   : 'payer_email',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions12'
+            },
+            { 
+
+                text        :'Payer id', 
+                dataIndex   : 'payer_id',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions13'
+            },
+            { 
+
+                text        :'Payer status', 
+                dataIndex   : 'payer_status',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions14'
+            },
+            { 
+
+                text        :'Payment gross', 
+                dataIndex   : 'payment_gross',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions15'
+            },
+            { 
+
+                text        :'MC gross', 
+                dataIndex   : 'mc_gross',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions16'
+            },
+            { 
+
+                text        :'MC fee', 
+                dataIndex   : 'mc_fee',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions17'
+            },
+            { 
+
+                text        :'MC currency', 
+                dataIndex   : 'mc_currency',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions18'
+            },
+            { 
+
+                text        :'Payment date', 
+                dataIndex   : 'payment_date',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions19'
+            },
+            { 
+
+                text        :'Payment status', 
+                dataIndex   : 'payment_status',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridPaypalTransactions20'
+            },
+            { 
+                text    : i18n('sNotes'),
+                sortable: false,
+                width   : 130,
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                                "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
+                ),
+                dataIndex: 'notes',stateId: 'StateGridDevices21'
+            }  
         ];
 
         //Create a mask and assign is as a property to the window

@@ -43,15 +43,17 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
 
     views:  [
         'components.pnlBanner',             'finPaypalTransactions.gridPaypalTransactions',
-        'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd'
+        'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd',
+        'finPaypalTransactions.winEmailVoucherDetail'
     ],
     stores: ['sFinPaypalTransactions', 'sAccessProvidersTree'],
     models: ['mFinPaypalTransaction',  'mAccessProviderTree' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv    : '/cake2/rd_cake/profile_components/export_csv',
-        urlNoteAdd      : '/cake2/rd_cake/profile_components/note_add.json'
+        urlExportCsv    : '/cake2/rd_cake/fin_paypal_transactions/export_csv',
+        urlNoteAdd      : '/cake2/rd_cake/fin_paypal_transactions/note_add.json',
+        urlEmailSend    : '/cake2/rd_cake/fin_paypal_transactions/email_voucher_details.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridPaypalTransactions'}       
@@ -68,6 +70,9 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
             'gridPaypalTransactions #reload': {
                 click:      me.reload
             },
+            'gridPaypalTransactions #email': {
+                click:      me.email
+            },
             'gridPaypalTransactions #note'   : {
                 click:      me.note
             },
@@ -76,6 +81,9 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
             },
             'gridPaypalTransactions'   : {
                 select:      me.select
+            },
+            'winEmailVoucherDetail #send'   : {
+                click:      me.emailSend
             },
             'gridNote[noteForGrid=fin_paypal_transactions] #reload' : {
                 click:  me.noteReload
@@ -89,7 +97,7 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
             'gridNote[noteForGrid=fin_paypal_transactions]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=profile_components] #btnTreeNext' : {
+            'winNoteAdd[noteForGrid=fin_paypal_transactions] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
             'winNoteAdd[noteForGrid=fin_paypal_transactions] #btnNoteAddPrev'  : {   
@@ -108,38 +116,110 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
     select: function(grid,record){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
-/*
+
         //Dynamically update the top toolbar
         tb = me.getGrid().down('toolbar[dock=top]');
-
-        var edit = record.get('update');
-        if(edit == true){
-            if(tb.down('#edit') != null){
-                tb.down('#edit').setDisabled(false);
+        var voucher_id = record.get('voucher_id');
+        if(voucher_id == 0){
+            if(tb.down('#attach') != null){
+                tb.down('#attach').setDisabled(false);
+            }
+            if(tb.down('#detach') != null){
+                tb.down('#detach').setDisabled(true);
+            }
+            if(tb.down('#email') != null){
+                tb.down('#email').setDisabled(true);
             }
         }else{
-            if(tb.down('#edit') != null){
-                tb.down('#edit').setDisabled(true);
+            if(tb.down('#attach') != null){
+                tb.down('#attach').setDisabled(true);
+            }
+            if(tb.down('#detach') != null){
+                tb.down('#detach').setDisabled(false);
+            }
+            if(tb.down('#email') != null){
+                tb.down('#email').setDisabled(false);
             }
         }
-
-        var del = record.get('delete');
-        if(del == true){
-            if(tb.down('#delete') != null){
-                tb.down('#delete').setDisabled(false);
-            }
-        }else{
-            if(tb.down('#delete') != null){
-                tb.down('#delete').setDisabled(true);
-            }
-        }
-*/
     },
 
     onStoreFinPaypalTransactionsLoaded: function() {
         var me      = this;
         var count   = me.getStore('sFinPaypalTransactions').getTotalCount();
         me.getGrid().down('#count').update({count: count});
+    },
+
+    email: function(button){
+        var me = this;
+        console.log("Email pappie");
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr              = me.getGrid().getSelectionModel().getLastSelected();
+                var email           = sr.get('payer_email');
+                var voucher_name    = sr.get('voucher_name');
+                var voucher_id      = sr.get('voucher_id');
+                var txn_id          = sr.get('txn_id');
+
+                //We can't mail if there is now voucher associated with transaction
+                if(voucher_id == 0){
+                        Ext.ux.Toaster.msg(
+                            'No voucher associated',
+                            'No voucher associaded with transaction',
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                    );
+                    return;
+                }
+
+                if(!me.application.runAction('cDesktop','AlreadyExist','winEmailVoucherDetailId'+sr.getId())){
+                    var w = Ext.widget('winEmailVoucherDetail',
+                        {
+                            id          : 'winEmailVoucherDetailId'+sr.getId(),
+                            paypalId    : sr.getId(),
+                            email       : email,
+                            voucher_name: voucher_name,
+                            txn_id      : txn_id
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    emailSend: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEmailSend,
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    'Voucher details sent',
+                    'Voucher details sent fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     csvExport: function(button,format) {
 /*        var me          = this;
@@ -233,8 +313,7 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
             }else{
 
                 //Determine the selected record:
-                var sr = me.getGrid().getSelectionModel().getLastSelected();
-                
+                var sr = me.getGrid().getSelectionModel().getLastSelected();    
                 if(!me.application.runAction('cDesktop','AlreadyExist','winNoteFinPaypalTransactions'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
