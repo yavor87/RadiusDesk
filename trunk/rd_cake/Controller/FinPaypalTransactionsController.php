@@ -619,9 +619,9 @@ class FinPaypalTransactionsController extends AppController {
             $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPaypalTransaction.txn_id' => $txn_id)));
 
             if($q_r){
-                $trans_data['id'] = $q_r['id'];
+                $trans_data['id'] = $q_r['FinPaypalTransaction']['id'];
                 $this->{$this->modelClass}->save($trans_data);
-                $id = $q_r['id'];
+                $id = $q_r['FinPaypalTransaction']['id'];
             }else{   
                 $this->{$this->modelClass}->save($trans_data);
                 $id = $this->{$this->modelClass}->id;
@@ -629,26 +629,33 @@ class FinPaypalTransactionsController extends AppController {
 
             $payment_status = $_POST['payment_status'];
             if($payment_status == 'Completed'){
+
+                $this->log('Payment status is Completed', 'debug');
                 //Check if we perhaps have not already created a voucher for this transaction
                 $q_r = $this->{$this->modelClass}->findById($id);
+                $this->log("Find item for id ".$id, 'debug');
+                $this->log($q_r, 'debug');
                 if($q_r){
-                    if($q_r['voucher_id'] == ''){ //Voucher ID is empty
+                    if($q_r['FinPaypalTransaction']['voucher_id'] == ''){ //Voucher ID is empty
+                        $this->log("Voucher id is empty we need to create one", 'debug');
                         //We need to create a voucher
                         $v  = ClassRegistry::init('Voucher');
+                        $v->contain(); //Make it lean
                         if($v->save($this->voucher_data)) {
-
+                            $voucher_id = $v->id;
+                            $this->log("Voucher was created ".$voucher_id." now update the entry", 'debug');
                             $success_flag = true;
-                            $q = $v->findById($v->id);
-                            $voucher_name = $q['name'];
-                            $voucher_id   = $q['id'];
+                            $q = $v->findById($voucher_id);
+                            $this->log($q, 'debug');
+                            $voucher_name = $q['Voucher']['name'];
+                            $voucher_id   = $q['Voucher']['id'];
                             //Update the transaction entry....
-                            $this->{$this->modelClass}->read(null, $id);
-                            $this->{$this->modelClass}->set(array(
-                                'voucher_name'  => $voucher_name,
-                                'voucher_id'    => $voucher_id
-                            ));
-                            $this->{$this->modelClass}->save();
+                            $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
+                            $this->log("Entry updated ".$voucher_name." ".$voucher_id, 'debug');
                         }else{
+                            //FIXME
+                            //Add log entry do record the failure!
+                    
 /*
                             $message = 'Error';
                             $this->set(array(
@@ -663,13 +670,6 @@ class FinPaypalTransactionsController extends AppController {
                     }
                 }
             }
-
-            $file               = fopen("/tmp/paypal_feedback.txt","w");
-            foreach($_POST as $key => $value) {
-              echo $key." = ". $value."<br>";
-              echo fwrite($file,"$key = $value\n");
-            }
-            fclose($file);
 
         } else if (strcmp ($res, "INVALID") == 0) {
             // IPN invalid, log for manual investigation
