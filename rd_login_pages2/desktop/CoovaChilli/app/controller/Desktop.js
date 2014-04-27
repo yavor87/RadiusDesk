@@ -10,7 +10,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     models  : ['mPrice' ],
     refs: [
         { ref: 'vp',        selector: '',               xtype: 'vp',        autoCreate: true},
-        { ref: 'land',      selector: '',               xtype: 'land'},        
+        { ref: 'land',      selector: 'land',           xtype: ''},        
         { ref: 'connect',   selector: 'pnlConnect',     xtype: '' },     //Connect panel
         { ref: 'status',    selector: 'pnlStatus',      xtype: '' },     //Status panel (mutually exclusive with connect panel)
         { ref: 'notHotspot',selector: 'pnlNotHotspot',  xtype: '' },      //Not a hotspot panel
@@ -34,7 +34,16 @@ Ext.define('CoovaChilli.controller.Desktop', {
     userName        : undefined,
     password        : undefined,
     remember        : false,
+
+    queryObj        : undefined,
+
     //--- 
+
+    //Payment gateway
+    paymentGw       : true,
+    patmentGwType   : 'pnlPayPal',
+   // patmentGwType   : 'pnlPayAd',
+   // patmentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -103,16 +112,14 @@ Ext.define('CoovaChilli.controller.Desktop', {
     buyVoucher:     function(button){
         var me = this;
         console.log("Payment!!");
-        var queryObj    = new Object();
-        window.location.search.replace(new RegExp("([^?=&]+)(=([^&]*))?","g"), function($0,$1,$2,$3) { queryObj[$1] = $3; });
-        if(queryObj.nasid != undefined){  //Override defaults
+        if(me.queryObj.nasid != undefined){  //Override defaults
             me.getFrmPayU().submit({
                 target:'_blank',
                 params:{
-                    nasid: queryObj.nasid
+                    nasid: me.queryObj.nasid
                 }
             });
-         
+      
         }else{
             //me.getFrmPayU().submit({target:'_blank'});  
         }
@@ -152,11 +159,14 @@ Ext.define('CoovaChilli.controller.Desktop', {
                 me.showConnect();   
                 me.coovaRefresh();
             }else{
-                me.showNotHotspot()
+                me.showNotHotspot();
             }  
         }else{
             me.coovaRefresh();  //Already established we are a hotspot, simply refresh
         }
+
+        //Check if this was perhaps the return of a payment gateway
+        me.checkPaymentGwReturn();
 
     },
     realmNotFound:  function(){
@@ -176,6 +186,47 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     },
 
+    checkPaymentGwReturn: function(){
+        var me = this;
+
+        //Return as we don't do anything
+        if(me.paymentGw == false){
+            return;
+        }
+
+        if(me.patmentGwType == 'pnlPayPal'){
+            if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
+                //Dummy thing:
+                console.log("Finding transaction details for "+ me.queryObj.tx);
+                Ext.Ajax.request({
+                    url     : me.application.config.urlPayPalVoucher,
+                    method  : 'GET',
+                    params: {
+                        txn_id: me.queryObj.tx
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                        console.log(jsonData);
+                        if(jsonData.success){
+                            me.getLand().down('#tpnlOptions').down('#pnlPayPalFeedback').update(jsonData.data);
+                            me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getLand().down('#tpnlOptions').down('#pnlPayPalFeedback').setVisible(true);
+                            me.getLand().down('#tpnlOptions').down('#pnlPayPalError').setVisible(false);
+                            
+                            me.getConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            console.log("big problems");
+                            me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getLand().down('#tpnlOptions').down('#pnlPayPalFeedback').setVisible(false);
+                            me.getLand().down('#tpnlOptions').down('#pnlPayPalError').setVisible(true);
+                        }       
+                    },
+                    scope: me
+                });
+            }
+        }
+    },
     onBtnPwdForgetClick: function(){
         var me = this;
         me.application.getController('Password').index();
@@ -185,25 +236,25 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     testForHotspot: function(){
         var me          = this;
-        var queryObj    = new Object(); 
+        me.queryObj    = new Object(); 
         //How the page was called - Should be called with the following search sting:
         //?res=notyet&uamip=10.1.0.1&uamport=3660&challenge=ca91105b39c91d49cbfa61ef085a2488&mac=00-0C-F1-5F-58-0B&
         //ip=10.1.0.8&called=00-1D-7E-BC-02-AD&nasid=10.20.30.2&userurl=http%3a%2f%2f1.1.1.1%2f&md=50834AD406B33D3A2D771FF2B4C80499
-        window.location.search.replace(new RegExp("([^?=&]+)(=([^&]*))?","g"), function($0,$1,$2,$3) { queryObj[$1] = $3; });
+        window.location.search.replace(new RegExp("([^?=&]+)(=([^&]*))?","g"), function($0,$1,$2,$3) { me.queryObj[$1] = $3; });
 
-        if(queryObj.uamport != undefined){  //Override defaults
-            me.uamPort = queryObj.uamport;
+        if(me.queryObj.uamport != undefined){  //Override defaults
+            me.uamPort = me.queryObj.uamport;
         }else{
 
             //It may have been called to be previewed
-            if(queryObj.dynamic_id != undefined){
+            if(me.queryObj.dynamic_id != undefined){
                 document.title = "Desktop preview";
                 me.showNotHotspot();
             }
             return false;   //Not a hotspot
         }
-        if(queryObj.uamip != undefined){    //Override defaults
-            me.uamIp = queryObj.uamip;
+        if(me.queryObj.uamip != undefined){    //Override defaults
+            me.uamIp = me.queryObj.uamip;
         }
         return true;        //Is a hotspot
     },

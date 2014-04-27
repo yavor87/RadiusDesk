@@ -11,8 +11,7 @@ Ext.define('CoovaChilli.view.pnlConnect', {
         if(me.jsonData.detail.t_c_check == true){
             t_c_hidden = false;
         } 
-        console.log(me.jsonData.detail.t_c_check);
-        this.items = [
+        me.items = [
             {
                 xtype       : 'form',
                 border      : false,
@@ -95,6 +94,6 @@ Ext.define('CoovaChilli.view.pnlConnect', {
         ]
             }
         ];
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });
