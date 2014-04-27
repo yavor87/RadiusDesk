@@ -53,7 +53,9 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv    : '/cake2/rd_cake/fin_paypal_transactions/export_csv',
         urlNoteAdd      : '/cake2/rd_cake/fin_paypal_transactions/note_add.json',
-        urlEmailSend    : '/cake2/rd_cake/fin_paypal_transactions/email_voucher_details.json'
+        urlEmailSend    : '/cake2/rd_cake/fin_paypal_transactions/email_voucher_details.json',
+        urlVoucherAttach: '/cake2/rd_cake/fin_paypal_transactions/voucher_attach.json',
+        urlVoucherDetach: '/cake2/rd_cake/fin_paypal_transactions/voucher_detach.json',
     },
     refs: [
         {  ref: 'grid',  selector: 'gridPaypalTransactions'}       
@@ -70,8 +72,18 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
             'gridPaypalTransactions #reload': {
                 click:      me.reload
             },
+            'gridPaypalTransactions #attach': {
+                click:      function(){
+                    me.attach_detach('attach');
+                }
+            },
+            'gridPaypalTransactions #detach': {
+                click:       function(){
+                    me.attach_detach('detach');
+                }
+            },
             'gridPaypalTransactions #email': {
-                click:      me.email
+                click:    me.email
             },
             'gridPaypalTransactions #note'   : {
                 click:      me.note
@@ -148,7 +160,80 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
         var count   = me.getStore('sFinPaypalTransactions').getTotalCount();
         me.getGrid().down('#count').update({count: count});
     },
+    attach_detach: function(type){
+        var me = this;
 
+        if(type == undefined){
+            type = 'detach';
+        }
+        //-----------------
+
+        if(type == 'attach'){
+            var url = me.urlVoucherAttach;
+            var s_head  = 'Voucher created and attached';
+            var s_msg   = 'Voucher created and attached fine';
+            var f_head  = 'Problems attaching a voucher';  
+        }
+
+        if(type == 'detach'){
+            var url = me.urlVoucherDetach;
+            var s_head  = 'Voucher detached';
+            var s_msg   = 'Voucher detached fine';
+            var f_head  = 'Problems detaching attaching a voucher';  
+        }
+        
+
+
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr              = me.getGrid().getSelectionModel().getLastSelected();
+                Ext.Ajax.request({
+                    url: url,
+                    method: 'GET',
+                    params: {
+                        id: sr.getId()
+                    },
+                    success: function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                        if(jsonData.success){
+                            Ext.ux.Toaster.msg(
+                                s_head,
+                                s_msg,
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );                     
+                            me.reload(); 
+                        }else{
+                            Ext.ux.Toaster.msg(
+                                f_head,
+                                jsonData.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );  
+                        }  
+                    },
+                    scope: me
+                });
+            }    
+        }
+    },
     email: function(button){
         var me = this;
         console.log("Email pappie");
