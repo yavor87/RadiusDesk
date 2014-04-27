@@ -27,7 +27,7 @@ class Voucher extends AppModel {
 	);
 
     public $hasOne = array(
-        'FinPayPalTransaction'   => array(
+        'FinPaypalTransaction'   => array(
             'dependent'     => true   
         )
     );
@@ -111,6 +111,13 @@ class Voucher extends AppModel {
             if($this->data['Voucher']['days_valid'] != ''){       
                 $valid = $this->data['Voucher']['days_valid']."-00-00-00";
                 $this->_add_radcheck_item($username,'Rd-Voucher',$valid);
+            }
+        }
+
+        //Use time_valid to create small values for vouchers after first login
+        if(array_key_exists('time_valid',$this->data['Voucher'])){ //It may be missing; you never know...  
+            if(preg_match('/[0-9]-[0-9]{2}-[0-9]{2}-[0-9]{2}/', $this->data['Voucher']['time_valid'])){      
+                $this->_add_radcheck_item($username,'Rd-Voucher',$this->data['Voucher']['time_valid']);
             }
         }
 
