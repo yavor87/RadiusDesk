@@ -46,7 +46,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     sessionData : undefined,
 
-    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 1, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : undefined,
@@ -173,7 +173,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url: urlStatus,
-            timeout: Mikrotik.config.Config.getJsonTimeout(),
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             success: function(j){
                 me.currentRetry = 0;
@@ -227,7 +227,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
         Ext.data.JsonP.request({
             url: urlLogin,
-            timeout: Mikrotik.config.Config.getJsonTimeout(),
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             params: {
                 username: me.userName,
@@ -319,7 +319,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlStatus   = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
             url             : urlStatus,
-            timeout         : Mikrotik.config.Config.getJsonTimeout(),
+            timeout         : CoovaChilli.config.Config.getJsonTimeout(),
             callbackKey     : 'callback',
             success         : function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
@@ -406,7 +406,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var urlLogoff = 'http://'+me.uamIp+':'+me.uamPort+'/json/logoff';
         Ext.data.JsonP.request({
             url: urlLogoff,
-            timeout: Mikrotik.config.Config.getJsonTimeout(),
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
             callbackKey: 'callback',
             success: function (){
                 me.currentRetry = 0;

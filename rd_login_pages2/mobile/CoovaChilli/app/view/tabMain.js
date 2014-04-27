@@ -91,7 +91,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                 itemId      : 'cntAbout',
                 layout      : 'fit',
                 scrollable  : false         
-            }/*, 
+            }, 
             {
                 title   : 'Online shop',
                 xtype   : 'container',
@@ -104,7 +104,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                 items: [
                     { xtype     : 'spacer', flex: 1 },
                     {
-                       html  : [
+                   /*    html  : [
                                 '<div class="rdWrapper">'+
                                 "<h2>Your Payment gateway here!</h2>"+
                                 "<div class='imgAbout'><img src='resources/images/paypal.png' /></div>"+
@@ -113,12 +113,28 @@ Ext.define('CoovaChilli.view.tabMain', {
                                 "<a href='http://www.radiusdesk.com/getting_started/contact_us' target='_blank'>"+
                                 "http://www.radiusdesk.com/getting_started/contact_us</a>"+
                                 "</div></div>"
-                        ], 
+                        ], */
+                        html    : [
+                            '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">'+
+                            '<input type="hidden" name="cmd" value="_s-xclick">',
+                            '<input type="hidden" name="hosted_button_id" value="W6C72N2CRB748">'+
+                            '<table>'+
+                            '<tr><td><input type="hidden" name="on0" value="Options">Options</td></tr><tr><td><select name="os0">'+
+                                '<option value="+ CoovaChilli">+ CoovaChilli $7.50 USD</option>'+
+                                '<option value="+ OpenVPN">+ OpenVPN $8.00 USD</option>'+
+                                '<option value="+ PPTP">+ PPTP $9.00 USD</option>'+
+                            '</select> </td></tr>'+
+                            '</table>'+
+                            '<input type="hidden" name="currency_code" value="USD">'+
+                            '<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
+                           ' <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">'+
+                        '</form>'
+                        ],
                         xtype:  'container'
                     },
                     { xtype     : 'spacer', flex: 1 }
                 ]
-            }*/
+            }
         ];
 
         me.callParent([config]);
