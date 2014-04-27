@@ -98,6 +98,44 @@ $config['financials']['vouchers']['a'][7] = array('id'=> 'dat_2560m', 'name' => 
 $config['financials']['vouchers']['a'][8] = array('id'=> 'dat_3072m', 'name' => '3072MB', 'price' => '565.00','currency' => 'R', 'position' => 'pre');
 $config['financials']['vouchers']['a'][9] = array('id'=> 'dat_5120m', 'name' => '5120MB', 'price' => '945.00','currency' => 'R', 'position' => 'pre');
 
+//From Paypal data 'item_name' (RDVoucher') 'item_number' (rd_v1) option_selection1 ('2Hours')
+
+$config['paypal']['RDVoucher']['rd_v1']['2Hours'] = array(
+                                                        'activate_on_login' => '1',
+                                                        'time_valid'        => '0-02-00-00',
+                                                        'expire'            => '05/31/2014',
+                                                        'precede'           => '',
+                                                        'profile_id'        => 7,
+                                                        'pwd_length'        => 3,
+                                                        'realm_id'          => 34,
+                                                        'sel_language'      => '4_4',
+                                                        'user_id'           => '44'
+                                                    ); 
+
+$config['paypal']['RDVoucher']['rd_v1']['8Hours'] = array(
+                                                        'activate_on_login' => '1',
+                                                        'time_valid'        => '0-08-00-00',
+                                                        'expire'            => '05/31/2014',
+                                                        'precede'           => '',
+                                                        'profile_id'        => 7,
+                                                        'pwd_length'        => 3,
+                                                        'realm_id'          => 34,
+                                                        'sel_language'      => '4_4',
+                                                        'user_id'           => '44'
+                                                    ); 
+
+$config['paypal']['RDVoucher']['rd_v1']['24Hours'] = array(
+                                                        'activate_on_login' => '1',
+                                                        'time_valid'        => '0-24-00-00',
+                                                        'expire'            => '05/31/2014',
+                                                        'precede'           => '',
+                                                        'profile_id'        => 7,
+                                                        'pwd_length'        => 3,
+                                                        'realm_id'          => 34,
+                                                        'sel_language'      => '4_4',
+                                                        'user_id'           => '44'
+                                                    );
+
 
 //======== END WORK IN PROGRESS ==========
 
