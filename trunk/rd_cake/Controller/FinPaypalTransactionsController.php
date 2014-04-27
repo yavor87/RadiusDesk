@@ -127,6 +127,16 @@ class FinPaypalTransactionsController extends AppController {
         exit;
     }
 
+    public function voucher_info_for(){
+
+        $data = array('username' => 'dirk', 'password' => 'greatsecret');
+        $this->set(array(
+            'data' => $data,
+            'success' => true,
+            '_serialize' => array('data','success')
+        ));
+    }
+
     public function email_voucher_details(){
         $user = $this->_ap_right_check();
         if(!$user){
@@ -627,47 +637,33 @@ class FinPaypalTransactionsController extends AppController {
                 $id = $this->{$this->modelClass}->id;
             }
 
+            //----- IF status of transaction is 'Completed'; we can go ahead ----
             $payment_status = $_POST['payment_status'];
             if($payment_status == 'Completed'){
 
-                $this->log('Payment status is Completed', 'debug');
                 //Check if we perhaps have not already created a voucher for this transaction
                 $q_r = $this->{$this->modelClass}->findById($id);
-                $this->log("Find item for id ".$id, 'debug');
-                $this->log($q_r, 'debug');
                 if($q_r){
                     if($q_r['FinPaypalTransaction']['voucher_id'] == ''){ //Voucher ID is empty
-                        $this->log("Voucher id is empty we need to create one", 'debug');
                         //We need to create a voucher
                         $v  = ClassRegistry::init('Voucher');
                         $v->contain(); //Make it lean
+                        //FIXME we need to select the profile and realm based on the sale's options selected
                         if($v->save($this->voucher_data)) {
-                            $voucher_id = $v->id;
-                            $this->log("Voucher was created ".$voucher_id." now update the entry", 'debug');
-                            $success_flag = true;
-                            $q = $v->findById($voucher_id);
-                            $this->log($q, 'debug');
-                            $voucher_name = $q['Voucher']['name'];
-                            $voucher_id   = $q['Voucher']['id'];
+                            $voucher_id     = $v->id;
                             //Update the transaction entry....
                             $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
-                            $this->log("Entry updated ".$voucher_name." ".$voucher_id, 'debug');
+                            //FIXME send an email to the user with his credentials
                         }else{
-                            //FIXME
-                            //Add log entry do record the failure!
-                    
-/*
-                            $message = 'Error';
-                            $this->set(array(
-                                'errors'    => $v->validationErrors,
-                                'success'   => false,
-                                'message'   => array('message' => __('Could not create item')),
-                                '_serialize' => array('errors','success','message')
-                            ));
-                            return; //Get out of here!
-*/
+                            //Add log entry do record the failure
+                            $this->log("Failed to create a voucher for PayPal entry $txn_id please do manual intervention");
+                            $this->log($v->validationErrors);                
                         }    
                     }
+                }else{
+                    //Add log entry do record the failure
+                    $this->log("Failed to add a PayPal entry for $txn_id please do manual intervention");
+                    $this->log($this->{$this->modelClass}->validationErrors);      
                 }
             }
 
