@@ -27,7 +27,7 @@ Ext.define('Mikrotik.view.Land' ,{
         },me);
 
         me.items    = [
-/*
+
             {       
                 height      : 90,
                 bodyStyle   :{"background-color":"#2a2a2a"}, 
@@ -37,7 +37,7 @@ Ext.define('Mikrotik.view.Land' ,{
                 }, 
                 items   : { xtype: 'image', src: 'resources/images/logo.png', 'height': 90 } 
             },
-*/
+/*
             {       
                 height  : 75, 
                 layout  : {
@@ -46,6 +46,7 @@ Ext.define('Mikrotik.view.Land' ,{
                 xtype   : 'image', 
                 src     : 'resources/images/banner.png'
             },
+*/
             {
                 layout  : {
                     type    : 'hbox',
@@ -113,7 +114,7 @@ Ext.define('Mikrotik.view.Land' ,{
                                 glyph       : Mikrotik.config.icnHelp,
                                 html        : html_string,
                                 autoScroll  : true
-                            }/*,
+                            },
                             {
                                 title       : 'Online shop',
                                 glyph       : Mikrotik.config.icnShop,
@@ -127,7 +128,7 @@ Ext.define('Mikrotik.view.Land' ,{
                                     "http://www.radiusdesk.com/getting_started/contact_us</a>",
                                     "</div></div>"
                                 ]
-                            }*/
+                            }
                         ]
                     }
                 ]

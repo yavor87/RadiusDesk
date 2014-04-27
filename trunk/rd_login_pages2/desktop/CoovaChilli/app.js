@@ -35,7 +35,8 @@ Ext.application({
         noStatus    : false,
         redirectTo  : "http://google.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
-        jsonTimeout : 10000
+        jsonTimeout : 10000,
+        urlPayPalVoucher : infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json'
     },
     //____ End of Configuration settings _____
 

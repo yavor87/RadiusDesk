@@ -22,9 +22,11 @@ Ext.ClassManager.addNameAlternateMappings({
   "CoovaChilli.view.Viewport": [],
   "CoovaChilli.view.cmbVouchers": [],
   "CoovaChilli.view.frmPayU": [],
+  "CoovaChilli.view.pnlAbout": [],
   "CoovaChilli.view.pnlAboutMenu": [],
   "CoovaChilli.view.pnlConnect": [],
   "CoovaChilli.view.pnlNotHotspot": [],
+  "CoovaChilli.view.pnlPhotos": [],
   "CoovaChilli.view.pnlStatus": [],
   "CoovaChilli.view.winHelp": [],
   "Ext.AbstractComponent": [],
@@ -879,6 +881,9 @@ Ext.ClassManager.addNameAliasMappings({
   "CoovaChilli.view.frmPayU": [
     "widget.frmPayU"
   ],
+  "CoovaChilli.view.pnlAbout": [
+    "widget.pnlAbout"
+  ],
   "CoovaChilli.view.pnlAboutMenu": [
     "widget.pnlAboutMenu"
   ],
@@ -887,6 +892,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "CoovaChilli.view.pnlNotHotspot": [
     "widget.pnlNotHotspot"
+  ],
+  "CoovaChilli.view.pnlPhotos": [
+    "widget.pnlPhotos"
   ],
   "CoovaChilli.view.pnlStatus": [
     "widget.pnlStatus"

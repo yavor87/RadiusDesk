@@ -15,7 +15,9 @@ Ext.define('CoovaChilli.view.Land' ,{
         'Ext.view.View',
         'Ext.data.Store',
         'CoovaChilli.view.pnlPhotos',
-        'CoovaChilli.view.pnlAbout'
+        'CoovaChilli.view.pnlAbout',
+        'CoovaChilli.view.pnlPayPal',
+        'CoovaChilli.view.pnlPayAd'
     ],
     initComponent: function() { 
         var me      = this;
@@ -98,6 +100,7 @@ Ext.define('CoovaChilli.view.Land' ,{
                         collapsible         : true,
                         collapseDirection   : 'left',
                         border              : true,
+                        itemId              : 'tpnlOptions',
                         glyph               : CoovaChilli.config.icnOptions,
                         items               : [
                             {
@@ -105,29 +108,22 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 glyph       : CoovaChilli.config.icnInfo,
                                 xtype       : 'pnlAbout',
                                 data        : me.jsonData.detail,
-                                autoScroll  : true
+                                autoScroll  : true,
+                                itemId      : 'pnlAbout'
                             },
                             {
                                 title       : 'Help',
                                 glyph       : CoovaChilli.config.icnHelp,
                                 html        : html_string,
-                                autoScroll  : true
+                                autoScroll  : true,
+                                itemId      : 'pnlHelp'
                             },
                             {
                                 title       : 'Online shop',
                                 glyph       : CoovaChilli.config.icnShop,
-                                html        : [
-                                    "<div class='rdCenter'>",
-                                    "<h2>Your Payment gateway here!</h2>",
-                                    "<div class='imgAbout'><img src='resources/images/paypal.png' /></div>",
-                                    "<div class='rdDescription'>",
-                                    "For custom payment gateway integration contact the developers of <b>RADIUSdesk</b><br>",
-                                    "<a href='http://www.radiusdesk.com/getting_started/contact_us' target='_blank'>",
-                                    "http://www.radiusdesk.com/getting_started/contact_us</a>",
-                                    "</div></div>"
-                                ]
+                                itemId      : 'pnlShop',
+                                xtype       : 'pnlPayPal'
                             }
-
                         ]
                     }
                 ]
