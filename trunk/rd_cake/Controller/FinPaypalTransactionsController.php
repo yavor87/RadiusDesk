@@ -137,6 +137,125 @@ class FinPaypalTransactionsController extends AppController {
         ));
     }
 
+    public function voucher_attach(){   //Creates and attaches a voucher based on the transaction details
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(!(isset($this->request->query['id']))){
+            $this->set(array(
+                'message'   => "Missing id in query string",
+                'success' => false,
+                '_serialize' => array('success','message')
+            ));
+            return;  
+        }
+        $success_flag = false;
+
+        $id  = $this->request->query['id'];
+        $q_r = $this->{$this->modelClass}->findById($id);
+
+        if($q_r){
+        
+            $item_name          = $q_r['FinPaypalTransaction']['item_name']; //RDVoucher
+            $item_number        = $q_r['FinPaypalTransaction']['item_number']; //rd_v1
+            $option_selection1  = $q_r['FinPaypalTransaction']['option_selection1']; //2Hours
+
+            $data               = Configure::read('paypal.'.$item_name.'.'.$item_number.'.'.$option_selection1);
+
+            if($data != null){
+                $v  = ClassRegistry::init('Voucher');
+                if($v->save($data)) {
+                    $success_flag = true;
+                    $voucher_id   = $v->id;
+                    $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
+                }else{
+
+                    $message = 'Error';
+                    $this->set(array(
+                        'errors'    => $v->validationErrors,
+                        'success'   => false,
+                        'message'   => array('message' => __('Could not create item')),
+                        '_serialize' => array('errors','success','message')
+                    ));
+                    return; //Get out of here!
+                }
+            }else{
+                $this->set(array(
+                    'success'   => false,
+                    'message'   => 'Detail not configured for item (item_name/item_number/option_selection1)',
+                    '_serialize' => array('success','message')
+                ));
+                return;
+            }
+        }else{
+            $this->set(array(
+                'success'   => false,
+                'message'   => 'Item not found to attach Voucher to it',
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $this->set(array(
+            'success' => $success_flag,
+            '_serialize' => array('success')
+        ));
+    }
+
+    public function voucher_detach(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(!(isset($this->request->query['id']))){
+            $this->set(array(
+                'message'   => "Missing id in query string",
+                'success' => false,
+                '_serialize' => array('success','message')
+            ));
+            return;  
+        }
+        $success_flag = false;
+
+        $id  = $this->request->query['id'];
+        $q_r = $this->{$this->modelClass}->findById($id);
+
+        if($q_r){
+
+            if($this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => null))){
+                $success_flag = true;
+            }else{
+                $message = 'Error';
+                $this->set(array(
+                    'errors'    => $this->{$this->modelClass}->validationErrors,
+                    'success'   => false,
+                    'message'   => array('message' => __('Could not detach voucher')),
+                    '_serialize' => array('errors','success','message')
+                ));
+                return; //Get out of here!
+            }
+        }else{
+            $this->set(array(
+                'success'   => false,
+                'message'   => 'Item not found to detach Voucher from',
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $this->set(array(
+            'success' => $success_flag,
+            '_serialize' => array('success')
+        ));
+    }
+
     public function email_voucher_details(){
         $user = $this->_ap_right_check();
         if(!$user){
@@ -144,23 +263,31 @@ class FinPaypalTransactionsController extends AppController {
         }
         $user_id    = $user['id'];
 
-        $v  = ClassRegistry::init('Voucher');
-        if($v->save($this->voucher_data)) {
+        print_r($this->request->data);
+        $id     = $this->request->data['id'];
+        $q_r    = $this->{$this->modelClass}->findById($id);
 
-            $success_flag = true;
-            $v->id = null;
+        if($q_r){
+            $v  = ClassRegistry::init('Voucher');
+            $v->contain('Radcheck');
+            $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
+            $q  = $v->findById($voucher_id);
+            if($q){
+                $password_found = false;
 
-        }else{
-
-            $message = 'Error';
-            $this->set(array(
-                'errors'    => $v->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-            return; //Get out of here!
+                foreach($q['Radcheck'] as $rc){
+                    if($rc['attribute'] == 'Cleartext-Password'){
+                        $password_found = true;
+                        $username = $rc['username'];
+                        $password = $rc['value'];  
+                    }
+                }
+                if($password_found){
+                    print_r("The username is $username and password is $password");
+                }
+            }
         }
+
 
 /*
         App::uses('CakeEmail', 'Network/Email');
