@@ -5,18 +5,18 @@
  * metadata-driven class system features 
  */
 Ext.Loader.addClassPathMappings({
-  "Ext": "touch/src",
-  "Ext.device.Purchases.Product": "touch/src/device/purchases/Sencha.js",
-  "Ext.device.filesystem.DirectoryEntry": "touch/src/device/filesystem/HTML5.js",
-  "Ext.device.filesystem.Entry": "touch/src/device/filesystem/HTML5.js",
-  "Ext.device.filesystem.FileEntry": "touch/src/device/filesystem/HTML5.js",
-  "Ext.device.filesystem.FileSystem": "touch/src/device/filesystem/HTML5.js",
-  "Ext.device.purchases.Purchase": "touch/src/device/purchases/Sencha.js",
-  "Ext.device.sqlite.Database": "touch/src/device/sqlite/Sencha.js",
-  "Ext.device.sqlite.SQLResultSet": "touch/src/device/sqlite/Sencha.js",
-  "Ext.device.sqlite.SQLResultSetRowList": "touch/src/device/sqlite/Sencha.js",
-  "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
-  "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
+  "Ext": "../CoovaChilli/touch/src",
+  "Ext.device.Purchases.Product": "../CoovaChilli/touch/src/device/purchases/Sencha.js",
+  "Ext.device.filesystem.DirectoryEntry": "../CoovaChilli/touch/src/device/filesystem/HTML5.js",
+  "Ext.device.filesystem.Entry": "../CoovaChilli/touch/src/device/filesystem/HTML5.js",
+  "Ext.device.filesystem.FileEntry": "../CoovaChilli/touch/src/device/filesystem/HTML5.js",
+  "Ext.device.filesystem.FileSystem": "../CoovaChilli/touch/src/device/filesystem/HTML5.js",
+  "Ext.device.purchases.Purchase": "../CoovaChilli/touch/src/device/purchases/Sencha.js",
+  "Ext.device.sqlite.Database": "../CoovaChilli/touch/src/device/sqlite/Sencha.js",
+  "Ext.device.sqlite.SQLResultSet": "../CoovaChilli/touch/src/device/sqlite/Sencha.js",
+  "Ext.device.sqlite.SQLResultSetRowList": "../CoovaChilli/touch/src/device/sqlite/Sencha.js",
+  "Ext.device.sqlite.SQLTransaction": "../CoovaChilli/touch/src/device/sqlite/Sencha.js",
+  "Ext.draw.engine.SvgContext.Gradient": "../CoovaChilli/touch/src/draw/engine/SvgContext.js",
   "Mikrotik": "app"
 });
 Ext.ClassManager.addNameAlternateMappings({
@@ -677,6 +677,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.util.Audio": [],
   "Ext.util.BufferedCollection": [],
   "Ext.util.Collection": [],
+  "Ext.util.Cookies": [],
   "Ext.util.DelayedTask": [],
   "Ext.util.Draggable": [],
   "Ext.util.Droppable": [],
@@ -743,7 +744,16 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.viewport.WindowsPhone": [
     "Ext.viewport.WP"
   ],
-  "Mikrotik.view.Main": []
+  "Mikrotik.config.Config": [],
+  "Mikrotik.controller.cMain": [],
+  "Mikrotik.view.Main": [],
+  "Mikrotik.view.cntAbout": [],
+  "Mikrotik.view.cntNotHotspot": [],
+  "Mikrotik.view.cntNotPresent": [],
+  "Mikrotik.view.cntPhotos": [],
+  "Mikrotik.view.cntStatus": [],
+  "Mikrotik.view.frmConnect": [],
+  "Mikrotik.view.tabMain": []
 });
 Ext.ClassManager.addNameAliasMappings({
   "Ext.AbstractComponent": [],
@@ -1617,6 +1627,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.util.Audio": [],
   "Ext.util.BufferedCollection": [],
   "Ext.util.Collection": [],
+  "Ext.util.Cookies": [],
   "Ext.util.DelayedTask": [],
   "Ext.util.Draggable": [],
   "Ext.util.Droppable": [],
@@ -1687,7 +1698,30 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.viewport.Ios": [],
   "Ext.viewport.Viewport": [],
   "Ext.viewport.WindowsPhone": [],
+  "Mikrotik.config.Config": [],
+  "Mikrotik.controller.cMain": [],
   "Mikrotik.view.Main": [
+    "widget.main"
+  ],
+  "Mikrotik.view.cntAbout": [
+    "widget.cntAbout"
+  ],
+  "Mikrotik.view.cntNotHotspot": [
+    "widget.cntNotHotspot"
+  ],
+  "Mikrotik.view.cntNotPresent": [
+    "widget.main"
+  ],
+  "Mikrotik.view.cntPhotos": [
+    "widget.cntPhotos"
+  ],
+  "Mikrotik.view.cntStatus": [
+    "widget.cntStatus"
+  ],
+  "Mikrotik.view.frmConnect": [
+    "widget.frmConnect"
+  ],
+  "Mikrotik.view.tabMain": [
     "widget.main"
   ]
 });

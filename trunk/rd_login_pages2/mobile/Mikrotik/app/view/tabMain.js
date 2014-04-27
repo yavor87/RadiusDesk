@@ -91,7 +91,7 @@ Ext.define('Mikrotik.view.tabMain', {
                 itemId      : 'cntAbout',
                 layout      : 'fit',
                 scrollable  : false         
-            }/*,
+            },
             {
                 title   : 'Online shop',
                 xtype   : 'container',
@@ -118,7 +118,7 @@ Ext.define('Mikrotik.view.tabMain', {
                     },
                     { xtype     : 'spacer', flex: 1 }
                 ]
-            }*/
+            }
         ];
 
         me.callParent([config]);
