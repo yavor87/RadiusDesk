@@ -32,19 +32,7 @@ class FinPaypalTransactionsController extends AppController {
         'sel_language'      => '4_4',
         'user_id'           => '44'
     );
-    /*
-        activate_on_login	activate_on_login
-        days_valid	2
-        expire	05/31/2015
-        precede	
-        profile_id	7
-        pwd_length	3
-        quantity	1
-        realm_id	34
-        sel_language	4_4
-        token	52190fff-a800-48eb-b1f2-478bc0a80167
-        user_id	0
-*/
+   
 
     public function index(){
 
@@ -81,7 +69,7 @@ class FinPaypalTransactionsController extends AppController {
 
          foreach($q_r as $i){
 
-          //  print_r($i);
+           // print_r($i);
             $row = array();
             foreach($this->fields as $field){
                 if(array_key_exists($field,$i['FinPaypalTransaction'])){
@@ -100,6 +88,10 @@ class FinPaypalTransactionsController extends AppController {
             }
 
             //Voucher id and name
+            if($i['FinPaypalTransaction']['voucher_id'] != ''){
+                $row['voucher_name'] = "Orphaned!"; //Default
+            }
+
             if($i['Voucher']['id'] != null){
                 $row['voucher_id']      = $i['Voucher']['id'];
                 $row['voucher_name']    = $i['Voucher']['name'];
@@ -261,11 +253,12 @@ class FinPaypalTransactionsController extends AppController {
         if(!$user){
             return;
         }
-        $user_id    = $user['id'];
+        $user_id= $user['id'];
 
-        print_r($this->request->data);
         $id     = $this->request->data['id'];
         $q_r    = $this->{$this->modelClass}->findById($id);
+        $to     = $this->request->data['email'];
+        $message= $this->request->data['message'];
 
         if($q_r){
             $v  = ClassRegistry::init('Voucher');
@@ -273,7 +266,11 @@ class FinPaypalTransactionsController extends AppController {
             $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
             $q  = $v->findById($voucher_id);
             if($q){
-                $password_found = false;
+                $password_found     = false;
+                $valid_for          = false;
+                $profile            = false;
+                $extra_name         = false;
+                $exta_value         = false;
 
                 foreach($q['Radcheck'] as $rc){
                     if($rc['attribute'] == 'Cleartext-Password'){
@@ -281,26 +278,29 @@ class FinPaypalTransactionsController extends AppController {
                         $username = $rc['username'];
                         $password = $rc['value'];  
                     }
+                    if($rc['attribute'] == 'Rd-Voucher'){
+                        $valid_for          = $rc['value'];
+                    }
+
+                    if($rc['attribute'] == 'User-Profile'){
+                        $profile        = $rc['value'];
+                    }
                 }
+                //Now we can send the email
                 if($password_found){
-                    print_r("The username is $username and password is $password");
+                  //  print_r("The username is $username and password is $password");
+                    App::uses('CakeEmail', 'Network/Email');
+                    $Email = new CakeEmail();
+                    $Email->config('gmail');
+                    $Email->subject('Your voucher detail');
+                    $Email->to($to);
+                    $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+                    $Email->template('voucher_detail', 'voucher_notify');
+                    $Email->emailFormat('html');
+                    $Email->send();
                 }
             }
         }
-
-
-/*
-        App::uses('CakeEmail', 'Network/Email');
-        $Email = new CakeEmail();
-
-        $Email->config('gmail');
-
-        $Email->sender('dirkvanderwalt@gmail.com', 'Dirk van der Walt');
-        $Email->from(array('dirkvanderwalt@gmail.com' => 'Dirk van der Walt'));
-        $Email->to('dirkvanderwalt@gmail.com');
-        $Email->subject('About');
-        $Email->send('My message Gooi hom Pappie!!!');
-*/
         $this->set(array(
             'success' => true,
             '_serialize' => array('success')
@@ -775,16 +775,28 @@ class FinPaypalTransactionsController extends AppController {
                         //We need to create a voucher
                         $v  = ClassRegistry::init('Voucher');
                         $v->contain(); //Make it lean
-                        //FIXME we need to select the profile and realm based on the sale's options selected
-                        if($v->save($this->voucher_data)) {
-                            $voucher_id     = $v->id;
-                            //Update the transaction entry....
-                            $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
-                            //FIXME send an email to the user with his credentials
+
+                        $item_name          = $q_r['FinPaypalTransaction']['item_name']; //RDVoucher
+                        $item_number        = $q_r['FinPaypalTransaction']['item_number']; //rd_v1
+                        $option_selection1  = $q_r['FinPaypalTransaction']['option_selection1']; //2Hours
+                        //FIXME replace with real one when going live!!!
+                        //$payer_email        = $q_r['FinPaypalTransaction']['payer_email'];
+                        $payer_email        =  'dirkvanderwalt@gmail.com'; 
+
+                        $data               = Configure::read('paypal.'.$item_name.'.'.$item_number.'.'.$option_selection1);
+                        if($data != null){
+                            if($v->save($data)) {
+                                $voucher_id     = $v->id;
+                                //Update the transaction entry....
+                                $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
+                                $this->_email_voucher_detail($payer_email,$voucher_id,$txn_id);
+                            }else{
+                                //Add log entry do record the failure
+                                $this->log("Failed to create a voucher for PayPal entry $txn_id please do manual intervention");
+                                $this->log($v->validationErrors);                
+                            }
                         }else{
-                            //Add log entry do record the failure
-                            $this->log("Failed to create a voucher for PayPal entry $txn_id please do manual intervention");
-                            $this->log($v->validationErrors);                
+                            $this->log("Failed to locate PayPal config item for $item_name / $item_number / $option_selection  please do manual intervention");
                         }    
                     }
                 }else{
@@ -797,6 +809,51 @@ class FinPaypalTransactionsController extends AppController {
         } else if (strcmp ($res, "INVALID") == 0) {
             // IPN invalid, log for manual investigation
             echo "The response from IPN was: <b>" .$res ."</b>";
+        }
+    }
+
+
+    private function _email_voucher_detail($payer_email, $voucher_id,$txn_id){
+
+        $v          = ClassRegistry::init('Voucher');
+        $v->contain('Radcheck');
+        $voucher_id = $voucher_id;
+        $q          = $v->findById($voucher_id);
+        if($q){
+            $password_found     = false;
+            $valid_for          = false;
+            $profile            = false;
+            $extra_name         = false;
+            $exta_value         = false;
+            $message            = '';
+
+            foreach($q['Radcheck'] as $rc){
+                if($rc['attribute'] == 'Cleartext-Password'){
+                    $password_found = true;
+                    $username = $rc['username'];
+                    $password = $rc['value'];  
+                }
+                if($rc['attribute'] == 'Rd-Voucher'){
+                    $valid_for          = $rc['value'];
+                }
+
+                if($rc['attribute'] == 'User-Profile'){
+                    $profile        = $rc['value'];
+                }
+            }
+            //Now we can send the email
+            if($password_found){
+              //  print_r("The username is $username and password is $password");
+                App::uses('CakeEmail', 'Network/Email');
+                $Email = new CakeEmail();
+                $Email->config('gmail');
+                $Email->subject('PayPal #'.$txn_id);
+                $Email->to($payer_email);
+                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+                $Email->template('voucher_detail', 'voucher_notify');
+                $Email->emailFormat('html');
+                $Email->send();
+            }
         }
     }
 
@@ -824,7 +881,6 @@ class FinPaypalTransactionsController extends AppController {
             return __("orphaned");
         }
     }
-
 
 //-----------------------------------------------
 }
