@@ -334,7 +334,9 @@ class VouchersController extends AppController {
                     'last_reject_nas'       => $i['Voucher']['last_reject_nas'],
                     'last_reject_message'   => $i['Voucher']['last_reject_message'],
                     'update'                => $action_flags['update'],
-                    'delete'                => $action_flags['delete']
+                    'delete'                => $action_flags['delete'],
+                    'extra_name'            => $i['Voucher']['extra_name'],
+                    'extra_value'           => $i['Voucher']['extra_value']
                 )
             );
         }
@@ -498,6 +500,9 @@ class VouchersController extends AppController {
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['voucher_id']);
 
+            $extra_name     = $q_r['Voucher']['extra_name'];
+            $extra_value    = $q_r['Voucher']['extra_value'];
+
             foreach($q_r['Radcheck'] as $rc){
 
                 if($rc['attribute'] == 'Rd-Realm'){
@@ -536,6 +541,8 @@ class VouchersController extends AppController {
                 $items['activate_on_login'] = 'activate_on_login';
                 $pieces                     = explode("-", $activate);
                 $items['days_valid']        = $pieces[0];  
+                $items['hours_valid']       = $pieces[1];
+                $items['minutes_valid']     = $pieces[2]; 
             }
 
             if($expire){
@@ -543,7 +550,10 @@ class VouchersController extends AppController {
                 $items['expire']        = $this->_extjs_format_radius_date($expire);
             }else{
                 $items['never_expire'] = true;
-            }   
+            }  
+
+            $items['extra_name']    = $extra_name;
+            $items['extra_value']   = $extra_value; 
         }
 
         $this->set(array(
@@ -562,7 +572,7 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        $this->{$this->modelClass}->save($this->request->data);
+        $result = $this->{$this->modelClass}->save($this->request->data);
 
         //TODO Check if the owner of this user is in the chain of the APs
         if(isset($this->request->data['id'])){
@@ -594,7 +604,20 @@ class VouchersController extends AppController {
             }
 
             if(isset($this->request->data['days_valid'])){
-                $expiration = $this->request->data['days_valid']."-00-00-00";
+                $hours      = 0;
+                $minutes    = 0;
+                if(isset($this->request->data['hours_valid'])){
+                    $hours = $this->request->data['hours_valid'];
+                }
+
+                if(isset($this->request->data['minutes_valid'])){
+                    $minutes = $this->request->data['minutes_valid'];
+                }
+
+                $hours      = sprintf("%02d", $hours);
+                $minutes    = sprintf("%02d", $minutes);
+
+                $expiration = $this->request->data['days_valid']."-".$hours."-".$minutes."-00";
                 $this->_replace_radcheck_item($username,'Rd-Voucher',$expiration);
             }
 
