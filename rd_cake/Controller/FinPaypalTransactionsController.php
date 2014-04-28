@@ -121,6 +121,68 @@ class FinPaypalTransactionsController extends AppController {
 
     public function voucher_info_for(){
 
+        if(!(isset($this->request->query['txn_id']))){
+            $this->set(array(
+                'message'   => "Missing txn_id in query string",
+                'success' => false,
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $txn_id = $this->request->query['txn_id'];
+
+        $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPaypalTransaction.txn_id' => $txn_id)));
+
+        if($q_r){
+            $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
+            if($voucher_id != ''){
+                $v  = ClassRegistry::init('Voucher');
+                $v->contain('Radcheck');
+                $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
+                $q  = $v->findById($voucher_id);
+                if($q){
+                    $password_found     = false;
+                    $valid_for          = false;
+                    $profile            = false;
+                    $extra_name         = false;
+                    $exta_value         = false;
+
+                    foreach($q['Radcheck'] as $rc){
+                        if($rc['attribute'] == 'Cleartext-Password'){
+                            $password_found = true;
+                            $username = $rc['username'];
+                            $password = $rc['value'];  
+                        }
+                        if($rc['attribute'] == 'Rd-Voucher'){
+                            $valid_for          = $rc['value'];
+                        }
+
+                        if($rc['attribute'] == 'User-Profile'){
+                            $profile        = $rc['value'];
+                        }
+                    }
+                    //Now we can send the email
+                    if($password_found){
+                        $this->set(array(
+                            'data'   => array('username' => $username,'password' => $password,'profile' => $profile,'valid_for' => $valid_for),
+                            'success' => true,
+                            '_serialize' => array('success','data')
+                        ));
+                        return;
+                    }
+                }
+            }
+
+        }else{
+            $this->set(array(
+                'message'   => "Do data available for $txn_id",
+                'success' => false,
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        
         $data = array('username' => 'dirk', 'password' => 'greatsecret');
         $this->set(array(
             'data' => $data,
