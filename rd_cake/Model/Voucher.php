@@ -28,7 +28,7 @@ class Voucher extends AppModel {
 
     public $hasOne = array(
         'FinPaypalTransaction'   => array(
-            'dependent'     => true   
+            'dependent'     => false   
         )
     );
 
