@@ -108,8 +108,23 @@ class Voucher extends AppModel {
 
         //Activate upon first login
         if(array_key_exists('days_valid',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['days_valid'] != ''){       
-                $valid = $this->data['Voucher']['days_valid']."-00-00-00";
+            if($this->data['Voucher']['days_valid'] != ''){
+
+                $hours      = 0;
+                $minutes    = 0;
+                if(isset($this->data['Voucher']['hours_valid'])){
+                    $hours = $this->data['Voucher']['hours_valid'];
+                }
+
+                if(isset($this->data['Voucher']['minutes_valid'])){
+                    $minutes = $this->data['Voucher']['minutes_valid'];
+                }
+
+                $hours      = sprintf("%02d", $hours);
+                $minutes    = sprintf("%02d", $minutes);
+
+                $valid      = $this->data['Voucher']['days_valid']."-".$hours."-".$minutes."-00";
+
                 $this->_add_radcheck_item($username,'Rd-Voucher',$valid);
             }
         }
