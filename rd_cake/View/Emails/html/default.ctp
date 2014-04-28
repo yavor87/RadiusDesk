@@ -16,8 +16,13 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 ?>
+<h1>Gooooooo</h1>
 <?php
 $content = explode("\n", $content);
+
+var_dump($this->viewVars);
+
+
 
 foreach ($content as $line):
 	echo '<p> ' . $line . "</p>\n";
