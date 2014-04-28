@@ -144,7 +144,23 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 tdCls       : 'gridTree',
                 hidden      : true,
                 filter      : {type: 'string'},stateId: 'StateGridVouchers15'
-            }    
+            },
+            {
+                text        : 'Extra field name',
+                flex        : 1,
+                dataIndex   : 'extra_name',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'},stateId: 'StateGridVouchers16'
+            },
+            {
+                text        : 'Extra field value',
+                flex        : 1,
+                dataIndex   : 'extra_value',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'},stateId: 'StateGridVouchers17'
+            }         
         ];
 
         //Create a mask and assign is as a property to the window

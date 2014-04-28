@@ -195,6 +195,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                         { 
                             'title' : i18n('sActivate_and_Expire'),
                             'layout'    : 'anchor',
+                            autoScroll  :true,
                             defaults    : {
                                 anchor: '100%'
                             },
@@ -212,10 +213,34 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     xtype       : 'numberfield',
                                     name        : 'days_valid',
                                     fieldLabel  : i18n('sDays_available_after_first_login'),
-                                    value       : 1,
+                                    value       : 0,
                                     maxValue    : 90,
-                                    minValue    : 1,
+                                    minValue    : 0,
                                     itemId      : 'days_valid',
+                                    hidden      : true,
+                                    disabled    : true
+                                },
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'hours_valid',
+                                    fieldLabel  : 'Hours',
+                                    labelAlign  : 'right',
+                                    value       : 0,
+                                    maxValue    : 23,
+                                    minValue    : 0,
+                                    itemId      : 'hours_valid',
+                                    hidden      : true,
+                                    disabled    : true
+                                },
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'minutes_valid',
+                                    fieldLabel  : 'Minutes',
+                                    labelAlign  : 'right',
+                                    value       : 0,
+                                    maxValue    : 59,
+                                    minValue    : 0,
+                                    itemId      : 'minutes_valid',
                                     hidden      : true,
                                     disabled    : true
                                 },
@@ -236,6 +261,29 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     minValue    : new Date(),  // limited to the current date or after
                                     disabled    : true,
                                     value       : dtTo
+                                }
+                            ]
+                        },
+                        { 
+                            'title' : 'Extra field',
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items: [
+                                {
+                                    xtype       : 'textfield',
+                                    name        : 'extra_name',
+                                    fieldLabel  : 'Extra field name',
+                                    allowBlank  : true,
+                                    labelClsExtra: 'lblRd'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    name        : 'extra_value',
+                                    fieldLabel  : 'Extra field value',
+                                    allowBlank  : true,
+                                    labelClsExtra: 'lblRd'
                                 }
                             ]
                         }

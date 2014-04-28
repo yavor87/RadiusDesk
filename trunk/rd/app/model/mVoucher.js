@@ -23,6 +23,8 @@ Ext.define('Rd.model.mVoucher', {
          'data_usage',
          'time_usage',
          {name: 'update',       type: 'bool'},
-         {name: 'delete',       type: 'bool'}
+         {name: 'delete',       type: 'bool'},
+         {name: 'extra_name',   type: 'string'  },
+         {name: 'extra_value',  type: 'string'  }
         ]
 });

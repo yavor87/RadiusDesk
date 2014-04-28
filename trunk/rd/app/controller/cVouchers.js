@@ -671,13 +671,23 @@ Ext.define('Rd.controller.cVouchers', {
         var me      = this;
         var form    = chk.up('form');
         var dv      = form.down('#days_valid');
+        var hv      = form.down('#hours_valid');
+        var mv      = form.down('#minutes_valid');
         var value   = chk.getValue();
         if(value){
             dv.setVisible(true);
-            dv.setDisabled(false);      
+            dv.setDisabled(false); 
+            hv.setVisible(true);
+            hv.setDisabled(false);
+            mv.setVisible(true);
+            mv.setDisabled(false);       
         }else{
             dv.setVisible(false);
-            dv.setDisabled(true); 
+            dv.setDisabled(true);
+            hv.setVisible(false);
+            hv.setDisabled(true);
+            mv.setVisible(false);
+            mv.setDisabled(true);
         }
     },
     chkNeverExpireChange: function(chk){
