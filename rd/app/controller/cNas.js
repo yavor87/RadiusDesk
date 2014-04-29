@@ -110,6 +110,10 @@ Ext.define('Rd.controller.cNas', {
 
         me.getStore('sNas').addListener('load',me.onStoreNasLoaded, me);
         me.control({
+            '#nasWin'    : {
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
+            },
             'gridNas #reload': {
                 click:      me.reload
             },
@@ -358,6 +362,12 @@ Ext.define('Rd.controller.cNas', {
                 change:      me.changeMonthlyGraph
             }  
         });
+    },
+    winClose:   function(){
+        var me = this;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
     },
     reload: function(){
         var me =this;
@@ -1218,9 +1228,11 @@ Ext.define('Rd.controller.cNas', {
         var interval= 30000; //default
         clearInterval(me.autoReload);   //Always clear
         b.setIconCls('b-reload_time');
+        b.setGlyph(Rd.config.icnTime);
         
         if(n == 'mnuRefreshCancel'){
             b.setIconCls('b-reload');
+            b.setGlyph(Rd.config.icnReload);
             return;
         }
         

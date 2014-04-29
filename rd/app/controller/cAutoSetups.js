@@ -78,6 +78,10 @@ Ext.define('Rd.controller.cAutoSetups', {
 
         me.getStore('sAutoSetups').addListener('load',me.onStoreAutoSetupsLoaded, me);
         me.control({
+            '#autoSetupsWin'    : {
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
+            },
             'gridAutoSetups #reload': {
                 click:      me.reload
             }, 
@@ -147,6 +151,12 @@ Ext.define('Rd.controller.cAutoSetups', {
                 click:      me.editSubmit
             }
         });
+    },
+    winClose:   function(){
+        var me = this;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
     },
     reload: function(){
         var me =this;
