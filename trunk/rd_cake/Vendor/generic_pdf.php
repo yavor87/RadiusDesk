@@ -16,9 +16,11 @@ class GenericPdf extends TCPDF {
         $this->SetFont('dejavusans','',10);
 
         if($this->getRTL()){
-	        $this->Image(WWW_ROOT.DS.$this->Logo,180,0,25,8,'','','');
+            $this->Image(WWW_ROOT.DS.$this->Logo,180,0,10,0,'','','',true);
+	     //   $this->Image(WWW_ROOT.DS.$this->Logo,180,0,25,8,'','','');
         }else{
-            $this->Image(WWW_ROOT.DS.$this->Logo,10,0,25,8,'','','');
+            $this->Image(WWW_ROOT.DS.$this->Logo,10,0,10,0,'','','',true);
+           // $this->Image(WWW_ROOT.DS.$this->Logo,10,0,25,8,'','','');
         }
         $this->Cell(0,9,$this->Title,1,0,'C');
         $this->SetFont('dejavusans','',8);
@@ -227,21 +229,12 @@ class GenericPdf extends TCPDF {
         
         if($voucher['days_valid'] != ''){
 
-            $pieces     = explode('-',$voucher['days_valid']);
-            if($pieces[0] != 0){
-                if($pieces[0] >= 2){
-                    $dv   = $pieces[0].' '.__('days from first log-in');
-                }else{
-                    $dv   = $pieces[0].' '.__('day from first log-in');
-                }
-            }
-
             $this->SetFont( $font_type, $font_format_i, $text_size);
             $this->SetX($x_p);
             $this->Cell(22,$cell_height,__("Valid for") , 0, 0, "L");
 
             $this->SetFont( $font_type, $font_format_b, $text_size);
-            $this->Cell(30,$cell_height, $dv, 0, 2, "L");
+            $this->Cell(30,$cell_height, $voucher['days_valid'], 0, 2, "L");
         }
 
         //---Expiry Date---
@@ -258,9 +251,11 @@ class GenericPdf extends TCPDF {
 
         $this->Ln();
         if($this->getRTL()){
-            $this->Image(WWW_ROOT.DS.$this->Logo,$r1+18,$y_curr+5,15,12);
+            $this->Image(WWW_ROOT.DS.$this->Logo,$r1+18,$y_curr+5,10,0,'','','',true);
+            //$this->Image(WWW_ROOT.DS.$this->Logo,$r1+18,$y_curr+5,15,12);
         }else{
-            $this->Image(WWW_ROOT.DS.$this->Logo,$r1+3,$y_curr+5,15,12);
+            $this->Image(WWW_ROOT.DS.$this->Logo,$r1+3,$y_curr+5,10,0,'','','',true);
+            //$this->Image(WWW_ROOT.DS.$this->Logo,$r1+3,$y_curr+5,15,12);
         }
 
         if(!($this->left_col)){
