@@ -183,3 +183,36 @@
     font-size:90%;
 }
 
+/*Last purchase */
+.lastPurchase {
+    padding: 10px;
+    color: #686667;
+}
+.lastPurchase > div {
+    clear: both;
+}
+
+.lastPurchase div.alternate {
+    background-color: #f4f6f4;
+}
+
+.lastPurchase .value {
+    color: #057612;
+    font-weight: normal;
+    padding: 2px;
+}
+
+.lastPurchase .item {
+    color: #495982;
+    font-weight: bold;
+    padding: 2px;
+    width: 150px;
+    float: left;
+}
+
+.lastPurchase .thead {
+    color: #495982;
+    font-weight: bold;
+    padding: 2px;
+}
+
