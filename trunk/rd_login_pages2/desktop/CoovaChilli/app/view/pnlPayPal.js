@@ -10,6 +10,9 @@ Ext.define('CoovaChilli.view.pnlPayPal', {
     initComponent: function() {
         me          = this;
 
+        var clean_location = window.location.href;
+        clean_location     = clean_location.replace(/&tx=.*/, ""); //Remove the PayPal part of the query string else it keeps on adding up!
+
         var tplVoucher = Ext.create('Ext.XTemplate', [ 
             '<h3>Last purchase</h3>'+
             '<div><div class="item">Username</div><div class="value">{username}</div></div>',
@@ -47,8 +50,8 @@ Ext.define('CoovaChilli.view.pnlPayPal', {
 '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">',
 '<input type="hidden" name="cmd" value="_s-xclick">',
 '<input type="hidden" name="hosted_button_id" value="TF9RJ5MLAZEC6">',
-'<input type="hidden" name="return" value="'+window.location+'" />',
-'<input type="hidden" name="cancel_return" value="'+window.location+'" />',
+'<input type="hidden" name="return" value="'+clean_location+'" />',
+'<input type="hidden" name="cancel_return" value="'+clean_location+'" />',
 '<input type="hidden" name="notify_url" value="http://95.85.10.220/cake2/rd_cake/fin_paypal_transactions/paypal_ipn.json" />',
 '<table>',
 '<tr><td class="thead"><input type="hidden" name="on0" value="Vouchers">Vouchers</td></tr><tr><td><select name="os0">',
