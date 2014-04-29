@@ -19,7 +19,7 @@ class LabelPdf extends TCPDF {
     public $lineHeight = 10;       // Default line height
     public $metric     = 'mm';     // Type of metric for labels.. Will help to calculate good values
     public $metricDoc  = 'mm';     // Type of metric for the document
-    public $fontName   = 'symbol'; // Name of the font
+    public $fontName   = 'FreeSans'; // Name of the font
     public $countX     = 0;
     public $countY     = 0;
 
@@ -52,8 +52,9 @@ class LabelPdf extends TCPDF {
                                'lMargin' => 7.1, 'tMargin' => 19, 'NX' => 3, 'NY' => 10,
                                'SpaceX' => 9.5, 'SpaceY' => 3.1, 'width' => 66.6,
                                'height' => 25.4, 'font-size' => 8),
-               'L7160' => array('name' => 'L7160', 'paper-size' => 'A4', 'metric' => 'mm', 'lMargin' => 6,
-                                'tMargin' => 15.1, 'NX' => 3, 'NY' => 7, 'SpaceX' => 2.5, 'SpaceY' => 0,
+               'L7160' => array('name' => 'L7160', 'paper-size' => 'A4', 'metric' => 'mm', 'lMargin' => 11, //lMargin was 6
+                               // 'tMargin' => 15.1, 'NX' => 3, 'NY' => 7, 'SpaceX' => 2.5, 'SpaceY' => 0,
+                                'tMargin' => 19.1, 'NX' => 3, 'NY' => 7, 'SpaceX' => 2.5, 'SpaceY' => 0,
                                 'width' => 63.5, 'height' => 38.1, 'font-size' => 9),
                'L7161' => array('name' => 'L7161', 'paper-size' => 'A4', 'metric' => 'mm', 'lMargin' => 6,
                                 'tMargin' => 9, 'NX' => 3, 'NY' => 6, 'SpaceX'=> 5, 'SpaceY' => 2,
@@ -83,7 +84,7 @@ class LabelPdf extends TCPDF {
        
        parent::__construct('P', $tFormat['metric'], $tFormat['paper-size']);
        $this->SetFormat($tFormat);
-//     $this->SetFontName('Arial'); uncomment this to use non-default font
+       //$this->SetFontName('FreeSans'); //uncomment this to use non-default font
        $this->SetMargins(0,0);
        $this->SetAutoPageBreak(false);
        
@@ -166,6 +167,7 @@ class LabelPdf extends TCPDF {
     function Add_Label($label_detail) {
 
         $img_space = 10;
+        //$img_space = 5;
 
         $this->countX++;
         if ($this->countX == $this->xNumber) {
@@ -194,7 +196,30 @@ class LabelPdf extends TCPDF {
         $y_after_heading = $this->GetY();
 
        // $this->Image(WWW_ROOT.DS.$this->Logo,null,null,8);
-        $this->Image(WWW_ROOT.DS.$this->Logo,($_PosX-$img_space),$_PosY+5,25,8,'','','');
+        //$this->Image(WWW_ROOT.DS.$this->Logo,($_PosX-$img_space),$_PosY+5,25,8,'','','');
+        /*
+        TCPDF::Image	(	 	$file,
+             	$x = '',
+             	$y = '',
+             	$w = 0,
+             	$h = 0,
+             	$type = '',
+             	$link = '',
+             	$align = '',
+             	$resize = false,
+             	$dpi = 300,
+             	$palign = '',
+             	$ismask = false,
+             	$imgmask = false,
+             	$border = 0,
+             	$fitbox = false,
+             	$hidden = false,
+             	$fitonpage = false,
+             	$alt = false,
+             	$altimgs = array() 
+            )		
+        */
+        $this->Image(WWW_ROOT.DS.$this->Logo,($_PosX),$_PosY+5,10,0,'','','',true);
 
        // $this->Set_Font_Size('6');
         //Set the location to start the details
@@ -203,9 +228,9 @@ class LabelPdf extends TCPDF {
         $detail_width   = $this->width-$this->marginLeft-$img_space;
         $field_width    = $detail_width / 2;
 
-        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Username')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['username'])));
+        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Username')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['username'])),false);
 
-        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Password')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['password'])));
+        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Password')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['password'])),false);
 
         $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Profile')),  'value'     => iconv('UTF-8', 'windows-1252',$label_detail['profile'])));
 
@@ -227,17 +252,32 @@ class LabelPdf extends TCPDF {
                     'key'           => iconv('UTF-8', 'windows-1252',gettext('Expiry date')),
                     'value'         => iconv('UTF-8', 'windows-1252',$label_detail['expiration'])));
         }
+
+        if($label_detail['extra_value'] != ''){
+            $this->_add_pair(
+                $field_width,
+                array(
+                    'key'           => iconv('UTF-8', 'windows-1252',$label_detail['extra_name']),
+                    'value'         => iconv('UTF-8', 'windows-1252',$label_detail['extra_value'])));
+        }
     }
 
 
-    function _add_pair($field_width,$pair){
-    
-        $this->SetFont('','I',6);
+    function _add_pair($field_width,$pair,$no_bold = true){
+        $bold       = 'B';
+        $font_size = 10;
+        if($no_bold){
+            $bold ='';
+            $this->SetTextColor(106, 106, 106);
+            $font_size = 6;
+        }
+        $this->SetFont('','',$font_size);
         $this->Cell($field_width, 3, $pair['key'], 0, 0, "L");
-        $this->SetFont('','B',6);
+        $this->SetFont('',$bold,$font_size);
         $this->Cell($field_width, 3, $pair['value'], 0, 2, "L");
         $this->SetFont('','',6);
         $this->SetX($this->getX()-$field_width);
+        $this->SetTextColor(0, 0, 0);
 
     }
 
