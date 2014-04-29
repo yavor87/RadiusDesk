@@ -69,9 +69,16 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
 
         me.getStore('sFinPaypalTransactions').addListener('load',me.onStoreFinPaypalTransactionsLoaded, me);
         me.control({
+            '#finPaypalTransactionsWin'    : {
+                beforeshow  : me.winClose,
+                destroy     : me.winClose
+            },
             'gridPaypalTransactions #reload': {
                 click:      me.reload
             },
+            'gridPaypalTransactions #reload menuitem[group=refresh]' : {
+                click:      me.reloadOptionClick
+            }, 
             'gridPaypalTransactions #attach': {
                 click:      function(){
                     me.attach_detach('attach');
@@ -119,6 +126,38 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
                 click: me.btnNoteAddNext
             }
         });
+    },
+    winClose:   function(){
+        var me = this;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+    },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        b.setGlyph(Rd.config.icnTime);
+        
+        if(n == 'mnuRefreshCancel'){
+            b.setIconCls('b-reload');
+            b.setGlyph(Rd.config.icnReload);
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReload = setInterval(function(){        
+            me.reload();
+        },  interval);  
     },
     reload: function(){
         var me =this;
@@ -236,7 +275,7 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
     },
     email: function(button){
         var me = this;
-        console.log("Email pappie");
+
         var sel_count = me.getGrid().getSelectionModel().getCount();
         if(sel_count == 0){
              Ext.ux.Toaster.msg(
@@ -291,6 +330,7 @@ Ext.define('Rd.controller.cFinPaypalTransactions', {
         var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
+        form.setLoading(true); //Mask it
         form.submit({
             clientValidation: true,
             url: me.urlEmailSend,

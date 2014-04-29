@@ -92,10 +92,8 @@ Ext.define('Rd.controller.cMeshes', {
         me.getStore('sMeshes').addListener('load',me.onStoreMeshesLoaded, me);
         me.control({
             '#meshWin'    : {
-                beforeshow:      me.winClose
-            },
-            '#meshWin'    : {
-                destroy:      me.winClose
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
             },
             'gridMeshes #reload': {
                 click:      me.reload

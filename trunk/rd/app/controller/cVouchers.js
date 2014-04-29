@@ -55,7 +55,7 @@ Ext.define('Rd.controller.cVouchers', {
         'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
         'vouchers.winVoucherPassword', 'components.winPdf',     'vouchers.winVoucherPdf',
         'vouchers.cmbPdfFormats',   'components.vCmbLanguages', 'components.winCsvColumnSelect', 
-        'components.pnlUsageGraph'  
+        'components.pnlUsageGraph', 'vouchers.winVoucherEmailDetail' 
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
     models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct', 'mPdfFormat', 'mUserStat'],
@@ -68,7 +68,8 @@ Ext.define('Rd.controller.cVouchers', {
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
-        urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf'
+        urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',
+        urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
     },
     refs: [
         {  ref: 'grid',         selector:   'gridVouchers'} ,
@@ -84,10 +85,8 @@ Ext.define('Rd.controller.cVouchers', {
         me.getStore('sVouchers').addListener('load',me.onStoreVouchersLoaded, me);
         me.control({
             '#vouchersWin'    : {
-                beforeshow:      me.winClose
-            },
-            '#vouchersWin'    : {
-                destroy:      me.winClose
+                beforeshow  : me.winClose,
+                destroy     : me.winClose
             },
             'gridVouchers #reload': {
                 click:      me.reload
@@ -116,9 +115,15 @@ Ext.define('Rd.controller.cVouchers', {
             'gridVouchers #test_radius' : {
                 click:      me.testRadius
             },
+            'gridVouchers #email': {
+                click:    me.email
+            },
             'gridVouchers'   : {
                 select      :  me.select,
                 activate    :  me.gridActivate
+            },
+            'winVoucherEmailDetail #send'   : {
+                click:      me.emailSend
             },
             'winVoucherAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -653,6 +658,62 @@ Ext.define('Rd.controller.cVouchers', {
             window.open(me.urlExportCsv+append_url);
             win.close();
         }
+    },
+    email: function(button){
+        var me = this;
+        var sel_count = me.getGrid().getSelectionModel().getCount();
+        if(sel_count == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(sel_count > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+
+                //Determine the selected record:
+                var sr              = me.getGrid().getSelectionModel().getLastSelected();
+                var voucher_name    = sr.get('name');
+
+                if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherEmailDetailId'+sr.getId())){
+                    var w = Ext.widget('winVoucherEmailDetail',
+                        {
+                            id          : 'winVoucherEmailDetailId'+sr.getId(),
+                            voucherId   : sr.getId(),
+                            voucher_name: voucher_name
+                        });
+                    me.application.runAction('cDesktop','Add',w);       
+                }
+            }    
+        }
+    },
+    emailSend: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.setLoading(true); //Mask it
+        form.submit({
+            clientValidation: true,
+            url: me.urlEmailSend,
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    'Voucher details sent',
+                    'Voucher details sent fine',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     quantityChange: function(number){
         var me      = this;

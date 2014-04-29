@@ -1,4 +1,4 @@
-Ext.define('Rd.view.meshes.winEmailVoucherDetail', {
+Ext.define('Rd.view.finPayPalTransactions.winEmailVoucherDetail', {
     extend      : 'Ext.window.Window',
     alias       : 'widget.winEmailVoucherDetail',
     closable    : true,

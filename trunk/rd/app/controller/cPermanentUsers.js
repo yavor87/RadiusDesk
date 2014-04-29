@@ -93,10 +93,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
         me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
         me.control({
             '#permanentUsersWin'    : {
-                beforeshow:      me.winClose
-            },
-            '#permanentUsersWin'    : {
-                destroy:      me.winClose
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
             },
             'gridPermanentUsers #reload': {
                 click:      me.reload
