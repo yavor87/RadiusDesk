@@ -161,6 +161,8 @@ class VouchersController extends AppController {
                 $v['expiration']= false;
                 $v['days_valid']= false;
                 $v['profile']   = false;
+                $v['extra_name'] = $i['Voucher']['extra_name'];
+                $v['extra_value']= $i['Voucher']['extra_value'];
 
                 foreach($i['Radcheck'] as $j){
                     if($j['attribute'] == 'Rd-Realm'){
@@ -205,6 +207,9 @@ class VouchersController extends AppController {
                 $v['expiration']= false;
                 $v['days_valid']= false;
                 $v['profile']   = false;
+                $v['extra_name']= $i['Voucher']['extra_name'];
+                $v['extra_value']= $i['Voucher']['extra_value'];
+
 
                 foreach($i['Radcheck'] as $j){
                     if($j['attribute'] == 'Rd-Realm'){
@@ -1073,6 +1078,61 @@ class VouchersController extends AppController {
         ));
     }
 
+    public function email_voucher_details(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id= $user['id'];
+
+        $id     = $this->request->data['id'];
+        $this->{$this->modelClass}->contain('Radcheck');
+        $q_r    = $this->{$this->modelClass}->findById($id);
+        $to     = $this->request->data['email'];
+        $message= $this->request->data['message'];
+
+         if($q_r){
+            $password_found     = false;
+            $valid_for          = false;
+            $profile            = false;
+            $extra_name         = false;
+            $exta_value         = false;
+
+            foreach($q_r['Radcheck'] as $rc){
+                if($rc['attribute'] == 'Cleartext-Password'){
+                    $password_found = true;
+                    $username = $rc['username'];
+                    $password = $rc['value'];  
+                }
+                if($rc['attribute'] == 'Rd-Voucher'){
+                    $valid_for          = $rc['value'];
+                }
+
+                if($rc['attribute'] == 'User-Profile'){
+                    $profile        = $rc['value'];
+                }
+            }
+            //Now we can send the email
+            if($password_found){
+              //  print_r("The username is $username and password is $password");
+                App::uses('CakeEmail', 'Network/Email');
+                $Email = new CakeEmail();
+                $Email->config('gmail');
+                $Email->subject('Your voucher detail');
+                $Email->to($to);
+                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+                $Email->template('voucher_detail', 'voucher_notify');
+                $Email->emailFormat('html');
+                $Email->send();
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
 
     //--------- END BASIC CRUD ---------------------------
 
@@ -1130,6 +1190,13 @@ class VouchersController extends AppController {
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-pdf',    'glyph' => Configure::read('icnPdf'),    'scale' => 'large', 'itemId' => 'pdf',     'tooltip'=> __('Export to PDF')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',    'glyph' => Configure::read('icnCsv'),    'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnEmail'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'email', 
+                        'tooltip'   => __('e-Mail voucher')
+                    )
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-password',   'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
@@ -1214,6 +1281,15 @@ class VouchersController extends AppController {
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
+
+                 array_push($document_group,array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnEmail'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'email', 
+                        'tooltip'   => __('e-Mail voucher')
+                    ));
+
             }
 
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'change_password')){
