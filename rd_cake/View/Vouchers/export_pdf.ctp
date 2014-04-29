@@ -54,6 +54,7 @@ if(($format == 'a4')||($format == 'a4_page')){
         $d = $voucher_data["$key"];
         foreach($d['vouchers'] as $v){
             $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
+           //$pdf->Logo = '/cake2/rd_cake/webroot/files/image.php?height=90&width=90&image=/cake2/rd_cake/webroot/img/dynamic_photos/1369746009.jpg';
             $pdf->Add_Label($v);
         }
     } 
