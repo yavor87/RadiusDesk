@@ -8,7 +8,13 @@ Ext.define('CoovaChilli.config.Config', {
         noStatus    : false,
         redirectTo  : "http://google.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
-        jsonTimeout : 10000
+        jsonTimeout : 10000,
+        paymentGw   : true,
+        //Payment gateway
+        paymentGwType: 'cntPayPal',
+        //paymentGwType: 'cntPayAd',
+        //paymentGwType: 'cntPayU',
+        urlPayPalVoucher : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json'
     },
  
     constructor: function(config) {
