@@ -1,4 +1,4 @@
-<?
+<?php
 class AutoAddDevicesShell extends AppShell {
 
     public $uses    = array('User','AutoDevice','Device','Profile');

@@ -1,4 +1,4 @@
-<?
+<?php
 class RemoveduplicatesShell extends AppShell {
 
     public $uses    = array('Radacct');

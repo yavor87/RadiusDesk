@@ -1,4 +1,4 @@
-<?
+<?php
 class TranslationShell extends AppShell {
 
     public $uses    = array('Country','Language','PhraseValue');

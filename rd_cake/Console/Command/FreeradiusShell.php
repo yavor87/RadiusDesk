@@ -1,4 +1,4 @@
-<?
+<?php
 class FreeradiusShell extends AppShell {
 
     public $uses    = array('Check','Na');
