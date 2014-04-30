@@ -41,9 +41,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     //Payment gateway
     paymentGw       : true,
-    patmentGwType   : 'pnlPayPal',
-   // patmentGwType   : 'pnlPayAd',
-   // patmentGwType   : 'pnlPayU',
+    patmenyGwType   : 'pnlPayPal',
+   // patmenyGwType   : 'pnlPayAd',
+   // patmenyGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -111,7 +111,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     },
     buyVoucher:     function(button){
         var me = this;
-        console.log("Payment!!");
+       // console.log("Payment!!");
         if(me.queryObj.nasid != undefined){  //Override defaults
             me.getFrmPayU().submit({
                 target:'_blank',
@@ -194,10 +194,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
             return;
         }
 
-        if(me.patmentGwType == 'pnlPayPal'){
+        if(me.paymentGwType == 'pnlPayPal'){
             if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
                 //Dummy thing:
-                console.log("Finding transaction details for "+ me.queryObj.tx);
+              //  console.log("Finding transaction details for "+ me.queryObj.tx);
                 Ext.Ajax.request({
                     url     : me.application.config.urlPayPalVoucher,
                     method  : 'GET',
@@ -206,7 +206,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
                     },
                     success : function(response){
                         var jsonData    = Ext.JSON.decode(response.responseText);
-                        console.log(jsonData);
+                     //   console.log(jsonData);
                         if(jsonData.success){
                             me.getLand().down('#tpnlOptions').down('#pnlPayPalFeedback').update(jsonData.data);
                             me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
@@ -216,7 +216,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
                             me.getConnect().down('#inpUsername').setValue(jsonData.data.username);
                             me.getConnect().down('#inpPassword').setValue(jsonData.data.password);
                         }else{
-                            console.log("big problems");
+                            //console.log("big problems");
                             me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
                             me.getLand().down('#tpnlOptions').down('#pnlPayPalFeedback').setVisible(false);
                             me.getLand().down('#tpnlOptions').down('#pnlPayPalError').setVisible(true);
