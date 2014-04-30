@@ -153,7 +153,7 @@ Ext.define('Rd.controller.cLogViewer', {
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
-                    b.up('pnlViewFile').down('#info').setDisabled(false);
+                    b.up('#pnlViewFile').down('#info').setDisabled(false);
                     Ext.ux.Toaster.msg(
                         "FreeRADIUS service started",
                         "FreeRADIUS service started fine",
@@ -175,7 +175,7 @@ Ext.define('Rd.controller.cLogViewer', {
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
-                    b.up('pnlViewFile').down('#info').setDisabled(true);
+                    b.up('#pnlViewFile').down('#info').setDisabled(true);
                     Ext.ux.Toaster.msg(
                         "FreeRADIUS service stopped",
                         "FreeRADIUS service stopped fine",
