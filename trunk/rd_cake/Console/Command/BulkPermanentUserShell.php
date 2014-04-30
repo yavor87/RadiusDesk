@@ -1,4 +1,4 @@
-<?
+<?php
 class BulkPermanentUserShell extends AppShell {
 
     public $uses    = array('User','Profile','Realm');

@@ -1,4 +1,4 @@
-<?
+<?php
 class AccountingShell extends AppShell {
 
     public $uses    = array('NewAccounting','Radcheck','Radacct','Voucher','User','Device','Radusergroup','Radgroupcheck');

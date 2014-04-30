@@ -1,4 +1,4 @@
-<?
+<?php
 class VoucherShell extends AppShell {
 
     //This shell runs at longer intervals (15 min) to check for tw things.
