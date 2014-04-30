@@ -34,8 +34,8 @@ Ext.define('CoovaChilli.view.cntPayPal', {
                 xtype       : 'container',
                 height      : 80,
                 html        : [
-                    '<b>Could not retrieve your voucher detail</b><br>',
-                    'This detail will also be emailed to you.<br>',
+                    '<b>Could not retrieve your voucher detail</b><br>'+
+                    'This detail will also be emailed to you.<br>'+
                     'Alternatively contact the helpdesk.<br>'
                 ],
                 cls         : 'lastPurchase',
@@ -44,7 +44,7 @@ Ext.define('CoovaChilli.view.cntPayPal', {
             },
             {
                // bodyStyle   :{"background-color":"blue"},
-                flex        : 1,
+              //  flex        : 1,
                 cls         : 'lastPurchase',
                 html        : [
                     '<h3>Need extra time on the Internet?</h3>'+
@@ -54,14 +54,15 @@ Ext.define('CoovaChilli.view.cntPayPal', {
                     '<input type="hidden" name="return" value="'+clean_location+'" />'+
                     '<input type="hidden" name="cancel_return" value="'+clean_location+'" />'+
                     '<input type="hidden" name="notify_url" value="http://95.85.10.220/cake2/rd_cake/fin_paypal_transactions/paypal_ipn.json" />'+
-                    '<table>'+
-                    '<tr><td class="thead"><input type="hidden" name="on0" value="Vouchers">Vouchers</td></tr><tr><td><select name="os0">'+
+                    '<input type="hidden" name="on0" value="Vouchers">'+
+                    '<div>Vouchers</div><div>'+
+                    '<select name="os0">'+
 	                    '<option value="2Hours">2Hours $2.00 USD</option>'+
 	                    '<option value="8Hours">8Hours $4.00 USD</option>'+
 	                    '<option value="24Hours">24Hours $10.00 USD</option>'+
 	                    '<option value="72Hours">72Hours $15.00 USD</option>'+
-                    '</select> </td></tr>'+
-                    '</table>'+
+                    '</select>'+
+                    '</div>'+
                     '<input type="hidden" name="currency_code" value="USD">'+
                     '<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
                     '<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">'+

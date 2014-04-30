@@ -8,7 +8,9 @@ Ext.define('CoovaChilli.controller.cMain', {
             frmConnect      : '#frmConnect', 
             cntSession      : '#cntSession',
             lblStatusTimer  : '#lblStatusTimer',
-            cntPhotos       : '#cntPhotos'
+            cntPhotos       : '#cntPhotos',
+            cntShop         : '#cntShop',
+            tabMain         : '#tabMain'
         },
         control: {
         
@@ -54,6 +56,8 @@ Ext.define('CoovaChilli.controller.cMain', {
     remember    : false,
 
     thumbPhoto  : undefined,
+
+    queryObj    : undefined,
     
     //called when the Application is launched, remove if not needed
     launch: function(app) {
@@ -72,6 +76,7 @@ Ext.define('CoovaChilli.controller.cMain', {
             },
             scope: me
         }); 
+
     },
     showNotPresent: function(){
         var me = this;
@@ -81,7 +86,8 @@ Ext.define('CoovaChilli.controller.cMain', {
         var me = this;
        // console.log(jsonData);
         //Load the main view
-        Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{'jsonData':jsonData}));
+        var paymentScreen = CoovaChilli.config.Config.getPaymentGwType();
+        Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{'jsonData':jsonData,'paymentScreen':paymentScreen, 'itemId': 'tabMain'}));
 
         //Change the page's title
         document.title = jsonData.detail.name;
@@ -101,28 +107,32 @@ Ext.define('CoovaChilli.controller.cMain', {
         }else{
             me.coovaRefresh();  //Already established we are a hotspot, simply refresh
         }
+
+        //Check if this was perhaps the return of a payment gateway
+        me.checkPaymentGwReturn();
+
     },
     testForHotspot: function(){
-        var me          = this;
-        var queryObj    = new Object(); 
+        var me         = this;
+        me.queryObj    = new Object(); 
         //How the page was called - Should be called with the following search sting:
         //?res=notyet&uamip=10.1.0.1&uamport=3660&challenge=ca91105b39c91d49cbfa61ef085a2488&mac=00-0C-F1-5F-58-0B&
         //ip=10.1.0.8&called=00-1D-7E-BC-02-AD&nasid=10.20.30.2&userurl=http%3a%2f%2f1.1.1.1%2f&md=50834AD406B33D3A2D771FF2B4C80499
-        window.location.search.replace(new RegExp("([^?=&]+)(=([^&]*))?","g"), function($0,$1,$2,$3) { queryObj[$1] = $3; });
+        window.location.search.replace(new RegExp("([^?=&]+)(=([^&]*))?","g"), function($0,$1,$2,$3) { me.queryObj[$1] = $3; });
 
-        if(queryObj.uamport != undefined){  //Override defaults
-            me.uamPort = queryObj.uamport;
+        if(me.queryObj.uamport != undefined){  //Override defaults
+            me.uamPort = me.queryObj.uamport;
         }else{
 
             //It may have been called to be previewed
-            if(queryObj.dynamic_id != undefined){
+            if(me.queryObj.dynamic_id != undefined){
                 document.title = "Mobile preview";
                 
             }
             return false;   //Not a hotspot
         }
-        if(queryObj.uamip != undefined){    //Override defaults
-            me.uamIp = queryObj.uamip;
+        if(me.queryObj.uamip != undefined){    //Override defaults
+            me.uamIp = me.queryObj.uamip;
         }
         return true;        //Is a hotspot
     },
@@ -144,6 +154,51 @@ Ext.define('CoovaChilli.controller.cMain', {
         }
     },
     //---------------------------------------
+    checkPaymentGwReturn: function(){
+        var me = this;
+        //Return as we don't do anything
+        if(CoovaChilli.config.Config.getPaymentGw() == false){
+            return;
+        }
+
+        if(CoovaChilli.config.Config.getPaymentGwType() == 'cntPayPal'){
+      
+            if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
+                //Dummy thing:
+                //console.log("Finding transaction details for "+ me.queryObj.tx);
+                Ext.Ajax.request({
+                    url     : CoovaChilli.config.Config.getUrlPayPalVoucher(),
+                    method  : 'GET',
+                    params: {
+                        txn_id: me.queryObj.tx
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                        //console.log(jsonData);
+                        if(jsonData.success){
+                            me.getCntShop().down('#pnlPayPalFeedback').setData(jsonData.data);
+                           // me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getCntShop().down('#pnlPayPalFeedback').show();
+                            me.getCntShop().down('#pnlPayPalError').hide();
+                            
+                            me.getFrmConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getFrmConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            //console.log("big problems");
+                            //me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getCntShop().down('#pnlPayPalFeedback').hide();
+                            me.getCntShop().down('#pnlPayPalError').show();
+                        }      
+                    },
+                    scope: me
+                });
+                me.getTabMain().setActiveItem('#cntShop'); //Show the shop tab
+            }
+        }
+    },
+
+
+
     onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....
         var me = this;
     

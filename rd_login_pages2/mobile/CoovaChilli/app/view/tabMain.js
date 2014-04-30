@@ -97,6 +97,7 @@ Ext.define('CoovaChilli.view.tabMain', {
             {
                 title   : 'Online shop',
                 xtype   : 'container',
+                itemId  : 'cntShop',
                 iconCls : 'compose',
                 layout  : 'hbox',
                 scrollable: {
@@ -106,7 +107,8 @@ Ext.define('CoovaChilli.view.tabMain', {
                 items: [
                     {   xtype     : 'spacer', flex: 1 },
                     {
-                        xtype     : 'cntPayPal'
+                        //xtype     : 'cntPayPal'
+                        xtype     :  config.paymentScreen
                     },
                     {   xtype     : 'spacer', flex: 1 }
                 ]

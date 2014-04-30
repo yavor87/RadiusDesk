@@ -185,8 +185,9 @@
 
 /*Last purchase */
 .lastPurchase {
-    padding: 10px;
-    color: #686667;
+    color: #495982;
+    padding: 5px;
+    text-align: center;
 }
 .lastPurchase > div {
     clear: both;
@@ -200,6 +201,7 @@
     color: #057612;
     font-weight: normal;
     padding: 2px;
+    text-align:left
 }
 
 .lastPurchase .item {
@@ -208,6 +210,7 @@
     padding: 2px;
     width: 150px;
     float: left;
+    text-align:left
 }
 
 .lastPurchase .thead {
