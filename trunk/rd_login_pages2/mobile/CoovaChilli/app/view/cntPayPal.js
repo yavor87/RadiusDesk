@@ -50,7 +50,7 @@ Ext.define('CoovaChilli.view.cntPayPal', {
                     '<h3>Need extra time on the Internet?</h3>'+
                     '<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">'+
                     '<input type="hidden" name="cmd" value="_s-xclick">'+
-                    '<input type="hidden" name="hosted_button_id" value="RXZ64B24CPY6U">'+
+                    '<input type="hidden" name="hosted_button_id" value="87YAZPLEQWBUC">'+
                     '<input type="hidden" name="return" value="'+clean_location+'" />'+
                     '<input type="hidden" name="cancel_return" value="'+clean_location+'" />'+
                     '<input type="hidden" name="notify_url" value="http://95.85.10.220/cake2/rd_cake/fin_paypal_transactions/paypal_ipn.json" />'+
@@ -64,7 +64,7 @@ Ext.define('CoovaChilli.view.cntPayPal', {
 	                    '<option value="120Hours">120Hours £25.00 GBP</option>'+
                     '</select>'+
                     '</div>'+
-                    '<input type="hidden" name="currency_code" value="USD">'+
+                    '<input type="hidden" name="currency_code" value="GBP">'+
                     '<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
                     '<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">'+
                     '</form>'

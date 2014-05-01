@@ -41,9 +41,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     //Payment gateway
     paymentGw       : true,
-    patmenyGwType   : 'pnlPayPal',
-   // patmenyGwType   : 'pnlPayAd',
-   // patmenyGwType   : 'pnlPayU',
+    paymentGwType   : 'pnlPayPal',
+   // paymentGwType   : 'pnlPayAd',
+   // paymentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -191,13 +191,16 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         //Return as we don't do anything
         if(me.paymentGw == false){
+            console.log("not doing a payment gw");
             return;
         }
+        console.log(me.paymentGwType);
 
         if(me.paymentGwType == 'pnlPayPal'){
+            console.log(me.queryObj.tx);
             if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
                 //Dummy thing:
-              //  console.log("Finding transaction details for "+ me.queryObj.tx);
+                console.log("Finding transaction details for "+ me.queryObj.tx);
                 Ext.Ajax.request({
                     url     : me.application.config.urlPayPalVoucher,
                     method  : 'GET',
