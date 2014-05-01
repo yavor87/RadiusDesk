@@ -26,6 +26,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "CoovaChilli.view.pnlAboutMenu": [],
   "CoovaChilli.view.pnlConnect": [],
   "CoovaChilli.view.pnlNotHotspot": [],
+  "CoovaChilli.view.pnlPayAd": [],
+  "CoovaChilli.view.pnlPayPal": [],
   "CoovaChilli.view.pnlPhotos": [],
   "CoovaChilli.view.pnlStatus": [],
   "CoovaChilli.view.winHelp": [],
@@ -892,6 +894,12 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "CoovaChilli.view.pnlNotHotspot": [
     "widget.pnlNotHotspot"
+  ],
+  "CoovaChilli.view.pnlPayAd": [
+    "widget.pnlPayAd"
+  ],
+  "CoovaChilli.view.pnlPayPal": [
+    "widget.pnlPayPal"
   ],
   "CoovaChilli.view.pnlPhotos": [
     "widget.pnlPhotos"

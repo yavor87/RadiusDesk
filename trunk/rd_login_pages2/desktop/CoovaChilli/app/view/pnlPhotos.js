@@ -75,8 +75,7 @@ Ext.define('CoovaChilli.view.pnlPhotos', {
                 tpl     : '<div class="rdCenter"><h2>{title}</h2><div class="rdDescription">{description}</div></div>'
             },
             image,
-            thumb,
-            
+            thumb  
         ];
         this.callParent(arguments);
     }
