@@ -87,6 +87,17 @@ $config['UserCanRemoveDevice']              = true;
 
 
 //========== WORK IN PROGRES =============
+//----- PayU settings ----- Change to live and your details once working
+$config['payu']['soapWdslUrl']  = 'https://staging.payu.co.za/service/PayUAPI?wsdl';
+$config['payu']['payuRppUrl']   = 'https://staging.payu.co.za/rpp.do?PayUReference=';
+$config['payu']['apiVersion']   = 'ONE_ZERO';
+$config['payu']['safeKey']      = '{45D5C765-16D2-45A4-8C41-8D6F84042F8C}';
+$config['payu']['soapUsername'] = 'Staging Integration Store 1';
+$config['payu']['soapPassword'] = '78cXrW1W';
+
+
+
+
 $config['financials']['vouchers']['a'][0] = array('id'=> 'dat_175m',  'name' => '175MB',  'price' => '129.00','currency' => 'R', 'position' => 'pre');
 $config['financials']['vouchers']['a'][1] = array('id'=> 'dat_400m',  'name' => '400MB',  'price' => '165.00','currency' => 'R', 'position' => 'pre');
 $config['financials']['vouchers']['a'][2] = array('id'=> 'dat_500m',  'name' => '500MB',  'price' => '185.00','currency' => 'R', 'position' => 'pre');
@@ -136,6 +147,29 @@ $config['paypal']['RDVoucher']['rd_v1']['24Hours'] = array(
                                                         'user_id'           => '44'
                                                     );
 
+$config['paypal']['RDVoucher']['rd_v1']['72Hours'] = array(
+                                                        'activate_on_login' => '1',
+                                                        'time_valid'        => '3-00-00-00',
+                                                        'expire'            => '05/31/2014',
+                                                        'precede'           => '',
+                                                        'profile_id'        => 7,
+                                                        'pwd_length'        => 3,
+                                                        'realm_id'          => 34,
+                                                        'sel_language'      => '4_4',
+                                                        'user_id'           => '44'
+                                                    );
+
+$config['paypal']['RDVoucher']['rd_v1']['120Hours'] = array(
+                                                        'activate_on_login' => '1',
+                                                        'time_valid'        => '5-00-00-00',
+                                                        'expire'            => '05/31/2014',
+                                                        'precede'           => '',
+                                                        'profile_id'        => 7,
+                                                        'pwd_length'        => 3,
+                                                        'realm_id'          => 34,
+                                                        'sel_language'      => '4_4',
+                                                        'user_id'           => '44'
+                                                    );
 
 //======== END WORK IN PROGRESS ==========
 
