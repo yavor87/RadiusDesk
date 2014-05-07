@@ -17,7 +17,8 @@ Ext.define('CoovaChilli.view.Land' ,{
         'CoovaChilli.view.pnlPhotos',
         'CoovaChilli.view.pnlAbout',
         'CoovaChilli.view.pnlPayPal',
-        'CoovaChilli.view.pnlPayAd'
+        'CoovaChilli.view.pnlPayAd',
+        'CoovaChilli.view.pnlPayU'
     ],
     initComponent: function() { 
         var me      = this;
@@ -67,7 +68,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 xtype       : 'pnlConnect',
                                 itemId      : 'pnlConnect',
                                 hidden      : true,
-                                jsonData    : me.jsonData
+                                jsonData    : me.jsonData,
+                                clickToConnect : me.clickToConnect
                             },
                             {   
                                 xtype       : 'pnlStatus',
@@ -122,7 +124,9 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 title       : 'Online shop',
                                 glyph       : CoovaChilli.config.icnShop,
                                 itemId      : 'pnlShop',
-                                xtype       : 'pnlPayPal'
+                              //  xtype       : 'pnlPayPal'
+                              //  xtype       : 'pnlPayAd'
+                                xtype       : 'pnlPayU'
                             }
                         ]
                     }

@@ -10,7 +10,23 @@ Ext.define('CoovaChilli.view.pnlConnect', {
         var t_c_hidden = true;
         if(me.jsonData.detail.t_c_check == true){
             t_c_hidden = false;
-        } 
+        }
+
+        //If Click to connect
+        var un_hidden = false;
+        var pw_hidden = false;
+        var rm_hidden = false;
+        var un        = '';
+        var pw        = '';
+        if(me.clickToConnect){
+            un_hidden = true;
+            pw_hidden = true;
+            rm_hidden = true;
+            //FIXME this must be sourced from the dynamic login page info!
+            un        = 'dvdwalt';
+            pw        = 'dvdwalt';
+        }
+
         me.items = [
             {
                 xtype       : 'form',
@@ -32,16 +48,20 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         name        : "username",
                         fieldLabel  : 'Username',
                         itemId      : 'inpUsername',
-                        allowBlank  :false,
-                        blankText   :"Enter username"
+                        allowBlank  : false,
+                        blankText   : "Enter username",
+                        hidden      : un_hidden,
+                        value       : un
                     },
                     {
                         name        : "password",
                         fieldLabel  : 'Password',
                         itemId      : 'inpPassword',
                         inputType   : 'password',
-                        allowBlank  :false,
-                        blankText   :"Enter password"
+                        allowBlank  : false,
+                        blankText   : "Enter password",
+                        hidden      : pw_hidden,
+                        value       : pw
                     },
                     {
                         boxLabel  : 'Remember me',
@@ -50,7 +70,8 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         labelAlign: 'right',
                         xtype     : 'checkbox',
                         itemId    : 'inpRememberMe',
-                        padding   : '20 0 0 0'
+                        padding   : '20 0 0 0',
+                        hidden    : rm_hidden
                     },
                     {
                         xtype       : 'displayfield',

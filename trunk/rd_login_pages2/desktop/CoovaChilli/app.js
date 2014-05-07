@@ -32,11 +32,16 @@ Ext.application({
         urlUam      : infoServer+'/rd_login_pages/services/uam.php',
         urlUsage    : infoServer+'/c2/yfi_cake/third_parties/json_usage_check',
         urlBase     : infoServer,
-        noStatus    : false,
-        redirectTo  : "http://google.com",
+      //  noStatus    : false,
+      //  redirectTo  : "http://google.com",
+        noStatus    : true,
+        redirectTo  : "http://www.waveloc.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
         jsonTimeout : 10000,
-        urlPayPalVoucher : infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json'
+        urlPayPalVoucher : infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
+        clickToConnect : true,
+        clickUsername : 'dvdwalt', //FIXME hard coded currently in the pnlConnect source from dynamic pages eventually
+        clickPassword : 'dvdwalt'
     },
     //____ End of Configuration settings _____
 
