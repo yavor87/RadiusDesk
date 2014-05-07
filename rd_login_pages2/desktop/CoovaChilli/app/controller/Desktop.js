@@ -2,9 +2,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     extend      : 'Ext.app.Controller',
     requires    : ['Ext.data.JsonP','Ext.util.Cookies'],
     views       : [
-        'Land',
-        'frmPayU',
-        'cmbVouchers'
+        'Land'
     ],
     stores  : ['sPrices'],
     models  : ['mPrice' ],
@@ -14,7 +12,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         { ref: 'connect',   selector: 'pnlConnect',     xtype: '' },     //Connect panel
         { ref: 'status',    selector: 'pnlStatus',      xtype: '' },     //Status panel (mutually exclusive with connect panel)
         { ref: 'notHotspot',selector: 'pnlNotHotspot',  xtype: '' },      //Not a hotspot panel
-        { ref: 'frmPayU',   selector: 'frmPayU',        xtype: '' }      //Not a hotspot panel
+        { ref: 'frmPayU',   selector: '#frmPayU',       xtype: '' }      //Not a hotspot panel
     ],
    
 
@@ -28,7 +26,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 1, //Make it high to start with --- sometimes it really takes long!
     currentRetry    : 0,
 
     userName        : undefined,
@@ -41,9 +39,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     //Payment gateway
     paymentGw       : true,
-    paymentGwType   : 'pnlPayPal',
-   // paymentGwType   : 'pnlPayAd',
-   // paymentGwType   : 'pnlPayU',
+    //paymentGw       : false,
+   // paymentGwType   : 'pnlPayPal',
+    //paymentGwType   : 'pnlPayAd',
+    paymentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -111,17 +110,41 @@ Ext.define('CoovaChilli.controller.Desktop', {
     },
     buyVoucher:     function(button){
         var me = this;
-       // console.log("Payment!!");
+        var clean_location = window.location.href;
+        var form = button.up('form');
+        form.setLoading('Redirecting to payment gateway ...');
+       // clean_location     = clean_location.replace(/&pay_u_=.*/, ""); //Remove the PayU part of the query string else it keeps on adding up!
+        console.log(clean_location);
         if(me.queryObj.nasid != undefined){  //Override defaults
+            console.log("Submit form with nasid");
             me.getFrmPayU().submit({
-                target:'_blank',
+                target:'_self',
                 params:{
-                    nasid: me.queryObj.nasid
+                    nasid       : me.queryObj.nasid,
+                    uamport     : me.queryObj.uamport,
+                    uamip       : me.queryObj.uamip,
+                    ssid        : me.queryObj.ssid,
+                    pathname    : window.location.pathname,
+                    hostname    : window.location.hostname,
+                    protocol    : window.location.protocol,
                 }
             });
       
         }else{
-            //me.getFrmPayU().submit({target:'_blank'});  
+            console.log("Submit form withOUT nasid");
+            me.getFrmPayU().submit(
+                {
+                    target      :'_self',
+                     params:{
+                        nasid       : me.queryObj.nasid,
+                        uamport     : me.queryObj.uamport,
+                        uamip       : me.queryObj.uamip,
+                        ssid        : me.queryObj.ssid,
+                        pathname    : window.location.pathname,
+                        hostname    : window.location.hostname,
+                        protocol    : window.location.protocol,
+                    }
+                });  
         }
     },
     //startUp: function(){
@@ -146,7 +169,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //____________________________ REALM DETAIL _______________________________
     realmFetched: function(data){   //Handler for Realm Info
         var me  = this;
-        var l   = me.getView('Land').create({'jsonData':data});
+        var l   = me.getView('Land').create({'jsonData':data,'clickToConnect' : me.application.config.clickToConnect});
         var vp  = me.getVp();
         vp.add([l]);
         //Change the page's title
