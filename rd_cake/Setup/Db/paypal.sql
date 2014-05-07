@@ -17,7 +17,7 @@ CREATE TABLE `fin_paypal_transactions` (
   `payer_email` varchar(255) DEFAULT NULL,
   `payer_id`    varchar(255) DEFAULT NULL,
   `payer_status`varchar(255) DEFAULT NULL,
-  `payment_gross` DECIMAL(10,2) NOT NULL,
+  `payment_gross` DECIMAL(10,2) DEFAULT NULL,
   `mc_gross`    DECIMAL(10,2) NOT NULL,
   `mc_fee`      DECIMAL(10,2) NOT NULL,
   `mc_currency` varchar(255) DEFAULT 'GBP',
