@@ -50,162 +50,177 @@ Ext.define('Rd.view.finPayUTransactions.gridPayUTransactions' ,{
             },
             { 
 
-                text        :'PayU ID', 
-                dataIndex   : 'txn_id',          
+                text        :'Merchant Reference', 
+                dataIndex   : 'merchantReference',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions4'
             },
             { 
 
-                text        :'Business', 
-                dataIndex   : 'business',          
+                text        :'PayU Reference', 
+                dataIndex   : 'payUReference',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : true,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions5'
             },
             { 
 
-                text        :'Option name', 
-                dataIndex   : 'option_name1',          
+                text        :'Transaction Type', 
+                dataIndex   : 'TransactionType',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions6'
             },
             { 
 
-                text        :'Option selection', 
-                dataIndex   : 'option_selection1',          
+                text        :'Transaction State', 
+                dataIndex   : 'TransactionState',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions7'
             },
             { 
 
-                text        :'Item name', 
-                dataIndex   : 'item_name',          
+                text        :'Result Code', 
+                dataIndex   : 'ResultCode',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions8'
             },
             { 
 
-                text        :'Item number', 
-                dataIndex   : 'item_number',          
+                text        : 'Result Message', 
+                dataIndex   : 'ResultMessage',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions9'
             },
             { 
 
-                text        :'First name', 
-                dataIndex   : 'first_name',          
+                text        :'Display Message', 
+                dataIndex   : 'DisplayMessage',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions10'
             },
             { 
 
-                text        :'Last name', 
-                dataIndex   : 'last_name',          
+                text        :'Merch User Id', 
+                dataIndex   : 'merchUserId',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions11'
             },
             { 
 
-                text        :'Payer email', 
-                dataIndex   : 'payer_email',          
+                text        : 'First Name', 
+                dataIndex   : 'firstName',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions12'
             },
             { 
 
-                text        :'Payer id', 
-                dataIndex   : 'payer_id',          
+                text        : 'Last Name', 
+                dataIndex   : 'lastName',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : true,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions13'
             },
             { 
 
-                text        :'Payer status', 
-                dataIndex   : 'payer_status',          
+                text        :'E-mail', 
+                dataIndex   : 'email',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : true,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions14'
             },
             { 
 
-                text        :'Payment gross', 
-                dataIndex   : 'payment_gross',          
+                text        :'Mobile', 
+                dataIndex   : 'mobile',          
                 tdCls       : 'gridTree',
-                hidden      : true, 
+                hidden      : false, 
                 flex        : 1,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions15'
             },
             { 
 
-                text        :'MC gross', 
-                dataIndex   : 'mc_gross',          
+                text        :'Regional Id', 
+                dataIndex   : 'regionalId',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
+                hidden      : true,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions16'
             },
             { 
 
-                text        :'MC fee', 
-                dataIndex   : 'mc_fee',          
+                text        :'Amount', 
+                dataIndex   : 'amountInCents',          
                 tdCls       : 'gridTree',
-                hidden      : true, 
+                hidden      : false, 
                 flex        : 1,
                 filter      : {type: 'string'},
+                renderer: function(value){
+                    return Ext.ux.centsToHuman(value)              
+                },
                 stateId     : 'StateGridPayUTransactions17'
             },
             { 
 
-                text        :'MC currency', 
-                dataIndex   : 'mc_currency',          
+                text        :'description', 
+                dataIndex   : 'description',          
                 tdCls       : 'gridTree',
-                hidden      : true, 
+                hidden      : false, 
                 flex        : 1,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridPayUTransactions18'
             },
             { 
-
-                text        :'Payment date', 
-                dataIndex   : 'payment_date',          
-                tdCls       : 'gridTree', 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : false, 
                 flex        : 1,
-                filter      : {type: 'string'},
-                stateId     : 'StateGridPayUTransactions19'
+                xtype       : 'datecolumn',   
+                format      :'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridPayUTransactions19'
             },
             { 
-
-                text        :'Payment status', 
-                dataIndex   : 'payment_status',          
-                tdCls       : 'gridTree', 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
                 flex        : 1,
-                filter      : {type: 'string'},
-                stateId     : 'StateGridPayUTransactions20'
+                xtype       : 'datecolumn',   
+                format      :'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridPayUTransactions20'
             },
             { 
                 text    : i18n('sNotes'),
