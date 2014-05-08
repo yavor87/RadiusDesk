@@ -332,6 +332,11 @@ Ext.application({
                 return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
             }
         }
+
+        //-- Format to a readable amount -->
+        Ext.ux.centsToHuman = function(cents) {
+            return (cents/100).toFixed(2); 
+        }
     }
 });
 
