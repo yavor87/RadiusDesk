@@ -32,6 +32,7 @@ class PayuComponent extends Component {
         $setTransactionArray['AdditionalInformation']['cancelUrl']                = $data['cancelUrl'];
         $setTransactionArray['AdditionalInformation']['returnUrl']                = $data['returnUrl'];
 	    $setTransactionArray['AdditionalInformation']['supportedPaymentMethods']  = 'CREDITCARD';
+        $setTransactionArray['AdditionalInformation']['notificationUrl']          = $this->settings['notificationUrl'];
 
         //---Basket---  
         $setTransactionArray['Basket']['description']       = $data['description'];
@@ -150,12 +151,16 @@ class PayuComponent extends Component {
         "<ResponseHash>7a06fe382948e97ad9207b8528d8c1f6847ac10d6230118ff9b3fb90eeaa4743</ResponseHash>".
     "</IpnExtraInfo>".
 "</PaymentNotification>";
-        $xml    = simplexml_load_string($dummy_input);
-        $json   = json_encode($xml);
-        $array  = json_decode($json,TRUE);
-        
-        print_r($array);
-
+        $xml        = simplexml_load_string($xml_string);
+        $json       = json_encode($xml);
+        $array      = json_decode($json,TRUE);
+        $log_string = "PAYU: MerchantReference: ".$array['MerchantReference'].
+            " TransactionType: ".$array['TransactionType'].
+            " TransactionState: ".$array['TransactionState'].
+            " ResultCode: ".$array['ResultCode'].
+            " ResultMessage: ".$array['ResultMessage'].
+            " PayUReference:  ".$array['PayUReference'];
+        $this->log($log_string,'debug');
     }
 
 }

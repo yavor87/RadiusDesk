@@ -11,12 +11,12 @@ class FinPayUTransactionsController extends AppController {
     protected $payu_user_id = 44;
 
     protected $fields  = array(
-        'basket_description',  'basket_amount_in_cents',    'basket_currency_code',     'custom_fields_description',    'custom_fields_value',
-        'customer_first_name', 'customer_last_name',        'customer_regional_id',     'customer_merch_user_id',       'customer_email',
-        'customer_mobile'
+        'merchantReference',    'payUReference',    'TransactionType',  'TransactionState',
+        'ResultCode',           'ResultMessage',    'DisplayMessage',   'merchUserId',
+        'firstName',            'lastName',         'email',            'mobile',
+        'regionalId',           'amountInCents',    'currencyCode',     'description',
+        'created',              'modified'
     );
-
-
 
     /* Set to suit your deployment */
     protected $voucher_data = array(
@@ -30,6 +30,36 @@ class FinPayUTransactionsController extends AppController {
         'sel_language'      => '4_4',
         'user_id'           => '44'
     );
+
+    public function price_list_for(){
+
+    //http://127.0.0.1/cake2/rd_cake/financials/price_list_for.json?plan=a
+
+        $items = array();
+
+        if(isset($this->request->query['plan'])){
+            $plan = $this->request->query['plan'];
+            $v    = Configure::read('payu.vouchers.'.$plan);
+            foreach(array_keys($v) as $k){
+                $data = $v[$k];
+                array_push($items,
+                array(
+                    'id'    => $k, 
+                    'name'  => $data['name'],
+                    'price' => $data['price'], 
+                    'currency' => $data['currency'], 
+                    'position' => $data['position']
+                ));           
+
+            }
+        }
+
+        $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('success', 'items')
+        )); 
+    } 
 
     public function submit_transaction(){
 
@@ -48,12 +78,21 @@ class FinPayUTransactionsController extends AppController {
         //Create a merchant reference that will be added to the url to track the transaction
         $merchantReference  = time();
 
+        //We need the description and the amount based on the selected value of 'voucher'
+        $description    = '0MB';
+        $amount         = '0';
+        $v              = Configure::read('payu.vouchers.a.'.$this->data['voucher']);
+        if($v){
+            $description    = $v['name'];
+            $amount         = $v['price'] * 100;
+        }
+        
         $data  = array();
         $data['merchantReference']  = $merchantReference;
         $data['cancelUrl']          = "$url_full"."&payu_cancel=1";
         $data['returnUrl']          = "$url_full";
-        $data['description']        = '1G Voucher';
-        $data['amountInCents']      = '25000';
+        $data['description']        = $description;
+        $data['amountInCents']      = $amount;
         $data['email']              = $this->data['email'];
         $data['firstName']          = $this->data['firstName'];
         $data['lastName']           = $this->data['lastName'];
@@ -68,7 +107,9 @@ class FinPayUTransactionsController extends AppController {
             $this->response->header('Location', $url_full.'&payu_error='.$msg);
         }else{
             //We can add this transaction and redirect the user to PayU
-            $data['payUReference'] = $ret_val['payUReference'];
+            $data['payUReference']  = $ret_val['payUReference'];
+            $data['user_id']        = $this->payu_user_id;
+
             $this->{$this->modelClass}->save($data);
             $rpp = Configure::read('payu.payuRppUrl');
             $rpp = $rpp.$ret_val['payUReference'];
@@ -77,7 +118,8 @@ class FinPayUTransactionsController extends AppController {
     }
 
     public function payu_ipn(){
-        $this->Payu->ipn_xml_to_data();
+        $xml_string = $this->request->input();
+        $this->Payu->ipn_xml_to_data($xml_string);
     }
 
     public function fetch_transaction($payUReference){
