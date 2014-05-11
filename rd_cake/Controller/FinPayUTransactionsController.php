@@ -15,7 +15,7 @@ class FinPayUTransactionsController extends AppController {
         'ResultCode',           'ResultMessage',    'DisplayMessage',   'merchUserId',
         'firstName',            'lastName',         'email',            'mobile',
         'regionalId',           'amountInCents',    'currencyCode',     'description',
-        'created',              'modified'
+        'created',              'modified',         'id'
     );
 
     /* Set to suit your deployment */
@@ -66,13 +66,21 @@ class FinPayUTransactionsController extends AppController {
         //Create a merchant reference that will be added to the url to track the transaction
         $merchantReference  = time();
 
+        //The mobile (sench touch) we have to do with a trick
+        $query_items = array('protocol','hostname','pathname','uamip','uamport','ssid','nasid');
+        foreach($query_items as $q_i){
+            if(isset($this->request->query[$q_i])){
+                $this->request->data[$q_i] = $this->request->query[$q_i];
+            }
+        }
+
         //Build the return URL
-        $url_base = $this->data['protocol']."//".$this->data['hostname'].$this->data['pathname'];
+        $url_base = $this->data['protocol']."//".$this->request->data['hostname'].$this->request->data['pathname'];
         $url_full = $url_base.
-                        '?uanip='.$this->data['uamip'].
-                        '&uamport='.$this->data['uamport'].
-                        '&ssid='.$this->data['ssid'].
-                        '&nasid='.$this->data['nasid'].
+                        '?uanip='.$this->request->data['uamip'].
+                        '&uamport='.$this->request->data['uamport'].
+                        '&ssid='.$this->request->data['ssid'].
+                        '&nasid='.$this->request->data['nasid'].
                         '&merchant_reference='.$merchantReference;
 
         //Create a merchant reference that will be added to the url to track the transaction
@@ -118,8 +126,61 @@ class FinPayUTransactionsController extends AppController {
     }
 
     public function payu_ipn(){
-        $xml_string = $this->request->input();
-        $this->Payu->ipn_xml_to_data($xml_string);
+        $xml_string     = $this->request->input();
+        $ret_array      = $this->Payu->ipn_xml_to_data($xml_string);
+        $PayUReference  = $ret_array['PayUReference'];
+        $this->{$this->modelClass}->contain();
+        $q_r            = $this->{$this->modelClass}->find('first',array('conditions'=> array('FinPayUTransaction.payUReference' => $PayUReference)));
+
+        if($q_r){
+
+            $id             = $q_r['FinPayUTransaction']['id'];
+            $description    = $q_r['FinPayUTransaction']['description'];
+            $PayUReference  = $q_r['FinPayUTransaction']['payUReference'];
+
+            if($q_r['FinPayUTransaction']['TransactionState'] != 'SUCCESSFUL'){ //SUCCESSFULL is the last state
+
+                $ret_array['id'] = $id;
+                $this->{$this->modelClass}->save($ret_array);
+                $this->log("PAYU: Save state ".$q_r['FinPayUTransaction']['TransactionState'],'debug');
+            }
+            if(
+                ($ret_array['TransactionState'] == 'SUCCESSFUL')&&  //No voucher yet; create one!
+                ($q_r['FinPayUTransaction']['voucher_id'] == '')
+            ){ 
+                $this->log("PAYU: Create a voucher for ".$description,'debug');
+
+                //-----------------------------------
+                $data = null;
+                $v_list  = Configure::read('payu.vouchers.a');
+                foreach(array_keys($v_list) as $v_id){
+                    $current_name = $v_list["$v_id"]['name'];
+                    if($current_name == $description){
+                        $data = $v_list["$v_id"]['voucher'];
+                        break;
+                    }    
+                }
+                if($data != null){
+                    $v  = ClassRegistry::init('Voucher');
+                    $v->contain(); //Make it lean
+
+                    $email      = $q_r['FinPayUTransaction']['email'];
+                    if($v->save($data)) {
+                        $voucher_id     = $v->id;
+                        //Update the transaction entry....
+                        $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
+                        $this->_email_voucher_detail($email,$voucher_id,$PayUReference);
+                    }else{
+                        //Add log entry do record the failure
+                        $this->log("Failed to create a voucher for PayU entry $PayUReference please do manual intervention");
+                        $this->log($v->validationErrors);                
+                    }
+                }else{
+                    $this->log("Failed to locate PayU config item for $description please do manual intervention");
+                }
+                //------------------------------------
+            }
+        }
     }
 
     public function fetch_transaction($payUReference){
@@ -208,64 +269,21 @@ class FinPayUTransactionsController extends AppController {
         ));
     }
 
-    public function paypal_ipn(){
-        $this->_confirm_paypal_ipn();
-        exit;
-    }
-
-    public function get_transaction(){
-
-        //Get a transaction id and redirect
-        if (!$this->request->is('post')) {
-			    throw new MethodNotAllowedException();
-		}
-        if(isset($this->data['voucher'])){
-            //Try to find the amount that this voucher is now charged for
-            $plan = 'a';
-            $items = Configure::read('financials.vouchers.'.$plan);
-            foreach($items as $i){
-                if($i['id'] == $this->data['voucher']){
-                    $product_id     = $i['id'];
-                    $price          = $i['price'];
-                    $price_in_cent  = $price * 100;
-                    $voucher_value  = $i['name'];
-                    //Build the cancel and return url
-                    $url = $this->data['protocol']."//".$this->data['hostname'].$this->data['pathname']."?uamip=".
-                            $this->data['uamip'].'&uamport='.$this->data['uamport']."&nasid=".$this->data['nasid'].
-                            "&ssid=".$this->data['ssid'];                 
-
-                    $cancelUrl      = $url;
-                    $returnUrl      = $url;
-                   
-                    $this->_do_payu_transaction($voucher_value,$price,$price_in_cent,$product_id,$cancelUrl,$returnUrl);
-                }
-            }
-            
-        }else{
-            $this->set('error', 'Missing information required for transaction');
-        }
-
-        //___ FINAL PART ___
-        $this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
-        ));
-    }
-
     public function voucher_info_for(){
 
-        if(!(isset($this->request->query['txn_id']))){
+        if(!(isset($this->request->query['PayUReference']))){
             $this->set(array(
-                'message'   => "Missing txn_id in query string",
+                'message'   => "Missing PayUReference in query string",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
             return;
         }
 
-        $txn_id = $this->request->query['txn_id'];
+        $PayUReference = $this->request->query['PayUReference'];
 
-        $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPayUTransaction.txn_id' => $txn_id)));
+        $data = array();
+        $q_r = $this->{$this->modelClass}->find('first', array('conditions' => array('FinPayUTransaction.payUReference' => $PayUReference)));
 
         if($q_r){
             $voucher_id = $q_r['FinPayUTransaction']['voucher_id'];
@@ -295,7 +313,6 @@ class FinPayUTransactionsController extends AppController {
                             $profile        = $rc['value'];
                         }
                     }
-                    //Now we can send the email
                     if($password_found){
                         $this->set(array(
                             'data'   => array('username' => $username,'password' => $password,'profile' => $profile,'valid_for' => $valid_for),
@@ -305,18 +322,24 @@ class FinPayUTransactionsController extends AppController {
                         return;
                     }
                 }
+            }else{
+               $this->set(array(
+                    'message'   => "PayU Reference: $PayUReference has no voucher associated to it - please contact helpdesk",
+                    'success' => false,
+                    '_serialize' => array('success','message')
+                ));
+                return;
             }
 
         }else{
             $this->set(array(
-                'message'   => "Do data available for $txn_id",
+                'message'   => "No data available for $PayUReference",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
             return;
         }
-        
-        $data = array('username' => 'dirk', 'password' => 'greatsecret');
+      
         $this->set(array(
             'data' => $data,
             'success' => true,
@@ -870,7 +893,7 @@ class FinPayUTransactionsController extends AppController {
 
 //-----------------------------------------------
    
-    private function _email_voucher_detail($payer_email, $voucher_id,$txn_id){
+    private function _email_voucher_detail($email,$voucher_id,$PayUReference){
 
         $v          = ClassRegistry::init('Voucher');
         $v->contain('Radcheck');
@@ -904,8 +927,8 @@ class FinPayUTransactionsController extends AppController {
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
                 $Email->config('gmail');
-                $Email->subject('PayPal #'.$txn_id);
-                $Email->to($payer_email);
+                $Email->subject('PayU #'.$PayUReference);
+                $Email->to($email);
                 $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
                 $Email->template('voucher_detail', 'voucher_notify');
                 $Email->emailFormat('html');
@@ -940,122 +963,4 @@ class FinPayUTransactionsController extends AppController {
     }
 
 //-----------------------------------------------
-
-    private function _do_payu_transaction($voucher_value,$voucher_price,$price_in_cent,$product_id,$cancelUrl,$returnUrl){
-
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
-        ob_start();
-
-
-        $baseUrl = 'https://staging.payu.co.za'; //staging environment URL
-        //$baseUrl = 'https://secure.payu.co.za'; //production environment URL
-
-        $soapWdslUrl = $baseUrl.'/service/PayUAPI?wsdl';
-        $payuRppUrl = $baseUrl.'/rpp.do?PayUReference=';
-        $apiVersion = 'ONE_ZERO';
-
-        //set value != 1 if you dont want to auto redirect topayment page
-        $doAutoRedirectToPaymentPage = 1;
-
-        /*
-        Store config details
-        */
-        $safeKey = '{45D5C765-16D2-45A4-8C41-8D6F84042F8C}';
-        $soapUsername = 'Staging Integration Store 1';
-        $soapPassword = '78cXrW1W';
-
-         
-        try {
-
-            $merchantReference  = time();
-            $description        = "$voucher_value Internet voucher";
-
-            $setTransactionArray                    = array();    
-            $setTransactionArray['Api']             = $this->apiVersion;
-            $setTransactionArray['Safekey']         = $this->safeKey;
-            $setTransactionArray['TransactionType'] = 'PAYMENT';  
-
-            $setTransactionArray['AdditionalInformation']['merchantReference']      = $merchantReference; 
-            $setTransactionArray['AdditionalInformation']['merchantReference'] = 10330456340;    
-            $setTransactionArray['AdditionalInformation']['cancelUrl'] = urldecode("$cancelUrl");
-            $setTransactionArray['AdditionalInformation']['returnUrl'] = urldecode("$returnUrl");
-	        $setTransactionArray['AdditionalInformation']['supportedPaymentMethods'] = 'CREDITCARD';
-            
-             $setTransactionArray['Basket']['description']       = $description;
-            $setTransactionArray['Basket']['amountInCents']     = "$price_in_cent";
-            $setTransactionArray['Basket']['currencyCode']      = 'ZAR';
-
-            $setTransactionArray['Customer']['merchUserId']     = "500";
-            $setTransactionArray['Customer']['email']           = "rviljoen@pcmaniacs.co.za";
-            $setTransactionArray['Customer']['firstName']       = 'Renier';
-            $setTransactionArray['Customer']['lastName']        = 'Viljoen';
-            $setTransactionArray['Customer']['mobile']          = '0725995050';
-            $setTransactionArray['Customer']['regionalId']      = '7701015055012';
-
-            $setTransactionArray['Customfield']['key']         = "ProductID";
-            $setTransactionArray['Customfield']['value']       = "$product_id";
-
-            $setTransactionArray['CustomFields']['Key']         = "Gooi";
-            $setTransactionArray['CustomFields']['Value']       = "HomNou";
-            
-            // 2. Creating a XML header for sending in the soap heaeder (creating it raw a.k.a xml mode)
-            $headerXml = '<wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">';
-            $headerXml .= '<wsse:UsernameToken wsu:Id="UsernameToken-9" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">';
-            $headerXml .= '<wsse:Username>'.$this->soapUsername.'</wsse:Username>';
-            $headerXml .= '<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">'.$this->soapPassword.'</wsse:Password>';
-            $headerXml .= '</wsse:UsernameToken>';
-            $headerXml .= '</wsse:Security>';
-            $headerbody = new SoapVar($headerXml, XSD_ANYXML, null, null, null);
-
-            // 3. Create Soap Header.        
-            $ns = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd'; //Namespace of the WS. 
-            $header = new SOAPHeader($ns, 'Security', $headerbody, true);        
-
-            // 4. Make new instance of the PHP Soap client
-            $soap_client = new SoapClient($this->soapWdslUrl, array("trace" => 1, "exception" => 0)); 
-
-            // 5. Set the Headers of soap client. 
-            $soap_client->__setSoapHeaders($header); 
-
-            // 6. Do the setTransaction soap call to PayU
-            $soapCallResult = $soap_client->setTransaction($setTransactionArray); 
-
-            // 7. Decode the Soap Call Result
-            $returnData = json_decode(json_encode($soapCallResult),true);
-            print_r($setTransactionArray);
-            print_r($returnData);
-            die();
-
-            //header('Location: '.$this->payuRppUrl);
-            //        die();
-
-	        if(isset($this->doAutoRedirectToPaymentPage) && ($this->doAutoRedirectToPaymentPage == 1) ) {
-		        if( (isset($returnData['return']['successful']) && ($returnData['return']['successful'] === true) && isset($returnData['return']['payUReference']) ) ) {
-
-                    //Add an entry since we could get a payUReference
-                    $data = array();
-                    $data['merchant_reference'] = $merchantReference;
-                    $data['payu_reference']     = $returnData['return']['payUReference'];
-                    $data['amount_in_cents']    = $price_in_cent;
-                    $data['description']        = $description;
-                    $data['product_code']       = $product_id;
-
-                    $transaction = ClassRegistry::init('FinPayuTransaction');
-                    $transaction->create();
-                    $transaction->save($data);
-			
-			        //Redirecting to payment page
-			        header('Location: '.$this->payuRppUrl.$returnData['return']['payUReference']);
-			        die();
-		        }else{
-                    //TODO Here we need to tell them what whent wrong!
-
-                }
-	        }
-        }
-        catch(Exception $e) {
-            var_dump($e);
-        }
-    }
 }
