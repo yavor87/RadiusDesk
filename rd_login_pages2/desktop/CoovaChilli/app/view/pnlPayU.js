@@ -20,13 +20,14 @@ Ext.define('CoovaChilli.view.pnlPayU', {
             '<h3>Last purchase</h3>'+
             '<div><div class="item">Username</div><div class="value">{username}</div></div>',
             '<div class="alternate"><div class="item">Password</div><div class="value">{password}</div></div>', 
-            '<div><div class="item">Profile</div><div class="value">{profile}</div></div>',
-            '<div class="alternate"><div class="item">Valid for</div><div class="value">{value}</div></div>'   
+            '<div><div class="item">Profile</div><div class="value">{profile}</div></div>'
+          //  '<div class="alternate"><div class="item">Valid for</div><div class="value">{value}</div></div>'   
         ]);
 
         me.items    = [
             {
                 height      : 140,
+                width       : 280,
                 tpl         : tplVoucher,
                 data        : {username: 'UN Placeholder',password: 'PW Placeholder'},
                 bodyCls     : 'lastPurchase',
@@ -69,14 +70,14 @@ Ext.define('CoovaChilli.view.pnlPayU', {
                         fieldLabel  : 'First name',
                         name        : "firstName",
                         allowBlank  : false,
-                        value       : 'Dirk'
+                        value       : ''
                     },
                     {
                         xtype       : 'textfield',
                         fieldLabel  : 'Last name',
                         name        : "lastName",
                         allowBlank  : false,
-                        value       : 'van der Walt'
+                        value       : ''
                     },
                     {
                         xtype       : 'textfield',
@@ -84,7 +85,7 @@ Ext.define('CoovaChilli.view.pnlPayU', {
                         name        : "email",
                         allowBlank  : false,
                         vtype       : 'email',
-                        value       : 'dirkvanderwalt@gmail.com'
+                        value       : ''
                     },
                     {
                         xtype       : 'textfield',
@@ -92,7 +93,7 @@ Ext.define('CoovaChilli.view.pnlPayU', {
                         name        : "mobile",
                         allowBlank  : false,
                         maskRe      : /[0-9.]/,
-                        value       : '0725963050'
+                        value       : ''
                     },
                     {
                         xtype   : 'cmbVouchers'

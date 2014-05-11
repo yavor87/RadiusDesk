@@ -6,7 +6,7 @@ Ext.define('CoovaChilli.store.sPrices', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/financials/price_list_for.json?plan=a',
+            url     : '/cake2/rd_cake/fin_pay_u_transactions/price_list_for.json?plan=a',
             reader: {
                 type            : 'json',
                 root            : 'items',
