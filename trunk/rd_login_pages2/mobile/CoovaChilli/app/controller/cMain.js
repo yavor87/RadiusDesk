@@ -10,30 +10,43 @@ Ext.define('CoovaChilli.controller.cMain', {
             lblStatusTimer  : '#lblStatusTimer',
             cntPhotos       : '#cntPhotos',
             cntShop         : '#cntShop',
-            tabMain         : '#tabMain'
+            tabMain         : '#tabMain',
+          //  frmPayU         : '#frmPayU'
         },
         control: {
         
             'cntStatus #btnDisconnect': {
-                tap: 'onBtnDisconnectTap'
+                tap         : 'onBtnDisconnectTap'
             },
             'cntStatus #btnGoInternet': {
-                tap: 'onBtnGoInternetTap'
+                tap         : 'onBtnGoInternetTap'
             },
             'frmConnect #btnConnect': {
-                tap: 'onBtnConnectTap'
+                tap         : 'onBtnConnectTap'
             },
             'cntPhotos #datThumb': {
-                itemtap: 'onThumbTap'
+                itemtap     : 'onThumbTap'
             },
             'cntPhotos #crslPhoto': {
                 activeitemchange: 'onPhotoShow'
+            },
+            'frmPayU': {
+                initialize  : 'onFrmPayUInit'
+            },
+            'frmPayU #btnPayU' : {
+                tap         : 'onBtnPayUTap'
             }
         },
         views: [
             'cntNotPresent',
             'tabMain',
             'frmConnect'
+        ],
+        stores: [
+            'sPrices'
+        ],
+        models : [
+            'mPrice'
         ] 
     },
     uamIp       : undefined,   //ip of coova hotspot
@@ -58,10 +71,18 @@ Ext.define('CoovaChilli.controller.cMain', {
     thumbPhoto  : undefined,
 
     queryObj    : undefined,
+
+    frmPayUExist        : false,
+    sPayUPricesLoaded   : false,
     
     //called when the Application is launched, remove if not needed
     launch: function(app) {
         var me = this;
+
+        if(CoovaChilli.config.Config.getPaymentGwType() == 'frmPayU'){
+            Ext.data.StoreManager.lookup('sPrices').addListener('load',me.onPayUStoreLoaded, me);
+        }
+
         Ext.Ajax.request({
             url     : CoovaChilli.config.Config.getUrlRealmInfo()+document.location.search,
             method  : 'GET',
@@ -78,6 +99,46 @@ Ext.define('CoovaChilli.controller.cMain', {
         }); 
 
     },
+    
+    onPayUStoreLoaded: function(){
+        var me = this;
+        console.log("PayU store loaded");
+        me.sPayUPricesLoaded = true;
+        if(me.frmPayUExist){
+            var fieldset    = me.getCntShop().down('fieldset');
+            var store       = Ext.data.StoreManager.lookup('sPrices');
+            store.each(function (item, index, length) {
+                fieldset.add(Ext.create('Ext.field.Radio',{
+                    name : 'Voucher',
+                    value: item.get('id'),
+                    label: item.get('name')
+                }));
+                console.log(item.get('name'), index);
+            });
+        }
+    },
+    onFrmPayUInit : function(f){
+        var me = this;
+        console.log("PayU form inited");
+        me.frmPayUExist = true;
+        if(me.sPayUPricesLoaded){
+            var fieldset    = f.down('fieldset');
+            var store       = Ext.data.StoreManager.lookup('sPrices');
+            store.each(function (item, index, length) {
+                var checked = false;
+                if(index == 0){
+                    checked = true;//Mark the first one
+                }
+                f.down('fieldset').add(Ext.create('Ext.field.Radio',{
+                    name    : 'voucher',
+                    value   : item.get('id'),
+                    label   : item.get('name'),
+                    checked : checked
+                }));
+            });
+        }
+    },
+
     showNotPresent: function(){
         var me = this;
         Ext.Viewport.add(Ext.create('CoovaChilli.view.cntNotPresent'));
@@ -87,7 +148,12 @@ Ext.define('CoovaChilli.controller.cMain', {
        // console.log(jsonData);
         //Load the main view
         var paymentScreen = CoovaChilli.config.Config.getPaymentGwType();
-        Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{'jsonData':jsonData,'paymentScreen':paymentScreen, 'itemId': 'tabMain'}));
+        Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{
+            'jsonData'      :jsonData,
+            'paymentScreen' :paymentScreen, 
+            'itemId'        : 'tabMain',
+            'clickToConnect': CoovaChilli.config.Config.getClickToConnect()
+        }));
 
         //Change the page's title
         document.title = jsonData.detail.name;
@@ -195,9 +261,40 @@ Ext.define('CoovaChilli.controller.cMain', {
                 me.getTabMain().setActiveItem('#cntShop'); //Show the shop tab
             }
         }
+
+        // --- PayU ---
+        if(CoovaChilli.config.Config.getPaymentGwType() == 'frmPayU'){
+            //console.log(me.queryObj.PayUReference);
+            if(me.queryObj.PayUReference != undefined){ 
+
+                Ext.Ajax.request({
+                    url     : CoovaChilli.config.Config.getUrlPayUVoucher(),
+                    method  : 'GET',
+                    params: {
+                        PayUReference: me.queryObj.PayUReference
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                     //   console.log(jsonData);
+                        if(jsonData.success){
+                            me.getCntShop().down('#pnlPayUFeedback').setData(jsonData.data);
+                            me.getCntShop().down('#pnlPayUFeedback').show();
+                            me.getCntShop().down('#pnlPayUError').hide();                       
+                            me.getFrmConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getFrmConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            me.getCntShop().down('#pnlPayUFeedback').hide();
+                            me.getCntShop().down('#pnlPayUError').show();
+                        }       
+                    },
+                    scope: me
+                });
+            }
+        }
+
+
+
     },
-
-
 
     onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....
         var me = this;
@@ -483,6 +580,70 @@ Ext.define('CoovaChilli.controller.cMain', {
         var me = this;
         window.open(CoovaChilli.config.Config.getRedirectTo(), '_blank');
     },
+
+    //-------PAYU start------------
+    onBtnPayUTap: function(button){
+        var me      = this;
+        var form    = button.up('formpanel');
+        console.log("Gooi hom!");
+        var firstName = form.down('#firstName').getValue();
+        var lastName  = form.down('#lastName').getValue();
+        var email     = form.down('#email').getValue();
+        var mobile    = form.down('#mobile').getValue();
+
+        if((firstName.length < 2 )||(lastName.length < 2)||(email.length < 4)||(mobile.length < 10)){
+            me.showPayUError('Some required values missing or wrong');
+            return;
+        }
+
+        Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Redirecting to payment gateway ...'
+        });
+
+        
+        var nasid       = me.queryObj.nasid;
+        var uamport     = me.queryObj.uamport;
+        var uamip       = me.queryObj.uamip;
+        var ssid        = me.queryObj.ssid;
+        var pathname    = window.location.pathname;
+        var hostname    = window.location.hostname;
+        var protocol    = window.location.protocol;
+
+        var url = '/cake2/rd_cake/fin_pay_u_transactions/submit_transaction?nasid='+nasid+
+            "&uamport="+uamport+"&uamip="+uamip+
+            "&ssid="+ssid+"&pathname="+pathname+
+            "&hostname="+hostname+"&protocol="+protocol;
+
+        form.submit({
+            method  : 'POST',
+            url     : url,
+            target  :'_self'
+        });
+    },
+
+    showPayUError: function(msg){
+        var me = this;
+        ///Ext.getBody().unmask();
+        Ext.Viewport.setMasked(false);
+        var error = me.getCntShop().down('#lblPayUErrorDisplay');
+        error.show();     //Display
+        error.setData({msg:msg});
+    },
+
+    clearPayUError: function(){
+        var me = this;
+        Ext.Viewport.setMasked(false);
+        var error = me.getFrmConnect().down('#lblPayUErrorDisplay');
+        error.hide();     //Display
+        error.setData({msg:''});
+    },
+
+
+
+    //--------- PAYU end ----------
+
+
     time:   function ( t , zeroReturn ) {
 
         if(t == 'NA'){

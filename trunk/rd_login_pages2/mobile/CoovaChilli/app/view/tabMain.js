@@ -10,6 +10,7 @@ Ext.define('CoovaChilli.view.tabMain', {
         'CoovaChilli.view.cntAbout',
         'CoovaChilli.view.cntPayAd',
         'CoovaChilli.view.cntPayPal',
+        'CoovaChilli.view.frmPayU'
     ],
     config: {
         tabBar : {
@@ -46,7 +47,8 @@ Ext.define('CoovaChilli.view.tabMain', {
                         scrollable  : false,
                         itemId      : 'frmConnect',
                         hidden      : true,
-                        jsonData    : config.jsonData
+                        jsonData    : config.jsonData,
+                        clickToConnect : config.clickToConnect
                     },
                     {   
                         xtype       : 'cntStatus',
@@ -96,21 +98,15 @@ Ext.define('CoovaChilli.view.tabMain', {
             }, 
             {
                 title   : 'Online shop',
-                xtype   : 'container',
                 itemId  : 'cntShop',
                 iconCls : 'compose',
-                layout  : 'hbox',
-                scrollable: {
-                    direction: 'vertical',
-                    directionLock: true
-                }, 
+                layout      : 'fit',
                 items: [
-                    {   xtype     : 'spacer', flex: 1 },
-                    {
-                        //xtype     : 'cntPayPal'
-                        xtype     :  config.paymentScreen
-                    },
-                    {   xtype     : 'spacer', flex: 1 }
+                   {
+                        xtype       : 'frmPayU',
+                        itemId      : 'frmPayU',
+                        scrollable  : false
+                   }
                 ]
             }
         ];
