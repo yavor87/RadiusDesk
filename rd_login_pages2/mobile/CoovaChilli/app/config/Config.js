@@ -5,16 +5,23 @@ Ext.define('CoovaChilli.config.Config', {
         urlUam      : 'http://'+document.location.hostname+'/rd_login_pages/services/uam.php',
         urlUsage    : 'http://'+document.location.hostname+'/c2/yfi_cake/third_parties/json_usage_check',
         urlBase     : 'http://'+document.location.hostname,
-        noStatus    : false,
-        redirectTo  : "http://google.com",
+        //noStatus    : false,
+        //redirectTo  : "http://google.com",
+        noStatus    : true,
+        redirectTo  : "http://www.waveloc.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
         jsonTimeout : 10000,
+        //paymentGw   : true,
         paymentGw   : true,
         //Payment gateway
-        paymentGwType: 'cntPayPal',
+        //paymentGwType: 'cntPayPal',
         //paymentGwType: 'cntPayAd',
-        //paymentGwType: 'cntPayU',
-        urlPayPalVoucher : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json'
+        paymentGwType: 'frmPayU',
+        urlPayPalVoucher : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
+        clickToConnect  : false,
+        clickUsername   : 'dvdwalt', //FIXME hard coded currently in the pnlConnect source from dynamic pages eventually
+        clickPassword   : 'dvdwalt',
+        urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
     },
  
     constructor: function(config) {

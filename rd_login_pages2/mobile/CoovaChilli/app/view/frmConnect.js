@@ -17,6 +17,21 @@ Ext.define('CoovaChilli.view.frmConnect', {
          var t_c_hidden = true;
         if(config.jsonData.detail.t_c_check == true){
             t_c_hidden = false;
+        }
+
+        //If Click to connect
+        var un_hidden = false;
+        var pw_hidden = false;
+        var rm_hidden = false;
+        var un        = '';
+        var pw        = '';
+        if(config.clickToConnect){
+            un_hidden = true;
+            pw_hidden = true;
+            rm_hidden = true;
+            //FIXME this must be sourced from the dynamic login page info!
+            un        = 'dvdwalt';
+            pw        = 'dvdwalt';
         } 
 
 
@@ -40,19 +55,24 @@ Ext.define('CoovaChilli.view.frmConnect', {
                         xtype   : 'textfield',
                         name    : 'name',
                         label   : 'Username',
-                        itemId  : 'inpUsername'
+                        itemId  : 'inpUsername',
+                        hidden  : un_hidden,
+                        value   : un
                     },
                     {
                         xtype   : 'passwordfield',
                         name    : 'password',
                         label   : 'Password',
-                        itemId  : 'inpPassword'
+                        itemId  : 'inpPassword',
+                        hidden  : pw_hidden,
+                        value   : pw
                     },
                     {
                         xtype   : 'checkboxfield',
                         name    : 'remember_me',
                         label   : 'Remember me',
-                        itemId  : 'inpRememberMe'
+                        itemId  : 'inpRememberMe',
+                        hidden  : rm_hidden
                     },
                     {
                         itemId  : 'lblTC',
