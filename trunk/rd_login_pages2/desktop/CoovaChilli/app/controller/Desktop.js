@@ -219,8 +219,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
         }
         console.log(me.paymentGwType);
 
+        //--- PayPal ---
         if(me.paymentGwType == 'pnlPayPal'){
-            console.log(me.queryObj.tx);
+            //console.log(me.queryObj.tx);
             if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
                 //Dummy thing:
                 console.log("Finding transaction details for "+ me.queryObj.tx);
@@ -252,6 +253,42 @@ Ext.define('CoovaChilli.controller.Desktop', {
                 });
             }
         }
+
+        // --- PayU ---
+        if(me.paymentGwType == 'pnlPayU'){
+            //console.log(me.queryObj.PayUReference);
+            if(me.queryObj.PayUReference != undefined){ //Paypal will add a tx=<transaction ID to the query string>
+                //Dummy thing:
+                //console.log("Finding transaction details for "+ me.queryObj.tx);
+                Ext.Ajax.request({
+                    url     : me.application.config.urlPayUVoucher,
+                    method  : 'GET',
+                    params: {
+                        PayUReference: me.queryObj.PayUReference
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                     //   console.log(jsonData);
+                        if(jsonData.success){
+                            me.getLand().down('#tpnlOptions').down('#pnlPayUFeedback').update(jsonData.data);
+                            me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getLand().down('#tpnlOptions').down('#pnlPayUFeedback').setVisible(true);
+                            me.getLand().down('#tpnlOptions').down('#pnlPayUError').setVisible(false);
+                            
+                            me.getConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            //console.log("big problems");
+                            me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getLand().down('#tpnlOptions').down('#pnlPayUFeedback').setVisible(false);
+                            me.getLand().down('#tpnlOptions').down('#pnlPayUError').setVisible(true);
+                        }       
+                    },
+                    scope: me
+                });
+            }
+        }
+
     },
     onBtnPwdForgetClick: function(){
         var me = this;
