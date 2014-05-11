@@ -161,6 +161,16 @@ class PayuComponent extends Component {
             " ResultMessage: ".$array['ResultMessage'].
             " PayUReference:  ".$array['PayUReference'];
         $this->log($log_string,'debug');
+
+        $ret_array = array(
+            'MerchantReference'     => $array['MerchantReference'],
+            'TransactionType'       => $array['TransactionType'],
+            'TransactionState'      => $array['TransactionState'],
+            'ResultCode'            => $array['ResultCode'],
+            'ResultMessage'         => $array['ResultMessage'],
+            'PayUReference'         => $array['PayUReference'],
+        );
+        return $ret_array;
     }
 
 }
