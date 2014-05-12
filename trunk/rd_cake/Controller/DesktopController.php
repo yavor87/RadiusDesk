@@ -291,9 +291,30 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+
+            //Permanent users
+            array(  'text'  => __('Permanent Users'),  'iconCls' => 'users',  'glyph' => Configure::read('icnUser') ,'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array(
+                            'text'      => __('Permanent Users'),
+                            'glyph'     => Configure::read('icnUser'),
+                            'itemId'    => 'cPermanentUsers'
+                        ),
+                        array(
+                            'text'      => __('BYOD Manager'), 
+                            'glyph'     => Configure::read('icnDevice'), 
+                            'itemId'    => 'cDevices'
+                        ),
+                        array(
+                            'text'      => __('Top-ups'), 
+                            'glyph'     => Configure::read('icnTopUp'), 
+                            'itemId'    => 'cTopUps'
+                        ),
+                    )
+                )
+            ),
             array(  'text'  => __('Vouchers'),        'iconCls' => 'vouchers','glyph' => Configure::read('icnVoucher'), 'itemId' => 'cVouchers'),
-            array(  'text'  => __('Permanent Users'), 'iconCls' => 'users',   'glyph' => Configure::read('icnUser'),'itemId' => 'cPermanentUsers'),
-            array(  'text'  => __('BYOD Manager'),    'iconCls' => 'devices', 'glyph' => Configure::read('icnDevice'),  'itemId' => 'cDevices'),
         );
 
         //Optional experimental stuff 
@@ -376,16 +397,29 @@ class DesktopController extends AppController {
                 )
         );
 
-
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
-            array_push($menu,
-                array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers', 'glyph' => Configure::read('icnVoucher'),   'itemId' => 'cVouchers')
-            );
-        }
-
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
-            array_push($menu,
-                array(  'text'  => __('Permanent Users'),       'iconCls' => 'users',  'glyph' => Configure::read('icnUser'),      'itemId' => 'cPermanentUsers')
+             $pu_sub_menu = array(
+                        array(
+                            'text'      => __('Permanent Users'),
+                            'glyph'     => Configure::read('icnUser'),
+                            'itemId'    => 'cPermanentUsers'
+                        ),
+                        array(
+                            'text'      => __('BYOD Manager'), 
+                            'glyph'     => Configure::read('icnDevice'), 
+                            'itemId'    => 'cDevices'
+                        ),
+                        array(
+                            'text'      => __('Top-ups'), 
+                            'glyph'     => Configure::read('icnTopUp'), 
+                            'itemId'    => 'cTopUps'
+                        ),
+                    );
+            
+            array_push($menu, 
+                array(  'text'  => __('Permanent Users'), 
+                        'glyph' => Configure::read('icnUser'),  
+                        'menu'  => array('items' =>$pu_sub_menu))
             );
         }
 
@@ -406,9 +440,9 @@ class DesktopController extends AppController {
 
     private function _build_admin_shortcuts(){
         $items = array();
-        array_push($items, array( 'name' => __('Vouchers'), 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         array_push($items, array( 'name'    => __('Permanent Users'), 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
         array_push($items, array( 'name'    => __('BYOD Manager'), 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        array_push($items, array( 'name' => __('Vouchers'), 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         array_push($items, array( 'name'    => __('Activity monitor'), 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
         array_push($items, array( 'name'    => __('Password manager'), 'iconCls' => 'password-shortcut', 'controller' => 'cPassword'));
         return $items;
@@ -430,16 +464,17 @@ class DesktopController extends AppController {
 
         $base   = "Access Providers/Controllers/";
 
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
-            array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
-        }
-
+       
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
             array_push($items, array( 'name'    => 'Permanent Users', 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
         }
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
             array_push($items, array( 'name'    => 'BYOD Manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
+            array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         }
 
         array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
