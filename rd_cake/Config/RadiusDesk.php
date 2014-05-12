@@ -101,14 +101,36 @@ $config['payu']['vouchers']['a']['data_175m'] = array(
     'name'      => '175MB',  
     'price'     => '129.00',
     'currency'  => 'R', 
-    'position'  => 'pre'
+    'position'  => 'pre',
+    'voucher'   => array(
+        'activate_on_login' => '1',
+        'time_valid'        => '0-02-00-00',
+        'expire'            => '05/31/2014',
+        'precede'           => '',
+        'profile_id'        => 7,
+        'pwd_length'        => 5,
+        'realm_id'          => 34,
+        'sel_language'      => '4_4',
+        'user_id'           => '44'
+    )
 );
 
 $config['payu']['vouchers']['a']['data_400m'] = array(
     'name'      => '400MB',  
     'price'     => '165.00',
     'currency'  => 'R', 
-    'position'  => 'pre'
+    'position'  => 'pre',
+    'voucher'   => array(
+        'activate_on_login' => '1',
+        'time_valid'        => '2-22-22-00',
+        'expire'            => '05/31/2014',
+        'precede'           => '',
+        'profile_id'        => 7,
+        'pwd_length'        => 5,
+        'realm_id'          => 34,
+        'sel_language'      => '4_4',
+        'user_id'           => '44'
+    )
 );
 
 
@@ -237,6 +259,9 @@ $config['icnOnlineShop']= 57554;
 $config['icnEmail']     = 57378;
 $config['icnAttach']    = 57380;
 $config['icnCut']       = 57551;
+$config['icnTopUp']     = 57419;
+$config['icnSubtract']  = 57520;
+
 
 //===== MESHdesk ======
 //== Encryption types ==
