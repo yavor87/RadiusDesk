@@ -196,7 +196,9 @@ Ext.application({
             icnOnlineShop   : 57554,
             icnEmail        : 57378,
             icnAttach       : 57380,
-            icnCut          : 57551
+            icnCut          : 57551,
+            icnTopUp        : 57419,
+            icnSubtract     : 57520
         };
     },
     addUx: function(){
