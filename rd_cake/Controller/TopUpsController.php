@@ -8,6 +8,12 @@ class TopUpsController extends AppController {
     public $uses        = array('TopUp','User');
     protected $base     = "Access Providers/Controllers/TopUps/";
 
+    protected $fields  = array(
+        'user_id',      'permanent_user_id',    'data',  'time',
+        'days_to_use',  'comment',
+        'created',       'modified',            'id'
+    );
+
 
 //------------------------------------------------------------------------
 
@@ -50,13 +56,18 @@ class TopUpsController extends AppController {
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
 
-           
-            array_push($items,array(
-                'id'                    => $i['TopUp']['id'], 
-                'comment'               => $i['TopUp']['comment'],
-                'update'                => $action_flags['update'],
-                'delete'                => $action_flags['delete']
-            ));
+            $row = array();
+            foreach($this->fields as $field){
+                if(array_key_exists($field,$i['TopUp'])){
+                    $row["$field"]= $i['TopUp']["$field"];
+                }
+            }
+            $row['user']                = $i['User']['username'];
+            $row['permanent_user']      = $i['PermanentUser']['username'];
+            $row['update']              = $action_flags['update'];
+            $row['delete']              = $action_flags['delete'];
+
+            array_push($items,$row);
         }
        
         //___ FINAL PART ___
@@ -82,6 +93,45 @@ class TopUpsController extends AppController {
          if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
+
+        //====Check what type it is====
+        //---Data---
+        if($this->request->data['type'] == 'data'){
+            $multiplier = 1;
+            if(isset($this->request->data['data_unit'])){
+                if($this->request->data['data_unit'] == 'mb'){
+                    $multiplier = 1048576; //(1024*1024)
+                }
+                if($this->request->data['data_unit'] == 'gb'){
+                    $multiplier = 1073741824; //(1024*1024*1024)
+                }            
+            }
+            $this->request->data['data'] = $this->request->data['value'] * $multiplier;
+        }
+
+        //---Time---
+        if($this->request->data['type'] == 'time'){
+            $multiplier = 1;
+            if(isset($this->request->data['time_unit'])){
+                if($this->request->data['time_unit'] == 'minutes'){
+                    $multiplier = 60; //(60 seconds = minute)
+                }
+                if($this->request->data['time_unit'] == 'hours'){
+                    $multiplier = 3600; //(60 seconds * 60 minutes)
+                } 
+                if($this->request->data['time_unit'] == 'days'){
+                    $multiplier = 86400; //(60 seconds * 60 minutes * 24 Hours)
+                }             
+            }
+            $this->request->data['time'] = $this->request->data['value'] * $multiplier;
+        }
+
+        //---Days To Use---
+        if($this->request->data['type'] == 'days_to_use'){
+            $this->request->data['days_to_use'] = $this->request->data['value'];
+        }
+        //====END Check what type it is====
+
 
         $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
