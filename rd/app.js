@@ -317,7 +317,7 @@ Ext.application({
             do {
                 fileSizeInBytes = fileSizeInBytes / 1024;
                 i++;
-            } while (fileSizeInBytes > 1024);
+            } while (fileSizeInBytes >= 1024);
 
             return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
         };

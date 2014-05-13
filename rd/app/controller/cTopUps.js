@@ -41,7 +41,7 @@ Ext.define('Rd.controller.cTopUps', {
 
     views:  [
         'components.pnlBanner',             'topUps.gridTopUps',    'topUps.winTopUpAddWizard',
-        'components.cmbPermanentUser'
+        'components.cmbPermanentUser',      'topUps.winTopUpEdit'
   
     ],
     stores: ['sTopUps', 'sAccessProvidersTree', 'sPermanentUsers'],
@@ -50,7 +50,8 @@ Ext.define('Rd.controller.cTopUps', {
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv    : '/cake2/rd_cake/top_ups/export_csv',
-        urlAdd          : '/cake2/rd_cake/top_ups/add.json'
+        urlAdd          : '/cake2/rd_cake/top_ups/add.json',
+        urlDelete       : '/cake2/rd_cake/top_ups/delete.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridTopUps'}       
@@ -76,6 +77,12 @@ Ext.define('Rd.controller.cTopUps', {
             }, 
             'gridTopUps #add': {
                 click:      me.add
+            }, 
+            'gridTopUps #edit': {
+                click:      me.edit
+            }, 
+            'gridTopUps #delete': {
+                click:      me.del
             }, 
             'gridTopUps #csv'  : {
                 click:      me.csvExport
@@ -245,5 +252,96 @@ Ext.define('Rd.controller.cTopUps', {
             cmbTimeUnit.setDisabled(true);
             txtAmount.setFieldLabel('Days');
         }
-    }
+    },
+    del:   function(){
+        var me      = this;     
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+
+                    var selected    = me.getGrid().getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+
+                    Ext.Ajax.request({
+                        url: me.urlDelete,
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.reload(); //Reload from server
+                        },                                    
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.reload(); //Reload from server
+                        }
+                    });
+                }
+            });
+        }
+    },
+    edit: function(button){
+        var me      = this;   
+        //Find out if there was something selected
+        var selCount = me.getGrid().getSelectionModel().getCount();
+        if(selCount == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(selCount > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                var sr              = me.getGrid().getSelectionModel().getLastSelected();
+
+                var permanent_user  = sr.get('permanent_user');
+                var data            = sr.get('data');
+                var time            = sr.get('time');
+                var days_to_use     = sr.get('days_to_use');
+                var comment         = sr.get('comment');
+
+                if(!me.application.runAction('cDesktop','AlreadyExist','winTopUpEditId')){
+                    var w = Ext.widget('winTopUpEdit',{ 
+                        id              : 'winTopUpEditId', 
+                        itemId          : sr.getId(), 
+                        permanent_user  : permanent_user,
+                        data            : data,
+                        time            : time,
+                        days_to_use     : days_to_use,
+                        comment         : comment     
+                    });
+                    me.application.runAction('cDesktop','Add',w);      
+                }
+            }
+        }
+    },
 });
