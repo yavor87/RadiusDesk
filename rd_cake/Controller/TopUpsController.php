@@ -78,8 +78,7 @@ class TopUpsController extends AppController {
             '_serialize' => array('items','success','totalCount')
         ));
     }
-
-   
+ 
     public function add() {
 
         //__ Authentication + Authorization __
@@ -216,6 +215,25 @@ class TopUpsController extends AppController {
             ));
         }
 	}
+
+
+    public function view(){
+
+        $data = array(
+            'id'                => 12,
+            'permanent_user_id' => 187,
+            'data'              => 1048576,
+            'time'              => null,
+            'days_to_use'       => null,
+            'comment'           => ''
+        );
+
+        $this->set(array(
+            'data'      => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
 
     //----- Menus ------------------------
     public function menu_for_grid(){
