@@ -103,8 +103,9 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
         var timeUnit = Ext.create('Ext.data.Store', {
             fields: ['id', 'name'],
             data : [
-                {"id":"mb",  "name":"MB"},
-                {"id":"gb",  "name":"GB"},
+                {"id":"minutes",  "name":"Minutes"},
+                {"id":"hours",    "name":"Hours"},
+                {"id":"days",     "name":"Days"},
             ]
         });
 
@@ -190,11 +191,11 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                     hidden  : true,
                     value   : me.user_id
                 },
-                {
+/*                {
                     xtype   : 'textfield',
                     name    : "id",
                     hidden  : true
-                }, 
+                }, */
                 {
                     itemId      : 'owner',
                     xtype       : 'displayfield',
@@ -207,7 +208,8 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                     allowBlank  : false,
                     labelClsExtra: 'lblRdReq',
                     itemId      : 'permanent_user_id',
-                    fieldLabel  : 'Permanent user'
+                    fieldLabel  : 'Permanent user',
+                    name        : 'permanent_user_id'
                     
                 },
                 cmbType,
@@ -219,14 +221,15 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                     maxValue    : 1000,
                     minValue    : 1,
                     labelClsExtra: 'lblRdReq',
-                    allowBlank  : false
+                    allowBlank  : false,
+                    itemId      : 'txtAmount'
                 },
                 cmbDataUnit,
                 cmbTimeUnit,
                 {
                     xtype       : 'textfield',
                     fieldLabel  : 'Comment',
-                    name        : "name",
+                    name        : "comment",
                     blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRd'
                 }
