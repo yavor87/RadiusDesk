@@ -91,7 +91,10 @@ Ext.define('Rd.controller.cTopUps', {
             },
             'winTopUpAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
-            }
+            },
+            'winTopUpAddWizard #cmbType' : {
+                change:  me.cmbTopUpTypeChanged
+            },
         });
     },
     winClose:   function(){
@@ -211,5 +214,36 @@ Ext.define('Rd.controller.cTopUps', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    cmbTopUpTypeChanged: function(cmb,new_value){
+        var me          = this;
+        var form        = cmb.up('form');
+        var cmbDataUnit = form.down('#cmbDataUnit');
+        var cmbTimeUnit = form.down('#cmbTimeUnit');
+        var txtAmount   = form.down('#txtAmount');
+
+        if(new_value == 'data'){
+            cmbDataUnit.setVisible(true);
+            cmbDataUnit.setDisabled(false);
+            cmbTimeUnit.setVisible(false);
+            cmbTimeUnit.setDisabled(true);
+            txtAmount.setFieldLabel('Amount');
+        }
+
+        if(new_value == 'time'){
+            cmbDataUnit.setVisible(false);
+            cmbDataUnit.setDisabled(true);
+            cmbTimeUnit.setVisible(true);
+            cmbTimeUnit.setDisabled(false);
+            txtAmount.setFieldLabel('Amount');
+        }
+
+        if(new_value == 'days_to_use'){
+            cmbDataUnit.setVisible(false);
+            cmbDataUnit.setDisabled(true);
+            cmbTimeUnit.setVisible(false);
+            cmbTimeUnit.setDisabled(true);
+            txtAmount.setFieldLabel('Days');
+        }
     }
 });
