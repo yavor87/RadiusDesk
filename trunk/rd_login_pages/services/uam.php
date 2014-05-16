@@ -1,4 +1,4 @@
-<?
+<?php
     $uamsecret = 'greatsecret';                         //Shared secret between chilli and uam json service
 
 
