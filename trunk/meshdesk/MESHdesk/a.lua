@@ -12,6 +12,8 @@ require "socket"
 require("rdLogger")
 --External programs object
 require("rdExternal")
+--Configure object
+require("rdConfig")
 
 
 
@@ -147,9 +149,9 @@ function try_settings_through_lan()
 	
 	-- See if we can ping it
 	local server = fetch_config_value('meshdesk.internet1.ip')
-	local c = require("rdConfig")
+	local c = rdConfig()
 	local lan_config_fail=true                                          
-	if(c.pingTest(server))then
+	if(c:pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
 		log("Ping os server was OK try to fetch the settings")
 --		local id	= "A8-40-41-13-60-E3"
@@ -158,7 +160,7 @@ function try_settings_through_lan()
 		local url   	= fetch_config_value('meshdesk.internet1.url')
 		local query     = proto .. "://" .. server .. "/" .. url 
 		print("Query url is " .. query )
-		if(c.fetchSettings(query,id,true))then
+		if(c:fetchSettings(query,id,true))then
 			print("Cool, settings gekry")
 			lan_config_fail=false
 		end
@@ -234,9 +236,9 @@ function try_settings_through_wifi()
 	
 	-- See if we can ping it
 	local server = fetch_config_value('meshdesk.internet1.ip')
-	local c = require("rdConfig")
+	local c = rdConfig()
 	local wifi_config_fail=true                                          
-	if(c.pingTest(server))then
+	if(c:pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
 		log("Ping os server was OK try to fetch the settings")
 --		local id	="A8-40-41-13-60-E3"
@@ -245,7 +247,7 @@ function try_settings_through_wifi()
 		local url   	= fetch_config_value('meshdesk.internet1.url')
 		local query     = proto .. "://" .. server .. "/" .. url 
 		print("Query url is " .. query )
-		if(c.fetchSettings(query,id,false))then
+		if(c:fetchSettings(query,id,false))then
 			print("Cool, settings gekry")
 			wifi_config_fail=false
 		end
