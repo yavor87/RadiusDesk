@@ -1115,7 +1115,18 @@ class PermanentUsersController extends AppController {
         // id; group_id; password; token should be empty ('')
         $success = false;
 
-        if(isset($this->request->data['user_id'])){
+        if(
+            (isset($this->request->data['user_id']))||
+            (isset($this->request->data['username'])) //Can also change by specifying username
+            ){
+
+            //If we got the username; we will have to fetch the ID
+            if(isset($this->request->data['username'])){
+                $q_un = $this->{$this->modelClass}->findByUsername($this->request->data['username']);
+                if($q_un){
+                    $this->request->data['user_id'] = $q_un['User']['id'];
+                }
+            }
 
             $d           = array();
             //We need to give the group_id to trigger the radcheck modifications.
