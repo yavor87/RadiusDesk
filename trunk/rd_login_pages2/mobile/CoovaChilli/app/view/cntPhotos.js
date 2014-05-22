@@ -5,7 +5,8 @@ Ext.define('CoovaChilli.view.cntPhotos', {
         'Ext.XTemplate',
         'Ext.dataview.DataView',
         'Ext.data.Store',
-        'Ext.carousel.Carousel'
+        'Ext.carousel.Carousel',
+        'Ext.XTemplate'
     ],
     config: {
         layout  : 'vbox',
@@ -16,6 +17,20 @@ Ext.define('CoovaChilli.view.cntPhotos', {
         var me          = this;
         var carousel    = Ext.create('Ext.Carousel', {itemId: 'crslPhoto',flex: 1 });
         var scaler_url  = CoovaChilli.config.Config.getUrlScaler();
+
+        var bigTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="rdCenter">',
+                    '<h2>{title}</h2>',
+                    '<span class="rdDescription">{description}</span>',
+                    '<tpl if="Ext.isEmpty(url)">', //If the url is not empty add the link
+                        '<div></div>',
+                    '<tpl else>',
+                        '<div><a href="{url}" target="_blank">{url}</a></div>',
+                    '</tpl>',
+                '</div>',
+            '</tpl>'
+        );
         
         Ext.Array.forEach(config.jsonData.photos,function(item,index,allItems){
             carousel.add(Ext.create('Ext.Panel', 
@@ -31,8 +46,9 @@ Ext.define('CoovaChilli.view.cntPhotos', {
                                 { xtype     : 'spacer', flex: 1 },
                                 {
                                     xtype   : 'label',
-                                    data    : {'title': item.title, 'msg' :item.description},
-                                    tpl     : '<div class="rdCenter"><h2>{title}</h2><span class="rdDescription">{msg}</span></div>'
+                                    data    : {'title': item.title, 'description' :item.description,'url': item.url},
+                                   // tpl     : '<div class="rdCenter"><h2>{title}</h2><span class="rdDescription">{msg}</span></div>'
+                                    tpl     : bigTpl
                                 },
                                 { xtype     : 'spacer', flex: 1 }
                             ]
