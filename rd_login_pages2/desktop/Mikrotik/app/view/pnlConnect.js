@@ -8,7 +8,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
 
         var me = this;
         var t_c_hidden = true;
-        if(me.jsonData.detail.t_c_check == true){
+        if(me.jsonData.settings.t_c_check == true){
             t_c_hidden = false;
         } 
         console.log(me.jsonData.detail.t_c_check);
@@ -58,7 +58,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
                         fieldLabel  : 'Terms & Conditions',
                         labelStyle  : 'font-weight: bold; color: blue; font-size:120%;',
                         fieldStyle  : 'color: #888282; font-style:italic; font-size:120%;',
-                        value       : "<a href='"+me.jsonData.detail.t_c_url+"' target='_blank'>"+me.jsonData.detail.t_c_url+"</a>",
+                        value       : "<a href='"+me.jsonData.settings.t_c_url+"' target='_blank'>"+me.jsonData.settings.t_c_url+"</a>",
                         hidden      : t_c_hidden
                     },
                     {
