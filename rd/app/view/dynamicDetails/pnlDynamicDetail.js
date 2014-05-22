@@ -35,7 +35,20 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
                 itemId  : 'tabPairs',
                 xtype   : 'gridDynamicDetailPairs',
                 dynamic_detail_id : me.dynamic_detail_id
+            },
+            { 
+                title   : 'Settings',
+                itemId  : 'tabSettings',
+                xtype   : 'pnlDynamicDetailSettings',
+                dynamic_detail_id : me.dynamic_detail_id
+            },
+            { 
+                title   : 'Click to connect',
+                itemId  : 'tabClickToConect',
+                xtype   : 'pnlDynamicDetailClickToConnect',
+                dynamic_detail_id : me.dynamic_detail_id
             }
+
         ]; 
         me.callParent(arguments);
     }

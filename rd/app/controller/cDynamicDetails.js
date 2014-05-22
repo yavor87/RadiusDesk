@@ -52,7 +52,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
-        'dynamicDetails.winPairEdit'          
+        'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect'        
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
     models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair'],
@@ -60,6 +60,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
         urlEdit:            '/cake2/rd_cake/dynamic_details/edit.json',
+        urlEditSettings:    '/cake2/rd_cake/dynamic_details/edit_settings.json',
+        urlEditClickToConnect:    '/cake2/rd_cake/dynamic_details/edit_click_to_connect.json',
         urlDelete:          '/cake2/rd_cake/dynamic_details/delete.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv:       '/cake2/rd_cake/dynamic_details/export_csv',
@@ -128,7 +130,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 click:  me.addSubmit
             },
             'pnlDynamicDetail pnlDynamicDetailDetail #save' : {
-                click:  me.editSubmit
+                click:  function(b){
+                    var me = this;
+                    me.editSubmit(b,me.urlEdit);
+                }
             },
             '#dynamicDetailsWin':   {
                 afterrender: me.onStoreDynamicDetailsLoaded //Prime it initially
@@ -161,8 +166,17 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 beforerender:   me.tabDetailActivate,
                 activate:       me.tabDetailActivate
             },
-            'pnlDynamicDetail #tabDetail #chkTc' : {
+            'pnlDynamicDetail #tabSettings #chkTc' : {
                 change:  me.chkTcChange
+            },
+            'pnlDynamicDetail #tabSettings #chkRedirect' : {
+                change:  me.chkRedirectChange
+            },
+            'pnlDynamicDetail #tabSettings #chkSlideshow' : {
+                change:  me.chkSlideshowChange
+            },
+            'pnlDynamicDetail #tabClickToConect #chkClickToConnect' : {
+                change:  me.chkClickToConnectChange
             },
             'pnlDynamicDetail #tabLogo': {
                 activate:       me.tabLogoActivate
@@ -241,7 +255,25 @@ Ext.define('Rd.controller.cDynamicDetails', {
             },
             'winPairEdit #save': {
                 click:      me.pairEditSave
-            }      
+            },
+            'pnlDynamicDetail #tabSettings': {
+                activate:       me.tabDetailActivate
+            },
+            'pnlDynamicDetail #tabClickToConect': {
+                activate:       me.tabDetailActivate
+            },
+            'pnlDynamicDetail pnlDynamicDetailSettings #save' : {
+                click:  function(b){
+                    var me = this;
+                    me.editSubmit(b,me.urlEditSettings);
+                }
+            },
+            'pnlDynamicDetail pnlDynamicDetailClickToConnect #save' : {
+                click:  function(b){
+                    var me = this;
+                    me.editSubmit(b,me.urlEditClickToConnect);
+                }
+            }    
         });
     },
     reload: function(){
@@ -375,6 +407,48 @@ Ext.define('Rd.controller.cDynamicDetails', {
             url.setDisabled(true);
         }
     },
+    chkRedirectChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var url     = form.down('#txtRedirectUrl');
+        var value   = chk.getValue();
+        if(value){
+            url.setDisabled(false);                
+        }else{
+            url.setDisabled(true);
+        }
+    },
+    chkSlideshowChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var nr      = form.down('#nrSecondsPerSlide');
+        var value   = chk.getValue();
+        if(value){
+            nr.setDisabled(false);                
+        }else{
+            nr.setDisabled(true);
+        }
+    },
+    chkClickToConnectChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var un      = form.down('#txtConnectUsername');
+        var sx      = form.down('#txtConnectSuffix');
+        var cd      = form.down('#nrConnectDelay');
+        var co      = form.down('#chkConnectOnly');
+        var value   = chk.getValue();
+        if(value){
+            un.setDisabled(false);
+            sx.setDisabled(false);
+            cd.setDisabled(false);
+            co.setDisabled(false);                
+        }else{
+            un.setDisabled(true);
+            sx.setDisabled(true);
+            cd.setDisabled(true);
+            co.setDisabled(true);
+        }
+    },
     del:   function(button){
         var me      = this;     
         //Find out if there was something selected
@@ -458,12 +532,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
             tp.setActiveTab(tab_id); //Set focus on Add Tab
         }
     },
-    editSubmit: function(button){
+    editSubmit: function(button,url){
         var me      = this;
         var form    = button.up('form');
         form.submit({
             clientValidation: true,
-            url: me.urlEdit,
+            url: url,
             success: function(form, action) {
                 me.getStore('sDynamicDetails').load();
                 Ext.ux.Toaster.msg(
