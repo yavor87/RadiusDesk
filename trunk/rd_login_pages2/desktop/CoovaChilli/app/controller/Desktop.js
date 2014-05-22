@@ -12,7 +12,8 @@ Ext.define('CoovaChilli.controller.Desktop', {
         { ref: 'connect',   selector: 'pnlConnect',     xtype: '' },     //Connect panel
         { ref: 'status',    selector: 'pnlStatus',      xtype: '' },     //Status panel (mutually exclusive with connect panel)
         { ref: 'notHotspot',selector: 'pnlNotHotspot',  xtype: '' },      //Not a hotspot panel
-        { ref: 'frmPayU',   selector: '#frmPayU',       xtype: '' }      //Not a hotspot panel
+        { ref: 'frmPayU',   selector: '#frmPayU',       xtype: '' },      //Not a hotspot panel
+        { ref: 'datThumb',  selector: '#datThumb',      xtype: '' }      //Thumb view
     ],
    
 
@@ -35,14 +36,16 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     queryObj        : undefined,
 
+    currentSlide    : 0,
+
     //--- 
 
     //Payment gateway
-    paymentGw       : true,
-    //paymentGw       : false,
+    //paymentGw       : true,
+    paymentGw       : false,
    // paymentGwType   : 'pnlPayPal',
-    //paymentGwType   : 'pnlPayAd',
-    paymentGwType   : 'pnlPayU',
+    paymentGwType   : 'pnlPayAd',
+    //paymentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -105,8 +108,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var file_name   = record.get('file_name');
         var title       = record.get('title');
         var description = record.get('description');
+        var url         = record.get('url');
         img.setSrc(file_name);
-        ph.update({title: title, description: description});
+        ph.update({title: title, description: description,url: url});
     },
     buyVoucher:     function(button){
         var me = this;
@@ -190,6 +194,15 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
+        
+        //Check if we need to start a slideshow
+        me.checkForSlideshow(data);
+
+        //Test the redirect after login thing
+        if(data.settings.redirect_check == true){
+            me.application.config.noStatus == true
+        }
+        me.application.config.redirectTo = data.settings.redirect_url;
 
     },
     realmNotFound:  function(){
@@ -208,7 +221,6 @@ Ext.define('CoovaChilli.controller.Desktop', {
         }));
 
     },
-
     checkPaymentGwReturn: function(){
         var me = this;
 
@@ -289,6 +301,23 @@ Ext.define('CoovaChilli.controller.Desktop', {
             }
         }
 
+    },
+    checkForSlideshow: function(data){
+        var me = this;
+        if(data.settings.slideshow_check == true){
+            me.slideShow = setInterval(function(){        
+                console.log("Change Slide");
+                var dv          = me.getDatThumb();
+                var count       = dv.store.getCount();
+                me.currentSlide = me.currentSlide +1;
+                if(me.currentSlide >= count){
+                    me.currentSlide =0 //Start again
+                }
+                var record = dv.store.getAt(me.currentSlide);
+                dv.getSelectionModel().select(record);
+                me.thumbSelected(dv,record)
+            },  (data.settings.seconds_per_slide * 1000));
+        }
     },
     onBtnPwdForgetClick: function(){
         var me = this;

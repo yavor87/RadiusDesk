@@ -27,7 +27,7 @@ Ext.define('CoovaChilli.view.pnlPhotos', {
             bodyStyle   :{"background-color":"#2a2a2a"},
             emptyText   : 'No images available',
             store: {
-                fields  : ['id', 'title', 'description','file_name'],
+                fields  : ['id', 'title', 'description','file_name','url'],
                 data    : me.jsonData.photos
             },
             tpl         : imageTpl,
@@ -41,6 +41,7 @@ Ext.define('CoovaChilli.view.pnlPhotos', {
         var title       = me.jsonData.photos[0].title;
         var description = me.jsonData.photos[0].description;
         var file_name   = me.jsonData.photos[0].file_name;
+        var url         = me.jsonData.photos[0].url;
 
         var image = Ext.create('Ext.Img', {
             src     : file_name,
@@ -65,14 +66,28 @@ Ext.define('CoovaChilli.view.pnlPhotos', {
                 }
             }
         });
+
+        var bigTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="rdCenter">',
+                    '<h2>{title}</h2>',
+                    '<div class="rdDescription">{description}</div>',
+                    '<tpl if="Ext.isEmpty(url)">', //If the url is not empty add the link
+                        '<div></div>',
+                    '<tpl else>',
+                        '<div><a href="{url}" target="_blank">{url}</a></div>',
+                    '</tpl>',
+                '</div>',
+            '</tpl>'
+        );
    
 
         me.items = [
             {
                 xtype   : 'panel',
                 itemId  : 'pnlPhotoHeading',
-                data    : {title: title, description :description, file_name:file_name},
-                tpl     : '<div class="rdCenter"><h2>{title}</h2><div class="rdDescription">{description}</div></div>'
+                data    : {title: title, description :description, file_name:file_name,url:url},
+                tpl     : bigTpl
             },
             image,
             thumb  
