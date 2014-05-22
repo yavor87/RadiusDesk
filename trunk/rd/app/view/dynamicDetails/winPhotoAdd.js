@@ -5,7 +5,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
     layout: 'fit',
     autoShow: false,
     width:    400,
-    height:   300,
+    height:   400,
     iconCls: 'add',
     glyph: Rd.config.icnAdd,
     dynamic_detail_id: undefined,
@@ -42,6 +42,13 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
                 anchor      : '100%',
                 labelClsExtra: 'lblRdReq',
                 allowBlank  : false
+            },
+            {
+                xtype       : 'textfield',
+                fieldLabel  : 'URL',
+                name        : 'url',
+                labelClsExtra: 'lblRd',
+                vtype       : 'url'
             },
             {
                 xtype: 'filefield',

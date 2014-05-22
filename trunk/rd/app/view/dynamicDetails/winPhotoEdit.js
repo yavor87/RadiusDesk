@@ -5,7 +5,7 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
     layout: 'fit',
     autoShow: false,
     width:    400,
-    height:   300,
+    height:   400,
     iconCls: 'edit',
     glyph: Rd.config.icnEdit,
     dynamic_detail_id: undefined,
@@ -47,6 +47,13 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                 anchor      : '100%',
                 labelClsExtra: 'lblRdReq',
                 allowBlank  : false
+            },
+            {
+                xtype       : 'textfield',
+                fieldLabel  : 'URL',
+                name        : 'url',
+                labelClsExtra: 'lblRd',
+                vtype       : 'url' 
             },
             {
                 xtype: 'filefield',

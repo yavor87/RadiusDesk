@@ -22,6 +22,11 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                         '<div><h1>{title}</h1></div>',
                             '<img src="{img}" />',
                         '<div class="description">{description}</div>',
+                        '<tpl if="Ext.isEmpty(url)">', //If the url is not empty add the link
+                            '<div></div>',
+                        '<tpl else>',
+                            '<div><a href="{url}" target="_blank">{url}</a></div>',
+                        '</tpl>',
                     '</div>',
                 '</div>',
             '</tpl>'

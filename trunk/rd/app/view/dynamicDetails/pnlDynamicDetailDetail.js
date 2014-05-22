@@ -182,36 +182,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailDetail', {
                                         labelClsExtra: 'lblRd'
                                     }
                                 ]
-                            },
-                            { 
-                            'title'     : i18n('sT_and_C'),
-                            'layout'    : 'anchor',
-                            itemId      : 'tabTc',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            autoScroll:true,
-                            items       : [         
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sCompulsory'),
-                                    itemId      : 'chkTc',
-                                    name        : 't_c_check',
-                                    inputValue  : 't_c_check',
-                                    checked     : false,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sURL'),
-                                    itemId      : 'txtTcUrl',
-                                    name        : "t_c_url",
-                                    disabled    : true,
-                                    allowBlank  : false,
-                                    margin      : 15
-                                }   
-                            ]
-                        }
+                            }
                         ]
                     }
                 ],
