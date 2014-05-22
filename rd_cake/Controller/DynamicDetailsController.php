@@ -68,8 +68,18 @@ class DynamicDetailsController extends AppController {
             $items['detail']['country']         = $q_r['DynamicDetail']['country'];
             $items['detail']['lon']             = $q_r['DynamicDetail']['lon'];
             $items['detail']['lat']             = $q_r['DynamicDetail']['lat'];
-            $items['detail']['t_c_check']       = $q_r['DynamicDetail']['t_c_check'];
-            $items['detail']['t_c_url']         = $q_r['DynamicDetail']['t_c_url'];
+
+            $items['settings']['t_c_check']         = $q_r['DynamicDetail']['t_c_check'];
+            $items['settings']['t_c_url']           = $q_r['DynamicDetail']['t_c_url'];
+            $items['settings']['redirect_check']    = $q_r['DynamicDetail']['redirect_check'];
+            $items['settings']['redirect_url']      = $q_r['DynamicDetail']['redirect_url'];
+            $items['settings']['slideshow_check']   = $q_r['DynamicDetail']['slideshow_check'];
+            $items['settings']['seconds_per_slide'] = $q_r['DynamicDetail']['seconds_per_slide'];
+            $items['settings']['connect_check']     = $q_r['DynamicDetail']['connect_check'];
+            $items['settings']['connect_username']  = $q_r['DynamicDetail']['connect_username'];
+            $items['settings']['connect_suffix']    = $q_r['DynamicDetail']['connect_suffix'];
+            $items['settings']['connect_delay']     = $q_r['DynamicDetail']['connect_delay'];
+            $items['settings']['connect_only']      = $q_r['DynamicDetail']['connect_only'];
         }
 
         $success = true;
