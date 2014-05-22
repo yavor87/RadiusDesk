@@ -405,13 +405,6 @@ class DynamicDetailsController extends AppController {
             $this->request->data['available_to_siblings'] = 0;
         }
 
-        //T & C compulsory check
-        if(isset($this->request->data['t_c_check'])){
-            $this->request->data['t_c_check'] = 1;
-        }else{
-            $this->request->data['t_c_check'] = 0;
-        }
-
 		if ($this->DynamicDetail->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -425,6 +418,83 @@ class DynamicDetailsController extends AppController {
 
         }
 	}
+
+    public function edit_settings(){
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+        //We will not modify user_id
+        unset($this->request->data['user_id']);
+
+        //T & C compulsory check
+        if(isset($this->request->data['t_c_check'])){
+            $this->request->data['t_c_check'] = 1;
+        }else{
+            $this->request->data['t_c_check'] = 0;
+        }
+
+        //redirect_check compulsory check
+        if(isset($this->request->data['redirect_check'])){
+            $this->request->data['redirect_check'] = 1;
+        }else{
+            $this->request->data['redirect_check'] = 0;
+        }
+
+        //slideshow_check compulsory check
+        if(isset($this->request->data['slideshow_check'])){
+            $this->request->data['slideshow_check'] = 1;
+        }else{
+            $this->request->data['slideshow_check'] = 0;
+        }
+
+        if ($this->DynamicDetail->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'success' => false,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
+    public function edit_click_to_connect(){
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+        //We will not modify user_id
+        unset($this->request->data['user_id']);
+
+        //connect_check compulsory check
+        if(isset($this->request->data['connect_check'])){
+            $this->request->data['connect_check'] = 1;
+        }else{
+            $this->request->data['connect_check'] = 0;
+        }
+
+        //connect_only compulsory check
+        if(isset($this->request->data['connect_only'])){
+            $this->request->data['connect_only'] = 1;
+        }else{
+            $this->request->data['connect_only'] = 0;
+        }
+
+        if ($this->DynamicDetail->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'success' => false,
+                '_serialize' => array('success')
+            ));
+        }
+    }
 
 
     public function delete($id = null) {
@@ -514,6 +584,15 @@ class DynamicDetailsController extends AppController {
                 $items['lon']                       = $q_r['DynamicDetail']['lon'];
                 $items['t_c_check']                 = $q_r['DynamicDetail']['t_c_check'];
                 $items['t_c_url']                   = $q_r['DynamicDetail']['t_c_url'];
+                $items['redirect_check']            = $q_r['DynamicDetail']['redirect_check'];
+                $items['redirect_url']              = $q_r['DynamicDetail']['redirect_url'];
+                $items['slideshow_check']           = $q_r['DynamicDetail']['slideshow_check'];
+                $items['seconds_per_slide']         = $q_r['DynamicDetail']['seconds_per_slide'];
+                $items['connect_check']             = $q_r['DynamicDetail']['connect_check'];
+                $items['connect_username']          = $q_r['DynamicDetail']['connect_username'];
+                $items['connect_suffix']            = $q_r['DynamicDetail']['connect_suffix'];
+                $items['connect_delay']             = $q_r['DynamicDetail']['connect_delay'];
+                $items['connect_only']              = $q_r['DynamicDetail']['connect_only'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
@@ -580,6 +659,7 @@ class DynamicDetailsController extends AppController {
                 $dd_id  = $i['DynamicPhoto']['dynamic_detail_id'];
                 $t      = $i['DynamicPhoto']['title'];
                 $d      = $i['DynamicPhoto']['description'];
+                $u      = $i['DynamicPhoto']['url'];
                 $f      = $i['DynamicPhoto']['file_name'];
                 $location = Configure::read('paths.dynamic_photos').$f;
                 array_push($items,
@@ -587,7 +667,8 @@ class DynamicDetailsController extends AppController {
                         'id'                => $id, 
                         'dynamic_detail_id' => $dd_id, 
                         'title'             => $t, 
-                        'description'       => $d, 
+                        'description'       => $d,
+                        'url'               => $u, 
                         'file_name'         => $f,
                         'img'               => "/cake2/rd_cake/webroot/files/image.php?width=200&height=200&image=".$location
                     )
@@ -620,6 +701,7 @@ class DynamicDetailsController extends AppController {
         $data['dynamic_detail_id']  = $this->request->data['dynamic_detail_id'];
         $data['title']              = $this->request->data['title'];
         $data['description']        = $this->request->data['description'];
+        $data['url']                = $this->request->data['url'];
 
         $this->{$this->modelClass}->DynamicPhoto->create();
 
@@ -686,6 +768,7 @@ class DynamicDetailsController extends AppController {
         $this->{$this->modelClass}->DynamicPhoto->id = $this->request->data['id'];
         $this->{$this->modelClass}->DynamicPhoto->saveField('title',        $this->request->data['title']);
         $this->{$this->modelClass}->DynamicPhoto->saveField('description',  $this->request->data['description']);
+        $this->{$this->modelClass}->DynamicPhoto->saveField('url',          $this->request->data['url']);
 
         if($_FILES['photo']['size'] > 0){
             $q_r        = $this->{$this->modelClass}->DynamicPhoto->findById($this->request->data['id']);
