@@ -11,6 +11,7 @@ Ext.define('CoovaChilli.controller.cMain', {
             cntPhotos       : '#cntPhotos',
             cntShop         : '#cntShop',
             tabMain         : '#tabMain',
+            datThumb        : '#datThumb'
           //  frmPayU         : '#frmPayU'
         },
         control: {
@@ -71,6 +72,8 @@ Ext.define('CoovaChilli.controller.cMain', {
     thumbPhoto  : undefined,
 
     queryObj    : undefined,
+
+    currentSlide : 0,
 
     frmPayUExist        : false,
     sPayUPricesLoaded   : false,
@@ -176,6 +179,15 @@ Ext.define('CoovaChilli.controller.cMain', {
 
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
+
+        //Check if we need to start a slideshow
+        me.checkForSlideshow(jsonData);
+
+        //Test the redirect after login thing
+        if(jsonData.settings.redirect_check == true){
+            CoovaChilli.config.Config.setNoStatus(true);
+        }
+        CoovaChilli.config.Config.setRedirectTo(jsonData.settings.redirect_url);
 
     },
     testForHotspot: function(){
@@ -291,9 +303,31 @@ Ext.define('CoovaChilli.controller.cMain', {
                 });
             }
         }
+    },
+    checkForSlideshow: function(data){
+        var me = this;
+        if(data.settings.slideshow_check == true){
 
+            me.getTabMain().setActiveItem('#cntPhotos'); //Show the slideshow
 
+            me.slideShow = setInterval(function(){        
+                console.log("Change Slide");
+                var dv          = me.getDatThumb()
+                var count       = dv.getStore().getCount();
+                me.currentSlide = me.currentSlide +1;
+                if(me.currentSlide >= count){
+                    me.currentSlide =0 //Start again
+                }
+                var record = dv.getStore().getAt(me.currentSlide);
+                dv.select(record);
 
+                var id          = record.getId();
+                me.thumbPhoto   = id;
+                var aa          = me.getCntPhotos().down('#'+id); 
+                me.getCntPhotos().down('#crslPhoto').setActiveItem(aa);
+
+            },  (data.settings.seconds_per_slide * 1000));
+        }
     },
 
     onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....

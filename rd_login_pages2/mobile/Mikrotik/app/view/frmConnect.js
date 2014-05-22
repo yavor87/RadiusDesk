@@ -15,7 +15,7 @@ Ext.define('Mikrotik.view.frmConnect', {
         var scaler_url = Mikrotik.config.Config.getUrlScaler();
 
          var t_c_hidden = true;
-        if(config.jsonData.detail.t_c_check == true){
+        if(config.jsonData.settings.t_c_check == true){
             t_c_hidden = false;
         } 
 
@@ -57,7 +57,7 @@ Ext.define('Mikrotik.view.frmConnect', {
                     {
                         itemId  : 'lblTC',
                         xtype   : 'label',
-                        html    : "<b>T&C:</b> <a href='"+config.jsonData.detail.t_c_url+"' target='_blank'>"+config.jsonData.detail.t_c_url+"</a>",
+                        html    : "<b>T&C:</b> <a href='"+config.jsonData.settings.t_c_url+"' target='_blank'>"+config.jsonData.settings.t_c_url+"</a>",
                         hidden  : t_c_hidden
                     },
                     {

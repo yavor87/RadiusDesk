@@ -12,13 +12,13 @@ Ext.define('CoovaChilli.config.Config', {
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
         jsonTimeout : 10000,
         //paymentGw   : true,
-        paymentGw   : true,
+        paymentGw   : false,
         //Payment gateway
         //paymentGwType: 'cntPayPal',
-        //paymentGwType: 'cntPayAd',
-        paymentGwType: 'frmPayU',
+        paymentGwType: 'cntPayAd',
+        //paymentGwType: 'frmPayU',
         urlPayPalVoucher : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
-        clickToConnect  : false,
+        clickToConnect  : true,
         clickUsername   : 'dvdwalt', //FIXME hard coded currently in the pnlConnect source from dynamic pages eventually
         clickPassword   : 'dvdwalt',
         urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
