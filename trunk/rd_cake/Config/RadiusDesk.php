@@ -75,11 +75,22 @@ $config['user_settings']['map']['lat']      = 42.3379770178396;
 
 //The location of the mobile and desktop login pages for CoovaChilli
 $config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/CoovaChilli/build/production/CoovaChilli/index.html';
+
 $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html';
+//$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/CoovaChilli/build/production/CoovaChilli/index.html';
 
 //The location of the mobile and desktop login pages for Mikrotik
 $config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/index.html';
+//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/Mikrotik/index.html';
+//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/Mikrotik/build/production/Mikrotik/index.html';
+
+
 $config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
+//$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/index.html';
+//$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/build/production/Mikrotik/index.html';
 
 
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
@@ -134,75 +145,38 @@ $config['payu']['vouchers']['a']['data_400m'] = array(
 );
 
 
-/*
-$config['financials']['vouchers']['a'][1] = array('id'=> 'data_400m',  'name' => '400MB',  'price' => '165.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][2] = array('id'=> 'data_500m',  'name' => '500MB',  'price' => '185.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][3] = array('id'=> 'data_800m',  'name' => '800MB',  'price' => '269.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][4] = array('id'=> 'data_1024m', 'name' => '1024MB', 'price' => '285.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][5] = array('id'=> 'data_1536m', 'name' => '1536MB', 'price' => '369.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][6] = array('id'=> 'data_2048m', 'name' => '2048MB', 'price' => '385.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][7] = array('id'=> 'data_2560m', 'name' => '2560MB', 'price' => '469.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][8] = array('id'=> 'data_3072m', 'name' => '3072MB', 'price' => '565.00','currency' => 'R', 'position' => 'pre');
-$config['financials']['vouchers']['a'][9] = array('id'=> 'data_5120m', 'name' => '5120MB', 'price' => '945.00','currency' => 'R', 'position' => 'pre');
-*/
-
 //From Paypal data 'item_name' (RDVoucher') 'item_number' (rd_v1) option_selection1 ('2Hours')
-
 $config['paypal']['RDVoucher']['rd_v1']['2Hours'] = array(
                                                         'activate_on_login' => '1',
                                                         'time_valid'        => '0-02-00-00',
-                                                        'expire'            => '05/31/2014',
+                                                        'expire'            => '06/31/2014',
                                                         'precede'           => '',
                                                         'profile_id'        => 7,
-                                                        'pwd_length'        => 3,
+                                                        'pwd_length'        => 5,
                                                         'realm_id'          => 34,
                                                         'sel_language'      => '4_4',
                                                         'user_id'           => '44'
                                                     ); 
 
-$config['paypal']['RDVoucher']['rd_v1']['8Hours'] = array(
+$config['paypal']['RDVoucher']['rd_v1']['4Hours'] = array(
                                                         'activate_on_login' => '1',
-                                                        'time_valid'        => '0-08-00-00',
-                                                        'expire'            => '05/31/2014',
+                                                        'time_valid'        => '0-04-00-00',
+                                                        'expire'            => '06/31/2014',
                                                         'precede'           => '',
                                                         'profile_id'        => 7,
-                                                        'pwd_length'        => 3,
+                                                        'pwd_length'        => 5,
                                                         'realm_id'          => 34,
                                                         'sel_language'      => '4_4',
                                                         'user_id'           => '44'
                                                     ); 
 
-$config['paypal']['RDVoucher']['rd_v1']['24Hours'] = array(
+$config['paypal']['RDVoucher']['rd_v1']['12Hours'] = array(
                                                         'activate_on_login' => '1',
-                                                        'time_valid'        => '0-24-00-00',
-                                                        'expire'            => '05/31/2014',
+                                                        'time_valid'        => '0-12-00-00',
+                                                        'expire'            => '06/31/2014',
                                                         'precede'           => '',
                                                         'profile_id'        => 7,
-                                                        'pwd_length'        => 3,
-                                                        'realm_id'          => 34,
-                                                        'sel_language'      => '4_4',
-                                                        'user_id'           => '44'
-                                                    );
-
-$config['paypal']['RDVoucher']['rd_v1']['72Hours'] = array(
-                                                        'activate_on_login' => '1',
-                                                        'time_valid'        => '3-00-00-00',
-                                                        'expire'            => '05/31/2014',
-                                                        'precede'           => '',
-                                                        'profile_id'        => 7,
-                                                        'pwd_length'        => 3,
-                                                        'realm_id'          => 34,
-                                                        'sel_language'      => '4_4',
-                                                        'user_id'           => '44'
-                                                    );
-
-$config['paypal']['RDVoucher']['rd_v1']['120Hours'] = array(
-                                                        'activate_on_login' => '1',
-                                                        'time_valid'        => '5-00-00-00',
-                                                        'expire'            => '05/31/2014',
-                                                        'precede'           => '',
-                                                        'profile_id'        => 7,
-                                                        'pwd_length'        => 3,
+                                                        'pwd_length'        => 5,
                                                         'realm_id'          => 34,
                                                         'sel_language'      => '4_4',
                                                         'user_id'           => '44'
