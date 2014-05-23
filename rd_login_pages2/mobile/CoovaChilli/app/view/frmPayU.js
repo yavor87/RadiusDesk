@@ -89,7 +89,7 @@ Ext.define('CoovaChilli.view.frmPayU', {
                    itemId   : 'mobile',
                    label    : 'Mobile',
                    required : true
-                },
+                }
             ]
             },
             {

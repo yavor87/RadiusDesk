@@ -23,15 +23,19 @@ Ext.Loader.addClassPathMappings({
 Ext.ClassManager.addNameAlternateMappings({
   "CoovaChilli.config.Config": [],
   "CoovaChilli.controller.cMain": [],
+  "CoovaChilli.model.mPrice": [],
+  "CoovaChilli.store.sPrices": [],
   "CoovaChilli.view.Main": [],
   "CoovaChilli.view.cntAbout": [],
   "CoovaChilli.view.cntNotHotspot": [],
   "CoovaChilli.view.cntNotPresent": [],
   "CoovaChilli.view.cntPayAd": [],
   "CoovaChilli.view.cntPayPal": [],
+  "CoovaChilli.view.cntPayU": [],
   "CoovaChilli.view.cntPhotos": [],
   "CoovaChilli.view.cntStatus": [],
   "CoovaChilli.view.frmConnect": [],
+  "CoovaChilli.view.frmPayU": [],
   "CoovaChilli.view.tabMain": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
@@ -761,6 +765,8 @@ Ext.ClassManager.addNameAlternateMappings({
 Ext.ClassManager.addNameAliasMappings({
   "CoovaChilli.config.Config": [],
   "CoovaChilli.controller.cMain": [],
+  "CoovaChilli.model.mPrice": [],
+  "CoovaChilli.store.sPrices": [],
   "CoovaChilli.view.Main": [
     "widget.main"
   ],
@@ -779,6 +785,9 @@ Ext.ClassManager.addNameAliasMappings({
   "CoovaChilli.view.cntPayPal": [
     "widget.cntPayPal"
   ],
+  "CoovaChilli.view.cntPayU": [
+    "widget.frmPayU"
+  ],
   "CoovaChilli.view.cntPhotos": [
     "widget.cntPhotos"
   ],
@@ -787,6 +796,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "CoovaChilli.view.frmConnect": [
     "widget.frmConnect"
+  ],
+  "CoovaChilli.view.frmPayU": [
+    "widget.frmPayU"
   ],
   "CoovaChilli.view.tabMain": [
     "widget.main"

@@ -40,7 +40,7 @@ Ext.application({
         jsonTimeout : 10000,
         urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
         urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
-        clickToConnect  : true,
+        clickToConnect  : false,
         clickUsername   : 'dvdwalt', //FIXME hard coded currently in the pnlConnect source from dynamic pages eventually
         clickPassword   : 'dvdwalt'
     },
