@@ -43,7 +43,7 @@ Ext.define('CoovaChilli.view.Land' ,{
            {       
                 height  : 75, 
                 layout  : {
-                    type    : 'fit',
+                    type    : 'fit'
                 }, 
                 xtype   : 'image', 
                 src     : 'resources/images/banner.png'
@@ -125,8 +125,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 title       : 'Online shop',
                                 glyph       : CoovaChilli.config.icnShop,
                                 itemId      : 'pnlShop',
-                              //  xtype       : 'pnlPayPal'
-                                xtype       : 'pnlPayAd'
+                                xtype       : 'pnlPayPal'
+                              //  xtype       : 'pnlPayAd'
                                 //xtype       : 'pnlPayU'
                             }
                         ]

@@ -41,10 +41,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //--- 
 
     //Payment gateway
-    //paymentGw       : true,
+    paymentGw       : true,
     paymentGw       : false,
-   // paymentGwType   : 'pnlPayPal',
-    paymentGwType   : 'pnlPayAd',
+    paymentGwType   : 'pnlPayPal',
+   // paymentGwType   : 'pnlPayAd',
     //paymentGwType   : 'pnlPayU',
 
     init: function() {
@@ -130,7 +130,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
                     ssid        : me.queryObj.ssid,
                     pathname    : window.location.pathname,
                     hostname    : window.location.hostname,
-                    protocol    : window.location.protocol,
+                    protocol    : window.location.protocol
                 }
             });
       
@@ -146,7 +146,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
                         ssid        : me.queryObj.ssid,
                         pathname    : window.location.pathname,
                         hostname    : window.location.hostname,
-                        protocol    : window.location.protocol,
+                        protocol    : window.location.protocol
                     }
                 });  
         }
