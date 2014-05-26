@@ -14,11 +14,18 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
         loadMask:true
     },
     urlMenu: '/cake2/rd_cake/vouchers/menu_for_grid.json',
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }  
-    ],
     initComponent: function(){
         var me      = this;
+        me.bbar     =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
+
+
         var filters = {
             ftype   : 'filters',
             encode  : true, 

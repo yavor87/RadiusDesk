@@ -81,8 +81,6 @@ Ext.define('Rd.controller.cVouchers', {
             return;
         }
         me.inited = true;
-
-        me.getStore('sVouchers').addListener('load',me.onStoreVouchersLoaded, me);
         me.control({
             '#vouchersWin'    : {
                 beforeshow  : me.winClose,
@@ -502,12 +500,6 @@ Ext.define('Rd.controller.cVouchers', {
             },
             failure             : Ext.ux.formFail
         });
-    },
-
-    onStoreVouchersLoaded: function() {
-        var me      = this;
-        var count   = me.getStore('sVouchers').getTotalCount();
-        me.getGrid().down('#count').update({count: count});
     },
     pdfExport: function(button){
         var me          = this;
