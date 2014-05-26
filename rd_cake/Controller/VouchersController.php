@@ -5,7 +5,7 @@ class VouchersController extends AppController {
 
     public $name       = 'Vouchers';
     public $components = array('Aa');
-    public $uses       = array('Voucher','User');
+    public $uses       = array('Voucher','User','Profile','Realm');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
     protected  $read_only_attributes = array(
@@ -152,7 +152,7 @@ class VouchersController extends AppController {
 
             $voucher_data = array();
 
-            $this->{$this->modelClass}->contain('Radcheck');
+            //$this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->find('all', array('conditions' => array('OR' => $sel_condition)));
             foreach($q_r as $i){
                 $v              = array();
@@ -195,7 +195,7 @@ class VouchersController extends AppController {
            
      
             $c          = $this->_build_common_query($user);
-            $this->{$this->modelClass}->contain('Radcheck');
+           // $this->{$this->modelClass}->contain('Radcheck');
             $q_r        = $this->{$this->modelClass}->find('all', $c);
 
             $voucher_data = array();
@@ -240,7 +240,6 @@ class VouchersController extends AppController {
         }
     }
 
-
     public function index(){
         //-- Required query attributes: token;
         //-- Optional query attribute: sel_language (for i18n error messages)
@@ -271,77 +270,44 @@ class VouchersController extends AppController {
         $c_page['limit']    = $limit;
         $c_page['offset']   = $offset;
 
-        $total  = $this->{$this->modelClass}->find('count'  , $c);  
-        $q_r    = $this->{$this->modelClass}->find('all'    , $c_page);
-
+        $total      = $this->{$this->modelClass}->find('count'  , $c);  
+        $q_r        = $this->{$this->modelClass}->find('all'    , $c_page);
         $items      = array();
-        $profiles   = array();
-        $realms     = array();
+        $af_hash    = array();
 
-        foreach($q_r as $i){
+        foreach($q_r as $i){            
+            $owner_id   = $i['Voucher']['user_id'];
 
-            //Find the realm and profile names
-            $realm      = 'not defined';
-            $profile    = 'not defined';
-            $password   = 'not defined';
-
-            foreach($i['Radcheck'] as $rc){
-                if($rc['attribute'] == 'User-Profile'){
-                    $profile = $rc['value'];
-                    if(!array_key_exists($profile,$profiles)){
-                        $p = ClassRegistry::init('Profile');
-                        $p->contain();
-                        $q_r = $p->findByName($profile);
-                        $profiles[$profile] = $q_r['Profile']['id'];
-                    }
-                }
-                if($rc['attribute'] == 'Rd-Realm'){
-                    $realm = $rc['value'];
-                    if(!array_key_exists($realm,$realms)){
-                        $r = ClassRegistry::init('Realm');
-                        $r->contain();
-                        $q_r = $r->findByName($realm);
-                        $realms[$realm] = $q_r['Realm']['id'];
-                    }
-                }
-                if($rc['attribute'] == 'Cleartext-Password'){
-                    $password = $rc['value'];
-                }
+            if(!array_key_exists($owner_id,$af_hash)){ //Avoid duplicate queries
+                $af_hash["$owner_id"] = $this->_get_action_flags($user,$owner_id,$i['Voucher']['realm_id']);
             }
-            $action_flags = array();
-            $action_flags['update'] = false;
-            $action_flags['delete'] = false;
-
-            if($realm != 'not defined'){
-                $owner_id       = $i['Voucher']['user_id'];
-                $q_r            = $this->User = ClassRegistry::init('Realm')->findByName($realm);
-                $action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
-            }
-
+           
             array_push($items,
                 array(
-                    'id'            => $i['Voucher']['id'], 
-                    'owner'         => $i['User']['username'],
-                    'user_id'       => $i['User']['id'],
-                    'batch'         => $i['Voucher']['batch'],
-                    'name'          => $i['Voucher']['name'],
-                    'password'      => $password,
-                    'realm'         => $realm,
-                    'realm_id'      => $realms[$realm],
-                    'profile'       => $profile,
-                    'profile_id'    => $profiles[$profile],
-                    'perc_time_used'=> $i['Voucher']['perc_time_used'],
-                    'perc_data_used'=> $i['Voucher']['perc_data_used'],
-                    'status'        => $i['Voucher']['status'],
+                    'id'                    => $i['Voucher']['id'], 
+                    'owner'                 => $i['User']['username'],
+                    'user_id'               => $i['User']['id'],
+                    'batch'                 => $i['Voucher']['batch'],
+                    'name'                  => $i['Voucher']['name'],
+                    'password'              => $i['Voucher']['password'],
+                    'realm'                 => $i['Voucher']['realm'],
+                    'realm_id'              => $i['Voucher']['realm_id'],
+                    'profile'               => $i['Voucher']['profile'],
+                    'profile_id'            => $i['Voucher']['profile_id'],
+                    'perc_time_used'        => $i['Voucher']['perc_time_used'],
+                    'perc_data_used'        => $i['Voucher']['perc_data_used'],
+                    'status'                => $i['Voucher']['status'],
                     'last_accept_time'      => $i['Voucher']['last_accept_time'],
                     'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
                     'last_reject_time'      => $i['Voucher']['last_reject_time'],
                     'last_reject_nas'       => $i['Voucher']['last_reject_nas'],
                     'last_reject_message'   => $i['Voucher']['last_reject_message'],
-                    'update'                => $action_flags['update'],
-                    'delete'                => $action_flags['delete'],
+                    'update'                => $af_hash["$owner_id"]['update'],
+                    'delete'                => $af_hash["$owner_id"]['delete'],
                     'extra_name'            => $i['Voucher']['extra_name'],
-                    'extra_value'           => $i['Voucher']['extra_value']
+                    'extra_value'           => $i['Voucher']['extra_value'],
+                    'expire'                => $i['Voucher']['expire'],
+                    'time_valid'            => $i['Voucher']['time_valid']
                 )
             );
         }
@@ -363,7 +329,7 @@ class VouchersController extends AppController {
         $user_id    = $user['id'];
 
         //Get the owner's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
    
@@ -376,6 +342,66 @@ class VouchersController extends AppController {
             $this->request->data['never_expire'] = 1;
         }
         //____ END OF TWO FIELD CHECK ___
+    
+        //_____We need the profile name / if and the realm name / id before we can continue___
+        $profile    = false;
+        $profile_id = false;
+        if(array_key_exists('profile',$this->request->data)){
+            $profile    = $this->request->data['profile'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findByName($profile);
+            $profile_id = $q_r['Profile']['id'];
+            $this->request->data['profile_id'] = $profile_id;   
+        }
+
+        if(array_key_exists('profile_id',$this->request->data)){
+            $profile_id = $this->request->data['profile_id'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findById($profile_id);
+            $profile    = $q_r['Profile']['name'];
+            $this->request->data['profile'] = $profile;    
+        }
+
+        if(($profile == false)||($profile_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $realm      = false;
+        $realm_id   = false;
+        if(array_key_exists('realm',$this->request->data)){
+            $realm      = $this->request->data['realm'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findByName($realm);
+            $realm_id   = $q_r['Realm']['id']; 
+            $this->request->data['realm_id'] = $realm_id;  
+        }
+
+        if(array_key_exists('realm_id',$this->request->data)){
+            $realm_id   = $this->request->data['realm_id'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findById($realm_id);
+            $realm      = $q_r['Realm']['name'];
+            $this->request->data['realm'] = $realm;    
+        }
+
+        if(($realm == false)||($realm_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        //______ END of Realm and Profile check _____
+
+
 
         //The rest of the attributes should be same as the form.
 
@@ -401,9 +427,11 @@ class VouchersController extends AppController {
             }
 
             //The loop completed fine
+            $data = $this->{$this->modelClass}->CreatedVouchers;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'    => $data,
+                '_serialize' => array('success','data')
             ));
         }  
     }
@@ -419,8 +447,13 @@ class VouchersController extends AppController {
             return;
         }
 
-        $user_id    = $user['id'];
-        $fail_flag = false;
+        $user_id            = $user['id'];
+        $fail_flag          = false;
+        $this->Radcheck     = ClassRegistry::init('Radcheck');
+        $this->Radreply     = ClassRegistry::init('Radreply');
+        $this->Radacct      = ClassRegistry::init('Radacct');
+        $this->Radpostauth  = ClassRegistry::init('Radpostauth');
+
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
@@ -495,74 +528,36 @@ class VouchersController extends AppController {
 
         //TODO Check if the owner of this voucher is in the chain of the APs
         if(isset($this->request->query['voucher_id'])){
-
-            $profile        = false;
-            $realm          = false;
-            $activate       = false;
-            $always_active  = true;
-            $expire         = false;
-
-            $this->{$this->modelClass}->contain('Radcheck');
-            $q_r = $this->{$this->modelClass}->findById($this->request->query['voucher_id']);
-
-            $extra_name     = $q_r['Voucher']['extra_name'];
-            $extra_value    = $q_r['Voucher']['extra_value'];
-
-            foreach($q_r['Radcheck'] as $rc){
-
-                if($rc['attribute'] == 'Rd-Realm'){
-                  $realm =  $rc['value'];
-                }
-
-                if($rc['attribute'] == 'User-Profile'){
-                  $profile =  $rc['value'];
-                }
-
-                if($rc['attribute'] == 'Expiration'){
-                  $expire =  $rc['value'];
-                }
-
-                if($rc['attribute'] == 'Rd-Voucher'){
-                    $activate = $rc['value'];
-                }
-
-                if($rc['attribute'] == 'Expiration'){
-                  $expire =  $rc['value'];
-                }
-            }
         
-            //Now we do the rest....
-            if($profile){
-                $q_r = $this->User = ClassRegistry::init('Profile')->findByName($profile);
-                $items['profile_id'] = intval($q_r['Profile']['id']);
-            }
+            $this->{$this->modelClass}->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['voucher_id']);
+            if($q_r){
+                //"profile_id":7,"realm_id":34,"activate_on_login":"activate_on_login","days_valid":"2","never_expire":false,"expire":"5\/31\/2015"}
+                $items['profile_id']    = intval($q_r['Voucher']['profile_id']);
+                $items['realm_id']      = intval($q_r['Voucher']['realm_id']);
+                $items['extra_name']    = $q_r['Voucher']['extra_name'];
+                $items['extra_value']   = $q_r['Voucher']['extra_value'];
 
-            if($realm){
-                $q_r = $this->User = ClassRegistry::init('Realm')->findByName($realm);
-                $items['realm_id'] = intval($q_r['Realm']['id']);
-            }
+                if($q_r['Voucher']['time_valid'] != ''){
+                    $items['activate_on_login'] = 'activate_on_login';
+                    $pieces                     = explode("-", $q_r['Voucher']['time_valid']);
+                    $items['days_valid']        = $pieces[0];  
+                    $items['hours_valid']       = $pieces[1];
+                    $items['minutes_valid']     = $pieces[2]; 
 
-            if($activate){
-                $items['activate_on_login'] = 'activate_on_login';
-                $pieces                     = explode("-", $activate);
-                $items['days_valid']        = $pieces[0];  
-                $items['hours_valid']       = $pieces[1];
-                $items['minutes_valid']     = $pieces[2]; 
-            }
+                }
 
-            if($expire){
-                $items['never_expire']  = false;
-                $items['expire']        = $this->_extjs_format_radius_date($expire);
-            }else{
-                $items['never_expire'] = true;
-            }  
-
-            $items['extra_name']    = $extra_name;
-            $items['extra_value']   = $extra_value; 
+                if($q_r['Voucher']['expire'] != ''){
+                    $items['never_expire']  = false;
+                    $items['expire']        = $q_r['Voucher']['expire'];
+                }else{
+                    $items['never_expire'] = true;
+                }
+            } 
         }
 
         $this->set(array(
-            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'data'   => $items,
             'success' => true,
             '_serialize' => array('success','data')
         ));
@@ -577,62 +572,75 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        $result = $this->{$this->modelClass}->save($this->request->data);
-
-        //TODO Check if the owner of this user is in the chain of the APs
-        if(isset($this->request->data['id'])){
-            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
-            $username   = $q_r['Voucher']['name'];
-
-            if(isset($this->request->data['profile_id'])){
-                $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
-                $profile_name = $q_r['Profile']['name'];
-                $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
-            }
-
-            if(isset($this->request->data['realm_id'])){
-                $q_r = ClassRegistry::init('Realm')->findById($this->data['realm_id']);
-                $realm_name = $q_r['Realm']['name'];
-                $this->_replace_radcheck_item($username,'Rd-Realm',$realm_name);
-            }
-
-            if(isset($this->request->data['never_expire'])){ //Clean up if there were previous ones
-             
-                ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Expiration'), false
-                );
-            }
-
-            if(isset($this->request->data['expire'])){
-                $expiration = $this->_radius_format_date($this->request->data['expire']);
-                $this->_replace_radcheck_item($username,'Expiration',$expiration);
-            }
-
-            if(isset($this->request->data['days_valid'])){
-                $hours      = 0;
-                $minutes    = 0;
-                if(isset($this->request->data['hours_valid'])){
-                    $hours = $this->request->data['hours_valid'];
-                }
-
-                if(isset($this->request->data['minutes_valid'])){
-                    $minutes = $this->request->data['minutes_valid'];
-                }
-
-                $hours      = sprintf("%02d", $hours);
-                $minutes    = sprintf("%02d", $minutes);
-
-                $expiration = $this->request->data['days_valid']."-".$hours."-".$minutes."-00";
-                $this->_replace_radcheck_item($username,'Rd-Voucher',$expiration);
-            }
-
-            if(!isset($this->request->data['activate_on_login'])){
-                ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Voucher'), false
-                );
-            }
+        //___Two fields should be tested for first___:
+        if(array_key_exists('activate_on_login',$this->request->data)){
+            $this->request->data['activate_on_login'] = 1;
         }
 
+        if(array_key_exists('never_expire',$this->request->data)){
+            $this->request->data['never_expire'] = 1;
+        }
+        //____ END OF TWO FIELD CHECK ___
+    
+        //_____We need the profile name / if and the realm name / id before we can continue___
+        $profile    = false;
+        $profile_id = false;
+        if(array_key_exists('profile',$this->request->data)){
+            $profile    = $this->request->data['profile'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findByName($profile);
+            $profile_id = $q_r['Profile']['id'];
+            $this->request->data['profile_id'] = $profile_id;   
+        }
+
+        if(array_key_exists('profile_id',$this->request->data)){
+            $profile_id = $this->request->data['profile_id'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findById($profile_id);
+            $profile    = $q_r['Profile']['name'];
+            $this->request->data['profile'] = $profile;    
+        }
+
+        if(($profile == false)||($profile_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $realm      = false;
+        $realm_id   = false;
+        if(array_key_exists('realm',$this->request->data)){
+            $realm      = $this->request->data['realm'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findByName($realm);
+            $realm_id   = $q_r['Realm']['id']; 
+            $this->request->data['realm_id'] = $realm_id;  
+        }
+
+        if(array_key_exists('realm_id',$this->request->data)){
+            $realm_id   = $this->request->data['realm_id'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findById($realm_id);
+            $realm      = $q_r['Realm']['name'];
+            $this->request->data['realm'] = $realm;    
+        }
+
+        if(($realm == false)||($realm_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        //______ END of Realm and Profile check _____
+
+        $result = $this->{$this->modelClass}->save($this->request->data);
         $this->set(array(
             'success' => true,
             '_serialize' => array('success')
@@ -958,97 +966,8 @@ class VouchersController extends AppController {
             ));
         }
     }
-
-    public function view_tracking(){
-
-         //We need the user_id;
-        //We supply the track_auth, track_acct
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $user_id    = $user['id'];
-        $items = array();
-
-        //TODO Check if the owner of this user is in the chain of the APs
-        if(isset($this->request->query['voucher_id'])){
-
-            $acct           = true;
-            $auth           = true;
-
-            $this->{$this->modelClass}->contain('Radcheck');
-            $q_r = $this->{$this->modelClass}->findById($this->request->query['voucher_id']);
-
-            foreach($q_r['Radcheck'] as $rc){
-
-                if($rc['attribute'] == 'Rd-Not-Track-Acct'){
-                    if($rc['value'] == 1){
-                        $acct = false;
-                    }
-                }
-
-                if($rc['attribute'] == 'Rd-Not-Track-Auth'){
-                  if($rc['value'] == 1){
-                        $auth = false;
-                  }
-                } 
-            }
-            $items['track_auth'] = $auth;
-            $items['track_acct'] = $acct;
-            
-        }
-
-        $this->set(array(
-            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
-            'success' => true,
-            '_serialize' => array('success','data')
-        ));
-    }
-
-    public function edit_tracking(){
-
-          //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-        //TODO Check if the owner of this user is in the chain of the APs
-        if(isset($this->request->data['id'])){
-            $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
-            $username   = $q_r['Voucher']['name'];
-           
-            //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth) 
-            if(!isset($this->request->data['track_auth'])){
-                $this->_replace_radcheck_item($username,'Rd-Not-Track-Auth',1);
-            }else{              //Clean up if there were previous ones
-                ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Auth'), false
-                );
-            }
-
-            //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
-            if(!isset($this->request->data['track_acct'])){
-                $this->_replace_radcheck_item($username,'Rd-Not-Track-Acct',1);
-            }else{              //Clean up if there were previous ones
-                ClassRegistry::init('Radcheck')->deleteAll(
-                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Not-Track-Acct'), false
-                );
-            }
-
-        }
-
-        $this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
-        ));
-    }
-
-     public function change_password(){
+ 
+    public function change_password(){
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -1086,7 +1005,7 @@ class VouchersController extends AppController {
         $user_id= $user['id'];
 
         $id     = $this->request->data['id'];
-        $this->{$this->modelClass}->contain('Radcheck');
+       // $this->{$this->modelClass}->contain('Radcheck');
         $q_r    = $this->{$this->modelClass}->findById($id);
         $to     = $this->request->data['email'];
         $message= $this->request->data['message'];
@@ -1117,7 +1036,7 @@ class VouchersController extends AppController {
               //  print_r("The username is $username and password is $password");
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
-                $Email->config('gmail');
+                $Email->config('smtp');
                 $Email->subject('Your voucher detail');
                 $Email->to($to);
                 $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
@@ -1529,44 +1448,17 @@ class VouchersController extends AppController {
         }
     }
 
-    private function _delete_clean_up_device($username){
-
-        $this->{$this->modelClass}->Radcheck->deleteAll(   //Delete a previous one
-            array('Radcheck.username' => $username), false
-        );
-
-        $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
-            array('Radreply.username' => $username), false
-        );
-
-        $acct = ClassRegistry::init('Radacct'); //With devices we use callingstaton id instead of username
-        $acct->deleteAll( 
-            array('Radacct.callingstationid' => $username), false
-        );
-
-        $post_a = ClassRegistry::init('Radpostauth');
-        $post_a->deleteAll( 
-            array('Radpostauth.username' => $username), false
-        );
-    }
-
     private function _delete_clean_up_voucher($username){
-
-        $this->{$this->modelClass}->Radcheck->deleteAll(   //Delete a previous one
+        $this->Radcheck->deleteAll(
             array('Radcheck.username' => $username), false
         );
-
-        $this->{$this->modelClass}->Radreply->deleteAll(   //Delete a previous one
+        $this->Radreply->deleteAll( 
             array('Radreply.username' => $username), false
         );
-
-        $acct = ClassRegistry::init('Radacct');
-        $acct->deleteAll( 
+        $this->Radacct->deleteAll( 
             array('Radacct.username' => $username), false
         );
-
-        $post_a = ClassRegistry::init('Radpostauth');
-        $post_a->deleteAll( 
+        $this->Radpostauth->deleteAll( 
             array('Radpostauth.username' => $username), false
         );
     }

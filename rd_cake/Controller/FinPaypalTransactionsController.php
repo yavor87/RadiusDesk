@@ -353,7 +353,7 @@ class FinPaypalTransactionsController extends AppController {
                   //  print_r("The username is $username and password is $password");
                     App::uses('CakeEmail', 'Network/Email');
                     $Email = new CakeEmail();
-                    $Email->config('gmail');
+                    $Email->config('smtp');
                     $Email->subject('Your voucher detail');
                     $Email->to($to);
                     $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
@@ -908,7 +908,7 @@ class FinPaypalTransactionsController extends AppController {
               //  print_r("The username is $username and password is $password");
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
-                $Email->config('gmail');
+                $Email->config('smtp');
                 $Email->subject('PayPal #'.$txn_id);
                 $Email->to($payer_email);
                 $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
