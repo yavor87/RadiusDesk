@@ -5,6 +5,11 @@ class Voucher extends AppModel {
 
     public $actsAs          = array('Containable');
 	public $displayField    = 'name';
+    
+    public $Radcheck;  
+    public $Radreply;
+
+    public $CreatedVouchers = array();
 
 	public $validate = array(
         'name' => array(
@@ -32,33 +37,22 @@ class Voucher extends AppModel {
         )
     );
 
-    public $hasMany = array(
-        'Radcheck' => array(
-            'className'     => 'Radcheck',
-            'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, vouchers WHERE vouchers.name=Radcheck.username AND vouchers.id={$__cakeID__$}',
-            'dependent'     => true
-        ),
-        'Radreply' => array(
-            'className'     => 'Radreply',
-            'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, vouchers WHERE vouchers.name=Radreply.username AND vouchers.id={$__cakeID__$}',
-            'dependent'     => true
-        ),
-    );
-
     public function beforeSave(){
-
         //Try to detect if it is an existing (edit):
         $existing_flag = false;
         if(!isset($this->data['Voucher']['id'])){
-            $this->data['Voucher']['name'] = $this->_detemine_voucher_name();     
-        }  
+            $this->data['Voucher']['name']      = $this->_detemine_voucher_name(); 
+            $this->data['Voucher']['password']  = $this->_generatePassword();      
+        }
+        $this->_build_time_valid(); //Do this regardless
+         
     }
 
     public function afterSave($created){
         if($created){
             $this->_add_radius_user();
+            //Push it on the create voucher stack
+            array_push($this->CreatedVouchers,$this->data['Voucher']);
         }else{
             $this->_update_radius_user();
         }
@@ -66,68 +60,54 @@ class Voucher extends AppModel {
 
     private function _update_radius_user(){
 
-        $voucher_id  = $this->data['Voucher']['id']; //The user's ID should always be present!
-        //Get the username
-        $q_r        = $this->findById($voucher_id);
-        $name       = $q_r['Voucher']['name'];
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radreply = ClassRegistry::init('Radreply');
 
-        //enabled or disabled (Rd-Account-Disabled)
-        if(array_key_exists('active',$this->data['Voucher'])){ //It may be missing; you never know...    
-                if($this->data['Voucher']['active'] == 1){ //Reverse the logic...
-                    $dis = 0;
-                }else{
-                    $dis = 1;
-                }
-                $this->_replace_radcheck_item($name,'Rd-Account-Disabled',$dis);
+        $voucher_id  = $this->data['Voucher']['id']; //The  ID should always be present!
+        //Get the username
+        $this->contain();
+        $q_r        = $this->findById($voucher_id);
+        $username   = $q_r['Voucher']['name'];
+
+        //Realm (Rd-Realm)
+        $this->_replace_radcheck_item($username,'Rd-Realm',$this->data['Voucher']['realm']);
+        //Profile name (User-Profile)
+        $this->_replace_radcheck_item($username,'User-Profile',$this->data['Voucher']['profile']);
+
+        //Use time_valid to create small values for vouchers after first login
+        if(array_key_exists('time_valid',$this->data['Voucher'])){ //It may be missing; you never know...  
+            if(preg_match('/[0-9]-[0-9]{2}-[0-9]{2}-[0-9]{2}/', $this->data['Voucher']['time_valid'])){      
+                $this->_replace_radcheck_item($username,'Rd-Voucher',$this->data['Voucher']['time_valid']);
+            }
+        }else{
+            $this->_remove_radcheck_item($username,'Rd-Voucher');
+        }
+
+        //Expiration date (Expiration)
+        if(array_key_exists('expire',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['expire'] != ''){       
+                $expiration = $this->_radius_format_date($this->data['Voucher']['expire']);
+                $this->_replace_radcheck_item($username,'Expiration',$expiration);
+            }
+        }else{
+            $this->_remove_radcheck_item($username,'Expiration');
         }
     }
 
     private function _add_radius_user(){
 
-        $username   = $this->data['Voucher']['name'];
-        $this->_add_radcheck_item($username,'Cleartext-Password',$this->_generatePassword());
+        $this->Radcheck = ClassRegistry::init('Radcheck');
+        $this->Radreply = ClassRegistry::init('Radreply');
+
+        $username       = $this->data['Voucher']['name'];
+
+        $this->_add_radcheck_item($username,'Cleartext-Password',$this->data['Voucher']['password']);
         $this->_add_radcheck_item($username,'Rd-User-Type','voucher');
 
         //Realm (Rd-Realm)
-        if(array_key_exists('realm_id',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['realm_id'] != ''){
-                $q_r = ClassRegistry::init('Realm')->findById($this->data['Voucher']['realm_id']);
-                $realm_name = $q_r['Realm']['name'];
-                $this->_add_radcheck_item($username,'Rd-Realm',$realm_name);
-            }
-        }
-
+        $this->_add_radcheck_item($username,'Rd-Realm',$this->data['Voucher']['realm']);
         //Profile name (User-Profile)
-        if(array_key_exists('profile_id',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['profile_id'] != ''){
-                $q_r = ClassRegistry::init('Profile')->findById($this->data['Voucher']['profile_id']);
-                $profile_name = $q_r['Profile']['name'];
-                $this->_add_radcheck_item($username,'User-Profile',$profile_name);
-            }
-        }
-
-        //Activate upon first login
-        if(array_key_exists('days_valid',$this->data['Voucher'])){ //It may be missing; you never know...
-            if($this->data['Voucher']['days_valid'] != ''){
-
-                $hours      = 0;
-                $minutes    = 0;
-                if(isset($this->data['Voucher']['hours_valid'])){
-                    $hours = $this->data['Voucher']['hours_valid'];
-                }
-
-                if(isset($this->data['Voucher']['minutes_valid'])){
-                    $minutes = $this->data['Voucher']['minutes_valid'];
-                }
-
-                $hours      = sprintf("%02d", $hours);
-                $minutes    = sprintf("%02d", $minutes);
-
-                $valid      = $this->data['Voucher']['days_valid']."-".$hours."-".$minutes."-00";
-
-                $this->_add_radcheck_item($username,'Rd-Voucher',$valid);
-            }
-        }
+        $this->_add_radcheck_item($username,'User-Profile',$this->data['Voucher']['profile']);
 
         //Use time_valid to create small values for vouchers after first login
         if(array_key_exists('time_valid',$this->data['Voucher'])){ //It may be missing; you never know...  
@@ -143,7 +123,6 @@ class Voucher extends AppModel {
                 $this->_add_radcheck_item($username,'Expiration',$expiration);
             }
         }
-
     }
 
     private function _radius_format_date($d){
@@ -158,7 +137,6 @@ class Voucher extends AppModel {
 
     private function _add_radcheck_item($username,$item,$value,$op = ":="){
 
-        $this->Radcheck = ClassRegistry::init('Radcheck');
         $this->Radcheck->create();
         $d['Radcheck']['username']  = $username;
         $d['Radcheck']['op']        = $op;
@@ -170,7 +148,6 @@ class Voucher extends AppModel {
 
     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
 
-        $this->Radcheck = ClassRegistry::init('Radcheck');
         $this->Radcheck->deleteAll(
             array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
         );
@@ -181,6 +158,12 @@ class Voucher extends AppModel {
         $d['Radcheck']['value']     = $value;
         $this->Radcheck->save($d);
         $this->Radcheck->id         = null;
+    }
+
+    private function _remove_radcheck_item($username,$item){
+        $this->Radcheck->deleteAll(
+            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
+        );
     }
 
     function _detemine_voucher_name(){
@@ -248,6 +231,29 @@ class Voucher extends AppModel {
         }
         // done!
         return $password;
+    }
+
+    function _build_time_valid(){
+        if(array_key_exists('days_valid',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['days_valid'] != ''){
+
+                $hours      = 0;
+                $minutes    = 0;
+                if(isset($this->data['Voucher']['hours_valid'])){
+                    $hours = $this->data['Voucher']['hours_valid'];
+                }
+
+                if(isset($this->data['Voucher']['minutes_valid'])){
+                    $minutes = $this->data['Voucher']['minutes_valid'];
+                }
+
+                $hours      = sprintf("%02d", $hours);
+                $minutes    = sprintf("%02d", $minutes);
+                $valid      = $this->data['Voucher']['days_valid']."-".$hours."-".$minutes."-00";
+                $this->data['Voucher']['time_valid'] = $valid;
+                
+            }
+        }
     }
 
 }
