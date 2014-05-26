@@ -59,31 +59,6 @@ class VouchersController extends AppController {
                         $owner_id       = $i['User']['id'];
                         $owner_tree     = $this->_find_parents($owner_id);
                         array_push($csv_line,$owner_tree);
-                    }elseif($column_name =='password'){
-                        $realm = 'n/a';
-                        foreach($i['Radcheck'] as $rc){       
-                            if($rc['attribute'] == 'Cleartext-Password'){
-                                $password = $rc['value'];
-                            }
-                        }
-                        array_push($csv_line,$password); 
-
-                    }elseif($column_name =='realm'){
-                        $realm = 'n/a';
-                        foreach($i['Radcheck'] as $rc){       
-                            if($rc['attribute'] == 'Rd-Realm'){
-                                $realm = $rc['value'];
-                            }
-                        }
-                        array_push($csv_line,$realm); 
-                    }elseif($column_name =='profile'){
-                        $profile = 'n/a';
-                        foreach($i['Radcheck'] as $rc){       
-                            if($rc['attribute'] == 'User-Profile'){
-                                $profile = $rc['value'];
-                            }
-                        }
-                        array_push($csv_line,$profile); 
                     }else{
                         array_push($csv_line,$i['Voucher']["$column_name"]);  
                     }
@@ -151,43 +126,22 @@ class VouchersController extends AppController {
             }
 
             $voucher_data = array();
-
-            //$this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->find('all', array('conditions' => array('OR' => $sel_condition)));
             foreach($q_r as $i){
-                $v              = array();
-                $v['username']  = $i['Voucher']['name'];
-                $v['password']  = false;
-                $v['expiration']= false;
-                $v['days_valid']= false;
-                $v['profile']   = false;
-                $v['extra_name'] = $i['Voucher']['extra_name'];
-                $v['extra_value']= $i['Voucher']['extra_value'];
+                $v                  = array();
+                $v['username']      = $i['Voucher']['name'];
+                $v['password']      = $i['Voucher']['password'];
+                $v['expiration']    = $i['Voucher']['expire'];
+                $v['days_valid']    = $i['Voucher']['time_valid'];
+                $v['profile']       = $i['Voucher']['profile'];
+                $v['extra_name']    = $i['Voucher']['extra_name'];
+                $v['extra_value']   = $i['Voucher']['extra_value'];
 
-                foreach($i['Radcheck'] as $j){
-                    if($j['attribute'] == 'Rd-Realm'){
-                        $realm = $j['value'];
-                    }
-                    if($j['attribute'] == 'Cleartext-Password'){
-                        $v['password'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'Expiration'){
-                        $v['expiration'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'Rd-Voucher'){
-                        $v['days_valid'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'User-Profile'){
-                        $v['profile'] = $j['value'];
-                    }
-                }
+                $realm          = $i['Voucher']['realm'];
                 if(!array_key_exists($realm,$voucher_data)){
-                    $r = ClassRegistry::init('Realm')->findByName($realm);
-                    $voucher_data[$realm] = $r['Realm'];
                     $voucher_data[$realm]['vouchers'] = array();
                 }
-                array_push($voucher_data[$realm]['vouchers'],$v); 
-                
+                array_push($voucher_data[$realm]['vouchers'],$v);   
             }
             $this->set('voucher_data',$voucher_data);
         }else{
@@ -195,42 +149,22 @@ class VouchersController extends AppController {
            
      
             $c          = $this->_build_common_query($user);
-           // $this->{$this->modelClass}->contain('Radcheck');
             $q_r        = $this->{$this->modelClass}->find('all', $c);
 
             $voucher_data = array();
 
             foreach($q_r as $i){
-                $v              = array();
-                $v['username']  = $i['Voucher']['name'];
-                $v['password']  = false;
-                $v['expiration']= false;
-                $v['days_valid']= false;
-                $v['profile']   = false;
-                $v['extra_name']= $i['Voucher']['extra_name'];
-                $v['extra_value']= $i['Voucher']['extra_value'];
+                $v                  = array();
+                $v['username']      = $i['Voucher']['name'];
+                $v['password']      = $i['Voucher']['password'];
+                $v['expiration']    = $i['Voucher']['expire'];
+                $v['days_valid']    = $i['Voucher']['time_valid'];
+                $v['profile']       = $i['Voucher']['profile'];
+                $v['extra_name']    = $i['Voucher']['extra_name'];
+                $v['extra_value']   = $i['Voucher']['extra_value'];
 
-
-                foreach($i['Radcheck'] as $j){
-                    if($j['attribute'] == 'Rd-Realm'){
-                        $realm = $j['value'];
-                    }
-                    if($j['attribute'] == 'Cleartext-Password'){
-                        $v['password'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'Expiration'){
-                        $v['expiration'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'Rd-Voucher'){
-                        $v['days_valid'] = $j['value'];
-                    }
-                    if($j['attribute'] == 'User-Profile'){
-                        $v['profile'] = $j['value'];
-                    }
-                }
+                $realm          = $i['Voucher']['realm'];
                 if(!array_key_exists($realm,$voucher_data)){
-                    $r = ClassRegistry::init('Realm')->findByName($realm);
-                    $voucher_data[$realm] = $r['Realm'];
                     $voucher_data[$realm]['vouchers'] = array();
                 }
                 array_push($voucher_data[$realm]['vouchers'],$v); 
@@ -640,6 +574,9 @@ class VouchersController extends AppController {
         }
         //______ END of Realm and Profile check _____
 
+        //VERY VERY important to cascade throught to the radcheck entries
+        $this->request->data['do_radcheck'] = true;
+
         $result = $this->{$this->modelClass}->save($this->request->data);
         $this->set(array(
             'success' => true,
@@ -980,15 +917,35 @@ class VouchersController extends AppController {
         // id; group_id; password; token should be empty ('')
         $success = false;
 
-        if(isset($this->request->data['voucher_id'])){
+        if(
+            (isset($this->request->data['voucher_id']))||
+            (isset($this->request->data['name'])) //Can also change by specifying name
+            ){
+
+            if(isset($this->request->data['name'])){
+                $q_n = $this->{$this->modelClass}->findByName($this->request->data['name']);
+                if($q_n){
+                    $this->request->data['voucher_id'] = $q_n['Voucher']['id'];
+                }
+            }
+        
+            $this->request->data['id']      = $this->request->data['voucher_id'];
+            $this->{$this->modelClass}->id  = $this->request->data['voucher_id'];
+            $this->{$this->modelClass}->save($this->request->data);
+
 
             //Get the name of this voucher
-            $q_r        = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
-            $username   = $q_r['Voucher']['name'];
-            if($username != ''){
-                $this->_replace_radcheck_item($username,'Cleartext-Password',$this->request->data['password']);
+            if(!(isset($this->request->data['name']))){
+                $this->{$this->modelClass}->contain();
+                $q_r                            = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
+                $this->request->data['name']    = $q_r['Voucher']['name'];
+            }
+
+            if(isset($this->request->data['name'])){
+                $this->_replace_radcheck_item($this->request->data['name'],'Cleartext-Password',$this->request->data['password']);
                 $success    = true; 
             }
+
         }
 
         $this->set(array(
@@ -1005,45 +962,30 @@ class VouchersController extends AppController {
         $user_id= $user['id'];
 
         $id     = $this->request->data['id'];
-       // $this->{$this->modelClass}->contain('Radcheck');
+        $this->{$this->modelClass}->contain();
         $q_r    = $this->{$this->modelClass}->findById($id);
         $to     = $this->request->data['email'];
         $message= $this->request->data['message'];
 
          if($q_r){
-            $password_found     = false;
-            $valid_for          = false;
-            $profile            = false;
-            $extra_name         = false;
-            $exta_value         = false;
+            $username       = $q_r['Voucher']['username'];
+            $password       = $q_r['Voucher']['password'];
+            $valid_for      = $q_r['Voucher']['time_valid'];
+            $profile        = $q_r['Voucher']['profile'];
+            $extra_name     = $q_r['Voucher']['extra_name'];
+            $exta_value     = $q_r['Voucher']['exta_value'];
 
-            foreach($q_r['Radcheck'] as $rc){
-                if($rc['attribute'] == 'Cleartext-Password'){
-                    $password_found = true;
-                    $username = $rc['username'];
-                    $password = $rc['value'];  
-                }
-                if($rc['attribute'] == 'Rd-Voucher'){
-                    $valid_for          = $rc['value'];
-                }
+            //  print_r("The username is $username and password is $password");
+            App::uses('CakeEmail', 'Network/Email');
+            $Email = new CakeEmail();
+            $Email->config('smtp');
+            $Email->subject('Your voucher detail');
+            $Email->to($to);
+            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+            $Email->template('voucher_detail', 'voucher_notify');
+            $Email->emailFormat('html');
+            $Email->send();
 
-                if($rc['attribute'] == 'User-Profile'){
-                    $profile        = $rc['value'];
-                }
-            }
-            //Now we can send the email
-            if($password_found){
-              //  print_r("The username is $username and password is $password");
-                App::uses('CakeEmail', 'Network/Email');
-                $Email = new CakeEmail();
-                $Email->config('smtp');
-                $Email->subject('Your voucher detail');
-                $Email->to($to);
-                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
-                $Email->template('voucher_detail', 'voucher_notify');
-                $Email->emailFormat('html');
-                $Email->send();
-            }
         }
 
         $this->set(array(
@@ -1307,8 +1249,7 @@ class VouchersController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'User',     
-                            'Radcheck',                           
+                            'User'                         
                         );
 
         //===== SORT =====
@@ -1319,8 +1260,6 @@ class VouchersController extends AppController {
         if(isset($this->request->query['sort'])){
             if($this->request->query['sort'] == 'owner'){
                 $sort = 'User.username';
-            }elseif(($this->request->query['sort'] == 'profile')||($this->request->query['sort'] == 'realm')){
-                $sort = 'Radcheck.value';
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
@@ -1350,51 +1289,25 @@ class VouchersController extends AppController {
                 }
 
                 //Strings
-                if($f->field == 'realm'){
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck_realm',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck_realm.username = Voucher.name')
-                        )); 
-                        array_push($c['conditions'],array(
-                            'Radcheck_realm.attribute'  => 'Rd-Realm',
-                            "Radcheck_realm.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'profile'){                       
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck_profile',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck_profile.username = Voucher.name')
-                        ));
-                        array_push($c['conditions'],array(
-                            'Radcheck_profile.attribute'  => 'User-Profile',
-                            "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'password'){                       
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck_password',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck_password.username = Voucher.name')
-                        ));
-                        array_push($c['conditions'],array(
-                            'Radcheck_password.attribute'  => 'Cleartext-Password',
-                            "Radcheck_password.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'owner'){
-                        array_push($c['conditions'],array("Owner.username LIKE" => '%'.$f->value.'%'));   
+                if($f->type == 'string'){
+                    if($f->field == 'owner'){
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
                     }
+                }
+
+                 //Lists
+                if($f->type == 'list'){
+                    $list_array = array();
+                    foreach($f->value as $filter_list){
+                        $col = $this->modelClass.'.'.$f->field;
+                        array_push($list_array,array("$col" => "$filter_list"));
+                    }
+                    array_push($c['conditions'],array('OR' => $list_array));
+                }
+
                 //Bools
                 if($f->type == 'boolean'){
                      $col = $this->modelClass.'.'.$f->field;
