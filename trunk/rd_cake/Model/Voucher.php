@@ -60,6 +60,10 @@ class Voucher extends AppModel {
 
     private function _update_radius_user(){
 
+        if(!(array_key_exists('do_radcheck',$this->data['Voucher']))){     
+            return;
+        }
+
         $this->Radcheck = ClassRegistry::init('Radcheck');
         $this->Radreply = ClassRegistry::init('Radreply');
 
@@ -70,9 +74,14 @@ class Voucher extends AppModel {
         $username   = $q_r['Voucher']['name'];
 
         //Realm (Rd-Realm)
-        $this->_replace_radcheck_item($username,'Rd-Realm',$this->data['Voucher']['realm']);
+        if(array_key_exists('realm',$this->data['Voucher'])){ //It may be missing; you never know... 
+            $this->_replace_radcheck_item($username,'Rd-Realm',$this->data['Voucher']['realm']);
+        }
+
         //Profile name (User-Profile)
-        $this->_replace_radcheck_item($username,'User-Profile',$this->data['Voucher']['profile']);
+        if(array_key_exists('profile',$this->data['Voucher'])){ //It may be missing; you never know... 
+            $this->_replace_radcheck_item($username,'User-Profile',$this->data['Voucher']['profile']);
+        }
 
         //Use time_valid to create small values for vouchers after first login
         if(array_key_exists('time_valid',$this->data['Voucher'])){ //It may be missing; you never know...  
