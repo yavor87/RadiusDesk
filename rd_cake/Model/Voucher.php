@@ -181,12 +181,14 @@ class Voucher extends AppModel {
         if($precede == ''){
             $this->contain();
             $reply  =   $this->find('first',array(
-                            'order'         => array('Voucher.name DESC'))
-                        );
+                            'order'         => array('Voucher.name DESC'),
+                            'conditions'    => array('Voucher.name REGEXP'  =>'^[0-9]{6}$')
+                        ));
             $last_value = 0;
             if($reply){
                 $last_value = $reply['Voucher']['name'];    
             }
+            
             $next_number = sprintf("%06d", $last_value+1); 
             return $next_number;
         }else{
