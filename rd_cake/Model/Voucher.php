@@ -206,7 +206,7 @@ class Voucher extends AppModel {
             }else{
 
                 //Get the last number
-                $number = preg_replace("/^$precede/",'',$last_entry);
+                $number = preg_replace("/^$precede/i",'',$last_entry); //SQL will find capital and non-capital so we also need to search for that
                 $number = sprintf("%06d", $number+1);
                 $voucher_name = $precede.$number;
             }
