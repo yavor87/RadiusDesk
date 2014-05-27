@@ -289,38 +289,22 @@ class FinPayUTransactionsController extends AppController {
             $voucher_id = $q_r['FinPayUTransaction']['voucher_id'];
             if($voucher_id != ''){
                 $v  = ClassRegistry::init('Voucher');
-                $v->contain('Radcheck');
                 $voucher_id = $q_r['FinPayUTransaction']['voucher_id'];
                 $q  = $v->findById($voucher_id);
                 if($q){
-                    $password_found     = false;
-                    $valid_for          = false;
-                    $profile            = false;
-                    $extra_name         = false;
-                    $exta_value         = false;
+                    $username       = $q['Voucher']['username'];
+                    $password       = $q['Voucher']['password'];
+                    $valid_for      = $q['Voucher']['time_valid'];
+                    $profile        = $q['Voucher']['profile'];
+                    $extra_name     = $q['Voucher']['extra_name'];
+                    $exta_value     = $q['Voucher']['exta_value'];
+                    $this->set(array(
+                        'data'   => array('username' => $username,'password' => $password,'profile' => $profile,'valid_for' => $valid_for),
+                        'success' => true,
+                        '_serialize' => array('success','data')
+                    ));
+                    return;
 
-                    foreach($q['Radcheck'] as $rc){
-                        if($rc['attribute'] == 'Cleartext-Password'){
-                            $password_found = true;
-                            $username = $rc['username'];
-                            $password = $rc['value'];  
-                        }
-                        if($rc['attribute'] == 'Rd-Voucher'){
-                            $valid_for          = $rc['value'];
-                        }
-
-                        if($rc['attribute'] == 'User-Profile'){
-                            $profile        = $rc['value'];
-                        }
-                    }
-                    if($password_found){
-                        $this->set(array(
-                            'data'   => array('username' => $username,'password' => $password,'profile' => $profile,'valid_for' => $valid_for),
-                            'success' => true,
-                            '_serialize' => array('success','data')
-                        ));
-                        return;
-                    }
                 }
             }else{
                $this->set(array(
@@ -480,43 +464,26 @@ class FinPayUTransactionsController extends AppController {
 
         if($q_r){
             $v  = ClassRegistry::init('Voucher');
-            $v->contain('Radcheck');
             $voucher_id = $q_r['FinPayUTransaction']['voucher_id'];
             $q  = $v->findById($voucher_id);
             if($q){
-                $password_found     = false;
-                $valid_for          = false;
-                $profile            = false;
-                $extra_name         = false;
-                $exta_value         = false;
+                $username       = $q['Voucher']['username'];
+                $password       = $q['Voucher']['password'];
+                $valid_for      = $q['Voucher']['time_valid'];
+                $profile        = $q['Voucher']['profile'];
+                $extra_name     = $q['Voucher']['extra_name'];
+                $exta_value     = $q['Voucher']['exta_value'];
+              //  print_r("The username is $username and password is $password");
+                App::uses('CakeEmail', 'Network/Email');
+                $Email = new CakeEmail();
+                $Email->config('gmail');
+                $Email->subject('Your voucher detail');
+                $Email->to($to);
+                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+                $Email->template('voucher_detail', 'voucher_notify');
+                $Email->emailFormat('html');
+                $Email->send();
 
-                foreach($q['Radcheck'] as $rc){
-                    if($rc['attribute'] == 'Cleartext-Password'){
-                        $password_found = true;
-                        $username = $rc['username'];
-                        $password = $rc['value'];  
-                    }
-                    if($rc['attribute'] == 'Rd-Voucher'){
-                        $valid_for          = $rc['value'];
-                    }
-
-                    if($rc['attribute'] == 'User-Profile'){
-                        $profile        = $rc['value'];
-                    }
-                }
-                //Now we can send the email
-                if($password_found){
-                  //  print_r("The username is $username and password is $password");
-                    App::uses('CakeEmail', 'Network/Email');
-                    $Email = new CakeEmail();
-                    $Email->config('gmail');
-                    $Email->subject('Your voucher detail');
-                    $Email->to($to);
-                    $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
-                    $Email->template('voucher_detail', 'voucher_notify');
-                    $Email->emailFormat('html');
-                    $Email->send();
-                }
             }
         }
         $this->set(array(
@@ -896,44 +863,27 @@ class FinPayUTransactionsController extends AppController {
     private function _email_voucher_detail($email,$voucher_id,$PayUReference){
 
         $v          = ClassRegistry::init('Voucher');
-        $v->contain('Radcheck');
         $voucher_id = $voucher_id;
         $q          = $v->findById($voucher_id);
         if($q){
-            $password_found     = false;
-            $valid_for          = false;
-            $profile            = false;
-            $extra_name         = false;
-            $exta_value         = false;
+            $username       = $q['Voucher']['username'];
+            $password       = $q['Voucher']['password'];
+            $valid_for      = $q['Voucher']['time_valid'];
+            $profile        = $q['Voucher']['profile'];
+            $extra_name     = $q['Voucher']['extra_name'];
+            $exta_value     = $q['Voucher']['exta_value'];
             $message            = '';
+          //  print_r("The username is $username and password is $password");
+            App::uses('CakeEmail', 'Network/Email');
+            $Email = new CakeEmail();
+            $Email->config('gmail');
+            $Email->subject('PayU #'.$PayUReference);
+            $Email->to($email);
+            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+            $Email->template('voucher_detail', 'voucher_notify');
+            $Email->emailFormat('html');
+            $Email->send();
 
-            foreach($q['Radcheck'] as $rc){
-                if($rc['attribute'] == 'Cleartext-Password'){
-                    $password_found = true;
-                    $username = $rc['username'];
-                    $password = $rc['value'];  
-                }
-                if($rc['attribute'] == 'Rd-Voucher'){
-                    $valid_for          = $rc['value'];
-                }
-
-                if($rc['attribute'] == 'User-Profile'){
-                    $profile        = $rc['value'];
-                }
-            }
-            //Now we can send the email
-            if($password_found){
-              //  print_r("The username is $username and password is $password");
-                App::uses('CakeEmail', 'Network/Email');
-                $Email = new CakeEmail();
-                $Email->config('gmail');
-                $Email->subject('PayU #'.$PayUReference);
-                $Email->to($email);
-                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
-                $Email->template('voucher_detail', 'voucher_notify');
-                $Email->emailFormat('html');
-                $Email->send();
-            }
         }
     }
 

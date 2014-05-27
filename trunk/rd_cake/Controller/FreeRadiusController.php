@@ -408,14 +408,11 @@ class FreeRadiusController extends AppController {
             }
 
             if($this->request->data['user_type'] == 'voucher'){
-                $q_r        = ClassRegistry::init('Voucher')->findById($this->request->data['voucher_id']);
+                $v = ClassRegistry::init('Voucher');
+                $v->contain();
+                $q_r        = $v->findById($this->request->data['voucher_id']);
                 $username   = $q_r['Voucher']['name'];
-                $q_r        = ClassRegistry::init('Radcheck')->find('first', 
-                    array('conditions' =>
-                        array('Radcheck.username' => $username,'Radcheck.attribute' => 'Cleartext-Password')
-                    )
-                );
-                $pwd        = $q_r['Radcheck']['value'];
+                $pwd        = $q_r['Voucher']['password'];  
             }
 
         }
