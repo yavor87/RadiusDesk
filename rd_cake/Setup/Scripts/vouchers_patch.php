@@ -10,6 +10,8 @@ try {
 
     //Find the credentials to connect with
     include_once("/var/www/cake2/rd_cake/Config/database.php");
+    //include_once("/usr/share/nginx/www/cake2/rd_cake/Config/database.php");
+    //include_once("/usr/share/nginx/html/cake2/rd_cake/Config/database.php");
     $dbc    = & new DATABASE_CONFIG();
     $host   = $dbc->default['host'];
     $login  = $dbc->default['login'];
