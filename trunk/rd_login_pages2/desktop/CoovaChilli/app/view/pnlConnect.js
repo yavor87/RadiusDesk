@@ -12,19 +12,68 @@ Ext.define('CoovaChilli.view.pnlConnect', {
             t_c_hidden = false;
         }
 
-        //If Click to connect
+        var buttons;
+
+        //If Click to connect only
         var un_hidden = false;
         var pw_hidden = false;
         var rm_hidden = false;
-        var un        = '';
-        var pw        = '';
-        if(me.clickToConnect){
+
+        if(me.jsonData.settings.connect_only == true){
             un_hidden = true;
             pw_hidden = true;
             rm_hidden = true;
-            //FIXME this must be sourced from the dynamic login page info!
-            un        = 'dvdwalt';
-            pw        = 'dvdwalt';
+        }
+
+        if(me.jsonData.settings.connect_check == true){
+            if(me.jsonData.settings.connect_only == true){
+                buttons = [
+                    '->',
+                    {
+                        text        : 'Free Access',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnClickToConnect',
+                        scale       : 'large',
+                        glyph       : CoovaChilli.config.icnConnect
+                    }
+                ];
+
+            }else{
+                buttons = [
+                    {
+                        text        : 'Free Access',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnClickToConnect',
+                        scale       : 'large',
+                        glyph       : CoovaChilli.config.icnConnect
+                    },
+                    '|',
+                    {
+                        text        : 'Connect',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnConnect',
+                        formBind    : true,
+                        scale       : 'large',
+                        glyph       : CoovaChilli.config.icnConnect
+                    }  
+                ];
+            }
+        }else{
+            buttons = [
+                '->',
+                {
+                    text        : 'Connect',
+                    action      : 'ok',
+                    type        : 'submit',
+                    itemId      : 'btnConnect',
+                    formBind    : true,
+                    scale       : 'large',
+                    glyph       : CoovaChilli.config.icnConnect
+                }  
+            ];
         }
 
         me.items = [
@@ -51,7 +100,7 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         allowBlank  : false,
                         blankText   : "Enter username",
                         hidden      : un_hidden,
-                        value       : un
+                        disabled    : un_hidden
                     },
                     {
                         name        : "password",
@@ -61,7 +110,7 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         allowBlank  : false,
                         blankText   : "Enter password",
                         hidden      : pw_hidden,
-                        value       : pw
+                        disabled    : pw_hidden
                     },
                     {
                         boxLabel  : 'Remember me',
@@ -71,7 +120,8 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         xtype     : 'checkbox',
                         itemId    : 'inpRememberMe',
                         padding   : '20 0 0 0',
-                        hidden    : rm_hidden
+                        hidden    : rm_hidden,
+                        disabled  : rm_hidden
                     },
                     {
                         xtype       : 'displayfield',
@@ -101,18 +151,7 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                         hidden      : true
                     } 
                 ],
-                buttons : [
-            '->',
-            {
-                text        : '<b>Connect</b>',
-                action      : 'ok',
-                type        : 'submit',
-                itemId      : 'btnConnect',
-                formBind    : true,
-                scale       : 'large',
-                glyph       : CoovaChilli.config.icnConnect
-            }  
-        ]
+                buttons : buttons
             }
         ];
         me.callParent(arguments);
