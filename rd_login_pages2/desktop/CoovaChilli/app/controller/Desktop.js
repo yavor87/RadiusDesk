@@ -27,7 +27,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 1, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry    : 0,
 
     userName        : undefined,
@@ -41,10 +41,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //--- 
 
     //Payment gateway
-    paymentGw       : true,
+    //paymentGw       : true,
     paymentGw       : false,
-    paymentGwType   : 'pnlPayPal',
-   // paymentGwType   : 'pnlPayAd',
+    //paymentGwType   : 'pnlPayPal',
+    paymentGwType   : 'pnlPayAd',
     //paymentGwType   : 'pnlPayU',
 
     init: function() {
@@ -68,6 +68,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
             },
             'pnlPhotos #datThumb' : {
                 itemclick  : me.thumbSelected
+            },
+            'pnlConnect #btnClickToConnect' : {
+                click: me.onBtnClickToConnect
             }
         });    
     },
@@ -226,7 +229,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         //Return as we don't do anything
         if(me.paymentGw == false){
-            console.log("not doing a payment gw");
+           // console.log("not doing a payment gw");
             return;
         }
         console.log(me.paymentGwType);
@@ -306,7 +309,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var me = this;
         if(data.settings.slideshow_check == true){
             me.slideShow = setInterval(function(){        
-                console.log("Change Slide");
+                //console.log("Change Slide");
                 var dv          = me.getDatThumb();
                 var count       = dv.store.getCount();
                 me.currentSlide = me.currentSlide +1;
@@ -444,7 +447,36 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var statusTab = me.getStatus().down('#sessionTab');
         statusTab.update({idletime : time_i, sessiontime : time_s, data_in: dat_i, data_out: dat_o, data_total: dat_t});
     },
-    onBtnConnectClick: function(b){  //Get the latest challenge and continue from there onwards....
+    onBtnClickToConnect: function(b){
+        var me      = this;
+        var delay   = b.up('pnlConnect').jsonData.settings.connect_delay;
+        var start   = delay;
+
+        //Check if they need to accept T&C
+        if(b.up('pnlConnect').down('#chkTcCheck').isHidden() == false){
+            if(b.up('pnlConnect').down('#chkTcCheck').getValue() == false){
+                me.showLoginError('First accept T&C');
+                return;
+            }
+        }
+
+        if(delay > 0){
+            b.setDisabled(true);
+            me.connectWait = setInterval(function(){        
+                me.showLoginError('Connect in '+start+' seconds','Connect wait time');
+                start = start -1;
+                if(start <= 0){
+                    b.setDisabled(false);
+                    me.clearLoginError();
+                    clearInterval(me.connectWait);
+                    me.onBtnConnectClick(b,true);
+                }
+            },  1000);  
+        }else{
+            me.onBtnConnectClick(b,true);
+        }
+    },
+    onBtnConnectClick: function(b,c_to_c){  //Get the latest challenge and continue from there onwards.... c_to_c = click to connect
         var me = this;
 
         //Check if they need to accept T&C
@@ -459,9 +491,16 @@ Ext.define('CoovaChilli.controller.Desktop', {
         b.up('pnlConnect').setLoading('Connecting....');
 
         //Set the username and password properties of this object to the values supplied
-        me.userName = me.getConnect().down('#inpUsername').getValue();
-        me.password = me.getConnect().down('#inpPassword').getValue();
-        me.remember = me.getConnect().down('#inpRememberMe').getValue();
+        if(c_to_c != true){
+            me.userName = me.getConnect().down('#inpUsername').getValue();
+            me.password = me.getConnect().down('#inpPassword').getValue();
+            me.remember = me.getConnect().down('#inpRememberMe').getValue();
+        }else{
+            var suffix  = b.up('pnlConnect').jsonData.settings.connect_suffix;
+            me.userName = b.up('pnlConnect').jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
+            me.password = b.up('pnlConnect').jsonData.settings.connect_username;
+            me.remember = false;
+        }
 
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
@@ -570,13 +609,18 @@ Ext.define('CoovaChilli.controller.Desktop', {
         }
     },
 
-    showLoginError: function(msg){
+    showLoginError: function(msg,label){
         var me = this;
         me.getConnect().setLoading(false);
         me.getStatus().setLoading(false);
         var error = me.getConnect().down('#inpErrorDisplay');
         error.setVisible(true);     //Display
         error.setValue(msg);
+        if(label != undefined){
+           error.setFieldLabel(label); 
+        }else{
+           error.setFieldLabel("Error");
+        }
     },
 
     clearLoginError: function(){

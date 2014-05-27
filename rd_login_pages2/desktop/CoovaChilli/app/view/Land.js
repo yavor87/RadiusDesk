@@ -122,11 +122,11 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 itemId      : 'pnlHelp'
                             },
                             {
-                                title       : 'Online shop',
+                                title       : 'Online Shop',
                                 glyph       : CoovaChilli.config.icnShop,
                                 itemId      : 'pnlShop',
-                                xtype       : 'pnlPayPal'
-                              //  xtype       : 'pnlPayAd'
+                               // xtype       : 'pnlPayPal'
+                                xtype       : 'pnlPayAd'
                                 //xtype       : 'pnlPayU'
                             }
                         ]
