@@ -2,7 +2,6 @@
 
 try {
 
-
     $realm_cache    = array();
     $profile_cache  = array();
     print("Start Vouchers Patch\n");
