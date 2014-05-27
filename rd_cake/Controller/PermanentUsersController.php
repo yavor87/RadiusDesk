@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class PermanentUsersController extends AppController {
 
     public $name       = 'PermanentUsers';
-    public $uses       = array('User');
+    public $uses       = array('User','Profile','Realm');
     public $components = array('Aa','Kicker');
     protected $base    = "Access Providers/Controllers/PermanentUsers/";
 
@@ -312,6 +312,66 @@ class PermanentUsersController extends AppController {
 
         $this->request->data['language_id'] = $language;
         $this->request->data['country_id']  = $country;
+
+         //_____We need the profile name / if and the realm name / id before we can continue___
+        $profile    = false;
+        $profile_id = false;
+        if(array_key_exists('profile',$this->request->data)){
+            $profile    = $this->request->data['profile'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findByName($profile);
+            $profile_id = $q_r['Profile']['id'];
+            $this->request->data['profile_id'] = $profile_id;   
+        }
+
+        if(array_key_exists('profile_id',$this->request->data)){
+            $profile_id = $this->request->data['profile_id'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findById($profile_id);
+            $profile    = $q_r['Profile']['name'];
+            $this->request->data['profile'] = $profile;    
+        }
+
+        if(($profile == false)||($profile_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $realm      = false;
+        $realm_id   = false;
+        if(array_key_exists('realm',$this->request->data)){
+            $realm      = $this->request->data['realm'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findByName($realm);
+            $realm_id   = $q_r['Realm']['id']; 
+            $this->request->data['realm_id'] = $realm_id;  
+        }
+
+        if(array_key_exists('realm_id',$this->request->data)){
+            $realm_id   = $this->request->data['realm_id'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findById($realm_id);
+            $realm      = $q_r['Realm']['name'];
+            $this->request->data['realm'] = $realm;    
+        }
+
+        if(($realm == false)||($realm_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        //______ END of Realm and Profile check _____
+
+
 
         //Get the group ID for AP's
         $group_name = Configure::read('group.user');
