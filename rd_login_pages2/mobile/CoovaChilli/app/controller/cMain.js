@@ -36,6 +36,9 @@ Ext.define('CoovaChilli.controller.cMain', {
             },
             'frmPayU #btnPayU' : {
                 tap         : 'onBtnPayUTap'
+            },
+            'frmConnect #btnClickToConnect': {
+                tap         : 'onBtnClickToConnectTap'
             }
         },
         views: [
@@ -311,7 +314,6 @@ Ext.define('CoovaChilli.controller.cMain', {
             me.getTabMain().setActiveItem('#cntPhotos'); //Show the slideshow
 
             me.slideShow = setInterval(function(){        
-                console.log("Change Slide");
                 var dv          = me.getDatThumb()
                 var count       = dv.getStore().getCount();
                 me.currentSlide = me.currentSlide +1;
@@ -329,13 +331,48 @@ Ext.define('CoovaChilli.controller.cMain', {
             },  (data.settings.seconds_per_slide * 1000));
         }
     },
+    onBtnClickToConnectTap: function(b){
 
-    onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....
+        var me      = this;
+        var delay   = b.up('frmConnect').config.jsonData.settings.connect_delay;
+        var start   = delay;
+
+        //Check if they need to accept T&C
+        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+            if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
+                me.showLoginError('First accept T&C');
+                return;
+            }
+        }
+        if(delay > 0){
+            b.setDisabled(true);
+            me.connectWait = setInterval(function(){        
+                me.showLoginError('Connect in '+start+' seconds');
+                start = start -1;
+                if(start <= 0){
+                    b.setDisabled(false);
+                    me.clearLoginError();
+                    clearInterval(me.connectWait);
+                    me.onBtnConnectTap(b,true);
+                }
+            },  1000);  
+        }else{
+            me.onBtnConnectTap(b,true);
+        }
+    },
+    onBtnConnectTap: function(b,c_to_c){  
         var me = this;
     
-        me.userName = me.getFrmConnect().down('#inpUsername').getValue();
-        me.password = me.getFrmConnect().down('#inpPassword').getValue();
-        me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+        if(c_to_c != true){
+            me.userName = me.getFrmConnect().down('#inpUsername').getValue();
+            me.password = me.getFrmConnect().down('#inpPassword').getValue();
+            me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+        }else{
+            var suffix  = b.up('frmConnect').config.jsonData.settings.connect_suffix;
+            me.userName = b.up('frmConnect').config.jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
+            me.password = b.up('frmConnect').config.jsonData.settings.connect_username;
+            me.remember = false;
+        }
 
         if((me.userName.length < 1 )||(me.password.length < 1)){
             me.showLoginError('Some required values missing');
