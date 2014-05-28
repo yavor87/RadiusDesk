@@ -80,6 +80,15 @@ Ext.define('CoovaChilli.view.tabMain', {
                     { xtype     : 'spacer', flex: 1 }
                 ]
             },
+          /*  {
+                title       : 'Event App',
+                iconCls     : 'home',
+                cls         : 'lastPurchase',
+                html        : [
+                    '<h3>Visit the Event App now!</h3>'+
+                    '<a href="http://show.rfid.com" target="_blank">show.rfid.com</a>'
+                ]
+            },*/
             {
                 title       : 'Gallery',
                 iconCls     : 'team',

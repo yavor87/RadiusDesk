@@ -14,7 +14,7 @@ Ext.define('CoovaChilli.view.frmConnect', {
         var me          = this;
         var scaler_url = CoovaChilli.config.Config.getUrlScaler();
 
-         var t_c_hidden = true;
+        var t_c_hidden = true;
         if(config.jsonData.settings.t_c_check == true){
             t_c_hidden = false;
         }
@@ -23,16 +23,57 @@ Ext.define('CoovaChilli.view.frmConnect', {
         var un_hidden = false;
         var pw_hidden = false;
         var rm_hidden = false;
-        var un        = '';
-        var pw        = '';
-        if(config.clickToConnect){
+        if(config.jsonData.settings.connect_only == true){
             un_hidden = true;
             pw_hidden = true;
             rm_hidden = true;
-            //FIXME this must be sourced from the dynamic login page info!
-            un        = 'dvdwalt';
-            pw        = 'dvdwalt';
-        } 
+        }
+
+        var buttons;
+
+        if(config.jsonData.settings.connect_check == true){
+            if(config.jsonData.settings.connect_only == true){
+                buttons = [
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Free Access',
+                        ui      : 'confirm',
+                        iconCls : 'time',
+                        itemId  : 'btnClickToConnect'
+                    },
+                    { xtype     : 'spacer' }
+                ];
+
+            }else{
+                buttons = [ 
+                    {
+                        text    : 'Free Access',
+                        ui      : 'confirm',
+                        iconCls : 'time',
+                        itemId  : 'btnClickToConnect'
+                    },
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Connect',
+                        ui      : 'confirm',
+                        iconCls : 'arrow_right',
+                        itemId  : 'btnConnect'
+                    },
+                    { xtype     : 'spacer' }
+                ];
+            }
+        }else{
+            buttons = [
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Connect',
+                        ui      : 'confirm',
+                        iconCls : 'arrow_right',
+                        itemId  : 'btnConnect'
+                    },
+                    { xtype     : 'spacer' }
+                ];
+        }
 
 
         var fs = Ext.create('Ext.form.FieldSet',{
@@ -57,7 +98,7 @@ Ext.define('CoovaChilli.view.frmConnect', {
                         label   : 'Username',
                         itemId  : 'inpUsername',
                         hidden  : un_hidden,
-                        value   : un
+                        disabled: un_hidden
                     },
                     {
                         xtype   : 'passwordfield',
@@ -65,14 +106,15 @@ Ext.define('CoovaChilli.view.frmConnect', {
                         label   : 'Password',
                         itemId  : 'inpPassword',
                         hidden  : pw_hidden,
-                        value   : pw
+                        disabled: pw_hidden
                     },
                     {
                         xtype   : 'checkboxfield',
                         name    : 'remember_me',
                         label   : 'Remember me',
                         itemId  : 'inpRememberMe',
-                        hidden  : rm_hidden
+                        hidden  : rm_hidden,
+                        disabled: rm_hidden
                     },
                     {
                         itemId  : 'lblTC',
@@ -104,16 +146,7 @@ Ext.define('CoovaChilli.view.frmConnect', {
                 xtype   : 'toolbar',
                 ui      : 'light',
                 docked  : 'bottom',
-                items: [
-                    { xtype     : 'spacer' },
-                    {
-                        text    : 'OK',
-                        ui      : 'confirm',
-                        iconCls : 'arrow_right',
-                        itemId  : 'btnConnect'
-                    },
-                    { xtype     : 'spacer' }
-                ]
+                items   : buttons
             }];
         me.callParent([config]);
     }
