@@ -137,10 +137,13 @@ class VouchersController extends AppController {
                 $v['extra_name']    = $i['Voucher']['extra_name'];
                 $v['extra_value']   = $i['Voucher']['extra_value'];
 
-                $realm          = $i['Voucher']['realm'];
+                $realm_id           = $i['Voucher']['realm_id'];
                 if(!array_key_exists($realm,$voucher_data)){
+                    $r = $this->Realm->findById($realm_id);
+                    $voucher_data[$realm] = $r['Realm'];
                     $voucher_data[$realm]['vouchers'] = array();
                 }
+
                 array_push($voucher_data[$realm]['vouchers'],$v);   
             }
             $this->set('voucher_data',$voucher_data);
@@ -163,8 +166,10 @@ class VouchersController extends AppController {
                 $v['extra_name']    = $i['Voucher']['extra_name'];
                 $v['extra_value']   = $i['Voucher']['extra_value'];
 
-                $realm          = $i['Voucher']['realm'];
+                $realm_id           = $i['Voucher']['realm_id'];
                 if(!array_key_exists($realm,$voucher_data)){
+                    $r = $this->Realm->findById($realm_id);
+                    $voucher_data[$realm] = $r['Realm'];
                     $voucher_data[$realm]['vouchers'] = array();
                 }
                 array_push($voucher_data[$realm]['vouchers'],$v); 
