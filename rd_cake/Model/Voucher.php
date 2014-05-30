@@ -30,12 +30,13 @@ class Voucher extends AppModel {
 			'foreignKey'    => 'user_id'
         )
 	);
-
+/*
     public $hasOne = array(
         'FinPaypalTransaction'   => array(
             'dependent'     => false   
         )
     );
+*/
 
     public function beforeSave(){
         //Try to detect if it is an existing (edit):
