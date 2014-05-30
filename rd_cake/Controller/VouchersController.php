@@ -19,6 +19,8 @@ class VouchersController extends AppController {
 
      public function export_csv(){
 
+        set_time_limit(60); //Double it 
+
         $this->autoRender   = false;
 
         //__ Authentication + Authorization __
@@ -79,6 +81,8 @@ class VouchersController extends AppController {
 
   
     public function export_pdf(){
+
+        set_time_limit(60); //Double it 
 
         $user = $this->_ap_right_check();
         if(!$user){
