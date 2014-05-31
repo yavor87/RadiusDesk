@@ -10,8 +10,72 @@ Ext.define('Mikrotik.view.pnlConnect', {
         var t_c_hidden = true;
         if(me.jsonData.settings.t_c_check == true){
             t_c_hidden = false;
-        } 
-        console.log(me.jsonData.detail.t_c_check);
+        }
+
+         var buttons;
+
+        //If Click to connect only
+        var un_hidden = false;
+        var pw_hidden = false;
+        var rm_hidden = false;
+
+        if(me.jsonData.settings.connect_only == true){
+            un_hidden = true;
+            pw_hidden = true;
+            rm_hidden = true;
+        }
+
+        if(me.jsonData.settings.connect_check == true){
+            if(me.jsonData.settings.connect_only == true){
+                buttons = [
+                    '->',
+                    {
+                        text        : 'Free Access',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnClickToConnect',
+                        scale       : 'large',
+                        glyph       : Mikrotik.config.icnConnect
+                    }
+                ];
+
+            }else{
+                buttons = [
+                    {
+                        text        : 'Free Access',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnClickToConnect',
+                        scale       : 'large',
+                        glyph       : Mikrotik.config.icnConnect
+                    },
+                    '|',
+                    {
+                        text        : 'Connect',
+                        action      : 'ok',
+                        type        : 'submit',
+                        itemId      : 'btnConnect',
+                        formBind    : true,
+                        scale       : 'large',
+                        glyph       : Mikrotik.config.icnConnect
+                    }  
+                ];
+            }
+        }else{
+            buttons = [
+                '->',
+                {
+                    text        : 'Connect',
+                    action      : 'ok',
+                    type        : 'submit',
+                    itemId      : 'btnConnect',
+                    formBind    : true,
+                    scale       : 'large',
+                    glyph       : Mikrotik.config.icnConnect
+                }  
+            ];
+        }
+
         this.items = [
             {
                 xtype       : 'form',
@@ -30,19 +94,23 @@ Ext.define('Mikrotik.view.pnlConnect', {
                 defaultType: 'textfield',
                 items: [
                     {
-                        name        : "username",
+                        name        : 'username',
                         fieldLabel  : 'Username',
                         itemId      : 'inpUsername',
-                        allowBlank  :false,
-                        blankText   :"Enter username"
+                        allowBlank  : false,
+                        blankText   : 'Enter username',
+                        hidden      : un_hidden,
+                        disabled    : un_hidden
                     },
                     {
-                        name        : "password",
+                        name        : 'password',
                         fieldLabel  : 'Password',
                         itemId      : 'inpPassword',
                         inputType   : 'password',
-                        allowBlank  :false,
-                        blankText   :"Enter password"
+                        allowBlank  : false,
+                        blankText   : 'Enter password',
+                        hidden      : pw_hidden,
+                        disabled    : pw_hidden
                     },
                     {
                         boxLabel  : 'Remember me',
@@ -51,7 +119,9 @@ Ext.define('Mikrotik.view.pnlConnect', {
                         labelAlign: 'right',
                         xtype     : 'checkbox',
                         itemId    : 'inpRememberMe',
-                        padding   : '20 0 0 0'
+                        padding   : '20 0 0 0',
+                        hidden    : rm_hidden,
+                        disabled  : rm_hidden
                     },
                     {
                         xtype       : 'displayfield',
@@ -81,27 +151,9 @@ Ext.define('Mikrotik.view.pnlConnect', {
                         hidden      : true
                     } 
                 ],
-                buttons : [
-            {
-                text        : 'Remove me from realm',
-                itemId      : 'btnRemoveMac',
-                scale       : 'large',
-                hidden      : true,
-                glyph       : Mikrotik.config.icnDelete
-            },
-            '->',
-            {
-                text        : 'Connect',
-                action      : 'ok',
-                type        : 'submit',
-                itemId      : 'btnConnect',
-                formBind    : true,
-                scale       : 'large',
-                glyph       : Mikrotik.config.icnConnect
-            }  
-        ]
+                buttons : buttons
             }
         ];
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });

@@ -30,7 +30,7 @@ Ext.define('CoovaChilli.view.Land' ,{
         },me);
 
         me.items    = [
-/*            {       
+           {       
                 height      : 90,
                 bodyStyle   :{"background-color":"#2a2a2a"}, 
                 layout  : {
@@ -38,9 +38,9 @@ Ext.define('CoovaChilli.view.Land' ,{
                     pack    : 'center'
                 }, 
                 items   : { xtype: 'image', src: 'resources/images/logo.png', 'height': 90 } 
-            },*/
+            },
 
-           {       
+/*           {       
                 height  : 75, 
                 layout  : {
                     type    : 'fit'
@@ -48,7 +48,7 @@ Ext.define('CoovaChilli.view.Land' ,{
                 xtype   : 'image', 
                 src     : 'resources/images/banner.png'
             },
-
+*/
             {
                 layout  : {
                     type    : 'hbox',
@@ -69,8 +69,7 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 xtype       : 'pnlConnect',
                                 itemId      : 'pnlConnect',
                                 hidden      : true,
-                                jsonData    : me.jsonData,
-                                clickToConnect : me.clickToConnect
+                                jsonData    : me.jsonData
                             },
                             {   
                                 xtype       : 'pnlStatus',
@@ -126,8 +125,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                                 glyph       : CoovaChilli.config.icnShop,
                                 itemId      : 'pnlShop',
                                // xtype       : 'pnlPayPal'
-                                xtype       : 'pnlPayAd'
-                                //xtype       : 'pnlPayU'
+                               // xtype       : 'pnlPayAd'
+                                xtype       : 'pnlPayU'
                             }
                         ]
                     }
