@@ -1,4 +1,4 @@
-Ext.define('CoovaChilli.view.pnlPayAd', {
+Ext.define('Mikrotik.view.pnlPayAd', {
     extend  : 'Ext.panel.Panel',
     alias   : 'widget.pnlPayAd',
     layout  : 'fit',

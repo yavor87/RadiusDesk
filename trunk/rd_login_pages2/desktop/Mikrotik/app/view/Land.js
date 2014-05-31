@@ -15,7 +15,8 @@ Ext.define('Mikrotik.view.Land' ,{
         'Ext.view.View',
         'Ext.data.Store',
         'Mikrotik.view.pnlPhotos',
-        'Mikrotik.view.pnlAbout'
+        'Mikrotik.view.pnlAbout',
+        'Mikrotik.view.pnlPayAd'
     ],
     initComponent: function() { 
         var me      = this;
@@ -118,16 +119,8 @@ Ext.define('Mikrotik.view.Land' ,{
                             {
                                 title       : 'Online shop',
                                 glyph       : Mikrotik.config.icnShop,
-                                html        : [
-                                    "<div class='rdCenter'>",
-                                    "<h2>Your Payment gateway here!</h2>",
-                                    "<div class='imgAbout'><img src='resources/images/paypal.png' /></div>",
-                                    "<div class='rdDescription'>",
-                                    "For custom payment gateway integration contact the developers of <b>RADIUSdesk</b><br>",
-                                    "<a href='http://www.radiusdesk.com/getting_started/contact_us' target='_blank'>",
-                                    "http://www.radiusdesk.com/getting_started/contact_us</a>",
-                                    "</div></div>"
-                                ]
+                                itemId      : 'pnlShop',
+                                xtype       : 'pnlPayAd'
                             }
                         ]
                     }

@@ -44,8 +44,8 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //paymentGw       : true,
     paymentGw       : false,
     //paymentGwType   : 'pnlPayPal',
-    paymentGwType   : 'pnlPayAd',
-    //paymentGwType   : 'pnlPayU',
+    //paymentGwType   : 'pnlPayAd',
+    paymentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
@@ -176,7 +176,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //____________________________ REALM DETAIL _______________________________
     realmFetched: function(data){   //Handler for Realm Info
         var me  = this;
-        var l   = me.getView('Land').create({'jsonData':data,'clickToConnect' : me.application.config.clickToConnect});
+        var l   = me.getView('Land').create({'jsonData':data});
         var vp  = me.getVp();
         vp.add([l]);
         //Change the page's title

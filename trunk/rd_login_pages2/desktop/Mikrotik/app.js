@@ -35,7 +35,9 @@ Ext.application({
         redirectTo  : "http://google.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
         removeMacUrl: infoServer+"/cake2/rd_cake/devices/remove_mac.json",
-        jsonTimeout : 10000
+        jsonTimeout : 10000,
+        urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
+        urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json'
     },
     //____ End of Configuration settings _____
 
