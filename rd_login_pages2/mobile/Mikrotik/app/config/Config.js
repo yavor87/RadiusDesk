@@ -9,7 +9,11 @@ Ext.define('Mikrotik.config.Config', {
         redirectTo  : "http://google.com",
         urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
         removeMacUrl: 'http://'+document.location.hostname+"/cake2/rd_cake/devices/remove_mac.json",
-        jsonTimeout : 10000
+        jsonTimeout : 10000,
+        paymentGw   : true,
+        paymentGwType   : 'cntPayAd',
+        urlPayPalVoucher: 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
+        urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json'
     },
  
     constructor: function(config) {

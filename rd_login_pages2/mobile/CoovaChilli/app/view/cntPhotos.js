@@ -47,7 +47,6 @@ Ext.define('CoovaChilli.view.cntPhotos', {
                                 {
                                     xtype   : 'label',
                                     data    : {'title': item.title, 'description' :item.description,'url': item.url},
-                                   // tpl     : '<div class="rdCenter"><h2>{title}</h2><span class="rdDescription">{msg}</span></div>'
                                     tpl     : bigTpl
                                 },
                                 { xtype     : 'spacer', flex: 1 }
@@ -72,7 +71,7 @@ Ext.define('CoovaChilli.view.cntPhotos', {
                 wrap: false
             },
             store: {
-                fields  : ['id', 'title', 'description','file_name'],
+                fields  : ['id', 'title', 'description','file_name','url'],
                 data    : config.jsonData.photos
             },
             itemTpl: '<tpl for="."><div class="rdThumb"><img src="'+scaler_url+'?height=90&width=90&image={file_name}"></div></tpl>'
