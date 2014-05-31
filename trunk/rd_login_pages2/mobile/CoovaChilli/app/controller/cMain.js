@@ -60,12 +60,9 @@ Ext.define('CoovaChilli.controller.cMain', {
     timeUntilStatus:20, //interval to refresh
     refreshInterval:20, //ditto
 
-    firstTime   : true,
-    noPopUp     : true,
-
     sessionData : undefined,
 
-    retryCount  : 1, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : undefined,
@@ -157,8 +154,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         Ext.Viewport.add(Ext.create('CoovaChilli.view.tabMain',{
             'jsonData'      :jsonData,
             'paymentScreen' :paymentScreen, 
-            'itemId'        : 'tabMain',
-            'clickToConnect': CoovaChilli.config.Config.getClickToConnect()
+            'itemId'        : 'tabMain'
         }));
 
         //Change the page's title
@@ -391,7 +387,6 @@ Ext.define('CoovaChilli.controller.cMain', {
             xtype: 'loadmask',
             message: 'Connecting....'
         });
-
 
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({

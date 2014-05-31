@@ -14,10 +14,73 @@ Ext.define('Mikrotik.view.frmConnect', {
         var me          = this;
         var scaler_url = Mikrotik.config.Config.getUrlScaler();
 
-         var t_c_hidden = true;
+        var t_c_hidden = true;
         if(config.jsonData.settings.t_c_check == true){
             t_c_hidden = false;
+        }
+
+        //If Click to connect
+        var un_hidden = false;
+        var pw_hidden = false;
+        var rm_hidden = false;
+        if(config.jsonData.settings.connect_only == true){
+            un_hidden = true;
+            pw_hidden = true;
+            rm_hidden = true;
         } 
+
+        var buttons;
+
+        if(config.jsonData.settings.connect_check == true){
+            if(config.jsonData.settings.connect_only == true){
+                buttons = [
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Free Access',
+                        ui      : 'confirm',
+                        iconCls : 'time',
+                        itemId  : 'btnClickToConnect'
+                    },
+                    { xtype     : 'spacer' }
+                ];
+
+            }else{
+                buttons = [ 
+                    {
+                        text    : 'Free Access',
+                        ui      : 'confirm',
+                        iconCls : 'time',
+                        itemId  : 'btnClickToConnect'
+                    },
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Connect',
+                        ui      : 'confirm',
+                        iconCls : 'arrow_right',
+                        itemId  : 'btnConnect'
+                    },
+                    
+                    { xtype     : 'spacer' }
+                ];
+            }
+        }else{
+            buttons = [
+                    { xtype     : 'spacer' },
+                    {
+                        text    : 'Connect',
+                        ui      : 'confirm',
+                        iconCls : 'arrow_right',
+                        itemId  : 'btnConnect'
+                    },
+                    {
+                        text    : 'Remove me from realm',
+                        itemId  : 'btnRemoveMac',
+                        ui      : 'decline',
+                        hidden  : true
+                    },
+                    { xtype     : 'spacer' }
+                ];
+        }
 
 
         var fs = Ext.create('Ext.form.FieldSet',{
@@ -40,19 +103,25 @@ Ext.define('Mikrotik.view.frmConnect', {
                         xtype   : 'textfield',
                         name    : 'name',
                         label   : 'Username',
-                        itemId  : 'inpUsername'
+                        itemId  : 'inpUsername',
+                        hidden  : un_hidden,
+                        disabled: un_hidden
                     },
                     {
                         xtype   : 'passwordfield',
                         name    : 'password',
                         label   : 'Password',
-                        itemId  : 'inpPassword'
+                        itemId  : 'inpPassword',
+                        hidden  : pw_hidden,
+                        disabled: pw_hidden
                     },
                     {
                         xtype   : 'checkboxfield',
                         name    : 'remember_me',
                         label   : 'Remember me',
-                        itemId  : 'inpRememberMe'
+                        itemId  : 'inpRememberMe',
+                        hidden  : rm_hidden,
+                        disabled: rm_hidden
                     },
                     {
                         itemId  : 'lblTC',
@@ -84,23 +153,9 @@ Ext.define('Mikrotik.view.frmConnect', {
                 xtype   : 'toolbar',
                 ui      : 'light',
                 docked  : 'bottom',
-                items: [
-                    { xtype     : 'spacer' },
-                    {
-                        text    : 'OK',
-                        ui      : 'confirm',
-                        iconCls : 'arrow_right',
-                        itemId  : 'btnConnect'
-                    },
-                    {
-                        text    : 'Remove me from realm',
-                        itemId  : 'btnRemoveMac',
-                        ui      : 'decline',
-                        hidden  : true
-                    },
-                    { xtype     : 'spacer' }
-                ]
+                items   : buttons
             }];
         me.callParent([config]);
+
     }
 });

@@ -47,8 +47,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                         scrollable  : false,
                         itemId      : 'frmConnect',
                         hidden      : true,
-                        jsonData    : config.jsonData,
-                        clickToConnect : config.clickToConnect
+                        jsonData    : config.jsonData
                     },
                     {   
                         xtype       : 'cntStatus',
@@ -105,7 +104,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                 layout      : 'fit',
                 scrollable  : false         
             }, 
-             {
+         /*    {
                 title       : 'Online shop',
                 xtype       : 'container',
                 itemId      : 'cntShop',
@@ -123,8 +122,8 @@ Ext.define('CoovaChilli.view.tabMain', {
                     },
                     { xtype : 'spacer', flex: 1 }
                 ]
-            } 
-         /*   {
+            } */
+           {
                 title   : 'Online shop',
                 itemId  : 'cntShop',
                 iconCls : 'compose',
@@ -136,7 +135,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                         scrollable  : false
                    }
                 ]
-            }*/
+            }
         ];
 
         me.callParent([config]);

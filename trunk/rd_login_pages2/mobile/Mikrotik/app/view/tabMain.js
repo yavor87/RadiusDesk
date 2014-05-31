@@ -7,7 +7,8 @@ Ext.define('Mikrotik.view.tabMain', {
         'Mikrotik.view.cntStatus',
         'Mikrotik.view.cntNotHotspot',
         'Mikrotik.view.cntPhotos',
-        'Mikrotik.view.cntAbout'
+        'Mikrotik.view.cntAbout',
+        'Mikrotik.view.cntPayAd'
     ],
     config: {
         tabBar : {
@@ -93,32 +94,25 @@ Ext.define('Mikrotik.view.tabMain', {
                 scrollable  : false         
             },
             {
-                title   : 'Online shop',
-                xtype   : 'container',
-                iconCls : 'compose',
-                layout  : 'hbox',
+                title       : 'Online shop',
+                xtype       : 'container',
+                itemId      : 'cntShop',
+                iconCls     : 'compose',
+                layout      : 'hbox',
                 scrollable: {
-                    direction: 'vertical',
-                    directionLock: true
-                }, 
+                    direction       : 'vertical',
+                    directionLock   : true
+                },
                 items: [
-                    { xtype     : 'spacer', flex: 1 },
+                    { xtype : 'spacer', flex: 1 },
                     {
-                       html  : [
-                                '<div class="rdWrapper">'+
-                                "<h2>Your Payment gateway here!</h2>"+
-                                "<div class='imgAbout'><img src='resources/images/paypal.png' /></div>"+
-                                "<div class='rdDescription'>"+
-                                "For custom payment gateway integration contact the developers of <b>RADIUSdesk</b><br>"+
-                                "<a href='http://www.radiusdesk.com/getting_started/contact_us' target='_blank'>"+
-                                "http://www.radiusdesk.com/getting_started/contact_us</a>"+
-                                "</div></div>"
-                        ], 
-                        xtype:  'container'
+
+                        xtype : config.paymentScreen
                     },
-                    { xtype     : 'spacer', flex: 1 }
+                    { xtype : 'spacer', flex: 1 }
                 ]
             }
+
         ];
 
         me.callParent([config]);

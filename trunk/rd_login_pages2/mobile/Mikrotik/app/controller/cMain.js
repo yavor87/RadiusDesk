@@ -8,7 +8,10 @@ Ext.define('Mikrotik.controller.cMain', {
             frmConnect      : '#frmConnect', 
             cntSession      : '#cntSession',
             lblStatusTimer  : '#lblStatusTimer',
-            cntPhotos       : '#cntPhotos'
+            cntPhotos       : '#cntPhotos',
+            cntShop         : '#cntShop',
+            tabMain         : '#tabMain',
+            datThumb        : '#datThumb'
         },
         control: {
         
@@ -29,6 +32,9 @@ Ext.define('Mikrotik.controller.cMain', {
             },
             'cntPhotos #crslPhoto': {
                 activeitemchange: 'onPhotoShow'
+            },
+            'frmConnect #btnClickToConnect': {
+                tap         : 'onBtnClickToConnectTap'
             }
         },
         views: [
@@ -44,7 +50,7 @@ Ext.define('Mikrotik.controller.cMain', {
 
     sessionData : undefined,
 
-    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 1, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : undefined,
@@ -58,7 +64,9 @@ Ext.define('Mikrotik.controller.cMain', {
     queryObj        : undefined,
 
     mac_username    : undefined,
-    
+
+    currentSlide    : 0,
+        
     //called when the Application is launched, remove if not needed
     launch: function(app) {
         var me = this;
@@ -90,7 +98,12 @@ Ext.define('Mikrotik.controller.cMain', {
         var me = this;
        // console.log(jsonData);
         //Load the main view
-        Ext.Viewport.add(Ext.create('Mikrotik.view.tabMain',{'jsonData':jsonData}));
+        var paymentScreen = Mikrotik.config.Config.getPaymentGwType();
+        Ext.Viewport.add(Ext.create('Mikrotik.view.tabMain',{
+            'jsonData'      :jsonData,
+            'paymentScreen' :paymentScreen, 
+            'itemId'        : 'tabMain'
+        }));
 
         //Change the page's title
         document.title = jsonData.detail.name;
@@ -110,7 +123,20 @@ Ext.define('Mikrotik.controller.cMain', {
             }  
         }else{
             me.mtRefresh();  //Already established we are a hotspot, simply refresh
-        }  
+        }
+
+        //Check if this was perhaps the return of a payment gateway
+        me.checkPaymentGwReturn();
+
+        //Check if we need to start a slideshow
+        me.checkForSlideshow(jsonData);
+
+        //Test the redirect after login thing
+        if(jsonData.settings.redirect_check == true){
+            Mikrotik.config.Config.setNoStatus(true);
+        }
+        Mikrotik.config.Config.setRedirectTo(jsonData.settings.redirect_url);
+  
     },
     testForHotspot: function(){
         var me          = this;
@@ -141,12 +167,144 @@ Ext.define('Mikrotik.controller.cMain', {
         }
     },
     //---------------------------------------
-    onBtnConnectTap: function(b){  //Get the latest challenge and continue from there onwards....
+    checkPaymentGwReturn: function(){
+        var me = this;
+        //Return as we don't do anything
+        if(Mikrotik.config.Config.getPaymentGw() == false){
+            return;
+        }
+
+        if(Mikrotik.config.Config.getPaymentGwType() == 'cntPayPal'){
+      
+            if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
+                //Dummy thing:
+                //console.log("Finding transaction details for "+ me.queryObj.tx);
+                Ext.Ajax.request({
+                    url     : Mikrotik.config.Config.getUrlPayPalVoucher(),
+                    method  : 'GET',
+                    params: {
+                        txn_id: me.queryObj.tx
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                        //console.log(jsonData);
+                        if(jsonData.success){
+                            me.getCntShop().down('#pnlPayPalFeedback').setData(jsonData.data);
+                           // me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getCntShop().down('#pnlPayPalFeedback').show();
+                            me.getCntShop().down('#pnlPayPalError').hide();
+                            
+                            me.getFrmConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getFrmConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            //console.log("big problems");
+                            //me.getLand().down('#tpnlOptions').setActiveTab('pnlShop');
+                            me.getCntShop().down('#pnlPayPalFeedback').hide();
+                            me.getCntShop().down('#pnlPayPalError').show();
+                        }      
+                    },
+                    scope: me
+                });
+                me.getTabMain().setActiveItem('#cntShop'); //Show the shop tab
+            }
+        }
+
+        // --- PayU ---
+        if(Mikrotik.config.Config.getPaymentGwType() == 'frmPayU'){
+            //console.log(me.queryObj.PayUReference);
+            if(me.queryObj.PayUReference != undefined){ 
+
+                Ext.Ajax.request({
+                    url     : Mikrotik.config.Config.getUrlPayUVoucher(),
+                    method  : 'GET',
+                    params: {
+                        PayUReference: me.queryObj.PayUReference
+                    },
+                    success : function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                     //   console.log(jsonData);
+                        if(jsonData.success){
+                            me.getCntShop().down('#pnlPayUFeedback').setData(jsonData.data);
+                            me.getCntShop().down('#pnlPayUFeedback').show();
+                            me.getCntShop().down('#pnlPayUError').hide();                       
+                            me.getFrmConnect().down('#inpUsername').setValue(jsonData.data.username);
+                            me.getFrmConnect().down('#inpPassword').setValue(jsonData.data.password);
+                        }else{
+                            me.getCntShop().down('#pnlPayUFeedback').hide();
+                            me.getCntShop().down('#pnlPayUError').show();
+                        }       
+                    },
+                    scope: me
+                });
+            }
+        }
+    },
+    checkForSlideshow: function(data){
+        var me = this;
+        if(data.settings.slideshow_check == true){
+
+            me.getTabMain().setActiveItem('#cntPhotos'); //Show the slideshow
+
+            me.slideShow = setInterval(function(){        
+                var dv          = me.getDatThumb()
+                var count       = dv.getStore().getCount();
+                me.currentSlide = me.currentSlide +1;
+                if(me.currentSlide >= count){
+                    me.currentSlide =0 //Start again
+                }
+                var record = dv.getStore().getAt(me.currentSlide);
+                dv.select(record);
+
+                var id          = record.getId();
+                me.thumbPhoto   = id;
+                var aa          = me.getCntPhotos().down('#'+id); 
+                me.getCntPhotos().down('#crslPhoto').setActiveItem(aa);
+
+            },  (data.settings.seconds_per_slide * 1000));
+        }
+    },
+    onBtnClickToConnectTap: function(b){
+
+        var me      = this;
+        var delay   = b.up('frmConnect').config.jsonData.settings.connect_delay;
+        var start   = delay;
+
+        //Check if they need to accept T&C
+        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+            if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
+                me.showLoginError('First accept T&C');
+                return;
+            }
+        }
+        if(delay > 0){
+            b.setDisabled(true);
+            me.connectWait = setInterval(function(){        
+                me.showLoginError('Connect in '+start+' seconds');
+                start = start -1;
+                if(start <= 0){
+                    b.setDisabled(false);
+                    me.clearLoginError();
+                    clearInterval(me.connectWait);
+                    me.onBtnConnectTap(b,true);
+                }
+            },  1000);  
+        }else{
+            me.onBtnConnectTap(b,true);
+        }
+    },
+    onBtnConnectTap: function(b,c_to_c){  //Get the latest challenge and continue from there onwards....
         var me = this;
     
-        me.userName = me.getFrmConnect().down('#inpUsername').getValue();
-        me.password = me.getFrmConnect().down('#inpPassword').getValue();
-        me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+        if(c_to_c != true){
+            me.userName = me.getFrmConnect().down('#inpUsername').getValue();
+            me.password = me.getFrmConnect().down('#inpPassword').getValue();
+            me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+        }else{
+            var suffix  = b.up('frmConnect').config.jsonData.settings.connect_suffix;
+            me.userName = b.up('frmConnect').config.jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
+            me.password = b.up('frmConnect').config.jsonData.settings.connect_username;
+            me.remember = false;
+        }
 
         if((me.userName.length < 1 )||(me.password.length < 1)){
             me.showLoginError('Some required values missing');
