@@ -276,7 +276,6 @@ Ext.application({
 
         //--- Form Fail message --->
         Ext.ux.formFail = function(form,action){
-
             switch (action.failureType) {
             case Ext.form.action.Action.CLIENT_INVALID:
                 Ext.ux.Toaster.msg(
