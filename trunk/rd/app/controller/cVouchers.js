@@ -335,6 +335,7 @@ Ext.define('Rd.controller.cVouchers', {
         var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
+       // form.setLoading(true); //Mask it
         form.submit({
             clientValidation: true,
             url: me.urlAdd,
@@ -482,10 +483,11 @@ Ext.define('Rd.controller.cVouchers', {
     saveBasicInfo:function(button){
 
         var me      = this;
-        var form    = button.up('form');
+        var f    = button.up('form');
         var voucher_id = button.up('pnlVoucher').v_id;
-        //Checks passed fine...      
-        form.submit({
+        //Checks passed fine...
+        //f.setLoading(true); //Mask it      
+        f.submit({
             clientValidation    : true,
             url                 : me.urlEditBasic,
             params              : {id: voucher_id},
@@ -497,6 +499,7 @@ Ext.define('Rd.controller.cVouchers', {
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
+                //f.setLoading(false);
             },
             failure             : Ext.ux.formFail
         });
@@ -952,7 +955,8 @@ Ext.define('Rd.controller.cVouchers', {
         var sr                  = me.getGrid().getSelectionModel().getLastSelected();
         extra_params['voucher_id'] = sr.getId();
 
-        //Checks passed fine...      
+        //Checks passed fine...
+        //form.setLoading(true); //Mask it    
         form.submit({
             clientValidation    : true,
             url                 : me.urlChangePassword,
