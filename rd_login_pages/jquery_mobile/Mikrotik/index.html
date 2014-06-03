@@ -1,0 +1,286 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Login</title>
+	<meta name="author" content="Dirk van der Walt - http://sourceforge.net/projects/radiusdesk/" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<link rel="stylesheet" type="text/css" href="resources/css/jquery.mobile-1.3.1.css" />
+   	<link rel="stylesheet" type="text/css" href="resources/css/jquery-mobile.css"  />
+	<link rel="stylesheet" type="text/css" href="resources/css/photoswipe.css"  />
+    <link rel="stylesheet" type="text/css" href="resources/css/custom.css"  />
+
+    <script type="text/javascript" src="resources/js/klass.min.js"></script>
+	<script type="text/javascript" src="resources/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.mobile-1.3.1.js"></script>
+    <script type="text/javascript" src="resources/js/code.photoswipe.jquery-3.0.5.min.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.cookie.js"></script>
+
+    <script src="resources/js/jqExtend.js"></script>
+    <script src="resources/js/rdDynamic.js"></script>
+    <script src="resources/js/rdConnect.js"></script>
+    <script type="text/javascript">
+
+    (function(window, $, PhotoSwipe){
+			
+		$(document).ready(function(){
+
+            
+
+            //___ Dynamic content ____
+            var h       = document.location.hostname;
+            var dynUrl  = "http://"+h+"/cake2/rd_cake/dynamic_details/info_for.json";
+            var item    = 'nasid';
+            var thumb_h = 200;
+            var thumb_w = 200;
+            var scaler  = 'http://'+h+'/cake2/rd_cake/webroot/files/image.php';
+            
+            var d       = rdDynamic({dynUrl: dynUrl, thumb_h: thumb_h, thumb_w: thumb_w, scaler: scaler},window.jQuery);
+            var removeMacUrl = "http://"+h+"/cake2/rd_cake/devices/remove_mac.json";
+
+           // if(d.isHotspot()){
+                var i = d.addDynamicInfo();
+          //  }else{
+             //   console.log("Not a hotspot");
+          //  } 
+            //___ END Dynamic Content ____
+
+            //If it is a preview page....
+            $('#Help').on('pageshow',function(e){
+                if($.getUrlVar('dynamic_id') != undefined){
+                    $('#previewHeading').text("Mobile preview");
+                    document.title = "Mobile preview";
+                    $.mobile.changePage('#Help');
+                    return;
+                }
+            });
+            
+            //______ Connect part ______
+            var c       = rdConnect({removeMacUrl : removeMacUrl},window.jQuery);
+            c.index();
+            $('#Connect')
+                .on('pageshow', function(e){
+                    c.index();
+                })
+                .on('pagehide', function(e){
+                    c.clearRefresh();
+                });
+            //___ END Connect Part ____
+
+            //Submitting the credentials
+            //Submit of connect form
+            $("a[name=btn_connect]").on('click',function(){
+                c.onBtnConnectClick();
+            });
+
+            $("a[name=btn_disconnect]").on('click',function(){
+                c.onBtnDisconnectClick();
+            });
+			
+            //Hide the remove mac button
+            $('#remove_mac').hide();
+
+            $("a[name=btn_remove_mac]").on('click',function(){
+                c.onBtnRemoveMac();
+            });
+
+			$('div.gallery-page')
+				.on('pageshow', function(e){
+					
+					var 
+						currentPage = $(e.target),
+						options = {},
+						photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
+
+                  //  $("ul.gallery a:first").click();
+						
+					return true;
+					
+				})
+				
+				.on('pagehide', function(e){
+					
+					var 
+						currentPage = $(e.target),
+						photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+					if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+						PhotoSwipe.detatch(photoSwipeInstance);
+					}
+					
+					return true;
+					
+				});
+			
+		});
+		
+    }(window, window.jQuery, window.Code.PhotoSwipe));
+	
+	</script>
+</head> 
+<body> 
+
+<div data-role="page" id="Connect">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1>Connect</h1>
+	</div>
+	
+	
+	<div data-role="content">
+
+    <!-- LOGIN SCREEN -->
+    <div id='cConnect' data-role="collapsible" data-content-theme="c" style="margin: 10px; max-width:400px; text-align:center;" data-collapsed="false" data-theme="a">
+        <h3>Credentials</h3>
+        <!-- Form to connect -->
+        <div id='connect_fb' class='warn'>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="Username">Username</label>
+            <input type="text" name="Username" id="Username" required="required">
+            <label for="Password">Password</label> 
+            <input type="password" name="Password" id="Password" required="required">
+            <input type="checkbox" name="remember" id="remember" class="custom" />       
+            <label for="remember">Remember me</label>
+            <a href="#" data-role="button" name='btn_remove_mac' id='remove_mac'>Remove me from realm</a>
+        </div>
+        <a href="#" data-role="button" name='btn_connect'>Login</a> 
+    </div>
+    <!-- END LOGIN SCREEN -->
+
+    <!-- NOT HOTSPOT SCREEN -->
+    <div id='cNotHotspot' data-role="collapsible" data-content-theme="c" style="margin: 10px; max-width:400px; text-align:center; display:none;" data-collapsed="false" data-theme="a">
+        <h3>Not a hotspot</h3>
+        <h3>This is not a hotspot</h3>
+    </div>
+    <!-- END LOGIN SCREEN -->
+
+    <!------ Status Screen -------->
+    <!-- Content Start -->
+    <div id='cStatus' data-role="content" style="margin: 0px; max-width:400px; text-align:center; display:none;">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" data-theme="d">
+            <li><a id='a_url_original' href="http://google.com" target="_blank"><img src="resources/img/link.png" alt="URL" class="ui-li-icon"><span id='span_url_original'>http://google.com</span></a></li>
+            <li><a href="#" name='btn_disconnect'><img src="resources/img/disconnect.png" alt="Disconnect" class="ui-li-icon">Disconnect</a></li>
+        </ul>
+        <div data-role="collapsible-set">
+	        <div data-role="collapsible" data-theme="a" data-content-theme="c">
+	            <h3>Session Detail</h3>
+	            <ul data-role="listview" data-inset="true" data-divider-theme="a">
+                    <li><b>Username</b><span class='col_right' id='acct_un'></span></li>
+                    <li><b>Uptime</b><span class='col_right' id='acct_ut'></span></li>
+                    <li><b>Data in</b><span class='col_right' id='acct_di'></span></li>
+                    <li><b>Data out</b><span class='col_right' id='acct_do'></span></li>
+		        </ul>
+	        </div>
+        </div>
+        <p ><strong>  Refreshing in </strong><span id='status_refresh' class='info'> </span><strong> seconds.</strong></p>
+    </div>
+    <!----- END Status Screen ---->
+
+	</div><!-- /content -->
+
+	<div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect" class="ui-btn-active ui-state-persist">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+			    <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+<div data-role="page" data-add-back-btn="false" id="Help">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1 id="previewHeading">Help</h1>
+	</div>
+
+	<div data-role="content" id="HelpContent">	
+		
+		
+		
+	</div>
+	
+	<div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help" class="ui-btn-active ui-state-persist">Help</a></li>
+			    <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+
+<div data-role="page" data-add-back-btn="false" id="Gallery" class="gallery-page">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1>Image Gallery</h1>
+	</div>
+
+	<div data-role="content">	
+		
+		<ul class="gallery" id="GalUl">	
+            <!-- We will add items dynamically -->
+			<!--<li><a href="images/full/001.jpg" rel="external"><img src="images/thumb/001.jpg" alt="Image 001" /></a></li> -->	
+		</ul>
+		
+	</div>
+
+    <div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+			    <li><a data-icon="grid" href="#Gallery" class="ui-btn-active ui-state-persist">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+<div data-role="page" data-add-back-btn="false" id="About">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1>About</h1>
+	</div>
+
+	<div data-role="content">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" style="max-width:400px; text-align:center;">
+	        <li data-role="list-divider" id='dynAbout'>About</li>
+            <li><p class="center"><img id='dynIcon' src="" /></p></li>
+            <li><strong>Phone</strong><span id='dynPhone' class='col_right'></span></li>
+            <li><strong>Fax</strong><span   id='dynFax'   class='col_right'></span></li>
+            <li><strong>Mobile</strong><span id='dynCell' class='col_right'></span></li>
+            <li style="height: 60px;"><strong>Address</strong><span id='dynAddr' class='col_right'></span></li>
+          <!--  <li><strong>Lat</strong><span id='dynLat' class='col_right'></span></li>
+            <li><strong>Lng</strong><span id='dynLng' class='col_right'></span></li>-->
+            <li><a id='dynUrl'  href="klklkl"></a></li>
+            <li><a id='dynMail' href="klklk"></a></li>
+        </ul>
+    </div>
+	
+	<div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+			    <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About" class="ui-btn-active ui-state-persist">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+
+</body>
+</html>
