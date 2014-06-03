@@ -977,7 +977,7 @@ class VouchersController extends AppController {
         $message= $this->request->data['message'];
 
          if($q_r){
-            $username       = $q_r['Voucher']['username'];
+            $username       = $q_r['Voucher']['name'];
             $password       = $q_r['Voucher']['password'];
             $valid_for      = $q_r['Voucher']['time_valid'];
             $profile        = $q_r['Voucher']['profile'];
