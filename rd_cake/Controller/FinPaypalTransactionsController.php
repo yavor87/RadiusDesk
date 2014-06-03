@@ -141,7 +141,7 @@ class FinPaypalTransactionsController extends AppController {
                 $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
                 $q  = $v->findById($voucher_id);
                 if($q){
-                    $username       = $q['Voucher']['username'];
+                    $username       = $q['Voucher']['name'];
                     $password       = $q['Voucher']['password'];
                     $valid_for      = $q['Voucher']['time_valid'];
                     $profile        = $q['Voucher']['profile'];
@@ -309,7 +309,7 @@ class FinPaypalTransactionsController extends AppController {
             $voucher_id = $q_r['FinPaypalTransaction']['voucher_id'];
             $q  = $v->findById($voucher_id);
             if($q){
-                $username       = $q['Voucher']['username'];
+                $username       = $q['Voucher']['name'];
                 $password       = $q['Voucher']['password'];
                 $valid_for      = $q['Voucher']['time_valid'];
                 $profile        = $q['Voucher']['profile'];
@@ -845,7 +845,7 @@ class FinPaypalTransactionsController extends AppController {
         $voucher_id = $voucher_id;
         $q          = $v->findById($voucher_id);
         if($q){
-            $username       = $q['Voucher']['username'];
+            $username       = $q['Voucher']['name'];
             $password       = $q['Voucher']['password'];
             $valid_for      = $q['Voucher']['time_valid'];
             $profile        = $q['Voucher']['profile'];
