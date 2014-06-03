@@ -74,22 +74,21 @@ $config['user_settings']['map']['lng']      = -71.0955740216735;
 $config['user_settings']['map']['lat']      = 42.3379770178396;
 
 //The location of the mobile and desktop login pages for CoovaChilli
-//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
-$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/CoovaChilli/index.html';
-//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/CoovaChilli/build/production/CoovaChilli/index.html';
+$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/jquery_mobile/CoovaChilli/index.html';
 
-//$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/CoovaLogin/production/index.html';
-$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/CoovaChilli/index.html';
-//$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/CoovaChilli/build/production/CoovaChilli/index.html';
+$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/index.html';
+//$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index.html';
+
 
 //The location of the mobile and desktop login pages for Mikrotik
-$config['MikrotikDynamicLogin']['mobile']   = '/rd_login_pages/mobile/Mikrotik/index.html';
-//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/Mikrotik/index.html';
-//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages2/mobile/Mikrotik/build/production/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/mobile/Mikrotik/index.html';
+//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index.html';
+//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/jquery_mobile/Mikrotik/index.html';
 
 
-$config['MikrotikDynamicLogin']['desktop']  = '/rd_login_pages/desktop/Mikrotik/build/MikrotikLogin/production/index.html';
-//$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/index.html';
 //$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/build/production/Mikrotik/index.html';
 
 
