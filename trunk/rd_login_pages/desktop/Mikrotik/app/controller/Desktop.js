@@ -161,7 +161,7 @@ Ext.define('Mikrotik.controller.Desktop', {
         if(data.settings.redirect_check == true){
             me.application.config.noStatus = true;
         }else{
-            me.application.config.noStatus = true;
+            me.application.config.noStatus = false;
         }
         me.application.config.redirectTo = data.settings.redirect_url;
 
