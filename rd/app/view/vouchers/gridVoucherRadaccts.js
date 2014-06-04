@@ -55,11 +55,7 @@ Ext.define('Rd.view.vouchers.gridVoucherRadaccts' ,{
         },
         {   text: i18n('sSession_time'), dataIndex: 'acctsessiontime', tdCls: 'gridTree', flex: 1,filter: {type: 'string'},
             renderer    : function(value){
-                if(value == 0){
-                    return value; 
-                }
-                var online    = new Date((value * 1000));
-                return Ext.Date.format(online, 'z:H:i:s');              
+                return Ext.ux.secondsToHuman(value);            
             },
             stateId: 'StateGridVoucherRadaccts12'
         }, //Format

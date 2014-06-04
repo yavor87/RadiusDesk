@@ -1,13 +1,12 @@
 Ext.define('Rd.view.desktop.winPasswordChanger', {
-    extend: 'Ext.window.Window',
-    alias : 'widget.winPasswordChanger',
-    title : i18n('sChange_password'),
-    layout: 'fit',
+    extend  : 'Ext.window.Window',
+    alias   : 'widget.winPasswordChanger',
+    title   : i18n('sChange_password'),
+    layout  : 'fit',
     autoShow: false,
-    width:    350,
-    height:   250,
-    glyph : 57495,
-
+    width   : 350,
+    height  : 250,
+    glyph   : Rd.config.icnLock,
     initComponent: function() {
         var me = this;
 
