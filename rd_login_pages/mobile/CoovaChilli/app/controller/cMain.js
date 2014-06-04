@@ -185,6 +185,8 @@ Ext.define('CoovaChilli.controller.cMain', {
         //Test the redirect after login thing
         if(jsonData.settings.redirect_check == true){
             CoovaChilli.config.Config.setNoStatus(true);
+        }else{
+            CoovaChilli.config.Config.setNoStatus(false);
         }
         CoovaChilli.config.Config.setRedirectTo(jsonData.settings.redirect_url);
 
