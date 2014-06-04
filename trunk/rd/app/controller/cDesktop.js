@@ -523,13 +523,12 @@ Ext.define('Rd.controller.cDesktop', {
     },
     onMenuItem: function(memuItem){
         var me      = this;
-        var itemId  = memuItem.getItemId();
-
-        me.getPnlDesktop().setLoading(true); //Mask it
+        var itemId  = memuItem.getItemId();  
         //If the itemId of the menuitem is not set; it will reply with the id which
         //will be menuitem-<something>
         var m=itemId.match(/menuitem-/g);
         if(m == null){
+            me.getPnlDesktop().setLoading(true); //Mask it
             me.application.runAction(itemId,'Index');
         }  
     },

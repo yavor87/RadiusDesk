@@ -1,12 +1,12 @@
 Ext.define('Rd.view.desktop.winDesktopSettings', {
-    extend: 'Ext.window.Window',
-    alias : 'widget.winDesktopSettings',
-    title : i18n('sSettings'),
-    layout: 'fit',
+    extend  : 'Ext.window.Window',
+    alias   : 'widget.winDesktopSettings',
+    title   : i18n('sSettings'),
+    layout  : 'fit',
     autoShow: false,
-    width:    350,
-    height:   250,
-    iconCls: 'settings',
+    width   : 350,
+    height  : 250,
+    glyph   : Rd.config.icnSpanner,
     initComponent: function() {
         var me = this;
 
