@@ -134,6 +134,8 @@ Ext.define('Mikrotik.controller.cMain', {
         //Test the redirect after login thing
         if(jsonData.settings.redirect_check == true){
             Mikrotik.config.Config.setNoStatus(true);
+        }else{
+            Mikrotik.config.Config.setNoStatus(false);
         }
         Mikrotik.config.Config.setRedirectTo(jsonData.settings.redirect_url);
   
