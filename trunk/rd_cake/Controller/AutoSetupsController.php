@@ -8,7 +8,7 @@ class AutoSetupsController extends AppController {
     public $uses       = array('AutoSetup','User');
     protected $base    = "Access Providers/Controllers/Tags/";
 
-    var $scaffold;
+    //var $scaffold;
 /*
 
 //------------------------------------------------------------------------

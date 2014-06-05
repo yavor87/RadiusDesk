@@ -1,7 +1,7 @@
 <?php
 class AutoGroupsController extends AppController {
 
-    var $scaffold;
+    //var $scaffold;
 
 }
 ?>
