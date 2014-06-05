@@ -44,8 +44,8 @@ Ext.define('CoovaChilli.controller.Desktop', {
     //paymentGw       : true,
     paymentGw       : false,
     //paymentGwType   : 'pnlPayPal',
-    //paymentGwType   : 'pnlPayAd',
-    paymentGwType   : 'pnlPayU',
+    paymentGwType   : 'pnlPayAd',
+    //paymentGwType   : 'pnlPayU',
 
     init: function() {
         var me = this;
