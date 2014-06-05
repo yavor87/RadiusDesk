@@ -14,7 +14,7 @@ class AutoMacsController extends AppController {
         'vpn_server',   'tunnel_ip'
     );
 
-    var $scaffold;
+    //var $scaffold;
 
 
 //------------------------------------------------------------------------

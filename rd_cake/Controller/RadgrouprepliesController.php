@@ -1,7 +1,7 @@
 <?php
 class RadgrouprepliesController extends AppController {
 
-    var $scaffold;
+    //var $scaffold;
 
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 class RadgroupchecksController extends AppController {
 
-    var $scaffold;
+   // var $scaffold;
 
 }
 ?>

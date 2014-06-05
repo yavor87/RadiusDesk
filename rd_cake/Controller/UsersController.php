@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-    var $scaffold;
+    //var $scaffold;
 
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
