@@ -1,3 +1,4 @@
+/*
 Ext.define('CoovaChilli.view.cntPayAd', {
     extend  : 'Ext.Container',
     xtype   : 'cntPayAd',
@@ -9,7 +10,8 @@ Ext.define('CoovaChilli.view.cntPayAd', {
         ]
     }
 });
-/*
+*/
+
 Ext.define('CoovaChilli.view.cntPayAd', {
     extend  : 'Ext.Container',
     xtype   : 'cntPayAd',
@@ -26,4 +28,4 @@ Ext.define('CoovaChilli.view.cntPayAd', {
         ]
     }
 });
-*/
+

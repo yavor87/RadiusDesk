@@ -104,7 +104,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                 layout      : 'fit',
                 scrollable  : false         
             }, 
-         /*    {
+            {
                 title       : 'Online shop',
                 xtype       : 'container',
                 itemId      : 'cntShop',
@@ -122,20 +122,20 @@ Ext.define('CoovaChilli.view.tabMain', {
                     },
                     { xtype : 'spacer', flex: 1 }
                 ]
-            } */
-           {
+            } 
+          /* {
                 title   : 'Online shop',
                 itemId  : 'cntShop',
                 iconCls : 'compose',
                 layout      : 'fit',
                 items: [
                    {
-                        xtype       : 'frmPayU',
-                        itemId      : 'frmPayU',
+                        xtype       : 'cntPayAd',
+                        itemId      : 'cntPayAd',
                         scrollable  : false
                    }
                 ]
-            }
+            }*/
         ];
 
         me.callParent([config]);
