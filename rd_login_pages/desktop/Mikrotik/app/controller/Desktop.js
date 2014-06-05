@@ -22,7 +22,7 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 1, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry    : 0,
 
     userName        : undefined,
