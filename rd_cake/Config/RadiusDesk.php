@@ -73,10 +73,19 @@ $config['user_settings']['map']['zoom']     = 18;
 $config['user_settings']['map']['lng']      = -71.0955740216735;
 $config['user_settings']['map']['lat']      = 42.3379770178396;
 
+
+//====== Mobile devices that do not support Sencha Touch =====
+//ID your device by visiting: http://127.0.0.1/cake2/rd_cake/dynamic_details/id_me
+$config['DynamicLogin']['use_jquery']       = array(
+   //array('type' => 'contain',  'value' => 'Ubuntu'),
+   //array('type' => 'match',    'value' => 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/10.04 Chromium/18.0.1025.151 Chrome/18.0.1025.151 Safari/535.19'),
+);
+
 //The location of the mobile and desktop login pages for CoovaChilli
 //$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/index.html';
-$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index.html';
-//$config['CoovaDynamicLogin']['mobile']      = '/rd_login_pages/jquery_mobile/CoovaChilli/index.html';
+
+$config['CoovaDynamicLogin']['mobile']          = '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index.html';
+$config['CoovaDynamicLogin']['jquery_mobile']   = '/rd_login_pages/jquery_mobile/CoovaChilli/index.html';
 
 //$config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/index.html';
 $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index.html';
@@ -84,8 +93,9 @@ $config['CoovaDynamicLogin']['desktop']     = '/rd_login_pages/desktop/CoovaChil
 
 //The location of the mobile and desktop login pages for Mikrotik
 //$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/mobile/Mikrotik/index.html';
-$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index.html';
-//$config['MikrotikDynamicLogin']['mobile']      = '/rd_login_pages/jquery_mobile/Mikrotik/index.html';
+
+$config['MikrotikDynamicLogin']['mobile']       = '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['jquery_mobile']= '/rd_login_pages/jquery_mobile/Mikrotik/index.html';
 
 
 //$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/index.html';
