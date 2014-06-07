@@ -219,7 +219,7 @@ class LabelPdf extends TCPDF {
              	$altimgs = array() 
             )		
         */
-        $this->Image(WWW_ROOT.DS.$this->Logo,($_PosX),$_PosY+5,10,0,'','','',true);
+        $this->Image(WWW_ROOT.$this->Logo,($_PosX),$_PosY+5,10,0,'','','',true);
 
        // $this->Set_Font_Size('6');
         //Set the location to start the details
