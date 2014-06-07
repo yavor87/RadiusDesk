@@ -95,18 +95,39 @@ class DynamicDetailsController extends AppController {
 
     }
 
+    public function id_me(){
+         $this->layout = 'rd';
+        $u_a = $this->request->header('User-Agent');
+        $this->set('u_a',$u_a);
+        $this->set(array(
+            'data' => array("User-Agent" => $u_a),
+            'success' => true,
+            '_serialize' => array('data','success')
+        ));
+    }
+
     public function chilli_browser_detect(){
-        $redir_to = Configure::read('CoovaDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
-        if($this->request->is('mobile')){
-            $redir_to = Configure::read('CoovaDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+        $match_found = $this->_use_jquery_mobile();  
+        if($match_found){
+                $redir_to = Configure::read('CoovaDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
+        }else{  
+            $redir_to = Configure::read('CoovaDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
+            if($this->request->is('mobile')){
+                $redir_to = Configure::read('CoovaDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+            }
         }
         $this->response->header('Location', $redir_to);
     }
 
     public function mikrotik_browser_detect(){
-        $redir_to = Configure::read('MikrotikDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
-        if($this->request->is('mobile')){
-            $redir_to = Configure::read('MikrotikDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+        $match_found = $this->_use_jquery_mobile();  
+        if($match_found){
+            $redir_to = Configure::read('MikrotikDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
+        }else{
+            $redir_to = Configure::read('MikrotikDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
+            if($this->request->is('mobile')){
+                $redir_to = Configure::read('MikrotikDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+            }
         }
         $this->response->header('Location', $redir_to);
     }
@@ -1705,6 +1726,30 @@ class DynamicDetailsController extends AppController {
                 }
             }  
         }
+    }
+
+    private function _use_jquery_mobile(){
+        $match_found    = false;
+        $jq_m           = Configure::read('DynamicLogin.use_jquery');
+        if(!empty($jq_m)){
+            $u_a = $this->request->header('User-Agent');
+            foreach($jq_m as $i){
+                $value = $i['value'];
+                if($i['type'] == 'contain'){
+                    if(preg_match("/$value/", $u_a)){
+                        $match_found = true;
+                        break; //We've found our match
+                    }
+                }
+                if($i['type'] == 'match'){
+                    if("$value" == "$u_a"){
+                        $match_found = true;
+                        break; //We've found our match
+                    }
+                }
+            } 
+        }
+        return $match_found;
     }
 
 }
