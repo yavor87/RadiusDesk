@@ -135,7 +135,7 @@ class NodesController extends AppController {
                 "interface"    => "mesh",
                 "options"   => array(
                     "ifname"    => "mesh0",
-                    "mtu"       => "1544",
+                    "mtu"       => "1560",
                     "proto"     => "batadv",
                     "mesh"      => "bat0"
                )
@@ -301,7 +301,14 @@ class NodesController extends AppController {
                     "wifi-device"   => "radio0",
                     "options"       => array(
                         'channel'       => $channel,
-                        'disabled'      => 0
+                        'disabled'      => 0,
+                        'hwmode'        => '11gn'
+                    ),
+                    'lists'          => array(
+                        array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
+                        array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-40'),  
+                        array('name'    => 'ht_capab', 'value'  => 'RX-STBC1'),
+                        array('name'    => 'ht_capab', 'value'  => 'DSSS_CCK-40')  
                     )
                 ));
 
