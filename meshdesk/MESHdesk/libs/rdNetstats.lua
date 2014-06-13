@@ -50,6 +50,10 @@ function rdNetstats._getWifi(self)
 	local w 	= {}
 	w['radios']	= {}
 	
+	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
+	io.input("/sys/class/net/eth0/address")                                                                      
+	w['eth0']       = io.read("*line")   
+	
 	local phy 	= nil
 	local i_info	= {}
 	

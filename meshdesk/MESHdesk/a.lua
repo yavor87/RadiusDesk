@@ -75,6 +75,7 @@ end
 
 -- Start-up function --
 function wait_for_lan()
+	                 
 	--kill potential existing batman_neighbours.lua instance
 	ext:stop('batman_neighbours.lui')	
 
@@ -86,8 +87,10 @@ function wait_for_lan()
 	local lan_is_up=false
 	
 	--Do a clean start with the wireless--
-	local wireless = require("rdWireless")
-	wireless.newWireless()	
+	require("rdWireless")
+	
+	local wireless = rdWireless()
+	wireless:newWireless()	
 	
 	local w = require("rdNetwork")                                            
 	w.dhcpStart()
@@ -183,8 +186,9 @@ function wait_for_wifi()
 	os.execute("/etc/MESHdesk/main_led.lua start c")
 	
 	-- Start the WiF interface
-	local w = require("rdWireless")                                            
-	w.connectClient()
+	require("rdWireless")
+	local w = rdWireless()                                            
+	w:connectClient()
 	
 	local start_time=os.time()
 	local loop=true
@@ -306,13 +310,6 @@ function configure_device(config)
 		a:disable()
 	end
 
-	-- Do we have some wireless settings?      
-	if(o.config_settings.wireless ~= nil)then  
-		print("Doing wireless")            
-	        local w = require("rdWireless")    
-	        w.main(o.config_settings.wireless) 
-	end
-	
 	-- Do we have some network settings?       
 	if(o.config_settings.network ~= nil)then   
 		print("Doing network")             
@@ -320,13 +317,16 @@ function configure_device(config)
 	        n.main(o.config_settings.network) 
 	end 
 	
+	-- Do we have some wireless settings?      
+	if(o.config_settings.wireless ~= nil)then  
+		print("Doing wireless")
+		require("rdWireless")           
+	        local w = rdWireless()    
+	        w:configureFromTable(o.config_settings.wireless) 
+	end
 	  
         os.execute("/etc/init.d/network reload")
-        os.execute("batctl if add mesh0") 	-- The batman if does not always comes up
-	sleep(5)
-       -- os.execute("wifi")			-- Reload the wifi also else the dhcp does not work well
-        
-        
+	
         -- Check if there are perhaps some captive portals to set up once everything has been done --
         sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
         if(o.config_settings.captive_portals ~= nil)then
