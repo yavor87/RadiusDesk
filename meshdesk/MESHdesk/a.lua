@@ -340,6 +340,14 @@ function configure_device(config)
         
         -- Do the LED's we have configured in /etc/config/system
         os.execute("ifconfig bat0 up") 	--On the pico's it goes down
+        
+	if(o.config_settings.gateways ~= nil)then
+		-- Set up the gateways --	
+		require("rdGateway")
+		local a = rdGateway()
+		a:restartServices()
+	end
+		
         --os.execute("/etc/init.d/led start")
         log('Starting Batman neighbour scan')
         ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')

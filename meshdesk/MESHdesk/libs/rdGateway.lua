@@ -35,6 +35,18 @@ function rdGateway:addNat(network)
 	self:__fwGwEnable(network,'no')
 end
 
+function rdGateway:restartServices()
+
+	os.execute("/etc/init.d/dnsmasq stop")
+	os.execute("/etc/init.d/dnsmasq start")
+--	os.execute("/etc/init.d/telnet stop")
+--	os.execute("/etc/init.d/telnet start")
+--	os.execute("/etc/init.d/dropbear stop")
+--	os.execute("/etc/init.d/dropbear start")
+
+end
+
+
 --[[--
 =========================================
 ========= Private methods =============== 
