@@ -31,7 +31,7 @@ end
 
 function rdExternal:stop(program)
 	if(self:pidof(program))then
-		os.execute("killall program")
+		os.execute("killall "..program)
 	end
 end
 
