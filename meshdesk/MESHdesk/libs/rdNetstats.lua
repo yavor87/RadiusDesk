@@ -24,7 +24,7 @@ end
 
 
 function rdNetstats:getWifi()
-	self:_getWifi()
+	return self:_getWifi()
 end
 
 function rdNetstats:getEthernet()
@@ -88,8 +88,7 @@ function rdNetstats._getWifi(self)
 			table.insert(w['radios'][phy]['interfaces'],{name= i_info['name'],mac = i_info['mac'], ssid = i_info['ssid'], type= i_info['type'],stations = stations})
 		end
 	end
-	
-	print (self.json.encode(w)) 	
+	return self.json.encode(w)
 end 
 
 
