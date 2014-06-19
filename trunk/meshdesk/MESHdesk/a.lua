@@ -118,7 +118,7 @@ function wait_for_lan()
 		--Then we can assume the LAN is up as set the flag
 		--TODO This will be large on second runs! - fix this
 		if((os.time() > 4000) and (start_time < 4000))then
-			log('Detected a very lage value for os time ausme the LAN and NTP working')
+			log('Detected a very lage value for os time asume the LAN and NTP working')
 			loop = false
 			lan_is_up = true
 		end

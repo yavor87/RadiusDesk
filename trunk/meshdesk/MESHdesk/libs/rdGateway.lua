@@ -23,16 +23,18 @@ function rdGateway:enable(exPoints)
 	self:__fwGwEnable()
 	self:__dhcpGwEnable()
 	self:__addExPoints(exPoints)
+    os.execute("touch /tmp/gw")
 end     
 
 function rdGateway:disable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
+    os.execute("rm /tmp/gw")
 end
 
 function rdGateway:addNat(network)
-
 	self:__fwGwEnable(network,'no')
+    os.execute("rm /tmp/gw")
 end
 
 function rdGateway:restartServices()
