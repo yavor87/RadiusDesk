@@ -10,6 +10,7 @@ config internet 'internet1'
 	option ip '188.226.185.234'
 #	option ip '192.168.1.103'
 	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
+    option status_url 'cake2/rd_cake/mesh_reports/submit_report.json'
 	option protocol 'http'
 
 config wifi-client 'wifi_client'
@@ -29,6 +30,7 @@ config settings 'settings'
 	option wifi_timeout '100'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
+    option internet_off_after '610'
 	option hardware 'dragino'
 	
 config captive_portal 'captive_portal'
@@ -45,6 +47,7 @@ config hardware 'om2p'
 	
 config hardware 'dragino'
 	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
+    option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
 	option swap_on_off "1"
 	
 
