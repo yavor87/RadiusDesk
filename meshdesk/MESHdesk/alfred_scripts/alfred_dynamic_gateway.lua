@@ -50,10 +50,10 @@ function updateGateway()
     
     --Get the Alfred GW
     require('rdAlfred')
-    local a = rdAlfred()
-    gw_list = a:readData(gateway_data)
+    local a         = rdAlfred()
+    local gw_list   = a:readData(gateway_data)
     if(gw_list)then
-        local ts = 0;
+        local ts = 0
         local gw = nil
         local j = require("json")
 
