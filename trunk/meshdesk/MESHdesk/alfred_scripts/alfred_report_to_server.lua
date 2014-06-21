@@ -58,6 +58,9 @@ function submitReport()
     local server    = fetch_config_value('meshdesk.internet1.ip')
     local query     = proto .. "://" .. server .. "/" .. url
 
+    --Remove old results                                                                                              
+    os.remove(result_file)
+
     os.execute('curl -o '..result_file..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
     
     --Read the results
