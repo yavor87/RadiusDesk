@@ -36,9 +36,21 @@ class Node extends AppModel {
             ),
             'NodeMeshExit'   => array(
                 'dependent'     => true   
+            ),
+            'NodeLoad'      => array(
+                'dependent'     => true
+            ),
+            'NodeStation'      => array(
+                'dependent'     => true
             )
+
     );
 
+    public $hasOne = array(
+            'NodeSystem'   => array(
+                'dependent'     => true   
+            )
+    );
 
     public function beforeSave(){
 
