@@ -48,13 +48,14 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
-        'components.winNote',       'components.winNoteAdd',    'meshes.winMeshEditNode'
+        'components.winNote',       'components.winNoteAdd',    'meshes.winMeshEditNode',
+        'meshes.winMeshView',       'meshes.gridMeshViewEntries'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
-        'sNodes' 
+        'sNodes',   'sMeshViewEntries'
     ],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  ,  'mMeshExit', 'mMeshEntryPoint',  
-        'mNode'
+        'mNode',    'mMeshViewEntry' 
     ],
     selectedRecord: null,
     config      : {
@@ -109,6 +110,9 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'gridMeshes #edit'   : {
                 click:      me.edit
+            },
+            'gridMeshes #view'   : {
+                click:      me.view
             },
             'gridMeshes #note'   : {
                 click:      me.note
@@ -351,6 +355,36 @@ Ext.define('Rd.controller.cMeshes', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    view: function(button){
+        var me      = this;   
+        //Find out if there was something selected
+        var selCount = me.getGrid().getSelectionModel().getCount();
+        if(selCount == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            if(selCount > 1){
+                Ext.ux.Toaster.msg(
+                        i18n('sLimit_the_selection'),
+                        i18n('sSelection_limited_to_one'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );
+            }else{
+                var sr      = me.getGrid().getSelectionModel().getLastSelected();
+                var id      = 'winMeshView'+sr.getId();
+                var name    = sr.get('name');   
+                if(!me.application.runAction('cDesktop','AlreadyExist',id)){
+                    var w = Ext.widget('winMeshView',{id:id, name:name, stateId:id,title: 'MESHdesk view '+name, itemId: sr.getId()});
+                    me.application.runAction('cDesktop','Add',w);      
+                }
+            }
+        }
     },
     edit: function(button){
         var me      = this;   
