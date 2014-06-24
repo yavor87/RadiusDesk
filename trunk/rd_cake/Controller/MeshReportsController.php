@@ -33,7 +33,8 @@ class MeshReportsController extends AppController {
 
             //Find all the distinct MACs for this Mesh entry...
             foreach($q_r as $i){
-                $mesh_entry_id = $i['MeshEntry']['id'];
+                $mesh_entry_id  = $i['MeshEntry']['id'];
+                $entry_name     = $i['MeshEntry']['name'];
                 $q_s = $this->NodeStation->find('all',array(
                     'conditions'    => array(
                         'NodeStation.mesh_entry_id' => $mesh_entry_id
@@ -43,48 +44,69 @@ class MeshReportsController extends AppController {
                     )
                 ));
 
-                foreach($q_s as $j){
-                    $mac = $j['NodeStation']['mac'];
-                    //Get the sum of Bytes and avg of signal
-                    $q_t = $this->NodeStation->find('first', array(
-                        'conditions'    => array(
-                            'NodeStation.mac'           => $mac,
-                            'NodeStation.mesh_entry_id' => $mesh_entry_id
-                        ),
-                        'fields'    => array(
-                            'SUM(NodeStation.tx_bytes) as tx_bytes',
-                            'SUM(NodeStation.rx_bytes)as rx_bytes',
-                            'AVG(NodeStation.signal_avg)as signal_avg',
-                        )
-                    ));
-                   // print_r($q_t);
-                    $t_bytes    = $q_t[0]['tx_bytes'];
-                    $r_bytes    = $q_t[0]['rx_bytes'];
-                    $signal_avg = $q_t[0]['signal_avg']; 
+                if($q_s){
 
-                    //Get the latest entry
-                    $lastCreated = $this->NodeStation->find('first', array(
-                        'conditions'    => array(
-                            'NodeStation.mac'           => $mac,
-                            'NodeStation.mesh_entry_id' => $mesh_entry_id
-                        ),
-                        'order' => array('NodeStation.created' => 'desc')
-                    ));
+                    foreach($q_s as $j){
+                        $mac = $j['NodeStation']['mac'];
+                        //Get the sum of Bytes and avg of signal
+                        $q_t = $this->NodeStation->find('first', array(
+                            'conditions'    => array(
+                                'NodeStation.mac'           => $mac,
+                                'NodeStation.mesh_entry_id' => $mesh_entry_id
+                            ),
+                            'fields'    => array(
+                                'SUM(NodeStation.tx_bytes) as tx_bytes',
+                                'SUM(NodeStation.rx_bytes)as rx_bytes',
+                                'AVG(NodeStation.signal_avg)as signal_avg',
+                            )
+                        ));
+                       // print_r($q_t);
+                        $t_bytes    = $q_t[0]['tx_bytes'];
+                        $r_bytes    = $q_t[0]['rx_bytes'];
+                        $signal_avg = $q_t[0]['signal_avg']; 
 
-                    array_push($items,array(
-                        'id'                => $id, 
-                        'mesh_entry_id'     => $mesh_entry_id, 
-                        'mac'               => $mac,
-                        'tx_bytes'          => $t_bytes,
-                        'rx_bytes'          => $r_bytes, 
-                        'signal_avg'        => $signal_avg ,
-                        'signal'            => $lastCreated['NodeStation']['signal'],
-                        'tx_bitrate'        => $lastCreated['NodeStation']['tx_bitrate'],
-                        'rx_bitrate'        => $lastCreated['NodeStation']['rx_bitrate'],
-                        'vendor'            => $lastCreated['NodeStation']['vendor']
-                    ));
-                    $id++;
-                }             
+                        //Get the latest entry
+                        $lastCreated = $this->NodeStation->find('first', array(
+                            'conditions'    => array(
+                                'NodeStation.mac'           => $mac,
+                                'NodeStation.mesh_entry_id' => $mesh_entry_id
+                            ),
+                            'order' => array('NodeStation.created' => 'desc')
+                        ));
+
+                        array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $entry_name, 
+                            'mesh_entry_id'     => $mesh_entry_id, 
+                            'mac'               => $mac,
+                            'tx_bytes'          => $t_bytes,
+                            'rx_bytes'          => $r_bytes, 
+                            'signal_avg'        => $signal_avg ,
+                            'signal'            => $lastCreated['NodeStation']['signal'],
+                            'tx_bitrate'        => $lastCreated['NodeStation']['tx_bitrate'],
+                            'rx_bitrate'        => $lastCreated['NodeStation']['rx_bitrate'],
+                            'vendor'            => $lastCreated['NodeStation']['vendor']
+                        ));
+                        $id++;
+                    }
+                }else{
+                     array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $entry_name, 
+                            'mesh_entry_id'     => $mesh_entry_id, 
+                            'mac'               => 'NA',
+                            'tx_bytes'          => 0,
+                            'rx_bytes'          => 0, 
+                            'signal_avg'        => 'NA' ,
+                            'signal'            => 'NA',
+                            'tx_bitrate'        => 0,
+                            'rx_bitrate'        => 0,
+                            'vendor'            => 'NA'
+                        ));
+                        $id++;
+
+
+                }            
             }
         }
 
