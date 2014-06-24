@@ -198,7 +198,8 @@ Ext.application({
             icnAttach       : 57380,
             icnCut          : 57551,
             icnTopUp        : 57419,
-            icnSubtract     : 57520
+            icnSubtract     : 57520,
+            icnView         : 57650
         };
     },
     addUx: function(){
