@@ -55,7 +55,7 @@ class NodesController extends AppController {
             }else{
                 //Write this to an "unknown nodes" table....
                 $this->set(array(
-                    'error' => "MAC Address: ".$node_id." not defined on system",
+                    'error' => "MAC Address: ".$mac." not defined on system",
                     'success' => false,
                     '_serialize' => array('error','success')
                 ));
