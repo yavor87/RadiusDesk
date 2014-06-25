@@ -110,16 +110,23 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
             {   text: 'Signal avg',       dataIndex: 'signal_avg',tdCls: 'gridTree', stateId: 'StateGridMeshViewEntries6',
                 width: 150,
                 renderer: function (v, m, r) {
-                    var v = 50
                     if(v != null){
+                        var bar = r.get('signal_avg_bar');
+                        var cls = 'wifigreen';
+                        if(bar < 0.3){
+                            cls = 'wifired';   
+                        }
+                        if((bar > 0.3)&(bar < 0.5)){
+                            cls = 'wifiyellow';
+                        } 
                         var id = Ext.id();
                         Ext.defer(function () {
                             Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 140,
-                                text: v+" %",
-                                cls :'wifigreen'
+                                renderTo    : id,
+                                value       : bar,
+                                width       : 140,
+                                text        : v+" dBm",
+                                cls         : cls
                             });
                         }, 50);
                         return Ext.String.format('<div id="{0}"></div>', id);
@@ -128,20 +135,44 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
                     }
                 }
             },
-            {   text: 'Signal now',       dataIndex: 'signal',    tdCls: 'gridTree', stateId: 'StateGridMeshViewEntries7',
+            {   text: 'Latest signal',       dataIndex: 'signal',    tdCls: 'gridTree', stateId: 'StateGridMeshViewEntries7',
                 width: 150,
                 renderer: function (v, m, r) {
-                    var v = 50
                     if(v != null){
+                        var bar = r.get('signal_bar');
+                        var cls = 'wifigreen';
+                        if(bar < 0.3){
+                            cls = 'wifired';   
+                        }
+                        if((bar >= 0.3)&(bar <= 0.5)){
+                            cls = 'wifiyellow';
+                        } 
                         var id = Ext.id();
                         Ext.defer(function () {
-                            Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 140,
-                                text: v+" %",
-                                cls :'wifiyellow'
+                            var p = Ext.widget('progressbar', {
+                                renderTo    : id,
+                                value       : bar,
+                                width       : 140,
+                                text        : v+" dBm",
+                                cls         : cls
                             });
+                        
+                            //Fetch some variables:
+                            var txbr = r.get('l_tx_bitrate');
+                            var rxbr = r.get('l_rx_bitrate');
+                            var t  = Ext.create('Ext.tip.ToolTip', {
+                                target  : id,
+                                border  : true,
+                                anchor  : 'left',
+                                title   : 'Latest connection detail',
+                                html    : [
+                                    "<div class='divMapAction'>",
+                                        "<label class='lblMap'>Tx Speed</label><label class='lblValue'>"+txbr+"Mb/s</label><br>",
+                                        "<label class='lblMap'>Rx Speed</label><label class='lblValue'>"+rxbr+"Mb/s</label><br>",
+                                    "</div>" 
+                                ]
+                            });
+
                         }, 50);
                         return Ext.String.format('<div id="{0}"></div>', id);
                     }else{
