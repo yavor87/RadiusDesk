@@ -63,7 +63,19 @@ class MeshReportsController extends AppController {
                        // print_r($q_t);
                         $t_bytes    = $q_t[0]['tx_bytes'];
                         $r_bytes    = $q_t[0]['rx_bytes'];
-                        $signal_avg = $q_t[0]['signal_avg']; 
+                        $signal_avg = round($q_t[0]['signal_avg']); 
+                        if($signal_avg < -95){
+                            $signal_avg_bar = 0.01;
+                        }
+                        if(($signal_avg >= -95)&($signal_avg <= -35)){
+                                $p_val = 95-(abs($signal_avg));
+                                $signal_avg_bar = round($p_val/60,1);
+                        }
+                        if($signal_avg > -35){
+                            $signal_avg_bar = 1;
+                        }
+
+                        
 
                         //Get the latest entry
                         $lastCreated = $this->NodeStation->find('first', array(
@@ -74,6 +86,23 @@ class MeshReportsController extends AppController {
                             'order' => array('NodeStation.created' => 'desc')
                         ));
 
+                        $signal = $lastCreated['NodeStation']['signal'];
+                        if($signal == -62){
+                            $signal = -80;
+                        }
+
+                        if($signal < -95){
+                            $signal_bar = 0.01;
+                        }
+                        if(($signal >= -95)&($signal <= -35)){
+                                $p_val = 95-(abs($signal));
+                                $signal_bar = round($p_val/60,1);
+                        }
+                        if($signal > -35){
+                            $signal_bar = 1;
+                        }
+                        
+
                         array_push($items,array(
                             'id'                => $id,
                             'name'              => $entry_name, 
@@ -82,10 +111,20 @@ class MeshReportsController extends AppController {
                             'tx_bytes'          => $t_bytes,
                             'rx_bytes'          => $r_bytes, 
                             'signal_avg'        => $signal_avg ,
-                            'signal'            => $lastCreated['NodeStation']['signal'],
-                            'tx_bitrate'        => $lastCreated['NodeStation']['tx_bitrate'],
-                            'rx_bitrate'        => $lastCreated['NodeStation']['rx_bitrate'],
-                            'vendor'            => $lastCreated['NodeStation']['vendor']
+                            'signal_avg_bar'    => $signal_avg_bar,
+                            'signal_bar'        => $signal_bar,
+                            'signal'            => $signal,
+                            'l_tx_bitrate'      => $lastCreated['NodeStation']['tx_bitrate'],
+                            'l_rx_bitrate'      => $lastCreated['NodeStation']['rx_bitrate'],
+                            'l_vendor'          => $lastCreated['NodeStation']['vendor'],
+                            'l_signal'          => $lastCreated['NodeStation']['signal'],
+                            'l_signal_avg'      => $lastCreated['NodeStation']['signal_avg'],
+                            'l_MFP'             => $lastCreated['NodeStation']['MFP'],
+                            'l_tx_failed'       => $lastCreated['NodeStation']['tx_failed'],
+                            'l_tx_retries'      => $lastCreated['NodeStation']['tx_retries'],
+                            'l_modified'        => $lastCreated['NodeStation']['modified'],
+                            'l_authenticated'   => $lastCreated['NodeStation']['authenticated'],
+                            'l_authorized'      => $lastCreated['NodeStation']['authorized'],
                         ));
                         $id++;
                     }
@@ -94,14 +133,17 @@ class MeshReportsController extends AppController {
                             'id'                => $id,
                             'name'              => $entry_name, 
                             'mesh_entry_id'     => $mesh_entry_id, 
-                            'mac'               => 'NA',
+                            'mac'               => 'N/A',
                             'tx_bytes'          => 0,
                             'rx_bytes'          => 0, 
-                            'signal_avg'        => 'NA' ,
-                            'signal'            => 'NA',
+                            'signal_avg'        => null ,
+                            'signal_bar'        => 'N/A' ,
+                            'signal_avg_bar'    => 'N/A',
+                            'signal_bar'        => 'N/A',
+                            'signal'            => null,
                             'tx_bitrate'        => 0,
                             'rx_bitrate'        => 0,
-                            'vendor'            => 'NA'
+                            'vendor'            => 'N/A'
                         ));
                         $id++;
 
