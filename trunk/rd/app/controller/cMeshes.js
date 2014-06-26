@@ -49,13 +49,13 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
         'components.winNote',       'components.winNoteAdd',    'meshes.winMeshEditNode',
-        'meshes.winMeshView',       'meshes.gridMeshViewEntries'
+        'meshes.winMeshView',       'meshes.gridMeshViewEntries', 'meshes.gridMeshViewNodes'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
-        'sNodes',   'sMeshViewEntries'
+        'sNodes',   'sMeshViewEntries', 'sMeshViewNodes'
     ],
     models      : ['mMesh',     'mAccessProviderTree',  'mMeshEntry'  ,  'mMeshExit', 'mMeshEntryPoint',  
-        'mNode',    'mMeshViewEntry' 
+        'mNode',    'mMeshViewEntry', 'mMeshViewNode'
     ],
     selectedRecord: null,
     config      : {
@@ -234,6 +234,13 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshEditNode #save': {
                 click: me.btnEditNodeSave
+            },
+            //==== MESHdesk View related ====
+            'winMeshView gridMeshViewEntries #reload' : {
+                click: me.reloadViewEntry
+            },
+            'winMeshView gridMeshViewEntries button' : {
+                toggle: me.viewEntryTimeToggle
             }
         });
     },
@@ -1228,5 +1235,28 @@ Ext.define('Rd.controller.cMeshes', {
                 }
             });
         }
+    },
+    //================= MESHdesk ViewStuff=================
+    viewEntryTimeToggle: function(button,pressed){
+        var me = this;
+        if(pressed){
+            me.reloadViewEntry(button);  
+        }
+    },
+    reloadViewEntry: function(button){
+        var me      = this;
+        var win     = button.up("winMeshView");
+        var entGrid = win.down("gridMeshViewEntries");
+        var day     = entGrid.down('#day');
+        var week    = entGrid.down('#week');
+        var span    = 'hour';
+        if(day.pressed){
+            span='day';
+        }
+        if(week.pressed){
+            span='week';
+        }
+        entGrid.getStore().getProxy().setExtraParam('timespan',span);
+        entGrid.getStore().reload();
     }
 });

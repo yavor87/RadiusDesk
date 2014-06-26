@@ -38,10 +38,18 @@ Ext.define('Rd.view.meshes.winMeshView', {
                         items   : [
                                 {
                                     title   :  i18n('sEntry_points'),
-                                    itemId  : 'tabEntryPoints',
+                                    itemId  : 'tabMeshViewEntries',
                                     xtype   : 'gridMeshViewEntries',
                                     meshId  : me.getItemId()
-                                }
+                                },
+                                {
+                                    title   :  i18n('sNodes'),
+                                    itemId  : 'tabMeshViewNodes',
+                                    xtype   : 'gridMeshViewNodes',
+                                    meshId  : me.getItemId()
+                                },
+
+
                             ]
                         }
                     ]

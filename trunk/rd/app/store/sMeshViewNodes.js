@@ -1,13 +1,13 @@
-Ext.define('Rd.store.sMeshViewEntries', {
+Ext.define('Rd.store.sMeshViewNodes', {
     extend  : 'Ext.data.Store',
-    model   : 'Rd.model.mMeshViewEntry',
+    model   : 'Rd.model.mMeshViewNode',
     //To force server side sorting:
     remoteSort: false,
     proxy: {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/mesh_reports/view_entries.json',
+            url     : '/cake2/rd_cake/mesh_reports/view_nodes.json',
             reader  : {
                 type            : 'json',
                 root            : 'items',
