@@ -575,6 +575,12 @@
     margin: 1px;
 }
 
+.lblValue {
+    text-align: left;
+    font-size:14px;
+    margin: 1px;
+}
+
 
 /*--- Translator applet ---*/
 td.grdBold div{

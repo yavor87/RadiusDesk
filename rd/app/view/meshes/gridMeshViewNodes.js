@@ -1,9 +1,9 @@
-Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
+Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
     extend      :'Ext.grid.Panel',
-    alias       : 'widget.gridMeshViewEntries',
+    alias       : 'widget.gridMeshViewNodes',
     multiSelect : true,
     stateful    : true,
-    stateId     : 'StateGridMeshViewEntries',
+    stateId     : 'StateGridMeshViewNodes',
     stateEvents :['groupclick','columnhide'],
     border      : false,
     viewConfig: {
@@ -11,7 +11,7 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
     },
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'), items : [
-            { xtype: 'button',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
+            { xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
             { xtype: 'button', text: 'Past hour',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'hour', pressed: true},
             { xtype: 'button', text: 'Past day',     toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'day' },
             { xtype: 'button', text: 'Past week',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'week'},
@@ -30,7 +30,7 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
     }],
     initComponent: function(){
         var me      = this;
-        me.store    = Ext.create(Rd.store.sMeshViewEntries,{
+        me.store    = Ext.create(Rd.store.sMeshViewNodes,{
             groupField: 'name',
             listeners: {
                 load: function(store, records, successful) {

@@ -1,4 +1,4 @@
-Ext.define('Rd.model.mMeshViewEntry', {
+Ext.define('Rd.model.mMeshViewNode', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'id',            type: 'int'     },
@@ -24,7 +24,6 @@ Ext.define('Rd.model.mMeshViewEntry', {
         {name: 'l_tx_retries',  type: 'int'},
         {name: 'l_modified'},
         {name: 'l_authenticated'},
-        {name: 'l_authorized'},
-        {name: 'l_node'},
+        {name: 'l_authorized'}
         ]
 });
