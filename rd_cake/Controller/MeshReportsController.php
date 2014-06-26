@@ -6,6 +6,10 @@ class MeshReportsController extends AppController {
 
     public function submit_report(){
 
+        //Source the vendors file and keep in memory
+        $vendor_file        = APP.DS."Setup".DS."Scripts".DS."mac_lookup.txt";
+        $this->vendor_list  = file($vendor_file);
+
         $this->log('Got a new report submission', 'debug');
         $this->_new_report();
         file_put_contents('/tmp/mesh_report.txt', print_r($this->request->data, true));
@@ -21,6 +25,29 @@ class MeshReportsController extends AppController {
 
         $items  = array();
         $id     = 1;
+        $hour   = (60*60);
+        $day    = $hour*24;
+        $week   = $day*7;
+
+        $timespan = 'hour';  //Default
+        if(isset($this->request->query['timespan'])){
+            $timespan = $this->request->query['timespan'];
+        }
+
+        if($timespan == 'hour'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$hour);
+        }
+
+        if($timespan == 'day'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$day);
+        }
+
+        if($timespan == 'week'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$week);
+        }
 
         if(isset($this->request->query['mesh_id'])){
            
@@ -31,13 +58,26 @@ class MeshReportsController extends AppController {
                 'MeshEntry.mesh_id' => $mesh_id
             )));
 
+            //Create a lookup of all the nodes for this mesh
+            $q_nodes = $this->Node->find('all',array('conditions' => array(
+                'Node.mesh_id'      => $mesh_id
+            )));
+            $this->node_lookup = array();
+            foreach($q_nodes as $n){
+                $n_id   = $n['Node']['id'];
+                $n_name = $n['Node']['name'];               
+                $this->node_lookup[$n_id] = $n_name;
+            }
+        
+
             //Find all the distinct MACs for this Mesh entry...
             foreach($q_r as $i){
                 $mesh_entry_id  = $i['MeshEntry']['id'];
                 $entry_name     = $i['MeshEntry']['name'];
                 $q_s = $this->NodeStation->find('all',array(
                     'conditions'    => array(
-                        'NodeStation.mesh_entry_id' => $mesh_entry_id
+                        'NodeStation.mesh_entry_id' => $mesh_entry_id,
+                        'NodeStation.modified >='   => $modified
                     ),
                     'fields'        => array(
                         'DISTINCT(mac)'
@@ -52,7 +92,8 @@ class MeshReportsController extends AppController {
                         $q_t = $this->NodeStation->find('first', array(
                             'conditions'    => array(
                                 'NodeStation.mac'           => $mac,
-                                'NodeStation.mesh_entry_id' => $mesh_entry_id
+                                'NodeStation.mesh_entry_id' => $mesh_entry_id,
+                                'NodeStation.modified >='   => $modified
                             ),
                             'fields'    => array(
                                 'SUM(NodeStation.tx_bytes) as tx_bytes',
@@ -75,8 +116,6 @@ class MeshReportsController extends AppController {
                             $signal_avg_bar = 1;
                         }
 
-                        
-
                         //Get the latest entry
                         $lastCreated = $this->NodeStation->find('first', array(
                             'conditions'    => array(
@@ -86,10 +125,9 @@ class MeshReportsController extends AppController {
                             'order' => array('NodeStation.created' => 'desc')
                         ));
 
+                       // print_r($lastCreated);
+
                         $signal = $lastCreated['NodeStation']['signal'];
-                        if($signal == -62){
-                            $signal = -80;
-                        }
 
                         if($signal < -95){
                             $signal_bar = 0.01;
@@ -102,12 +140,14 @@ class MeshReportsController extends AppController {
                             $signal_bar = 1;
                         }
                         
+                        $last_node_id = $lastCreated['NodeStation']['node_id'];
 
                         array_push($items,array(
                             'id'                => $id,
                             'name'              => $entry_name, 
                             'mesh_entry_id'     => $mesh_entry_id, 
                             'mac'               => $mac,
+                            'vendor'            => $lastCreated['NodeStation']['vendor'],
                             'tx_bytes'          => $t_bytes,
                             'rx_bytes'          => $r_bytes, 
                             'signal_avg'        => $signal_avg ,
@@ -116,7 +156,6 @@ class MeshReportsController extends AppController {
                             'signal'            => $signal,
                             'l_tx_bitrate'      => $lastCreated['NodeStation']['tx_bitrate'],
                             'l_rx_bitrate'      => $lastCreated['NodeStation']['rx_bitrate'],
-                            'l_vendor'          => $lastCreated['NodeStation']['vendor'],
                             'l_signal'          => $lastCreated['NodeStation']['signal'],
                             'l_signal_avg'      => $lastCreated['NodeStation']['signal_avg'],
                             'l_MFP'             => $lastCreated['NodeStation']['MFP'],
@@ -125,6 +164,9 @@ class MeshReportsController extends AppController {
                             'l_modified'        => $lastCreated['NodeStation']['modified'],
                             'l_authenticated'   => $lastCreated['NodeStation']['authenticated'],
                             'l_authorized'      => $lastCreated['NodeStation']['authorized'],
+                            'l_tx_bytes'        => $lastCreated['NodeStation']['tx_bytes'],
+                            'l_rx_bytes'        => $lastCreated['NodeStation']['rx_bytes'],
+                            'l_node'            => $this->node_lookup[$last_node_id]
                         ));
                         $id++;
                     }
@@ -227,7 +269,27 @@ class MeshReportsController extends AppController {
                             $data = $this->_prep_station_data($s);
                             $data['mesh_entry_id']  = $entry_id;
                             $data['node_id']        = $node_id;
-                            $this->NodeStation->create();   
+                            //--Check the last entry for this MAC
+                            $q_mac = $this->NodeStation->find('first',array(
+                                'conditions'    => array(
+                                    'NodeStation.mesh_entry_id' => $entry_id,
+                                    'NodeStation.node_id'       => $node_id,
+                                    'NodeStation.mac'           => $data['mac'],
+                                ),
+                                'order' => array('NodeStation.created' => 'desc')
+                            ));
+                            $new_flag = true;
+                            if($q_mac){
+                                $old_tx = $q_mac['NodeStation']['tx_bytes'];
+                                $old_rx = $q_mac['NodeStation']['rx_bytes'];
+                                if(($data['tx_bytes'] >= $old_tx)&($data['rx_bytes'] >= $old_rx)){
+                                    $data['id'] =  $q_mac['NodeStation']['id'];
+                                    $new_flag = false;   
+                                }
+                            }
+                            if($new_flag){
+                                $this->NodeStation->create();
+                            }   
                             $this->NodeStation->save($data);
                         }
                     }
@@ -405,15 +467,13 @@ class MeshReportsController extends AppController {
     }
 
     private function _lookup_vendor($mac){
-        $vendor_file = APP.DS."Setup".DS."Scripts".DS."mac_lookup.txt";
-
         //Convert the MAC to be in the same format as the file 
         $mac    = strtoupper($mac);
         $pieces = explode(":", $mac);
 
         $big_match      = $pieces[0].":".$pieces[1].":".$pieces[2].":".$pieces[3].":".$pieces[4];
         $small_match    = $pieces[0].":".$pieces[1].":".$pieces[2];
-        $lines          = file($vendor_file);
+        $lines          = $this->vendor_list;
 
         $big_match_found = false;
         foreach($lines as $i){
