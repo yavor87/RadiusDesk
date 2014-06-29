@@ -1,6 +1,10 @@
 Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
     extend      :'Ext.grid.Panel',
     alias       : 'widget.gridMeshViewEntries',
+    requires    : [
+        'Rd.store.sMeshViewEntries',
+        'Rd.model.mMeshViewEntry'
+    ],
     multiSelect : true,
     stateful    : true,
     stateId     : 'StateGridMeshViewEntries',
@@ -11,10 +15,20 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
     },
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'), items : [
-            { xtype: 'button',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
-            { xtype: 'button', text: 'Past hour',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'hour', pressed: true},
-            { xtype: 'button', text: 'Past day',     toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'day' },
-            { xtype: 'button', text: 'Past week',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'week'},
+            { xtype: 'splitbutton',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload'),
+                menu: {
+                    items: [
+                        '<b class="menu-title">Reload every:</b>',
+                        {'text': '30 seconds',  'itemId': 'mnuRefresh30s','group': 'refresh','checked': false },
+                        {'text': '1 minute',    'itemId': 'mnuRefresh1m', 'group': 'refresh','checked': false },
+                        {'text': '5 minutes',   'itemId': 'mnuRefresh5m', 'group': 'refresh','checked': false },
+                        {'text':'Stop auto reload','itemId':'mnuRefreshCancel', 'group': 'refresh', 'checked':true}
+                    ]
+                }
+            },
+            { xtype: 'button', text: 'Past hour',    toggleGroup: 'time_e', enableToggle : true, scale: 'large', itemId: 'hour', pressed: true},
+            { xtype: 'button', text: 'Past day',     toggleGroup: 'time_e', enableToggle : true, scale: 'large', itemId: 'day' },
+            { xtype: 'button', text: 'Past week',    toggleGroup: 'time_e', enableToggle : true, scale: 'large', itemId: 'week'},
         ]}    
     ],
     bbar: [
