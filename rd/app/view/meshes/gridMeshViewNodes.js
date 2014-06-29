@@ -1,6 +1,10 @@
 Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
     extend      :'Ext.grid.Panel',
     alias       : 'widget.gridMeshViewNodes',
+    requires    : [
+        'Rd.store.sMeshViewNodes',
+        'Rd.model.mMeshViewNode'
+    ],
     multiSelect : true,
     stateful    : true,
     stateId     : 'StateGridMeshViewNodes',
@@ -11,10 +15,20 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
     },
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'), items : [
-            { xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
-            { xtype: 'button', text: 'Past hour',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'hour', pressed: true},
-            { xtype: 'button', text: 'Past day',     toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'day' },
-            { xtype: 'button', text: 'Past week',    toggleGroup: 'time', enableToggle : true, scale: 'large', itemId: 'week'},
+            { xtype: 'splitbutton',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload'),
+                menu: {
+                    items: [
+                        '<b class="menu-title">Reload every:</b>',
+                        {'text': '30 seconds',  'itemId': 'mnuRefresh30s','group': 'refresh','checked': false },
+                        {'text': '1 minute',    'itemId': 'mnuRefresh1m', 'group': 'refresh','checked': false },
+                        {'text': '5 minutes',   'itemId': 'mnuRefresh5m', 'group': 'refresh','checked': false },
+                        {'text':'Stop auto reload','itemId':'mnuRefreshCancel', 'group': 'refresh', 'checked':true}
+                    ]
+                }
+            },
+            { xtype: 'button', text: 'Past hour',    toggleGroup: 'time_n', enableToggle : true, scale: 'large', itemId: 'hour', pressed: true},
+            { xtype: 'button', text: 'Past day',     toggleGroup: 'time_n', enableToggle : true, scale: 'large', itemId: 'day' },
+            { xtype: 'button', text: 'Past week',    toggleGroup: 'time_n', enableToggle : true, scale: 'large', itemId: 'week'},
         ]}    
     ],
     bbar: [
@@ -23,7 +37,35 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
     features: [{
         //ftype: 'grouping',
         ftype               : 'groupingsummary',
-        groupHeaderTpl      : '{name}',
+        //groupHeaderTpl      : '<span style="color:green;">{name}</span><span style="color:grey;"> Last contact 2014-06-14 07:21</span>',
+        groupHeaderTpl: [
+            '<span class="{children:this.formatColor}">{name}</span><span class="grpInfo"> {children:this.getLastContact}</span>',
+            {
+                formatColor: function(children) {
+                    var fc = children[0];
+                    var state = fc.get('state');
+                    if(state == 'never'){
+                        return 'grpNever';
+                    }
+                    if(state == 'down'){
+                        return 'grpDown';
+                    }
+                    if(state == 'up'){
+                        return 'grpUp';
+                    }
+                }
+            },
+            {
+                getLastContact: function(children) {
+                    var fc = children[0];
+                    var c = fc.get('l_contact');
+                    if(c == null){
+                        return '(never)';
+                    }
+                    return c;
+                }
+            }
+        ],
         hideGroupedHeader   : true,
         enableGroupingMenu  : false,
         startCollapsed      : true
@@ -168,7 +210,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                             var tx_r    = r.get('l_tx_retries');
                             var auth    = r.get('l_authenticated');
                             var authz   = r.get('l_authorized');
-                            var n       = r.get('l_node');
+                            var e       = r.get('l_entry');
 
                             var t  = Ext.create('Ext.tip.ToolTip', {
                                 target  : id,
@@ -179,7 +221,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                                     "<div class='divMapAction'>",
                                         "<label class='lblMap'>Time</label><label class='lblValue'>"+t+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Node</label><label class='lblValue'>"+n+"</label>",
+                                        "<label class='lblMap'>SSID</label><label class='lblValue'>"+e+"</label>",
                                         "<div style='clear:both;'></div>",
                                         "<label class='lblMap'>Tx Speed</label><label class='lblValue'>"+txbr+"Mb/s</label>",
                                         "<div style='clear:both;'></div>",

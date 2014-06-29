@@ -25,6 +25,6 @@ Ext.define('Rd.model.mMeshViewEntry', {
         {name: 'l_modified'},
         {name: 'l_authenticated'},
         {name: 'l_authorized'},
-        {name: 'l_node'},
+        {name: 'l_node'}
         ]
 });

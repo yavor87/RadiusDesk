@@ -726,6 +726,29 @@ td.grdEditable div {
     margin: 0px;
 }
 
+.grpInfo {
+    color:grey;
+    font-size:10px;
+    font-style:italic;
+    font-weight:lighter;
+}
+
+.grpNever {
+    color: #1383bd;
+    font-size:14px;  
+}
+
+.grpUp {
+    color: green;
+    font-size:14px;  
+}
+
+.grpDown {
+    color: red;
+    font-size:14px;  
+}
+
+
 
 
 
