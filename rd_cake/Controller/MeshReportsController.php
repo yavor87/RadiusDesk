@@ -2,7 +2,7 @@
 class MeshReportsController extends AppController {
 
     public $name    = 'MeshReports';
-    public $uses    = array('Node','NodeLoad','NodeStation','NodeSystem','MeshEntry','NodeIbssConnection');
+    public $uses    = array('Node','NodeLoad','NodeStation','NodeSystem','MeshEntry','NodeIbssConnection','NodeSetting');
 
     public function submit_report(){
 
@@ -53,7 +53,7 @@ class MeshReportsController extends AppController {
            
             //Find all the entries for this mesh
             $mesh_id = $this->request->query['mesh_id'];
-            $this->MeshEntry->contain('Mesh');
+            $this->MeshEntry->contain();
             $q_r = $this->MeshEntry->find('all',array('conditions' => array(
                 'MeshEntry.mesh_id' => $mesh_id
             )));
@@ -202,6 +202,219 @@ class MeshReportsController extends AppController {
     }
 
 
+     public function view_nodes(){
+
+        $items  = array();
+        $id     = 1;
+        $hour   = (60*60);
+        $day    = $hour*24;
+        $week   = $day*7;
+
+        $timespan = 'hour';  //Default
+        if(isset($this->request->query['timespan'])){
+            $timespan = $this->request->query['timespan'];
+        }
+
+        if($timespan == 'hour'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$hour);
+        }
+
+        if($timespan == 'day'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$day);
+        }
+
+        if($timespan == 'week'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$week);
+        }
+
+        if(isset($this->request->query['mesh_id'])){
+
+            //Find all the nodes for this mesh
+            $mesh_id = $this->request->query['mesh_id'];
+
+            $this->Node->contain();
+            $q_r = $this->Node->find('all',array('conditions' => array(
+                'Node.mesh_id'      => $mesh_id
+            )));
+
+           
+            //Create a lookup of all the entries for this mesh 
+            $this->MeshEntry->contain();
+            $q_entries = $this->MeshEntry->find('all',array('conditions' => array(
+                'MeshEntry.mesh_id' => $mesh_id
+            )));
+
+            $this->entry_lookup = array();
+            foreach($q_entries as $e){
+                $e_id   = $e['MeshEntry']['id'];
+                $e_name = $e['MeshEntry']['name'];               
+                $this->entry_lookup[$e_id] = $e_name;
+            }
+
+            
+            //Find all the distinct MACs for this Mesh node...
+            foreach($q_r as $i){
+                $node_id    = $i['Node']['id'];
+                $node_name  = $i['Node']['name'];
+                $l_contact  = $i['Node']['last_contact'];
+                $dead_after = '660'; //11Minutes
+
+                //Find the dead time (only once)
+                if($l_contact == null){
+                    $state = 'never';
+                }else{
+                    $n_s = $this->NodeSetting->find('first',array(
+                        'conditions'    => array(
+                            'NodeSetting.mesh_id' => $mesh_id
+                        )
+                    )); 
+                    if($n_s){
+                        $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
+                    }
+                    $last_timestamp = strtotime($l_contact);
+                    if($last_timestamp+$dead_after <= time()){
+                        $state = 'down';
+                    }else{
+                        $state = 'up';
+                    }
+                }
+
+                $q_s = $this->NodeStation->find('all',array(
+                    'conditions'    => array(
+                        'NodeStation.node_id'       => $node_id,
+                        'NodeStation.modified >='   => $modified
+                    ),
+                    'fields'        => array(
+                        'DISTINCT(mac)'
+                    )
+                ));
+
+                if($q_s){
+                    foreach($q_s as $j){
+                        //print_r($j);
+                        $mac = $j['NodeStation']['mac'];
+                        //Get the sum of Bytes and avg of signal
+                        $q_t = $this->NodeStation->find('first', array(
+                            'conditions'    => array(
+                                'NodeStation.mac'           => $mac,
+                                'NodeStation.node_id'       => $node_id,
+                                'NodeStation.modified >='   => $modified
+                            ),
+                            'fields'    => array(
+                                'SUM(NodeStation.tx_bytes) as tx_bytes',
+                                'SUM(NodeStation.rx_bytes)as rx_bytes',
+                                'AVG(NodeStation.signal_avg)as signal_avg',
+                            )
+                        ));
+                       // print_r($q_t);
+                        $t_bytes    = $q_t[0]['tx_bytes'];
+                        $r_bytes    = $q_t[0]['rx_bytes'];
+                        $signal_avg = round($q_t[0]['signal_avg']); 
+                        if($signal_avg < -95){
+                            $signal_avg_bar = 0.01;
+                        }
+                        if(($signal_avg >= -95)&($signal_avg <= -35)){
+                                $p_val = 95-(abs($signal_avg));
+                                $signal_avg_bar = round($p_val/60,1);
+                        }
+                        if($signal_avg > -35){
+                            $signal_avg_bar = 1;
+                        }
+
+                        //Get the latest entry
+                        $lastCreated = $this->NodeStation->find('first', array(
+                            'conditions'    => array(
+                                'NodeStation.mac'       => $mac,
+                                'NodeStation.node_id'   => $node_id
+                            ),
+                            'order' => array('NodeStation.created' => 'desc')
+                        ));
+
+                       // print_r($lastCreated);
+
+                        $signal = $lastCreated['NodeStation']['signal'];
+
+                        if($signal < -95){
+                            $signal_bar = 0.01;
+                        }
+                        if(($signal >= -95)&($signal <= -35)){
+                                $p_val = 95-(abs($signal));
+                                $signal_bar = round($p_val/60,1);
+                        }
+                        if($signal > -35){
+                            $signal_bar = 1;
+                        }
+                        
+                        $last_mesh_entry_id = $lastCreated['NodeStation']['mesh_entry_id'];
+
+                        
+
+                        array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $node_name, 
+                            'node_id'           => $node_id, 
+                            'mac'               => $mac,
+                            'vendor'            => $lastCreated['NodeStation']['vendor'],
+                            'tx_bytes'          => $t_bytes,
+                            'rx_bytes'          => $r_bytes, 
+                            'signal_avg'        => $signal_avg ,
+                            'signal_avg_bar'    => $signal_avg_bar,
+                            'signal_bar'        => $signal_bar,
+                            'signal'            => $signal,
+                            'l_tx_bitrate'      => $lastCreated['NodeStation']['tx_bitrate'],
+                            'l_rx_bitrate'      => $lastCreated['NodeStation']['rx_bitrate'],
+                            'l_signal'          => $lastCreated['NodeStation']['signal'],
+                            'l_signal_avg'      => $lastCreated['NodeStation']['signal_avg'],
+                            'l_MFP'             => $lastCreated['NodeStation']['MFP'],
+                            'l_tx_failed'       => $lastCreated['NodeStation']['tx_failed'],
+                            'l_tx_retries'      => $lastCreated['NodeStation']['tx_retries'],
+                            'l_modified'        => $lastCreated['NodeStation']['modified'],
+                            'l_authenticated'   => $lastCreated['NodeStation']['authenticated'],
+                            'l_authorized'      => $lastCreated['NodeStation']['authorized'],
+                            'l_tx_bytes'        => $lastCreated['NodeStation']['tx_bytes'],
+                            'l_rx_bytes'        => $lastCreated['NodeStation']['rx_bytes'],
+                            'l_entry'           => $this->entry_lookup[$last_mesh_entry_id],
+                            'l_contact'         => $l_contact,
+                            'state'             => $state
+                        ));
+                        $id++;
+                    }
+                }else{
+                     array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $node_name, 
+                            'mesh_entry_id'     => $node_id, 
+                            'mac'               => 'N/A',
+                            'tx_bytes'          => 0,
+                            'rx_bytes'          => 0, 
+                            'signal_avg'        => null ,
+                            'signal_bar'        => 'N/A' ,
+                            'signal_avg_bar'    => 'N/A',
+                            'signal_bar'        => 'N/A',
+                            'signal'            => null,
+                            'tx_bitrate'        => 0,
+                            'rx_bitrate'        => 0,
+                            'vendor'            => 'N/A',
+                            'l_contact'         => $l_contact,
+                            'state'             => $state
+                        ));
+                        $id++;
+                }            
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+
+
     //---------- Private Functions --------------
 
     private function _new_report(){
@@ -242,6 +455,7 @@ class MeshReportsController extends AppController {
                     $this->log('The node id of '.$id.' is '.$node_id, 'debug');
                     $this->_do_node_system_info($node_id,$si['sys']);
                     $this->_do_node_load($node_id,$si['sys']);
+                    $this->_update_last_contact($node_id);
                 }else{
                     $this->log('Node with MAC '.$id.' was not found', 'debug');
                 }
@@ -299,8 +513,28 @@ class MeshReportsController extends AppController {
                 if($i['type'] == 'IBSS'){
                      foreach($i['stations'] as $s){
                             $data = $this->_prep_station_data($s);
-                            $data['node_id']        = $node_id;
-                            $this->NodeIbssConnection->create();   
+                            $data['node_id']    = $node_id;
+
+                            //--Check the last entry for this MAC
+                            $q_mac = $this->NodeIbssConnection->find('first',array(
+                                'conditions'    => array(
+                                    'NodeIbssConnection.node_id'    => $node_id,
+                                    'NodeIbssConnection.mac'        => $data['mac'],
+                                ),
+                                'order' => array('NodeIbssConnection.created' => 'desc')
+                            ));
+                            $new_flag = true;
+                            if($q_mac){
+                                $old_tx = $q_mac['NodeIbssConnection']['tx_bytes'];
+                                $old_rx = $q_mac['NodeIbssConnection']['rx_bytes'];
+                                if(($data['tx_bytes'] >= $old_tx)&($data['rx_bytes'] >= $old_rx)){
+                                    $data['id'] =  $q_mac['NodeIbssConnection']['id'];
+                                    $new_flag = false;   
+                                }
+                            }
+                            if($new_flag){
+                                $this->NodeIbssConnection->create(); 
+                            }    
                             $this->NodeIbssConnection->save($data);
                      }
                 }
@@ -420,6 +654,13 @@ class MeshReportsController extends AppController {
         }           
     }
 
+    private function _update_last_contact($node_id){
+        $this->Node->id = $node_id;
+        if($this->Node->id){
+            $this->Node->saveField('last_contact', date("Y-m-d H:i:s", time()));
+        }
+    }
+
     private function _format_mac($mac){
         return preg_replace('/:/', '-', $mac);
     }
@@ -500,7 +741,5 @@ class MeshReportsController extends AppController {
         }
         $vendor = "Unkown";
     }
-
-
 }
 ?>
