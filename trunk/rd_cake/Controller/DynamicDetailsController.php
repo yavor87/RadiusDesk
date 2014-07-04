@@ -716,6 +716,12 @@ class DynamicDetailsController extends AppController {
 
     public function upload_photo($id = null){
 
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
         //are posted to the server.
         $this->layout = 'ext_file_upload';
@@ -790,6 +796,12 @@ class DynamicDetailsController extends AppController {
 	}
 
     public function edit_photo(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
         //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
         //are posted to the server.
