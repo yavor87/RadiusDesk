@@ -142,6 +142,7 @@ class VouchersController extends AppController {
                 $v['extra_value']   = $i['Voucher']['extra_value'];
 
                 $realm_id           = $i['Voucher']['realm_id'];
+                $realm              = $i['Voucher']['realm'];
                 if(!array_key_exists($realm,$voucher_data)){
                     $r = $this->Realm->findById($realm_id);
                     $voucher_data[$realm] = $r['Realm'];
@@ -171,6 +172,7 @@ class VouchersController extends AppController {
                 $v['extra_value']   = $i['Voucher']['extra_value'];
 
                 $realm_id           = $i['Voucher']['realm_id'];
+                $realm              = $i['Voucher']['realm'];
                 if(!array_key_exists($realm,$voucher_data)){
                     $r = $this->Realm->findById($realm_id);
                     $voucher_data[$realm] = $r['Realm'];
