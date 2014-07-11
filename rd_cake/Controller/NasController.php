@@ -301,9 +301,11 @@ class NasController extends AppController {
                     }
                 }
             }   
+            $this->request->data['id'] = $this->{$this->modelClass}->id;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'      => $this->request->data,
+                '_serialize' => array('success','data')
             ));
         } else {
             $first_error = reset($this->{$this->modelClass}->validationErrors);
@@ -387,11 +389,14 @@ class NasController extends AppController {
 
             //Save the new ID to the OpenvpnClient....
             $this->Na->OpenvpnClient->saveField('na_id', $this->{$this->modelClass}->id);
-          
+
+            $this->request->data['id'] = $this->{$this->modelClass}->id;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'      => $this->request->data,
+                '_serialize' => array('success','data')
             ));
+
         } else {
             //If it was an OpenvpnClient we need to remove the created openvpnclient entry since there was a failure
             $this->Na->OpenvpnClient->delete();
@@ -475,9 +480,11 @@ class NasController extends AppController {
                     }
                 }
             }   
+            $this->request->data['id'] = $this->{$this->modelClass}->id;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'      => $this->request->data,
+                '_serialize' => array('success','data')
             ));
         } else {
             $first_error = reset($this->{$this->modelClass}->validationErrors);
@@ -561,9 +568,11 @@ class NasController extends AppController {
             //Save the new ID to the PptpClient....
             $this->{$this->modelClass}->PptpClient->saveField('na_id', $this->{$this->modelClass}->id);
           
+            $this->request->data['id'] = $this->{$this->modelClass}->id;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'      => $this->request->data,
+                '_serialize' => array('success','data')
             ));
         } else {
             //If it was an PptpClient we need to remove the created pptpclient entry since there was a failure
