@@ -23,7 +23,7 @@ config button
 	option min '5'
 	option max '30'
 
-config led 'led_mesh'
+config led 'mesh_led'
 	option name 'mesh'
 	option sysfs 'gpio1'
 	option trigger 'netdev'
