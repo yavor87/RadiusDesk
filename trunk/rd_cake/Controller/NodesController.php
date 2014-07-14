@@ -123,7 +123,7 @@ class NodesController extends AppController {
             array(
                 "interface"    => "lan",
                 "options"   => array(
-                    "ifname"        => "eth0 eth1",
+                    "ifname"        => "eth0 eth1", //FIXME Check the hardware and return eth0 or eth0 end eth1 based on the hardware
                     "type"          => "bridge",
                     "proto"         => "dhcp"
                )
