@@ -117,7 +117,7 @@ end
 
 function read_line_from_sock(sock)
     sock:WaitForRead(50);
-    local message = sock:Read(100)
+    local message = sock:Read(1000)
     local translate = {}
     local line_end = false
     local client_string
