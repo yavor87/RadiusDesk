@@ -73,6 +73,26 @@ end
 -- End Some general functions --
 --==============================
 
+-- FW configuration --
+function do_fw_config()
+    --kill potential existing batman_neighbours.lua instance
+	ext:stop('batman_neighbours.lui')
+
+    require("rdNetwork")
+
+	-- LAN we flash "I"
+	log("Do Firmware configuration - if server running")
+	os.execute("/etc/MESHdesk/main_led.lua start i")
+    --Set eth0 (and eth1) to a known IP Address
+    local network = rdNetwork()
+	network:frmwrStart()
+    sleep(4) --jus so it eases out
+    require("rdFirmwareConfig")
+    local f = rdFirmwareConfig()
+    f:runConfig()
+end
+
+
 -- Start-up function --
 function wait_for_lan()
 	                 
@@ -92,9 +112,10 @@ function wait_for_lan()
 	local wireless = rdWireless()
 	wireless:newWireless()	
 	
-	local w = require("rdNetwork")                                            
-	w.dhcpStart()
+    require("rdNetwork")
 	
+	local network = rdNetwork()
+	network:dhcpStart()
 	
 	while (loop) do
 		sleep(sleep_time)
@@ -312,9 +333,10 @@ function configure_device(config)
 
 	-- Do we have some network settings?       
 	if(o.config_settings.network ~= nil)then   
-		print("Doing network")             
-	        local n = require("rdNetwork")     
-	        n.main(o.config_settings.network) 
+		print("Doing network")
+        require("rdNetwork")
+	    local network = rdNetwork()
+	    network:configureFromTable(o.config_settings.network)             
 	end 
 	
 	-- Do we have some wireless settings?      
@@ -366,6 +388,8 @@ function getMac(interface)
 
 end
 
+--Pre-setup: Configure Firmware is there is a server running on the correct IP and port
+do_fw_config()
 
 -- Kick off by waiting for the LAN
 wait_for_lan()

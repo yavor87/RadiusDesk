@@ -33,6 +33,10 @@ function rdMorse:rdMorse()
 	self.d		= "_ . ."
 	self.e		= "."
 	self.f		= ". . _ ."
+    self.g      = "_ _ ."
+    self.h      = ". . . ."
+    self.i      = ". ."
+
 	
 	--SOS
 	self.sos	= ". . . _ _ _ . . ."
