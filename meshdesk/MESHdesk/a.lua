@@ -14,6 +14,8 @@ require("rdLogger")
 require("rdExternal")
 --Configure object
 require("rdConfig")
+--Alfred object
+require("rdAlfred")
 
 
 
@@ -28,13 +30,14 @@ end
 
 -- Some constants -- Replace later with uci values
 previous_config_file 	= fetch_config_value('meshdesk.settings.previous_config_file')
-sleep_time		= 1
-config_file		= fetch_config_value('meshdesk.settings.config_file')
-lan_timeout		= tonumber(fetch_config_value('meshdesk.settings.lan_timeout'))
-wifi_timeout		= tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
-debug			= true
-l			= rdLogger()
-ext 			= rdExternal()
+sleep_time		        = 1
+config_file		        = fetch_config_value('meshdesk.settings.config_file')
+lan_timeout		        = tonumber(fetch_config_value('meshdesk.settings.lan_timeout'))
+wifi_timeout		    = tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
+debug			        = true
+l			            = rdLogger()
+ext 			        = rdExternal()
+alfred                  = rdAlfred()
 
 
 --======================================
@@ -343,36 +346,39 @@ function configure_device(config)
 	if(o.config_settings.wireless ~= nil)then  
 		print("Doing wireless")
 		require("rdWireless")           
-	        local w = rdWireless()    
-	        w:configureFromTable(o.config_settings.wireless) 
+	    local w = rdWireless()    
+	    w:configureFromTable(o.config_settings.wireless) 
 	end
 	  
-        os.execute("/etc/init.d/network reload")
-	
-        -- Check if there are perhaps some captive portals to set up once everything has been done --
-        sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
-        if(o.config_settings.captive_portals ~= nil)then
-        	print("Doing Captive Portals")
-        	require("rdCoovaChilli")
-        	local a = rdCoovaChilli()
-        	a:createConfigs(o.config_settings.captive_portals)                  
-        	a:startPortals()	
-        	
-        end
-        
-        -- Do the LED's we have configured in /etc/config/system
-        os.execute("ifconfig bat0 up") 	--On the pico's it goes down
-        
+    os.execute("/etc/init.d/network reload")
+
+    -- Check if there are perhaps some captive portals to set up once everything has been done --
+    sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+    if(o.config_settings.captive_portals ~= nil)then
+    	print("Doing Captive Portals")
+    	require("rdCoovaChilli")
+    	local a = rdCoovaChilli()
+    	a:createConfigs(o.config_settings.captive_portals)                  
+    	a:startPortals()	
+    end
+    
+    -- Do the LED's we have configured in /etc/config/system
+    os.execute("ifconfig bat0 up") 	--On the pico's it goes down
+    
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
 		require("rdGateway")
 		local a = rdGateway()
 		a:restartServices()
+        --start alfred in master mode
+        alfred:masterEnableAndStart()
+    else
+        alfred:slaveEnableAndStart()
 	end
-		
-        --os.execute("/etc/init.d/led start")
-        log('Starting Batman neighbour scan')
-        ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
+	
+    --os.execute("/etc/init.d/led start")
+    log('Starting Batman neighbour scan')
+    ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
         
 --]]--
 end
