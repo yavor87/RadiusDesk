@@ -10,15 +10,16 @@ class "rdAlfred"
 function rdAlfred:rdAlfred()
 
 	require('rdLogger')
-	local uci	= require('uci')
-
+    require('rdExternal');
+	local uci	    = require('uci')
+    self.socket    	= require("socket")
 	self.version    = "1.0.1"
 	self.tag	    = "MESHdesk"
 	self.debug	    = true
 	self.json	    = require("json")
 	self.logger	    = rdLogger()
 	self.x		    = uci.cursor(nil,'/var/state')
-	self.socket    	= require("socket")
+    self.external   = rdExternal()
 end
         
 function rdAlfred:getVersion()
@@ -33,6 +34,63 @@ end
 function rdAlfred:readData(nr)
 	self:log("==Read Alfred data from "..nr.." ==")
 	return self:__readData(nr)
+end
+
+function rdAlfred:masterEnableAndStart()
+
+    local interface = self.x.get('alfred','alfred','interface')
+    if(interface ~= 'br-one')then
+        self.x.set('alfred','alfred','interface','br-one')
+    end
+
+    local mode      = self.x.get('alfred','alfred','mode')
+    if(mode ~= 'master')then
+        self.x.set('alfred','alfred','mode','master')
+    end
+
+    local disabled  = self.x.get('alfred','alfred','disabled')
+    if(disabled ~= '0')then
+        self.x.set('alfred','alfred','disabled','0')
+    end
+
+    local start_vis  = self.x.get('alfred','alfred','start_vis')
+    if(start_vis ~= '1')then
+        self.x.set('alfred','alfred','start_vis','1')
+    end
+
+    self.x.commit('alfred')
+    --start the service
+    self:log("**Start up alfred master**")
+    os.execute("/etc/init.d/alfred start")
+
+end
+
+function rdAlfred:slaveEnableAndStart()
+
+    local interface = self.x.get('alfred','alfred','interface')
+    if(interface ~= 'br-one')then
+        self.x.set('alfred','alfred','interface','br-one')
+    end
+
+    local mode      = self.x.get('alfred','alfred','mode')
+    if(mode ~= 'slave')then
+        self.x.set('alfred','alfred','mode','slave')
+    end
+
+    local disabled  = self.x.get('alfred','alfred','disabled')
+    if(disabled ~= '0')then
+        self.x.set('alfred','alfred','disabled','0')
+    end
+
+    local start_vis  = self.x.get('alfred','alfred','start_vis')
+    if(start_vis ~= '0')then
+        self.x.set('alfred','alfred','start_vis','0')
+    end
+
+    self.x.commit('alfred')
+    --start the service
+    self:log("**Start up alfred slave**")
+    os.execute("/etc/init.d/alfred start")
 end
 
 function rdAlfred:log(m,p)

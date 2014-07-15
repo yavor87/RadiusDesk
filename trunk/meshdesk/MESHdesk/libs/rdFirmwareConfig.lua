@@ -12,7 +12,6 @@ function rdFirmwareConfig:rdFirmwareConfig()
     require('rdNetwork');
 
     local uci 	    = require("uci")
-    local socket 	= require("socket")
 	self.version 	= "1.0.0"
 	self.logger	    = rdLogger()
     self.external   = rdExternal()
