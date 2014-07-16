@@ -32,7 +32,7 @@ config settings 'settings'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
     option internet_off_after '610'
 	option hardware 'dragino'
-    option config_server '192.168.1.107'
+    option config_server '192.168.1.105'
     option config_port  '3000'
     option shared_secret 'verysecure'
 
@@ -43,14 +43,17 @@ config captive_portal 'captive_portal'
 #Hardware specific settings here:	
 config hardware 'pico2'
 	option morse_led "/sys/class/leds/gpio4/brightness"
-	option mesh_led	 "/sys/class/leds/gpio1/brightness"
+	option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	option wifi_led "dragino2:red:wlan"
 	
 config hardware 'om2p'
 	option morse_led "/sys/class/leds/om2p\:blue\:lan/brightness"
+	option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	option wifi_led "dragino2:red:wlan"
 	
 config hardware 'dragino'
 	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
     option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	option wifi_led "dragino2:red:wlan"
 	option swap_on_off "1"
-	
 
