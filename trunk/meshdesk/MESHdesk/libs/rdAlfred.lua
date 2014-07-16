@@ -20,6 +20,7 @@ function rdAlfred:rdAlfred()
 	self.logger	    = rdLogger()
 	self.x		    = uci.cursor(nil,'/var/state')
     self.external   = rdExternal()
+	self.bat_hosts  = '/etc/alfred/bat-hosts.lua'
 end
         
 function rdAlfred:getVersion()
@@ -59,6 +60,14 @@ function rdAlfred:masterEnableAndStart()
     end
 
     self.x.commit('alfred')
+
+	--Remove the /etc/alfred/bat-hosts.lua file 
+	local f=io.open(self.bat_hosts,"r")                                                   
+    if f~=nil then 
+		io.close(f) 
+	else 
+ 		os.remove(self.bat_hosts)
+	end
     --start the service
     self:log("**Start up alfred master**")
     os.execute("/etc/init.d/alfred start")
@@ -88,6 +97,13 @@ function rdAlfred:slaveEnableAndStart()
     end
 
     self.x.commit('alfred')
+	--Remove the /etc/alfred/bat-hosts.lua file 
+	local f=io.open(self.bat_hosts,"r")                                                   
+    if f~=nil then 
+		io.close(f) 
+	else 
+ 		os.remove(self.bat_hosts)
+	end
     --start the service
     self:log("**Start up alfred slave**")
     os.execute("/etc/init.d/alfred start")

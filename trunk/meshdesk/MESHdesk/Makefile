@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
 PKG_VERSION:=1.0.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,11 +51,7 @@ define Package/zzz-MESHdesk/install
 	mkdir -p $(1)/etc/dropbear
 	cp ./files/MESHdesk/files/common/dropbear_dss_host_key $(1)/etc/dropbear
 	cp ./files/MESHdesk/files/common/dropbear_rsa_host_key $(1)/etc/dropbear
-	mkdir  $(1)/etc
-	cp ./files/MESHdesk/files/common/shadow $(1)/etc
-	cp ./files/MESHdesk/files/common/passwd $(1)/etc
 	mkdir -p $(1)/etc/alfred
-	rm /etc/alfred/bat-hosts.lua
 	cp ./files/MESHdesk/alfred_scripts/alfred_meshdesk_scripts.sh $(1)/etc/alfred
 endef
 
