@@ -99,11 +99,11 @@ end
 loop = true
 while(loop)do
 	if(not(pidof('a.lua')))then                   
-		print("Setup script not running evaluate the Batman-adv neighbours")
-		log("Setup script not running evaluate the Batman-adv neighbours")
+		--print("Setup script not running evaluate the Batman-adv neighbours")
+		--log("Setup script not running evaluate the Batman-adv neighbours")
 		batman_neighbour_count()
 	else
-		print("Setup script running already wait for it to finish")
+		--print("Setup script running already wait for it to finish")
 		log("Setup script running already wait for it to finish")
 	end
 	sleep(interval)
