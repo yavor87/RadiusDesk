@@ -15,7 +15,7 @@ function rdMorse:rdMorse()
 	self.socket	= s
 	
 	self.led	= "/sys/class/leds/gpio4/brightness" --Set a default value this will be changed during initialisation
-	self.debug	= true
+	self.debug	= false
 	
 	self.short	= 0.3 		--1unit
 	self.long	= self.short*3	--3units
@@ -62,7 +62,7 @@ function rdMorse:rdMorse()
 			if(a['.name'] == hardware)then
 				self.led = a['morse_led']
 				if(a['swap_on_off'] == '1')then
-					print("Swapping on and off")
+					--print("Swapping on and off")
 					self:swapOnOff()
 				end
 			end	
