@@ -42,14 +42,14 @@ config captive_portal 'captive_portal'
 	
 #Hardware specific settings here:	
 config hardware 'pico2'
-	option morse_led "/sys/class/leds/gpio4/brightness"
-	option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
-	option wifi_led "dragino2:red:wlan"
+	option morse_led "/sys/class/leds/ubnt:red:lan:link1/brightness"
+	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
+	option wifi_led "ubnt:green:link4"
 	
-config hardware 'om2p'
-	option morse_led "/sys/class/leds/om2p\:blue\:lan/brightness"
-	option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
-	option wifi_led "dragino2:red:wlan"
+config hardware 'om2p'                                                   
+	option morse_led '/sys/class/leds/om2p:blue:lan/brightness'      
+    option internet_led '/sys/class/leds/om2p:blue:wan/brightness'   
+    option wifi_led 'om2p:green:wifi'       
 	
 config hardware 'dragino'
 	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"

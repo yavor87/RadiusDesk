@@ -74,7 +74,19 @@ end
 
 function rdNetwork.__getMac(self,interface)
 	interface = interface or "eth0"
-	io.input("/sys/class/net/" .. interface .. "/address")
+
+	local file_to_check = "/sys/class/net/" .. interface .. "/address"
+
+	--Check if file exists
+	local f=io.open(file_to_check,"r")                                                   
+    if f~=nil then 
+		io.close(f)
+	else
+		return false
+	end
+
+	--Read the file now we know it exists
+	io.input(file_to_check)
 	t = io.read("*line")
     if(t)then
 	    dashes, count = string.gsub(t, ":", "-")
