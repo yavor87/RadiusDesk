@@ -24,6 +24,9 @@ function rdGateway:enable(exPoints)
 	self:__dhcpGwEnable()
 	self:__addExPoints(exPoints)
     os.execute("touch /tmp/gw")
+	--We also have to remove (and re-enable the /etc/resolv.conf)
+	os.execute("rm /etc/resolv.conf")
+	os.execute("ln -s /tmp/resolv.conf /etc/resolv.conf")
 end     
 
 function rdGateway:disable()

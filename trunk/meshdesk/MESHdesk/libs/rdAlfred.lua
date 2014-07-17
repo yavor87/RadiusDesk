@@ -61,12 +61,12 @@ function rdAlfred:masterEnableAndStart()
 
     self.x.commit('alfred')
 
-	--Remove the /etc/alfred/bat-hosts.lua file 
+	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
 	local f=io.open(self.bat_hosts,"r")                                                   
     if f~=nil then 
 		io.close(f) 
-	else 
  		os.remove(self.bat_hosts)
+		os.execute("/etc/init.d/alfred disable")
 	end
     --start the service
     self:log("**Start up alfred master**")
@@ -97,16 +97,17 @@ function rdAlfred:slaveEnableAndStart()
     end
 
     self.x.commit('alfred')
-	--Remove the /etc/alfred/bat-hosts.lua file 
+	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
 	local f=io.open(self.bat_hosts,"r")                                                   
     if f~=nil then 
 		io.close(f) 
-	else 
  		os.remove(self.bat_hosts)
+		os.execute("/etc/init.d/alfred disable")
 	end
     --start the service
     self:log("**Start up alfred slave**")
     os.execute("/etc/init.d/alfred start")
+	
 end
 
 function rdAlfred:log(m,p)
@@ -114,7 +115,6 @@ function rdAlfred:log(m,p)
 		self.logger:log(m,p)
 	end
 end
-
 
 --[[--
 ========================================================
