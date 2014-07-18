@@ -3,7 +3,6 @@ config fallback
 	option ap 'md_admin'
 	option key 'meshdesk'
 	option timeout '240'
-	option gaan 'groot'
 
 config internet 'internet1'
 	option dns 'radiusdev.webage.co'
@@ -31,8 +30,8 @@ config settings 'settings'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
     option internet_off_after '610'
-	option hardware 'dragino'
-    option config_server '192.168.1.105'
+	option hardware 'pico2'
+    option config_server '192.168.255.20'
     option config_port  '3000'
     option shared_secret 'verysecure'
 
