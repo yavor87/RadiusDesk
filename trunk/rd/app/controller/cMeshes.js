@@ -951,13 +951,15 @@ Ext.define('Rd.controller.cMeshes', {
         var win     = button.up("winMeshEdit");
         
         //Entry points present; continue 
-        var store   = win.down("gridNodes").getStore();
+        var store   	= win.down("gridNodes").getStore();
+		var hide_power 	= win.down("pnlNodeCommonSettings #all_power").getValue();
         if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
                 id          :'winMeshAddNodeId',
                 store       : store,
-                meshId      : win.getItemId()
+                meshId      : win.getItemId(),
+				hidePower	: hide_power	
             });
             me.application.runAction('cDesktop','Add',w);         
         }
@@ -1026,7 +1028,6 @@ Ext.define('Rd.controller.cMeshes', {
         var me      = this;
         var win     = button.up("winMeshEdit");
         var store   = win.down("gridNodes").getStore();
-        console.log("gooi 2");
         if(win.down("gridNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
@@ -1038,13 +1039,16 @@ Ext.define('Rd.controller.cMeshes', {
             var sr      = win.down("gridNodes").getSelectionModel().getLastSelected();
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
+			//Determine if we can show a power bar or not.
+			var hide_power = win.down("pnlNodeCommonSettings #all_power").getValue();
             if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
                 var w = Ext.widget('winMeshEditNode',
                 {
                     id          :'winMeshEditNodeId',
                     store       : store,
                     nodeId      : id,
-                    meshId      : meshId
+                    meshId      : meshId,
+					hidePower	: hide_power
                 });
                 me.application.runAction('cDesktop','Add',w);         
             }

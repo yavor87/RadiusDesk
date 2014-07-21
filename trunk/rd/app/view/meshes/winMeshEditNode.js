@@ -14,6 +14,7 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
     glyph       : Rd.config.icnEdit,
     autoShow    : false,
     nodeId      : '',
+	hidePower	: false,
     defaults: {
             border: false
     },
@@ -24,7 +25,7 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
         'Rd.view.meshes.cmbHardwareOptions'
     ],
      initComponent: function() {
-        var me = this;  
+        var me 		= this; 
         var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
             layout:     'anchor',
@@ -101,7 +102,9 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                         minValue    : 1,
                         maxValue    : 100,
                         name        : 'power',
-                        fieldLabel  : i18n('sTX_Power_br_percent_br')
+                        fieldLabel  : i18n('sTX_Power_br_percent_br'),
+						disabled	: me.hidePower,
+						hidden		: me.hidePower
                     },
                     {
                         xtype       : 'cmbStaticEntries',
