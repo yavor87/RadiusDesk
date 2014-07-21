@@ -317,16 +317,17 @@ class NodesController extends AppController {
                     "options"       => array(
                         'channel'       => $channel,
                         'disabled'      => 0,
-                        'hwmode'        => '11gn',
+                        'hwmode'        => '11ng',
 						'txpower'		=> $db_power
                     ),
                     'lists'          => array(
-                        array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
-                        array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-40'),  
-                        array('name'    => 'ht_capab', 'value'  => 'RX-STBC1'),
-                        array('name'    => 'ht_capab', 'value'  => 'DSSS_CCK-40')  
+                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
+                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-40'),  
+                        //array('name'    => 'ht_capab', 'value'  => 'RX-STBC1'),
+                        //array('name'    => 'ht_capab', 'value'  => 'DSSS_CCK-40')  
                     )
                 ));
+
 
         //Get the mesh's BSSID and SSID
         $bssid      = $mesh['Mesh']['bssid'];
