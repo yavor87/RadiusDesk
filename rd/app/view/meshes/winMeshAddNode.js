@@ -14,6 +14,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     glyph   : Rd.config.icnAdd,
     autoShow:   false,
     meshId :    '',
+	hidePower	: false,
     defaults: {
             border: false
     },
@@ -101,7 +102,9 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         minValue    : 1,
                         maxValue    : 100,
                         name        : 'power',
-                        fieldLabel  : i18n('sTX_Power_br_percent_br')
+                        fieldLabel  : i18n('sTX_Power_br_percent_br'),
+						disabled	: me.hidePower,
+						hidden		: me.hidePower
                     },
                     {
                         xtype       : 'cmbStaticEntries',
