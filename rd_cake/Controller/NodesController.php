@@ -7,6 +7,8 @@ class NodesController extends AppController {
     public $uses        = array('Mesh');
     public $components  = array('OpenWrt');
     protected $NodeId   = '';
+	protected $Hardware = 'dragino'; //Some default value
+	protected $Power	= '10'; //Some default
 
 
     public function get_config_for_node(){
@@ -23,7 +25,11 @@ class NodesController extends AppController {
             if($q_r){
                // print_r($q_r);
                 $mesh_id        = $q_r['Node']['mesh_id'];
+
                 $this->NodeId   = $q_r['Node']['id'];
+				$this->Hardware	= $q_r['Node']['hardware'];
+				$this->Power	= $q_r['Node']['power'];
+
                 $mesh->contain(
                     'Node.NodeMeshEntry',
                     'Node.NodeMeshExit',
@@ -296,13 +302,23 @@ class NodesController extends AppController {
         //Get the channel
         $channel    = $mesh['NodeSetting']['two_chan'];
         //The radio's channel
+		//Get the power - If the node settings has it to apply to all we do not consider the node's individual power setting
+		//The dbm value also depends on the node's hardware
+		if($mesh['NodeSetting']['all_power'] == 1){
+			$power_perc = $mesh['NodeSetting']['power'];
+			$db_power   = $this->_db_power_for($this->Hardware,$power_perc);
+		}else{
+			$db_power   = $this->_db_power_for($this->Hardware,$this->Power);
+		}
+
         array_push( $wireless,
                 array(
                     "wifi-device"   => "radio0",
                     "options"       => array(
                         'channel'       => $channel,
                         'disabled'      => 0,
-                        'hwmode'        => '11gn'
+                        'hwmode'        => '11gn',
+						'txpower'		=> $db_power
                     ),
                     'lists'          => array(
                         array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
@@ -452,4 +468,18 @@ class NodesController extends AppController {
 
         return($dictionary[$number]);
     }
+
+	private function _db_power_for($hw,$power_perc){
+		$return_val = 10; //some default
+
+		$ct = Configure::read('hardware');
+        foreach($ct as $i){
+            if($i['id'] ==$hw){
+				$return_val = intval($i['max_power'] *($power_perc/100));
+				break;
+            }
+        }
+		return $return_val;
+	}
+
 }
