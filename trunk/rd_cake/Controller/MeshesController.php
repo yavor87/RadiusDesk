@@ -1028,6 +1028,21 @@ class MeshesController extends AppController {
             $hardware["$id"]= $name;
         }
 
+		//Check if we need to show the override on the power
+		$node_setting	= ClassRegistry::init('NodeSetting');
+		$node_setting->contain();
+
+		$power_override = false;
+
+		$ns				= $node_setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $mesh_id)));
+		if($ns){
+			if($ns['NodeSetting']['all_power'] == 1){
+				$power_override = true;
+				$power 			= $ns['NodeSetting']['power'];
+			}
+		}
+		
+
         foreach($q_r as $m){
             $static_entries = array();
             $static_exits   = array();
@@ -1039,6 +1054,13 @@ class MeshesController extends AppController {
                 array_push($static_exits,array('name'   => $m_e_exit['MeshExit']['name']));
             }
 
+			if($power_override){
+				$p = $power;
+			}else{
+				$p = $m['Node']['power'];
+			}
+			
+
             $hw_id = $m['Node']['hardware'];
             array_push($items,array( 
                 'id'            => $m['Node']['id'],
@@ -1047,7 +1069,7 @@ class MeshesController extends AppController {
                 'description'   => $m['Node']['description'],
                 'mac'           => $m['Node']['mac'],
                 'hardware'      => $hardware["$hw_id"],
-                'power'         => $m['Node']['power'],
+                'power'         => $p,
                 'static_entries'=> $static_entries,
                 'static_exits'  => $static_exits,
                 'ip'            => $m['Node']['ip'],
