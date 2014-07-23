@@ -352,6 +352,14 @@ function configure_device(config)
 	  
     os.execute("/etc/init.d/network reload")
 
+	-- Do we have some system settings?
+	if(o.config_settings.system ~= nil)then  
+		print("Doing system")
+		require("rdSystem")           
+	    local s = rdSystem()    
+	    s:configureFromTable(o.config_settings.system) 
+	end
+
     -- Check if there are perhaps some captive portals to set up once everything has been done --
     sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
     if(o.config_settings.captive_portals ~= nil)then
