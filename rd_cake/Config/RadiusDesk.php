@@ -270,11 +270,12 @@ $config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching
 $config['mesh_node']['start_ip']    = '10.5.5.1';
 
 //== Default node settings ==
-$config['common_node_settings']['password']  = 'verysecure'; //Root password on nodes
-$config['common_node_settings']['power']     = 100; //% of tx power to use on devices
-$config['common_node_settings']['all_power'] = true; //Apply this power to all devices?
-$config['common_node_settings']['two_chan']  = 6; //% Channel to use on 2.4G wifi
-$config['common_node_settings']['five_chan'] = 44; //% Channel to use on 5G wifi
+$config['common_node_settings']['password']  		= 'admin'; //Root password on nodes
+$config['common_node_settings']['password_hash']  	= '$1$TJn8xhHP$BLhc3QEW54de0V8yCYD/T.'; //Output of 'openssl passwd -1 admin'
+$config['common_node_settings']['power']     		= 100; //% of tx power to use on devices
+$config['common_node_settings']['all_power'] 		= true; //Apply this power to all devices?
+$config['common_node_settings']['two_chan']  		= 6; //% Channel to use on 2.4G wifi
+$config['common_node_settings']['five_chan'] 		= 44; //% Channel to use on 5G wifi
 $config['common_node_settings']['heartbeat_interval']  = 60; //Send a heartbeat pulse through every interval seconds
 $config['common_node_settings']['heartbeat_dead_after'] = 300; //Mark a device as dead if we have not had heartbeats in this time
  
