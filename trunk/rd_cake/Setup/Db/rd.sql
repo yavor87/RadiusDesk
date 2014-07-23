@@ -1338,8 +1338,9 @@ CREATE TABLE `node_settings` (
   `heartbeat_dead_after` int(5) NOT NULL DEFAULT '600',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `password_hash` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1348,7 +1349,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (12,33,'verysecure',99,1,11,44,60,660,'2014-03-26 14:06:04','2014-06-27 12:30:45');
+INSERT INTO `node_settings` VALUES (12,33,'admin',100,1,11,44,60,660,'2014-03-26 14:06:04','2014-07-22 16:55:51','$1$nqwORsQD$xAFVXf/pABpb5H5DZ799K0'),(13,34,'admin',100,1,6,44,60,300,'2014-07-22 16:43:43','2014-07-22 16:55:41','$1$cF1MGb/7$24fIxfBZyI/YiIwWH782i0');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1462,7 +1463,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (80,33,'node_1','node_1','A8-40-41-13-66-FF','dragino2',50,'10.5.5.1','2014-07-14 12:20:00',0,NULL,NULL,'logo.jpg','2014-03-26 14:06:56','2014-07-14 12:20:00'),(81,33,'node_2','node_2','A8-40-41-13-66-FB','dragino2',51,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2014-03-27 03:29:36','2014-03-27 03:29:49'),(85,33,'vt-01','vt-01','A8-40-41-13-60-E3','dragino2',50,'10.5.5.6','2014-06-29 18:50:06',0,NULL,NULL,'logo.jpg','2014-06-18 09:20:12','2014-06-29 18:50:06'),(86,33,'vt-02','vt-02','A8-40-41-13-60-E7','dragino2',50,'10.5.5.7','2014-06-29 18:50:06',0,NULL,NULL,'logo.jpg','2014-06-20 03:34:46','2014-06-29 18:50:06'),(87,33,'vt-03','vt-03','A8-40-41-13-60-EF','dragino2',51,'10.5.5.8','2014-07-14 12:20:00',0,NULL,NULL,'logo.jpg','2014-06-20 03:45:29','2014-07-14 12:20:00');
+INSERT INTO `nodes` VALUES (80,33,'node_1','node_1','A8-40-41-13-66-FF','dragino',50,'10.5.5.1','2014-07-14 12:20:00',0,NULL,NULL,'logo.jpg','2014-03-26 14:06:56','2014-07-14 12:20:00'),(81,33,'node_2','node_2','A8-40-41-13-66-FB','dragino',51,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2014-03-27 03:29:36','2014-03-27 03:29:49'),(85,33,'vt-01','vt-01','A8-40-41-13-60-E3','picostation2',50,'10.5.5.6','2014-06-29 18:50:06',0,NULL,NULL,'logo.jpg','2014-06-18 09:20:12','2014-07-21 13:17:01'),(86,33,'vt-02','vt-02','A8-40-41-13-60-E7','dragino',50,'10.5.5.7','2014-06-29 18:50:06',0,NULL,NULL,'logo.jpg','2014-06-20 03:34:46','2014-06-29 18:50:06'),(87,33,'vt-03','vt-03','A8-40-41-13-60-EF','dragino',51,'10.5.5.8','2014-07-14 12:20:00',0,NULL,NULL,'logo.jpg','2014-06-20 03:45:29','2014-07-14 12:20:00');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2402,4 +2403,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-07-15  5:18:36
+-- Dump completed on 2014-07-23  4:35:39
