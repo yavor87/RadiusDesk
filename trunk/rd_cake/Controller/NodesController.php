@@ -86,6 +86,7 @@ class NodesController extends AppController {
         $json['config_settings']                = array();
         $json['config_settings']['wireless']    = array();
         $json['config_settings']['network']     = array();
+		$json['config_settings']['system']		= array();
 
         //============ Network ================
         $net_return         = $this->_build_network($mesh,$gateway);
@@ -103,8 +104,32 @@ class NodesController extends AppController {
             $json['config_settings']['captive_portals'] = $net_return[3]; //Captive portals
         }
 
+		//======== System related settings ======
+		$system_data 		= $this->_build_system($mesh);
+		$json['config_settings']['system'] = $system_data;
+
         return $json; 
     }
+
+	private function _build_system($mesh){
+		//Get the root password
+		$ss = array();
+		if($mesh['NodeSetting']['password_hash'] != ''){
+			$ss['password_hash'] = $mesh['NodeSetting']['password_hash'];
+		}else{
+			$data = Configure::read('common_node_settings'); //Read the defaults
+			$ss['password_hash'] = $data['password_hash'];
+		}
+
+		foreach($mesh['Node'] as $n){
+			if($n['id'] == $this->NodeId){
+				$ss['hostname'] = $n['name'];
+				break;
+			}
+		}
+		//print_r($mesh);
+		return $ss;
+	}
 
     private function _build_network($mesh,$gateway = false){
 

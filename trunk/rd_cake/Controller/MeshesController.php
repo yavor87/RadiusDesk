@@ -1040,8 +1040,13 @@ class MeshesController extends AppController {
 				$power_override = true;
 				$power 			= $ns['NodeSetting']['power'];
 			}
+		}else{
+			$data       = Configure::read('common_node_settings'); //Read the defaults
+			if($data['all_power'] == true){
+				$power_override = true;
+				$power 			= $data['power'];
+			}
 		}
-		
 
         foreach($q_r as $m){
             $static_entries = array();
@@ -1396,9 +1401,17 @@ class MeshesController extends AppController {
             $mesh_id = $this->request->data['mesh_id'];
             //See if there is not already a setting entry
             $setting    = ClassRegistry::init('NodeSetting');
+			$setting->contain();
             $q_r        = $setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $mesh_id)));
+
             if($q_r){
                 $this->request->data['id'] = $q_r['NodeSetting']['id']; //Set the ID
+				//Check if the value of 
+				if($this->request->data['password'] != $q_r['NodeSetting']['password']){
+					//Create a new hash
+					$new_pwd = $this->_make_linux_password($this->request->data['password']);
+					$this->request->data['password_hash'] = $new_pwd;
+				}
             }
 
             if ($setting->save($this->request->data)) {
@@ -1871,4 +1884,8 @@ class MeshesController extends AppController {
             }  
         }
     }
+
+	private function _make_linux_password($pwd){
+		return exec("openssl passwd -1 $pwd");
+	}
 }
