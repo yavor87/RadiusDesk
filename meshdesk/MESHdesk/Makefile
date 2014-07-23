@@ -44,6 +44,7 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_BIN) ./files/MESHdesk/main_led.lua $(1)/etc/MESHdesk/
 	mkdir -p $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/MESHdesk/md_prerun $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/MESHdesk/files/common/alfred $(1)/etc/init.d
 	mkdir -p $(1)/etc/config
 	$(INSTALL_DATA) ./files/MESHdesk/meshdesk $(1)/etc/config
 	mkdir -p $(1)/etc/hotplug.d/iface

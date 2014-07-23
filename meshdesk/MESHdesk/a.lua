@@ -380,6 +380,8 @@ function configure_device(config)
 		a:restartServices()
         --start alfred in master mode
         alfred:masterEnableAndStart()
+		--Only the gateway node
+		ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
     else
         alfred:slaveEnableAndStart()
 	end

@@ -2,7 +2,7 @@
 
 
 -- Include libraries
-package.path = "../libs/?.lua;" .. package.path
+package.path = "../libs/?.lua;./libs/?.lua;" .. package.path
 
 --Some variables
 local network_data          = 100   --This is where we store network stats
@@ -60,7 +60,6 @@ function submitReport()
 
     --Remove old results                                                                                              
     os.remove(result_file)
-
     os.execute('curl -o '..result_file..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
     
     --Read the results

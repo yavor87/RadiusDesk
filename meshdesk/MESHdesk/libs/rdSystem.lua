@@ -84,7 +84,30 @@ function rdSystem.__configureFromTable(self,tbl)
 			end
 		end
 	end
-	 
+
+	--Heartbeat interval
+	local c_hb = self.x.get('meshdesk', 'settings', 'heartbeat_interval')
+	if(c_hb)then
+		local new_hb	= tbl.heartbeat_interval
+		if(new_hb)then
+			if(c_hb ~= new_hb)then
+				self.x.set('meshdesk', 'settings', 'heartbeat_interval',new_hb)
+				self.x.commit('meshdesk')
+			end
+		end
+	end
+
+	--Hearbeat dead after
+	local c_hbd = self.x.get('meshdesk', 'settings', 'heartbeat_dead_after')
+	if(c_hbd)then
+		local new_hbd	= tbl.heartbeat_dead_after
+		if(new_hbd)then
+			if(c_hbd ~= new_hbd)then
+				self.x.set('meshdesk', 'settings', 'heartbeat_dead_after',new_hbd)
+				self.x.commit('meshdesk')
+			end
+		end
+	end	 
 end
 
 

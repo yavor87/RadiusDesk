@@ -5,6 +5,7 @@ cd /etc/MESHdesk/alfred_scripts
 #Now we check if the gateway is still the same
 ./alfred_dynamic_gateway.lua
 #Then we report it to the server
-./alfred_report_to_server.lua
+#We do this independently to 1.) Avoid all report the same time 2.) to be able to adjust heartbeat intervals
+#./alfred_report_to_server.lua
 #Then we set our Interwebs LED
 ./alfred_check_for_internet.lua

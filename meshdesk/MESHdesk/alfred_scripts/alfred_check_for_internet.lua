@@ -20,7 +20,7 @@ function check()
     local j         = require("json")
     local ft_list   = a:readData(feedback_timestamp)
 
-    local dead_after    = fetch_config_value('meshdesk.settings.internet_off_after')
+    local dead_after    = fetch_config_value('meshdesk.settings.heartbeat_dead_after')
     local hardware      = fetch_config_value('meshdesk.settings.hardware')
     local led           = fetch_config_value('meshdesk.'..hardware..'.internet_led')
 
