@@ -115,10 +115,15 @@ class NodesController extends AppController {
 		//Get the root password
 		$ss = array();
 		if($mesh['NodeSetting']['password_hash'] != ''){
-			$ss['password_hash'] = $mesh['NodeSetting']['password_hash'];
+			$ss['password_hash'] 		= $mesh['NodeSetting']['password_hash'];
+			$ss['heartbeat_interval']	= $mesh['NodeSetting']['heartbeat_interval'];
+			$ss['heartbeat_dead_after']	= $mesh['NodeSetting']['heartbeat_dead_after'];
+
 		}else{
 			$data = Configure::read('common_node_settings'); //Read the defaults
-			$ss['password_hash'] = $data['password_hash'];
+			$ss['password_hash'] 		= $data['password_hash'];
+			$ss['heartbeat_interval']	= $data['heartbeat_interval'];
+			$ss['heartbeat_dead_after']	= $data['heartbeat_dead_after'];
 		}
 
 		foreach($mesh['Node'] as $n){
