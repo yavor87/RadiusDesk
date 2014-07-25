@@ -749,6 +749,42 @@ td.grdEditable div {
 }
 
 
+.divTip {
+	border-radius: 4px;
+    -moz-border-radius: 4px;
+    background: #cdd0d5;
+    border: 1px solid #333435;
+    margin-top: 2px;
+    padding: 10px 15px;
+    color: #555;
+}
+
+.tip-title {
+    color: #333435;
+    text-decoration: underline;
+    font-size: 14px;
+	padding: 2px;
+	text-align: center;
+}
+
+.lblListS {
+    width: 125px;
+    float: left;
+    text-align: left;
+    color: #676d76;
+    font-size:12px;
+    margin: 1px;
+}
+
+.lblValueS {
+    text-align: left;
+    font-size:12px;
+    margin: 1px;
+	color: #2651a9;
+}
+
+
+
 
 
 
