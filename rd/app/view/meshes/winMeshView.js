@@ -36,6 +36,12 @@ Ext.define('Rd.view.meshes.winMeshView', {
                         border  : true,
                         plain   : true,
                         items   : [
+								{
+                                    title   : 'Overview',
+                                    itemId  : 'tabMeshViewNodeToNode',
+									xtype	: 'pnlMeshViewNodes',
+                                    meshId  : me.getItemId()
+                                },
                                 {
                                     title   : 'SSID &#8660; Device',
                                     itemId  : 'tabMeshViewEntries',
@@ -47,13 +53,7 @@ Ext.define('Rd.view.meshes.winMeshView', {
                                     itemId  : 'tabMeshViewNodes',
                                     xtype   : 'gridMeshViewNodes',
                                     meshId  : me.getItemId()
-                                },
-                                {
-                                    title   : 'Node &#8660; Node',
-                                    itemId  : 'tabMeshViewNodeToNode',
-                                    meshId  : me.getItemId()
                                 }
-
                             ]
                         }
                     ]

@@ -49,7 +49,8 @@ Ext.define('Rd.controller.cMeshes', {
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
         'components.winNote',       'components.winNoteAdd',    'meshes.winMeshEditNode',
-        'meshes.winMeshView',       'meshes.gridMeshViewEntries', 'meshes.gridMeshViewNodes'
+        'meshes.winMeshView',       'meshes.gridMeshViewEntries', 'meshes.gridMeshViewNodes',
+		'meshes.pnlMeshViewNodes'
     ],
     stores      : ['sMeshes',   'sAccessProvidersTree', 'sMeshEntries', 'sMeshExits', 'sMeshEntryPoints',
         'sNodes'//,   'sMeshViewEntries', 'sMeshViewNodes'
@@ -270,7 +271,201 @@ Ext.define('Rd.controller.cMeshes', {
             'winMeshView': {
                 beforeshow:      me.winViewClose,
                 destroy   :      me.winViewClose
-            }
+            },
+			'winMeshView #tabMeshViewNodeToNode':	{
+				afterlayout:		function(panel){
+/*
+					console.log("Thing was layouted ;-)")
+					var i = 'n_t_n_'+panel.meshId;
+					console.log(panel.meshId);
+//------------
+var labelType, useGradients, nativeTextSupport, animate;
+
+(function() {
+  var ua = navigator.userAgent,
+      iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+      typeOfCanvas = typeof HTMLCanvasElement,
+      nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
+      textSupport = nativeCanvasSupport 
+        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
+  //I'm setting this based on the fact that ExCanvas provides text support for IE
+  //and that as of today iPhone/iPad current text support is lame
+  labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
+  nativeTextSupport = labelType == 'Native';
+  useGradients = nativeCanvasSupport;
+  animate = !(iStuff || !nativeCanvasSupport);
+})();
+
+  var json = [
+	// first node
+    {
+        id: "graphnode1",
+        name: "A graph node (#1)",
+		
+        data: {
+            $color: "#00FF00",
+            $type: "circle",
+            $dim: 10,
+			'attr': 'once'
+        },
+		adjacencies: [
+			"graphnode2",
+			{
+				nodeTo: "graphnode3",
+				data: {
+					"$color"	: "green",
+					"$lineWidth": 6,
+					"$alpha"	: 0.2
+				}
+			},
+			"graphnode3",
+			{
+				nodeTo: "graphnode2",
+				data: {
+					"$color"	: "blue",
+					"$lineWidth": 6,
+					"$alpha"	: 0.7
+				}
+			}
+		]
+    },
+    // second node
+    {
+        data: {
+            $color: "#00FFFF",
+            $type: "triangle",
+            $dim: 10,
+			'attr': 'twice'
+        },
+        id: "graphnode2",
+        name: "Another graph node (#2)"
+    },
+    // third node
+    {
+        data: {
+            $color: "#0000FF",
+            $type: "square",
+            $dim: 10,
+			'attr': 'three times'
+        },
+        id: "graphnode3",
+        name: "And another (#3)"
+    }
+];
+
+  // init ForceDirected
+  var fd = new $jit.ForceDirected({
+    //id of the visualization container
+    injectInto: i,
+    //Enable zooming and panning
+    //by scrolling and DnD
+    Navigation: {
+      enable: true,
+      //Enable panning events only if we're dragging the empty
+      //canvas (and not a node).
+      panning: 'avoid nodes',
+      zooming: 10 //zoom speed. higher is more sensible
+    },
+    // Change node and edge styles such as
+    // color and width.
+    // These properties are also set per node
+    // with dollar prefixed data-properties in the
+    // JSON structure.
+    Node: {
+      overridable: true
+    },
+    Edge: {
+      overridable: true,
+      color: 'red',
+      lineWidth: 0.4
+    },
+    //Native canvas text styling
+    Label: {
+      type: labelType, //Native or HTML
+      size: 20,
+      style: 'bold'
+    },
+    //Add Tips
+    Tips: {
+      enable: true,
+      onShow: function(tip, node) {
+        //count connections
+        var count = 0;
+		console.log("Show tip pappie");
+        node.eachAdjacency(function() { count++; });
+        //display node info in tooltip
+        tip.innerHTML = "<div class=\"divTip\"><div class=\"tip-title\">" + node.data.attr + "</div>"
+          + "<div class=\"tip-text\"><b>connections:</b> " + count + "</div></div>";
+      }
+    },
+    // Add node events
+    Events: {
+      enable: true,
+      type: 'Native',
+      //Change cursor style when hovering a node
+      onMouseEnter: function() {
+        fd.canvas.getElement().style.cursor = 'move';
+      },
+      onMouseLeave: function() {
+        fd.canvas.getElement().style.cursor = '';
+      },
+      //Update node positions when dragged
+      onDragMove: function(node, eventInfo, e) {
+          var pos = eventInfo.getPos();
+          node.pos.setc(pos.x, pos.y);
+          fd.plot();
+      },
+      //Implement the same handler for touchscreens
+      onTouchMove: function(node, eventInfo, e) {
+        $jit.util.event.stop(e); //stop default touchmove event
+        this.onDragMove(node, eventInfo, e);
+      },
+      //Add also a click handler to nodes
+      onClick: function(node) {
+          if(!node) return;
+          console.log(node);
+          node.data["$color"] = "#FF0000";
+          fd.plot();
+      }
+    },
+    //Number of iterations for the FD algorithm
+    iterations: 200,
+    //Edge length
+    levelDistance: 130,
+    // Add text to the labels. This method is only triggered
+    // on label creation and only for DOM labels (not native canvas ones).
+    onCreateLabel: function(domElement, node){
+      domElement.innerHTML = node.name;
+      var style = domElement.style;
+      style.fontSize = "0.8em";
+      style.color = "#ddd";
+    },
+  });
+
+ fd.loadJSON(json);
+  // compute positions incrementally and animate.
+  fd.computeIncremental({
+    iter: 40,
+    property: 'end',
+    onStep: function(perc){
+      console.log(perc + '% loaded...');
+    },
+    onComplete: function(){
+      console.log('done');
+      fd.animate({
+        modes: ['linear'],
+        transition: $jit.Trans.Elastic.easeOut,
+        duration: 2500
+      });
+    }
+  });
+
+*/
+//--------------
+
+
+				}
+			}
         });
     },
     winClose:   function(){
