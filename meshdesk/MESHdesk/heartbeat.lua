@@ -17,7 +17,6 @@ interval = 120
 local uci= require('uci')
 
 require "socket" 
-require "                                                                                         
 require("rdLogger")
 l   	= rdLogger() 
 
@@ -64,7 +63,7 @@ while(loop)do
 
 	--Check if there are another interval besides the default of 30 seconds
 	local x = uci.cursor(nil,'/var/state')
-	local time_to_sleep = self.x.get('meshdesk','settings','heartbeat_interval')
+	local time_to_sleep = x.get('meshdesk','settings','heartbeat_interval')
 	if(time_to_sleep)then
 		interval = time_to_sleep
 	end

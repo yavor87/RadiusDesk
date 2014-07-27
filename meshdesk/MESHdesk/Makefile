@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
-PKG_VERSION:=1.0.2
+PKG_VERSION:=1.3.0
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -39,6 +39,7 @@ define Package/zzz-MESHdesk/install
 	cp -r ./files/MESHdesk/tests/* $(1)/etc/MESHdesk/tests
 	$(INSTALL_BIN) ./files/MESHdesk/a.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/batman_neighbours.lua $(1)/etc/MESHdesk/
+	$(INSTALL_BIN) ./files/MESHdesk/heartbeat.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/hotplug_lan.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/led.lua $(1)/etc/MESHdesk/
 	$(INSTALL_BIN) ./files/MESHdesk/main_led.lua $(1)/etc/MESHdesk/
