@@ -42,8 +42,10 @@ class Node extends AppModel {
             ),
             'NodeStation'      => array(
                 'dependent'     => true
-            )
-
+            ),
+			'NodeNeighbor'   	=> array(
+                'dependent'     => true
+            ),
     );
 
     public $hasOne = array(
