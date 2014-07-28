@@ -783,6 +783,24 @@ td.grdEditable div {
 	color: #2651a9;
 }
 
+.node {
+  background-color:transparent;
+  font-weight:bold;
+  overflow:hidden;
+  text-decoration:none;
+  position:absolute;
+  text-align:center;
+  padding:40px 10px 10px 10px;
+}
+
+.node:hover {
+  color:#393434;
+}
+
+.hidden{
+  display:none;
+}
+
 
 
 
