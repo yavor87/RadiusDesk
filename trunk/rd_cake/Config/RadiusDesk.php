@@ -99,7 +99,7 @@ $config['MikrotikDynamicLogin']['jquery_mobile']= '/rd_login_pages/jquery_mobile
 
 
 //$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/index.html';
-$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages2/desktop/Mikrotik/build/production/Mikrotik/index.html';
+$config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages/desktop/Mikrotik/build/production/Mikrotik/index.html';
 
 
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
