@@ -21,6 +21,141 @@ class MeshReportsController extends AppController {
         ));
     }
 
+	public function overview(){
+		if(isset($this->request->query['mesh_id'])){
+
+			$d 			= array();
+			$mesh_id 	= $this->request->query['mesh_id'];
+
+			//Find all the nodes for this mesh
+			$this->Node->contain('NodeNeighbor');
+			$q_r = $this->Node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
+			if($q_r){
+
+				$d = array();
+
+				$no_neighbors  	= true; //If none of the nodes has neighbor entries this will stay true
+				$grey_list		= array(); //List of nodes with no neighbors
+
+				foreach($q_r as $n){
+					if(count($n['NodeNeighbor']) == 0){	//We handle nodes without any entries and grey nodes
+						array_push($d,array(
+							'id'	=> $n['Node']['id'],
+							'name'	=> $n['Node']['name'],
+							'data'	=> array(
+								'$color'		=> "#5c88e0",
+								'$type'			=> "circle",
+								'$dim'			=> 10,
+								'type'			=> 'no_neighbors',
+								'description'	=> $n['Node']['description'],
+								'mac'			=> $n['Node']['mac'],
+								'hardware'		=> $n['Node']['hardware'],
+								'ip'			=> $n['Node']['ip'],
+								'last_contact'	=> $n['Node']['last_contact']
+							)));
+						array_push($grey_list,array( 'nodeTo' => $n['Node']['id'],'data' => array('$alpha'	=> 0.0)));
+					}else{
+						$no_neighbors 	= false;
+						$adjacencies 	= array();
+						$gw				= false;
+						//Some defaults
+						$color			= '#4bd765'; //light green
+						$size			= 10;
+						$type			= 'node';
+
+						foreach($n['NodeNeighbor'] as $neighbor){
+							if($neighbor['gateway'] == 'yes'){
+								$gw = true;
+							}
+							array_push($adjacencies,array( 
+								'nodeTo' 	=> $neighbor['neighbor_id'],
+								'data' 		=> array(
+									'$color'	=> "green",
+									'$lineWidth'=> 6,
+									'$alpha'	=> 0.5
+								)
+							));
+						}
+
+						if($gw){
+							$type = 'gateway';
+							$size = 20;
+							$color= "#117c25"; 
+						}
+
+						array_push($d,array(
+							'id'	=> $n['Node']['id'],
+							'name'	=> $n['Node']['name'],
+							'gw'	=> true,
+							'data'	=> array(
+								'$color'		=> $color,
+								'$type'			=> "circle",
+								'$dim'			=> $size,
+								'type'			=> $type,
+								'description'	=> $n['Node']['description'],
+								'mac'			=> $n['Node']['mac'],
+								'hardware'		=> $n['Node']['hardware'],
+								'ip'			=> $n['Node']['ip'],
+								'last_contact'	=> $n['Node']['last_contact']
+							),
+							'adjacencies'		=> $adjacencies
+						));
+					}
+				}
+
+				if($no_neighbors){
+					array_push($d,array(
+						'id'	=> 'center',
+						'name'	=> '',
+						'data'	=> array(
+							'$color'	=> "grey",
+							'$type'		=> "circle",
+							'$dim'		=> 0
+						),
+						'adjacencies'	=> $grey_list
+					));
+				}else{
+					//Attach those to the list of adjacencies of the gateway node
+					$count = 0;
+					foreach($d as $item){
+						//Attach to the first one
+						if(isset($item['gw'])){
+
+							if(isset($item['adjacencies'])){
+								
+								$d[$count]['adjacencies'] = array_merge((array)$item['adjacencies'],(array)$grey_list);
+
+							}else{
+								$d[$count]['adjacencies'] = $grey_list;
+							}
+						}
+						$count ++;
+					}
+				}
+				//print_r($q_r);
+				
+			}else{
+				$d = array(
+					array(
+						'id' 	=> "empty1",
+						'name' 	=> "Please add nodes.....",
+						'data'	=> array(
+							'$color' 	=> "#f8d908",
+							'$type'		=> "star",
+							'$dim'		=> 30
+						)
+					)
+				);
+			}
+
+			$this->set(array(
+		        'data' => $d,
+		        'success' => true,
+		        '_serialize' => array('data','success')
+		    ));
+		}
+	}
+
     public function view_entries(){
 
         $items  = array();
