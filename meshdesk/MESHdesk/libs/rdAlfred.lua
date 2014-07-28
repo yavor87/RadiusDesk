@@ -91,9 +91,10 @@ function rdAlfred:slaveEnableAndStart()
         self.x.set('alfred','alfred','disabled','0')
     end
 
+	--We also need to start the vis server so all can join in
     local start_vis  = self.x.get('alfred','alfred','start_vis')
     if(start_vis ~= '0')then
-        self.x.set('alfred','alfred','start_vis','0')
+        self.x.set('alfred','alfred','start_vis','1')
     end
 
     self.x.commit('alfred')
