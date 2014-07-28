@@ -38,7 +38,7 @@ Ext.define('Rd.view.meshes.winMeshView', {
                         items   : [
 								{
                                     title   : 'Overview',
-                                    itemId  : 'tabMeshViewNodeToNode',
+                                    itemId  : 'tabMeshViewOverwiew',
 									xtype	: 'pnlMeshViewNodes',
                                     meshId  : me.getItemId()
                                 },

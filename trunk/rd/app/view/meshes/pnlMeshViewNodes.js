@@ -1,78 +1,80 @@
 Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
-    extend  : 'Ext.panel.Panel',
-    alias   : 'widget.pnlMeshViewNodes',
-    border  : false,
-    bodyStyle: {backgroundColor : 'green' },
-	//layout  : 'fit',
-	//autoEl	: {html:'$0.00',width:90},
-	meshId	: '',
-	canvas_new: true,
-	viewConfig: {
+    extend  	: 'Ext.panel.Panel',
+    alias   	: 'widget.pnlMeshViewNodes',
+    border  	: false,
+	urlOverview	:   '/cake2/rd_cake/mesh_reports/overview.json',
+	meshId		: '',
+	viewConfig	: {
         loadMask:true
     },
     tbar: [
         { xtype: 'buttongroup', title: i18n('sAction'), items : [
-            { xtype: 'splitbutton',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload'),
-                menu: {
-                    items: [
-                        '<b class="menu-title">Reload every:</b>',
-                        {'text': '30 seconds',  'itemId': 'mnuRefresh30s','group': 'refresh','checked': false },
-                        {'text': '1 minute',    'itemId': 'mnuRefresh1m', 'group': 'refresh','checked': false },
-                        {'text': '5 minutes',   'itemId': 'mnuRefresh5m', 'group': 'refresh','checked': false },
-                        {'text':'Stop auto reload','itemId':'mnuRefreshCancel', 'group': 'refresh', 'checked':true}
-                    ]
-                }
-            }
+            { xtype: 'button',  iconCls: 'b-reload',    glyph: Rd.config.icnReload ,scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')}
         ]}    
     ],
     initComponent: function(){
         var me 	= this;
 		me.html	= "<div id='n_t_n_"+me.meshId+"' style='width:100%;height:100%;background-color:#aaf6be;'></div>";
+		me.buffered = Ext.Function.createBuffered(function(){			
+				me.fd.computeIncremental({
+					iter	: 40,
+					property: ['end'],
+					onStep: function(perc){
+					  //console.log(perc + '% loaded...');
+					},
+					onComplete: function(){
+					  //console.log('done');
+					  me.fd.animate({
+						modes: ['linear'],
+						transition: $jit.Trans.Elastic.easeOut,
+						duration: 2500
+					  });
+					}
+				});
+			},1000,me);
 		
-		var gooi = "hom";
-
 		me.listeners= {
-			boxready: function(panel,width, height, eOpts){
-				var me = this;
-				console.log("Now "+width+" "+height+" End");
-			},
 		    afterrender: function(a,b,c){
-				console.log("afterrender....");
+				//console.log("afterrender....");
 				me.initCanvas();
-				me.buffered = Ext.Function.createBuffered(function(){
-					me.fd.computeIncremental({
-						iter: 40,
-						property: 'end',
-						onStep: function(perc){
-						  console.log(perc + '% loaded...');
-						},
-						onComplete: function(){
-						  console.log('done');
-						  me.fd.animate({
-							modes: ['linear'],
-							transition: $jit.Trans.Elastic.easeOut,
-							duration: 2500
-						  });
-						}
-					});
-				},1000,me);
 		    },
 			afterlayout: function(a,b,c){
-				console.log("afterlayout....");
+				//console.log("afterlayout....");
 				var me = this;
 				var w  = me.getWidth();
 				var h  = me.getHeight()-90; //90 is the space taken up by the top toolbar
-				me.fd.canvas.resize(w,h);
+				me.fd.canvas.resize(w,h);	
 				me.buffered();
-
 		    },
 			scope: me
 		}
 		me.callParent(arguments);
     },
+	getData: function(){
+		var me = this
+		me.setLoading(true);
+		Ext.Ajax.request({
+            url: me.urlOverview,
+            method: 'GET',
+			params: {
+				mesh_id: me.meshId
+			},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                	//console.log(jsonData)
+					me.fd.loadJSON(jsonData.data);
+					//re-layout
+					me.buffered()
+					me.setLoading(false);
+                }   
+            },
+            scope: me
+        });
+	},
 	initCanvas: function(){
 		var me = this;
-		console.log("Init the canvas");
+		//console.log("Init the canvas");
 		var labelType, useGradients, nativeTextSupport, animate;
 
 		(function() {
@@ -115,7 +117,7 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
 			// with dollar prefixed data-properties in the
 			// JSON structure.
 			Node: {
-			  overridable: true
+			  	overridable: true          
 			},
 			Edge: {
 			  overridable: true,
@@ -135,22 +137,35 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
 			  onShow: function(tip, node) {
 				//count connections
 				var count = 0;
-				node.eachAdjacency(function() { count++; });
+				node.eachAdjacency(function(a,b,c) { 
+					console.log(a)
+					console.log(b)
+					console.log(c)
+					count++; 
+				});
 				//display node info in tooltip
 				tip.innerHTML = "<div class='divTip'>"+
 					"<div class='tip-title'>"+ node.name + "</div>"+
-					"<label class='lblListS'>Time</label><label class='lblValueS'>"+node.data.attr+"</label>"+
+					"<label class='lblListS'>MAC</label><label class='lblValueS'>"+node.data.mac+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Connections</label><label class='lblValueS'>"+count+"</label>"+
+					"<label class='lblListS'>Description</label><label class='lblValueS'>"+node.data.description+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Time</label><label class='lblValueS'>"+node.data.attr+"</label>"+
+					"<label class='lblListS'>Hardware</label><label class='lblValueS'>"+node.data.hardware+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Connections</label><label class='lblValueS'>"+count+"</label>"+
+					"<label class='lblListS'>IP Address</label><label class='lblValueS'>"+node.data.ip+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Time</label><label class='lblValueS'>"+node.data.attr+"</label>"+
+					"<label class='lblListS'>Last contact</label><label class='lblValueS'>"+node.data.last_contact+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Connections</label><label class='lblValueS'>"+count+"</label>"+
-                    "<div style='clear:both;'></div>"+
+					//"<label class='lblListS'>Gateway</label><label class='lblValueS'>"+node.data.gateway+"</label>"+
+                    //"<div style='clear:both;'></div>"+
+					//"<label class='lblListS'>Clients</label><label class='lblValueS'>"+node.data.clients+"</label>"+
+                   // "<div style='clear:both;'></div>"+
+					//"<label class='lblListS'>Uptime</label><label class='lblValueS'>"+node.data.uptime+"</label>"+
+                   // "<div style='clear:both;'></div>"+
+					//"<label class='lblListS'>System time</label><label class='lblValueS'>"+node.data.uptime+"</label>"+
+                   // "<div style='clear:both;'></div>"+
+					//"<label class='lblListS'>Neighbors</label><label class='lblValueS'>"+count+"</label>"+
+                   // "<div style='clear:both;'></div>"+
 					"</div>";
 			  }
 			},
@@ -185,7 +200,7 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
 			  }
 			},
 			//Number of iterations for the FD algorithm
-			iterations			: 200,
+			iterations			: 50,
 			//Edge length
 			levelDistance		: 130,
 			// Add text to the labels. This method is only triggered
@@ -198,74 +213,19 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
 			},
 		});
 
-						 var json = [
-	// first node
-    {
-        id: "graphnode1",
-        name: "OM2P-1 Study",
-		
-        data: {
-            $color: "#117c25",
-            $type: "circle",
-            $dim: 20,
-			'attr': 'once'
-        },
-		adjacencies: [
+		//Some dummy date to start with (else it spitz out an error)
+		var json = [
 			{
-				nodeTo: "graphnode3",
+				id: "graphnode1",
+				name: ".",
 				data: {
-					"$color"	: "green",
-					"$lineWidth": 6,
-					"$alpha"	: 0.5
-				}
-			},
-			{
-				nodeTo: "graphnode2",
-				data: {
-					"$color"	: "green",
-					"$lineWidth": 3,
-					"$alpha"	: 0.5
+				    $color: "#117c25",
+				    $type: "circle",
+				    $dim: 1
 				}
 			}
-		]
-    },
-    // second node
-    {
-        data: {
-            $color	: "#4bd765",
-            $type	: "circle",
-            $dim	: 10,
-			'attr'	: 'twice'
-        },
-        id: "graphnode2",
-        name: "OM2P-2 Flatlet"
-    },
-    // third node
-    {
-        data: {
-            $color	: "#4bd765",
-            $type	: "circle",
-            $dim	: 10,
-			'attr': 'three times'
-        },
-        id: "graphnode3",
-        name: "Dragino-3 Lapa"
-    },
-	//New node
-	{
-        data: {
-            $color	: "grey",
-            $type	: "circle",
-            $dim	: 10,
-			'attr'	: 'twice'
-        },
-        id: "graphnode5",
-        name: "New node"
-    },
-];
-
-				fd.loadJSON(json);
-	
+		];
+		fd.loadJSON(json);
 		me.fd 			= fd;
 	}
 });
