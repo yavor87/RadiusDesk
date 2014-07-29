@@ -7,7 +7,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
-        'meshes.winMeshEditNode'
+        'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
@@ -28,7 +28,8 @@ Ext.define('Rd.controller.cMeshEdits', {
         urlEditNodeCommonSettings:'/cake2/rd_cake/meshes/node_common_settings_edit.json',
         urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
-        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json'
+        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
+		urlMapPref: 		'/cake2/rd_cake/meshes/view_map_pref.json',
     },
     refs: [
     	{  ref: 'editEntryWin', selector: 'winMeshEditEntry'},
@@ -123,6 +124,9 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             'gridNodes #edit': {
                 click:  me.editNode
+            },
+			'gridNodes #map' : {
+                click: 	me.mapLoadApi
             },
             'winMeshEditNode': {
                 beforeshow:      me.loadNode
@@ -719,5 +723,123 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             failure: Ext.ux.formFail
         });
-    }
+    },
+	//____ MAP ____
+    mapLoadApi:   function(button){
+        var me          = this;
+
+		Ext.ux.Toaster.msg(
+            'Loading Google Maps API',
+            'Please be patient....',
+            Ext.ux.Constants.clsInfo,
+            Ext.ux.Constants.msgInfo
+        );
+
+        Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
+            google.load("maps", "3", {
+                other_params	:"sensor=false",
+                callback 		: function(){
+                // Google Maps are loaded. Place your code here
+					console.log("Gooi daai map pappie!")
+                    me.mapCreatePanel(button);
+            	}
+        	});
+        },Ext.emptyFn,null,false);
+    },
+    mapCreatePanel : function(button){
+        var me = this
+        var tp          = button.up('tabpanel');
+        var map_tab_id  = 'mapTab';
+        var nt          = tp.down('#'+map_tab_id);
+        if(nt){
+            tp.setActiveTab(map_tab_id); //Set focus on  Tab
+            return;
+        }
+
+        var map_tab_name = i18n("sGoogle_Maps");
+		var win 		= tp.up('winMeshEdit');
+		var mesh_id		= win.getItemId();
+
+        //We need to fetch the Preferences for this user's Google Maps map
+        Ext.Ajax.request({
+            url		: me.urlMapPref,
+            method	: 'GET',
+			params	: {
+				mesh_id	: mesh_id
+			},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                   	console.log(jsonData);
+					//___Build this tab based on the preferences returned___
+                    tp.add({ 
+                        title 		: map_tab_name,
+                        itemId		: map_tab_id,
+                        closable	: true,
+                        glyph		: Rd.config.icnMap, 
+                        layout		: 'fit', 
+                        xtype		: 'pnlMeshEditGMap',
+                        mapOptions	: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },
+                       	centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},
+                       	markers		: [],
+						meshId		: mesh_id
+                    });
+                    tp.setActiveTab(map_tab_id); //Set focus on Add Tab
+                    //____________________________________________________   
+                }   
+            },
+			failure: function(batch,options){
+                Ext.ux.Toaster.msg(
+                    'Problems getting the map preferences',
+                    'Map preferences could not be fetched',
+                    Ext.ux.Constants.clsWarn,
+                    Ext.ux.Constants.msgWarn
+                );
+            },
+			scope: me
+        });
+    },
+    mapPreferencesSnapshot: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var pnl     = me.getPnlGMap();
+        var zoom    = pnl.gmap.getZoom();
+        var type    = pnl.gmap.getMapTypeId();
+        var ll      = pnl.gmap.getCenter();
+        var lat     = ll.lat();
+        var lng     = ll.lng();
+
+        form.down('#lat').setValue(lat);
+        form.down('#lng').setValue(lng);
+        form.down('#zoom').setValue(zoom);
+        form.down('#type').setValue(type.toUpperCase());
+        
+        console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
+    },
+    mapPreferencesSave: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+		var mesh_id = win.getItemId();
+       
+        form.submit({
+            clientValidation: true,
+            url: me.urlMapPref,
+			params: {
+				mesh_id: me.meshId
+			},
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
 });
