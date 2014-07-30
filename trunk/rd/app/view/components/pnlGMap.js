@@ -128,9 +128,12 @@ Ext.define('Rd.view.components.pnlGMap', {
                 c.id = 'filledDiv';
                 var tpl = new Ext.Template([
                     "<div class='divMapAction'>",
-                        "<label class='lblMap'>"+i18n("sNew_position")+"</label><br><br>",
-                        "<label class='lblMap'>"+ i18n("sLatitude")+"  </label><label class='lblValue'> {lat}</label><br>",
+                        "<label class='lblMap'>"+i18n("sNew_position")+"</label>",
+						"<div style='clear:both;'></div>",
+                        "<label class='lblMap'>"+ i18n("sLatitude")+"  </label><label class='lblValue'> {lat}</label>",
+						"<div style='clear:both;'></div>",
                         "<label class='lblMap'>"+i18n("sLongitude")+"  </label><label class='lblValue'> {lng}</label><br>",
+						"<div style='clear:both;'></div>",
                     "</div>"
                     ]
                 );
@@ -174,13 +177,24 @@ Ext.define('Rd.view.components.pnlGMap', {
             }
         });
 
-        //___Add infowindow___
+		//___ Edit window ______
+		e_pnl = Ext.create('Ext.panel.Panel', {
+                    title: i18n("sAction_required"),
+                    itemId: 'pnlMapsEdit',
+                    height: 200,
+					html: "Vat hom dawie"
+                });
+		e_pnl.render();
+		var div = e_pnl.getEl();
+		console.log(div);
+
+        //___Info baloon when adding a node___
         me.addwindow = new google.maps.InfoWindow({
-            content: "<div class='lblRdReq'>"+
+             content: "<div style='padding:5px;margin:5px; height:100px; width:200px;'><div class='lblRdReq'>"+
                         i18n("sAction_required")+
                      "</div><div class='lblRd'>"+
-                        i18n("sDrag_and_drop_marker_to_required_position")+
-                    "</div>"
+                        "Drag and drop marker to required position"+
+                    "</div></div>"
         });
         me.infoWindows.push(me.addwindow);
         me.callParent(arguments);

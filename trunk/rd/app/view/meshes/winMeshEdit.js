@@ -65,13 +65,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                                     itemId      : 'tabNodes',
                                     xtype       : 'gridNodes',
                                     meshId      : me.getItemId()     
-                                },
-                               /* {
-                                    title   	:  i18n('sMap'),
-                                    itemId  	: 'tabMap',
-									xtype		: 'pnlMeshEditGMap',
-									meshId		: me.getItemId() 
-                                }*/
+                                }
                             ]
                         }
                     ]

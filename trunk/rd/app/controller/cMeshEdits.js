@@ -7,7 +7,8 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
-        'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap'
+        'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap',	'meshes.winMeshMapPreferences',
+		'meshes.winMeshMapNodeAdd'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
@@ -29,11 +30,14 @@ Ext.define('Rd.controller.cMeshEdits', {
         urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
         urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
-		urlMapPref: 		'/cake2/rd_cake/meshes/view_map_pref.json',
+		urlMapPrefView: 	'/cake2/rd_cake/meshes/map_pref_view.json',
+		urlMapPrefEdit:		'/cake2/rd_cake/meshes/map_pref_edit.json',
+		urlMapSave:			'/cake2/rd_cake/meshes/map_node_save.json',
+		urlMapDelete:		'/cake2/rd_cake/meshes/map_node_delete.json'
     },
     refs: [
-    	{  ref: 'editEntryWin', selector: 'winMeshEditEntry'},
-        {  ref: 'editExitWin',  selector: 'winMeshEditExit'}   
+    	{  ref: 'editEntryWin', 	selector: 'winMeshEditEntry'},
+        {  ref: 'editExitWin',  	selector: 'winMeshEditExit'}  
     ],
     init: function() {
         var me = this;
@@ -133,6 +137,48 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             'winMeshEditNode #save': {
                 click: me.btnEditNodeSave
+            },
+			//---- MAP Starts here..... -----
+
+			'pnlMeshEditGMap #preferences': {
+                click: me.mapPreferences
+            },
+			'winMeshMapPreferences #snapshot': {
+                click:      me.mapPreferencesSnapshot
+            },
+            'winMeshMapPreferences #save': {
+                click:      me.mapPreferencesSave
+            },
+            'pnlMeshEditGMap #add': {
+                click: me.mapNodeAdd
+            },
+           'winMeshMapNodeAdd #save': {
+                click: me.meshMapNodeAddSubmit
+            },
+            'pnlMeshEditGMap #edit': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sEdit_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_save_button_in_the_info_window')
+                    );
+                }
+            },
+            'pnlMeshEditGMap #delete': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sDelete_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_delete_button_in_the_info_window')
+                    );
+                }
+            },
+            '#pnlMapsEdit #cancel': {
+                click: me.btnMapCancel
+            },
+            '#pnlMapsEdit #delete': {
+                click: me.btnMapDelete
+            },
+            '#pnlMapsEdit #save': {
+                click: me.btnMapSave
             }
         });
     },
@@ -725,26 +771,24 @@ Ext.define('Rd.controller.cMeshEdits', {
         });
     },
 	//____ MAP ____
+
     mapLoadApi:   function(button){
-        var me          = this;
-
+        var me 	= this;
 		Ext.ux.Toaster.msg(
-            'Loading Google Maps API',
-            'Please be patient....',
-            Ext.ux.Constants.clsInfo,
-            Ext.ux.Constants.msgInfo
-        );
-
-        Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
-            google.load("maps", "3", {
-                other_params	:"sensor=false",
-                callback 		: function(){
-                // Google Maps are loaded. Place your code here
-					console.log("Gooi daai map pappie!")
-                    me.mapCreatePanel(button);
-            	}
-        	});
-        },Ext.emptyFn,null,false);
+	        'Loading Google Maps API',
+	        'Please be patient....',
+	        Ext.ux.Constants.clsInfo,
+	        Ext.ux.Constants.msgInfo
+	    );
+	    Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
+	        google.load("maps", "3", {
+	            other_params	:"sensor=false",
+	            callback 		: function(){
+	            	// Google Maps are loaded. Place your code here
+	                me.mapCreatePanel(button);
+	        	}
+	    	});
+	    },Ext.emptyFn,null,false);
     },
     mapCreatePanel : function(button){
         var me = this
@@ -762,7 +806,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 
         //We need to fetch the Preferences for this user's Google Maps map
         Ext.Ajax.request({
-            url		: me.urlMapPref,
+            url		: me.urlMapPrefView,
             method	: 'GET',
 			params	: {
 				mesh_id	: mesh_id
@@ -770,7 +814,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){     
-                   	console.log(jsonData);
+                   	//console.log(jsonData);
 					//___Build this tab based on the preferences returned___
                     tp.add({ 
                         title 		: map_tab_name,
@@ -779,8 +823,8 @@ Ext.define('Rd.controller.cMeshEdits', {
                         glyph		: Rd.config.icnMap, 
                         layout		: 'fit', 
                         xtype		: 'pnlMeshEditGMap',
-                        mapOptions	: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },
-                       	centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},
+                        mapOptions	: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },	//Required for map
+                       	centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},										//Required for map
                        	markers		: [],
 						meshId		: mesh_id
                     });
@@ -799,11 +843,141 @@ Ext.define('Rd.controller.cMeshEdits', {
 			scope: me
         });
     },
+    dragStart: function(node_id,map_panel,sel_marker){
+        var me = this;
+        me.lastMovedMarker  = sel_marker;
+        me.lastOrigPosition = sel_marker.getPosition();
+        me.editWindow 		= map_panel.editwindow;
+    },
+    dragEnd: function(node_id,map_panel,sel_marker){
+        var me = this;
+        var l_l = sel_marker.getPosition();
+        map_panel.new_lng = l_l.lng();
+        map_panel.new_lat = l_l.lat();
+        map_panel.editwindow.open(map_panel.gmap, sel_marker);
+        me.lastLng    = l_l.lng();
+        me.lastLat    = l_l.lat();
+        me.lastDragId = node_id;
+    },
+    btnMapCancel: function(button){
+        var me = this;
+		console.log("Cancel pappie");
+        me.editWindow.close();
+        me.lastMovedMarker.setPosition(me.lastOrigPosition);
+    },
+    btnMapDelete: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlMapDelete,
+            method: 'GET',
+            params: {
+                id: me.lastDragId
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_deleted'),
+                        i18n('sItem_deleted_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
+    },
+    btnMapSave: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlMapSave,
+            method: 'GET',
+            params: {
+                id: me.lastDragId,
+                lat: me.lastLat,
+                lon: me.lastLng
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_updated'),
+                        i18n('sItem_updated_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
+    },
+	mapPreferences: function(button){
+       	var me 		= this;
+		var win		= button.up('winMeshEdit');
+		var mesh_id	= win.getItemId();
+		var pref_id = 'winMeshMapPreferences_'+mesh_id;
+		var map_p	= win.down('pnlMeshEditGMap');
+
+       	if(!me.application.runAction('cDesktop','AlreadyExist',pref_id)){
+            var w = Ext.widget('winMeshMapPreferences',{id:pref_id,mapPanel: map_p,meshId: mesh_id});
+            me.application.runAction('cDesktop','Add',w);
+            //We need to load this widget's form with the latest data:
+            w.down('form').load({
+				url		: me.urlMapPrefView,
+            	method	: 'GET',
+				params	: {
+					mesh_id	: mesh_id
+				}
+			});
+       }   
+    },
+   	mapNodeAdd: function(button){
+        var me 		= this;
+		var win		= button.up('winMeshEdit');
+		var mesh_id	= win.getItemId();
+		var add_id  = 'winMeshMapNodeAdd_'+mesh_id;
+		var map_p	= win.down('pnlMeshEditGMap');
+
+        if(!me.application.runAction('cDesktop','AlreadyExist',add_id)){
+            var w = Ext.widget('winMeshMapNodeAdd',{id: add_id,mapPanel: map_p,meshId:mesh_id});
+            me.application.runAction('cDesktop','Add',w);       
+       }   
+    },
+    meshMapNodeAddSubmit: function(button){
+        var me      = this;
+        var win     = button.up('winMeshMapNodeAdd');
+        var node    = win.down('cmbMeshAddMapNodes');
+        var id      = node.getValue();
+		var pnl		= win.mapPanel
+        win.close();
+        var m_center 	= pnl.gmap.getCenter();
+        var sel_marker 	= pnl.addMarker({
+            lat: m_center.lat(), 
+            lng: m_center.lng(),
+            icon: "resources/images/map_markers/yellow-dot.png",
+            draggable: true, 
+            title: "New Marker",
+            listeners: {
+                dragend: function(){
+                    me.dragEnd(id,pnl,sel_marker);
+                },
+                dragstart: function(){
+                    pnl.addwindow.close();
+                    me.dragStart(id,pnl,sel_marker);
+                }
+            }
+        });
+		//Show the add infowinfow on the pnl's gmap at the marker
+		pnl.addwindow.open(pnl.gmap, sel_marker);
+    },
     mapPreferencesSnapshot: function(button){
 
         var me      = this;
         var form    = button.up('form');
-        var pnl     = me.getPnlGMap();
+		var w		= button.up('winMeshMapPreferences');
+        var pnl     = w.mapPanel;
         var zoom    = pnl.gmap.getZoom();
         var type    = pnl.gmap.getMapTypeId();
         var ll      = pnl.gmap.getCenter();
@@ -814,21 +988,20 @@ Ext.define('Rd.controller.cMeshEdits', {
         form.down('#lng').setValue(lng);
         form.down('#zoom').setValue(zoom);
         form.down('#type').setValue(type.toUpperCase());
-        
         console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
     },
     mapPreferencesSave: function(button){
 
         var me      = this;
         var form    = button.up('form');
-        var win     = button.up('window');
-		var mesh_id = win.getItemId();
+        var win     = button.up('winMeshMapPreferences');
+		var mesh_id = win.meshId;
        
         form.submit({
             clientValidation: true,
-            url: me.urlMapPref,
+            url: me.urlMapPrefEdit,
 			params: {
-				mesh_id: me.meshId
+				mesh_id: mesh_id
 			},
             success: function(form, action) {
                 win.close();
@@ -841,5 +1014,5 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             failure: Ext.ux.formFail
         });
-    },
+    }
 });
