@@ -288,6 +288,12 @@ $config['hardware'][2]      = array('name' => __('PicoStation2 M2'),	'id'    => 
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
 
+//== MESHdesk Defaul MAP settings ==
+$config['mesh_specifics']['map']['type']     = "ROADMAP";
+$config['mesh_specifics']['map']['zoom']     = 18;
+$config['mesh_specifics']['map']['lng']      = -71.0955740216735;
+$config['mesh_specifics']['map']['lat']      = 42.3379770178396;
+
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
 $config['experimental']['active']                   = false;
