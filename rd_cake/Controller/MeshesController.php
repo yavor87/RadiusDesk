@@ -1075,6 +1075,10 @@ class MeshesController extends AppController {
                 'mac'           => $m['Node']['mac'],
                 'hardware'      => $hardware["$hw_id"],
                 'power'         => $p,
+				'ip'			=> $m['Node']['ip'],
+				'last_contact'	=> $m['Node']['last_contact'],
+				'lat'			=> $m['Node']['lat'],
+				'lng'			=> $m['Node']['lon'],
                 'static_entries'=> $static_entries,
                 'static_exits'  => $static_exits,
                 'ip'            => $m['Node']['ip'],
@@ -1578,7 +1582,7 @@ class MeshesController extends AppController {
     }
 
 	public function map_pref_edit(){
-		  $user = $this->_ap_right_check();
+		$user = $this->_ap_right_check();
         if(!$user){
             return;
         }
@@ -1664,6 +1668,20 @@ class MeshesController extends AppController {
 	}
 
 	public function map_node_save(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+		if(isset($this->request->query['id'])){
+			$this->Node = ClassRegistry::init('Node');
+			$this->Node->contain();
+            $this->Node->id = $this->request->query['id'];
+            $this->Node->saveField('lat', $this->request->query['lat']);
+            $this->Node->saveField('lon', $this->request->query['lon']);
+        }
+
 		$this->set(array(
             'success' => true,
             '_serialize' => array('success')
@@ -1671,6 +1689,21 @@ class MeshesController extends AppController {
 	}
 
 	public function map_node_delete(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+		if(isset($this->request->query['id'])){
+			$this->Node = ClassRegistry::init('Node');
+			$this->Node->contain();
+            $this->Node->id = $this->request->query['id'];
+            $this->Node->saveField('lat', null);
+            $this->Node->saveField('lon', null);
+        }
+
 		$this->set(array(
             'success' => true,
             '_serialize' => array('success')
