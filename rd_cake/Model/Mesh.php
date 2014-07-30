@@ -25,6 +25,9 @@ class Mesh extends AppModel {
         'Node'   => array(
             'dependent'     => true   
         ),
+		'MeshSpecific'	=> array(
+			'dependent'		=> true
+		)
     );
 
     public $hasOne = array(
@@ -33,10 +36,8 @@ class Mesh extends AppModel {
         ),
         'NodeSetting'   => array(
             'dependent'     => true   
-        ),
+        )
     );
-
-
 
     public $validate = array(
         'name' => array(
