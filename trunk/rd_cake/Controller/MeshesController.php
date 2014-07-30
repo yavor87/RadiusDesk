@@ -1411,6 +1411,7 @@ class MeshesController extends AppController {
 					//Create a new hash
 					$new_pwd = $this->_make_linux_password($this->request->data['password']);
 					$this->request->data['password_hash'] = $new_pwd;
+
 				}
             }
 
@@ -1512,6 +1513,210 @@ class MeshesController extends AppController {
             '_serialize' => array('items','success')
         ));
     }
+
+	public function map_pref_view(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $items		= array();
+
+		if(!isset($this->request->query['mesh_id'])){
+			$this->set(array(
+		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
+		        'success' => false,
+		        '_serialize' => array('success','message')
+		    ));
+			return;
+		}
+
+		$mesh_id = $this->request->query['mesh_id'];
+
+    	$this->MeshSpecific = ClassRegistry::init('MeshSpecific');
+
+    	$zoom = Configure::read('mesh_specifics.map.zoom');
+    	//Check for personal overrides
+    	$q_r = $this->MeshSpecific->find('first',array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_zoom')));
+        if($q_r){
+            $zoom = intval($q_r['MeshSpecific']['value']);
+        }
+
+        $type = Configure::read('mesh_specifics.map.type');
+        //Check for overrides
+        $q_r = $this->MeshSpecific->find('first',array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_type')));
+        if($q_r){
+            $type = $q_r['MeshSpecific']['value'];
+        }
+
+        $lat = Configure::read('mesh_specifics.map.lat');
+        //Check for overrides
+        $q_r = $this->MeshSpecific->find('first',array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_lat')));
+        if($q_r){
+            $lat = $q_r['MeshSpecific']['value']+0;
+        }
+
+        $lng = Configure::read('mesh_specifics.map.lng');
+        //Check for overrides
+        $q_r = $this->MeshSpecific->find('first',array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_lng')));
+        if($q_r){
+            $lng = $q_r['MeshSpecific']['value']+0;
+        }
+
+        $items['zoom'] = $zoom;
+        $items['type'] = $type;
+        $items['lat']  = $lat;
+        $items['lng']  = $lng;
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+	public function map_pref_edit(){
+		  $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $this->MeshSpecific = ClassRegistry::init('MeshSpecific');
+
+		$mesh_id 	= $this->request->data['mesh_id'];
+
+        if(array_key_exists('zoom',$this->request->data)){        
+            $q_r = $this->MeshSpecific->find('first',
+				array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_zoom'))
+			);
+            if(!empty($q_r)){
+                $this->MeshSpecific->id = $q_r['MeshSpecific']['id'];    
+                $this->MeshSpecific->saveField('value', $this->request->data['zoom']);
+            }else{
+                $d['MeshSpecific']['mesh_id']	= $mesh_id;
+                $d['MeshSpecific']['name']   	= 'map_zoom';
+                $d['MeshSpecific']['value']  	= $this->request->data['zoom'];
+                $this->MeshSpecific->create();
+                $this->MeshSpecific->save($d);
+                $this->MeshSpecific->id = null;
+            }
+        }
+
+        if(array_key_exists('type',$this->request->data)){        
+            $q_r = $this->MeshSpecific->find('first',
+				array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_type'))
+			);
+            if(!empty($q_r)){
+                $this->MeshSpecific->id = $q_r['MeshSpecific']['id'];    
+                $this->MeshSpecific->saveField('value', $this->request->data['type']);
+            }else{
+                $d['MeshSpecific']['mesh_id']	= $mesh_id;
+                $d['MeshSpecific']['name']   	= 'map_type';
+                $d['MeshSpecific']['value']  	= $this->request->data['type'];
+                $this->MeshSpecific->create();
+                $this->MeshSpecific->save($d);
+                $this->MeshSpecific->id = null;
+            }
+        }
+
+        if(array_key_exists('lat',$this->request->data)){        
+            $q_r = $this->MeshSpecific->find('first',
+				array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_lat'))
+			);
+            if(!empty($q_r)){
+                $this->MeshSpecific->id = $q_r['MeshSpecific']['id'];    
+                $this->MeshSpecific->saveField('value', $this->request->data['lat']);
+            }else{
+                $d['MeshSpecific']['mesh_id']	= $mesh_id;
+                $d['MeshSpecific']['name']   	= 'map_lat';
+                $d['MeshSpecific']['value']  	= $this->request->data['lat'];
+
+                $this->MeshSpecific->create();
+                $this->MeshSpecific->save($d);
+                $this->MeshSpecific->id = null;
+            }
+        }
+
+        if(array_key_exists('lng',$this->request->data)){        
+            $q_r = $this->MeshSpecific->find('first',
+				array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_lng'))
+			);
+            if(!empty($q_r)){
+                $this->MeshSpecific->id = $q_r['MeshSpecific']['id'];    
+                $this->MeshSpecific->saveField('value', $this->request->data['lng']);
+            }else{
+                $d['MeshSpecific']['mesh_id']= $mesh_id;
+                $d['MeshSpecific']['name']   = 'map_lng';
+                $d['MeshSpecific']['value']  = $this->request->data['lng'];
+                $this->MeshSpecific->create();
+                $this->MeshSpecific->save($d);
+                $this->MeshSpecific->id = null;
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+	public function map_node_save(){
+		$this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+	public function map_node_delete(){
+		$this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+
+	public function nodes_avail_for_map(){
+		//List all the nodes that has not yet been assigned a lat (and lon) value for a mesh
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $items		= array();
+
+		if(!isset($this->request->query['mesh_id'])){
+			$this->set(array(
+		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
+		        'success' => false,
+		        '_serialize' => array('success','message')
+		    ));
+			return;
+		}
+		$mesh_id = $this->request->query['mesh_id'];
+
+		$this->Node = ClassRegistry::init('Node');
+		$this->Node->contain();
+		$q_r		= $this->Node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id,'Node.lat' => null)));
+		$items 		= array();
+		foreach($q_r as $i){
+			array_push($items,array(
+				'id' 			=> $i['Node']['id'],
+				'name'			=> $i['Node']['name'],
+				'description'	=> $i['Node']['description']
+			));
+		}
+
+		$this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+	}
 
     //----- Menus ------------------------
     public function menu_for_grid(){
@@ -1721,8 +1926,9 @@ class MeshesController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+					array('xtype' => 'button', 'iconCls' => 'b-map',     'glyph'     => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
                 ))
-                
+    
             );
         }
 
