@@ -555,14 +555,20 @@
     }
 }
 
-.mapDiv {
+.mapInfoDiv {
     height: 250px;
     width:  350px;
     margin: 0px;
 }
 
+.mapEditDiv {
+    height: 190px;
+    width:  350px;
+    margin: 0px;
+}
+
 .divMapAction {
-    margin: 10px;
+    margin: 5px;
     padding: 5px;
 }
 

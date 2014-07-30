@@ -33,7 +33,9 @@ Ext.define('Rd.controller.cMeshEdits', {
 		urlMapPrefView: 	'/cake2/rd_cake/meshes/map_pref_view.json',
 		urlMapPrefEdit:		'/cake2/rd_cake/meshes/map_pref_edit.json',
 		urlMapSave:			'/cake2/rd_cake/meshes/map_node_save.json',
-		urlMapDelete:		'/cake2/rd_cake/meshes/map_node_delete.json'
+		urlMapDelete:		'/cake2/rd_cake/meshes/map_node_delete.json',
+		urlMeshNodes: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
+		urlBlueMark : 'resources/images/map_markers/blue-dot.png'
     },
     refs: [
     	{  ref: 'editEntryWin', 	selector: 'winMeshEditEntry'},
@@ -139,7 +141,17 @@ Ext.define('Rd.controller.cMeshEdits', {
                 click: me.btnEditNodeSave
             },
 			//---- MAP Starts here..... -----
-
+			'winMeshEdit #mapTab'		: {
+				activate: function(pnl){
+					me.reloadMap(pnl);
+				}
+			},
+			'pnlMeshEditGMap #reload'	: {
+				click:	function(b){
+					var me = this;
+					me.reloadMap(b.up('pnlMeshEditGMap'));
+				}
+			},
 			'pnlMeshEditGMap #preferences': {
                 click: me.mapPreferences
             },
@@ -861,12 +873,13 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     btnMapCancel: function(button){
         var me = this;
-		console.log("Cancel pappie");
         me.editWindow.close();
         me.lastMovedMarker.setPosition(me.lastOrigPosition);
     },
     btnMapDelete: function(button){
-        var me = this;
+        var me 		= this;
+		var pnl		= button.up('#pnlMapsEdit');
+		var map_pnl = pnl.mapPanel;
         Ext.Ajax.request({
             url: me.urlMapDelete,
             method: 'GET',
@@ -883,13 +896,16 @@ Ext.define('Rd.controller.cMeshEdits', {
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
+					me.reloadMap(map_pnl);
                 }   
             },
             scope: me
         });
     },
     btnMapSave: function(button){
-        var me = this;
+        var me 		= this;
+		var pnl		= button.up('#pnlMapsEdit');
+		var map_pnl = pnl.mapPanel;
         Ext.Ajax.request({
             url: me.urlMapSave,
             method: 'GET',
@@ -908,6 +924,7 @@ Ext.define('Rd.controller.cMeshEdits', {
                         Ext.ux.Constants.clsInfo,
                         Ext.ux.Constants.msgInfo
                     );
+					me.reloadMap(map_pnl);
                 }   
             },
             scope: me
@@ -988,7 +1005,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         form.down('#lng').setValue(lng);
         form.down('#zoom').setValue(zoom);
         form.down('#type').setValue(type.toUpperCase());
-        console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
+        //console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
     },
     mapPreferencesSave: function(button){
 
@@ -1014,5 +1031,46 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             failure: Ext.ux.formFail
         });
-    }
+    },
+	reloadMap: function(map_panel){
+		var me = this;
+		//console.log("Reload markers");
+		map_panel.setLoading(true);
+		map_panel.clearMarkers();
+		var mesh_id = map_panel.meshId;
+
+		Ext.Ajax.request({
+            url: me.urlMeshNodes,
+            method: 'GET',
+			params: {
+				mesh_id: mesh_id
+			},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+					Ext.each(jsonData.items, function(i){
+						var icon = me.urlBlueMark;
+						var sel_marker = map_panel.addMarker({
+		                    lat			: i.lat, 
+		                    lng			: i.lng,
+		                    icon		: icon,
+		                    draggable	: true, 
+		                    title		: i.name,
+		                    listeners: {
+		                        dragend: function(){
+		                            me.dragEnd(i.id,map_panel,sel_marker);
+		                        },
+		                        dragstart: function(){
+		                            me.dragStart(i.id,map_panel,sel_marker);
+		                        }
+		                    }
+		                })
+					});
+					map_panel.setLoading(false);
+                }   
+            },
+            scope: me
+        });
+	}
+
 });
