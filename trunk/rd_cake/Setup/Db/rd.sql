@@ -1002,7 +1002,7 @@ CREATE TABLE `mesh_specifics` (
 
 LOCK TABLES `mesh_specifics` WRITE;
 /*!40000 ALTER TABLE `mesh_specifics` DISABLE KEYS */;
-INSERT INTO `mesh_specifics` VALUES (72,37,'map_zoom','15','2014-07-30 14:00:16','2014-07-30 14:00:16'),(73,37,'map_type','ROADMAP','2014-07-30 14:00:16','2014-07-30 14:00:16'),(74,37,'map_lat','-29.11638616826009','2014-07-30 14:00:16','2014-07-30 14:00:16'),(75,37,'map_lng','26.21026444401765','2014-07-30 14:00:16','2014-07-30 14:00:16'),(76,35,'map_zoom','18','2014-07-30 14:15:27','2014-07-30 15:48:56'),(77,35,'map_type','HYBRID','2014-07-30 14:15:27','2014-07-30 15:48:56'),(78,35,'map_lat','-25.74410031786369','2014-07-30 14:15:27','2014-07-30 15:48:56'),(79,35,'map_lng','28.29434353079739','2014-07-30 14:15:27','2014-07-30 15:48:56');
+INSERT INTO `mesh_specifics` VALUES (72,37,'map_zoom','15','2014-07-30 14:00:16','2014-07-30 14:00:16'),(73,37,'map_type','ROADMAP','2014-07-30 14:00:16','2014-07-30 14:00:16'),(74,37,'map_lat','-29.11638616826009','2014-07-30 14:00:16','2014-07-30 14:00:16'),(75,37,'map_lng','26.21026444401765','2014-07-30 14:00:16','2014-07-30 14:00:16'),(76,35,'map_zoom','17','2014-07-30 14:15:27','2014-07-31 00:47:37'),(77,35,'map_type','HYBRID','2014-07-30 14:15:27','2014-07-31 00:47:37'),(78,35,'map_lat','-25.74433398724963','2014-07-30 14:15:27','2014-07-31 00:47:37'),(79,35,'map_lng','28.2959394451609','2014-07-30 14:15:27','2014-07-31 00:47:37');
 /*!40000 ALTER TABLE `mesh_specifics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1179,7 +1179,7 @@ CREATE TABLE `nas` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nasname` (`nasname`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1188,7 +1188,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','NAS-Name','NAS-Name','CoovaChilli-Heartbeat',NULL,'NAS-Secret','','00-AA-BB-CC-DD','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','NAS-ID-Value','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-10 05:24:52','2014-07-10 06:30:31'),(79,'10.120.0.2','Carson_City_01','Carson_City_01','CoovaChilli-Heartbeat',NULL,'Carson_City_01_f64',NULL,'36-4b-77-6a-f8-44','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Carson_City_01','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-11 13:10:41','2014-07-11 13:10:41'),(80,'10.120.0.3','Boston_01','Boston_01','CoovaChilli-Heartbeat',NULL,'Boston_01_8df',NULL,'36-4b-77-6a-f8-48','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Boston_01','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-11 13:10:41','2014-07-11 13:10:42'),(81,'10.120.0.4','Salt_Lake_City_01','Salt_Lake_City_01','CoovaChilli-Heartbeat',NULL,'Salt_Lake_City_01_967',NULL,'36-4b-77-6a-f8-40','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Salt_Lake_City_01','heartbeat',600,300,NULL,1,3600,0,-25.7376823069725,28.3014433380611,'logo.jpg',182,'2014-07-11 13:10:42','2014-07-29 17:23:10');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2013-10-03 10:25:15'),(60,'10.120.0.1','NAS-Name','NAS-Name','CoovaChilli-Heartbeat',NULL,'NAS-Secret','','00-AA-BB-CC-DD','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','NAS-ID-Value','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-10 05:24:52','2014-07-10 06:30:31'),(79,'10.120.0.2','Carson_City_01','Carson_City_01','CoovaChilli-Heartbeat',NULL,'Carson_City_01_f64',NULL,'36-4b-77-6a-f8-44','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Carson_City_01','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-11 13:10:41','2014-07-11 13:10:41'),(80,'10.120.0.3','Boston_01','Boston_01','CoovaChilli-Heartbeat',NULL,'Boston_01_8df',NULL,'36-4b-77-6a-f8-48','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Boston_01','heartbeat',600,300,NULL,1,3600,0,NULL,NULL,'logo.jpg',182,'2014-07-11 13:10:41','2014-07-11 13:10:42'),(81,'10.120.0.4','Salt_Lake_City_01','Salt_Lake_City_01','CoovaChilli-Heartbeat',NULL,'Salt_Lake_City_01_967',NULL,'36-4b-77-6a-f8-40','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','Salt_Lake_City_01','heartbeat',600,300,NULL,1,3600,0,-25.7377161325272,28.3014540668971,'logo.jpg',182,'2014-07-11 13:10:42','2014-07-30 23:16:39'),(82,'',NULL,'','other',NULL,'secret',NULL,NULL,'RADIUS Client','direct',1,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',NULL,'2014-07-30 23:31:48','2014-07-30 23:31:48'),(83,'',NULL,'','other',NULL,'secret',NULL,NULL,'RADIUS Client','direct',1,0,0,'','','off',600,600,NULL,0,3600,0,NULL,NULL,'logo.jpg',NULL,'2014-07-30 23:32:03','2014-07-30 23:32:03');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1521,7 +1521,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (88,35,'OM2P-1','OM2P-1','AC-86-74-0F-20-D8','om2p',100,'10.5.5.1','2014-07-30 12:43:22',0,NULL,NULL,'logo.jpg','2014-07-26 04:23:51','2014-07-30 12:43:22'),(89,35,'OM2P-2','OM2P-2','AC-86-74-10-03-08','om2p',100,'10.5.5.2','2014-07-30 12:43:22',0,NULL,NULL,'logo.jpg','2014-07-26 04:24:34','2014-07-30 12:43:22'),(90,35,'VT-1','VT-1','A8-40-41-13-60-E7','dragino',100,'10.5.5.3','2014-07-30 12:43:22',0,NULL,NULL,'logo.jpg','2014-07-26 22:30:46','2014-07-30 12:43:22'),(91,35,'Pico2-1','Pico2-1','68-72-51-01-C5-39','picostation2',100,'10.5.5.4','2014-07-28 04:17:01',0,NULL,NULL,'logo.jpg','2014-07-27 21:49:29','2014-07-28 04:17:01');
+INSERT INTO `nodes` VALUES (88,35,'OM2P-1','OM2P-1','AC-86-74-0F-20-D8','om2p',100,'10.5.5.1','2014-07-30 12:43:22',0,-25.7440042060461,28.2941182252398,'logo.jpg','2014-07-26 04:23:51','2014-07-31 00:46:42'),(89,35,'OM2P-2','OM2P-2','AC-86-74-10-03-08','om2p',100,'10.5.5.2','2014-07-30 12:43:22',0,-25.7438055678272,28.2946171161166,'logo.jpg','2014-07-26 04:24:34','2014-07-31 00:41:37'),(90,35,'VT-1','VT-1','A8-40-41-13-60-E7','dragino',100,'10.5.5.3','2014-07-30 12:43:22',0,-25.7443032600872,28.2938392755023,'logo.jpg','2014-07-26 22:30:46','2014-07-31 00:41:51'),(91,35,'Pico2-1','Pico2-1','68-72-51-01-C5-39','picostation2',100,'10.5.5.4','2014-07-28 04:17:01',0,-25.7442356127181,28.2951964732638,'logo.jpg','2014-07-27 21:49:29','2014-07-31 00:41:31');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2461,4 +2461,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-07-30 17:42:19
+-- Dump completed on 2014-07-31  0:51:46
