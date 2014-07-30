@@ -783,7 +783,7 @@ Ext.define('Rd.controller.cNas', {
 
                     var ip = record.get('nasname');
                     var n  = record.get('shortname');
-                    console.log("Marker added "+ip+" name "+n)
+                   // console.log("Marker added "+ip+" name "+n)
                     var sel_marker = map_panel.addMarker({
                         lat: lat, 
                         lng: lng,
@@ -792,15 +792,15 @@ Ext.define('Rd.controller.cNas', {
                         title: ip,
                         listeners: {
                             click: function(e,f){
-                                console.log(record);
+                                //console.log(record);
                                 me.markerClick(record,map_panel,sel_marker);   
                             },
                             dragend: function(){
-                                console.log(record);
+                                //console.log(record);
                                 me.dragEnd(record,map_panel,sel_marker);
                             },
                             dragstart: function(){
-                                console.log(record);
+                                //console.log(record);
                                 me.dragStart(record,map_panel,sel_marker);
                             }
                         }
@@ -850,7 +850,7 @@ Ext.define('Rd.controller.cNas', {
         var me = this;
         me.lastMovedMarker  = sel_marker;
         me.lastOrigPosition = sel_marker.getPosition();
-        me.editWindow = map_panel.editwindow;
+        me.editWindow 		= map_panel.editwindow;
     },
     dragEnd: function(record,map_panel,sel_marker){
         var me = this;
@@ -1530,7 +1530,7 @@ Ext.define('Rd.controller.cNas', {
                         url: me.urlDelete,
                         method: 'POST',          
                         jsonData: list,
-                        success: function(batch,options){console.log('success');
+                        success: function(batch,options){//console.log('success');
                             Ext.ux.Toaster.msg(
                                 i18n('sItem_deleted'),
                                 i18n('sItem_deleted_fine'),
@@ -1591,7 +1591,7 @@ Ext.define('Rd.controller.cNas', {
             success: function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){     
-                   console.log(jsonData);
+                  // console.log(jsonData);
                     //___Build this tab based on the preferences returned___
                     tp.add({ 
                         title :     map_tab_name,
@@ -1631,7 +1631,7 @@ Ext.define('Rd.controller.cNas', {
         form.down('#zoom').setValue(zoom);
         form.down('#type').setValue(type.toUpperCase());
         
-        console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
+        //console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
     },
 
     mapPreferencesSave: function(button){

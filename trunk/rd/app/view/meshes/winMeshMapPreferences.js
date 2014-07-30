@@ -66,7 +66,7 @@ Ext.define('Rd.view.meshes.winMeshMapPreferences', {
                         xtype       : 'numberfield',
                         name        : 'zoom',
                         itemId      : 'zoom',  
-                        fieldLabel  : i18n('sZoom_level'),
+                        fieldLabel  : 'Zoom level',
                         value       : 17,
                         maxValue    : 22,
                         minValue    : 0,
