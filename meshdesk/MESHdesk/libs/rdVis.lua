@@ -60,17 +60,19 @@ function rdVis.__getVis(self)
 				if(lookup)then	
 					local eth0 	= lookup.eth0
 					local gw	= lookup.gateway
-					fb_data[eth0] = {neighors ={},gateway = gw}
+					local fb_wip= {}
+					fb_wip = {neighbors ={},gateway = gw, eth0 = eth0}
 					--print("Mesh "..	row.primary .. " Eth " .. eth0 .. " Gw " .. gw)
 					--Now we can loop through the neighbors
 					for j, n in ipairs(row.neighbors) do
 						local n_lookup= self.mac_map[n.neighbor]
 						if(n_lookup)then
-							table.insert(fb_data[eth0].neighors, {eth0 = n_lookup.eth0, metric = n.metric})
+							table.insert(fb_wip.neighbors, {eth0 = n_lookup.eth0, metric = n.metric})
 							--print(n.neighbor);
 							--print(n.metric);
 						end
 					end
+					table.insert(fb_data, fb_wip)
 				end
 			end
         end

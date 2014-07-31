@@ -58,7 +58,7 @@ function submitReport()
 	local vis_string 	= "[]"
 	local vis_feedback 	= v:getVis()
 	if(vis_feedback)then
-		vis_string = "["..vis_feedback.."]"
+		vis_string = vis_feedback
 	end
 
     local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..'}'
