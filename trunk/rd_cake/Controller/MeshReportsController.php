@@ -2,7 +2,7 @@
 class MeshReportsController extends AppController {
 
     public $name    = 'MeshReports';
-    public $uses    = array('Node','NodeLoad','NodeStation','NodeSystem','MeshEntry','NodeIbssConnection','NodeSetting');
+    public $uses    = array('Node','NodeLoad','NodeStation','NodeSystem','MeshEntry','NodeIbssConnection','NodeSetting','NodeNeighbor');
 
     public function submit_report(){
 
@@ -596,6 +596,61 @@ class MeshReportsController extends AppController {
                 }
             }  
         }
+
+		//----- Check if the 'vis' array is in the data ----
+		$this->log('Checking for vis info in log', 'debug');
+		if(array_key_exists('system_info',$this->request->data)){
+
+			$this->log('Found vis', 'debug');
+			//Create a lookup hash:
+			$mac_lookup = array();
+            foreach($this->request->data['vis'] as $vis){
+              	$mac = $vis['eth0'];
+				$gw	 = $vis['gateway'];
+                $this->Node->contain();
+                $q_r = $this->Node->findByMac($mac);
+                if($q_r){
+                   	$node_id    = $q_r['Node']['id'];
+					$mac_lookup[$mac] = $node_id;
+                    $this->log("Found VIS node $mac", 'debug');
+					//Check if there are any entries for this node + neighbor combination
+					foreach($vis['neighbors'] as $n){
+						$neighbor_mac = $n['eth0'];
+						$neighbor_id  = false;
+						$metric		  = $n['metric'];
+						if(!array_key_exists($neighbor_mac,$mac_lookup)){
+							//Find the ID of the neighbor
+							$q_n = $this->Node->findByMac($neighbor_mac);
+							if($q_n){
+								$this->log("FOUND $neighbor_mac", 'debug');
+								$mac_lookup[$neighbor_mac] = $q_n['Node']['id'];
+								$neighbor_id = 	$q_n['Node']['id'];
+							}
+						}else{
+							$neighbor_id = 	$mac_lookup[$neighbor_mac];
+						}
+						if($neighbor_id){
+							$d = array();
+							$previous = $this->NodeNeighbor->find('first',
+								array('conditions' =>array(
+									'NodeNeighbor.node_id' 		=> $node_id,
+									'NodeNeighbor.neighbor_id'  => $neighbor_id,
+								))
+							);
+							if($previous) {
+								$d['id'] = $previous[ 'NodeNeighbor' ][ 'id' ];
+							}
+							$d['node_id']		= $node_id;
+							$d['neighbor_id']	= $neighbor_id;
+							$d['metric']	    = $metric;
+							$d['gateway']	    = $gw;
+							$this->NodeNeighbor->saveAll($d);
+
+						}
+					}
+                }
+            }  
+		}
     }
 
     private function _do_radio_interfaces($mesh_id,$node_id,$interfaces){
