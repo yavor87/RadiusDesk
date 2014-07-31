@@ -32,6 +32,10 @@ function rdNetstats:getEthernet()
 
 end
 
+function rdNetstats:mapEthWithMeshMac()
+	return self:__mapEthWithMeshMac()
+end
+
 function rdNetstats:log(m,p)
 	if(self.debug)then
 		self.logger:log(m,p)
@@ -43,6 +47,40 @@ end
 ========================================================
 (Note they are in the pattern function <rdName>._function_name(self, arg...) and called self:_function_name(arg...) )
 --]]--
+
+function rdNetstats.__mapEthWithMeshMac(self)
+
+	local m 	= {}
+	local mesh  = 'mesh0'
+
+	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
+	io.input("/sys/class/net/eth0/address")                                                                      
+	m['eth0']       = io.read("*line")
+	
+	local file_to_check = "/sys/class/net/" .. mesh .. "/address"
+
+	--Check if file exists
+	local f=io.open(file_to_check,"r")                                                   
+    if f~=nil then 
+		io.close(f)
+	else
+		m['mesh0'] = ""
+		return self.json.encode(m)
+	end
+
+	--Also record if this node is a gateway or not
+	m['gateway'] = 0
+    local f=io.open('/tmp/gw',"r")
+    if f~=nil then
+  		m['gateway'] = 1
+	end
+
+	--Read the file now we know it exists
+	io.input(file_to_check)
+	local mac 	= io.read("*line")
+	m['mesh0'] 	= mac
+	return self.json.encode(m)
+end
 
 
 function rdNetstats._getWifi(self)
