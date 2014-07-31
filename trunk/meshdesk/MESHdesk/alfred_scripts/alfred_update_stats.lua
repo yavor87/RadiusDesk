@@ -12,15 +12,21 @@ package.path = "../libs/?.lua;" .. package.path
 --Some variables
 local network_data  = 100   --This is where we store network stats
 local system_data   = 101   --This is where we store stats about the system
-local feedback_data = 102   --This is where feedback from the back-end is kept 
+local feedback_data = 102   --This is where feedback from the back-end is kept
+local eth_mesh_map  = 110
 
 function main()
+
 
     --Network info to Alfred--
     require("rdNetstats")
     local n         = rdNetstats()
     local n_stats   = n:getWifi()
     os.execute("echo '"..n_stats.."' | alfred -s "..network_data)
+
+	--Keep the mapping of eth0 to mesh0 fresh
+	local mapping	= n:mapEthWithMeshMac()
+	os.execute("echo '"..mapping.."' | alfred -s "..eth_mesh_map)
 
     --System info to Alfred--
     require("rdSystemstats")

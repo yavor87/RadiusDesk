@@ -51,7 +51,17 @@ function submitReport()
         end
     end
     local sd        = j.encode(repacked_system)
-    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..'}'
+
+	--Add the neighbor details
+	require('rdVis')
+	local v 			= rdVis()
+	local vis_string 	= "[]"
+	local vis_feedback 	= v:getVis()
+	if(vis_feedback)then
+		vis_string = "["..vis_feedback.."]"
+	end
+
+    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..'}'
 
     local proto 	= fetch_config_value('meshdesk.internet1.protocol')
     local url       = fetch_config_value('meshdesk.internet1.status_url')
