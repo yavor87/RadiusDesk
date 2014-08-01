@@ -1,11 +1,9 @@
-Ext.define('Rd.model.mMeshViewNode', {
+Ext.define('Rd.model.mMeshViewNodeNode', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'id',            type: 'int'     },
         {name: 'name',          type: 'string'  },
-        {name: 'mesh_entry_id'},
         {name: 'mac'},
-        {name: 'vendor'},
         {name: 'tx_bytes',      type: 'int' },
         {name: 'rx_bytes',      type: 'int' },
         {name: 'signal_avg' },
