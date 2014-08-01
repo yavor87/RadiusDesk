@@ -63,6 +63,7 @@ Ext.define('Rd.view.meshes.winMeshView', {
 								{
                                     title   : 'Nodes',
                                     itemId  : 'tabMeshViewNodesZ',
+									xtype   : 'gridMeshViewNodeDetails',
                                     meshId  : me.getItemId()
                                 }
                             ]

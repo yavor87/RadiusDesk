@@ -2,7 +2,8 @@ Ext.define('Rd.controller.cMeshViews', {
     extend: 'Ext.app.Controller',
     views:  [
         'components.pnlBanner', 	'meshes.winMeshView', 		'meshes.gridMeshViewEntries',	
-		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes',	'meshes.gridMeshViewNodeNodes'
+		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes',	'meshes.gridMeshViewNodeNodes',
+		'meshes.gridMeshViewNodeDetails',						'meshes.pnlMeshViewGMap'
     ],
     stores      : [
 
@@ -11,7 +12,8 @@ Ext.define('Rd.controller.cMeshViews', {
 
     ],
     config      : {  
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck		: '/cake2/rd_cake/access_providers/child_check.json',
+		urlMapPrefView		: '/cake2/rd_cake/meshes/map_pref_view.json',
     },
     refs: [
        
@@ -83,7 +85,10 @@ Ext.define('Rd.controller.cMeshViews', {
 			},
 			'winMeshView gridMeshViewNodeNodes button' : {
                 toggle: me.viewNodeNodesTimeToggle
-            } 
+            },
+			'gridMeshViewNodeDetails #map' : {
+                click: 	me.mapLoadApi
+            },
         });
     },
     actionIndex: function(mesh_id,name){
@@ -217,5 +222,77 @@ Ext.define('Rd.controller.cMeshViews', {
         if(me.autoRefresInterval != undefined){
             clearInterval(me.autoRefresInterval);   //Always clear
         }
+    },
+	//____ MAP ____
+    mapLoadApi:   function(button){
+        var me 	= this;
+		Ext.ux.Toaster.msg(
+	        'Loading Google Maps API',
+	        'Please be patient....',
+	        Ext.ux.Constants.clsInfo,
+	        Ext.ux.Constants.msgInfo
+	    );
+	    Ext.Loader.loadScriptFile('https://www.google.com/jsapi',function(){
+	        google.load("maps", "3", {
+	            other_params	:"sensor=false",
+	            callback 		: function(){
+	            	// Google Maps are loaded. Place your code here
+	                me.mapCreatePanel(button);
+	        	}
+	    	});
+	    },Ext.emptyFn,null,false);
+    },
+    mapCreatePanel : function(button){
+        var me = this
+        var tp          = button.up('tabpanel');
+        var map_tab_id  = 'mapTab';
+        var nt          = tp.down('#'+map_tab_id);
+        if(nt){
+            tp.setActiveTab(map_tab_id); //Set focus on  Tab
+            return;
+        }
+
+        var map_tab_name = i18n("sGoogle_Maps");
+		var win 		= tp.up('winMeshView');
+		var mesh_id		= win.getItemId();
+
+        //We need to fetch the Preferences for this user's Google Maps map
+        Ext.Ajax.request({
+            url		: me.urlMapPrefView,
+            method	: 'GET',
+			params	: {
+				mesh_id	: mesh_id
+			},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                   	//console.log(jsonData);
+					//___Build this tab based on the preferences returned___
+                    tp.add({ 
+                        title 		: map_tab_name,
+                        itemId		: map_tab_id,
+                        closable	: true,
+                        glyph		: Rd.config.icnMap, 
+                        layout		: 'fit', 
+                        xtype		: 'pnlMeshViewGMap',
+                        mapOptions	: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },	//Required for map
+                       	centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},										//Required for map
+                       	markers		: [],
+						meshId		: mesh_id
+                    });
+                    tp.setActiveTab(map_tab_id); //Set focus on Add Tab
+                    //____________________________________________________   
+                }   
+            },
+			failure: function(batch,options){
+                Ext.ux.Toaster.msg(
+                    'Problems getting the map preferences',
+                    'Map preferences could not be fetched',
+                    Ext.ux.Constants.clsWarn,
+                    Ext.ux.Constants.msgWarn
+                );
+            },
+			scope: me
+        });
     }
 });
