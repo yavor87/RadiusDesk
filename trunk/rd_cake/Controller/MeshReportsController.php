@@ -194,6 +194,7 @@ class MeshReportsController extends AppController {
             )));
 
             //Create a lookup of all the nodes for this mesh
+			$this->Node->contain();
             $q_nodes = $this->Node->find('all',array('conditions' => array(
                 'Node.mesh_id'      => $mesh_id
             )));
@@ -209,6 +210,7 @@ class MeshReportsController extends AppController {
             foreach($q_r as $i){
                 $mesh_entry_id  = $i['MeshEntry']['id'];
                 $entry_name     = $i['MeshEntry']['name'];
+				$this->NodeStation->contain();
                 $q_s = $this->NodeStation->find('all',array(
                     'conditions'    => array(
                         'NodeStation.mesh_entry_id' => $mesh_entry_id,
@@ -224,6 +226,7 @@ class MeshReportsController extends AppController {
                     foreach($q_s as $j){
                         $mac = $j['NodeStation']['mac'];
                         //Get the sum of Bytes and avg of signal
+						$this->NodeStation->contain();
                         $q_t = $this->NodeStation->find('first', array(
                             'conditions'    => array(
                                 'NodeStation.mac'           => $mac,
@@ -252,6 +255,7 @@ class MeshReportsController extends AppController {
                         }
 
                         //Get the latest entry
+						$this->NodeStation->contain();
                         $lastCreated = $this->NodeStation->find('first', array(
                             'conditions'    => array(
                                 'NodeStation.mac'           => $mac,
@@ -432,6 +436,7 @@ class MeshReportsController extends AppController {
                         //print_r($j);
                         $mac = $j['NodeStation']['mac'];
                         //Get the sum of Bytes and avg of signal
+						$this->NodeStation->contain();
                         $q_t = $this->NodeStation->find('first', array(
                             'conditions'    => array(
                                 'NodeStation.mac'           => $mac,
@@ -460,6 +465,7 @@ class MeshReportsController extends AppController {
                         }
 
                         //Get the latest entry
+						$this->NodeStation->contain();
                         $lastCreated = $this->NodeStation->find('first', array(
                             'conditions'    => array(
                                 'NodeStation.mac'       => $mac,
@@ -538,6 +544,217 @@ class MeshReportsController extends AppController {
                         ));
                         $id++;
                 }            
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+	 public function view_node_nodes(){
+
+        $items  = array();
+        $id     = 1;
+        $hour   = (60*60);
+        $day    = $hour*24;
+        $week   = $day*7;
+
+		$node_lookup = array();
+
+        $timespan = 'hour';  //Default
+        if(isset($this->request->query['timespan'])){
+            $timespan = $this->request->query['timespan'];
+        }
+
+        if($timespan == 'hour'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$hour);
+        }
+
+        if($timespan == 'day'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$day);
+        }
+
+        if($timespan == 'week'){
+            //Get entries created modified during the past hour
+            $modified = date("Y-m-d H:i:s", time()-$week);
+        }
+
+        if(isset($this->request->query['mesh_id'])){
+
+            //Find all the nodes for this mesh
+            $mesh_id = $this->request->query['mesh_id'];
+
+            $this->Node->contain();
+            $q_r = $this->Node->find('all',array('conditions' => array(
+                'Node.mesh_id'      => $mesh_id
+            )));
+
+			//Build a quick lookup
+			foreach($q_r as $k){
+				$node_id    = $k['Node']['id'];
+                $node_name  = $k['Node']['name'];
+				$node_lookup[$node_id]=$node_name;
+			}
+            
+            //Find all the distinct MACs for this Mesh node...
+            foreach($q_r as $i){
+                $node_id    = $i['Node']['id'];
+                $node_name  = $i['Node']['name'];
+                $l_contact  = $i['Node']['last_contact'];
+                $dead_after = '660'; //11Minutes
+
+                //Find the dead time (only once)
+                if($l_contact == null){
+                    $state = 'never';
+                }else{
+					$this->NodeSetting->contain();
+                    $n_s = $this->NodeSetting->find('first',array(
+                        'conditions'    => array(
+                            'NodeSetting.mesh_id' => $mesh_id
+                        )
+                    )); 
+                    if($n_s){
+                        $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
+                    }
+                    $last_timestamp = strtotime($l_contact);
+                    if($last_timestamp+$dead_after <= time()){
+                        $state = 'down';
+                    }else{
+                        $state = 'up';
+                    }
+                }
+
+				//--Get a list of all the other nodes to which this one connected within specified time
+				$this->NodeIbssConnection->contain();
+				$q_s = $this->NodeIbssConnection->find('all',array(
+                    'conditions'    => array(
+                        'NodeIbssConnection.node_id'    => $node_id,
+                        'NodeIbssConnection.modified >='   	=> $modified
+                    ),
+                    'fields'        => array(
+                        'DISTINCT(mac)'
+                    )
+                ));
+
+				//----- Found ANY? --------------
+
+				if($q_s){
+                    foreach($q_s as $j){
+
+                        $mac = $j['NodeIbssConnection']['mac'];
+                        //Get the sum of Bytes and avg of signal
+						$this->NodeIbssConnection->contain();
+                        $q_t = $this->NodeIbssConnection->find('first', array(
+                            'conditions'    => array(
+                                'NodeIbssConnection.mac'           => $mac,
+                                'NodeIbssConnection.node_id'       => $node_id,
+                                'NodeIbssConnection.modified >='   => $modified
+                            ),
+                            'fields'    => array(
+                                'SUM(NodeIbssConnection.tx_bytes) as tx_bytes',
+                                'SUM(NodeIbssConnection.rx_bytes)as rx_bytes',
+                                'AVG(NodeIbssConnection.signal_avg)as signal_avg',
+                            )
+                        ));
+                       // print_r($q_t);
+                        $t_bytes    = $q_t[0]['tx_bytes'];
+                        $r_bytes    = $q_t[0]['rx_bytes'];
+                        $signal_avg = round($q_t[0]['signal_avg']); 
+                        if($signal_avg < -95){
+                            $signal_avg_bar = 0.01;
+                        }
+                        if(($signal_avg >= -95)&($signal_avg <= -35)){
+                                $p_val = 95-(abs($signal_avg));
+                                $signal_avg_bar = round($p_val/60,1);
+                        }
+                        if($signal_avg > -35){
+                            $signal_avg_bar = 1;
+                        }
+
+                        //Get the latest entry
+						$this->NodeIbssConnection->contain();
+                        $lastCreated = $this->NodeIbssConnection->find('first', array(
+                            'conditions'    => array(
+                                'NodeIbssConnection.mac'       => $mac,
+                                'NodeIbssConnection.node_id'   => $node_id
+                            ),
+                            'order' => array('NodeIbssConnection.created' => 'desc')
+                        ));
+
+                       // print_r($lastCreated);
+
+                        $signal = $lastCreated['NodeIbssConnection']['signal'];
+
+                        if($signal < -95){
+                            $signal_bar = 0.01;
+                        }
+                        if(($signal >= -95)&($signal <= -35)){
+                                $p_val = 95-(abs($signal));
+                                $signal_bar = round($p_val/60,1);
+                        }
+                        if($signal > -35){
+                            $signal_bar = 1;
+                        }
+                       
+                        array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $node_name, 
+                            'node_id'           => $node_id, 
+                            'mac'               => $mac,
+                            'tx_bytes'          => $t_bytes,
+                            'rx_bytes'          => $r_bytes, 
+                            'signal_avg'        => $signal_avg ,
+                            'signal_avg_bar'    => $signal_avg_bar,
+                            'signal_bar'        => $signal_bar,
+                            'signal'            => $signal,
+                            'l_tx_bitrate'      => $lastCreated['NodeIbssConnection']['tx_bitrate'],
+                            'l_rx_bitrate'      => $lastCreated['NodeIbssConnection']['rx_bitrate'],
+                            'l_signal'          => $lastCreated['NodeIbssConnection']['signal'],
+                            'l_signal_avg'      => $lastCreated['NodeIbssConnection']['signal_avg'],
+                            'l_MFP'             => $lastCreated['NodeIbssConnection']['MFP'],
+                            'l_tx_failed'       => $lastCreated['NodeIbssConnection']['tx_failed'],
+                            'l_tx_retries'      => $lastCreated['NodeIbssConnection']['tx_retries'],
+                            'l_modified'        => $lastCreated['NodeIbssConnection']['modified'],
+                            'l_authenticated'   => $lastCreated['NodeIbssConnection']['authenticated'],
+                            'l_authorized'      => $lastCreated['NodeIbssConnection']['authorized'],
+                            'l_tx_bytes'        => $lastCreated['NodeIbssConnection']['tx_bytes'],
+                            'l_rx_bytes'        => $lastCreated['NodeIbssConnection']['rx_bytes'],
+                            'l_contact'         => $l_contact,
+                            'state'             => $state
+                        ));
+                        $id++;
+                    }
+
+                }else{	//---NOT FOUND ANY???----
+
+                     array_push($items,array(
+                            'id'                => $id,
+                            'name'              => $node_name, 
+                            'node_id'     		=> $node_id, 
+                            'mac'               => 'N/A',
+                            'tx_bytes'          => 0,
+                            'rx_bytes'          => 0, 
+                            'signal_avg'        => null ,
+                            'signal_bar'        => 'N/A' ,
+                            'signal_avg_bar'    => 'N/A',
+                            'signal_bar'        => 'N/A',
+                            'signal'            => null,
+                            'tx_bitrate'        => 0,
+                            'rx_bitrate'        => 0,
+                            'vendor'            => 'N/A',
+                            'l_contact'         => $l_contact,
+                            'state'             => $state
+                        ));
+                        $id++;
+                }            
+
+				//--- END FOUND ANY?---
+
             }
         }
 
