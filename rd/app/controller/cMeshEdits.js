@@ -30,12 +30,12 @@ Ext.define('Rd.controller.cMeshEdits', {
         urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
         urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
-		urlMapPrefView: 	'/cake2/rd_cake/meshes/map_pref_view.json',
-		urlMapPrefEdit:		'/cake2/rd_cake/meshes/map_pref_edit.json',
-		urlMapSave:			'/cake2/rd_cake/meshes/map_node_save.json',
-		urlMapDelete:		'/cake2/rd_cake/meshes/map_node_delete.json',
-		urlMeshNodes: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
-		urlBlueMark : 'resources/images/map_markers/blue-dot.png'
+		urlMapPrefView		: '/cake2/rd_cake/meshes/map_pref_view.json',
+		urlMapPrefEdit		: '/cake2/rd_cake/meshes/map_pref_edit.json',
+		urlMapSave			: '/cake2/rd_cake/meshes/map_node_save.json',
+		urlMapDelete		: '/cake2/rd_cake/meshes/map_node_delete.json',
+		urlMeshNodes		: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
+		urlBlueMark 		: 'resources/images/map_markers/blue-dot.png'
     },
     refs: [
     	{  ref: 'editEntryWin', 	selector: 'winMeshEditEntry'},
