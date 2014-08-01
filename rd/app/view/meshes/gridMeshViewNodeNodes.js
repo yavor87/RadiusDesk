@@ -1,13 +1,13 @@
-Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
+Ext.define('Rd.view.meshes.gridMeshViewNodeNodes' ,{
     extend      :'Ext.grid.Panel',
-    alias       : 'widget.gridMeshViewNodes',
+    alias       : 'widget.gridMeshViewNodeNodes',
     requires    : [
-        'Rd.store.sMeshViewNodes',
-        'Rd.model.mMeshViewNode'
+        'Rd.store.sMeshViewNodeNodes',
+        'Rd.model.mMeshViewNodeNode'
     ],
     multiSelect : true,
     stateful    : true,
-    stateId     : 'StateGridMeshViewNodes',
+    stateId     : 'StateGridMeshViewNodeNodes',
     stateEvents :['groupclick','columnhide'],
     border      : false,
     viewConfig: {
@@ -72,7 +72,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
     }],
     initComponent: function(){
         var me      = this;
-        me.store    = Ext.create(Rd.store.sMeshViewNodes,{
+        me.store    = Ext.create(Rd.store.sMeshViewNodeNodes,{
             groupField: 'name',
             listeners: {
                 load: function(store, records, successful) {
@@ -117,22 +117,22 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
         me.store.load();
 
         me.columns  = [
-            { xtype: 'rownumberer',                                                         stateId: 'StateGridMeshViewNodes1'},
-            { text: i18n("sName"),      dataIndex: 'name',      tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodes2'},     
-            { text: 'MAC Address',      dataIndex: 'mac',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodes3',
+            { xtype: 'rownumberer',                                                         stateId: 'StateGridMeshViewNodeNodes1'},
+            { text: i18n("sName"),      dataIndex: 'name',      tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodeNodes2'},     
+            { text: 'MAC Address',      dataIndex: 'mac',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodeNodes3',
                 summaryType     : 'count',
                 summaryRenderer : function(value, summaryData, dataIndex) {
                     
                     var tx_bytes =summaryData.record.get('tx_bytes'); //Assume that if the tx_bytes are zero - we have no devices
                     if(tx_bytes == 0){
-                        return 'No devices';
+                        return 'No peers';
                     }else{
-                        return ((value === 0 || value > 1) ? '(' + value + ' Devices)' : '(1 Device)');
+                        return ((value === 0 || value > 1) ? '(' + value + ' Peers)' : '(1 Peer)');
                     }
                 }
             },
-            { text: 'Vendor',           dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodes4'},
-            {   text: 'Data Tx',        dataIndex: 'tx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodes5',
+            { text: 'Vendor',           dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries4'},
+            {   text: 'Data Tx',        dataIndex: 'tx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries5',
                 renderer    : function(value){
                     return Ext.ux.bytesToHuman(value)              
                 },
@@ -141,7 +141,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                     return Ext.ux.bytesToHuman(value)
                 }
             },
-            {   text: 'Data Rx',        dataIndex: 'rx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewNodes6',
+            {   text: 'Data Rx',        dataIndex: 'rx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries6',
                 renderer    : function(value){
                     return Ext.ux.bytesToHuman(value)              
                 },
@@ -150,7 +150,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                     return Ext.ux.bytesToHuman(value)
                 }
             },
-            {   text: 'Signal avg',       dataIndex: 'signal_avg',tdCls: 'gridTree', stateId: 'StateGridMeshViewNodes7',
+            {   text: 'Signal avg',       dataIndex: 'signal_avg',tdCls: 'gridTree', stateId: 'StateGridMeshViewEntries7',
                 width: 150,
                 renderer: function (v, m, r) {
                     if(v != null){
@@ -178,7 +178,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                     }
                 }
             },
-            {   text: 'Latest signal',       dataIndex: 'signal',    tdCls: 'gridTree', stateId: 'StateGridMeshViewNodes8',
+            {   text: 'Latest signal',       dataIndex: 'signal',    tdCls: 'gridTree', stateId: 'StateGridMeshViewEntries8',
                 width: 150,
                 renderer: function (v, m, r) {
                     if(v != null){
@@ -210,7 +210,6 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                             var tx_r    = r.get('l_tx_retries');
                             var auth    = r.get('l_authenticated');
                             var authz   = r.get('l_authorized');
-                            var e       = r.get('l_entry');
 
                             var t  = Ext.create('Ext.tip.ToolTip', {
                                 target  : id,
@@ -220,8 +219,6 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
                                 html    : [
                                     "<div class='divMapAction'>",
                                         "<label class='lblMap'>Time</label><label class='lblValue'>"+t+"</label>",
-                                        "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>SSID</label><label class='lblValue'>"+e+"</label>",
                                         "<div style='clear:both;'></div>",
                                         "<label class='lblMap'>Tx Speed</label><label class='lblValue'>"+txbr+"Mb/s</label>",
                                         "<div style='clear:both;'></div>",

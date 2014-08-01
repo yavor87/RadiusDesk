@@ -1,8 +1,8 @@
 Ext.define('Rd.controller.cMeshViews', {
     extend: 'Ext.app.Controller',
     views:  [
-        'components.pnlBanner', 	'meshes.winMeshView', 	'meshes.gridMeshViewEntries',	
-		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes'
+        'components.pnlBanner', 	'meshes.winMeshView', 		'meshes.gridMeshViewEntries',	
+		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes',	'meshes.gridMeshViewNodeNodes'
     ],
     stores      : [
 
@@ -43,6 +43,9 @@ Ext.define('Rd.controller.cMeshViews', {
             'winMeshView #tabMeshViewNodes': {
                 activate:       me.tabMeshViewNodesActivate
             },
+			'winMeshView #tabMeshViewNodeNodes': {
+                activate:       me.tabMeshViewNodeNodesActivate
+            },
             'winMeshView gridMeshViewEntries #reload menuitem[group=refresh]'   : {
                 click:      function(menu){
                     var me = this;
@@ -54,6 +57,11 @@ Ext.define('Rd.controller.cMeshViews', {
                     me.autoRefresh(menu,'nodes');
                 }
             },
+			'winMeshView gridMeshViewNodeNodes #reload menuitem[group=refresh]'   : {
+                click:      function(menu){
+                    me.autoRefresh(menu,'node_nodes');
+                }
+            }, 
             'winMeshView': {
                 beforeshow:      me.winViewClose,
                 destroy   :      me.winViewClose
@@ -69,7 +77,13 @@ Ext.define('Rd.controller.cMeshViews', {
 					var pnl = button.up("pnlMeshViewNodes");
 					pnl.getData()
 				}
-			}  
+			},
+			'winMeshView gridMeshViewNodeNodes #reload':	{
+				click: me.reloadViewNodeNodes
+			},
+			'winMeshView gridMeshViewNodeNodes button' : {
+                toggle: me.viewNodeNodesTimeToggle
+            } 
         });
     },
     actionIndex: function(mesh_id,name){
@@ -124,6 +138,28 @@ Ext.define('Rd.controller.cMeshViews', {
         entGrid.getStore().getProxy().setExtraParam('timespan',span);
         entGrid.getStore().reload();
     },
+	viewNodeNodesTimeToggle: function(button,pressed){
+        var me = this;
+        if(pressed){
+            me.reloadViewNodeNodes(button);  
+        }
+    },
+	reloadViewNodeNodes: function(button){
+        var me      = this;
+        var win     = button.up("winMeshView");
+        var entGrid = win.down("gridMeshViewNodeNodes");
+        var day     = entGrid.down('#day');
+        var week    = entGrid.down('#week');
+        var span    = 'hour';
+        if(day.pressed){
+            span='day';
+        }
+        if(week.pressed){
+            span='week';
+        }
+        entGrid.getStore().getProxy().setExtraParam('timespan',span);
+        entGrid.getStore().reload();
+    },
     tabMeshViewNodesActivate: function(tab){
         var me = this;
         var b = tab.down('#reload');
@@ -133,6 +169,11 @@ Ext.define('Rd.controller.cMeshViews', {
         var me = this;
         var b = tab.down('#reload');
         me.reloadViewEntry(b);
+    },
+	tabMeshViewNodeNodesActivate: function(tab){
+        var me = this;
+        var b = tab.down('#reload');
+        me.reloadViewNodeNodes(b);
     },
     autoRefresh: function(menu_item,item){
         var me      = this;
@@ -159,7 +200,11 @@ Ext.define('Rd.controller.cMeshViews', {
         me.autoRefresInterval = setInterval(function(){ 
             if(item == 'nodes'){
                 me.reloadViewNode(b);
-            } 
+            }
+
+			 if(item == 'node_nodes'){
+                me.reloadViewNodeNodes(b);
+            }  
 
             if(item == 'entries'){
                 me.reloadViewEntry(b);
