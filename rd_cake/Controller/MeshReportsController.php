@@ -428,7 +428,7 @@ class MeshReportsController extends AppController {
 							$grey_cut	= $now - $cut_off;
 							
 							if($last >= $green_cut){
-								$color = $green;
+								$c = $green;
 								//How clear the line must be
 								$green_range 	= $now - $green_cut;
 								$green_percent	= ($last- $green_cut)/$green_range;
@@ -436,7 +436,7 @@ class MeshReportsController extends AppController {
 								$o_val			= round($o_val,2);	
 							}else{
 								//How clear the line must be
-								$color			= $grey; //Default
+								$c			= $grey; //Default
 								$grey_range 	= $green_cut - $grey_cut;
 								$grey_percent	= ($last- $grey_cut)/$grey_range;
 								$o_val			= ($grey_percent * 0.5)+0.5;
@@ -453,7 +453,7 @@ class MeshReportsController extends AppController {
 									'lng'	=> $to_lng
 								),
 								'weight'	=> $weight,
-								'color'		=> $color,
+								'color'		=> $c,
 								'opacity'	=> $o_val,
 								'metric'	=> $metric
 							));
