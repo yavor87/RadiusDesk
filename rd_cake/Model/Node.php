@@ -44,7 +44,10 @@ class Node extends AppModel {
                 'dependent'     => true
             ),
 			'NodeNeighbor'   	=> array(
-                'dependent'     => true
+                'dependent'     => true,
+				'order'			=> array(
+					'NodeNeighbor.modified DESC'
+				)
             ),
     );
 
