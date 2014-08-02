@@ -3,6 +3,7 @@ Ext.define('Rd.view.meshes.pnlMeshViewGMap', {
     alias :'widget.pnlMeshViewGMap',
     markers     : [],
     infoWindows : [],
+	polyLines	: [],
     infowindow  : undefined,
     shadow      : undefined,
     store       : undefined,
@@ -49,6 +50,31 @@ Ext.define('Rd.view.meshes.pnlMeshViewGMap', {
         while(me.markers[0]){
             me.markers.pop().setMap(null);
         }
-    }
+    },
+	addPolyLine: function(line){
+		var me = this;
+
+		var from_to = [
+			new google.maps.LatLng(line.from.lat, line.from.lng),
+			new google.maps.LatLng(line.to.lat, line.to.lng),
+		];
+
+		var o = new google.maps.Polyline({
+			path			: from_to,
+			geodesic		: true,
+			strokeColor		: line.color,
+			strokeOpacity	: line.opacity,
+			strokeWeight	: line.weight
+		});
+		o.setMap(me.gmap);	//Attach it to the map
+		me.polyLines.push(o);
+		return o;
+	},
+	clearPolyLines: function(){
+		var me = this;
+		while(me.polyLines[0]){
+            me.polyLines.pop().setMap(null);
+        }
+	}
 });
 

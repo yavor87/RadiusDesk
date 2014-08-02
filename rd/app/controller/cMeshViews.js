@@ -12,8 +12,14 @@ Ext.define('Rd.controller.cMeshViews', {
 
     ],
     config      : {  
-        urlApChildCheck		: '/cake2/rd_cake/access_providers/child_check.json',
-		urlMapPrefView		: '/cake2/rd_cake/meshes/map_pref_view.json',
+        urlApChildCheck				: '/cake2/rd_cake/access_providers/child_check.json',
+		urlMapPrefView				: '/cake2/rd_cake/meshes/map_pref_view.json',
+		urlOverviewGoogleMap		: '/cake2/rd_cake/mesh_reports/overview_google_map.json',
+		urlBlueMark 				: 'resources/images/map_markers/mesh_blue_node.png',
+		urlRedNode 					: 'resources/images/map_markers/mesh_red_node.png',
+		urlRedGw 					: 'resources/images/map_markers/mesh_red_gw.png',
+		urlGreenNode 				: 'resources/images/map_markers/mesh_green_node.png',
+		urlGreenGw	 				: 'resources/images/map_markers/mesh_green_gw.png'
     },
     refs: [
        
@@ -89,6 +95,17 @@ Ext.define('Rd.controller.cMeshViews', {
 			'gridMeshViewNodeDetails #map' : {
                 click: 	me.mapLoadApi
             },
+			'winMeshView #mapTab'		: {
+				activate: function(pnl){
+					me.reloadMap(pnl);
+				}
+			},
+			'pnlMeshViewGMap #reload'	: {
+				click:	function(b){
+					var me = this;
+					me.reloadMap(b.up('pnlMeshViewGMap'));
+				}
+			}
         });
     },
     actionIndex: function(mesh_id,name){
@@ -294,5 +311,68 @@ Ext.define('Rd.controller.cMeshViews', {
             },
 			scope: me
         });
-    }
+    },
+	reloadMap: function(map_panel){
+		var me = this;
+		//console.log("Reload markers");
+		map_panel.setLoading(true);
+		map_panel.clearMarkers();
+		map_panel.clearPolyLines();
+		var mesh_id = map_panel.meshId;
+
+		Ext.Ajax.request({
+            url		: me.urlOverviewGoogleMap,
+            method	: 'GET',
+			params	: {
+				mesh_id: mesh_id
+			},
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+
+					Ext.each(jsonData.items, function(i){
+						var icon = me.urlBlueMark;
+
+						if(i.state == 'down'){
+							icon = me.urlRedNode
+						}
+
+						if((i.state == 'down')&(i.gateway == 'yes')){
+							icon = me.urlRedGw
+						}
+
+						if(i.state == 'up'){
+							icon = me.urlGreenNode
+						}
+
+						if((i.state == 'up')&(i.gateway == 'yes')){
+							icon = me.urlGreenGw
+						}
+						
+						var sel_marker = map_panel.addMarker({
+		                    lat			: i.lat, 
+		                    lng			: i.lng,
+		                    icon		: icon,
+		                    title		: i.name,
+		                    listeners: {
+		                        dragend: function(){
+		                            me.dragEnd(i.id,map_panel,sel_marker);
+		                        },
+		                        dragstart: function(){
+		                            me.dragStart(i.id,map_panel,sel_marker);
+		                        }
+		                    }
+		                })
+					});
+					//Add the poly lines
+					Ext.each(jsonData.connections, function(c){
+						var pl = map_panel.addPolyLine(c);
+					});
+
+					map_panel.setLoading(false);
+                }   
+            },
+            scope: me
+        });
+	}
 });
