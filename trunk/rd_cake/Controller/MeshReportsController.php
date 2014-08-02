@@ -156,6 +156,155 @@ class MeshReportsController extends AppController {
 		}
 	}
 
+	public function overview_google_map(){
+
+
+		if(isset($this->request->query['mesh_id'])){
+
+			$items 			= array();
+			$connections	= array();
+
+			//Create a hardware lookup for proper names of hardware
+		    $hardware = array();        
+		    $hw   = Configure::read('hardware');
+		    foreach($hw as $h){
+		        $id     = $h['id'];
+		        $name   = $h['name']; 
+		        $hardware["$id"]= $name;
+		    }
+
+			
+            //Find all the nodes for this mesh
+            $mesh_id = $this->request->query['mesh_id'];
+
+            $this->Node->contain('NodeNeighbor');
+            $q_r = $this->Node->find('all',array(
+				'conditions'=> array('Node.mesh_id'      => $mesh_id)
+			));
+
+			//Get the 'dead_after' value
+			$dead_after = $this->_get_dead_after($mesh_id);
+
+
+			//Build a hash of nodes with their detail for lookup
+			$neighbor_hash = array();
+			foreach($q_r as $i){
+				if($i['Node']['lat'] != null){	//Only those with co-ordinates
+					$id = $i['Node']['id'];
+					$neighbor_hash[$id]=$i['Node'];
+				}
+			}
+
+			//Some defaults for the spiderweb
+			$thickness 	= 9;	//The bigger the metric; ther thinner this line
+			$green		= '#01823d';	//Green until dead time then grey
+			$grey		= '#505351';	//Green until dead time then grey
+			$opacity	= 1;	//The older a line is the more opacity it will have (tend to zero)
+			$cut_off	= 3 * $dead_after;
+
+			foreach($q_r as $i){
+				//print_r($i);
+                $node_id    = $i['Node']['id'];
+                $node_name  = $i['Node']['name'];
+                $l_contact  = $i['Node']['last_contact'];
+				$hw_id 		= $i['Node']['hardware'];
+				$hw_human	= $hardware["$hw_id"];
+				$gw			= false;
+				if(count($i['NodeNeighbor'])>0){
+					$gw = $i['NodeNeighbor'][0]['gateway'];
+
+					foreach($i['NodeNeighbor'] as $n){
+						$n_id 	= $n['neighbor_id'];
+						$metric = $n['metric'];
+						$last	= strtotime($n['modified']);
+						$now	= time();
+
+						//It might be so old that we do not bother drawing it
+						if($last <= ($now - $cut_off)){
+							continue;
+						}
+
+						//print_r($n);
+						if((array_key_exists($n_id,$neighbor_hash))&&
+							(array_key_exists($node_id,$neighbor_hash))
+						){
+							$from_lat 	= $neighbor_hash[$node_id]['lat'];
+							$from_lng 	= $neighbor_hash[$node_id]['lon'];
+							$to_lat 	= $neighbor_hash[$n_id]['lat'];
+							$to_lng 	= $neighbor_hash[$n_id]['lon'];
+							$metric		= $n['metric'];
+							$weight		= round((1/$metric*$thickness),2);
+
+							//What color the line must be
+							$green_cut	= $now - $dead_after;
+							$grey_cut	= $now - $cut_off;
+							
+							if($last >= $green_cut){
+								$color = $green;
+								//How clear the line must be
+								$green_range 	= $now - $green_cut;
+								$green_percent	= ($last- $green_cut)/$green_range;
+								$o_val			= ($green_percent * 0.5)+0.5;
+								$o_val			= round($o_val,2);	
+							}else{
+								//How clear the line must be
+								$color			= $grey; //Default
+								$grey_range 	= $green_cut - $grey_cut;
+								$grey_percent	= ($last- $grey_cut)/$grey_range;
+								$o_val			= ($grey_percent * 0.5)+0.5;
+								$o_val			= round($o_val,2);	
+							}
+							
+							array_push($connections,array(
+								'from' 	=> array(
+									'lat'	=> $from_lat,
+									'lng'	=> $from_lng
+								),
+								'to'	=> array(
+									'lat'	=> $to_lat,
+									'lng'	=> $to_lng
+								),
+								'weight'	=> $weight,
+								'color'		=> $color,
+								'opacity'	=> $o_val,
+								'metric'	=> $metric
+							));
+
+						}
+					}
+				}
+
+                //Find the dead time (only once)
+                if($l_contact == null){
+                    $state = 'never';
+                }else{
+                    $last_timestamp = strtotime($l_contact);
+                    if($last_timestamp+$dead_after <= time()){
+                        $state = 'down';
+                    }else{
+                        $state = 'up';
+                    }
+                }
+
+				$i['Node']['state'] 	= $state;
+				$i['Node']['hw_human'] 	= $hw_human;
+				$i['Node']['lng']		= $i['Node']['lon'];
+				$i['Node']['gateway']	= $gw;
+
+				array_push($items,$i['Node']);
+			}
+
+		}
+
+		$this->set(array(
+		        'items' 		=> $items,
+				'connections'	=> $connections,
+		        'success' 		=> true,
+		        '_serialize' => array('items', 'connections','success')
+		    ));
+
+	}
+
     public function view_entries(){
 
         $items  = array();
@@ -379,6 +528,8 @@ class MeshReportsController extends AppController {
                 'Node.mesh_id'      => $mesh_id
             )));
 
+			//Get the 'dead_after' value
+			$dead_after = $this->_get_dead_after($mesh_id);
            
             //Create a lookup of all the entries for this mesh 
             $this->MeshEntry->contain();
@@ -399,20 +550,10 @@ class MeshReportsController extends AppController {
                 $node_id    = $i['Node']['id'];
                 $node_name  = $i['Node']['name'];
                 $l_contact  = $i['Node']['last_contact'];
-                $dead_after = '660'; //11Minutes
 
-                //Find the dead time (only once)
                 if($l_contact == null){
                     $state = 'never';
                 }else{
-                    $n_s = $this->NodeSetting->find('first',array(
-                        'conditions'    => array(
-                            'NodeSetting.mesh_id' => $mesh_id
-                        )
-                    )); 
-                    if($n_s){
-                        $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
-                    }
                     $last_timestamp = strtotime($l_contact);
                     if($last_timestamp+$dead_after <= time()){
                         $state = 'down';
@@ -594,6 +735,10 @@ class MeshReportsController extends AppController {
                 'Node.mesh_id'      => $mesh_id
             )));
 
+			//Get the 'dead_after' value
+			$dead_after = $this->_get_dead_after($mesh_id);
+
+
 			//Build a quick lookup
 			foreach($q_r as $k){
 				$node_id    = $k['Node']['id'];
@@ -606,21 +751,12 @@ class MeshReportsController extends AppController {
                 $node_id    = $i['Node']['id'];
                 $node_name  = $i['Node']['name'];
                 $l_contact  = $i['Node']['last_contact'];
-                $dead_after = '660'; //11Minutes
 
                 //Find the dead time (only once)
                 if($l_contact == null){
                     $state = 'never';
                 }else{
 					$this->NodeSetting->contain();
-                    $n_s = $this->NodeSetting->find('first',array(
-                        'conditions'    => array(
-                            'NodeSetting.mesh_id' => $mesh_id
-                        )
-                    )); 
-                    if($n_s){
-                        $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
-                    }
                     $last_timestamp = strtotime($l_contact);
                     if($last_timestamp+$dead_after <= time()){
                         $state = 'down';
@@ -1148,5 +1284,20 @@ class MeshReportsController extends AppController {
         }
         $vendor = "Unkown";
     }
+
+	private function _get_dead_after($mesh_id){
+
+		$data 		= Configure::read('common_node_settings'); //Read the defaults
+		$dead_after	= $data['heartbeat_dead_after'];
+		$n_s = $this->NodeSetting->find('first',array(
+            'conditions'    => array(
+                'NodeSetting.mesh_id' => $mesh_id
+            )
+        )); 
+        if($n_s){
+            $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
+        }
+		return $dead_after;
+	}
 }
 ?>

@@ -1020,7 +1020,7 @@ class MeshesController extends AppController {
         $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
 
         //Create a hardware lookup for proper names of hardware
-            $hardware = array();        
+        $hardware = array();        
         $hw   = Configure::read('hardware');
         foreach($hw as $h){
             $id     = $h['id'];
@@ -1089,6 +1089,119 @@ class MeshesController extends AppController {
             'items' => $items,
             'success' => true,
             '_serialize' => array('items','success')
+        ));
+    }
+
+	//Add the list of connections also to the equation
+	public function mesh_nodes_and_connections_view(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $items      = array();
+        $total      = 0;
+        $node       = ClassRegistry::init('Node');
+        $node->contain(array('NodeMeshEntry.MeshEntry','NodeMeshExit.MeshExit'));
+        $mesh_id    = $this->request->query['mesh_id'];
+        $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
+
+        //Create a hardware lookup for proper names of hardware
+        $hardware = array();        
+        $hw   = Configure::read('hardware');
+        foreach($hw as $h){
+            $id     = $h['id'];
+            $name   = $h['name']; 
+            $hardware["$id"]= $name;
+        }
+
+		//Check if we need to show the override on the power
+		$node_setting	= ClassRegistry::init('NodeSetting');
+		$node_setting->contain();
+
+		$power_override = false;
+
+		$ns				= $node_setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $mesh_id)));
+		if($ns){
+			if($ns['NodeSetting']['all_power'] == 1){
+				$power_override = true;
+				$power 			= $ns['NodeSetting']['power'];
+			}
+		}else{
+			$data       = Configure::read('common_node_settings'); //Read the defaults
+			if($data['all_power'] == true){
+				$power_override = true;
+				$power 			= $data['power'];
+			}
+		}
+
+        foreach($q_r as $m){
+            $static_entries = array();
+            $static_exits   = array();
+            foreach($m['NodeMeshEntry'] as $m_e_ent){
+                array_push($static_entries,array('name' => $m_e_ent['MeshEntry']['name']));
+            }
+
+            foreach($m['NodeMeshExit'] as $m_e_exit){
+                array_push($static_exits,array('name'   => $m_e_exit['MeshExit']['name']));
+            }
+
+			if($power_override){
+				$p = $power;
+			}else{
+				$p = $m['Node']['power'];
+			}
+			
+
+            $hw_id = $m['Node']['hardware'];
+            array_push($items,array( 
+                'id'            => $m['Node']['id'],
+                'mesh_id'       => $m['Node']['mesh_id'],
+                'name'          => $m['Node']['name'],
+                'description'   => $m['Node']['description'],
+                'mac'           => $m['Node']['mac'],
+                'hardware'      => $hardware["$hw_id"],
+                'power'         => $p,
+				'ip'			=> $m['Node']['ip'],
+				'last_contact'	=> $m['Node']['last_contact'],
+				'lat'			=> $m['Node']['lat'],
+				'lng'			=> $m['Node']['lon'],
+                'static_entries'=> $static_entries,
+                'static_exits'  => $static_exits,
+                'ip'            => $m['Node']['ip'],
+            ));
+        }
+
+		$connections = array(
+			array(
+				'from' 	=> array( 
+					'lng' 	=> 28.2941182252398,
+					'lat' 	=> -25.7440042060461
+				),
+				'to'	=> array(
+					'lng' 	=> 28.2946171161166,
+					'lat' 	=> -25.7438055678272
+				)
+			),
+			array(
+				'from' 	=> array( 
+					'lng' 	=> 28.2938687798016,
+					'lat' 	=> -25.7443820657791
+				),
+				'to'	=> array(
+					'lng' 	=> 28.2946171161166,
+					'lat' 	=> -25.7438055678272
+				)
+			)
+		);
+
+        //___ FINAL PART ___
+        $this->set(array(
+			'connections'	=> $connections,
+            'items' 		=> $items,
+            'success' 		=> true,
+            '_serialize' => array('items', 'connections', 'success')
         ));
     }
 
