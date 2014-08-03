@@ -12,6 +12,8 @@ class MeshReportsController extends AppController {
 	private	$grey	 	= '#505351';	//Green until dead time then grey
 	private $yellow		= '#f8d908'; 
 	private $thickness  = 9;
+	private $gw_size	= 20;
+	private $node_size	= 10;
 
     public function submit_report(){
 
@@ -31,236 +33,319 @@ class MeshReportsController extends AppController {
     }
 
 	public function overview(){
-		if(isset($this->request->query['mesh_id'])){
 
-			//Create a hardware lookup for proper names of hardware
-		    $hardware = array();        
-		    $hw   = Configure::read('hardware');
-		    foreach($hw as $h){
-		        $id     = $h['id'];
-		        $name   = $h['name']; 
-		        $hardware["$id"]= $name;
-		    }
+		if(!isset($this->request->query['mesh_id'])){
+			$this->set(array(
+		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
+		        'success' => false,
+		        '_serialize' => array('success','message')
+		    ));
+			return;
+		}
 
-			$d 			= array();
-			$mesh_id 	= $this->request->query['mesh_id'];
+		//Create a hardware lookup for proper names of hardware
+	    $hardware = array();        
+	    $hw   = Configure::read('hardware');
+	    foreach($hw as $h){
+	        $id     = $h['id'];
+	        $name   = $h['name']; 
+	        $hardware["$id"]= $name;
+	    }
 
-			//Get the 'dead_after' value
-			$dead_after = $this->_get_dead_after($mesh_id);
+		$items 		= array();
+		$mesh_id 	= $this->request->query['mesh_id'];
 
-			//Find all the nodes for this mesh
-			$this->Node->contain('NodeNeighbor');
-			$q_r = $this->Node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
+		//Get the 'dead_after' value
+		$dead_after = $this->_get_dead_after($mesh_id);
 
-			//Build a hash of nodes with their detail for lookup
-			$neighbor_hash = array();
-			foreach($q_r as $i){
-				if($i['Node']['lat'] != null){	//Only those with co-ordinates
-					$id = $i['Node']['id'];
-					$neighbor_hash[$id]=$i['Node'];
-				}
-			}
+		//Find all the nodes for this mesh with their Neighbors
+		$this->Node->contain('NodeNeighbor');
+		$q_r 		= $this->Node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
+	
 
-			//Some defaults for the spiderweb
-			$opacity	= 1;	//The older a line is the more opacity it will have (tend to zero)
-			$cut_off	= 3 * $dead_after;
-
-			if(!($q_r))
-				$d = array(
-					array(
-						'id' 	=> "empty1",
-						'name' 	=> "Please add nodes.....",
-						'data'	=> array(
-							'$color' 	=> $this->yellow,
-							'$type'		=> "star",
-							'$dim'		=> 30
-						)
+		//===No Nodes found===
+		if(!($q_r)){
+			$items = array(
+				array(
+					'id' 	=> "empty1",
+					'name' 	=> "Please add nodes.....",
+					'data'	=> array(
+						'$color' 	=> $this->yellow,
+						'$type'		=> "star",
+						'$dim'		=> 30
 					)
-				);
+				)
+			);
+		}
+
+		//Some defaults for the spiderweb
+		$opacity		= 1;	//The older a line is the more opacity it will have (tend to zero)
+		$cut_off		= 3 * $dead_after;//Three times ater it will turn red
+
+		$no_neighbors  	= true; 	//If none of the nodes has neighbor entries this will stay true
+		$grey_list		= array(); //List of nodes with no neighbors
+
+		foreach($q_r as $i){
+
+			$node_id    = $i['Node']['id'];
+            $node_name  = $i['Node']['name'];
+            $l_contact  = $i['Node']['last_contact'];
+			$hw_id 		= $i['Node']['hardware'];
+			$hw_human	= $hardware["$hw_id"]; 	//Human name for Hardware
+			$type		= 'node';
+
+			//=== Determine if this node is a gataway node or not === 
+			$gw			= 'yes'; 				//Make it by default a gateway node (if there are only one node)
+			if(count($i['NodeNeighbor'])>0){
+				$gw = $i['NodeNeighbor'][0]['gateway']; //Check if this is a gateway ('yes' or 'no')
 			}
 
-			$no_neighbors  	= true; 	//If none of the nodes has neighbor entries this will stay true
-			$grey_list		= array(); //List of nodes with no neighbors
-
-			foreach($q_r as $n){
-
-/*
-//------------------------------------------------------
-				$node_id    = $i['Node']['id'];
-                $node_name  = $i['Node']['name'];
-                $l_contact  = $i['Node']['last_contact'];
-				$hw_id 		= $i['Node']['hardware'];
-				$hw_human	= $hardware["$hw_id"];
-				$gw			= false;
-				if(count($i['NodeNeighbor'])>0){
-					$gw = $i['NodeNeighbor'][0]['gateway'];
-
-					foreach($i['NodeNeighbor'] as $n){
-						$n_id 	= $n['neighbor_id'];
-						$metric = $n['metric'];
-						$last	= strtotime($n['modified']);
-						$now	= time();
-
-						//It might be so old that we do not bother drawing it
-						if($last <= ($now - $cut_off)){
-							continue;
-						}
-
-						//print_r($n);
-						if((array_key_exists($n_id,$neighbor_hash))&&
-							(array_key_exists($node_id,$neighbor_hash))
-						){
-							$from_lat 	= $neighbor_hash[$node_id]['lat'];
-							$from_lng 	= $neighbor_hash[$node_id]['lon'];
-							$to_lat 	= $neighbor_hash[$n_id]['lat'];
-							$to_lng 	= $neighbor_hash[$n_id]['lon'];
-							$metric		= $n['metric'];
-							$weight		= round((1/$metric*$thickness),2);
-
-							//What color the line must be
-							$green_cut	= $now - $dead_after;
-							$grey_cut	= $now - $cut_off;
-							
-							if($last >= $green_cut){
-								$color = $green;
-								//How clear the line must be
-								$green_range 	= $now - $green_cut;
-								$green_percent	= ($last- $green_cut)/$green_range;
-								$o_val			= ($green_percent * 0.5)+0.5;
-								$o_val			= round($o_val,2);	
-							}else{
-								//How clear the line must be
-								$color			= $grey; //Default
-								$grey_range 	= $green_cut - $grey_cut;
-								$grey_percent	= ($last- $grey_cut)/$grey_range;
-								$o_val			= ($grey_percent * 0.5)+0.5;
-								$o_val			= round($o_val,2);	
-							}
-							
-							array_push($connections,array(
-								'from' 	=> array(
-									'lat'	=> $from_lat,
-									'lng'	=> $from_lng
-								),
-								'to'	=> array(
-									'lat'	=> $to_lat,
-									'lng'	=> $to_lng
-								),
-								'weight'	=> $weight,
-								'color'		=> $color,
-								'opacity'	=> $o_val,
-								'metric'	=> $metric
-							));
-
-						}
-					}
-				}
-
-                //Find the dead time (only once)
-                if($l_contact == null){
-                    $state = 'never';
+			//===Determine when last did we saw this node (never / up / down) ====
+			if($l_contact == null){
+                $state = 'never';
+            }else{
+                $last_timestamp = strtotime($l_contact);
+                if($last_timestamp+$dead_after <= time()){
+                    $state = 'down';
                 }else{
-                    $last_timestamp = strtotime($l_contact);
-                    if($last_timestamp+$dead_after <= time()){
-                        $state = 'down';
-                    }else{
-                        $state = 'up';
-                    }
+                    $state = 'up';
                 }
-
-				$i['Node']['state'] 	= $state;
-				$i['Node']['hw_human'] 	= $hw_human;
-				$i['Node']['lng']		= $i['Node']['lon'];
-				$i['Node']['gateway']	= $gw;
-
-				//array_push($items,$i['Node']);
-//---------------------------------------------
-*/
-
-//====================
-
-				$node_id    = $n['Node']['id'];
-                $node_name  = $n['Node']['name'];
-                $l_contact  = $n['Node']['last_contact'];
-				$hw_id 		= $n['Node']['hardware'];
-				$hw_human	= $hardware["$hw_id"];
-				$gw			= false;
-
-				if($l_contact == null){
-                    $state = 'never';
-                }else{
-                    $last_timestamp = strtotime($l_contact);
-                    if($last_timestamp+$dead_after <= time()){
-                        $state = 'down';
-                    }else{
-                        $state = 'up';
-                    }
-                }
-				
-				$node_data	= $n['Node'];
-				$color		= $this->blue;
+            }
 			
-				if($state == 'down'){
-					$color = $this->l_red;
+			//===Specify the color based on the state + gw type
+			$color		= $this->blue;	//Default
+
+			if(($state == 'down')&($gw == 'no')){
+				$color 	= $this->l_red;
+				$size	= $this->node_size;
+			}
+
+			if(($state == 'up')&($gw == 'no')){
+				$color = $this->l_green;
+				$size  = $this->node_size;
+			}
+
+			if(($state == 'down')&($gw == 'yes')){
+				$color 	= $this->d_red;
+				$size   = $this->gw_size;
+				$type	= 'gateway';
+			}
+
+			if(($state == 'up')&($gw == 'yes')){
+				$color 	= $this->d_green;
+				$size   = $this->gw_size;
+				$type	= 'gateway';
+			}
+
+			if($state == 'up'){
+				$color = $this->l_green;
+			}
+
+			//=== add extra info to node data ===
+			$i['Node']['state'] 	= $state;
+			$i['Node']['hw_human'] 	= $hw_human;
+			$i['Node']['gateway']	= $gw;
+			$node_data				= $i['Node'];
+
+			
+			if(count($i['NodeNeighbor']) == 0){	//We handle nodes without any entries as blue nodes
+
+				$specific_data = array(
+					'$color'		=> "$color",
+					'$type'			=> "circle",
+					'$dim'			=> $size,
+					'type'			=> 'no_neighbors'
+				);
+
+				$this_data = array_merge((array)$node_data,(array)$specific_data);
+				array_push($items,array('id'=> $node_id,'name'=> $node_name,'data' => $this_data));
+				array_push($grey_list,array( 'nodeTo' => $i['Node']['id'],'data' => array('$alpha'	=> 0.0)));
+			}else{
+				$no_neighbors 	= false; //Set this trigger for us to know once loop is done
+				$adjacencies 	= array();
+
+				//=== Loop the neighbors ===
+				foreach($i['NodeNeighbor'] as $n){
+					//We need to determine the 1.)Thickness 2.)Color and 3.) Opacity
+					$metric = $n['metric'];
+					$last	= strtotime($n['modified']);
+					$now	= time();
+					$weight	= round((1/$metric*$this->thickness),2);
+
+					//What color the line must be
+					$green_cut	= $now - $dead_after;
+					$grey_cut	= $now - $cut_off;
+					
+					if($last >= $green_cut){
+						$c = $this->green;
+						//How clear the line must be
+						$green_range 	= $now - $green_cut;
+						$green_percent	= ($last- $green_cut)/$green_range;
+						$o_val			= ($green_percent * 0.5)+0.5;
+						$o_val			= round($o_val,2);	
+					}elseif(($last >= $grey_cut)&&($last <= $green_cut)){
+						//How clear the line must be
+						$c				= $this->grey; //Default
+						$grey_range 	= $green_cut - $grey_cut;
+						$grey_percent	= ($last- $grey_cut)/$grey_range;
+						$o_val			= ($grey_percent * 0.5)+0.5;
+						$o_val			= round($o_val,2);	
+					}else{
+						$weight			= 0;
+						$o_val			= 0;
+						$c				= $this->grey; //Default
+					}
+
+					array_push($adjacencies,array( 
+						'nodeTo' 	=> $n['neighbor_id'],
+						'data' 		=> array(
+							'$color'	=> $c,
+							'$lineWidth'=> $weight,
+							'$alpha'	=> $o_val
+						)
+					));
 				}
+				//=== End loop neighbors ===
 
-				if($state == 'up'){
-					$color = $this->l_green;
+				$specific_data = array(
+					'$color'		=> $color,
+					'$type'			=> "circle",
+					'$dim'			=> $size,
+					'type'			=> $type,
+				);
+				$this_data = array_merge((array)$node_data,(array)$specific_data);
+				array_push($items,array('id'=> $this_data['id'],'name'=> $this_data['name'], 'data' => $this_data,'adjacencies'=> $adjacencies));
+			}
+		}
+		//End the loop of nodes
+
+		if($no_neighbors){
+			//Add a 'ghost' node as the center
+			array_push($items,array(
+				'id'	=> 'center',
+				'name'	=> '',
+				'data'	=> array(
+					'$color'	=> "grey",
+					'$type'		=> "circle",
+					'$dim'		=> 0
+				),
+				'adjacencies'	=> $grey_list
+			));
+		}else{
+			//Attach those to the list of adjacencies of the gateway node
+			$count = 0;
+			foreach($items as $item){
+				//Attach to the first one
+				if(isset($item['gateway'])&&($item['gateway']=='yes')){
+					if(isset($item['adjacencies'])){
+						$items[$count]['adjacencies'] = array_merge((array)$item['adjacencies'],(array)$grey_list);
+
+					}else{
+						$items[$count]['adjacencies'] = $grey_list;
+					}
+					break;
 				}
+				$count ++;
+			}
+		}
 
-				if(count($n['NodeNeighbor']) == 0){	//We handle nodes without any entries as grey nodes
+		$this->set(array(
+	        'data' => $items,
+	        'success' => true,
+	        '_serialize' => array('data','success')
+	    ));
+	}
+	public function overview_google_map(){
 
-					$specific_data = array(
-						'$color'		=> "$color",
-						'$type'			=> "circle",
-						'$dim'			=> 10,
-						'type'			=> 'no_neighbors'
-					);
+		if(!isset($this->request->query['mesh_id'])){
+			$this->set(array(
+		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
+		        'success' => false,
+		        '_serialize' => array('success','message')
+		    ));
+			return;
+		}
 
-					$this_data = array_merge((array)$node_data,(array)$specific_data);
-					array_push($d,array('id'=> $node_id,'name'=> $node_name,'data' => $this_data));
-					array_push($grey_list,array( 'nodeTo' => $n['Node']['id'],'data' => array('$alpha'	=> 0.0)));
-				}else{
-					$no_neighbors 	= false;
-					$adjacencies 	= array();
-					$gw				= false;
-					//Some defaults
-					$color			= $color;
-					$size			= 10;
-					$type			= 'node';
-					$gw 			= $n['NodeNeighbor'][0]['gateway'];
+		$items 			= array();
+		$connections	= array();
 
-					foreach($n['NodeNeighbor'] as $n){
-						//We need to determine the 1.)Thickness 2.)Color and 3.) Opacity
-						$metric = $n['metric'];
-						$last	= strtotime($n['modified']);
-						$now	= time();
+		//Create a hardware lookup for proper names of hardware
+	    $hardware = array();        
+	    $hw   = Configure::read('hardware');
+	    foreach($hw as $h){
+	        $id     = $h['id'];
+	        $name   = $h['name']; 
+	        $hardware["$id"]= $name;
+	    }
 
-						//It might be so old that we do not bother drawing it
-						if($last <= ($now - $cut_off)){
-							$specific_data = array(
-								'$color'		=> "$color",
-								'$type'			=> "circle",
-								'$dim'			=> 10,
-								'type'			=> 'no_neighbors'
-							);
+		
+        //Find all the nodes for this mesh
+        $mesh_id = $this->request->query['mesh_id'];
 
-							$this_data = array_merge((array)$node_data,(array)$specific_data);
-							array_push($d,array('id'=> $node_id,'name'=> $node_name,'data' => $this_data));
-							array_push($grey_list,array( 'nodeTo' => $node_id,'data' => array('$alpha'	=> 0.0)));
-							continue;
-						}
+        $this->Node->contain('NodeNeighbor');
+        $q_r = $this->Node->find('all',array(
+			'conditions'=> array('Node.mesh_id'      => $mesh_id)
+		));
 
+		//Get the 'dead_after' value
+		$dead_after = $this->_get_dead_after($mesh_id);
+
+
+		//Build a hash of nodes with their detail for lookup
+		$neighbor_hash = array();
+		foreach($q_r as $i){
+			if($i['Node']['lat'] != null){	//Only those with co-ordinates
+				$id = $i['Node']['id'];
+				$neighbor_hash[$id]=$i['Node'];
+			}
+		}
+
+		//Some defaults for the spiderweb
+		$thickness 	= 9;	//The bigger the metric; ther thinner this line
+		$green		= '#01823d';	//Green until dead time then grey
+		$grey		= '#505351';	//Green until dead time then grey
+		$opacity	= 1;	//The older a line is the more opacity it will have (tend to zero)
+		$cut_off	= 3 * $dead_after;
+
+		foreach($q_r as $i){
+			//print_r($i);
+            $node_id    = $i['Node']['id'];
+            $node_name  = $i['Node']['name'];
+            $l_contact  = $i['Node']['last_contact'];
+			$hw_id 		= $i['Node']['hardware'];
+			$hw_human	= $hardware["$hw_id"];
+			$gw			= false;
+			if(count($i['NodeNeighbor'])>0){
+				$gw = $i['NodeNeighbor'][0]['gateway'];
+
+				foreach($i['NodeNeighbor'] as $n){
+					$n_id 	= $n['neighbor_id'];
+					$metric = $n['metric'];
+					$last	= strtotime($n['modified']);
+					$now	= time();
+
+					//It might be so old that we do not bother drawing it
+					if($last <= ($now - $cut_off)){
+						continue;
+					}
+
+					//print_r($n);
+					if((array_key_exists($n_id,$neighbor_hash))&&
+						(array_key_exists($node_id,$neighbor_hash))
+					){
+						$from_lat 	= $neighbor_hash[$node_id]['lat'];
+						$from_lng 	= $neighbor_hash[$node_id]['lon'];
+						$to_lat 	= $neighbor_hash[$n_id]['lat'];
+						$to_lng 	= $neighbor_hash[$n_id]['lon'];
 						$metric		= $n['metric'];
 						$weight		= round((1/$metric*$this->thickness),2);
-
 
 						//What color the line must be
 						$green_cut	= $now - $dead_after;
 						$grey_cut	= $now - $cut_off;
 						
 						if($last >= $green_cut){
-							$c = $this->green;
+							$c = $green;
 							//How clear the line must be
 							$green_range 	= $now - $green_cut;
 							$green_percent	= ($last- $green_cut)/$green_range;
@@ -268,229 +353,58 @@ class MeshReportsController extends AppController {
 							$o_val			= round($o_val,2);	
 						}else{
 							//How clear the line must be
-							$c			= $this->grey; //Default
+							$c			= $grey; //Default
 							$grey_range 	= $green_cut - $grey_cut;
 							$grey_percent	= ($last- $grey_cut)/$grey_range;
 							$o_val			= ($grey_percent * 0.5)+0.5;
 							$o_val			= round($o_val,2);	
 						}
-
-						array_push($adjacencies,array( 
-							'nodeTo' 	=> $n['neighbor_id'],
-							'data' 		=> array(
-								'$color'	=> $c,
-								'$lineWidth'=> $weight,
-								'$alpha'	=> $o_val
-							)
+						
+						array_push($connections,array(
+							'from' 	=> array(
+								'lat'	=> $from_lat,
+								'lng'	=> $from_lng
+							),
+							'to'	=> array(
+								'lat'	=> $to_lat,
+								'lng'	=> $to_lng
+							),
+							'weight'	=> $weight,
+							'color'		=> $c,
+							'opacity'	=> $o_val,
+							'metric'	=> $metric
 						));
+
 					}
-
-					if($gw){
-						$color = $this->d_green;
-						if($state == 'down'){
-							$color = $this->d_red;
-						}
-						$type = 'gateway';
-						$size = 20;
-						$color= $color; 
-					}
-
-					$specific_data = array(
-						'$color'		=> $color,
-						'$type'			=> "circle",
-						'$dim'			=> $size,
-						'type'			=> $type,
-					);
-					$this_data = array_merge((array)$node_data,(array)$specific_data);
-					array_push($d,array('id'=> $node_id,'name'=> $node_name, 'gw' => $gw, 'data' => $this_data,'adjacencies'=> $adjacencies));
-				}
-//==============================
-			}
-
-			if($no_neighbors){
-				//Add a 'ghost' node as the center
-				array_push($d,array(
-					'id'	=> 'center',
-					'name'	=> '',
-					'data'	=> array(
-						'$color'	=> "grey",
-						'$type'		=> "circle",
-						'$dim'		=> 0
-					),
-					'adjacencies'	=> $grey_list
-				));
-			}else{
-				//Attach those to the list of adjacencies of the gateway node
-				$count = 0;
-				foreach($d as $item){
-					//Attach to the first one
-					if(isset($item['gw'])&&($item['gw']=='yes')){
-						if(isset($item['adjacencies'])){
-							$d[$count]['adjacencies'] = array_merge((array)$item['adjacencies'],(array)$grey_list);
-
-						}else{
-							$d[$count]['adjacencies'] = $grey_list;
-						}
-						break;
-					}
-					$count ++;
-				}
-			}
-		
-			$this->set(array(
-		        'data' => $d,
-		        'success' => true,
-		        '_serialize' => array('data','success')
-		    ));
-	}
-
-	public function overview_google_map(){
-
-
-		if(isset($this->request->query['mesh_id'])){
-
-			$items 			= array();
-			$connections	= array();
-
-			//Create a hardware lookup for proper names of hardware
-		    $hardware = array();        
-		    $hw   = Configure::read('hardware');
-		    foreach($hw as $h){
-		        $id     = $h['id'];
-		        $name   = $h['name']; 
-		        $hardware["$id"]= $name;
-		    }
-
-			
-            //Find all the nodes for this mesh
-            $mesh_id = $this->request->query['mesh_id'];
-
-            $this->Node->contain('NodeNeighbor');
-            $q_r = $this->Node->find('all',array(
-				'conditions'=> array('Node.mesh_id'      => $mesh_id)
-			));
-
-			//Get the 'dead_after' value
-			$dead_after = $this->_get_dead_after($mesh_id);
-
-
-			//Build a hash of nodes with their detail for lookup
-			$neighbor_hash = array();
-			foreach($q_r as $i){
-				if($i['Node']['lat'] != null){	//Only those with co-ordinates
-					$id = $i['Node']['id'];
-					$neighbor_hash[$id]=$i['Node'];
 				}
 			}
 
-			//Some defaults for the spiderweb
-			$thickness 	= 9;	//The bigger the metric; ther thinner this line
-			$green		= '#01823d';	//Green until dead time then grey
-			$grey		= '#505351';	//Green until dead time then grey
-			$opacity	= 1;	//The older a line is the more opacity it will have (tend to zero)
-			$cut_off	= 3 * $dead_after;
-
-			foreach($q_r as $i){
-				//print_r($i);
-                $node_id    = $i['Node']['id'];
-                $node_name  = $i['Node']['name'];
-                $l_contact  = $i['Node']['last_contact'];
-				$hw_id 		= $i['Node']['hardware'];
-				$hw_human	= $hardware["$hw_id"];
-				$gw			= false;
-				if(count($i['NodeNeighbor'])>0){
-					$gw = $i['NodeNeighbor'][0]['gateway'];
-
-					foreach($i['NodeNeighbor'] as $n){
-						$n_id 	= $n['neighbor_id'];
-						$metric = $n['metric'];
-						$last	= strtotime($n['modified']);
-						$now	= time();
-
-						//It might be so old that we do not bother drawing it
-						if($last <= ($now - $cut_off)){
-							continue;
-						}
-
-						//print_r($n);
-						if((array_key_exists($n_id,$neighbor_hash))&&
-							(array_key_exists($node_id,$neighbor_hash))
-						){
-							$from_lat 	= $neighbor_hash[$node_id]['lat'];
-							$from_lng 	= $neighbor_hash[$node_id]['lon'];
-							$to_lat 	= $neighbor_hash[$n_id]['lat'];
-							$to_lng 	= $neighbor_hash[$n_id]['lon'];
-							$metric		= $n['metric'];
-							$weight		= round((1/$metric*$this->thickness),2);
-
-							//What color the line must be
-							$green_cut	= $now - $dead_after;
-							$grey_cut	= $now - $cut_off;
-							
-							if($last >= $green_cut){
-								$c = $green;
-								//How clear the line must be
-								$green_range 	= $now - $green_cut;
-								$green_percent	= ($last- $green_cut)/$green_range;
-								$o_val			= ($green_percent * 0.5)+0.5;
-								$o_val			= round($o_val,2);	
-							}else{
-								//How clear the line must be
-								$c			= $grey; //Default
-								$grey_range 	= $green_cut - $grey_cut;
-								$grey_percent	= ($last- $grey_cut)/$grey_range;
-								$o_val			= ($grey_percent * 0.5)+0.5;
-								$o_val			= round($o_val,2);	
-							}
-							
-							array_push($connections,array(
-								'from' 	=> array(
-									'lat'	=> $from_lat,
-									'lng'	=> $from_lng
-								),
-								'to'	=> array(
-									'lat'	=> $to_lat,
-									'lng'	=> $to_lng
-								),
-								'weight'	=> $weight,
-								'color'		=> $c,
-								'opacity'	=> $o_val,
-								'metric'	=> $metric
-							));
-
-						}
-					}
-				}
-
-                //Find the dead time (only once)
-                if($l_contact == null){
-                    $state = 'never';
+            //Find the dead time (only once)
+            if($l_contact == null){
+                $state = 'never';
+            }else{
+                $last_timestamp = strtotime($l_contact);
+                if($last_timestamp+$dead_after <= time()){
+                    $state = 'down';
                 }else{
-                    $last_timestamp = strtotime($l_contact);
-                    if($last_timestamp+$dead_after <= time()){
-                        $state = 'down';
-                    }else{
-                        $state = 'up';
-                    }
+                    $state = 'up';
                 }
+            }
 
-				$i['Node']['state'] 	= $state;
-				$i['Node']['hw_human'] 	= $hw_human;
-				$i['Node']['lng']		= $i['Node']['lon'];
-				$i['Node']['gateway']	= $gw;
+			$i['Node']['state'] 	= $state;
+			$i['Node']['hw_human'] 	= $hw_human;
+			$i['Node']['lng']		= $i['Node']['lon'];
+			$i['Node']['gateway']	= $gw;
 
-				array_push($items,$i['Node']);
-			}
-
+			array_push($items,$i['Node']);
 		}
 
 		$this->set(array(
-		        'items' 		=> $items,
-				'connections'	=> $connections,
-		        'success' 		=> true,
-		        '_serialize' => array('items', 'connections','success')
-		    ));
-
+	        'items' 		=> $items,
+			'connections'	=> $connections,
+	        'success' 		=> true,
+	        '_serialize' => array('items', 'connections','success')
+	    ));
 	}
 
     public function view_entries(){
@@ -1153,6 +1067,10 @@ class MeshReportsController extends AppController {
                 if($q_r){
                    	$node_id    = $q_r['Node']['id'];
 					$mac_lookup[$mac] = $node_id;
+					$gw_val = 'no';
+					if($gw == 1){
+						$gw_val = 'yes';
+					}
                     $this->log("Found VIS node $mac", 'debug');
 					//Check if there are any entries for this node + neighbor combination
 					foreach($vis['neighbors'] as $n){
@@ -1184,7 +1102,7 @@ class MeshReportsController extends AppController {
 							$d['node_id']		= $node_id;
 							$d['neighbor_id']	= $neighbor_id;
 							$d['metric']	    = $metric;
-							$d['gateway']	    = $gw;
+							$d['gateway']	    = $gw_val;
 							$this->NodeNeighbor->saveAll($d);
 
 						}
