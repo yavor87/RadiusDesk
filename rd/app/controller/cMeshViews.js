@@ -54,6 +54,9 @@ Ext.define('Rd.controller.cMeshViews', {
 			'winMeshView #tabMeshViewNodeNodes': {
                 activate:       me.tabMeshViewNodeNodesActivate
             },
+			'winMeshView #tabMeshViewNodeDetails': {
+                activate:       me.tabMeshViewNodeDetailsActivate
+            },
             'winMeshView gridMeshViewEntries #reload menuitem[group=refresh]'   : {
                 click:      function(menu){
                     var me = this;
@@ -105,6 +108,9 @@ Ext.define('Rd.controller.cMeshViews', {
 					var me = this;
 					me.reloadMap(b.up('pnlMeshViewGMap'));
 				}
+			},
+			'winMeshView gridMeshViewNodeDetails #reload' : {
+				click	: me.reloadViewNodeDetails
 			}
         });
     },
@@ -196,6 +202,11 @@ Ext.define('Rd.controller.cMeshViews', {
         var me = this;
         var b = tab.down('#reload');
         me.reloadViewNodeNodes(b);
+    },
+	tabMeshViewNodeDetailsActivate: function(tab){
+        var me = this;
+        var b = tab.down('#reload');
+        me.reloadViewNodeDetails(b);
     },
     autoRefresh: function(menu_item,item){
         var me      = this;
@@ -355,11 +366,9 @@ Ext.define('Rd.controller.cMeshViews', {
 		                    icon		: icon,
 		                    title		: i.name,
 		                    listeners: {
-		                        dragend: function(){
-		                            me.dragEnd(i.id,map_panel,sel_marker);
-		                        },
-		                        dragstart: function(){
-		                            me.dragStart(i.id,map_panel,sel_marker);
+								click: function(e,f){
+		                            //console.log(record);
+		                            me.markerClick(i,map_panel,sel_marker);   
 		                        }
 		                    }
 		                })
@@ -374,5 +383,22 @@ Ext.define('Rd.controller.cMeshViews', {
             },
             scope: me
         });
-	}
+	},
+	reloadViewNodeDetails: function(button){
+        var me      = this;
+        var win     = button.up("winMeshView");
+        var grid    = win.down("gridMeshViewNodeDetails"); 
+        grid.getStore().reload();
+    },
+	markerClick: function(item,map_panel,sel_marker){
+    	var me = this;
+        map_panel.marker_data = item;
+        //See if the pnlMapsInfo exists
+        //We have to do it here in order to prevent the domready event to fire twice
+        var qr =Ext.ComponentQuery.query('#pnlMapsNodeInfo');
+        if(qr[0]){
+            qr[0].down('#tabMapsNodeInfo').update(item);
+        }
+        map_panel.infowindow.open(map_panel.gmap,sel_marker); 
+    }
 });

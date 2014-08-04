@@ -150,22 +150,12 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
                     "<div style='clear:both;'></div>"+
 					"<label class='lblListS'>Description</label><label class='lblValueS'>"+node.data.description+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Hardware</label><label class='lblValueS'>"+node.data.hardware+"</label>"+
+					"<label class='lblListS'>Hardware</label><label class='lblValueS'>"+node.data.hw_human+"</label>"+
                     "<div style='clear:both;'></div>"+
 					"<label class='lblListS'>IP Address</label><label class='lblValueS'>"+node.data.ip+"</label>"+
                     "<div style='clear:both;'></div>"+
 					"<label class='lblListS'>Last contact</label><label class='lblValueS'>"+node.data.last_contact+"</label>"+
                     "<div style='clear:both;'></div>"+
-					//"<label class='lblListS'>Gateway</label><label class='lblValueS'>"+node.data.gateway+"</label>"+
-                    //"<div style='clear:both;'></div>"+
-					//"<label class='lblListS'>Clients</label><label class='lblValueS'>"+node.data.clients+"</label>"+
-                   // "<div style='clear:both;'></div>"+
-					//"<label class='lblListS'>Uptime</label><label class='lblValueS'>"+node.data.uptime+"</label>"+
-                   // "<div style='clear:both;'></div>"+
-					//"<label class='lblListS'>System time</label><label class='lblValueS'>"+node.data.uptime+"</label>"+
-                   // "<div style='clear:both;'></div>"+
-					//"<label class='lblListS'>Neighbors</label><label class='lblValueS'>"+count+"</label>"+
-                   // "<div style='clear:both;'></div>"+
 					"</div>";
 			  }
 			},
