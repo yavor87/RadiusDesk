@@ -49,6 +49,12 @@ class Node extends AppModel {
 			'NodeSystem'   => array(
                 'dependent'     => true   
             ),
+			'NodeAction'   => array(
+                        'limit'     => 1,
+                        'className' => 'NodeAction',
+                        'order'     => 'NodeAction.created DESC',
+                        'dependent' => true
+          	),
     );
 
     public $hasOne = array(
