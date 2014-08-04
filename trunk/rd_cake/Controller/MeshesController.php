@@ -2104,7 +2104,7 @@ class MeshesController extends AppController {
 					array('xtype' => 'button', 	'glyph' => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map', 'tooltip'=> __('Map')),
                   
                     array('xtype' => 'button',  'glyph' => Configure::read('icnSpanner'),'scale' => 'large', 'itemId' => 'execute','tooltip'=> __('Execute')),
-					
+					array('xtype' => 'button',  'glyph' => Configure::read('icnWatch'),'scale' => 'large', 'itemId' => 'history','tooltip'=> __('View execute history')),
 					array('xtype' => 'button',  'glyph' => Configure::read('icnPower'),'scale' => 'large', 'itemId' => 'restart','tooltip'=> __('Restart')),
                 ))
             );
