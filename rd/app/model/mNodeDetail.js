@@ -20,6 +20,8 @@ Ext.define('Rd.model.mNodeDetail', {
 	'load_2',
 	'load_3',
 	'release',
-	'cpu'		
+	'cpu',
+	'last_cmd',
+	'last_cmd_status'		
   	]
 });
