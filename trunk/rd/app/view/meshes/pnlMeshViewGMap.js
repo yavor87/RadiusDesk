@@ -61,6 +61,11 @@ Ext.define('Rd.view.meshes.pnlMeshViewGMap', {
                 "</div>"
                 ]
             );
+
+			var dis = false;
+			if(me.marker_data.state == 'down'){
+				dis = true;
+			}
            
             
             me.i_pnl = Ext.create('Ext.tab.Panel', {
@@ -81,10 +86,11 @@ Ext.define('Rd.view.meshes.pnlMeshViewGMap', {
 				        buttons	: [
 				            {
 				                xtype   : 'button',
-				                itemId  : 'save',
+				                itemId  : 'restart',
 				                text    : 'Restart',
 				                scale   : 'large',
-				                glyph   : Rd.config.icnPower
+				                glyph   : Rd.config.icnPower,
+								disabled: dis
 				            }
 				        ]
                     }

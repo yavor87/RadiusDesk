@@ -45,19 +45,19 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGMVND1'},
-            { text: i18n('sName'),              dataIndex: 'name',           tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND2'},
-            { text: i18n('sDescription'),       dataIndex: 'description',    tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND3', hidden : true},
-            { text: 'MAC_Address',       		dataIndex: 'mac',            tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND4'},
-            { text: i18n('sHardware'),          dataIndex: 'hw_human',       tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND5', hidden : true},
-            { text: i18n('sPower'),             dataIndex: 'power',          tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND6', hidden : true},
-            { text: i18n('sIP_Address'),        dataIndex: 'ip',             tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND7'},
-			{ text: 'Uptime',        	dataIndex: 'uptime',   		tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND9'},
-			{ text: 'System time',      dataIndex: 'system_time',   tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND10'},
+            { text: i18n('sName'),              dataIndex: 'name',          tdCls: 'gridTree', width: 130,stateId: 'StateGMVND2'},
+            { text: i18n('sDescription'),       dataIndex: 'description',   tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND3', hidden : true},
+            { text: 'MAC_Address',       		dataIndex: 'mac',           tdCls: 'gridTree', width: 130,stateId: 'StateGMVND4'},
+            { text: i18n('sHardware'),          dataIndex: 'hw_human',      tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND5', hidden : true},
+            { text: i18n('sPower'),             dataIndex: 'power',         tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND6', hidden : true},
+            { text: i18n('sIP_Address'),        dataIndex: 'ip',            tdCls: 'gridTree', width: 110,stateId: 'StateGMVND7'},
+			{ text: 'Uptime',        			dataIndex: 'uptime',   		tdCls: 'gridTree', width: 110,stateId: 'StateGMVND9'},
+			{ text: 'System time',      		dataIndex: 'system_time',   tdCls: 'gridTree', width: 110,stateId: 'StateGMVND10'},
 			{ 
                 text        : 'System load',   
                 dataIndex   : 'mem_total',  
                 tdCls       : 'gridTree', 
-                flex        : 1,
+                width		: 130,
                 renderer    : function(value,metaData, record){
                 	var mem_free 	= record.get('mem_free');
                     var load		= record.get('load_1')+" "+record.get('load_2')+" "+record.get('load_3');
@@ -111,6 +111,19 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                         return "<div class=\"fieldBlue\">Never</div>";
                     }              
                 },stateId: 'StateGMVND12'
+            },
+			{ 
+                text    : 'Last command',
+                sortable: false,
+                flex    : 1,  
+                xtype   : 'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            "<tpl if='Ext.isEmpty(last_cm)'><div class=\"fieldBlue\">(nothing)</div></tpl>", 
+                            "<tpl if='last_cmd_status == \"awaiting\"'><div class=\"fieldBlue\">{last_cmd}</div></tpl>",
+                            "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreen\">{last_cmd}</div></tpl>"
+                        ),
+                stateId	: 'StateGMVND13',
+				hidden	: false
             }
         ];
         me.callParent(arguments);

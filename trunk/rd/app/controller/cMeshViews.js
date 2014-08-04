@@ -3,7 +3,8 @@ Ext.define('Rd.controller.cMeshViews', {
     views:  [
         'components.pnlBanner', 	'meshes.winMeshView', 		'meshes.gridMeshViewEntries',	
 		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes',	'meshes.gridMeshViewNodeNodes',
-		'meshes.gridMeshViewNodeDetails',						'meshes.pnlMeshViewGMap'
+		'meshes.gridMeshViewNodeDetails',						'meshes.pnlMeshViewGMap',
+		'meshes.gridMeshViewNodeActions',						'meshes.winMeshAddNodeAction'
     ],
     stores      : [
 
@@ -15,6 +16,8 @@ Ext.define('Rd.controller.cMeshViews', {
         urlApChildCheck				: '/cake2/rd_cake/access_providers/child_check.json',
 		urlMapPrefView				: '/cake2/rd_cake/meshes/map_pref_view.json',
 		urlOverviewGoogleMap		: '/cake2/rd_cake/mesh_reports/overview_google_map.json',
+		urlRestartNodes				: '/cake2/rd_cake/mesh_reports/restart_nodes.json',
+		urlMeshAddNodeAction		: '/cake2/rd_cake/node_actions/add.json',
 		urlBlueMark 				: 'resources/images/map_markers/mesh_blue_node.png',
 		urlRedNode 					: 'resources/images/map_markers/mesh_red_node.png',
 		urlRedGw 					: 'resources/images/map_markers/mesh_red_gw.png',
@@ -111,7 +114,19 @@ Ext.define('Rd.controller.cMeshViews', {
 			},
 			'winMeshView gridMeshViewNodeDetails #reload' : {
 				click	: me.reloadViewNodeDetails
-			}
+			},
+			'winMeshView gridMeshViewNodeDetails #execute' : {
+				click	: me.execute
+			},
+			'winMeshView gridMeshViewNodeDetails #history' : {
+				click	: me.history
+			},
+			'winMeshView gridMeshViewNodeDetails #restart' : {
+				click	: me.restart
+			},
+			'winMeshAddNodeAction #save' : {
+				click	: me.commitExecute
+			}	
         });
     },
     actionIndex: function(mesh_id,name){
@@ -393,12 +408,124 @@ Ext.define('Rd.controller.cMeshViews', {
 	markerClick: function(item,map_panel,sel_marker){
     	var me = this;
         map_panel.marker_data = item;
-        //See if the pnlMapsInfo exists
-        //We have to do it here in order to prevent the domready event to fire twice
-        var qr =Ext.ComponentQuery.query('#pnlMapsNodeInfo');
-        if(qr[0]){
-            qr[0].down('#tabMapsNodeInfo').update(item);
-        }
         map_panel.infowindow.open(map_panel.gmap,sel_marker); 
+    },
+	execute:   function(button){
+        var me      = this; 
+		var win		= button.up('window')
+		var grid	= win.down('gridMeshViewNodeDetails');
+		var mesh_id = grid.meshId;   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        'Select an item on which to execute the command',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+        	console.log("Show window for command content")
+			if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeActionId')){
+                var w = Ext.widget('winMeshAddNodeAction',{id:'winMeshAddNodeActionId',grid : grid});
+                me.application.runAction('cDesktop','Add',w);         
+            }
+        }
+    },
+	commitExecute:  function(button){
+        var me      = this;
+        var win     = button.up('winMeshAddNodeAction');
+        var form    = win.down('form');
+
+		var selected    = win.grid.getSelectionModel().getSelection();
+		var list        = [];
+        Ext.Array.forEach(selected,function(item){
+            var id = item.getId();
+            Ext.Array.push(list,{'id' : id});
+        });
+
+        form.submit({
+            clientValidation	: true,
+            url					: me.urlMeshAddNodeAction,
+			params				: list,
+            success: function(form, action) {       
+                win.grid.getStore().reload();
+				win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+	history:   function(button){
+        var me      = this; 
+		var win		= button.up('window')
+		var grid	= win.down('gridMeshViewNodeDetails');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        'Select an item to view the history',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+        	console.log("Open a execution history tab")
+        }
+    },
+	restart:   function(button){
+        var me      = this; 
+		var win		= button.up('window')
+		var grid	= win.down('gridMeshViewNodeDetails');
+		var mesh_id = grid.meshId;
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        'First select an item to restart',
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+
+                    var selected    = grid.getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+
+                    Ext.Ajax.request({
+                        url: me.urlRestartNodes,
+                        method: 'POST',          
+                        jsonData: {nodes: list, mesh_id: mesh_id},
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                'Restart command queued',
+                                'Command queued for execution',
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().reload();
+                        },                                    
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                'Problems restarting device',
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().reload();
+                        }
+                    });
+                }
+            });
+        }
     }
 });
