@@ -2,7 +2,10 @@
 class MeshReportsController extends AppController {
 
     public  $name    	= 'MeshReports';
-    public  $uses    	= array('Node','NodeLoad','NodeStation','NodeSystem','MeshEntry','NodeIbssConnection','NodeSetting','NodeNeighbor');
+    public  $uses    	= array(
+		'Node',					'NodeLoad',		'NodeStation',	'NodeSystem','MeshEntry',
+		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction'
+	);
 	private $blue	 	= '#627dde';
 	private $l_red   	= '#fb6002';
 	private $d_red   	= '#dc1a1a';
@@ -963,7 +966,7 @@ class MeshReportsController extends AppController {
 		//Get the 'dead_after' value
 		$dead_after = $this->_get_dead_after($mesh_id);
 
-		$this->Node->contain('NodeSystem', 'NodeLoad');
+		$this->Node->contain('NodeSystem', 'NodeLoad','NodeAction');
 		$q_r 		= $this->Node->find('all', array('conditions' => array('Node.mesh_id' => $mesh_id )));
 
 		//Create a hardware lookup for proper names of hardware
@@ -991,6 +994,7 @@ class MeshReportsController extends AppController {
 			$i['Node']['state'] 	= $state;
 			$i['Node']['hw_human'] 	= $hw_human;
 			$node_data				= $i['Node'];
+			unset($i['NodeLoad']['id']);		//Else the node's ID is just wrong!
 			$load_data				= $i['NodeLoad'];
 			$this_data 				= array_merge((array)$node_data,(array)$load_data);
 		
@@ -1008,10 +1012,46 @@ class MeshReportsController extends AppController {
 
 			}	
 			$this_data 	= array_merge((array)$this_data,(array)$system_data);
+
+			//Merge the last command (if present)
+			if(count($i['NodeAction'])>0){
+				$last_action = $i['NodeAction'][0];
+				//Add it to the list....
+				$this_data['last_cmd'] 			= $last_action['command'];
+				$this_data['last_cmd_status'] 	= $last_action['status'];
+			}
+
 			array_push($items,$this_data);
 		}
 	
-		
+		$this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+	}
+
+	public function restart_nodes(){
+		//print_r($this->request->data);
+
+
+		//Loop through the nodes and make sure there is not already one pending before adding one
+		foreach($this->request->data['nodes'] as $n){
+			$node_id	= $n['id'];
+			$this->NodeAction->contain();
+			$already = $this->NodeAction->find('count', array('conditions' => 
+				array('NodeAction.command' => 'reboot','NodeAction.node_id' => $node_id, 'NodeAction.status' => 'awaiting' )
+			));
+
+			if($already == 0){ //Nothing waiting - Create a new one
+				$d	= array('node_id' => $node_id,'command' => 'reboot');
+				$this->NodeAction->create();
+				$this->NodeAction->save($d);
+				$this->NodeAction->id = null;
+			}
+		}
+
+		$items = array();
 		$this->set(array(
             'items' => $items,
             'success' => true,
