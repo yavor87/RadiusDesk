@@ -114,7 +114,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodes' ,{
             autoLoad: false 
         });
         me.store.getProxy().setExtraParam('mesh_id',me.meshId);
-        me.store.load();
+        //me.store.load();
 
         me.columns  = [
             { xtype: 'rownumberer',                                                         stateId: 'StateGridMeshViewNodes1'},
