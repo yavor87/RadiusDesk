@@ -2085,6 +2085,38 @@ class MeshesController extends AppController {
         ));
     }
 
+	 public function menu_for_node_details_grid(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        //Empty by default
+        $menu = array();
+
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload', 'tooltip'=> __('Reload')),
+					array('xtype' => 'button', 	'glyph' => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map', 'tooltip'=> __('Map')),
+                  
+                    array('xtype' => 'button',  'glyph' => Configure::read('icnSpanner'),'scale' => 'large', 'itemId' => 'execute','tooltip'=> __('Execute')),
+					
+					array('xtype' => 'button',  'glyph' => Configure::read('icnPower'),'scale' => 'large', 'itemId' => 'restart','tooltip'=> __('Restart')),
+                ))
+            );
+        }
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
 
     private function _find_parents($id){
 
