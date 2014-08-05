@@ -7,7 +7,7 @@ Ext.define('Rd.view.meshes.winMeshAddNodeAction', {
     width       : 350,
     height      : 220,
     glyph       : Rd.config.icnAdd,
-    node_id     : null,
+    nodeId      : null,
     grid        : null,
     initComponent: function() {
         var me = this;
@@ -33,7 +33,7 @@ Ext.define('Rd.view.meshes.winMeshAddNodeAction', {
                         xtype       : 'textfield',
                         name        : "node_id",
                         hidden      : true,
-                        value       : me.node_id
+                        value       : me.nodeId
                     },
                     {
                         fieldLabel  : i18n('sCommand'),
