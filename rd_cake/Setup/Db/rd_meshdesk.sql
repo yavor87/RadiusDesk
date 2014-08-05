@@ -42,6 +42,21 @@ CREATE TABLE `mesh_specifics` (
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `node_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `node_actions` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `node_id` int(10) NOT NULL,
+  `action` enum('execute') DEFAULT 'execute',
+  `command` varchar(500) DEFAULT '',
+  `status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 
 
