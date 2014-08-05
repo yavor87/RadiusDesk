@@ -5,6 +5,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeActions' ,{
     stateful	: true,
     multiSelect	: true,
     stateId		: 'StateGMVNA',
+	nodeId		: '',
     stateEvents	:['groupclick','columnhide'],
     viewConfig	: {
         preserveScrollOnRefresh: true
@@ -40,10 +41,9 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeActions' ,{
        var me      = this;  
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
 
-
         //Create a store specific to this Owner
         me.store = Ext.create(Ext.data.Store,{
-            model: 'Rd.model.mAction',
+            model: 'Rd.model.mMeshViewNodeAction',
             proxy: {
                 type: 'ajax',
                 format  : 'json',
@@ -88,6 +88,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeActions' ,{
             },
             autoLoad: false    
         });
+		me.store.getProxy().setExtraParam('node_id',me.nodeId);
         me.callParent(arguments);
     }
 });

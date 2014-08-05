@@ -126,7 +126,19 @@ Ext.define('Rd.controller.cMeshViews', {
 			},
 			'winMeshAddNodeAction #save' : {
 				click	: me.commitExecute
-			}	
+			},
+			'winMeshView gridMeshViewNodeActions #reload' : {
+				click	: me.reloadNodeActions
+			},
+			'winMeshView gridMeshViewNodeActions #add' : {
+				click	: me.addNodeActions
+			},
+			'winMeshView gridMeshViewNodeActions #delete' : {
+				click	: me.addNodeActions
+			},
+			'winMeshView gridMeshViewNodeActions' : {
+				activate: me.activateNodeActions
+			}
         });
     },
     actionIndex: function(mesh_id,name){
@@ -461,9 +473,12 @@ Ext.define('Rd.controller.cMeshViews', {
         });
     },
 	history:   function(button){
-        var me      = this; 
-		var win		= button.up('window')
-		var grid	= win.down('gridMeshViewNodeDetails');   
+
+		var me 			= this
+		var win			= button.up('winMeshView');
+        var tp          = button.up('tabpanel');
+		var grid		= win.down('gridMeshViewNodeDetails');
+  
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -473,7 +488,29 @@ Ext.define('Rd.controller.cMeshViews', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-        	console.log("Open a execution history tab")
+			var selected    	= grid.getSelectionModel().getSelection();
+            Ext.Array.forEach(selected,function(item){
+                var id 			= item.getId();
+				var n			= item.get('name');
+				var h_tab_id    = 'hTab_'+id;
+				var h_tab_name  = 'History for '+n;
+				var nt          = tp.down('#'+h_tab_id);
+				if(nt){
+				    tp.setActiveTab(h_tab_id); //Set focus on  Tab
+				}else{
+					tp.add({ 
+                        title 		: h_tab_name,
+                        itemId		: h_tab_id,
+                        closable	: true,
+                        glyph		: Rd.config.icnWatch, 
+                        layout		: 'fit', 
+         				xtype		: 'gridMeshViewNodeActions',
+						nodeId		: id
+                    });
+                    tp.setActiveTab(h_tab_id); //Set focus on Add Tab
+				}
+
+            });
         }
     },
 	restart:   function(button){
@@ -527,5 +564,31 @@ Ext.define('Rd.controller.cMeshViews', {
                 }
             });
         }
-    }
+    },
+	activateNodeActions: function(grid){
+		var me = this;
+		grid.getStore().reload();
+	},
+	reloadNodeActions: function(b){
+		var me 		= this;
+		var grid 	= b.up('gridMeshViewNodeActions');
+		grid.getStore().reload();
+
+	},
+	addNodeActions: function(b){
+		var me 		= this;
+		var grid 	= b.up('gridMeshViewNodeActions');
+		var nodeId	= grid.nodeId;
+
+		if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeAction_'+nodeId)){
+            var w = Ext.widget('winMeshAddNodeAction',{id:'winMeshAddNodeAction_'+nodeId,grid : grid,nodeId: nodeId});
+            me.application.runAction('cDesktop','Add',w);         
+        }
+	},
+	deleteNodeActions: function(b){
+		var me = this;
+		console.log("Delete actions");
+
+	}
+
 });
