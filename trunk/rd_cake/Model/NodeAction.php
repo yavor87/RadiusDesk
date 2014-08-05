@@ -1,7 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class NodeActions extends AppModel {
+class NodeAction extends AppModel {
 
      public $actsAs = array('Containable');
      public $belongsTo = array(
