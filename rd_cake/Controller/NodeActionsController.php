@@ -24,7 +24,7 @@ class NodeActionsController extends AppController {
         $c = $this->_build_common_query($user); 
 
         if(isset($this->request->query['node_id'])){
-            array_push($c['conditions'],array("Action.node_id" => $this->request->query['node_id']));
+            array_push($c['conditions'],array("NodeAction.node_id" => $this->request->query['node_id']));
         }
 
         //===== PAGING (MUST BE LAST) ======
@@ -49,12 +49,12 @@ class NodeActionsController extends AppController {
         if($q_r){
             foreach($q_r as $item){          
                 array_push($items,array(
-                    'id'        =>  $item['Action']['id'],
-                    'action'    =>  $item['Action']['action'],
-                    'command'   =>  $item['Action']['command'],
-                    'status'    =>  $item['Action']['status'],
-                    'created'   =>  $item['Action']['created'],
-                    'modified'  =>  $item['Action']['modified'],
+                    'id'        =>  $item['NodeAction']['id'],
+                    'action'    =>  $item['NodeAction']['action'],
+                    'command'   =>  $item['NodeAction']['command'],
+                    'status'    =>  $item['NodeAction']['status'],
+                    'created'   =>  $item['NodeAction']['created'],
+                    'modified'  =>  $item['NodeAction']['modified'],
                 )); 
             }
         }
@@ -251,12 +251,12 @@ class NodeActionsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'Na'
+                            'Node'
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'Action.created';
+        $sort   = 'NodeAction.created';
         $dir    = 'ASC';
 
         if(isset($this->request->query['sort'])){  
