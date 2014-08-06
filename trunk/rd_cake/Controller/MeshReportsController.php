@@ -18,38 +18,7 @@ class MeshReportsController extends AppController {
 	private $gw_size	= 20;
 	private $node_size	= 10;
 
-	public function wip(){
-
-		//Dummy MAC
-		$items  = array();
-		$eth0 	= 'a8:40:41:13:60:e3';
-		$id 	= $this->_format_mac($eth0);
-		$this->Node->contain();
-        $q_r 	= $this->Node->findByMac($id);
-        if($q_r){
-            $node_id = $q_r['Node']['id'];
-            $mesh_id = $q_r['Node']['mesh_id'];
-			$this->NodeAction->contain('Node');
-			$q_r = $this->NodeAction->find('all', 
-				array('conditions' => array('Node.mesh_id' => $mesh_id,'NodeAction.status' => 'awaiting'))); //Only awaiting actions
-			foreach($q_r as $i){
-				$mac 		= $i['Node']['mac'];
-				$action_id	= $i['NodeAction']['id'];
-				if(array_key_exists($mac,$items)){
-					array_push($items[$mac],$action_id);
-				}else{
-					$items[$mac] = array($action_id); //First one
-				}
-			}
-        }
-
-		$this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-	}
-
+	
     public function submit_report(){
 
         //Source the vendors file and keep in memory
@@ -59,7 +28,8 @@ class MeshReportsController extends AppController {
         $this->log('Got a new report submission', 'debug');
         $fb = $this->_new_report();
 
-        file_put_contents('/tmp/mesh_report.txt', print_r($this->request->data, true));
+		//Handy for debug to see what has been submitted
+        //file_put_contents('/tmp/mesh_report.txt', print_r($this->request->data, true));
         $this->set(array(
            // 'items' => $this->request->data,
             'items'   => $fb,
