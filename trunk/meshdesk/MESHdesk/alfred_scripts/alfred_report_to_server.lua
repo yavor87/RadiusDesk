@@ -8,9 +8,8 @@ package.path = "../libs/?.lua;./libs/?.lua;" .. package.path
 local network_data          = 100   --This is where we store network stats
 local system_data           = 101   --This is where we store stats about the system
 local feedback_timestamp    = 102   --This is where feedback timestamp
-
-local json_file_to_send = '/tmp/to_server.json'
-local result_file       = '/tmp/result.json'
+local actions_waiting		= 115
+local result_file       	= '/tmp/result.json'
 
 function fetch_config_value(item)
 	local handle = io.popen('uci get '..item)
@@ -78,6 +77,8 @@ function submitReport()
         result_string = f:read("*all")
         r =j.decode(result_string)
         if(r.success)then
+			--Write the awaiting actions to actions_awaiting (no matter if you overwrite - the will remain waiting until a client fetch
+			a:writeData(r.items, actions_waiting)
             local fb    = {}
             fb.timestamp = os.time()
             a:writeData(fb,feedback_timestamp)

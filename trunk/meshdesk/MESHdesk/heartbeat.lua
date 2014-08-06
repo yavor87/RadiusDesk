@@ -67,7 +67,6 @@ while(loop)do
 	if(time_to_sleep)then
 		interval = time_to_sleep
 	end
-
 	sleep(interval)
 end 
 

@@ -101,8 +101,7 @@ function rdSystemstats._getStats(self)
     local file = assert(io.open("/etc/openwrt_release", "r"))
     local c = file:read("*all")
     s['sys']['release'] = c	    
-    
-    
+      
     return (self.json.encode(s)) 	
 end 
 
