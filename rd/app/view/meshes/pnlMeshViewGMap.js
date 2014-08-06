@@ -67,13 +67,16 @@ Ext.define('Rd.view.meshes.pnlMeshViewGMap', {
 				dis = true;
 			}
            
+			var node_id = me.marker_data.id;
             
             me.i_pnl = Ext.create('Ext.tab.Panel', {
-                itemId: 'pnlMapsNodeInfo',
-                width: 350,
-                height: 250,
-				layout: 'fit',
-                activeTab: 0,
+                itemId		: 'pnlMapsNodeInfo',
+                width		: 350,
+                height		: 250,
+				layout		: 'fit',
+                activeTab	: 0,
+				nodeId		: node_id,
+				meshId		: me.meshId,	
                 items: [
                     {
                         title: 'Info',
