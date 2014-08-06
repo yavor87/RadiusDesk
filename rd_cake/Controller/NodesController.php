@@ -138,9 +138,11 @@ class NodesController extends AppController {
 
     private function _build_network($mesh,$gateway = false){
 
-        $network = array();
-        $nat_data= array();
-        $captive_portal_data = array();
+        $network 				= array();
+        $nat_data				= array();
+        $captive_portal_data 	= array();
+
+
         //loopback if
         array_push( $network,
             array(
@@ -155,11 +157,12 @@ class NodesController extends AppController {
             ));
 
         //LAN
+		$br_int = $this->_eth_br_for($this->Hardware);
         array_push( $network,
             array(
                 "interface"    => "lan",
                 "options"   => array(
-                    "ifname"        => "eth0 eth1", //FIXME Check the hardware and return eth0 or eth0 end eth1 based on the hardware
+                    "ifname"        => "$br_int", //FIXME Check the hardware and return eth0 or eth0 end eth1 based on the hardware
                     "type"          => "bridge",
                     "proto"         => "dhcp"
                )
@@ -234,7 +237,13 @@ class NodesController extends AppController {
                 //=======================================
 
                 if(($type == 'tagged_bridge')&&($gateway)){
-                    $interfaces =  "bat0.".$start_number." eth0.".$vlan." eth1.".$vlan;
+
+					$br_int = $this->_eth_br_for($this->Hardware);
+					if(preg_match('/eth1/', $br_int)){	//If it has two add both
+                    	$interfaces =  "bat0.".$start_number." eth0.".$vlan." eth1.".$vlan;
+					}else{
+						$interfaces =  "bat0.".$start_number." eth0.".$vlan; //only one
+					}
                     array_push($network,
                         array(
                             "interface"    => "$if_name",
@@ -507,6 +516,18 @@ class NodesController extends AppController {
         foreach($ct as $i){
             if($i['id'] ==$hw){
 				$return_val = intval($i['max_power'] *($power_perc/100));
+				break;
+            }
+        }
+		return $return_val;
+	}
+
+	private function _eth_br_for($hw){
+		$return_val = 'eth0'; //some default
+		$ct = Configure::read('hardware');
+        foreach($ct as $i){
+            if($i['id'] ==$hw){
+				$return_val = $i['eth_br'];
 				break;
             }
         }
