@@ -161,13 +161,26 @@ class MeshesController extends AppController {
             $owner_id       = $i['Mesh']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
+			$mesh_id		= $i['Mesh']['id'];
 
-            //Add the components (already from the highest priority
-            $components = array();
-          
-            $node_count = count($i['Node']);
-            $nodes_up   = $node_count;
-            $nodes_down = 10;
+			//Get the 'dead_after' value
+			$dead_after = $this->_get_dead_after($mesh_id);
+			$now		= time();
+
+			$node_count 	= 0;
+			$nodes_up		= 0;
+			$nodes_down		= 0;
+			foreach($i['Node'] as $node){
+				$l_contact  = $node['last_contact'];
+				//===Determine when last did we saw this node (never / up / down) ====
+				$last_timestamp = strtotime($l_contact);
+	            if($last_timestamp+$dead_after <= $now){
+	                $nodes_down++;
+	            }else{
+					$nodes_up++;  
+	            }
+				$node_count++;
+			}
 
             array_push($items,array(
                 'id'                    => $i['Mesh']['id'], 
@@ -2272,4 +2285,20 @@ class MeshesController extends AppController {
 	private function _make_linux_password($pwd){
 		return exec("openssl passwd -1 $pwd");
 	}
+
+	private function _get_dead_after($mesh_id){
+
+		$data 		= Configure::read('common_node_settings'); //Read the defaults
+		$dead_after	= $data['heartbeat_dead_after'];
+		$n_s = $this->Mesh->NodeSetting->find('first',array(
+            'conditions'    => array(
+                'NodeSetting.mesh_id' => $mesh_id
+            )
+        )); 
+        if($n_s){
+            $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
+        }
+		return $dead_after;
+	}
+
 }
