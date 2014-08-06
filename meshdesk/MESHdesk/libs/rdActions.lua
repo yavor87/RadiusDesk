@@ -187,7 +187,5 @@ function rdActions.__addToCompleted(self,id)
 		e[self.eth0] = {id}
 		self.alfred:writeData(e, self.completed)
 	end
-
-
 end
 
