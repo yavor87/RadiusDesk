@@ -385,6 +385,9 @@ function configure_device(config)
     else
         alfred:slaveEnableAndStart()
 	end
+
+	--Start the actions checker (on every node)
+	ext:startOne('/etc/MESHdesk/actions_checker.lua &','actions_checker.lua')
 	
     --os.execute("/etc/init.d/led start")
     log('Starting Batman neighbour scan')
