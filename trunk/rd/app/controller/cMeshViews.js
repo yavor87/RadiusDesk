@@ -85,6 +85,9 @@ Ext.define('Rd.controller.cMeshViews', {
 					pnl.getData()
 				}
 			},
+			'#pnlMapsNodeInfo #restart': {
+				click:	me.mapRestart
+			},
 			'winMeshView pnlMeshViewNodes #reload':	{
 				click:		function(button){
 					var me 	= this;
@@ -134,7 +137,7 @@ Ext.define('Rd.controller.cMeshViews', {
 				click	: me.addNodeActions
 			},
 			'winMeshView gridMeshViewNodeActions #delete' : {
-				click	: me.addNodeActions
+				click	: me.deleteNodeActions
 			},
 			'winMeshView gridMeshViewNodeActions' : {
 				activate: me.activateNodeActions
@@ -436,7 +439,7 @@ Ext.define('Rd.controller.cMeshViews', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-        	console.log("Show window for command content")
+        	//console.log("Show window for command content")
 			if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeActionId')){
                 var w = Ext.widget('winMeshAddNodeAction',{id:'winMeshAddNodeActionId',grid : grid});
                 me.application.runAction('cDesktop','Add',w);         
@@ -515,7 +518,7 @@ Ext.define('Rd.controller.cMeshViews', {
     },
 	restart:   function(button){
         var me      = this; 
-		var win		= button.up('window')
+		var win		= button.up('window');
 		var grid	= win.down('gridMeshViewNodeDetails');
 		var mesh_id = grid.meshId;
     
@@ -565,6 +568,33 @@ Ext.define('Rd.controller.cMeshViews', {
             });
         }
     },
+	mapRestart: function(b){
+		var me 		= this;
+		var pnl		= b.up('#pnlMapsNodeInfo');
+		var node_id	= pnl.nodeId;
+		var mesh_id = pnl.meshId;
+		Ext.Ajax.request({
+            url: me.urlRestartNodes,
+            method: 'POST',          
+            jsonData: {nodes: [{'id': node_id}], mesh_id: mesh_id},
+            success: function(batch,options){
+                Ext.ux.Toaster.msg(
+                    'Restart command queued',
+                    'Command queued for execution',
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );c
+            },                                    
+            failure: function(batch,options){
+                Ext.ux.Toaster.msg(
+                    'Problems restarting device',
+                    batch.proxy.getReader().rawData.message.message,
+                    Ext.ux.Constants.clsWarn,
+                    Ext.ux.Constants.msgWarn
+                );
+            }
+        });
+	},
 	activateNodeActions: function(grid){
 		var me = this;
 		grid.getStore().reload();
@@ -585,10 +615,46 @@ Ext.define('Rd.controller.cMeshViews', {
             me.application.runAction('cDesktop','Add',w);         
         }
 	},
-	deleteNodeActions: function(b){
-		var me = this;
-		console.log("Delete actions");
-
-	}
+	deleteNodeActions:   function(b){
+        var me 		= this;
+		var grid 	= b.up('gridMeshViewNodeActions');
+		var nodeId	= grid.nodeId;
+   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    }
 
 });
