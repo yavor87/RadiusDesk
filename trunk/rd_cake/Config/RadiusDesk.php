@@ -282,9 +282,30 @@ $config['common_node_settings']['heartbeat_dead_after'] = 300; //Mark a device a
  
 
 //== Device types for MESHdesk ==
-$config['hardware'][0]      = array('name' => __('Dragino MS14'),   	'id'    => 'dragino', 'active'    => true, 'max_power' => 18	);
-$config['hardware'][1]      = array('name' => __('OpenMesh OM2P'),  	'id'    => 'om2p' ,   'active'    => true, 'max_power' => '20' 	);
-$config['hardware'][2]      = array('name' => __('PicoStation2 M2'),	'id'    => 'picostation2', 'active'    => true, 'max_power' => '28' );
+
+$config['hardware'][0]      = array(
+		'name' 		=> __('Dragino MS14'),   	
+		'id'    	=> 'dragino', 
+		'active'    => true, 
+		'max_power' => 18,
+		'eth_br'	=> 'eth0 eth1'	
+);
+
+$config['hardware'][1]      = array(
+		'name' 		=> __('OpenMesh OM2P'),  	
+		'id'    	=> 'om2p' ,   
+		'active'    => true, 
+		'max_power' => '20',
+		'eth_br'	=> 'eth0 eth1' 	
+);
+
+$config['hardware'][2]      = array(
+		'name' 		=> __('PicoStation2 M2'),	
+		'id'    	=> 'picostation2', 
+		'active'    => true, 
+		'max_power' => '28',
+		'eth_br'	=> 'eth0'
+);
 
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
