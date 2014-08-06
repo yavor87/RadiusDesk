@@ -152,6 +152,45 @@ class NodeActionsController extends AppController {
         }
 	}
 
+	public function get_actions_for(){
+
+		if(!(array_key_exists('mac',$this->request->data))){
+				$this->set(array(
+				'message'		=> 'Required field missing in POST',
+		        'success' => false,
+		        '_serialize' => array('success','message')
+		    ));
+			return;
+		}
+
+		$mac = $this->request->data['mac'];
+		$this->NodeAction->contain('Node');
+		$q_r = $this->NodeAction->find('all', 
+				array('conditions' => array('Node.mac' => $mac,'NodeAction.status' => 'awaiting')
+		)); //Only awaiting actions
+
+		$items = array();
+		foreach($q_r as $i){
+			$id		= $i['NodeAction']['id'];
+			$c 		= $i['NodeAction']['command'];
+			array_push($items,array('id' => $id,'command' => $c));	
+		}
+
+		//Run through this list and mark them as 'fetched'
+		foreach($items as $i){
+		    $this->NodeAction->id = $i['id'];
+		    if($this->NodeAction->id){
+		        $this->NodeAction->saveField('status','fetched');
+		    }
+		}	
+
+		$this->set(array(
+			'items'		=> $items,
+            'success' 	=> true,
+            '_serialize' => array('success','items')
+        ));
+	}
+
 
     //----- Menus ------------------------
     public function menu_for_grid(){
