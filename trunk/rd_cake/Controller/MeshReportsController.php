@@ -29,7 +29,7 @@ class MeshReportsController extends AppController {
         $fb = $this->_new_report();
 
 		//Handy for debug to see what has been submitted
-        //file_put_contents('/tmp/mesh_report.txt', print_r($this->request->data, true));
+        file_put_contents('/tmp/mesh_report.txt', print_r($this->request->data, true));
         $this->set(array(
            // 'items' => $this->request->data,
             'items'   => $fb,
@@ -1186,7 +1186,7 @@ class MeshReportsController extends AppController {
 					array('conditions' => array('Node.mesh_id' => $mesh_id,'NodeAction.status' => 'awaiting')
 				)); //Only awaiting actions
 				foreach($q_r as $i){
-					$mac 		= $i['Node']['mac'];
+					$mac 		= strtoupper($i['Node']['mac']);
 					$action_id	= $i['NodeAction']['id'];
 					if(array_key_exists($mac,$items)){
 						array_push($items[$mac],$action_id);
