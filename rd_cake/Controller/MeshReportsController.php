@@ -2,6 +2,7 @@
 class MeshReportsController extends AppController {
 
     public  $name    	= 'MeshReports';
+	public $components  = array('Aa');
     public  $uses    	= array(
 		'Node',					'NodeLoad',		'NodeStation',	'NodeSystem','MeshEntry',
 		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction'
@@ -39,6 +40,11 @@ class MeshReportsController extends AppController {
     }
 
 	public function overview(){
+
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
@@ -113,7 +119,10 @@ class MeshReportsController extends AppController {
             }
 			
 			//===Specify the color based on the state + gw type
-			$color		= $this->blue;	//Default
+			if($state = 'never'){
+				$color	= $this->blue;	//Default
+				$size	= $this->node_size;
+			}
 
 			if(($state == 'down')&($gw == 'no')){
 				$color 	= $this->l_red;
@@ -137,9 +146,9 @@ class MeshReportsController extends AppController {
 				$type	= 'gateway';
 			}
 
-			if($state == 'up'){
-				$color = $this->l_green;
-			}
+			//if($state == 'up'){
+			//	$color = $this->l_green;
+			//}
 
 			//=== add extra info to node data ===
 			$i['Node']['state'] 	= $state;
@@ -256,6 +265,11 @@ class MeshReportsController extends AppController {
 	    ));
 	}
 	public function overview_google_map(){
+
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
@@ -401,6 +415,11 @@ class MeshReportsController extends AppController {
 	}
 
     public function view_entries(){
+
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
@@ -573,6 +592,11 @@ class MeshReportsController extends AppController {
 
      public function view_nodes(){
 
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
 		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
@@ -698,8 +722,6 @@ class MeshReportsController extends AppController {
                     
                     $last_mesh_entry_id = $lastCreated['NodeStation']['mesh_entry_id'];
 
-                    
-
                     array_push($items,array(
                         'id'                => $id,
                         'name'              => $node_name, 
@@ -761,6 +783,11 @@ class MeshReportsController extends AppController {
     }
 
 	 public function view_node_nodes(){
+
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
@@ -954,6 +981,11 @@ class MeshReportsController extends AppController {
 
 	public function view_node_details(){
 
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
 		if(!isset($this->request->query['mesh_id'])){
 			$this->set(array(
 		        'message'	=> array("message"	=>"Mesh ID (mesh_id) missing"),
@@ -1035,9 +1067,11 @@ class MeshReportsController extends AppController {
 	}
 
 	public function restart_nodes(){
-		//print_r($this->request->data);
 
-
+		$user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
 		//Loop through the nodes and make sure there is not already one pending before adding one
 		foreach($this->request->data['nodes'] as $n){
 			$node_id	= $n['id'];

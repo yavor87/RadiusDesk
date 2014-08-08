@@ -266,21 +266,6 @@ class NodeActionsController extends AppController {
         ));
     }
 
-  
-
-    private function _is_sibling_of($parent_id,$user_id){
-        $this->User->contain();//No dependencies
-        $q_r        = $this->User->getPath($user_id);
-        foreach($q_r as $i){
-            $id = $i['User']['id'];
-            if($id == $parent_id){
-                return true;
-            }
-        }
-        //No match
-        return false;
-    }
-
     function _build_common_query($user){
 
         //Empty to start with
@@ -338,7 +323,7 @@ class NodeActionsController extends AppController {
                 if($i_id != $user_id){ //upstream
                   ////  array_push($tree_array,array('Node.user_id' => $i_id,'Na.available_to_siblings' => true));
                 }else{
-                  ////  array_push($tree_array,array('Na.user_id' => $i_id));
+                  ///  array_push($tree_array,array('Na.user_id' => $i_id));
                 }
             }
             //** ALL the AP's children
