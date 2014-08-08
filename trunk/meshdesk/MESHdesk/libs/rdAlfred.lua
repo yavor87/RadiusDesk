@@ -54,10 +54,11 @@ function rdAlfred:masterEnableAndStart()
         self.x.set('alfred','alfred','disabled','0')
     end
 
-    local start_vis  = self.x.get('alfred','alfred','start_vis')
-    if(start_vis ~= '1')then
-        self.x.set('alfred','alfred','start_vis','1')
-    end
+    --local start_vis  = self.x.get('alfred','alfred','start_vis')
+    --if(start_vis ~= '1')then
+	--Enable this regardless
+   	self.x.set('alfred','alfred','start_vis','1')
+    --end
 
     self.x.commit('alfred')
 
@@ -92,10 +93,11 @@ function rdAlfred:slaveEnableAndStart()
     end
 
 	--We also need to start the vis server so all can join in
-    local start_vis  = self.x.get('alfred','alfred','start_vis')
-    if(start_vis ~= '0')then
-        self.x.set('alfred','alfred','start_vis','1')
-    end
+    --local start_vis  = self.x.get('alfred','alfred','start_vis')
+    --if(start_vis ~= '0')then
+    --Enable this regardless
+   	self.x.set('alfred','alfred','start_vis','1')
+    --end
 
     self.x.commit('alfred')
 	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
