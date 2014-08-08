@@ -11,108 +11,8 @@ class MeshesController extends AppController {
 
 //------------------------------------------------------------------------
 
-/*
-    //____ Access Provider _________
-    public function index_ap(){
+	//====== MESHES OVERVIEW =========
 
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $user_id    = null;
-        $admin_flag = true;
-
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id    = $user['id'];
-            $admin_flag = true;
-        }
-
-        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }
-        $items      = array();
-
-        if($admin_flag){
-            $this->Profile->contain(array('Radusergroup'  => array('Radgroupcheck')));
-            $r = $this->Profile->find('all');
-            foreach($r as $j){
-                $id     = $j['Profile']['id'];
-                $name   = $j['Profile']['name'];
-                $data_cap_in_profile = false; 
-                $time_cap_in_profile = false; 
-                foreach($j['Radusergroup'] as $cmp){
-                    foreach($cmp['Radgroupcheck'] as $chk){
-                      //  print_r($chk);
-                        if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                            $data_cap_in_profile = true;
-                        }
-                        if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                            $time_cap_in_profile = true;
-                        }
-                    } 
-                    unset($cmp['Radgroupcheck']);
-                }
-                array_push($items,
-                    array(
-                        'id'                    => $id, 
-                        'name'                  => $name,
-                        'data_cap_in_profile'   => $data_cap_in_profile,
-                        'time_cap_in_profile'   => $time_cap_in_profile
-                    )
-                );
-            }
-
-        }else{
-            //Access Providers needs more work...
-            if(isset($this->request->query['ap_id'])){
-                $ap_id      = $this->request->query['ap_id'];
-                if($ap_id == 0){
-                    $ap_id = $user_id;
-                }
-                $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
-                foreach($q_r as $i){               
-                    $user_id    = $i['User']['id'];
-                    $this->Profile->contain(array('Radusergroup'  => array('Radgroupcheck')));
-                    $r        = $this->Profile->find('all',array('conditions' => array('Profile.user_id' => $user_id, 'Profile.available_to_siblings' => true)));
-                    foreach($r  as $j){
-                        $id     = $j['Profile']['id'];
-                        $name   = $j['Profile']['name'];
-
-                        $data_cap_in_profile = false; 
-                        $time_cap_in_profile = false; 
-                        foreach($j['Radusergroup'] as $cmp){
-                            foreach($cmp['Radgroupcheck'] as $chk){
-                                if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                                    $data_cap_in_profile = true;
-                                }
-                                if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                                    $time_cap_in_profile = true;
-                                }
-                            } 
-                            unset($cmp['Radgroupcheck']);
-                        }
-                        
-                        array_push($items,
-                            array(
-                                'id'                    => $id, 
-                                'name'                  => $name,
-                                'data_cap_in_profile'   => $data_cap_in_profile,
-                                'time_cap_in_profile'   => $time_cap_in_profile
-                            )
-                        );
-                    }
-                }
-            }
-
-        }
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-*/
     //____ BASIC CRUD Manager ________
     public function index(){
 
@@ -146,9 +46,6 @@ class MeshesController extends AppController {
         $items      = array();
 
         foreach($q_r as $i){
-
-           // print_r($i);
-
             //Create notes flag
             $notes_flag  = false;
             foreach($i['MeshNote'] as $nn){
@@ -206,98 +103,6 @@ class MeshesController extends AppController {
         ));
     }
 
-    
-
-/*
-    //____ BASIC CRUD Manager ________
-    public function index_for_filter(){
-    //Display a list of items with their owners
-    //This will be dispalyed to the Administrator as well as Access Providers who has righs
-
-       //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-
-        //_____ ADMIN _____
-        $items = array();
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-
-            $this->Profile->contain();
-            $q_r = $this->Profile->find('all');
-
-            foreach($q_r as $i){   
-                array_push($items,array(
-                    'id'            => $i['Profile']['name'], 
-                    'text'          => $i['Profile']['name']
-                ));
-            }
-        }
-
-        //_____ AP _____
-        if($user['group_name'] == Configure::read('group.ap')){  
-
-            //If it is an Access Provider that requested this list; we should show:
-            //1.) all those NAS devices that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
-            //2.) all those he created himself (if any) (this he can manage, depending on his right)
-            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
-       
-            $q_r = $this->Profile->find('all');
-
-            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $ap_child_count = $this->User->childCount($user_id);
-
-            foreach($q_r as $i){
-                $add_flag   = false;
-                $owner_id   = $i['Profile']['user_id'];
-                $a_t_s      = $i['Profile']['available_to_siblings'];
-                $add_flag   = false;
-                
-                //Filter for parents and children
-                //NAS devices of parent's can not be edited, where realms of childern can be edited
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($owner_id,$user_id)){ //Is the user_id an upstream parent of the AP
-                        //Only those available to siblings:
-                        if($a_t_s == 1){
-                            $add_flag = true;
-                        }
-                    }
-                }
-
-                if($ap_child_count != 0){ //See if this NAS device is perhaps not one of those created by a sibling of the Access Provider
-                    if($this->_is_sibling_of($user_id,$owner_id)){ //Is the creator a downstream sibling of the AP - Full rights
-                        $add_flag = true;
-                    }
-                }
-
-                //Created himself
-                if($owner_id == $user_id){
-                    $add_flag = true;
-                }
-
-                if($add_flag == true ){
-                    $owner_tree = $this->_find_parents($owner_id);                      
-                    //Add to return items
-                    array_push($items,array(
-                        'id'            => $i['Profile']['name'], 
-                        'text'          => $i['Profile']['name']
-                    ));
-                }
-            }
-        }
-
-        //___ FINAL PART ___
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-
-*/
     public function add() {
 
         //__ Authentication + Authorization __
@@ -553,6 +358,9 @@ class MeshesController extends AppController {
             ));
         }
     }
+
+//___________________________________________________
+
     //======= MESH entries ============
     public function mesh_entries_index(){
 
@@ -619,6 +427,10 @@ class MeshesController extends AppController {
 
     public function mesh_entry_edit(){
 
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
         if ($this->request->is('post')) {
 
@@ -695,6 +507,12 @@ class MeshesController extends AppController {
 
     //======= MESH settings =======
     public function mesh_settings_view(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         $id         = $this->request->query['mesh_id'];  
         $data       = Configure::read('mesh_settings'); //Read the defaults
         $setting    = ClassRegistry::init('MeshSetting');
@@ -713,6 +531,11 @@ class MeshesController extends AppController {
     }
 
     public function mesh_settings_edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
         if ($this->request->is('post')) {
 
@@ -864,6 +687,11 @@ class MeshesController extends AppController {
     }
 
     public function mesh_exit_edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
 
         if ($this->request->is('post')) {
@@ -1105,119 +933,6 @@ class MeshesController extends AppController {
         ));
     }
 
-	//Add the list of connections also to the equation
-	public function mesh_nodes_and_connections_view(){
-
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $items      = array();
-        $total      = 0;
-        $node       = ClassRegistry::init('Node');
-        $node->contain(array('NodeMeshEntry.MeshEntry','NodeMeshExit.MeshExit'));
-        $mesh_id    = $this->request->query['mesh_id'];
-        $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
-
-        //Create a hardware lookup for proper names of hardware
-        $hardware = array();        
-        $hw   = Configure::read('hardware');
-        foreach($hw as $h){
-            $id     = $h['id'];
-            $name   = $h['name']; 
-            $hardware["$id"]= $name;
-        }
-
-		//Check if we need to show the override on the power
-		$node_setting	= ClassRegistry::init('NodeSetting');
-		$node_setting->contain();
-
-		$power_override = false;
-
-		$ns				= $node_setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $mesh_id)));
-		if($ns){
-			if($ns['NodeSetting']['all_power'] == 1){
-				$power_override = true;
-				$power 			= $ns['NodeSetting']['power'];
-			}
-		}else{
-			$data       = Configure::read('common_node_settings'); //Read the defaults
-			if($data['all_power'] == true){
-				$power_override = true;
-				$power 			= $data['power'];
-			}
-		}
-
-        foreach($q_r as $m){
-            $static_entries = array();
-            $static_exits   = array();
-            foreach($m['NodeMeshEntry'] as $m_e_ent){
-                array_push($static_entries,array('name' => $m_e_ent['MeshEntry']['name']));
-            }
-
-            foreach($m['NodeMeshExit'] as $m_e_exit){
-                array_push($static_exits,array('name'   => $m_e_exit['MeshExit']['name']));
-            }
-
-			if($power_override){
-				$p = $power;
-			}else{
-				$p = $m['Node']['power'];
-			}
-			
-
-            $hw_id = $m['Node']['hardware'];
-            array_push($items,array( 
-                'id'            => $m['Node']['id'],
-                'mesh_id'       => $m['Node']['mesh_id'],
-                'name'          => $m['Node']['name'],
-                'description'   => $m['Node']['description'],
-                'mac'           => $m['Node']['mac'],
-                'hardware'      => $hardware["$hw_id"],
-                'power'         => $p,
-				'ip'			=> $m['Node']['ip'],
-				'last_contact'	=> $m['Node']['last_contact'],
-				'lat'			=> $m['Node']['lat'],
-				'lng'			=> $m['Node']['lon'],
-                'static_entries'=> $static_entries,
-                'static_exits'  => $static_exits,
-                'ip'            => $m['Node']['ip'],
-            ));
-        }
-
-		$connections = array(
-			array(
-				'from' 	=> array( 
-					'lng' 	=> 28.2941182252398,
-					'lat' 	=> -25.7440042060461
-				),
-				'to'	=> array(
-					'lng' 	=> 28.2946171161166,
-					'lat' 	=> -25.7438055678272
-				)
-			),
-			array(
-				'from' 	=> array( 
-					'lng' 	=> 28.2938687798016,
-					'lat' 	=> -25.7443820657791
-				),
-				'to'	=> array(
-					'lng' 	=> 28.2946171161166,
-					'lat' 	=> -25.7438055678272
-				)
-			)
-		);
-
-        //___ FINAL PART ___
-        $this->set(array(
-			'connections'	=> $connections,
-            'items' 		=> $items,
-            'success' 		=> true,
-            '_serialize' => array('items', 'connections', 'success')
-        ));
-    }
-
     public function mesh_node_add(){
         $user = $this->_ap_right_check();
         if(!$user){
@@ -1304,6 +1019,11 @@ class MeshesController extends AppController {
     }
 
     public function mesh_node_edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
         if ($this->request->is('post')) {
 
@@ -1497,6 +1217,11 @@ class MeshesController extends AppController {
     //-- View common node settings --
     public function node_common_settings_view(){
 
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         $id         = $this->request->query['mesh_id'];  
         $data       = Configure::read('common_node_settings'); //Read the defaults
         $setting    = ClassRegistry::init('NodeSetting');
@@ -1515,6 +1240,12 @@ class MeshesController extends AppController {
     }
 
     public function node_common_settings_edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         if ($this->request->is('post')) {
 
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
@@ -1558,6 +1289,11 @@ class MeshesController extends AppController {
     //-- List static entry point options for mesh --
     public function static_entry_options(){
 
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         if(isset($this->request->query['mesh_id'])){
             $mesh_id = $this->request->query['mesh_id'];
         }
@@ -1584,7 +1320,12 @@ class MeshesController extends AppController {
 
     public function static_exit_options(){
 
-         if(isset($this->request->query['mesh_id'])){
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if(isset($this->request->query['mesh_id'])){
             $mesh_id = $this->request->query['mesh_id'];
         }
 
@@ -1877,6 +1618,8 @@ class MeshesController extends AppController {
         ));
 	}
 
+//_______________________________________________________
+
     //----- Menus ------------------------
     public function menu_for_grid(){
 
@@ -1931,13 +1674,26 @@ class MeshesController extends AppController {
             $document_group = array();
             $specific_group = array();
 
-            array_push($action_group,array(  
-                'xtype'     => 'button',
+            array_push($action_group,array( 
+                'xtype'     =>  'splitbutton',  
                 'iconCls'   => 'b-reload',
-                'glyph'     => Configure::read('icnReload'), 
+                'glyph'     => Configure::read('icnReload'),   
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+                'tooltip'   => __('Reload'),
+                    'menu'  => array( 
+                        'items' => array( 
+                            '<b class="menu-title">'.__('Reload every').':</b>',
+                            array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                            array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                            array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                            array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                           
+                        )
+                    )
+            	)
+			);
+
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
@@ -1956,21 +1712,28 @@ class MeshesController extends AppController {
                     'iconCls'   => 'b-delete',
                     'glyph'     => Configure::read('icnDelete'),  
                     'scale'     => 'large', 
-                    'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'itemId'    => 'delete', 
                     'tooltip'   => __('Delete')));
             }
 
-            //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_components')){
+			//Edit
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'mesh_entry_edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',
-                    'glyph'     => Configure::read('icnEdit'),    
+                    'glyph'     => Configure::read('icnEdit'),  
                     'scale'     => 'large', 
-                    'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'itemId'    => 'edit', 
                     'tooltip'   => __('Edit')));
+            }
+
+			//View
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'mesh_entry_view')){
+                array_push($action_group,array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnView'),  
+                    'scale'     => 'large', 
+                    'itemId'    => 'view',
+                    'tooltip'   => __('View')));
             }
 
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
@@ -1982,16 +1745,7 @@ class MeshesController extends AppController {
                         'itemId'    => 'note',      
                         'tooltip'   => __('Add Notes')));
             }
-/*
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
-                array_push($document_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',     
-                    'scale'     => 'large', 
-                    'itemId'    => 'csv',      
-                    'tooltip'   => __('Export CSV')));
-            }
-*/
+
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
                         array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100,   'items' => $document_group)
@@ -2028,6 +1782,20 @@ class MeshesController extends AppController {
             );
         }
 
+		//Access Provider
+        if($user['group_name'] == Configure::read('group.ap')){  //FIXME fine tune the rights later
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                ))
+                
+            );
+        }
+
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -2047,6 +1815,20 @@ class MeshesController extends AppController {
 
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+                ))
+                
+            );
+        }
+
+		//Access Provider
+        if($user['group_name'] == Configure::read('group.ap')){  //FIXME fine tune the rights later
 
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
@@ -2091,6 +1873,22 @@ class MeshesController extends AppController {
             );
         }
 
+		//Access Provider
+		if($user['group_name'] == Configure::read('group.ap')){  //FIXME fine tune the rights later
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit')),
+					array('xtype' => 'button', 'iconCls' => 'b-map',     'glyph'     => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
+                ))
+    
+            );
+        }
+
+
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -2122,6 +1920,22 @@ class MeshesController extends AppController {
                 ))
             );
         }
+
+		 //Access provider
+        if($user['group_name'] == Configure::read('group.ap')){  //FIXME fine tune the rights later
+
+            $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload', 'tooltip'=> __('Reload')),
+					array('xtype' => 'button', 	'glyph' => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map', 'tooltip'=> __('Map')),
+                  
+                    array('xtype' => 'button',  'glyph' => Configure::read('icnSpanner'),'scale' => 'large', 'itemId' => 'execute','tooltip'=> __('Execute')),
+					array('xtype' => 'button',  'glyph' => Configure::read('icnWatch'),'scale' => 'large', 'itemId' => 'history','tooltip'=> __('View execute history')),
+					array('xtype' => 'button',  'glyph' => Configure::read('icnPower'),'scale' => 'large', 'itemId' => 'restart','tooltip'=> __('Restart')),
+                ))
+            );
+        }
+
 
         $this->set(array(
             'items'         => $menu,
@@ -2234,7 +2048,8 @@ class MeshesController extends AppController {
             foreach($this->parents as $i){
                 $i_id = $i['User']['id'];
                 if($i_id != $user_id){ //upstream
-                    array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
+                   // array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
+					//array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
                 }else{
                     array_push($tree_array,array('Mesh.user_id' => $i_id));
                 }

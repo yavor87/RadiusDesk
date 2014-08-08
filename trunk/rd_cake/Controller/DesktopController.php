@@ -429,6 +429,12 @@ class DesktopController extends AppController {
             );
         }
 
+		if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
+			  array_push($menu,
+				array(  'text'  => __('MESHdesk'),  'glyph' => Configure::read('icnMesh'), 'itemId' => 'cMeshes')
+			);
+		}
+
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
             array_push($menu,
                 array(  'text'  => __('Dynamic login pages'),  'iconCls' => 'dynamic_pages', 'glyph' => Configure::read('icnDynamic'),'itemId' => 'cDynamicDetails')
