@@ -259,13 +259,14 @@ $config['encryption'][5]     = array('name' => __('WPA2 Enterprise'),   'id' => 
 
 //== Default mesh settings ==
 //Define default settings for the mesh which can be overwritten
-$config['mesh_settings']['ap']  = false; //AP Isolation
-$config['mesh_settings']['bl']  = false; //Bridge loop avoidence
-$config['mesh_settings']['ag']  = true;  //Aggregation
-$config['mesh_settings']['b']   = false; //Bonding
-$config['mesh_settings']['f']   = true;  //Fragmentation
-$config['mesh_settings']['it']  = 1000; //OGM Interval
-$config['mesh_settings']['gateway_switching'] = 20; //Client Gateway switching 
+$config['mesh_settings']['aggregated_ogms']  		= true;  //Aggregation*
+$config['mesh_settings']['ap_isolation']  			= false; //AP Isolation*
+$config['mesh_settings']['bonding']   				= false; //Bonding*
+$config['mesh_settings']['fragmentation']   		= true;  //Fragmentation*
+$config['mesh_settings']['gw_sel_class'] 			= 20; //Client Gateway switching*
+$config['mesh_settings']['orig_interval']  			= 1000; //OGM Interval*
+$config['mesh_settings']['bridge_loop_avoidance']  	= false; //Bridge loop avoidence*
+$config['mesh_settings']['distributed_arp_table'] 	= true; //Distributed ARP table
 
 //== Node start ip for defined mesh ==
 $config['mesh_node']['start_ip']    = '10.5.5.1';
