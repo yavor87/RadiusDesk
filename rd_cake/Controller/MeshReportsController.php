@@ -119,7 +119,7 @@ class MeshReportsController extends AppController {
             }
 			
 			//===Specify the color based on the state + gw type
-			if($state = 'never'){
+			if($state == 'never'){
 				$color	= $this->blue;	//Default
 				$size	= $this->node_size;
 			}

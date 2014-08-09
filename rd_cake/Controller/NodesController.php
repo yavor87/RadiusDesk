@@ -112,6 +112,10 @@ class NodesController extends AppController {
 
         $batman_adv       = Configure::read('mesh_settings'); //Read the defaults
 		if($mesh['MeshSetting']['id']!=null){
+			unset($mesh['MeshSetting']['id']);
+			unset($mesh['MeshSetting']['mesh_id']);
+			unset($mesh['MeshSetting']['created']);
+			unset($mesh['MeshSetting']['modified']);
 			$batman_adv = $mesh['MeshSetting'];
 		}
 		$json['config_settings']['batman_adv'] = $batman_adv;
@@ -169,7 +173,7 @@ class NodesController extends AppController {
             array(
                 "interface"    => "lan",
                 "options"   => array(
-                    "ifname"        => "$br_int", //FIXME Check the hardware and return eth0 or eth0 end eth1 based on the hardware
+                    "ifname"        => "$br_int", 
                     "type"          => "bridge",
                     "proto"         => "dhcp"
                )
