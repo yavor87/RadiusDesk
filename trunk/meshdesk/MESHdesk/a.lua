@@ -320,6 +320,16 @@ function configure_device(config)
 	local json            = require("json")           
 	local o               = json.decode(contents)  
 ---[[--	
+
+	-- Do we have any batman_adv settings? --
+	if(o.config_settings.batman_adv ~= nil)then   
+		--print("Doing Batman-adv")
+        require("rdBatman")
+	    local batman = rdBatman()
+	    batman:configureFromTable(o.config_settings.batman_adv)             
+	end 
+
+
 	-- Is this perhaps a gateway node? --
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	

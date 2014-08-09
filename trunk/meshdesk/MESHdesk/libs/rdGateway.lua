@@ -24,15 +24,24 @@ function rdGateway:enable(exPoints)
 	self:__dhcpGwEnable()
 	self:__addExPoints(exPoints)
     os.execute("touch /tmp/gw")
+
 	--We also have to remove (and re-enable the /etc/resolv.conf)
 	os.execute("rm /etc/resolv.conf")
 	os.execute("ln -s /tmp/resolv.conf /etc/resolv.conf")
+
+	--Tell batman we are a client
+	self.x.set('batman-adv','bat0','gw_mode', 'server')
+	self.x.commit('batman-adv')
 end     
 
 function rdGateway:disable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
     os.execute("rm /tmp/gw")
+
+	--Tell batman we are a client
+	self.x.set('batman-adv','bat0','gw_mode', 'client')
+	self.x.commit('batman-adv')
 end
 
 function rdGateway:addNat(network)
