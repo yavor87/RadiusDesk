@@ -28,46 +28,54 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : i18n('sAP_isolation'),
-                        name        : 'ap',
-                        inputValue  : 'ap',
+                        name        : 'ap_isolation',
+                        inputValue  : 'ap_isolation',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : i18n('sBridge_Loop_Avoidance'),
-                        name        : 'bl',
-                        inputValue  : 'bl',
+                        name        : 'bridge_loop_avoidance',
+                        inputValue  : 'bridge_loop_avoidance',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : i18n('sAggregation'),
-                        name        : 'ag',
-                        inputValue  : 'ag',
+                        name        : 'aggregated_ogms',
+                        inputValue  : 'aggregated_ogms',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : i18n('sBonding'),
-                        name        : 'b',
-                        inputValue  : 'b',
+                        name        : 'bonding',
+                        inputValue  : 'bonding',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : i18n('sFragmentation'),
-                        name        : 'f',
-                        inputValue  : 'f',
+                        name        : 'fragmentation',
+                        inputValue  : 'fragmentation',
+                        checked     : true,
+                        labelClsExtra: 'lblRdReq'
+                    },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Distributed ARP table',
+                        name        : 'distributed_arp_table',
+                        inputValue  : 'distributed_arp_table',
                         checked     : true,
                         labelClsExtra: 'lblRdReq'
                     },
                     {
                         xtype       : 'numberfield',
-                        name        : 'it',
+                        name        : 'orig_interval',
                         fieldLabel  : i18n('sOGM_interval_br_ms_br'),
                         value       : 1000,
                         maxValue    : 20000,
@@ -79,7 +87,7 @@ Ext.define('Rd.view.meshes.pnlMeshSettings', {
                     },
                     {
                         xtype       : 'numberfield',
-                        name        : 'gatweway_switching',
+                        name        : 'gw_sel_class',
                         fieldLabel  : i18n('sGateway_switching'),
                         value       : 20,
                         maxValue    : 255,
