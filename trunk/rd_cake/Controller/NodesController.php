@@ -108,6 +108,13 @@ class NodesController extends AppController {
 		$system_data 		= $this->_build_system($mesh);
 		$json['config_settings']['system'] = $system_data;
 
+		//====== Batman-adv specific config settings ======
+
+        $batman_adv       = Configure::read('mesh_settings'); //Read the defaults
+		if($mesh['MeshSetting']['id']!=null){
+			$batman_adv = $mesh['MeshSetting'];
+		}
+		$json['config_settings']['batman_adv'] = $batman_adv;
         return $json; 
     }
 
