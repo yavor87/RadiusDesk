@@ -541,7 +541,14 @@ class MeshesController extends AppController {
 
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
             //so we have to check for them
-            $check_items = array('ap','bl','ag','b','f');
+            $check_items = array(
+				'aggregated_ogms',
+				'ap_isolation',
+				'bonding',
+				'fragmentation',
+				'bridge_loop_avoidance',
+				'distributed_arp_table'
+			);
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
                     $this->request->data[$i] = 1;
