@@ -16,11 +16,13 @@ local app           = wx.wxGetApp()
 local frame,tc_shared_secret,tc_timestamp,tc_eth0,tc_c_srvr,tc_firmware,choice_hw,tc_new_secret,tc_new_srvr
 
 --Some hardware
-local choices = {"Dragino", "OpenMesh", "Picostation M2"}
+local choices = {"Dragino", "OpenMesh", "Picostation M2", "UniFi AP", "UniFi AP-LR"}
 local hardware      = {}
 hardware[0]         = 'dragino'
 hardware[1]         = 'om2p'
 hardware[2]         = 'pico2'
+hardware[3]         = 'unifiap'
+hardware[4]         = 'unifilrap'
 
 
 function HandleEvents(event)
@@ -32,6 +34,12 @@ function HandleEvents(event)
     end
     if(event:GetSelection() == 2)then
         sbmHardware:SetBitmap(bm_pico)
+    end
+    if(event:GetSelection() == 3)then
+        sbmHardware:SetBitmap(bm_unifiap)
+    end
+    if(event:GetSelection() == 4)then
+        sbmHardware:SetBitmap(bm_unifilrap)
     end
 end
 
@@ -149,6 +157,12 @@ function build_gui()
 
     bm_pico      = wx.wxBitmap();
     bm_pico:LoadFile("./graphics/pico.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_unifiap      = wx.wxBitmap();
+    bm_unifiap:LoadFile("./graphics/unifiap.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_unifilrap      = wx.wxBitmap();
+    bm_unifilrap:LoadFile("./graphics/unifilrap.png",wx.wxBITMAP_TYPE_ANY )
 
 
     frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node config utility',
@@ -272,7 +286,7 @@ function build_gui()
                            choices)
         choice_hw:SetSelection(0)
         hbox6:Add(st6, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox6:Add(choice_hw, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
 
         local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st7   = wx.wxStaticText(frame, wx.wxID_ANY, 'Change secret to ')
