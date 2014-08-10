@@ -308,6 +308,24 @@ $config['hardware'][2]      = array(
 		'eth_br'	=> 'eth0'
 );
 
+$config['hardware'][3]      = array(
+		'name' 		=> __('UniFi AP'),	
+		'id'    	=> 'unifiap', 
+		'active'    => true, 
+		'max_power' => '23',
+		'eth_br'	=> 'eth0'
+);
+
+$config['hardware'][4]      = array(
+		'name' 		=> __('UniFi AP-LR'),	
+		'id'    	=> 'unifilrap', 
+		'active'    => true, 
+		'max_power' => '27',
+		'eth_br'	=> 'eth0'
+);
+
+
+
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
 
