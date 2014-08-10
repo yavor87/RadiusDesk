@@ -200,6 +200,11 @@ function rdFirmwareConfig.__set_up_hardware(self,hw)
 		return
 	end
 
+	if(model_led == nil)then
+		self:log("No WiFi LED defined - return")
+		return
+	end
+
 	self:log("Wifi LEDs new config")
 
 	--Now we need to get rid of all the LED entries and populate it with ours

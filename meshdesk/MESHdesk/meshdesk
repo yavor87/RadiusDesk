@@ -41,20 +41,31 @@ config captive_portal 'captive_portal'
 	option default_dns_1 '208.67.222.222'
 	option default_dns_2 '208.67.220.220'
 	
-#Hardware specific settings here:	
-config hardware 'pico2'
-	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
-	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
-	option wifi_led "ubnt:green:link4"
+#Hardware specific settings here:
+
+config hardware 'dragino'
+	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
+    option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
+	option wifi_led "dragino2:red:wlan"
+	option swap_on_off "1"
 	
 config hardware 'om2p'                                                   
 	option morse_led '/sys/class/leds/om2p:blue:lan/brightness'      
     option internet_led '/sys/class/leds/om2p:blue:wan/brightness'   
     option wifi_led 'om2p:green:wifi'       
 	
-config hardware 'dragino'
-	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
-    option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
-	option wifi_led "dragino2:red:wlan"
-	option swap_on_off "1"
+config hardware 'pico2'
+	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
+	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
+	option wifi_led "ubnt:green:link4"
+
+config hardware 'unifiap'                                                   
+	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
+ 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
+    #option wifi_led 'om2p:green:wifi'  
+
+config hardware 'unifilrap'                                                   
+	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
+ 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
+    #option wifi_led 'om2p:green:wifi'        
 
