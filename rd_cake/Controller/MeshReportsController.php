@@ -68,7 +68,7 @@ class MeshReportsController extends AppController {
 		$this->Node->contain('NodeNeighbor');
 		$q_r 		= $this->Node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
 	
-
+		$grey_list		= array(); //List of nodes with no neighbors
 		//===No Nodes found===
 		if(!($q_r)){
 			$items = array(
@@ -82,14 +82,15 @@ class MeshReportsController extends AppController {
 					)
 				)
 			);
+
+			array_push($grey_list,array( 'nodeTo' => "empty1",'data' => array('$alpha'	=> 0.0)));
 		}
 
 		//Some defaults for the spiderweb
 		$opacity		= 1;	//The older a line is the more opacity it will have (tend to zero)
 		$cut_off		= 3 * $dead_after;//Three times ater it will turn red
-
 		$no_neighbors  	= true; 	//If none of the nodes has neighbor entries this will stay true
-		$grey_list		= array(); //List of nodes with no neighbors
+		
 
 		foreach($q_r as $i){
 
