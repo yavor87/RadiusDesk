@@ -1514,6 +1514,11 @@ class DevicesController extends AppController {
         $post_a->deleteAll( 
             array('Radpostauth.username' => $username), false
         );
+
+		$user_s = ClassRegistry::init('UserStat');
+        $user_s->deleteAll( 
+            array('UserStat.username' => $username), false
+        );
     }
 
     private function _is_sibling_of($parent_id,$user_id){

@@ -398,6 +398,7 @@ class VouchersController extends AppController {
         $this->Radreply     = ClassRegistry::init('Radreply');
         $this->Radacct      = ClassRegistry::init('Radacct');
         $this->Radpostauth  = ClassRegistry::init('Radpostauth');
+		$this->UserStat  	= ClassRegistry::init('UserStat');
 
 
 	    if(isset($this->data['id'])){   //Single item delete
@@ -1385,6 +1386,11 @@ class VouchersController extends AppController {
         $this->Radpostauth->deleteAll( 
             array('Radpostauth.username' => $username), false
         );
+
+		$this->UserStat->deleteAll( 
+            array('UserStat.username' => $username), false
+        );
+
     }
 
     private function _is_sibling_of($parent_id,$user_id){
