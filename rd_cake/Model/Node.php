@@ -40,6 +40,9 @@ class Node extends AppModel {
             'NodeStation'      => array(
                 'dependent'     => true
             ),
+			'NodeIbssConnection'      => array(
+                'dependent'     => true
+            ),
 			'NodeNeighbor'   	=> array(
                 'dependent'     => true,
 				'order'			=> array(
@@ -59,6 +62,9 @@ class Node extends AppModel {
 
     public $hasOne = array(
 			'NodeLoad'      => array(
+                'dependent'     => true
+            ),
+			'NodeSetting'      => array(
                 'dependent'     => true
             ),
     );
