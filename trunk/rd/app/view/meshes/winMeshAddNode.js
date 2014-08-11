@@ -73,7 +73,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         labelClsExtra: 'lblRdReq',
                         vtype       : 'MacAddress',
                         fieldStyle  : 'text-transform:lowercase',
-                        value       : 'A8-40-41-13-60-E3'
+                       // value       : 'A8-40-41-13-60-E3'
                     },
                     {
                         xtype       : 'textfield',
