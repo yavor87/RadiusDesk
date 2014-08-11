@@ -12,3 +12,6 @@
 
 #Every 10 minutes check the auto add table to assign devices to users with this feature enabled
 */10 * * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake AutoAddDevices >> /dev/null 2>&1
+
+#Clean up the old MESHdesk data once a day
+30 1 * * * www-data /var/www/cake2/rd_cake/Console/cake -app /var/www/cake2/rd_cake AutoCleanMESHdesk >> /dev/null 2>&1
