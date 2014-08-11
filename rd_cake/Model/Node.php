@@ -63,10 +63,7 @@ class Node extends AppModel {
     public $hasOne = array(
 			'NodeLoad'      => array(
                 'dependent'     => true
-            ),
-			'NodeSetting'      => array(
-                'dependent'     => true
-            ),
+            )
     );
 
     public function beforeSave(){
