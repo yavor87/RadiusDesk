@@ -59,6 +59,21 @@ config hardware 'pico2'
 	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
 	option wifi_led "ubnt:green:link4"
 
+config hardware 'pico5'
+	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
+	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
+	option wifi_led "ubnt:green:link4" 
+
+config hardware 'nano2'
+	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
+	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
+	option wifi_led "ubnt:green:link4"  
+
+config hardware 'nano5'
+	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
+	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
+	option wifi_led "ubnt:green:link4"       
+
 config hardware 'unifiap'                                                   
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
  	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
@@ -67,5 +82,5 @@ config hardware 'unifiap'
 config hardware 'unifilrap'                                                   
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
  	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
-    #option wifi_led 'om2p:green:wifi'        
+    #option wifi_led 'om2p:green:wifi'
 
