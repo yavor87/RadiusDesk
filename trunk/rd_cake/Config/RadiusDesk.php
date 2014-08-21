@@ -289,39 +289,111 @@ $config['hardware'][0]      = array(
 		'id'    	=> 'dragino', 
 		'active'    => true, 
 		'max_power' => 18,
-		'eth_br'	=> 'eth0 eth1'	
+		'eth_br'	=> 'eth0 eth1',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
 );
 
 $config['hardware'][1]      = array(
+		'name' 		=> __('MP2 Basic'),   	
+		'id'    	=> 'mp2_basic', 
+		'active'    => true, 
+		'max_power' => 18,
+		'eth_br'	=> 'eth0 eth1',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
+);
+
+$config['hardware'][2]      = array(
+		'name' 		=> __('MP2 Phone'),   	
+		'id'    	=> 'mp2_phone', 
+		'active'    => true, 
+		'max_power' => 18,
+		'eth_br'	=> 'eth0 eth1',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
+);
+
+
+$config['hardware'][3]      = array(
 		'name' 		=> __('OpenMesh OM2P'),  	
 		'id'    	=> 'om2p' ,   
 		'active'    => true, 
 		'max_power' => '20',
-		'eth_br'	=> 'eth0 eth1' 	
+		'eth_br'	=> 'eth0 eth1',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
 );
 
-$config['hardware'][2]      = array(
-		'name' 		=> __('PicoStation2 M2'),	
-		'id'    	=> 'picostation2', 
+$config['hardware'][4]      = array(
+		'name' 		=> __('PicoStation M2'),	
+		'id'    	=> 'pico2', 
 		'active'    => true, 
 		'max_power' => '28',
-		'eth_br'	=> 'eth0'
+		'eth_br'	=> 'eth0',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'
 );
 
-$config['hardware'][3]      = array(
+$config['hardware'][5]      = array(
+		'name' 		=> __('PicoStation M5'),	
+		'id'    	=> 'pico5', 
+		'active'    => true, 
+		'max_power' => '28',
+		'eth_br'	=> 'eth0',
+		'two'		=> false,
+		'five'		=> true,
+		'hwmode'	=> '11na'
+);
+
+$config['hardware'][6]      = array(
+		'name' 		=> __('NanoStation M2'),	
+		'id'    	=> 'nano2', 
+		'active'    => true, 
+		'max_power' => '28',
+		'eth_br'	=> 'eth0',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'
+);
+
+
+$config['hardware'][7]      = array(
+		'name' 		=> __('NanoStation M5'),	
+		'id'    	=> 'nano5', 
+		'active'    => true, 
+		'max_power' => '28',
+		'eth_br'	=> 'eth0',
+		'two'		=> false,
+		'five'		=> true,
+		'hwmode'	=> '11na'	
+);
+
+$config['hardware'][8]      = array(
 		'name' 		=> __('UniFi AP'),	
 		'id'    	=> 'unifiap', 
 		'active'    => true, 
 		'max_power' => '23',
-		'eth_br'	=> 'eth0'
+		'eth_br'	=> 'eth0',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
 );
 
-$config['hardware'][4]      = array(
+$config['hardware'][9]      = array(
 		'name' 		=> __('UniFi AP-LR'),	
 		'id'    	=> 'unifilrap', 
 		'active'    => true, 
 		'max_power' => '27',
-		'eth_br'	=> 'eth0'
+		'eth_br'	=> 'eth0',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11ng'	
 );
 
 
