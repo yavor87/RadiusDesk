@@ -16,13 +16,29 @@ local app           = wx.wxGetApp()
 local frame,tc_shared_secret,tc_timestamp,tc_eth0,tc_c_srvr,tc_firmware,choice_hw,tc_new_secret,tc_new_srvr
 
 --Some hardware
-local choices = {"Dragino", "OpenMesh", "Picostation M2", "UniFi AP", "UniFi AP-LR"}
+local choices = {
+    "Dragino",
+    "MP2 Basic",
+    "MP2 Phone",
+    "OpenMesh", 
+    "PicoStation M2",
+    "PicoStation M5",
+    "NanoStation M2",
+    "NanoStation M5",
+    "UniFi AP", 
+    "UniFi AP-LR"
+}
 local hardware      = {}
 hardware[0]         = 'dragino'
-hardware[1]         = 'om2p'
-hardware[2]         = 'pico2'
-hardware[3]         = 'unifiap'
-hardware[4]         = 'unifilrap'
+hardware[1]         = 'mp2_basic'
+hardware[2]         = 'mp2_phone'
+hardware[3]         = 'om2p'
+hardware[4]         = 'pico2'
+hardware[5]         = 'pico5'
+hardware[6]         = 'nano2'
+hardware[7]         = 'nano5'
+hardware[8]         = 'unifiap'
+hardware[9]         = 'unifilrap'
 
 
 function HandleEvents(event)
@@ -30,15 +46,30 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_dragino)
     end
     if(event:GetSelection() == 1)then
-        sbmHardware:SetBitmap(bm_om2p)
+        sbmHardware:SetBitmap(bm_mp2_basic)
     end
     if(event:GetSelection() == 2)then
-        sbmHardware:SetBitmap(bm_pico)
+        sbmHardware:SetBitmap(bm_mp2_phone)
     end
     if(event:GetSelection() == 3)then
-        sbmHardware:SetBitmap(bm_unifiap)
+        sbmHardware:SetBitmap(bm_om2p)
     end
     if(event:GetSelection() == 4)then
+        sbmHardware:SetBitmap(bm_pico2)
+    end
+    if(event:GetSelection() == 5)then
+        sbmHardware:SetBitmap(bm_pico5)
+    end
+    if(event:GetSelection() == 6)then
+        sbmHardware:SetBitmap(bm_nano2)
+    end
+    if(event:GetSelection() == 7)then
+        sbmHardware:SetBitmap(bm_nano5)
+    end
+    if(event:GetSelection() == 8)then
+        sbmHardware:SetBitmap(bm_unifiap)
+    end
+    if(event:GetSelection() == 9)then
         sbmHardware:SetBitmap(bm_unifilrap)
     end
 end
@@ -152,11 +183,26 @@ function build_gui()
     bm_dragino      = wx.wxBitmap();
     bm_dragino:LoadFile("./graphics/ms14.jpg",wx.wxBITMAP_TYPE_ANY )
     
+    bm_mp2_basic    = wx.wxBitmap();
+    bm_mp2_basic:LoadFile("./graphics/mp2_basic.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_mp2_phone    = wx.wxBitmap();
+    bm_mp2_phone:LoadFile("./graphics/mp2_phone.jpg",wx.wxBITMAP_TYPE_ANY )
+    
     bm_om2p      = wx.wxBitmap();
     bm_om2p:LoadFile("./graphics/om2p.jpg",wx.wxBITMAP_TYPE_ANY )
 
-    bm_pico      = wx.wxBitmap();
-    bm_pico:LoadFile("./graphics/pico.png",wx.wxBITMAP_TYPE_ANY )
+    bm_pico2      = wx.wxBitmap();
+    bm_pico2:LoadFile("./graphics/pico2.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_pico5      = wx.wxBitmap();
+    bm_pico5:LoadFile("./graphics/pico5.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_nano2      = wx.wxBitmap();
+    bm_nano2:LoadFile("./graphics/nano2.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_nano5      = wx.wxBitmap();
+    bm_nano5:LoadFile("./graphics/nano5.jpg",wx.wxBITMAP_TYPE_ANY )
     
     bm_unifiap      = wx.wxBitmap();
     bm_unifiap:LoadFile("./graphics/unifiap.png",wx.wxBITMAP_TYPE_ANY )
