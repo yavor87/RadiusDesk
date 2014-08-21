@@ -351,6 +351,19 @@ class NodesController extends AppController {
 
         //Get the channel
         $channel    = $mesh['NodeSetting']['two_chan'];
+	
+		//Hardware mode for 5G
+		$hwmode		= '11ng';	//Sane default
+		$hw_temp    = $this->_get_hardware_setting($this->Hardware,'hwmode');
+		if($hw_temp){
+			$hwmode	= $hw_temp;
+		}
+
+		//Channel (if 5)
+		if($this->_get_hardware_setting($this->Hardware,'five')){
+			$channel    = $mesh['NodeSetting']['five_chan'];
+		}
+
         //The radio's channel
 		//Get the power - If the node settings has it to apply to all we do not consider the node's individual power setting
 		//The dbm value also depends on the node's hardware
@@ -367,7 +380,7 @@ class NodesController extends AppController {
                     "options"       => array(
                         'channel'       => $channel,
                         'disabled'      => 0,
-                        'hwmode'        => '11ng',
+                        'hwmode'        => $hwmode,
 						'txpower'		=> $db_power
                     ),
                     'lists'          => array(
@@ -522,11 +535,22 @@ class NodesController extends AppController {
 
 	private function _db_power_for($hw,$power_perc){
 		$return_val = 10; //some default
-
 		$ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['id'] ==$hw){
 				$return_val = intval($i['max_power'] *($power_perc/100));
+				break;
+            }
+        }
+		return $return_val;
+	}
+
+	private function _get_hardware_setting($hw,$setting){
+		$return_val = false; //some default
+		$ct = Configure::read('hardware');
+        foreach($ct as $i){
+            if($i['id'] ==$hw){
+				$return_val = $i["$setting"];
 				break;
             }
         }
