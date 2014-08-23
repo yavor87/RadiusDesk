@@ -14,6 +14,19 @@ class VouchersController extends AppController {
             'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password', 'Rd-Voucher'
         );
 
+	private $singleField	= true;
+	private $wordPool 		= array(
+		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
+		'was', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'fig',
+		'new', 'now', 'old', 'see', 'way', 'who', 'boy', 'did', 'its', 'let', 'fin',
+		'put', 'say', 'she', 'too', 'use', 'dad', 'mom', 'try',	'why', 'act', 'bar',
+		'car', 'dew', 'eat', 'far', 'gym', 'hey', 'ink', 'jet',	'key', 'log', 'mad',
+		'nap', 'odd', 'pal', 'ram',	'saw', 'tan', 'urn', 'vet', 'wed', 'yap', 'zoo',
+		'win', 'wax', 'tee', 'tin', 'til', 'tel', 'sit', 'sin', 'rim', 'red', 'rye',
+		'pin', 'pix', 'pad', 'pen', 'off', 'map', 'mas', 'lay', 'lin', 'lox', 'low',
+		'kin', 'hod', 'ego', 'dog', 'die', 'dam', 'dig', 'dim', 'cat', 'cot', 'com',  
+	);
+
     //-------- BASIC CRUD -------------------------------
 
 
@@ -346,7 +359,23 @@ class VouchersController extends AppController {
         }
         //______ END of Realm and Profile check _____
 
+		$this->v_names = array();
 
+		//Check if this is a single field voucher or not
+		$single_field = true; //Default = true
+		if(array_key_exists('single_field',$this->request->data)){
+			if($this->request->data['single_field'] == 'false'){
+				$single_field = false;
+			}else{
+				//Source a list of all the voucher names
+				$this->Voucher->contain();
+				$t_v_names = $this->Voucher->find('all',array('fields' => array('Voucher.name')));
+				foreach($t_v_names as $n){
+					$v_name = $n['Voucher']['name'];
+					array_push($this->v_names,$v_name);
+				}	
+			}
+		}
 
         //The rest of the attributes should be same as the form.
 
@@ -354,6 +383,14 @@ class VouchersController extends AppController {
             $qty = $this->request->data['quantity'];
             $counter = 0;
             while($counter < $qty){
+				//Set the voucher's name and password
+				$pwd = false;
+				if($single_field){
+					$pwd = $this->_generateVoucher();
+					$this->request->data['name']      = $pwd; 
+		        	$this->request->data['password']  = $pwd;
+				}
+
                 $this->{$this->modelClass}->create();
                 if ($this->{$this->modelClass}->save($this->request->data)) {
                     $success_flag = true;
@@ -1055,8 +1092,19 @@ class VouchersController extends AppController {
                                 )
                             )
                     ),
-                   // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',    'glyph' => Configure::read('icnAdd'),    'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array(
+						'xtype' 	=> 'splitbutton',   
+						'glyph' 	=> Configure::read('icnAdd'),    
+						'scale' 	=> 'large', 
+						'itemId' 	=> 'add',      
+						'tooltip'	=> __('Add'),
+						'menu'  => array( 
+                                'items' => array( 
+                                    array( 'text'  => _('Single field'),      		'itemId'    => 'addSingle', 'group' => 'add', 'checked' => true ),
+                                    array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false)  
+                                )
+                            )
+					),
                     array('xtype' => 'button', 'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',   'glyph' => Configure::read('icnEdit'),   'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
@@ -1471,6 +1519,26 @@ class VouchersController extends AppController {
         }
         return "$month_count/$day/$year";
     }
+
+	function _generateVoucher(){
+		//We will take two random words from the pool and then sandwitch them with random digits
+		$duplicate_flag = true;
+		while($duplicate_flag){		
+			//Generate a value
+			$pool_count = (count($this->wordPool)-1);
+			$d1 		= rand (1,9);
+			$d2 		= rand (1,9);
+			$w1			= rand(0,$pool_count);
+			$w2			= rand(0,$pool_count);
+			$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
+			//Test if not already taken
+			if(!in_array("v_value", $this->v_names)){
+				$duplicate_flag = false; //Break the loop - we ar unique;
+				array_push($this->v_names, $v_value);
+			}
+		}
+		return $v_value; //We are unique and we added ourselves to the existing list
+	}
 
 }
 ?>
