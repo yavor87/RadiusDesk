@@ -228,9 +228,31 @@ class LabelPdf extends TCPDF {
         $detail_width   = $this->width-$this->marginLeft-$img_space;
         $field_width    = $detail_width / 2;
 
-        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Username')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['username'])),false);
+		if($label_detail['username'] == $label_detail['password']){
+        	$this->_add_pair($field_width,
+				array(
+					'key'		=> iconv('UTF-8', 'windows-1252',gettext('Voucher')), 
+					'value'     => iconv('UTF-8', 'windows-1252',$label_detail['username'])
+				),
+				false
+			);
+		}else{
+			$this->_add_pair($field_width,
+				array(
+					'key'		=> iconv('UTF-8', 'windows-1252',gettext('Username')), 
+					'value'     => iconv('UTF-8', 'windows-1252',$label_detail['username'])
+				),
+				false
+			);
 
-        $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Password')), 'value'     => iconv('UTF-8', 'windows-1252',$label_detail['password'])),false);
+        	$this->_add_pair($field_width,
+				array(
+					'key'		=> iconv('UTF-8', 'windows-1252',gettext('Password')),
+					'value'     => iconv('UTF-8', 'windows-1252',$label_detail['password'])
+				),
+				false
+			);
+		}
 
         $this->_add_pair($field_width,array('key'=> iconv('UTF-8', 'windows-1252',gettext('Profile')),  'value'     => iconv('UTF-8', 'windows-1252',$label_detail['profile'])));
 
