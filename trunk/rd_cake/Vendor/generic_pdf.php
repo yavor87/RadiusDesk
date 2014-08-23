@@ -200,20 +200,30 @@ class GenericPdf extends TCPDF {
         $this->Cell(10,5, $this->Title, 0, 2, "C");
         $x_p = $this->GetX()-18;
 
-        $this->SetX($x_p);
-        $this->SetFont( 'dejavusans','', 8);
-        $this->Cell(22,$cell_height, __("Username"), 0, 0, "L");
+		if($voucher['username'] == $voucher['password']){	//Assume single field
 
-        $this->SetFont( 'dejavusans', $font_format_b, 8);
-        $this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
+			$this->SetX($x_p);
+			$this->SetFont( 'dejavusans','', 8);
+			$this->Cell(22,$cell_height, __("Voucher"), 0, 0, "L");
 
-        //--Password----
-        $this->SetFont( 'dejavusans', '', 8);
-        $this->SetX($x_p);
-        $this->Cell(22,$cell_height,__("Password"), 0, 0, "L");
+			$this->SetFont( 'dejavusans', $font_format_b, 8);
+			$this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
+		}else{
+			$this->SetX($x_p);
+			$this->SetFont( 'dejavusans','', 8);
+			$this->Cell(22,$cell_height, __("Username"), 0, 0, "L");
 
-        $this->SetFont('dejavusans', $font_format_b, 8);
-        $this->Cell(30,$cell_height, $voucher['password'], 0, 2, "L");
+			$this->SetFont( 'dejavusans', $font_format_b, 8);
+			$this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
+
+			//--Password----
+			$this->SetFont( 'dejavusans', '', 8);
+			$this->SetX($x_p);
+			$this->Cell(22,$cell_height,__("Password"), 0, 0, "L");
+
+			$this->SetFont('dejavusans', $font_format_b, 8);
+			$this->Cell(30,$cell_height, $voucher['password'], 0, 2, "L");
+		}
 
         //Profile
         $this->SetTextColor(157,157,167);
