@@ -40,10 +40,14 @@ class Voucher extends AppModel {
 
     public function beforeSave(){
         //Try to detect if it is an existing (edit):
-        $existing_flag = false;
+        //$existing_flag = false;
         if(!isset($this->data['Voucher']['id'])){
-            $this->data['Voucher']['name']      = $this->_detemine_voucher_name(); 
-            $this->data['Voucher']['password']  = $this->_generatePassword();      
+			//Single field (where voucher name and password are the same) are pre-populated with [Voucher]['name']
+			//If not we generate a name and random password
+			if(!isset($this->data['Voucher']['name'])){
+            	$this->data['Voucher']['name']      = $this->_determine_voucher_name(); 
+            	$this->data['Voucher']['password']  = $this->_generatePassword();
+			}   
         }
         $this->_build_time_valid(); //Do this regardless
          
@@ -176,7 +180,7 @@ class Voucher extends AppModel {
         );
     }
 
-    function _detemine_voucher_name(){
+    function _determine_voucher_name(){
 
         $precede = $this->data['Voucher']['precede'];
         if($precede == ''){
@@ -267,5 +271,16 @@ class Voucher extends AppModel {
             }
         }
     }
+
+	function _generateVoucher(){
+		//We will take two random words from the pool and then sandwitch them with random digits
+		$pool_count = (count($this->wordPool)-1);
+		$d1 		= rand (1,9);
+		$d2 		= rand (1,9);
+		$w1			= rand(0,$pool_count);
+		$w2			= rand(0,$pool_count);
+		$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
+		return $v_value;
+	}
 
 }
