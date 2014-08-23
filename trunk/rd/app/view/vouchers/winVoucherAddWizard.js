@@ -1,27 +1,28 @@
 Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
-    extend:     'Ext.window.Window',
-    alias :     'widget.winVoucherAddWizard',
-    closable:   true,
-    draggable:  true,
-    resizable:  false,
-    title:      i18n('sNew_voucher'),
-    width:      400,
-    height:     450,
-    plain:      true,
-    border:     false,
-    layout:     'card',
-    iconCls:    'add',
-    glyph   :   Rd.config.icnAdd,
-    autoShow:   false,
-    apId    :   false,
-    defaults: {
-            border: false
+    extend		: 'Ext.window.Window',
+    alias 		: 'widget.winVoucherAddWizard',
+    closable	: true,
+    draggable	: true,
+    resizable	: false,
+    title		: i18n('sNew_voucher'),
+    width		: 400,
+    height		: 450,
+    plain		: true,
+    border		: false,
+    layout		: 'card',
+    iconCls		: 'add',
+    glyph   	: Rd.config.icnAdd,
+    autoShow	: false,
+    apId    	: false,
+	singleField : true,
+    defaults	: {
+            border	: false
     },
-    no_tree : false, //If the user has no children we don't bother giving them a branchless tree
-    user_id : '',
-    owner   : '',
-    startScreen: 'scrnApTree', //Default start screen
-    requires: [
+    no_tree 	: false, //If the user has no children we don't bother giving them a branchless tree
+    user_id 	: '',
+    owner   	: '',
+    startScreen	: 'scrnApTree', //Default start screen
+    requires	: [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
         'Ext.form.field.Text',
@@ -105,9 +106,6 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                 margin: 15
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[
                {
                     xtype   : 'tabpanel',
@@ -132,6 +130,13 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     hidden  : true,
                                     value   : me.user_id
                                 },
+								{
+                                    itemId  : 'single_field',
+                                    xtype   : 'textfield',
+                                    name    : "single_field",
+                                    hidden  : true,
+                                    value   : me.singleField
+                                },
                                 {
                                     itemId      : 'owner',
                                     xtype       : 'displayfield',
@@ -144,7 +149,9 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     name        : 'precede',
                                     fieldLabel  : i18n('sPrecede_string'),
                                     allowBlank  : true,
-                                    labelClsExtra: 'lblRd'
+                                    labelClsExtra: 'lblRd',
+									hidden		: me.singleField,
+									disabled	: me.singleField
                                 },
                                 {
                                     xtype       : 'cmbRealm',
@@ -188,7 +195,9 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     value       : 3,
                                     increment   : 1,
                                     minValue    : 3,
-                                    maxValue    : 15
+                                    maxValue    : 15,
+									hidden		: me.singleField,
+									disabled	: me.singleField
                                 }
                             ]
                         },

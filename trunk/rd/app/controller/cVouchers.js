@@ -80,7 +80,9 @@ Ext.define('Rd.controller.cVouchers', {
         if (me.inited) {
             return;
         }
-        me.inited = true;
+        me.inited 		= true;
+		me.singleField	= true;
+
         me.control({
             '#vouchersWin'    : {
                 beforeshow  : me.winClose,
@@ -94,6 +96,9 @@ Ext.define('Rd.controller.cVouchers', {
             },  
             'gridVouchers #add'   : {
                 click:      me.add
+            },
+			'gridVouchers #add menuitem[group=add]'   : {
+                click:      me.addOptionClick
             },
             'gridVouchers #delete'   : {
                 click:      me.del
@@ -262,6 +267,17 @@ Ext.define('Rd.controller.cVouchers', {
             me.reload();
         },  interval);  
     },
+	addOptionClick: function(menu_item){
+		var me = this;
+		var n  = menu_item.getItemId();
+		if(n == 'addSingle'){
+			me.singleField = true;
+		} 
+
+		if(n == 'addDouble'){
+			me.singleField = false;
+		} 
+	},
     gridActivate: function(g){
         var me = this;
         g.getStore().load();
@@ -282,13 +298,21 @@ Ext.define('Rd.controller.cVouchers', {
                         
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
-                            var w = Ext.widget('winVoucherAddWizard',{id:'winVoucherAddWizardId'});
+                            var w = Ext.widget('winVoucherAddWizard',{id:'winVoucherAddWizardId',singleField: me.singleField});
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
                             var w = Ext.widget('winVoucherAddWizard',
-                                {id:'winVoucherAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true,apId:'0'}
+                                {
+									id			: 'winVoucherAddWizardId',
+									startScreen	: 'scrnData',
+									user_id		:'0',
+									owner		: i18n('sLogged_in_user'), 
+									no_tree		: true,
+									apId		:'0',
+									singleField : me.singleField
+								}
                             );
                             me.application.runAction('cDesktop','Add',w);         
                         }
