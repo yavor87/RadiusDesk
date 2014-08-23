@@ -101,11 +101,12 @@ my $disconn_flag= $ARGV[3];
 
 my $radclient = "/usr/local/bin/radclient";
 
+my $calling_station = "AA-AA-AA-AA-AA-AA"; #"Calling-Station-Id = 
+my $called_station  = "BB-BB-BB-BB-BB-BB"; #Called-Station-Id = 
 
 
-my @scenario_string = ("auth User-Name=$username User-Password=$password",
 
-                       );
+my @scenario_string = ("auth User-Name=$username User-Password=$password Called-Station-Id=$called_station Calling-Station-Id=$calling_station");
 
 if($disconn_flag){
 
@@ -113,14 +114,14 @@ if($disconn_flag){
     exit;
 }
 
-
+#For accounting
 if($acct_flag){
-
 my $id=time()."_test";
-@scenario_string = ("auth User-Name=$username User-Password=$password",
-                        "acct Acct-Status-Type=Start User-Name=$username Acct-Session-Id=$id",
-                        "acct Acct-Status-Type=Stop User-Name=$username Acct-Session-Time=10 Acct-Input-Octets=10 Acct-Output-Octets=10 Acct-Terminate-Cause=User-Request Acct-Session-Id=$id",
-                       );
+@scenario_string = (
+	"auth User-Name=$username User-Password=$password Called-Station-Id=$called_station Calling-Station-Id=$calling_station",
+    "acct Acct-Status-Type=Start User-Name=$username Acct-Session-Id=$id Called-Station-Id=$called_station Calling-Station-Id=$calling_station",
+    "acct Acct-Status-Type=Stop User-Name=$username Acct-Session-Time=10 Acct-Input-Octets=10 Acct-Output-Octets=10 Acct-Terminate-Cause=User-Request Acct-Session-Id=$id Called-Station-Id=$called_station Calling-Station-Id=$calling_station"
+);
 }
 
 
