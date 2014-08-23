@@ -38,7 +38,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             {xtype: 'rownumberer',stateId: 'StateGridVouchers1'},
             { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridVouchers2'},  
             { text: i18n('sName'),         dataIndex: 'name',       tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridVouchers3'},
-            { text: i18n('sPassword'),     dataIndex: 'password',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridVouchers4'},
+            { text: i18n('sPassword'),     dataIndex: 'password',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridVouchers4', hidden: true},
             { 
                 text        : i18n('sBatch'),
                 sortable    : true,
