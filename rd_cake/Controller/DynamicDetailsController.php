@@ -80,6 +80,10 @@ class DynamicDetailsController extends AppController {
             $items['settings']['connect_suffix']    = $q_r['DynamicDetail']['connect_suffix'];
             $items['settings']['connect_delay']     = $q_r['DynamicDetail']['connect_delay'];
             $items['settings']['connect_only']      = $q_r['DynamicDetail']['connect_only'];
+			$items['settings']['user_login_check']  = $q_r['DynamicDetail']['user_login_check'];
+			$items['settings']['voucher_login_check']= $q_r['DynamicDetail']['voucher_login_check'];
+			$items['settings']['auto_suffix_check'] = $q_r['DynamicDetail']['auto_suffix_check'];
+			$items['settings']['auto_suffix']       = $q_r['DynamicDetail']['auto_suffix'];
         }
 
         $success = true;
@@ -479,6 +483,27 @@ class DynamicDetailsController extends AppController {
             $this->request->data['slideshow_check'] = 0;
         }
 
+		//user_login compulsory check
+        if(isset($this->request->data['user_login_check'])){
+            $this->request->data['user_login_check'] = 1;
+        }else{
+            $this->request->data['user_login_check'] = 0;
+        }
+
+		//voucher_login compulsory check
+        if(isset($this->request->data['voucher_login_check'])){
+            $this->request->data['voucher_login_check'] = 1;
+        }else{
+            $this->request->data['voucher_login_check'] = 0;
+        }
+
+		//auto_suffix compulsory check
+        if(isset($this->request->data['auto_suffix_check'])){
+            $this->request->data['auto_suffix_check'] = 1;
+        }else{
+            $this->request->data['auto_suffix_check'] = 0;
+        }
+
         if ($this->DynamicDetail->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -624,6 +649,10 @@ class DynamicDetailsController extends AppController {
                 $items['connect_suffix']            = $q_r['DynamicDetail']['connect_suffix'];
                 $items['connect_delay']             = $q_r['DynamicDetail']['connect_delay'];
                 $items['connect_only']              = $q_r['DynamicDetail']['connect_only'];
+				$items['user_login_check']          = $q_r['DynamicDetail']['user_login_check'];
+				$items['voucher_login_check']       = $q_r['DynamicDetail']['voucher_login_check'];
+				$items['auto_suffix_check']         = $q_r['DynamicDetail']['auto_suffix_check'];
+				$items['auto_suffix']               = $q_r['DynamicDetail']['auto_suffix'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
