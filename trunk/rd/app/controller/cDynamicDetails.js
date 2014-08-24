@@ -166,6 +166,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 beforerender:   me.tabDetailActivate,
                 activate:       me.tabDetailActivate
             },
+			'pnlDynamicDetail #tabSettings #chkUserLogin' : {
+                change:  me.chkUserLoginChange
+            },
+			'pnlDynamicDetail #tabSettings #chkAutoSuffix' : {
+                change:  me.chkAutoSuffixChange
+            },
             'pnlDynamicDetail #tabSettings #chkTc' : {
                 change:  me.chkTcChange
             },
@@ -395,6 +401,31 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 Ext.ux.formFail(form,action)
             }
         });
+    },
+	chkUserLoginChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var chkSuff = form.down('#chkAutoSuffix');
+		var txtSuff = form.down('#txtSuffix');
+        var value   = chk.getValue();
+        if(value){
+            chkSuff.setDisabled(false); 
+			//txtSuff.setDisabled(false);               
+        }else{
+			chkSuff.setDisabled(true); 
+			txtSuff.setDisabled(true);
+        }
+    },
+	chkAutoSuffixChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+		var txtSuff = form.down('#txtSuffix');
+        var value   = chk.getValue();
+        if(value){
+			txtSuff.setDisabled(false);               
+        }else{
+			txtSuff.setDisabled(true);
+        }
     },
     chkTcChange: function(chk){
         var me      = this;
