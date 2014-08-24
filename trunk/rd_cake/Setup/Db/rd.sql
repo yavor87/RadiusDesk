@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (i486)
 --
 -- Host: localhost    Database: rd
 -- ------------------------------------------------------
--- Server version	5.5.38-0ubuntu0.14.04.1
+-- Server version	5.1.63-0ubuntu0.10.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -429,7 +429,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'aa-aa-aa-aa-aa-aa','ll',0,NULL,NULL,NULL,NULL,NULL,187,'2013-09-10 13:20:30','2014-01-10 10:58:57',NULL,NULL),(2,'00-1e-e5-a5-67-a6','Auto add ( Cisco-Li # Cisco-Linksys, LLC )',1,NULL,NULL,NULL,NULL,NULL,187,'2014-08-11 19:00:01','2014-08-11 19:00:01',NULL,NULL),(3,'08-ed-b9-00-bc-55','Auto add ( HonHaiPr # Hon Hai Precision Ind. Co.,Ltd. )',1,NULL,NULL,NULL,NULL,NULL,187,'2014-08-11 19:20:01','2014-08-11 19:20:01',NULL,NULL);
+INSERT INTO `devices` VALUES (2,'00-1e-e5-a5-67-a6','Auto add ( Cisco-Li # Cisco-Linksys, LLC )',1,NULL,NULL,NULL,NULL,NULL,187,'2014-08-11 19:00:01','2014-08-11 19:00:01',NULL,NULL),(3,'08-ed-b9-00-bc-55','Auto add ( HonHaiPr # Hon Hai Precision Ind. Co.,Ltd. )',1,NULL,NULL,NULL,NULL,NULL,187,'2014-08-11 19:20:01','2014-08-11 19:20:01',NULL,NULL);
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -497,6 +497,10 @@ CREATE TABLE `dynamic_details` (
   `connect_only` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `user_login_check` tinyint(1) NOT NULL DEFAULT '1',
+  `voucher_login_check` tinyint(1) NOT NULL DEFAULT '0',
+  `auto_suffix_check` tinyint(1) NOT NULL DEFAULT '0',
+  `auto_suffix` char(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -507,7 +511,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',1,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-06-05 03:54:06');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',1,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-08-24 14:38:18',1,0,0,'');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -736,7 +740,7 @@ CREATE TABLE `fin_paypal_transactions` (
 
 LOCK TABLES `fin_paypal_transactions` WRITE;
 /*!40000 ALTER TABLE `fin_paypal_transactions` DISABLE KEYS */;
-INSERT INTO `fin_paypal_transactions` VALUES (2,44,87,NULL,'radiusdesk_merch@gmail.com','2N879041J5073971B','Vouchers','2Hours','RDVoucher','rd_v1','Renier','Viljoen','radiusdesk_buyer@gmail.com','NWBRWDPU862AY','verified',2.00,2.00,0.36,'USD','02:55:52 Apr 25, 2014 PDT','Completed','2014-04-25 09:23:27','2014-04-28 05:44:43');
+INSERT INTO `fin_paypal_transactions` VALUES (2,44,87,NULL,'radiusdesk_merch@gmail.com','2N879041J5073971B','Vouchers','2Hours','RDVoucher','rd_v1','Renier','Viljoen','radiusdesk_buyer@gmail.com','NWBRWDPU862AY','verified','2.00','2.00','0.36','USD','02:55:52 Apr 25, 2014 PDT','Completed','2014-04-25 09:23:27','2014-04-28 05:44:43');
 /*!40000 ALTER TABLE `fin_paypal_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1232,7 +1236,7 @@ CREATE TABLE `node_actions` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1241,7 +1245,6 @@ CREATE TABLE `node_actions` (
 
 LOCK TABLES `node_actions` WRITE;
 /*!40000 ALTER TABLE `node_actions` DISABLE KEYS */;
-INSERT INTO `node_actions` VALUES (29,99,'execute','reboot','fetched','2014-08-11 19:27:39','2014-08-11 19:28:45');
 /*!40000 ALTER TABLE `node_actions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1280,7 +1283,7 @@ CREATE TABLE `node_ibss_connections` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7550 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1289,7 +1292,6 @@ CREATE TABLE `node_ibss_connections` (
 
 LOCK TABLES `node_ibss_connections` WRITE;
 /*!40000 ALTER TABLE `node_ibss_connections` DISABLE KEYS */;
-INSERT INTO `node_ibss_connections` VALUES (7544,101,NULL,NULL,'ba:40:41:13:60:ec',159888,1796963,525,14337,39,29,'4','GI','yes','yes','no','long',0,10,'yes',121,'no',-82,-80,'2014-08-11 19:31:41','2014-08-11 19:38:57'),(7545,100,NULL,NULL,'ba:40:41:13:60:e4',76590,1906981,631,14853,72,43,'GI','GI','yes','yes','no','long',0,60,'yes',27,'no',-15,-13,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(7546,100,NULL,NULL,'ba:40:41:13:60:ec',108275,1711340,299,13811,72,43,'GI','GI','yes','yes','no','long',3,70,'yes',50,'no',-80,-77,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(7547,99,NULL,NULL,'ba:40:41:13:60:e0',24936,1642078,210,12154,43,26,'GI','3','yes','yes','no','long',0,50,'yes',30,'no',-78,-76,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(7548,99,NULL,NULL,'ba:40:41:13:60:e4',62550,1749706,405,13753,29,39,'GI','4','yes','yes','no','long',0,0,'yes',124,'no',-77,-77,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(7549,101,NULL,NULL,'ba:40:41:13:60:e0',76485,1894236,630,14523,43,72,'GI','GI','yes','yes','no','long',0,0,'yes',33,'no',-21,-20,'2014-08-11 19:32:43','2014-08-11 19:38:57');
 /*!40000 ALTER TABLE `node_ibss_connections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1313,7 +1315,7 @@ CREATE TABLE `node_loads` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29849 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1322,7 +1324,6 @@ CREATE TABLE `node_loads` (
 
 LOCK TABLES `node_loads` WRITE;
 /*!40000 ALTER TABLE `node_loads` DISABLE KEYS */;
-INSERT INTO `node_loads` VALUES (29846,99,63283200,35262464,'9 min','11:38:02',0.13,0.19,0.13,'2014-08-11 19:17:16','2014-08-11 19:38:57'),(29847,101,63283200,37249024,'8 min','11:38:01',0.16,0.19,0.13,'2014-08-11 19:31:41','2014-08-11 19:38:57'),(29848,100,63283200,37285888,'8 min','11:38:01',0.04,0.12,0.11,'2014-08-11 19:32:43','2014-08-11 19:38:57');
 /*!40000 ALTER TABLE `node_loads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1394,7 +1395,7 @@ CREATE TABLE `node_neighbors` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1403,7 +1404,6 @@ CREATE TABLE `node_neighbors` (
 
 LOCK TABLES `node_neighbors` WRITE;
 /*!40000 ALTER TABLE `node_neighbors` DISABLE KEYS */;
-INSERT INTO `node_neighbors` VALUES (40,101,'no',99,1.0160,'2014-08-11 19:31:41','2014-08-11 19:38:57'),(41,99,'yes',101,1.0200,'2014-08-11 19:31:41','2014-08-11 19:38:57'),(42,101,'no',100,1.0000,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(43,99,'yes',100,1.0900,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(44,100,'no',101,1.0160,'2014-08-11 19:32:43','2014-08-11 19:38:57'),(45,100,'no',99,1.0000,'2014-08-11 19:32:43','2014-08-11 19:38:57');
 /*!40000 ALTER TABLE `node_neighbors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1437,7 +1437,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (14,35,'admin',100,1,11,44,60,300,'2014-07-26 04:22:20','2014-08-11 12:14:12','$1$vNSzDtxr$5gx1cm954F8qeiXIUKdS81'),(15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 12:33:19','');
+INSERT INTO `node_settings` VALUES (14,35,'admin',100,1,11,44,60,300,'2014-07-26 04:22:20','2014-08-11 12:14:12','$1$vNSzDtxr$5gx1cm954F8qeiXIUKdS81'),(15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1476,7 +1476,7 @@ CREATE TABLE `node_stations` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1383 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1485,7 +1485,6 @@ CREATE TABLE `node_stations` (
 
 LOCK TABLES `node_stations` WRITE;
 /*!40000 ALTER TABLE `node_stations` DISABLE KEYS */;
-INSERT INTO `node_stations` VALUES (1381,99,54,'HonHaiPr # Hon Hai Precision Ind. Co.,Ltd.','08:ed:b9:00:bc:55',41854,87973,245,564,39,59,'4','6','yes','yes','no','short',0,10,'yes',40,'no',-74,-73,'2014-08-11 19:25:47','2014-08-11 19:25:47'),(1382,101,54,'HonHaiPr # Hon Hai Precision Ind. Co.,Ltd.','08:ed:b9:00:bc:55',14895,23044,102,222,52,65,'5','7','yes','yes','no','short',0,30,'yes',0,'no',-37,-36,'2014-08-11 19:33:46','2014-08-11 19:33:46');
 /*!40000 ALTER TABLE `node_stations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1505,7 +1504,7 @@ CREATE TABLE `node_systems` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=707 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1514,7 +1513,6 @@ CREATE TABLE `node_systems` (
 
 LOCK TABLES `node_systems` WRITE;
 /*!40000 ALTER TABLE `node_systems` DISABLE KEYS */;
-INSERT INTO `node_systems` VALUES (677,99,'system_type','Atheros AR9330 rev 1','cpu','2014-08-11 19:17:16','2014-08-11 19:17:16'),(678,99,'machine','Dragino Dragino v2','cpu','2014-08-11 19:17:16','2014-08-11 19:17:16'),(679,99,'cpu_model','MIPS 24Kc V7.4','cpu','2014-08-11 19:17:16','2014-08-11 19:17:16'),(680,99,'BogoMIPS','265.42','cpu','2014-08-11 19:17:16','2014-08-11 19:17:16'),(681,99,'DISTRIB_ID','OpenWrt','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(682,99,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(683,99,'DISTRIB_REVISION','r41803','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(684,99,'DISTRIB_CODENAME','attitude_adjustment','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(685,99,'DISTRIB_TARGET','ar71xx/generic','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(686,99,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-08-11 19:17:16','2014-08-11 19:17:16'),(687,101,'system_type','Atheros AR9330 rev 1','cpu','2014-08-11 19:31:41','2014-08-11 19:31:41'),(688,101,'machine','Dragino Dragino v2','cpu','2014-08-11 19:31:41','2014-08-11 19:31:41'),(689,101,'cpu_model','MIPS 24Kc V7.4','cpu','2014-08-11 19:31:41','2014-08-11 19:31:41'),(690,101,'BogoMIPS','265.42','cpu','2014-08-11 19:31:41','2014-08-11 19:31:41'),(691,101,'DISTRIB_ID','OpenWrt','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(692,101,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(693,101,'DISTRIB_REVISION','r41803','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(694,101,'DISTRIB_CODENAME','attitude_adjustment','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(695,101,'DISTRIB_TARGET','ar71xx/generic','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(696,101,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-08-11 19:31:41','2014-08-11 19:31:41'),(697,100,'system_type','Atheros AR9330 rev 1','cpu','2014-08-11 19:32:43','2014-08-11 19:32:43'),(698,100,'machine','Dragino Dragino v2','cpu','2014-08-11 19:32:43','2014-08-11 19:32:43'),(699,100,'cpu_model','MIPS 24Kc V7.4','cpu','2014-08-11 19:32:43','2014-08-11 19:32:43'),(700,100,'BogoMIPS','265.42','cpu','2014-08-11 19:32:43','2014-08-11 19:32:43'),(701,100,'DISTRIB_ID','OpenWrt','release','2014-08-11 19:32:43','2014-08-11 19:32:43'),(702,100,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-08-11 19:32:43','2014-08-11 19:32:43'),(703,100,'DISTRIB_REVISION','r41803','release','2014-08-11 19:32:43','2014-08-11 19:32:43'),(704,100,'DISTRIB_CODENAME','attitude_adjustment','release','2014-08-11 19:32:43','2014-08-11 19:32:43'),(705,100,'DISTRIB_TARGET','ar71xx/generic','release','2014-08-11 19:32:43','2014-08-11 19:32:43'),(706,100,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-08-11 19:32:43','2014-08-11 19:32:43');
 /*!40000 ALTER TABLE `node_systems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1542,7 +1540,7 @@ CREATE TABLE `nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1551,7 +1549,6 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (99,41,'VT1','VT1','A8-40-41-13-60-EF','dragino',100,'10.5.5.1','2014-08-11 19:38:57',0,NULL,NULL,'logo.jpg','2014-08-11 19:17:07','2014-08-11 19:38:57'),(100,41,'VT2','VT2','A8-40-41-13-60-E3','dragino',100,'10.5.5.2','2014-08-11 19:38:57',0,NULL,NULL,'logo.jpg','2014-08-11 19:17:32','2014-08-11 19:38:57'),(101,41,'VT3','VT3','A8-40-41-13-60-E7','dragino',100,'10.5.5.3','2014-08-11 19:38:57',0,NULL,NULL,'logo.jpg','2014-08-11 19:17:55','2014-08-11 19:38:57');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1906,7 +1903,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9227 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9691 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1915,7 +1912,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8482,'aa-aa-aa-aa-aa-aa','Rd-User-Type',':=','device'),(8483,'aa-aa-aa-aa-aa-aa','Rd-Realm',':=','Residence Inn'),(8484,'aa-aa-aa-aa-aa-aa','Rd-Device-Owner',':=','dvdwalt'),(8485,'aa-aa-aa-aa-aa-aa','User-Profile',':=','Time-Standard-1Hour'),(8486,'aa-aa-aa-aa-aa-aa','Rd-Cap-Type-Time',':=','hard'),(8488,'aa-aa-aa-aa-aa-aa','Rd-Not-Track-Auth',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(8911,'aa-aa-aa-aa-aa-aa','Rd-Account-Disabled',':=','1'),(9191,'dvdwalt','Rd-Total-Data',':=','7517241344'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9204,'000001','Cleartext-Password',':=','HTB'),(9205,'000001','Rd-User-Type',':=','voucher'),(9206,'000001','Rd-Realm',':=','Residence Inn'),(9207,'000001','User-Profile',':=','Data-Standard-250'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9210,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9211,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9214,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9215,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9216,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(9217,'00-1e-e5-a5-67-a6','Rd-User-Type',':=','device'),(9218,'00-1e-e5-a5-67-a6','Rd-Realm',':=','Residence Inn'),(9219,'00-1e-e5-a5-67-a6','Rd-Device-Owner',':=','dvdwalt'),(9220,'00-1e-e5-a5-67-a6','User-Profile',':=','Data-Standard-1G'),(9221,'00-1e-e5-a5-67-a6','Rd-Account-Disabled',':=','0'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0');
+INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(9191,'dvdwalt','Rd-Total-Data',':=','7517241344'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9210,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9211,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9214,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9215,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9216,'dvdwalt','Rd-Cap-Type-Data',':=','soft'),(9217,'00-1e-e5-a5-67-a6','Rd-User-Type',':=','device'),(9218,'00-1e-e5-a5-67-a6','Rd-Realm',':=','Residence Inn'),(9219,'00-1e-e5-a5-67-a6','Rd-Device-Owner',':=','dvdwalt'),(9220,'00-1e-e5-a5-67-a6','User-Profile',':=','Data-Standard-1G'),(9221,'00-1e-e5-a5-67-a6','Rd-Account-Disabled',':=','0'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0'),(9611,'day2lay1','Cleartext-Password',':=','day2lay1'),(9612,'day2lay1','Rd-User-Type',':=','voucher'),(9613,'day2lay1','Rd-Realm',':=','Residence Inn'),(9614,'day2lay1','User-Profile',':=','Data-Standard-250'),(9615,'did9ego1','Cleartext-Password',':=','did9ego1'),(9616,'did9ego1','Rd-User-Type',':=','voucher'),(9617,'did9ego1','Rd-Realm',':=','Residence Inn'),(9618,'did9ego1','User-Profile',':=','Data-Standard-250'),(9619,'can5can1','Cleartext-Password',':=','can5can1'),(9620,'can5can1','Rd-User-Type',':=','voucher'),(9621,'can5can1','Rd-Realm',':=','Residence Inn'),(9622,'can5can1','User-Profile',':=','Data-Standard-250'),(9623,'lox9out5','Cleartext-Password',':=','lox9out5'),(9624,'lox9out5','Rd-User-Type',':=','voucher'),(9625,'lox9out5','Rd-Realm',':=','Residence Inn'),(9626,'lox9out5','User-Profile',':=','Data-Standard-250'),(9627,'urn3get2','Cleartext-Password',':=','urn3get2'),(9628,'urn3get2','Rd-User-Type',':=','voucher'),(9629,'urn3get2','Rd-Realm',':=','Residence Inn'),(9630,'urn3get2','User-Profile',':=','Data-Standard-250'),(9631,'you9its2','Cleartext-Password',':=','you9its2'),(9632,'you9its2','Rd-User-Type',':=','voucher'),(9633,'you9its2','Rd-Realm',':=','Residence Inn'),(9634,'you9its2','User-Profile',':=','Data-Standard-250'),(9635,'how6odd1','Cleartext-Password',':=','how6odd1'),(9636,'how6odd1','Rd-User-Type',':=','voucher'),(9637,'how6odd1','Rd-Realm',':=','Residence Inn'),(9638,'how6odd1','User-Profile',':=','Data-Standard-250'),(9639,'ram2who9','Cleartext-Password',':=','ram2who9'),(9640,'ram2who9','Rd-User-Type',':=','voucher'),(9641,'ram2who9','Rd-Realm',':=','Residence Inn'),(9642,'ram2who9','User-Profile',':=','Data-Standard-250'),(9643,'our9dim7','Cleartext-Password',':=','our9dim7'),(9644,'our9dim7','Rd-User-Type',':=','voucher'),(9645,'our9dim7','Rd-Realm',':=','Residence Inn'),(9646,'our9dim7','User-Profile',':=','Data-Standard-250'),(9647,'lox8boy4','Cleartext-Password',':=','lox8boy4'),(9648,'lox8boy4','Rd-User-Type',':=','voucher'),(9649,'lox8boy4','Rd-Realm',':=','Residence Inn'),(9650,'lox8boy4','User-Profile',':=','Data-Standard-250'),(9651,'dad5why9','Cleartext-Password',':=','dad5why9'),(9652,'dad5why9','Rd-User-Type',':=','voucher'),(9653,'dad5why9','Rd-Realm',':=','Residence Inn'),(9654,'dad5why9','User-Profile',':=','Data-Standard-250'),(9655,'mad4wax3','Cleartext-Password',':=','mad4wax3'),(9656,'mad4wax3','Rd-User-Type',':=','voucher'),(9657,'mad4wax3','Rd-Realm',':=','Residence Inn'),(9658,'mad4wax3','User-Profile',':=','Data-Standard-250'),(9659,'map4why2','Cleartext-Password',':=','map4why2'),(9660,'map4why2','Rd-User-Type',':=','voucher'),(9661,'map4why2','Rd-Realm',':=','Residence Inn'),(9662,'map4why2','User-Profile',':=','Data-Standard-250'),(9663,'sit3dig9','Cleartext-Password',':=','sit3dig9'),(9664,'sit3dig9','Rd-User-Type',':=','voucher'),(9665,'sit3dig9','Rd-Realm',':=','Residence Inn'),(9666,'sit3dig9','User-Profile',':=','Data-Standard-250'),(9667,'key9day9','Cleartext-Password',':=','key9day9'),(9668,'key9day9','Rd-User-Type',':=','voucher'),(9669,'key9day9','Rd-Realm',':=','Residence Inn'),(9670,'key9day9','User-Profile',':=','Data-Standard-250'),(9671,'why9low2','Cleartext-Password',':=','why9low2'),(9672,'why9low2','Rd-User-Type',':=','voucher'),(9673,'why9low2','Rd-Realm',':=','Residence Inn'),(9674,'why9low2','User-Profile',':=','Data-Standard-250'),(9675,'lay8wax5','Cleartext-Password',':=','lay8wax5'),(9676,'lay8wax5','Rd-User-Type',':=','voucher'),(9677,'lay8wax5','Rd-Realm',':=','Residence Inn'),(9678,'lay8wax5','User-Profile',':=','Data-Standard-250'),(9679,'cat9far7','Cleartext-Password',':=','cat9far7'),(9680,'cat9far7','Rd-User-Type',':=','voucher'),(9681,'cat9far7','Rd-Realm',':=','Residence Inn'),(9682,'cat9far7','User-Profile',':=','Data-Standard-250'),(9683,'hod7our4','Cleartext-Password',':=','hod7our4'),(9684,'hod7our4','Rd-User-Type',':=','voucher'),(9685,'hod7our4','Rd-Realm',':=','Residence Inn'),(9686,'hod7our4','User-Profile',':=','Data-Standard-250'),(9687,'pad6not5','Cleartext-Password',':=','pad6not5'),(9688,'pad6not5','Rd-User-Type',':=','voucher'),(9689,'pad6not5','Rd-Realm',':=','Residence Inn'),(9690,'pad6not5','User-Profile',':=','Data-Standard-250');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2432,7 +2429,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-08-11 12:51:57',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-08-28 11:31:14','2014-08-11 12:51:57',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','537ca8a5-ff10-4e91-94cf-0b9203662c24','','','','','','sql',1,0,'2014-08-11 19:13:39','2013-10-05 20:39:14','10.1.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,4,5,'2013-09-04 10:51:36','2014-08-11 12:51:57',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,6,7,'2013-10-25 11:22:19','2014-08-11 12:51:57',NULL,NULL),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','5384ce4c-12d0-4a56-82e3-419a03662c24','','','','','','sql',1,0,'2014-05-27 19:46:00',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,8,9,'2014-05-27 19:41:32','2014-08-11 12:51:57',NULL,0);
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-08-11 12:51:57',NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-08-28 11:31:14','2014-08-11 12:51:57',NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','537ca8a5-ff10-4e91-94cf-0b9203662c24','','','','','','sql',1,0,'2014-08-11 19:13:39','2013-10-05 20:39:14','10.1.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,4,5,'2013-09-04 10:51:36','2014-08-11 12:51:57',NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,6,7,'2013-10-25 11:22:19','2014-08-11 12:51:57',NULL,NULL),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','5384ce4c-12d0-4a56-82e3-419a03662c24','','','','','','sql',1,0,'2014-08-23 05:10:08',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,8,9,'2014-05-27 19:41:32','2014-08-11 12:51:57',NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2469,7 +2466,7 @@ CREATE TABLE `vouchers` (
   `time_valid` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ak_vouchers` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=235 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2478,7 +2475,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (118,'000001','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-05-27 11:37:34','2014-05-27 11:37:34','','','HTB','Residence Inn',34,'Data-Standard-250',7,'','');
+INSERT INTO `vouchers` VALUES (215,'day2lay1','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','day2lay1','Residence Inn',34,'Data-Standard-250',7,'',''),(216,'did9ego1','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','did9ego1','Residence Inn',34,'Data-Standard-250',7,'',''),(217,'can5can1','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','can5can1','Residence Inn',34,'Data-Standard-250',7,'',''),(218,'lox9out5','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','lox9out5','Residence Inn',34,'Data-Standard-250',7,'',''),(219,'urn3get2','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','urn3get2','Residence Inn',34,'Data-Standard-250',7,'',''),(220,'you9its2','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','you9its2','Residence Inn',34,'Data-Standard-250',7,'',''),(221,'how6odd1','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','how6odd1','Residence Inn',34,'Data-Standard-250',7,'',''),(222,'ram2who9','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','ram2who9','Residence Inn',34,'Data-Standard-250',7,'',''),(223,'our9dim7','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','our9dim7','Residence Inn',34,'Data-Standard-250',7,'',''),(224,'lox8boy4','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','lox8boy4','Residence Inn',34,'Data-Standard-250',7,'',''),(225,'dad5why9','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','dad5why9','Residence Inn',34,'Data-Standard-250',7,'',''),(226,'mad4wax3','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','mad4wax3','Residence Inn',34,'Data-Standard-250',7,'',''),(227,'map4why2','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','map4why2','Residence Inn',34,'Data-Standard-250',7,'',''),(228,'sit3dig9','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','sit3dig9','Residence Inn',34,'Data-Standard-250',7,'',''),(229,'key9day9','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','key9day9','Residence Inn',34,'Data-Standard-250',7,'',''),(230,'why9low2','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','why9low2','Residence Inn',34,'Data-Standard-250',7,'',''),(231,'lay8wax5','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','lay8wax5','Residence Inn',34,'Data-Standard-250',7,'',''),(232,'cat9far7','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','cat9far7','Residence Inn',34,'Data-Standard-250',7,'',''),(233,'hod7our4','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','hod7our4','Residence Inn',34,'Data-Standard-250',7,'',''),(234,'pad6not5','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-08-23 12:52:36','2014-08-23 12:52:36','','','pad6not5','Residence Inn',34,'Data-Standard-250',7,'','');
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2491,4 +2488,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-11 19:39:01
+-- Dump completed on 2014-08-24 14:46:04
