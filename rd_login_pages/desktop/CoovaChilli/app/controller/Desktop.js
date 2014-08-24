@@ -71,6 +71,12 @@ Ext.define('CoovaChilli.controller.Desktop', {
             },
             'pnlConnect #btnClickToConnect' : {
                 click: me.onBtnClickToConnect
+            },
+			'pnlConnect #tabUser' : {
+                activate: me.onTabUserActivate
+            },
+			'pnlConnect #tabVoucher' : {
+                activate: me.onTabVoucherActivate
             }
         });    
     },
@@ -478,6 +484,29 @@ Ext.define('CoovaChilli.controller.Desktop', {
             me.onBtnConnectClick(b,true);
         }
     },
+	onTabUserActivate: function(tab){
+		var me = this;
+		var form = tab.up('form');
+		var un = form.down('#inpUsername');
+		var pw = form.down('#inpPassword');
+		var v  = form.down('#inpVoucher');
+		un.setDisabled(false);
+		pw.setDisabled(false);
+		v.setValue('');
+		v.setDisabled(true);
+	},
+	onTabVoucherActivate: function(tab){
+		var me = this;
+		var form = tab.up('form');
+		var un = form.down('#inpUsername');
+		var pw = form.down('#inpPassword');
+		var v  = form.down('#inpVoucher');
+		un.setValue('');
+		pw.setValue('');
+		un.setDisabled(true);
+		pw.setDisabled(true);
+		v.setDisabled(false);
+	},
     onBtnConnectClick: function(b,c_to_c){  //Get the latest challenge and continue from there onwards.... c_to_c = click to connect
         var me = this;
 
@@ -494,9 +523,24 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         //Set the username and password properties of this object to the values supplied
         if(c_to_c != true){
-            me.userName = me.getConnect().down('#inpUsername').getValue();
-            me.password = me.getConnect().down('#inpPassword').getValue();
-            me.remember = me.getConnect().down('#inpRememberMe').getValue();
+			//Check if there is a username controll and it is not empty
+			if((me.getConnect().down('#inpUsername') != undefined)&&
+			(me.getConnect().down('#inpUsername').getValue() != '')
+			){
+		        me.userName = me.getConnect().down('#inpUsername').getValue();
+		        me.password = me.getConnect().down('#inpPassword').getValue();
+				me.remember = me.getConnect().down('#inpRememberMe').getValue(); //This should always be there
+			}
+
+			//Check if there is a voucher controll and it is not empty
+			if((me.getConnect().down('#inpVoucher') != undefined)&&
+			(me.getConnect().down('#inpVoucher').getValue() != '')
+			){
+		        me.userName = me.getConnect().down('#inpVoucher').getValue();
+		        me.password = me.getConnect().down('#inpVoucher').getValue();
+				me.remember = me.getConnect().down('#inpRememberMe').getValue(); //This should always be there
+			}
+		   	
         }else{
             var suffix  = b.up('pnlConnect').jsonData.settings.connect_suffix;
             me.userName = b.up('pnlConnect').jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
