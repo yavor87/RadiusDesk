@@ -59,6 +59,32 @@ if not exists (select * from information_schema.columns
     alter table dynamic_details add column `connect_only` tinyint(1) NOT NULL DEFAULT '0';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'user_login_check' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `user_login_check` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'voucher_login_check' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `voucher_login_check` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'auto_suffix_check' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `auto_suffix_check` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'auto_suffix' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `auto_suffix` char(200) NOT NULL DEFAULT '';
+end if;
+
+
+if not exists (select * from information_schema.columns
+    where column_name = 'url' and table_name = 'dynamic_photos' and table_schema = 'rd') then
+    alter table dynamic_photos add column `url` varchar(250) NOT NULL DEFAULT '';
+end if;
+
 end//
 
 delimiter ;
