@@ -807,7 +807,21 @@ td.grdEditable div {
   display:none;
 }
 
+.lightGreen {
+background-color:#eaffea;
+}
 
+.lightBlue {
+background-color:#e9fdff;
+}
+
+.lightGrey {
+background-color:#dcdcdc;
+}
+
+.lightRed {
+background-color:#ffecec;
+}
 
 
 

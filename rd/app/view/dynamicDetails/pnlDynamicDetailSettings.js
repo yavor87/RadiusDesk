@@ -33,6 +33,43 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : "id",
                         hidden      : true
                     },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'User login',
+                        itemId      : 'chkUserLogin',
+                        name        : 'user_login_check',
+                        inputValue  : 'user_login_check',
+                        checked     : true,
+                        labelClsExtra: 'lblRdReq',
+						baseCls		: 'lightGreen'
+                    },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Auto-add suffix',
+                        itemId      : 'chkAutoSuffix',
+                        name        : 'auto_suffix_check',
+                        inputValue  : 'auto_suffix_check',
+                        checked     : true,
+                        labelClsExtra: 'lblRd',
+						baseCls		: 'lightGreen'
+                    },
+					{
+                        xtype       : 'textfield',
+                        fieldLabel  : 'Suffix',
+                        itemId      : 'txtSuffix',
+                        name        : 'auto_suffix',
+                        disabled    : true,
+                        baseCls		: 'lightGreen'
+                    },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Voucher login',
+                        itemId      : 'chkVoucherLogin',
+                        name        : 'voucher_login_check',
+                        inputValue  : 'voucher_login_check',
+                        checked     : true,
+                        labelClsExtra: 'lblRdReq'
+                    },
                     {
                         xtype       : 'checkbox',      
                         fieldLabel  : 'Agree to T&C',
@@ -40,7 +77,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : 't_c_check',
                         inputValue  : 't_c_check',
                         checked     : false,
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+						baseCls		: 'lightGrey'
                     },
                     {
                         xtype       : 'textfield',
@@ -49,7 +87,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : "t_c_url",
                         disabled    : true,
                         allowBlank  : false,
-                        vtype       : 'url'
+                        vtype       : 'url',
+						baseCls		: 'lightGrey'
                     },       
                     {
                         xtype       : 'checkbox',      
@@ -58,7 +97,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : 'redirect_check',
                         inputValue  : 'redirect_check',
                         checked     : false,
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+						baseCls		: 'lightRed'
                     },
                     {
                         xtype       : 'textfield',
@@ -67,7 +107,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : "redirect_url",
                         disabled    : true,
                         allowBlank  : false,
-                        vtype       : 'url'
+                        vtype       : 'url',
+						baseCls		: 'lightRed'
                     },
                     {
                         xtype       : 'checkbox',      
@@ -76,7 +117,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : 'slideshow_check',
                         inputValue  : 'slideshow_check',
                         checked     : false,
-                        labelClsExtra: 'lblRdReq'
+                        labelClsExtra: 'lblRdReq',
+						baseCls		: 'lightBlue'
                     },
                     {
                         xtype       : 'numberfield',
@@ -86,7 +128,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         value       : 30,
                         maxValue    : 300,
                         minValue    : 10,
-                        disabled    : true
+                        disabled    : true,
+						baseCls		: 'lightBlue'
                     }
                 ],
                 buttons: [
