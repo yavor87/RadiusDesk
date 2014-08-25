@@ -183,3 +183,13 @@
     font-size:90%;
 }
 
+.lblSeperator {
+	color: #165def;
+    font-weight: bold;
+    padding: 2px;
+	margin: 2px 10px 2px 10px;
+	background: #aeadad;
+	text-align: center;
+}
+
+

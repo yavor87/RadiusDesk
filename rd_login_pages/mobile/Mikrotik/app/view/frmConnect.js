@@ -19,15 +19,20 @@ Ext.define('Mikrotik.view.frmConnect', {
             t_c_hidden = false;
         }
 
-        //If Click to connect
+		//Some sane defaults
         var un_hidden = false;
         var pw_hidden = false;
         var rm_hidden = false;
+		var v_hidden  = true;
+		var or_hidden = true;
+
         if(config.jsonData.settings.connect_only == true){
             un_hidden = true;
             pw_hidden = true;
             rm_hidden = true;
-        } 
+			v_hidden  = true;
+			or_hidden = true;
+        }
 
         var buttons;
 
@@ -82,6 +87,42 @@ Ext.define('Mikrotik.view.frmConnect', {
                 ];
         }
 
+		//We need to turn the controlls on and off depending what is selected:		
+		if(
+			(config.jsonData.settings.voucher_login_check 	== false)&&
+			(config.jsonData.settings.user_login_check 		== true)&&
+			(config.jsonData.settings.connect_only 			== false)
+		){
+			un_hidden = false;
+		    pw_hidden = false;
+		    rm_hidden = false;
+			v_hidden  = true;
+			or_hidden = true;
+		}
+
+		if(
+			(config.jsonData.settings.voucher_login_check 	== true)&&
+			(config.jsonData.settings.user_login_check 		== false)&&
+			(config.jsonData.settings.connect_only 			== false)
+		){
+			un_hidden = true;
+		    pw_hidden = true;
+		    rm_hidden = false;
+			v_hidden  = false;
+			or_hidden = true;
+		}
+
+		if(
+			(config.jsonData.settings.voucher_login_check 	== true)&&
+			(config.jsonData.settings.user_login_check 		== true)&&
+			(config.jsonData.settings.connect_only 			== false)
+		){
+			un_hidden = false;
+		    pw_hidden = false;
+		    rm_hidden = false;
+			v_hidden  = false;
+			or_hidden = false;
+		}
 
         var fs = Ext.create('Ext.form.FieldSet',{
                 title       : 'Credentials',
@@ -99,6 +140,20 @@ Ext.define('Mikrotik.view.frmConnect', {
                         ],
                         data : config.jsonData.detail
                     },
+					{
+                        xtype   : 'textfield',
+                        name    : 'name',
+                        label   : 'Voucher',
+                        itemId  : 'inpVoucher',
+                        hidden  : v_hidden,
+                        disabled: v_hidden
+                    },
+					{
+						xtype	: 'label',
+						html	: '-OR-',
+						baseCls : 'lblSeperator',
+						hidden	: or_hidden 
+					},
                     {
                         xtype   : 'textfield',
                         name    : 'name',

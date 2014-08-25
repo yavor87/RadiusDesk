@@ -13,7 +13,7 @@
       "c6c1fb2fb1dda28480ad0f6e5caffc9b97d196ae": "eJytkUFygzAMRfc5hSZsOxygM11223aRCwgsQBNH8tiCTG5fGWjDAcLOsnjvS27g45XfqYHLxAUGjgQp68KBCqCALpSzHyApi8GgGQINOEeDBTNjF73PKywUgAUclLC/4kjt3lda5yXKxlRat1BZDXsFMBOoxAfwLWk2p9wnEuhmjoFldF512kRw3sFnIFk4q9xIrD013vLz5B2y2P9EhtcqZc1sj3WmTXCI5gWrYZy2xomKwTFV/hSvP5XN+fV9+Xzftjb7SDoc+jClWJmmIGi80N9SwnbVe1HlDUTdWfNvt1togpGEMkYoLP1K7tVfIHKXfeVU/S9+/V9rlbyW"
     },
     "sencha.cfg.tpl.merge": {
-      "d2e6e42720f88befc892f12df5fd7bab587f7879": "eJxtUDEOwjAM3PsKSzAi6MaUhQfwAhaTujTQNpHtClWof8cpamFgSU53F/sumNK+x47cK59TUaARNRt+Rn641wrPX9m3KJJQG7e9DGV5PGWyCjwdMrjL7g9dFBvQJggkjolYR5BEPtSBBBB87DoEoYSMShW0QRRiDXmJmNorhj70NxvCJHFgb880mpLGfGtDcB1CW4HtI6+RxznpYt7Pg9wn/mzMwZb4uZ71MdsqTYefDp+feQN/i2pK"
+      "1c8816ae68410194920503d7ebb08a9cbfde5e97": "eJxtUDEOwjAM3PsKSzCi0o2pCw/gBSwmdWmgbSLbFaqq/h2nqIWBJTndXey7YIx5jx2VUzrnLEMjajb8Cvwspw1evrJrUSSiNuX+OhTF6ZzIyvN8TOAhhz90lu1AGy8QOURiHUEiOV97EkBwoesQhCIyKlXQelEINaQlYmqv6Hvf320Ik4SBnT3TYEoc060NwW3wbQW2j5wGHpekqzlfBpWf+IsxBVvjp3rWx2ybNB9/Oiw/8wYVQWpA"
     },
     "build.properties.merge": {
       "ec0f832e80d63d776086203cffe9fed5c73b4294": "eJytUstOw0AMvPcrRuoNQT8AiQPixIGHoD/gZp3E6saOdjeJ+vc4fagSQZy6N3vs8YzXazzd8q3W2LaSUUtk9MlGCZxBChs5JQ/Qm2hBbQmBaxpiwUhJaBe9zjOiHCCK0nJmZ4s2cXImsSTlcOTNj6u1I8ADig1Vu/E5PacinM/pu82ZOy+xP5FZtl01Es7gATvKLsgUu0Fi2LCOkkw7dg+iuTAFUAi4krkmZzNlWH1ygVaa9h8T3huGqojpUm3hXESbJaBUZORlvqdqTw3/dvf69vnxtX1+33rJN2vVEl66gEliRMepYRxsSPC8Nu5hktJCSoZNijAkl4ChbxL5b25Oy6LRxH1b8VUIXVgq0zpK5Z0nvKP93BvJwXvkibmf48uc467K5WBm5tte4w874erN"
@@ -38,6 +38,9 @@
     },
     "{controllerFileName}.js.tpl.merge": {
       "7cd8d1cf12515ca525732931d6b775e3f7924ad9": "eJx1j0EKwyAQRfeeYnYmIMk+XZXSbe8gOjaCGSWxbSB49xoTQij0L8ZR3p8/3ufYaDSWsOKL8hRH7xyODzngFKTC1Py8Ji5gYZCFc0TSHfB7niFDaG4HyEUhSsl2Y5/dblo1opnO9wNdlcTR7sH/UXYylNK2SuZ8DZ8eCWKPcA3BWSWj9QR2AidfpHrUIi8x+DeCNUA+AiFq1GXGhnRg8rHaqvy1+rTCFspSfWFfyCxXmA\u003d\u003d"
+    },
+    "development.properties.merge": {
+      "c45c602c9b6f6f73cace183e9f0bf09c00a3ccf6": "eJytkUuOAjEMBfec4one9w24wyy4QFDc0xbBjhyTEbcfp0F89mRny6l6liccvvl2E44rNyxcCNW0c6aGJNBOZlGgKotjUUOmJV2LoyfjdCoxFx0WymBBgJyas/zOj7k2B6+SOVObw0JtMzw6SEZQKTfwpap5UP5WEpyuXHJQgjecvhL2mToVrRcS34Oks6mMYt5NMfbzYr7l8edWns5DzGrst22vu+QtXjR8BAraFqloyoEZAT7l28cW3i9f4R+b7pUs"
     }
   },
   "targets": {
@@ -45,240 +48,240 @@
       "source": "native.properties.merge",
       "version": "2c8c063f9588eecff09624782d7369a8a000d61c",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     ".sencha/app/testing.properties": {
       "source": "testing.properties.merge",
       "version": "360e715956c81757e53736789fe20be045acb544",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     ".sencha/app/production.properties": {
       "source": "production.properties.merge",
       "version": "cbdf9712e9b5d37cecb4d0530ba1fccd0ed004a3",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     ".sencha/app/package.properties": {
       "source": "package.properties.merge",
       "version": "c6c1fb2fb1dda28480ad0f6e5caffc9b97d196ae",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     ".sencha/app/sencha.cfg": {
       "source": "sencha.cfg.tpl.merge",
-      "version": "d2e6e42720f88befc892f12df5fd7bab587f7879",
+      "version": "1c8816ae68410194920503d7ebb08a9cbfde5e97",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     ".sencha/app/build.properties": {
       "source": "build.properties.merge",
       "version": "ec0f832e80d63d776086203cffe9fed5c73b4294",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "app.json": {
       "source": "app.json.tpl.merge",
       "version": "a36200bbd84dffd4133a6074252425c15a5f25b1",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "index.html": {
       "source": "index.html.tpl.merge",
       "version": "5c2622f8945945e183e62230dbbcdc870ee41e31",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "app.js": {
       "source": "app.js.tpl.merge",
       "version": "bf7e5518d2efd28e0a64077e1e7666428cf994ae",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "packager.json": {
       "source": "packager.json.tpl.merge",
       "version": "79175610d9330cc0582cd66bb8103f2e24409b4a",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "resources/sass/app.scss": {
       "source": "app.scss.tpl.merge",
       "version": "3d3f6b023c31a4e49cd626dd27cff9474aff32d7",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "resources/sass/config.rb": {
       "source": "config.rb.tpl.merge",
       "version": "e254e92dd21bc9ecb27f3b8251d67dfbc79fa1af",
       "parameters": {
-        "viewNamespace": "CoovaChilli.view",
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
         "frameworkName": "touch",
         "frameworkPath": "touch",
-        "senchadir": ".sencha",
-        "appModels": "",
-        "appControllers": "",
-        "appViews": "",
-        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
-        "appName": "CoovaChilli",
+        "library": "core",
         "modelNamespace": "CoovaChilli.model",
         "name": "CoovaChilli",
-        "library": "core",
-        "controllerNamespace": "CoovaChilli.controller",
-        "appStores": ""
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     },
     "app/controller/Main.js": {
@@ -286,10 +289,30 @@
       "version": "7cd8d1cf12515ca525732931d6b775e3f7924ad9",
       "parameters": {
         "appName": "CoovaChilli",
-        "controllerName": "Main",
         "controllerFileName": "Main",
-        "name": "Main",
-        "controllerNamespace": "CoovaChilli.controller"
+        "controllerName": "Main",
+        "controllerNamespace": "CoovaChilli.controller",
+        "name": "Main"
+      }
+    },
+    ".sencha/app/development.properties": {
+      "source": "development.properties.merge",
+      "version": "c45c602c9b6f6f73cace183e9f0bf09c00a3ccf6",
+      "parameters": {
+        "appControllers": "",
+        "appModels": "",
+        "appName": "CoovaChilli",
+        "appStores": "",
+        "appViews": "",
+        "controllerNamespace": "CoovaChilli.controller",
+        "frameworkName": "touch",
+        "frameworkPath": "touch",
+        "library": "core",
+        "modelNamespace": "CoovaChilli.model",
+        "name": "CoovaChilli",
+        "senchadir": ".sencha",
+        "uniqueId": "db799626-abe0-4d7b-9493-8c92173dbb82",
+        "viewNamespace": "CoovaChilli.view"
       }
     }
   }

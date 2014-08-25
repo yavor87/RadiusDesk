@@ -195,7 +195,7 @@
 
 .lastPurchase div.alternate {
     background-color: #f4f6f4;
-}
+}background: #e1c8d4;
 
 .lastPurchase .value {
     color: #057612;
@@ -217,5 +217,14 @@
     color: #495982;
     font-weight: bold;
     padding: 2px;
+}
+
+.lblSeperator {
+	color: #165def;
+    font-weight: bold;
+    padding: 2px;
+	margin: 2px 10px 2px 10px;
+	background: #aeadad;
+	text-align: center;
 }
 
