@@ -518,6 +518,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
             }
         }
 
+		//Auto suffix check
+		var auto_suffix_check   = b.up('pnlConnect').jsonData.settings.auto_suffix_check;
+		var auto_suffix			= b.up('pnlConnect').jsonData.settings.auto_suffix;
+
         //Set a body mask telling the people we are connecting 
         b.up('pnlConnect').setLoading('Connecting....');
 
@@ -530,6 +534,15 @@ Ext.define('CoovaChilli.controller.Desktop', {
 		        me.userName = me.getConnect().down('#inpUsername').getValue();
 		        me.password = me.getConnect().down('#inpPassword').getValue();
 				me.remember = me.getConnect().down('#inpRememberMe').getValue(); //This should always be there
+
+				//Auto suffix for permanent users only
+				if(auto_suffix_check){
+					//Check if not already in username
+					var re = new RegExp(".*"+auto_suffix+"$");
+					if(me.userName.match(re)==null){
+						me.userName = me.userName+auto_suffix;
+					}
+				}
 			}
 
 			//Check if there is a voucher controll and it is not empty
