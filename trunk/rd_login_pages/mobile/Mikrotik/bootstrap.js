@@ -750,6 +750,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Mikrotik.view.cntAbout": [],
   "Mikrotik.view.cntNotHotspot": [],
   "Mikrotik.view.cntNotPresent": [],
+  "Mikrotik.view.cntPayAd": [],
   "Mikrotik.view.cntPhotos": [],
   "Mikrotik.view.cntStatus": [],
   "Mikrotik.view.frmConnect": [],
@@ -1711,6 +1712,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Mikrotik.view.cntNotPresent": [
     "widget.main"
+  ],
+  "Mikrotik.view.cntPayAd": [
+    "widget.cntPayAd"
   ],
   "Mikrotik.view.cntPhotos": [
     "widget.cntPhotos"

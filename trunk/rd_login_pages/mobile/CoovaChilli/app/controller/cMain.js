@@ -1,3 +1,4 @@
+
 Ext.define('CoovaChilli.controller.cMain', {
     extend: 'Ext.app.Controller',
     requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView'],
@@ -65,8 +66,8 @@ Ext.define('CoovaChilli.controller.cMain', {
     retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
-    userName    : undefined,
-    password    : undefined,
+    userName    : '',
+    password    : '',
     remember    : false,
 
     thumbPhoto  : undefined,
@@ -360,11 +361,45 @@ Ext.define('CoovaChilli.controller.cMain', {
     },
     onBtnConnectTap: function(b,c_to_c){  
         var me = this;
+
+		//Auto suffix check
+		var auto_suffix_check   = b.up('frmConnect').config.jsonData.settings.auto_suffix_check;
+		var auto_suffix			= b.up('frmConnect').config.jsonData.settings.auto_suffix;
+
     
         if(c_to_c != true){
-            me.userName = me.getFrmConnect().down('#inpUsername').getValue();
-            me.password = me.getFrmConnect().down('#inpPassword').getValue();
-            me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+          
+			//Check if there is a username controll and it is not empty
+			if(
+				(!(me.getFrmConnect().down('#inpUsername').isHidden()))&&
+				(me.getFrmConnect().down('#inpUsername').getValue() != '')
+
+			){
+		        me.userName = me.getFrmConnect().down('#inpUsername').getValue();
+            	me.password = me.getFrmConnect().down('#inpPassword').getValue();
+            	me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+
+				//Auto suffix for permanent users only
+				if(auto_suffix_check){
+					//Check if not already in username
+					var re = new RegExp(".*"+auto_suffix+"$");
+					if(me.userName.match(re)==null){
+						me.userName = me.userName+auto_suffix;
+					}
+				}
+			}
+
+			//Check if there is a voucher controll and it is not empty
+			if(
+				(!(me.getFrmConnect().down('#inpVoucher').isHidden()))&&
+				(me.getFrmConnect().down('#inpVoucher').getValue() != '')
+
+			){
+		        me.userName = me.getFrmConnect().down('#inpVoucher').getValue();
+		        me.password = me.getFrmConnect().down('#inpVoucher').getValue();
+				me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+			}
+
         }else{
             var suffix  = b.up('frmConnect').config.jsonData.settings.connect_suffix;
             me.userName = b.up('frmConnect').config.jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
