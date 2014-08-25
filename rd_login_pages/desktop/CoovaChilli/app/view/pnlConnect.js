@@ -66,14 +66,14 @@ Ext.define('CoovaChilli.view.pnlConnect', {
         }
 
 		var remember_me = {
-						    boxLabel  : 'Remember me',
-						    name      : 'rememberMe',
-						    inputValue: 'rememberMe',
-						    labelAlign: 'right',
-						    xtype     : 'checkbox',
-						    itemId    : 'inpRememberMe',
-							baseBodyCls: 'frmField'
-						};
+		    boxLabel  : 'Remember me',
+		    name      : 'rememberMe',
+		    inputValue: 'rememberMe',
+		    labelAlign: 'right',
+		    xtype     : 'checkbox',
+		    itemId    : 'inpRememberMe',
+			baseBodyCls: 'frmField'
+		};
 
 
 		//Form items depends on what is specified with user_login_check and voucher_login_check
@@ -162,9 +162,6 @@ Ext.define('CoovaChilli.view.pnlConnect', {
 			(me.jsonData.settings.user_login_check == true)&&
 			(me.jsonData.settings.connect_only == false)
 		){
-
-			//Set bodyPadding : '0 20 10 20' to not waste so much space with the tab panel
-			//bp = '0 20 10 20';
 			var frm_items_top = [
 			{
 					xtype       : 'tabpanel',
@@ -230,7 +227,6 @@ Ext.define('CoovaChilli.view.pnlConnect', {
                 layout      : 'anchor',
                 height      : '100%',
                 bodyPadding : '0 20 10 20',
-				//bodyPadding : 20,
                 fieldDefaults: {
                     msgTarget   : 'under',
                     labelStyle  : 'font-weight: bold; color: #980820; font-size:120%;',
