@@ -66,8 +66,39 @@ Ext.define('Mikrotik.controller.Desktop', {
             },
             'pnlConnect #btnClickToConnect' : {
                 click: me.onBtnClickToConnect
+            },
+			'pnlConnect #btnRemoveMac': {
+                click: me.onBtnRemoveMac
+            },
+			'pnlConnect #tabUser' : {
+                activate: me.onTabUserActivate
+            },
+			'pnlConnect #tabVoucher' : {
+                activate: me.onTabVoucherActivate
             }
         });    
+    },
+	onBtnRemoveMac : function(button){
+        var me  = this;
+        Ext.Ajax.request({
+            url     : me.application.config.removeMacUrl,
+            params  : {'mac': me.mac_username},
+            method  : 'GET',
+            success : function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                    me.showLoginError("Device "+me.mac_username+" removed from realm, please log in again");
+                    //Hide yourself button:
+                    button.setVisible(false);
+                }else{
+                    me.showLoginError(jsonData.message);
+                }
+            },
+            failure: function(){
+                me.showLoginError('Problems encountered while trying to remove '+me.mac_username);
+            },
+            scope: me
+        });
     },
     onBtnDisconnectClick: function(b){
         var me = this;
@@ -415,6 +446,29 @@ Ext.define('Mikrotik.controller.Desktop', {
             me.onBtnConnectClick(b,true);
         }
     },
+	onTabUserActivate: function(tab){
+		var me = this;
+		var form = tab.up('form');
+		var un = form.down('#inpUsername');
+		var pw = form.down('#inpPassword');
+		var v  = form.down('#inpVoucher');
+		un.setDisabled(false);
+		pw.setDisabled(false);
+		v.setValue('');
+		v.setDisabled(true);
+	},
+	onTabVoucherActivate: function(tab){
+		var me = this;
+		var form = tab.up('form');
+		var un = form.down('#inpUsername');
+		var pw = form.down('#inpPassword');
+		var v  = form.down('#inpVoucher');
+		un.setValue('');
+		pw.setValue('');
+		un.setDisabled(true);
+		pw.setDisabled(true);
+		v.setDisabled(false);
+	},
     onBtnConnectClick: function(b,c_to_c){  //Get the latest challenge and continue from there onwards....
         var me = this;
 
@@ -426,14 +480,42 @@ Ext.define('Mikrotik.controller.Desktop', {
             }
         }
 
+		//Auto suffix check
+		var auto_suffix_check   = b.up('pnlConnect').jsonData.settings.auto_suffix_check;
+		var auto_suffix			= b.up('pnlConnect').jsonData.settings.auto_suffix;
+
         //Set a body mask telling the people we are connecting 
         b.up('pnlConnect').setLoading('Connecting....');
 
         //Set the username and password properties of this object to the values supplied
         if(c_to_c != true){
-            me.userName = me.getConnect().down('#inpUsername').getValue();
-            me.password = me.getConnect().down('#inpPassword').getValue();
-            me.remember = me.getConnect().down('#inpRememberMe').getValue();
+            //Check if there is a username controll and it is not empty
+			if((me.getConnect().down('#inpUsername') != undefined)&&
+			(me.getConnect().down('#inpUsername').getValue() != '')
+			){
+		        me.userName = me.getConnect().down('#inpUsername').getValue();
+		        me.password = me.getConnect().down('#inpPassword').getValue();
+				me.remember = me.getConnect().down('#inpRememberMe').getValue(); //This should always be there
+
+				//Auto suffix for permanent users only
+				if(auto_suffix_check){
+					//Check if not already in username
+					var re = new RegExp(".*"+auto_suffix+"$");
+					if(me.userName.match(re)==null){
+						me.userName = me.userName+auto_suffix;
+					}
+				}
+			}
+
+			//Check if there is a voucher controll and it is not empty
+			if((me.getConnect().down('#inpVoucher') != undefined)&&
+			(me.getConnect().down('#inpVoucher').getValue() != '')
+			){
+		        me.userName = me.getConnect().down('#inpVoucher').getValue();
+		        me.password = me.getConnect().down('#inpVoucher').getValue();
+				me.remember = me.getConnect().down('#inpRememberMe').getValue(); //This should always be there
+			}
+
         }else{
             var suffix  = b.up('pnlConnect').jsonData.settings.connect_suffix;
             me.userName = b.up('pnlConnect').jsonData.settings.connect_username+'@'+me.queryObj[suffix]; //Makes this unique
