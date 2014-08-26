@@ -22,7 +22,13 @@ Ext.define('Rd.controller.cMeshViews', {
 		urlRedNode 					: 'resources/images/map_markers/mesh_red_node.png',
 		urlRedGw 					: 'resources/images/map_markers/mesh_red_gw.png',
 		urlGreenNode 				: 'resources/images/map_markers/mesh_green_node.png',
-		urlGreenGw	 				: 'resources/images/map_markers/mesh_green_gw.png'
+		urlGreenGw	 				: 'resources/images/map_markers/mesh_green_gw.png', //Now also supporting phones!
+		urlPhoneGreenGw				: 'resources/images/map_markers/phone_green_gw.png',
+		urlPhoneGreenNode			: 'resources/images/map_markers/phone_green.png',
+		urlPhoneRedGw				: 'resources/images/map_markers/phone_red_gw.png',
+		urlPhoneRedNode			    : 'resources/images/map_markers/phone_red.png',
+		urlPhoneBlueGw				: 'resources/images/map_markers/phone_blue_gw.png',
+		urlPhoneBlueNode			: 'resources/images/map_markers/phone_blue.png',
     },
     refs: [
        
@@ -372,22 +378,48 @@ Ext.define('Rd.controller.cMeshViews', {
                 if(jsonData.success){
 
 					Ext.each(jsonData.items, function(i){
-						var icon = me.urlBlueMark;
+						var icon 		= me.urlBlueMark;
+						
+						//Phones
+						var phone_flag 	= false;
+						if((i.hardware == 'mp2_basic')||(i.hardware == 'mp2_phone')){
+							phone_flag = true; 
+						}
+
+						if(phone_flag){
+							icon 		= me.urlPhoneBlueNode;
+						}
 
 						if(i.state == 'down'){
-							icon = me.urlRedNode
+							if(phone_flag){
+								icon = me.urlPhoneRedNode;
+							}else{
+								icon = me.urlRedNode
+							}
 						}
 
 						if((i.state == 'down')&(i.gateway == 'yes')){
-							icon = me.urlRedGw
+							if(phone_flag){
+								icon = me.urlPhoneRedGw;
+							}else{
+								icon = me.urlRedGw
+							}
 						}
 
 						if(i.state == 'up'){
-							icon = me.urlGreenNode
+							if(phone_flag){
+								icon = me.urlPhoneGreenNode;
+							}else{
+								icon = me.urlGreenNode
+							}
 						}
 
 						if((i.state == 'up')&(i.gateway == 'yes')){
-							icon = me.urlGreenGw
+							if(phone_flag){
+								icon = me.urlPhoneGreenGw;
+							}else{
+								icon = me.urlGreenGw
+							}
 						}
 						
 						var sel_marker = map_panel.addMarker({
