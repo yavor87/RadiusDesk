@@ -145,7 +145,7 @@ function rdCoovaChilli.__getDns(self)
 			dns_start = dns_start + 1
 		end
 	end
-	dns_list[1]= 'o'
+	--dns_list[1]= 'o' --Dunno what this is.... probably an artefact 
 	return dns_list
 end
 
