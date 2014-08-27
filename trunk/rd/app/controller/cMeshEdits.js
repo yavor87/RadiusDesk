@@ -125,6 +125,9 @@ Ext.define('Rd.controller.cMeshEdits', {
             'winMeshAddNode #save' : {
                 click:  me.btnAddNodeSave
             },
+			'winMeshAddNode cmbHardwareOptions': {
+                change: me.cmbHardwareOptionsChange
+            },
             'gridNodes #delete': {
                 click: me.delNode
             },
@@ -140,6 +143,16 @@ Ext.define('Rd.controller.cMeshEdits', {
             'winMeshEditNode #save': {
                 click: me.btnEditNodeSave
             },
+			'winMeshEditNode cmbHardwareOptions': {
+                change: me.cmbHardwareOptionsChange
+            },
+			//VOIP Choices
+			'#chkSip'	: {
+				change	: me.chkSipChange
+			},
+			'#chkAsterisk' : {
+				change	: me.chkAsteriskChange
+			},
 			//---- MAP Starts here..... -----
 			'winMeshEdit #mapTab'		: {
 				activate: function(pnl){
@@ -648,6 +661,22 @@ Ext.define('Rd.controller.cMeshEdits', {
         var nodes   = win.down("gridNodes");
         nodes.getStore().reload();
     },
+	cmbHardwareOptionsChange: function(cmb){
+		var me      = this;
+        var form    = cmb.up('form');
+        var key     = form.down('#key');
+        var voip    = form.down('#tabVoip');
+        var adv     = form.down('#tabVoipAdvanced'); 
+        var val     = cmb.getValue();
+
+		if((val == 'mp2_basic')||(val == 'mp2_phone')){
+			voip.setDisabled(false);
+			adv.setDisabled(false);
+		}else{
+			voip.setDisabled(true);
+			adv.setDisabled(true);
+		}
+	},
     addNode: function(button){
         var me      = this;
         var win     = button.up("winMeshEdit");
@@ -782,6 +811,30 @@ Ext.define('Rd.controller.cMeshEdits', {
             failure: Ext.ux.formFail
         });
     },
+	//____ VOIP _____
+	chkSipChange: function(chk){
+		var me 		= this;
+		var voip    = chk.up('#tabVoip');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',voip);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+	},
+	chkAsteriskChange: function(chk){
+		var me 		= this;
+		var voipA   = chk.up('#tabVoipAdvanced');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',voipA);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+
+	},
 	//____ MAP ____
 
     mapLoadApi:   function(button){
