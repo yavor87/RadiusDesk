@@ -50,6 +50,17 @@ class CountersTask extends Shell {
             $counter['cap']     = $cap;
             $counter['reset']   = $this->_query_radgroupcheck($groupname,'Rd-Reset-Type-Time');
             $counter['value']   = $this->_query_radgroupcheck($groupname,'Rd-Total-Time');
+
+			//Defaults for mac_counter and reset_interval
+			$mac_counter		= false;
+			$reset_interval		= false;
+			if($counter['reset'] == 'dynamic'){
+				$reset_interval = $this->_query_radgroupcheck($groupname,'Rd-Reset-Interval-Time');
+			}
+			$mac_counter		= $this->_query_radgroupcheck($groupname,'Rd-Mac-Counter-Time');
+			$counter['reset_interval'] 	= $reset_interval;
+			$counter['mac_counter'] 	= $mac_counter;
+
             //Rd-Used-Time := "%{sql:SELECT IFNULL(SUM(AcctSessionTime),0) FROM radacct WHERE username='%{request:User-Name}'}"
         }
         return $counter;
@@ -63,6 +74,16 @@ class CountersTask extends Shell {
             $counter['cap']     = $cap;
             $counter['reset']   = $this->_query_radgroupcheck($groupname,'Rd-Reset-Type-Data');
             $counter['value']   = $this->_query_radgroupcheck($groupname,'Rd-Total-Data');
+
+			//Defaults for mac_counter and reset_interval
+			$mac_counter		= false;
+			$reset_interval		= false;
+			if($counter['reset'] == 'dynamic'){
+				$reset_interval = $this->_query_radgroupcheck($groupname,'Rd-Reset-Interval-Data');
+			}
+			$mac_counter		= $this->_query_radgroupcheck($groupname,'Rd-Mac-Counter-Data');
+			$counter['reset_interval'] 	= $reset_interval;
+			$counter['mac_counter'] 	= $mac_counter;
         }
         return $counter;
     }
