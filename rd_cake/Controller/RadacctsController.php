@@ -8,28 +8,106 @@ class RadacctsController extends AppController {
     public $uses       = array('Radacct','User');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
-    //--- FROM THE OLD ---
-    /* json_index json_add json_del json_view json_edit 
-        // json_prepaid_list json_tabs json_send_message csv json_change_profile 
-        // json_private_attributes json_add_private json_del_private json_edit_private
-        // json_test_auth json_disable json_usage json_kick json_notify_detail json_notify_save
-        // json_view_activity json_del_activity json_password 
-        // json_actions json_actions_for_user_private json_actions_for_user_profile json_actions_for_user_activity
-    */
 
-    //-- NOTES on users:
-    //-- Each user belongs to (A) group (group_id) = Permanent Users. (B) a realm (realm_id) (C) a creator (user_id)
-    //-- (D) Profile ID (profile_id) (E) a Language ID (language_id) (F) an Auth Method id (auth_method_id)
+	//---- Return the usage for a user/MAC combination
+	public function get_usage(){
+		if(
+			(isset($this->request->query['username']))&&
+			(isset($this->request->query['mac']))
+		){
 
-    //-- Each user will have a token which should be used in the URL to do Ajax calls
+			//Some defaults 
+			$data_used	= null;
+			$data_cap	= null;
+			$time_used	= null;
+			$time_cap	= null;
 
-    //-- NOTES on rights:
-    //-- Most controller actions will require a token in the query string to determine who originated the request
-    //-- The rights of that person will then be checked and also against who it is attempting to be done.
+			$username 	= $this->request->query['username'];
+			$mac		= $this->request->query['mac'];
+			
+			$this->MacUsage = ClassRegistry::init('MacUsage');
+			$q_m_u	= $this->MacUsage->find('first', array(
+				'conditions'	=> array('MacUsage.username' => $username, 'MacUsage.mac'=> $mac)
+			));
+			
+
+			if($q_m_u){
+				$data_used	= $q_m_u['MacUsage']['data_used'];
+				$data_cap	= $q_m_u['MacUsage']['data_cap'];
+				$time_used	= $q_m_u['MacUsage']['time_used'];
+				$time_cap	= $q_m_u['MacUsage']['time_cap'];
+			}else{
+				//Check what type of user it is
+				$this->Radcheck = ClassRegistry::init('Radcheck');
+				$type 			= 'unknown';
+				$q_r 			= $this->Radcheck->find('first',
+					array('conditions' => array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-User-Type'))
+				);
+				if($q_r){
+				    $type = $q_r['Radcheck']['value'];
+				}
+
+				if($type == 'user'){
+					$this->User->contain();
+					$q_u 		= $this->User->find('first',
+						array('conditions' => array('User.username' => $username))
+					);
+					if($q_u){
+						$data_used	= $q_u['User']['data_used'];
+						$data_cap	= $q_u['User']['data_cap'];
+						$time_used	= $q_u['User']['time_used'];
+						$time_cap	= $q_u['User']['time_cap'];
+					}
+				}
+
+				if($type == 'voucher'){
+					$this->Voucher = ClassRegistry::init('Radcheck');
+					$this->Voucher->contain();
+					$q_v 		= $this->Voucher->find('first',
+						array('conditions' => array('Voucher.name' => $username))
+					);
+					if($q_v){
+						$data_used	= $q_v['Voucher']['data_used'];
+						$data_cap	= $q_v['Voucher']['data_cap'];
+						$time_used	= $q_v['Voucher']['time_used'];
+						$time_cap	= $q_v['Voucher']['time_cap'];
+					}
+				}
+
+				if($type == 'device'){
+					$this->Device = ClassRegistry::init('Device');
+					$this->Device->contain();
+					$q_v 		= $this->Device->find('first',
+						array('conditions' => array('Device.name' => $username))
+					);
+					if($q_v){
+						$data_used	= $q_v['Device']['data_used'];
+						$data_cap	= $q_v['Device']['data_cap'];
+						$time_used	= $q_v['Device']['time_used'];
+						$time_cap	= $q_v['Device']['time_cap'];
+					}
+				}
+			}
+
+			$data = array('data_used' => $data_used, 'data_cap' => $data_cap, 'time_used' => $time_used, 'time_cap' => $time_cap);
+      
+			$this->set(array(
+                'success'   => false,
+                'data'      => $data,
+                '_serialize' => array('success','data')
+            ));
+
+		}else{
+			$this->set(array(
+                'success'   => false,
+                'message'   => array('message' => "Require a valud MAC address and username in the query string"),
+                '_serialize' => array('success','message')
+            ));
+		}
+	}
 
 
     //-------- BASIC CRUD -------------------------------
-
     public function export_csv(){
 
         $this->autoRender   = false;
@@ -207,71 +285,7 @@ class RadacctsController extends AppController {
             '_serialize'    => array('items','success','totalCount','totalIn','totalOut','totalInOut')
         ));
     }
-/*
-    public function add(){
 
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-
-        $this->request['active']       = 0;
-        $this->request['monitor']      = 0;     
-
-
-        //Two fields should be tested for first:
-        if(array_key_exists('active',$this->request->data)){
-            $this->request->data['active'] = 1;
-        }
-
-        if(array_key_exists('monior',$this->request->data)){
-            $this->request->data['monitor'] = 1;
-        }
-
-        if($this->request->data['parent_id'] == '0'){ //This is the holder of the token
-            $this->request->data['parent_id'] = $user['id'];
-        }
-
-        if(!array_key_exists('language',$this->request->data)){
-            $this->request->data['language'] = Configure::read('language.default');
-        }
-
-        //Get the language and country
-        $country_language   = explode( '_', $this->request->data['language'] );
-
-        $country            = $country_language[0];
-        $language           = $country_language[1];
-
-        $this->request->data['language_id'] = $language;
-        $this->request->data['country_id']  = $country;
-
-        //Get the group ID for AP's
-        $group_name = Configure::read('group.user');
-        $q_r        = ClassRegistry::init('Group')->find('first',array('conditions' =>array('Group.name' => $group_name)));
-        $group_id   = $q_r['Group']['id'];
-        $this->request->data['group_id'] = $group_id;
-
-        //Zero the token to generate a new one for this user:
-        $this->request->data['token'] = '';
-
-        //The rest of the attributes should be same as the form..
-        $this->{$this->modelClass}->create();
-        if ($this->{$this->modelClass}->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        } else {
-            $message = 'Error';
-            $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
-    }
-*/
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -529,16 +543,6 @@ class RadacctsController extends AppController {
         if(isset($this->request->query['sort'])){
             $sort = $this->modelClass.'.'.$this->request->query['sort'];
             $dir  = $this->request->query['dir'];
-/*
-            if($this->request->query['sort'] == 'owner'){
-                $sort = 'User.username';
-            }elseif(($this->request->query['sort'] == 'profile')||($this->request->query['sort'] == 'realm')){
-                $sort = 'Radcheck.value';
-            }else{
-                $sort = $this->modelClass.'.'.$this->request->query['sort'];
-            }
-            $dir  = $this->request->query['dir'];
-*/
         } 
 
         $c['order'] = array("$sort $dir");
@@ -654,44 +658,7 @@ class RadacctsController extends AppController {
         return $c;
     }
 
-    private function _find_parents($id){
-
-        $this->User->contain();//No dependencies
-        $q_r        = $this->User->getPath($id);
-        $path_string= '';
-        if($q_r){
-
-            foreach($q_r as $line_num => $i){
-                $username       = $i['User']['username'];
-                if($line_num == 0){
-                    $path_string    = $username;
-                }else{
-                    $path_string    = $path_string.' -> '.$username;
-                }
-            }
-            if($line_num > 0){
-                return $username." (".$path_string.")";
-            }else{
-                return $username;
-            }
-        }else{
-            return __("orphaned");
-        }
-    }
-
-    private function _is_sibling_of($parent_id,$user_id){
-        $this->User->contain();//No dependencies
-        $q_r        = $this->User->getPath($user_id);
-        foreach($q_r as $i){
-            $id = $i['User']['id'];
-            if($id == $parent_id){
-                return true;
-            }
-        }
-        //No match
-        return false;
-    }
-
+   
     private function _voucher_status_check($id){
 
         //Find the count of this username; if zero check if voucher; if voucher change status to 'new';
