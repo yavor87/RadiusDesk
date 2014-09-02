@@ -1,9 +1,32 @@
 <?php
 
 class UsageTask extends Shell {
-    public $uses = array('Radusergroup','Radgroupcheck','Radacct','Radcheck');
+    public $uses = array('Radusergroup','Radgroupcheck','Radacct','Radcheck','MacUsage');
 
     public function time_usage($counter_data,$username,$field){
+        print_r($counter_data);
+        $query_string = false;
+        if($counter_data['reset'] =='never'){
+            $query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE $field='$username' AND callingstationid='$mac'"; 
+        }else{
+            $start_time = $this->_find_start_time($counter_data);
+            if($start_time){
+                $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($month_start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
+                                "FROM radacct WHERE $field='$username' AND callingstationid='$mac' ".
+								"AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+            }
+        }
+
+        if($query_string){
+            $q_r = $this->Radacct->query($query_string);
+            $accounting_used = $q_r[0][0]['used'];
+            return $accounting_used;
+        }else{
+            return false;
+        }
+    }
+
+	public function time_usage_for_mac($counter_data,$username,$mac){
         print_r($counter_data);
         $query_string = false;
         if($counter_data['reset'] =='never'){
@@ -49,6 +72,30 @@ class UsageTask extends Shell {
         }
     }
 
+	public function data_usage_for_mac($counter_data,$username,$mac){
+        print_r($counter_data);
+        $query_string = false;
+        if($counter_data['reset'] =='never'){
+            $query_string = "SELECT IFNULL(SUM(acctinputoctets)+SUM(acctoutputoctets),0) as used FROM radacct WHERE username='$username' AND callingstationid='$mac'"; 
+        }else{
+            $start_time = $this->_find_start_time($counter_data);
+            if($start_time){
+                $query_string = "SELECT IFNULL(SUM(acctinputoctets - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0))+ ".
+                                "SUM(acctoutputoctets -GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)),0) as used ".
+                                "FROM radacct WHERE username='$username' AND callingstationid='$mac' ".
+								"AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+            }
+        }
+
+        if($query_string){
+            print_r($query_string);
+            $q_r = $this->Radacct->query($query_string);
+            $accounting_used = $q_r[0][0]['used'];
+            return $accounting_used;
+        }else{
+            return false;
+        }
+    }
 
     private function _find_start_time($counter_data){
         $start_time = false;
@@ -63,6 +110,16 @@ class UsageTask extends Shell {
         if($counter_data['reset'] == 'monthly'){
             print("Start at 1st of month");
             $start_time = mktime(0, 0, 0, date('m'), 1, date('Y'));
+        }
+
+		//This is an enhancement and expects a value for reset_interval to determine the start time :-)
+		if($counter_data['reset'] == 'dynamic'){
+			$interval = 0;
+			if($counter_data['reset_interval']){
+				$interval = $counter_data['reset_interval'];
+			}
+            print("Start dynamic interval: $interval seconds back from now\n");
+            $start_time = time() - $interval;
         }
         return $start_time;
     }

@@ -1,20 +1,20 @@
 <?php
 class AccountingShell extends AppShell {
 
-    public $uses    = array('NewAccounting','Radcheck','Radacct','Voucher','User','Device','Radusergroup','Radgroupcheck');
+    public $uses    = array('NewAccounting','Radcheck','Radacct','Voucher','User','Device','Radusergroup','Radgroupcheck','MacUsage');
     public $tasks   = array('Counters','Usage');
 
     public function main() {
         $qr = $this->NewAccounting->find('all');
         foreach($qr as $i){
-            $this->process_username($i['NewAccounting']['username']);
+            $this->process_username($i['NewAccounting']['username'],$i['NewAccounting']['mac']);
         }
 
         //Clear the table for the next lot
         $this->NewAccounting->query('TRUNCATE table new_accountings;');
     }
 
-    private function process_username($username){
+    private function process_username($username,$mac){
 
         //find type
         $this->out("<info>Test the usertype of $username</info>");
@@ -139,6 +139,8 @@ class AccountingShell extends AppShell {
                                 $d['Voucher']['precede']        = '';
                                 $d['Voucher']['perc_data_used'] = $perc_data_used;
                                 $d['Voucher']['status']         = 'used';
+								$d['Voucher']['data_used']		= $used;
+								$d['Voucher']['data_cap']		= $counters['data']['value'];
                                 $this->Voucher->save($d);
                             }
                     }
@@ -154,33 +156,78 @@ class AccountingShell extends AppShell {
             $profile = $this->_find_user_profile($username);
             if($profile){
                 $counters = $this->Counters->return_counter_data($profile,$type);
+				print_r($counters);
                 //___time___
                 if(array_key_exists('time', $counters)){
+					//We will only update the usage if it is NOT Rd-Mac-Counter-Time in the counter (mac_counter)
+					if(!$counters['time']['mac_counter']){
                     
-                    $used       = $this->Usage->time_usage($counters['time'],$username,'username');
-                    $perc_used  = intval(($used / $counters['time']['value'])* 100);                  
-                    $q_r        = $this->User->findByUsername($username);
-                    if($q_r){
-                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
-                        $this->User->id             = $q_r['User']['id'];
-                        $d['User']['id']            = $q_r['User']['id'];
-                        $d['User']['perc_time_used']= $perc_used;
-                        $this->User->save($d);
-                    }
+		                $used       = $this->Usage->time_usage($counters['time'],$username,'username');
+		                $perc_used  = intval(($used / $counters['time']['value'])* 100);                  
+		                $q_r        = $this->User->findByUsername($username);
+		                if($q_r){
+		                    $this->out("<comment>Update usage percentage for $username to $perc_used</comment>");
+		                    $this->User->id             = $q_r['User']['id'];
+		                    $d['User']['id']            = $q_r['User']['id'];
+		                    $d['User']['perc_time_used']= $perc_used;
+							$d['User']['time_used']		= $used;
+							$d['User']['time_cap']		= $counters['time']['value'];
+		                    $this->User->save($d);
+		                }
+					}else{
+						//This counter is on the MAC so well add it to the mac_usages table
+						$used       	= $this->Usage->time_usage_for_mac($counters['time'],$username,$mac);
+						$d['username']	= $username;
+						$d['mac']		= $mac;
+						$d['time_used'] = $used;
+						$d['time_cap']	= $counters['time']['value'];
+						//Check if it exist
+						$q_r = $this->MacUsage->find('first', 
+							array('conditions' => array('MacUsage.username' => $username,'MacUsage.mac' => $mac))
+						);
+						if($q_r){
+							$id 		= $q_r['MacUsage']['id'];
+							$d['id']	= $id; 
+						}
+						$this->MacUsage->save($d);
+					}
                 }
 
                 //___data___
                 if(array_key_exists('data', $counters)){
-                    $used       = $this->Usage->data_usage($counters['data'],$username,'username');
-                    $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
-                    $q_r        = $this->User->findByUsername($username);
-                    if($q_r){
-                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
-                        $this->User->id             = $q_r['User']['id'];
-                        $d['User']['id']            = $q_r['User']['id'];
-                        $d['User']['perc_data_used']= $perc_used;
-                        $this->User->save($d);
-                    }
+					//We will only update the usage if it is NOT Rd-Mac-Counter-Data in the counter (mac_counter)
+					if(!$counters['data']['mac_counter']){
+
+		                $used       = $this->Usage->data_usage($counters['data'],$username,'username');
+		                $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
+		                $q_r        = $this->User->findByUsername($username);
+						print("GOOOOOO\n");
+		                if($q_r){
+		                    $this->out("<comment>Update usage percentage for $username to $perc_used</comment>");
+		                    $this->User->id             = $q_r['User']['id'];
+		                    $d['User']['id']            = $q_r['User']['id'];
+		                    $d['User']['perc_data_used']= $perc_used;
+							$d['User']['data_used']		= $used;
+							$d['User']['data_cap']		= $counters['data']['value'];
+		                    $this->User->save($d);
+		                }
+					}else{
+						//This counter is on the MAC so well add it to the mac_usages table
+						$used       	= $this->Usage->data_usage_for_mac($counters['data'],$username,$mac);
+						$d['username']	= $username;
+						$d['mac']		= $mac;
+						$d['data_used'] = $used;
+						$d['data_cap']	= $counters['data']['value'];
+						//Check if it exist
+						$q_r = $this->MacUsage->find('first', 
+							array('conditions' => array('MacUsage.username' => $username,'MacUsage.mac' => $mac))
+						);
+						if($q_r){
+							$id 		= $q_r['MacUsage']['id'];
+							$d['id']	= $id; 
+						}
+						$this->MacUsage->save($d);
+					}
                 }
             }
         }
@@ -199,10 +246,12 @@ class AccountingShell extends AppShell {
                     $perc_used  = intval(($used / $counters['time']['value'])* 100);                  
                     $q_r        = $this->Device->findByName($username);
                     if($q_r){
-                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->out("<comment>Update usage percentage for $username to $perc_used</comment>");
                         $this->Device->id             = $q_r['Device']['id'];
                         $d['Device']['id']            = $q_r['Device']['id'];
                         $d['Device']['perc_time_used']= $perc_used;
+						$d['Device']['time_used']	  = $used;
+						$d['Device']['time_cap']	  = $counters['time']['value'];
                         $this->Device->save($d);
                     }
                 }
@@ -213,10 +262,12 @@ class AccountingShell extends AppShell {
                     $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
                     $q_r        = $this->Device->findByName($username);
                     if($q_r){
-                        $this->out("<comment>Update usage percentage for $username tp $perc_used</comment>");
+                        $this->out("<comment>Update usage percentage for $username to $perc_used</comment>");
                         $this->Device->id             = $q_r['Device']['id'];
                         $d['Device']['id']            = $q_r['Device']['id'];
                         $d['Device']['perc_data_used']= $perc_used;
+						$d['Device']['data_used']	  = $used;
+						$d['Device']['data_cap']	  = $counters['data']['value'];
                         $this->Device->save($d);
                     }
                 }
