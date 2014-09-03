@@ -79,6 +79,16 @@ if not exists (select * from information_schema.columns
     alter table dynamic_details add column `auto_suffix` char(200) NOT NULL DEFAULT '';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'usage_show_check' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `usage_show_check` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'usage_refresh_interval' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `usage_refresh_interval` int(3) NOT NULL DEFAULT '120';
+end if;
+
 
 if not exists (select * from information_schema.columns
     where column_name = 'url' and table_name = 'dynamic_photos' and table_schema = 'rd') then
