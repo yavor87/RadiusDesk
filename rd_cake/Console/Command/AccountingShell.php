@@ -201,7 +201,6 @@ class AccountingShell extends AppShell {
 		                $used       = $this->Usage->data_usage($counters['data'],$username,'username');
 		                $perc_used  = intval(($used / $counters['data']['value'])* 100);                   
 		                $q_r        = $this->User->findByUsername($username);
-						print("GOOOOOO\n");
 		                if($q_r){
 		                    $this->out("<comment>Update usage percentage for $username to $perc_used</comment>");
 		                    $this->User->id             = $q_r['User']['id'];
