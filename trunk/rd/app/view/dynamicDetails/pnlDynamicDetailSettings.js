@@ -130,7 +130,29 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         minValue    : 10,
                         disabled    : true,
 						baseCls		: 'lightBlue'
+                    },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Show usage',
+                        itemId      : 'chkUsage',
+                        name        : 'usage_show_check',
+                        inputValue  : 'usage_show_check',
+                        checked     : false,
+                        labelClsExtra: 'lblRdReq',
+						baseCls		: 'lightGreen'
+                    },
+                    {
+                        xtype       : 'numberfield',
+                        name        : 'usage_refresh_interval',
+                        fieldLabel  : 'Refresh every (seconds)',
+                        itemId      : 'nrUsageRefresh',
+                        value       : 120,
+                        maxValue    : 600,
+                        minValue    : 60,
+                        disabled    : true,
+						baseCls		: 'lightGreen'
                     }
+
                 ],
                 buttons: [
                     {

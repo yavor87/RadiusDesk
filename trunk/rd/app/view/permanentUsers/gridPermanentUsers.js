@@ -143,7 +143,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                     }else{
                         return "N/A";
                     }
-                },stateId: 'StateGridPermanentUsers19'
+                },stateId: 'StateGridPermanentUsers18'
             },
             {
                 header      : i18n('sTime_used'),
