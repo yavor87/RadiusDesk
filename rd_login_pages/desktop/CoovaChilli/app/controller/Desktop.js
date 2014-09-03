@@ -25,6 +25,11 @@ Ext.define('CoovaChilli.controller.Desktop', {
     timeUntilStatus : 20, //interval to refresh
     refreshInterval : 20, //ditto
 
+	timeUntilUsage 	: 60, //defaults
+    usageInterval 	: 60, //ditto
+	usageUsername 	: undefined,
+	usageMac 		: undefined,
+
     sessionData     : undefined,
 
     retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
@@ -127,9 +132,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var form = button.up('form');
         form.setLoading('Redirecting to payment gateway ...');
        // clean_location     = clean_location.replace(/&pay_u_=.*/, ""); //Remove the PayU part of the query string else it keeps on adding up!
-        console.log(clean_location);
+       // console.log(clean_location);
         if(me.queryObj.nasid != undefined){  //Override defaults
-            console.log("Submit form with nasid");
+           // console.log("Submit form with nasid");
             me.getFrmPayU().submit({
                 target:'_self',
                 params:{
@@ -144,7 +149,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
             });
       
         }else{
-            console.log("Submit form withOUT nasid");
+           // console.log("Submit form withOUT nasid");
             me.getFrmPayU().submit(
                 {
                     target      :'_self',
@@ -170,6 +175,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
             success : function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
+					me.jsonData = jsonData.data;
                     me.realmFetched(jsonData.data);
                 }else{
                     me.realmNotFound(); //Tell then to add an identifier
@@ -187,6 +193,14 @@ Ext.define('CoovaChilli.controller.Desktop', {
         vp.add([l]);
         //Change the page's title
         document.title = data.detail.name;
+
+		//Set interval if specified
+		if(me.jsonData.settings.usage_show_check != undefined){
+			if(me.jsonData.settings.usage_show_check == true){
+				me.timeUntilUsage 	= me.jsonData.settings.usage_refresh_interval;
+    			me.usageInterval 	= me.jsonData.settings.usage_refresh_interval;
+			}
+		}
 
         if(me.uamIp == undefined){
             if(me.testForHotspot()){
@@ -240,14 +254,14 @@ Ext.define('CoovaChilli.controller.Desktop', {
            // console.log("not doing a payment gw");
             return;
         }
-        console.log(me.paymentGwType);
+       // console.log(me.paymentGwType);
 
         //--- PayPal ---
         if(me.paymentGwType == 'pnlPayPal'){
             //console.log(me.queryObj.tx);
             if(me.queryObj.tx != undefined){ //Paypal will add a tx=<transaction ID to the query string>
                 //Dummy thing:
-                console.log("Finding transaction details for "+ me.queryObj.tx);
+               // console.log("Finding transaction details for "+ me.queryObj.tx);
                 Ext.Ajax.request({
                     url     : me.application.config.urlPayPalVoucher,
                     method  : 'GET',
@@ -365,10 +379,10 @@ Ext.define('CoovaChilli.controller.Desktop', {
         var me = this;   
         var urlStatus = 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
         Ext.data.JsonP.request({
-            url: urlStatus,
-            timeout: me.application.config.jsonTimeout,
-            callbackKey: 'callback',
-            success: function(j){
+            url			: urlStatus,
+            timeout		: me.application.config.jsonTimeout,
+            callbackKey	: 'callback',
+            success		: function(j){
                 me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
 
                 if(j.clientState == 0){ 
@@ -391,6 +405,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
                     if(me.application.config.noStatus == true){
                         window.location=me.application.config.redirectTo;
                     }else{
+						me.usageUsername 	= j.session.userName;
+						me.usageMac 		= j.redir.macAddress;
+
                         me.showStatus();
                         //Refresh status window
                         me.refreshStatus(j);
@@ -419,14 +436,30 @@ Ext.define('CoovaChilli.controller.Desktop', {
         });
     },
     refreshCounter: function(){
-        var me = this; 
-
-        me.counter = setInterval (function(){
+        var me 		= this; 
+        me.counter  = setInterval (function(){
             me.timeUntilStatus = me.timeUntilStatus-1;
+			//Check if we need to fetch usage data
+			if(me.jsonData.settings.usage_show_check != undefined){
+				if(me.jsonData.settings.usage_show_check == true){
+					var uM = me.getStatus().down('#refreshUsageMessage');
+					if(uM != undefined){
+						me.timeUntilUsage = me.timeUntilUsage -1;
+                		uM.setText('Refresh in <span style="color:blue;">'+ me.timeUntilUsage + '</span> seconds');
+					}
+					if(me.timeUntilUsage == 0){      //Each time we reach null we refresh the screens
+		                me.timeUntilUsage = me.usageInterval; //Start anew
+		               // console.log("Fetch usage pappie");
+						me.fetchUsage();
+		            }
+				}
+			}
+
             if(me.getStatus().isHidden()){    //We remove ourself gracefully
                 clearInterval(me.counter);
                 me.counter   = undefined;
                 me.timeUntilStatus = me.refreshInterval;
+				me.timeUntilUsage  = me.usageInterval;
             }else{
                // console.log('Refresh in '+ me.timeUntilStatus + ' seconds');
                 var m = me.getStatus().down('#refreshMessage');
@@ -438,6 +471,66 @@ Ext.define('CoovaChilli.controller.Desktop', {
             }
         }, 1000 );
     },
+	fetchUsage: function(){
+        var me = this;  
+        Ext.Ajax.request({
+            url     : me.application.config.urlUsage,
+            method  : 'GET',
+			params: {
+                username: me.usageUsername,
+                mac		: me.usageMac
+            },
+            success : function(response){
+                var jsonD    = Ext.JSON.decode(response.responseText);
+                if(jsonD.success){
+					//console.log(jsonD);
+					me.refreshUsage(jsonD.data);
+                }      
+            },
+            scope: me
+        });
+    },
+	refreshUsage:  function(data){
+		var me 		= this;		
+		var pData	= me.getStatus().down('#pData');
+		var pbData	= me.getStatus().down('#pbData');
+		var pTime	= me.getStatus().down('#pTime');
+		var pbTime	= me.getStatus().down('#pbTime');
+
+		//Data related
+		if(	(data.data_used != null)&&
+			(data.data_cap  != null)
+		){
+			var dUsed 	= me.bytes(data.data_used);
+			var dAvail	= me.bytes((data.data_cap-data.data_used));
+			var dPerc	= data.data_used / data.data_cap;
+			var dText   = (dPerc * 100).toFixed(1)+'%';
+			pData.update({dUsed: dUsed, dAvail: dAvail});
+			pbData.updateProgress(dPerc,dText);
+		}else{
+			if(pData.isVisible()){
+				pData.setVisible(false);
+				pbData.setVisible(false);
+			}
+		}
+
+		//Time related
+		if(	(data.time_used != null)&&
+			(data.time_cap  != null)
+		){
+			var tUsed 	= me.time(data.time_used);
+			var tAvail	= me.time((data.time_cap-data.time_used));
+			var tPerc	= data.time_used / data.time_cap;
+			var tText   = (tPerc * 100).toFixed(1)+'%';
+			pTime.update({tUsed: tUsed, tAvail: tAvail});
+			pbTime.updateProgress(tPerc,tText);
+		}else{
+			if(pTime.isVisible()){
+				pTime.setVisible(false);
+				pbTime.setVisible(false);
+			}
+		}
+	},
     refreshStatus: function(j){
         var me      = this;
         var gw      = 4294967296;
