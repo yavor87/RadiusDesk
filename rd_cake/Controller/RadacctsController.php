@@ -22,6 +22,11 @@ class RadacctsController extends AppController {
 			$time_used	= null;
 			$time_cap	= null;
 
+			$data_used	= 10000;
+			$data_cap	= 50000;
+			$time_used	= 100;
+			$time_cap	= 200;
+
 			$username 	= $this->request->query['username'];
 			$mac		= $this->request->query['mac'];
 			
@@ -92,7 +97,7 @@ class RadacctsController extends AppController {
 			$data = array('data_used' => $data_used, 'data_cap' => $data_cap, 'time_used' => $time_used, 'time_cap' => $time_cap);
       
 			$this->set(array(
-                'success'   => false,
+                'success'   => true,
                 'data'      => $data,
                 '_serialize' => array('success','data')
             ));

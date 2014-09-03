@@ -84,6 +84,8 @@ class DynamicDetailsController extends AppController {
 			$items['settings']['voucher_login_check']= $q_r['DynamicDetail']['voucher_login_check'];
 			$items['settings']['auto_suffix_check'] = $q_r['DynamicDetail']['auto_suffix_check'];
 			$items['settings']['auto_suffix']       = $q_r['DynamicDetail']['auto_suffix'];
+			$items['settings']['usage_show_check']  = $q_r['DynamicDetail']['usage_show_check'];
+			$items['settings']['usage_refresh_interval'] 	= $q_r['DynamicDetail']['usage_refresh_interval'];
         }
 
         $success = true;
@@ -504,6 +506,13 @@ class DynamicDetailsController extends AppController {
             $this->request->data['auto_suffix_check'] = 0;
         }
 
+		//usage_show_check compulsory check
+        if(isset($this->request->data['usage_show_check'])){
+            $this->request->data['usage_show_check'] = 1;
+        }else{
+            $this->request->data['usage_show_check'] = 0;
+        }
+
         if ($this->DynamicDetail->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -653,6 +662,8 @@ class DynamicDetailsController extends AppController {
 				$items['voucher_login_check']       = $q_r['DynamicDetail']['voucher_login_check'];
 				$items['auto_suffix_check']         = $q_r['DynamicDetail']['auto_suffix_check'];
 				$items['auto_suffix']               = $q_r['DynamicDetail']['auto_suffix'];
+				$items['usage_show_check']          = $q_r['DynamicDetail']['usage_show_check'];
+				$items['usage_refresh_interval']    = $q_r['DynamicDetail']['usage_refresh_interval'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
