@@ -28,21 +28,21 @@ Ext.application({
 
     //____Configuration settings comes here____:
     config: {
-        urlRealmInfo: infoServer+'/cake2/rd_cake/dynamic_details/info_for.json',
-        urlUam      : infoServer+'/rd_login_pages/services/uam.php',
-        urlUsage    : infoServer+'/c2/yfi_cake/third_parties/json_usage_check',
-        urlBase     : infoServer,
+        urlRealmInfo	: infoServer+'/cake2/rd_cake/dynamic_details/info_for.json',
+        urlUam      	: infoServer+'/rd_login_pages/services/uam.php',
+        urlUsage    	: infoServer+'/c2/yfi_cake/third_parties/json_usage_check',
+        urlBase     	: infoServer,
       //  noStatus    : false,
       //  redirectTo  : "http://google.com",
-        noStatus    : true,
-        redirectTo  : "http://www.waveloc.com",
-        urlScaler   : '/cake2/rd_cake/webroot/files/image.php',
-        jsonTimeout : 10000,
+        noStatus    	: true,
+        redirectTo  	: "http://www.waveloc.com",
+        urlScaler   	: '/cake2/rd_cake/webroot/files/image.php',
+        jsonTimeout 	: 10000,
         urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
-        urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json'
-    },
+        urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
+		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json'
     //____ End of Configuration settings _____
-
+	},
     init: function(){
         var me = this;
         me.addConstants();

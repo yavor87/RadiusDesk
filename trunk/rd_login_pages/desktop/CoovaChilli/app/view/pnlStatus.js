@@ -11,8 +11,13 @@ Ext.define('CoovaChilli.view.pnlStatus', {
     },
     initComponent: function() {
 
-        var me = this;
+        var me 		= this;
         var pbWidth = 270;
+
+		//If it is there check and show accordingly
+		if(me.jsonData.settings.usage_show_check != undefined){
+			me.inclUsage = me.jsonData.settings.usage_show_check;
+		}
 
         //Usage section
             var tplTime = Ext.create('Ext.XTemplate', [ 
@@ -49,10 +54,17 @@ Ext.define('CoovaChilli.view.pnlStatus', {
             var pbData  = Ext.create('Ext.ProgressBar', {itemId: 'pbData', width: pbWidth, value: .0, text: '0%'});
 
         var tUsage = Ext.create('Ext.panel.Panel',{
-            defaults: {'margin':'10px'},
-            items:  [pTime,pbTime,pData,pbData],
-            itemId: 'usageTab', 
-            title:  'Usage'
+            defaults	: {'margin':'10px'},
+            items		:  [pTime,pbTime,pData,pbData],
+            itemId		: 'usageTab', 
+            title		:  'Usage',
+			bbar		: [
+                { 
+                    xtype		: 'tbtext', 
+                    itemId		: 'refreshUsageMessage', 
+                    text		: 'Refreshing in .....'
+                }
+			]
         });
 
 
@@ -67,16 +79,23 @@ Ext.define('CoovaChilli.view.pnlStatus', {
                 '<div><div class="item">Data in</div><div class="value">{data_in}</div></div>'+
                 '<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>'+
                 '<div><div class="item">Data total</div><div class="value">{data_total}</div></div>'
-            ]) 
+            ]),
+			bbar: [
+                { 
+                    xtype		: 'tbtext', 
+                    itemId		: 'refreshMessage', 
+                    text		: 'Refreshing in .....'
+                }
+			]
         });
 
-        if(this.inclUsage){
-            var i = [tUsage, tSession];
+        if(me.inclUsage){
+            var i = [tSession, tUsage];
         }else{
             var i = [tSession];
         }
 
-        this.items = [     
+        me.items = [     
         {
             xtype: 'tabpanel',
             activeTab: 0,
@@ -108,15 +127,16 @@ Ext.define('CoovaChilli.view.pnlStatus', {
             componentCls: 'ttt'
         }
         ];
-
-        this. bbar = [
+/*
+        me. bbar = [
                 { 
                     xtype:      'tbtext', 
                     itemId:     'refreshMessage', 
                     text: 'Refreshing in .....'
                 }
         ];
+*/
 
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });

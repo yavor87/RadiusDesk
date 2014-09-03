@@ -74,7 +74,8 @@ Ext.define('CoovaChilli.view.Land' ,{
                             {   
                                 xtype       : 'pnlStatus',
                                 itemId      : 'pnlStatus',
-                                hidden      : true
+                                hidden      : true,
+								jsonData    : me.jsonData
                             },
                             {   
                                 xtype       : 'pnlNotHotspot',
