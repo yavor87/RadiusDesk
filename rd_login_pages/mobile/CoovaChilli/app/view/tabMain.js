@@ -104,8 +104,8 @@ Ext.define('CoovaChilli.view.tabMain', {
                 itemId      : 'cntAbout',
                 layout      : 'fit',
                 scrollable  : false         
-            }, 
-            {
+            }/* 
+            ,{
                 title       : 'Online shop',
                 xtype       : 'container',
                 itemId      : 'cntShop',
@@ -123,7 +123,7 @@ Ext.define('CoovaChilli.view.tabMain', {
                     },
                     { xtype : 'spacer', flex: 1 }
                 ]
-            } 
+            } */
           /* {
                 title   : 'Online shop',
                 itemId  : 'cntShop',
