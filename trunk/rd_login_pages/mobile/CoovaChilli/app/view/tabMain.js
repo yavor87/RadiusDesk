@@ -53,7 +53,8 @@ Ext.define('CoovaChilli.view.tabMain', {
                         xtype       : 'cntStatus',
                         itemId      : 'cntStatus',
                         hidden      : true,
-                        scrollable  : true
+                        scrollable  : true,
+						jsonData    : config.jsonData
                     },
                     {   
                         xtype       : 'cntNotHotspot',
