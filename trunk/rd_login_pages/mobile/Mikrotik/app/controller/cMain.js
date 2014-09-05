@@ -7,7 +7,9 @@ Ext.define('Mikrotik.controller.cMain', {
             cntNotHotspot   : '#cntNotHotspot',
             frmConnect      : '#frmConnect', 
             cntSession      : '#cntSession',
+			cntUsage		: '#cntUsage',
             lblStatusTimer  : '#lblStatusTimer',
+			lblUsageTimer	: '#lblUsageTimer',
             cntPhotos       : '#cntPhotos',
             cntShop         : '#cntShop',
             tabMain         : '#tabMain',
@@ -35,6 +37,9 @@ Ext.define('Mikrotik.controller.cMain', {
             },
             'frmConnect #btnClickToConnect': {
                 tap         : 'onBtnClickToConnectTap'
+            },
+			'cntStatus #tpStatus': {
+                activeitemchange    : 'onActiveItemChange'
             }
         },
         views: [
@@ -44,20 +49,25 @@ Ext.define('Mikrotik.controller.cMain', {
         ] 
     },
  
-    counter     : undefined, //refresh counter's id
-    timeUntilStatus:20, //interval to refresh
-    refreshInterval:20, //ditto
+    counter     	: undefined, //refresh counter's id
+    timeUntilStatus	:20, //interval to refresh
+    refreshInterval	:20, //ditto
 
-    sessionData : undefined,
+	timeUntilUsage 	: 60, //defaults
+    usageInterval 	: 60, //ditto
+	usageUsername 	: undefined,
+	usageMac 		: undefined,
 
-    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
-    currentRetry: 0,
+    sessionData 	: undefined,
 
-    userName    : '',
-    password    : '',
-    remember    : false,
+    retryCount  	: 10, //Make it high to start with --- sometimes it really takes long!
+    currentRetry	: 0,
 
-    thumbPhoto  : undefined,
+    userName    	: '',
+    password    	: '',
+    remember    	: false,
+
+    thumbPhoto  	: undefined,
 
     //MT
     mtServer        : undefined,
@@ -82,6 +92,7 @@ Ext.define('Mikrotik.controller.cMain', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                    // console.log(jsonData.data.detail.icon_file_name)
+					me.jsonData = jsonData.data;
                     me.showMain(jsonData.data);
                 }else{
                     me.showNotPresent();    
@@ -96,7 +107,15 @@ Ext.define('Mikrotik.controller.cMain', {
     },
     showMain: function(jsonData){
         var me = this;
-       // console.log(jsonData);
+
+		//Set interval if specified
+		if(me.jsonData.settings.usage_show_check != undefined){
+			if(me.jsonData.settings.usage_show_check == true){
+				me.timeUntilUsage 	= me.jsonData.settings.usage_refresh_interval;
+    			me.usageInterval 	= me.jsonData.settings.usage_refresh_interval;
+			}
+		}
+
         //Load the main view
         var paymentScreen = Mikrotik.config.Config.getPaymentGwType();
         Ext.Viewport.add(Ext.create('Mikrotik.view.tabMain',{
@@ -506,6 +525,11 @@ Ext.define('Mikrotik.controller.cMain', {
                     if(Mikrotik.config.Config.getNoStatus() == true){
                         window.location=Mikrotik.config.Config.getRedirectTo();
                     }else{
+
+						var mac_colons		= j.mac;
+						me.usageUsername 	= j.username;
+						me.usageMac 		= mac_colons.replace(/:/g,'-');
+
                         me.showStatus();
                         //Refresh status window
                         me.refreshStatus(j);
@@ -540,6 +564,20 @@ Ext.define('Mikrotik.controller.cMain', {
         var me      = this; 
         me.counter  = setInterval (function(){
             me.timeUntilStatus = me.timeUntilStatus-1;
+
+			//Check if we need to fetch usage data
+			if(me.jsonData.settings.usage_show_check != undefined){
+				if(me.jsonData.settings.usage_show_check == true){
+					me.timeUntilUsage = me.timeUntilUsage -1;
+					me.getLblUsageTimer().setData({'sec' : me.timeUntilUsage});
+					if(me.timeUntilUsage == 0){      //Each time we reach null we refresh the screens
+		                me.timeUntilUsage = me.usageInterval; //Start anew
+		                //console.log("Fetch usage pappie");
+						me.fetchUsage();
+		            }
+				}
+			}
+
             if(me.getCntStatus().isHidden()){    //We remove ourself gracefully
                 clearInterval(me.counter);
                 me.counter   = undefined;
@@ -553,6 +591,57 @@ Ext.define('Mikrotik.controller.cMain', {
             }
         }, 1000 );
     },
+	fetchUsage: function(){
+        var me = this;  
+        Ext.Ajax.request({
+            url     : Mikrotik.config.Config.getUrlUsage(),
+            method  : 'GET',
+			params	: {
+                username: me.usageUsername,
+                mac		: me.usageMac
+            },
+            success : function(response){
+                var jsonD    = Ext.JSON.decode(response.responseText);
+                if(jsonD.success){
+					me.refreshUsage(jsonD.data);
+                }      
+            },
+            scope: me
+        });
+    },
+	refreshUsage:  function(data){
+		var me 		= this;			
+		//Data related
+		var dUsed 	= 'N/A';
+		var dAvail  = 'N/A';
+
+		var tUsed 	= 'N/A';
+		var tAvail  = 'N/A';
+
+		if(	(data.data_used != null)&&
+			(data.data_cap  != null)
+		){
+			var dUsed 	= me.bytes(data.data_used);
+			var dAvail	= me.bytes((data.data_cap-data.data_used));
+		}
+
+		//Time related
+		if(	(data.time_used != null)&&
+			(data.time_cap  != null)
+		){
+			var tUsed 	= me.time(data.time_used);
+			var tAvail	= me.time((data.time_cap-data.time_used));	
+		}
+
+		me.getCntUsage().setData(
+			{
+				data_used 	: dUsed,
+				data_avail	: dAvail,
+				time_used	: tUsed,
+				time_avail	: tAvail
+			}
+		);
+	},
     onBtnDisconnectTap: function(button){
         var me = this;
         Ext.Viewport.setMasked({
@@ -583,5 +672,24 @@ Ext.define('Mikrotik.controller.cMain', {
     onBtnGoInternetTap: function(button){
         var me = this;
         window.open(Mikrotik.config.Config.getRedirectTo(), '_blank');
-    }
+    },
+	onActiveItemChange : function(tabpanel){
+		var me 		= this;
+		var active	= tabpanel.getActiveItem();
+		var s		= tabpanel.up('cntStatus');
+		
+		var lu		= s.down('#lblUsageTimer');
+		var ls		= s.down('#lblStatusTimer');
+		var itemId  = active.getItemId();
+
+		if(itemId == 'sessionTab'){
+			ls.setHidden(true);
+			lu.setHidden(false);
+		}
+
+		if(itemId == 'usageTab'){
+			ls.setHidden(false);
+			lu.setHidden(true);
+		}
+	}
 });

@@ -37,7 +37,8 @@ Ext.application({
         removeMacUrl: infoServer+"/cake2/rd_cake/devices/remove_mac.json",
         jsonTimeout : 10000,
         urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
-        urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json'
+        urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
+		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json'
     },
     //____ End of Configuration settings _____
 

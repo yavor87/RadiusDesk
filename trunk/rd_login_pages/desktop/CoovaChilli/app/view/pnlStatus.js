@@ -127,15 +127,6 @@ Ext.define('CoovaChilli.view.pnlStatus', {
             componentCls: 'ttt'
         }
         ];
-/*
-        me. bbar = [
-                { 
-                    xtype:      'tbtext', 
-                    itemId:     'refreshMessage', 
-                    text: 'Refreshing in .....'
-                }
-        ];
-*/
 
         me.callParent(arguments);
     }

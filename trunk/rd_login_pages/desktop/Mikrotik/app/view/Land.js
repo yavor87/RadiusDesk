@@ -74,7 +74,8 @@ Ext.define('Mikrotik.view.Land' ,{
                             {   
                                 xtype       : 'pnlStatus',
                                 itemId      : 'pnlStatus',
-                                hidden      : true
+                                hidden      : true,
+								jsonData    : me.jsonData
                             },
                             {   
                                 xtype       : 'pnlNotHotspot',
