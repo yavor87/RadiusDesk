@@ -6,8 +6,8 @@ Ext.define('CoovaChilli.view.cntStatus', {
         'Ext.XTemplate'
     ],
     config: {
-        layout		: 'vbox',
-        cls			: 'sessionClass'
+        layout	: 'vbox',
+        cls		: 'sessionClass'
 	},
 	inclUsage	: false,
 	constructor	: function(config) {
@@ -24,13 +24,13 @@ Ext.define('CoovaChilli.view.cntStatus', {
 				{
 					itemId: 'cntSession',
 					tpl: [
-					'<div class="rdWrapper">',
-					'<div><div class="item">Idle Time</div><div class="value">{idletime}</div></div>',
-					'<div class="alternate"><div class="item">Session Time</div><div class="value">{sessiontime}</div></div>',
-					'<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
-					'<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
-					'<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
-					'</div>'
+						'<div class="rdWrapper">',
+						'<div><div class="item">Idle Time</div><div class="value">{idletime}</div></div>',
+						'<div class="alternate"><div class="item">Session Time</div><div class="value">{sessiontime}</div></div>',
+						'<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
+						'<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
+						'<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
+						'</div>'
 					],
 					data : {'idletime': 30, 'sessiontime': 50,'data_in': 100, 'data_out' : 200, 'data_total' : 300, 'sessiontime': 30},
 					xtype: 'container'
@@ -68,13 +68,13 @@ Ext.define('CoovaChilli.view.cntStatus', {
 				            {
 				                itemId: 'cntSession',
 				                tpl: [
-				                        '<div class="rdWrapper">',
-				                        '<div><div class="item">Idle Time</div><div class="value">{idletime}</div></div>',
-				                        '<div class="alternate"><div class="item">Session Time</div><div class="value">{sessiontime}</div></div>',
-				                        '<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
-				                        '<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
-				                        '<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
-				                        '</div>' 
+			                        '<div class="rdWrapper">',
+			                        '<div><div class="item">Idle Time</div><div class="value">{idletime}</div></div>',
+			                        '<div class="alternate"><div class="item">Session Time</div><div class="value">{sessiontime}</div></div>',
+			                        '<div><div class="item">Data in</div><div class="value">{data_in}</div></div>',
+			                        '<div class="alternate"><div class="item">Data out</div><div class="value">{data_out}</div></div>',
+			                        '<div><div class="item">Data total</div><div class="value">{data_total}</div></div>',
+			                        '</div>' 
 				                ],
 				                data : {'idletime': 30, 'sessiontime': 50,'data_in': 100, 'data_out' : 200, 'data_total' : 300, 'sessiontime': 30},
 				                xtype:  'container'

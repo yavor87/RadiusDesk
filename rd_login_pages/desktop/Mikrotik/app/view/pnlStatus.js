@@ -14,6 +14,11 @@ Ext.define('Mikrotik.view.pnlStatus', {
         var me = this;
         var pbWidth = 270;
 
+		//If it is there check and show accordingly
+		if(me.jsonData.settings.usage_show_check != undefined){
+			me.inclUsage = me.jsonData.settings.usage_show_check;
+		}
+
         //Usage section
             var tplTime = Ext.create('Ext.XTemplate', [ 
                 '<div>Time</div><span class="st">Used </span>'+
@@ -49,10 +54,17 @@ Ext.define('Mikrotik.view.pnlStatus', {
             var pbData  = Ext.create('Ext.ProgressBar', {itemId: 'pbData', width: pbWidth, value: .0, text: '0%'});
 
         var tUsage = Ext.create('Ext.panel.Panel',{
-            defaults: {'margin':'10px'},
-            items:  [pTime,pbTime,pData,pbData],
-            itemId: 'usageTab', 
-            title:  'Usage'
+            defaults	: {'margin':'10px'},
+            items		:  [pTime,pbTime,pData,pbData],
+            itemId		: 'usageTab', 
+            title		:  'Usage',
+			bbar		: [
+                { 
+                    xtype		: 'tbtext', 
+                    itemId		: 'refreshUsageMessage', 
+                    text		: 'Refreshing in .....'
+                }
+			]
         });
 
 
@@ -66,16 +78,23 @@ Ext.define('Mikrotik.view.pnlStatus', {
                 '<div class="alternate"><div class="item">Session Time</div><div class="value">{uptime}</div></div>'+
                 '<div><div class="item">Data in</div><div class="value">{bytes_in_nice}</div></div>'+
                 '<div class="alternate"><div class="item">Data out</div><div class="value">{bytes_out_nice}</div></div>'
-            ]) 
+            ]),
+			bbar: [
+                { 
+                    xtype		: 'tbtext', 
+                    itemId		: 'refreshMessage', 
+                    text		: 'Refreshing in .....'
+                }
+			] 
         });
 
         if(this.inclUsage){
-            var i = [tUsage, tSession];
+            var i = [tSession, tUsage];
         }else{
             var i = [tSession];
         }
 
-        this.items = [     
+        me.items = [     
         {
             xtype: 'tabpanel',
             activeTab: 0,
@@ -108,14 +127,6 @@ Ext.define('Mikrotik.view.pnlStatus', {
         }
         ];
 
-        this. bbar = [
-                { 
-                    xtype:      'tbtext', 
-                    itemId:     'refreshMessage', 
-                    text: 'Refreshing in .....'
-                }
-        ];
-
-        this.callParent(arguments);
+        me.callParent(arguments);
     }
 });

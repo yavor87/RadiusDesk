@@ -13,7 +13,8 @@ Ext.define('Mikrotik.config.Config', {
         paymentGw   : true,
         paymentGwType   : 'cntPayAd',
         urlPayPalVoucher: 'http://'+document.location.hostname+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
-        urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json'
+        urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
+		urlUsage		: 'http://'+document.location.hostname+'/cake2/rd_cake/radaccts/get_usage.json'
     },
  
     constructor: function(config) {

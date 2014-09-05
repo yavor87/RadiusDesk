@@ -1,4 +1,3 @@
-
 Ext.define('CoovaChilli.controller.cMain', {
     extend: 'Ext.app.Controller',
     requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView'],
@@ -670,7 +669,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 					me.getLblUsageTimer().setData({'sec' : me.timeUntilUsage});
 					if(me.timeUntilUsage == 0){      //Each time we reach null we refresh the screens
 		                me.timeUntilUsage = me.usageInterval; //Start anew
-		                console.log("Fetch usage pappie");
+		                //console.log("Fetch usage pappie");
 						me.fetchUsage();
 		            }
 				}

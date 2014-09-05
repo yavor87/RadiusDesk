@@ -29,6 +29,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
     usageInterval 	: 60, //ditto
 	usageUsername 	: undefined,
 	usageMac 		: undefined,
+	jsonData		: undefined,
 
     sessionData     : undefined,
 
@@ -449,7 +450,6 @@ Ext.define('CoovaChilli.controller.Desktop', {
 					}
 					if(me.timeUntilUsage == 0){      //Each time we reach null we refresh the screens
 		                me.timeUntilUsage = me.usageInterval; //Start anew
-		               // console.log("Fetch usage pappie");
 						me.fetchUsage();
 		            }
 				}

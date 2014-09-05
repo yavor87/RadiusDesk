@@ -20,6 +20,11 @@ Ext.define('Mikrotik.controller.Desktop', {
     timeUntilStatus : 20, //interval to refresh
     refreshInterval : 20, //ditto
 
+	timeUntilUsage 	: 60, //defaults
+    usageInterval 	: 60, //ditto
+	usageUsername 	: undefined,
+	usageMac 		: undefined,
+
     sessionData     : undefined,
 
     retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
@@ -150,6 +155,7 @@ Ext.define('Mikrotik.controller.Desktop', {
             success : function(response){
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
+					me.jsonData = jsonData.data;
                     me.realmFetched(jsonData.data);
                 }else{
                     me.realmNotFound(); //Tell then to add an identifier
@@ -364,6 +370,11 @@ Ext.define('Mikrotik.controller.Desktop', {
                     if(me.application.config.noStatus == true){
                         window.location=me.application.config.redirectTo;
                     }else{
+
+						var mac_colons		= j.mac;
+						me.usageUsername 	= j.username;
+						me.usageMac 		= mac_colons.replace(/:/g,'-');
+
                         me.showStatus();
                         //Refresh status window
                         me.refreshStatus(j);
@@ -397,6 +408,21 @@ Ext.define('Mikrotik.controller.Desktop', {
         var me      = this; 
         me.counter  = setInterval (function(){
             me.timeUntilStatus = me.timeUntilStatus-1;
+			//Check if we need to fetch usage data
+			if(me.jsonData.settings.usage_show_check != undefined){
+				if(me.jsonData.settings.usage_show_check == true){
+					var uM = me.getStatus().down('#refreshUsageMessage');
+					if(uM != undefined){
+						me.timeUntilUsage = me.timeUntilUsage -1;
+                		uM.setText('Refresh in <span style="color:blue;">'+ me.timeUntilUsage + '</span> seconds');
+					}
+					if(me.timeUntilUsage == 0){      //Each time we reach null we refresh the screens
+		                me.timeUntilUsage = me.usageInterval; //Start anew
+						me.fetchUsage();
+		            }
+				}
+			}
+
             if(me.getStatus().isHidden()){    //We remove ourself gracefully
                 clearInterval(me.counter);
                 me.counter   = undefined;
@@ -410,8 +436,67 @@ Ext.define('Mikrotik.controller.Desktop', {
                 }
             }
         }, 1000 );
-
     },
+	fetchUsage: function(){
+        var me = this;  
+        Ext.Ajax.request({
+            url     : me.application.config.urlUsage,
+            method  : 'GET',
+			params: {
+                username: me.usageUsername,
+                mac		: me.usageMac
+            },
+            success : function(response){
+                var jsonD    = Ext.JSON.decode(response.responseText);
+                if(jsonD.success){
+					//console.log(jsonD);
+					me.refreshUsage(jsonD.data);
+                }      
+            },
+            scope: me
+        });
+    },
+	refreshUsage:  function(data){
+		var me 		= this;		
+		var pData	= me.getStatus().down('#pData');
+		var pbData	= me.getStatus().down('#pbData');
+		var pTime	= me.getStatus().down('#pTime');
+		var pbTime	= me.getStatus().down('#pbTime');
+
+		//Data related
+		if(	(data.data_used != null)&&
+			(data.data_cap  != null)
+		){
+			var dUsed 	= me.bytes(data.data_used);
+			var dAvail	= me.bytes((data.data_cap-data.data_used));
+			var dPerc	= data.data_used / data.data_cap;
+			var dText   = (dPerc * 100).toFixed(1)+'%';
+			pData.update({dUsed: dUsed, dAvail: dAvail});
+			pbData.updateProgress(dPerc,dText);
+		}else{
+			if(pData.isVisible()){
+				pData.setVisible(false);
+				pbData.setVisible(false);
+			}
+		}
+
+		//Time related
+		if(	(data.time_used != null)&&
+			(data.time_cap  != null)
+		){
+			var tUsed 	= me.time(data.time_used);
+			var tAvail	= me.time((data.time_cap-data.time_used));
+			var tPerc	= data.time_used / data.time_cap;
+			var tText   = (tPerc * 100).toFixed(1)+'%';
+			pTime.update({tUsed: tUsed, tAvail: tAvail});
+			pbTime.updateProgress(tPerc,tText);
+		}else{
+			if(pTime.isVisible()){
+				pTime.setVisible(false);
+				pbTime.setVisible(false);
+			}
+		}
+	},
     refreshStatus: function(j){
         var me      = this;
         var statusTab = me.getStatus().down('#sessionTab');
