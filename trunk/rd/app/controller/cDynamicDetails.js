@@ -181,6 +181,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabSettings #chkSlideshow' : {
                 change:  me.chkSlideshowChange
             },
+			'pnlDynamicDetail #tabSettings #chkUsage' : {
+                change:  me.chkUsageChange
+            },
             'pnlDynamicDetail #tabClickToConect #chkClickToConnect' : {
                 change:  me.chkClickToConnectChange
             },
@@ -453,6 +456,17 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var me      = this;
         var form    = chk.up('form');
         var nr      = form.down('#nrSecondsPerSlide');
+        var value   = chk.getValue();
+        if(value){
+            nr.setDisabled(false);                
+        }else{
+            nr.setDisabled(true);
+        }
+    },
+	chkUsageChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var nr      = form.down('#nrUsageRefresh');
         var value   = chk.getValue();
         if(value){
             nr.setDisabled(false);                
