@@ -58,6 +58,9 @@ class Node extends AppModel {
                         'order'     => 'NodeAction.created DESC',
                         'dependent' => true
           	),
+			'NodeMpSetting'   => array(
+                'dependent'     => true   
+            ),
     );
 
     public $hasOne = array(
