@@ -154,40 +154,45 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
 								{
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'SIP enable',
-						            itemId      : 'chkTc',
-						            name        : 'sip_check',
-						            inputValue  : 'sip_check',
+						            itemId      : 'chkSip',
+						            name        : 'enable',
+						            inputValue  : 'enable',
 						            checked     : false,
 						            labelClsExtra: 'lblRdReq'
+									
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'SIP host',
-						            name        : "sip_host",
-						            allowBlank  : false,
+						            name        : "host",
+						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRdReq',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'Username',
-						            name        : "sip_username",
-						            allowBlank  : false,
+						            name        : "username",
+						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRdReq',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'Password',
-						            name        : "sip_password",
-						            allowBlank  : false,
+						            name        : "secret",
+						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRdReq',
+									disabled	: true
 						        },
 								{
-						            xtype       : 'cmbDialoutCode'
-						        }          
-                               
+						            xtype       : 'cmbDialoutCode',
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
+						        }    
                             ]
                         },
 						{ 
@@ -204,63 +209,77 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'Asterisk enable',
 						            itemId      : 'chkAsterisk',
-						            name        : 'asterisk_check',
-						            inputValue  : 'asterisk_check',
+						            name        : 'enable_ast',
+						            inputValue  : 'enable_ast',
 						            checked     : false,
 						            labelClsExtra: 'lblRdReq'
 						        },
 								{
-									xtype		: 'cmbSoftphoneSupport'
+									xtype		: 'cmbSoftphoneSupport',
+									disabled	: true
 								},
         						{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec1',
-									value		: 'gsm'
+									name		: 'codec1',
+									value		: 'gsm',
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec2',
-									value		: 'ulaw'
+									name		: 'codec2',
+									value		: 'ulaw',
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec3',
-									value		: 'alaw'
+									name		: 'codec3',
+									value		: 'alaw',
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'SIP Register',
 						            itemId      : 'chkSipRegister',
-						            name        : 'sip_register_check',
-						            inputValue  : 'sip_register_check',
+						            name        : 'register',
+						            inputValue  : 'register',
 						            checked     : false,
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'SIP registrar',
-						            name        : "sip_registrar",
+						            name        : "reghost",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'Enable Asterisk NAT',
 						            itemId      : 'chkAsteriskNat',
-						            name        : 'asterisk_nat_check',
-						            inputValue  : 'asterisk_nat_check',
+						            name        : 'enablenat',
+						            inputValue  : 'enablenat',
 						            checked     : false,
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'NAT external IP',
-						            name        : "nat_external_ip",
+						            name        : "externip",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
-						        } 
+						            labelClsExtra: 'lblRd',
+									disabled	: true
+						        }
                             ]
                         } 
                     ]
