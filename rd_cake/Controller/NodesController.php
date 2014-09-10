@@ -119,6 +119,17 @@ class NodesController extends AppController {
 			$batman_adv = $mesh['MeshSetting'];
 		}
 		$json['config_settings']['batman_adv'] = $batman_adv;
+
+
+		//=====What if is a MP2 -> do we have settings for the mesh_potato?
+		if(
+			($this->Hardware == 'mp2_phone')||
+			($this->Hardware == 'mp2_basic')
+		){
+			$mp_data 								= $this->_build_mesh_potato($mesh);
+			$json['config_settings']['mesh_potato'] = $mp_data;
+		}
+
         return $json; 
     }
 
@@ -502,6 +513,20 @@ class NodesController extends AppController {
        // print_r($wireless);
         return $wireless;
     }
+
+	private function _build_mesh_potato($mesh){
+
+		$mp_settings = array();
+		$node_mp_setting	= ClassRegistry::init('NodeMpSetting');
+		$node_mp_setting->contain();
+		$q_r	= $node_mp_setting->find('all', array('conditions' => array('NodeMpSetting.node_id' => $this->NodeId)));
+		foreach($q_r as $i){
+			$key = $i['NodeMpSetting']['name'];
+			$val = $i['NodeMpSetting']['value'];
+			$mp_settings["$key"] = $val;
+		}
+		return $mp_settings;
+	}
 
     private function _number_to_word($number) {
    
