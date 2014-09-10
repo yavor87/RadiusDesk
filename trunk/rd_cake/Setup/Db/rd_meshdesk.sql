@@ -81,11 +81,14 @@ CREATE TABLE `mesh_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-
-
-
-
-
+DROP TABLE IF EXISTS `node_mp_settings`;
+CREATE TABLE `node_mp_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `node_id`int(11) DEFAULT NULL,
+  `name`  varchar(50) DEFAULT NULL,
+  `value` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
