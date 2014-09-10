@@ -1010,6 +1010,14 @@ class MeshesController extends AppController {
                 }
             }
 
+			//____ Do a check if it is a MP2 type of device and send it away to be delt with
+			if(
+				($this->request->data['hardware'] == 'mp2_phone')||
+				($this->request->data['hardware'] == 'mp2_basic')
+			){
+				$this->_add_or_edit_mp_settings($new_id); //$this->request will be available in that method we only send the new node_id
+			}
+
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
@@ -1097,6 +1105,14 @@ class MeshesController extends AppController {
                     }
                 }
 
+				if(
+					($this->request->data['hardware'] == 'mp2_phone')||
+					($this->request->data['hardware'] == 'mp2_basic')
+				){
+					$this->_add_or_edit_mp_settings($new_id); //$this->request will be available in that method we only send the new node_id
+				}
+
+
                 $this->set(array(
                     'success' => true,
                     '_serialize' => array('success')
@@ -1121,11 +1137,23 @@ class MeshesController extends AppController {
         }
 
         $node = ClassRegistry::init('Node');
+		$node->contain('NodeMpSetting');
 
         $id    = $this->request->query['node_id'];
         $q_r   = $node->findById($id);
  
        // print_r($q_r);
+		if(
+			($q_r['Node']['hardware'] == 'mp2_phone')||
+			($q_r['Node']['hardware'] == 'mp2_basic')
+		){
+
+			foreach($q_r['NodeMpSetting'] as $nms){
+				$key 	= $nms['name'];
+				$value	= $nms['value'];
+				$q_r['Node']["$key"] = $value; 
+			}
+		}
 
         $this->set(array(
             'data'      => $q_r['Node'],
@@ -2121,6 +2149,108 @@ class MeshesController extends AppController {
             $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
         }
 		return $dead_after;
+	}
+
+	private function _add_or_edit_mp_settings($node_id){
+
+/*
+
+config secn 'asterisk'
+    option codec1 'gsm'
+    option codec2 'ulaw'
+    option codec3 'alaw'
+    option host 'sip.myhost.com'
+    option fromdomain 'sip.myhost.com'
+    option dialout '#'
+    option externip '0.0.0.0'
+    option reghost 'sip.myhost.com'
+    option softph 'OFF'
+    option username 'myuser'
+    option fromusername 'myuser'
+    option enable '0'
+    option register '0'
+    option enablenat '0'
+    option enable_ast '0'
+*/
+
+		$settings_to_add = array();
+
+		//Some defaults
+		$settings_to_add['enablenat']	= '0';
+		$settings_to_add['externip']	= '0.0.0.0';
+		$settings_to_add['codec1']		= 'gsm';
+		$settings_to_add['codec2']		= 'ulaw';
+		$settings_to_add['codec2']		= 'alaw';
+		$settings_to_add['softph']		= 'OFF';
+
+
+		$sip_check = false;
+		//We have tou build in quite a lot of 'logic' on this one to assume some things based on what the user chose
+		if (
+			(array_key_exists('enable', $this->request->data))&&
+			(!array_key_exists('enable_ast', $this->request->data))
+		){
+			//We assume the person did not touch the advanced settings thus we will make some descisions for them
+			$sip_check 			= true;
+			$sip_register_check	= '1';
+			$settings_to_add['reghost']		= $this->request->data['host'];
+		}
+
+		if (
+			(array_key_exists('enable', $this->request->data))&&
+			(array_key_exists('enable_ast', $this->request->data))
+		){
+			$sip_check 			= true;
+			//We assume the person did choose advanced settings -check for the registrar
+			if(array_key_exists('register', $this->request->data)){
+				$sip_register_check = "1";
+				$sip_registrar		= $this->request->data['reghost'];
+			}else{
+				$sip_register_check = "0";
+			}
+
+			if(array_key_exists('enablenat', $this->request->data)){
+				$settings_to_add['externip']	= $this->request->data['externip'];
+				$settings_to_add['enablenat']	= '1';
+			}
+
+			$settings_to_add['codec1']		= $this->request->data['codec1'];
+			$settings_to_add['codec2']		= $this->request->data['codec2'];
+			$settings_to_add['codec3']		= $this->request->data['codec3'];
+			$settings_to_add['softph']		= $this->request->data['softph'];
+		}
+
+		//Now we can add /edit the lot
+ 		$node_mp_setting	= ClassRegistry::init('NodeMpSetting');
+		$node_mp_setting->contain();
+
+		//Clear previous ones first:
+        $node_mp_setting->deleteAll(array('NodeMpSetting.node_id' => $node_id), false);
+
+
+		if(!$sip_check){
+			//Silently ignore it
+			return;
+		}
+
+		$settings_to_add['enable'] 		= 1;
+		$settings_to_add['register'] 	= $sip_register_check;
+		$settings_to_add['host']		= $this->request->data['host'];
+		$settings_to_add['fromdomain']	= $this->request->data['host'];
+		$settings_to_add['enable_ast']	= '1';
+		$settings_to_add['fromusername']= $this->request->data['username'];
+		$settings_to_add['username']    = $this->request->data['username'];
+		$settings_to_add['secret']      = $this->request->data['secret'];
+		$settings_to_add['dialout']     = $this->request->data['dialout'];
+	
+		foreach(array_keys($settings_to_add) as $k){
+            $node_mp_setting->create();
+            $data['node_id']  	= $node_id;
+            $data['name'] 		= $k;
+			$data['value'] 		= $settings_to_add["$k"];
+            $node_mp_setting->save($data);
+			$node_mp_setting->id= null;
+		}
 	}
 
 }
