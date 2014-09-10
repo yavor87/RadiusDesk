@@ -10,7 +10,7 @@ Ext.define('Rd.view.meshes.cmbDialoutCode', {
     typeAhead		: true,
     allowBlank		: false,
     mode			: 'local',
-    name			: 'dialout_code',
+    name			: 'dialout',
     labelClsExtra	: 'lblRd',
 	value			: "#",
     initComponent: function() {

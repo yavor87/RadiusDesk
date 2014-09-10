@@ -149,8 +149,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'SIP enable',
 						            itemId      : 'chkSip',
-						            name        : 'sip_check',
-						            inputValue  : 'sip_check',
+						            name        : 'enable',
+						            inputValue  : 'enable',
 						            checked     : false,
 						            labelClsExtra: 'lblRdReq'
 									
@@ -158,7 +158,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'SIP host',
-						            name        : "sip_host",
+						            name        : "host",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
 						            labelClsExtra: 'lblRdReq',
@@ -167,7 +167,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'Username',
-						            name        : "sip_username",
+						            name        : "username",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
 						            labelClsExtra: 'lblRdReq',
@@ -176,7 +176,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'Password',
-						            name        : "sip_password",
+						            name        : "secret",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
 						            labelClsExtra: 'lblRdReq',
@@ -203,68 +203,76 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'Asterisk enable',
 						            itemId      : 'chkAsterisk',
-						            name        : 'asterisk_check',
-						            inputValue  : 'asterisk_check',
+						            name        : 'enable_ast',
+						            inputValue  : 'enable_ast',
 						            checked     : false,
 						            labelClsExtra: 'lblRdReq'
 						        },
 								{
-									xtype		: 'cmbSoftphoneSupport'
+									xtype		: 'cmbSoftphoneSupport',
+									disabled	: true
 								},
         						{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec1',
 									name		: 'codec1',
 									value		: 'gsm',
-									labelClsExtra: 'lblRdReq'
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec2',
 									name		: 'codec2',
 									value		: 'ulaw',
-									labelClsExtra: 'lblRdReq'
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 									xtype		: 'cmbCodec',
 									fieldLabel  : 'Codec3',
 									name		: 'codec3',
 									value		: 'alaw',
-									labelClsExtra: 'lblRdReq'
+									labelClsExtra: 'lblRdReq',
+									disabled	: true
 								},
 								{
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'SIP Register',
 						            itemId      : 'chkSipRegister',
-						            name        : 'sip_register_check',
-						            inputValue  : 'sip_register_check',
+						            name        : 'register',
+						            inputValue  : 'register',
 						            checked     : false,
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'SIP registrar',
-						            name        : "sip_registrar",
+						            name        : "reghost",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'checkbox',      
 						            fieldLabel  : 'Enable Asterisk NAT',
 						            itemId      : 'chkAsteriskNat',
-						            name        : 'asterisk_nat_check',
-						            inputValue  : 'asterisk_nat_check',
+						            name        : 'enablenat',
+						            inputValue  : 'enablenat',
 						            checked     : false,
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        },
 								{
 						            xtype       : 'textfield',
 						            fieldLabel  : 'NAT external IP',
-						            name        : "nat_external_ip",
+						            name        : "externip",
 						            allowBlank  : true,
 						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd'
+						            labelClsExtra: 'lblRd',
+									disabled	: true
 						        }
                             ]
                         } 

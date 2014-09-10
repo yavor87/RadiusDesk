@@ -10,7 +10,7 @@ Ext.define('Rd.view.meshes.cmbSoftphoneSupport', {
     typeAhead		: true,
     allowBlank		: false,
     mode			: 'local',
-    name			: 'softphone_support',
+    name			: 'softph',
     labelClsExtra	: 'lblRd',
 	value			: "OFF",
     initComponent: function() {
