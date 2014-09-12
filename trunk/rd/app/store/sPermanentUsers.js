@@ -2,9 +2,9 @@ Ext.define('Rd.store.sPermanentUsers', {
     extend: 'Ext.data.Store',
     model: 'Rd.model.mPermanentUser',
     //To make it load AJAXly from the server specify the follown 3 attributes
-    buffered: true,
-    leadingBufferZone: 150, 
-    pageSize: 50,
+   // buffered: true,
+   // leadingBufferZone: 150, 
+    pageSize: 100,
     //To force server side sorting:
     remoteSort: true,
     proxy: {

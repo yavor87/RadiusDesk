@@ -98,7 +98,13 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         hidden      : true,
                         disabled    : true,
                         value       : dtTo
-                    }
+                    },
+					{
+                        xtype		: 'textfield',
+                        fieldLabel	: 'Static IP',
+                        name 		: "static_ip",
+                        allowBlank	:true
+                    }   
                 ],
                 buttons: [
                     {
