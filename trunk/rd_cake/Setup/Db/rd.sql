@@ -2490,6 +2490,17 @@ CREATE TABLE `users` (
   `data_cap` bigint(20) DEFAULT NULL,
   `time_used` int(12) DEFAULT NULL,
   `time_cap` int(12) DEFAULT NULL,
+  `time_cap_type` enum('hard','soft') DEFAULT 'soft',
+  `data_cap_type` enum('hard','soft') DEFAULT 'soft',
+  `realm` varchar(50) NOT NULL DEFAULT '',
+  `realm_id` int(11) DEFAULT NULL,
+  `profile` varchar(50) NOT NULL DEFAULT '',
+  `profile_id` int(11) DEFAULT NULL,
+  `from_date` datetime DEFAULT NULL,
+  `to_date` datetime DEFAULT NULL,
+  `track_auth` tinyint(1) NOT NULL DEFAULT '0',
+  `track_acct` tinyint(1) NOT NULL DEFAULT '1',
+  `static_ip` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2500,7 +2511,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-08-28 11:31:14','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','537ca8a5-ff10-4e91-94cf-0b9203662c24','','','','','','sql',1,0,'2014-09-02 16:09:42','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,4,5,'2013-09-04 10:51:36','2014-09-02 16:09:54',NULL,0,84483,1000000000,NULL,NULL),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,6,7,'2013-10-25 11:22:19','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','5384ce4c-12d0-4a56-82e3-419a03662c24','','','','','','sql',1,0,'2014-09-02 15:24:41',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,8,9,'2014-05-27 19:41:32','2014-08-11 12:51:57',NULL,0,NULL,NULL,NULL,NULL);
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','52190fff-a800-48eb-b1f2-478bc0a80167','root','','','','','sql',1,0,NULL,NULL,NULL,NULL,NULL,4,8,4,NULL,1,10,'2012-12-10 13:14:13','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL,'soft','soft','',NULL,'',NULL,NULL,NULL,0,1,''),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','','sql',1,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,2,3,'2013-08-28 11:31:14','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL,'soft','soft','',NULL,'',NULL,NULL,NULL,0,1,''),(187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','537ca8a5-ff10-4e91-94cf-0b9203662c24','','','','','','sql',1,0,'2014-09-02 16:09:42','2013-10-05 20:39:14','127.0.0.1','127.0.0.1','Most likely PEAP failure. Run in debug',4,10,4,44,4,5,'2013-09-04 10:51:36','2014-09-02 16:09:54',NULL,0,84483,1000000000,NULL,NULL,'soft','soft','',NULL,'',NULL,NULL,NULL,0,1,''),(190,'admin_freddy','d130baf00734e6ea7d6d9333742d11d4f24d7db7','526c074c-1364-4543-93ce-052e03662c24','','','','','','sql',0,1,NULL,NULL,NULL,NULL,NULL,4,9,4,44,6,7,'2013-10-25 11:22:19','2014-08-11 12:51:57',NULL,NULL,NULL,NULL,NULL,NULL,'soft','soft','',NULL,'',NULL,NULL,NULL,0,1,''),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','5384ce4c-12d0-4a56-82e3-419a03662c24','','','','','','sql',1,0,'2014-09-02 15:24:41',NULL,'127.0.0.1',NULL,NULL,4,10,4,44,8,9,'2014-05-27 19:41:32','2014-08-11 12:51:57',NULL,0,NULL,NULL,NULL,NULL,'soft','soft','',NULL,'',NULL,NULL,NULL,0,1,'');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2563,4 +2574,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-10 13:23:45
+-- Dump completed on 2014-09-12 10:40:09
