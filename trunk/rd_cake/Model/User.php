@@ -30,22 +30,12 @@ class User extends AppModel {
         ),
 		'password' => array(
 			'notempty' => array(
-				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'rule' => array('notempty')
 			),
 		),
 		'group_id' => array(
 			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'rule' => array('numeric')
 			),
 		),
 	);
@@ -197,7 +187,7 @@ class User extends AppModel {
         if(array_key_exists('profile_id',$this->data['User'])){ //It may be missing; you never know...
             if($this->data['User']['profile_id'] != ''){
                 $q_r = ClassRegistry::init('Profile')->findById($this->data['User']['profile_id']);
-                $profile_name = $q_r['Profile']['name'];
+                $profile_name = $q_r['Profile']['name']; 
                 $this->_add_radcheck_item($username,'User-Profile',$profile_name);
             }
         }
@@ -252,7 +242,17 @@ class User extends AppModel {
         //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
         if(!array_key_exists('track_acct',$this->data['User'])){ //It may be missing; you never know...
             $this->_add_radcheck_item($username,'Rd-Not-Track-Acct',1);
-        }  
+        }
+
+		//Static IP
+        if(array_key_exists('static_ip',$this->data['User'])){ //It may be missing; you never know...
+            if($this->data['User']['static_ip'] != ''){       
+                $static_ip = $this->data['User']['static_ip'];
+				$this->_add_radreply_item($username,'Service-Type','Framed-User');
+                $this->_add_radreply_item($username,'Framed-IP-Address',$static_ip);
+            }
+        }
+ 
     }
 
     private function _radius_format_date($d){
@@ -276,6 +276,19 @@ class User extends AppModel {
         $this->Radcheck->save($d);
         $this->Radcheck->id         = null;
     }
+
+	private function _add_radreply_item($username,$item,$value,$op = ":="){
+
+        $this->Radreply = ClassRegistry::init('Radreply');
+        $this->Radreply->create();
+        $d['Radreply']['username']  = $username;
+        $d['Radreply']['op']        = $op;
+        $d['Radreply']['attribute'] = $item;
+        $d['Radreply']['value']     = $value;
+        $this->Radreply->save($d);
+        $this->Radreply->id         = null;
+    }
+
 
     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
 
