@@ -171,61 +171,10 @@ class PermanentUsersController extends AppController {
                 }
             }
 
-            //Find the realm and profile names
-            $realm  = 'not defined';
-            $profile= 'not defined';
-
-            foreach($i['Radcheck'] as $rc){
-
-                if($rc['attribute'] == 'User-Profile'){
-                    $profile = $rc['value'];
-                    if(!array_key_exists($profile,$profiles)){
-                        $p = ClassRegistry::init('Profile');
-                        $p->contain();
-                        $q_r = $p->findByName($profile);
-                        $profiles[$profile] = $q_r['Profile']['id'];
-                    }
-                }
-
-
-                if($rc['attribute'] == 'Rd-Realm'){
-                    $realm = $rc['value'];
-                    if(!array_key_exists($realm,$realms)){
-                        $r = ClassRegistry::init('Realm');
-                        $r->contain();
-                        $q_r = $r->findByName($realm);
-			if($q_r){
-                        	$realms[$realm] = $q_r['Realm']['id'];
-			}else{
-				$realms[$realm] = 'not defined';
-			}
-                    }
-                }
-
-            }
-
             $action_flags = array();
             $action_flags['update'] = false;
             $action_flags['delete'] = false;
-
-            if($realm != 'not defined'){
-                $owner_id       = $i['User']['parent_id'];
-                $q_r            = ClassRegistry::init('Realm')->findByName($realm);
-		if($q_r){
-                	$action_flags   = $this->_get_action_flags($user,$owner_id,$q_r['Realm']['id']);
-			$r_id = $realms[$realm];
-		}else{
-			$r_id = "not defined";
-		}
-            }else{
-		$r_id = 'not defined';
-            }		
-	
-	   if($profile != 'not defined'){
-		$p_id = $profiles[$profile];
-	    }else{
-		$p_id = 'not defined';
-	   }
+            $action_flags   = $this->_get_action_flags($user,$owner_id,$i['User']['realm_id']);
 
             array_push($items,
                 array(
@@ -238,12 +187,7 @@ class PermanentUsersController extends AppController {
                     'email'     => $i['User']['email'],
                     'address'   => $i['User']['address'],
                     'auth_type' => $i['User']['auth_type'],
-                    'realm'     => $realm,
-                    //'realm_id'  => $realms[$realm],
-                    'realm_id'  => $r_id,
-                    'profile'   => $profile,
-                   // 'profile_id'=> $profiles[$profile],
-                    'profile_id'=> $p_id,
+
                     'perc_time_used'=> $i['User']['perc_time_used'],
                     'perc_data_used'=> $i['User']['perc_data_used'],
                     'active'    => $i['User']['active'], 
@@ -253,9 +197,18 @@ class PermanentUsersController extends AppController {
                     'last_reject_time'      => $i['User']['last_reject_time'],
                     'last_reject_nas'       => $i['User']['last_reject_nas'],
                     'last_reject_message'   => $i['User']['last_reject_message'],
-//This is a work in progress with dummy values
-                    'data_cap'              => 80,
-                    'time_cap'              => 20,
+
+                    'data_used'             => $i['User']['data_used'],
+                    'data_cap'              => $i['User']['data_cap'],
+					'time_used'             => $i['User']['time_used'],
+                    'time_cap'              => $i['User']['time_cap'],
+					'time_cap_type'         => $i['User']['time_cap_type'],
+                    'date_cap_type'         => $i['User']['data_cap_type'],
+					'realm'                 => $i['User']['realm'],
+					'realm_id'              => $i['User']['realm_id'],
+					'profile'               => $i['User']['profile'],
+					'profile_id'            => $i['User']['profile_id'],
+                    'static_ip'             => $i['User']['static_ip'],
                     'notes'                 => $notes_flag,
                     'update'                => $action_flags['update'],
                     'delete'                => $action_flags['delete']
@@ -271,12 +224,12 @@ class PermanentUsersController extends AppController {
     }
 
 
-   public function fix_tree(){
-	$this->User->recover('tree');
-	$this->set(array('success' => true, '_serialize' => array('success')));
-  }
+   	public function fix_tree(){
+		$this->User->recover('tree');
+		$this->set(array('success' => true, '_serialize' => array('success')));
+  	}
 
-    public function add(){
+  	public function add(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -313,7 +266,7 @@ class PermanentUsersController extends AppController {
         $this->request->data['language_id'] = $language;
         $this->request->data['country_id']  = $country;
 
-         //_____We need the profile name / if and the realm name / id before we can continue___
+         //_____We need the profile name / id and the realm name / id before we can continue___
         $profile    = false;
         $profile_id = false;
         if(array_key_exists('profile',$this->request->data)){
@@ -505,9 +458,12 @@ class PermanentUsersController extends AppController {
             $from_date      = false;
             $cap_data       = false;
             $cap_time       = false;
+			$static_ip		= false;
 
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
+
+			$items['static_ip'] = $q_r['User']['static_ip'];
 
             foreach($q_r['Radcheck'] as $rc){
 
@@ -552,7 +508,7 @@ class PermanentUsersController extends AppController {
                 $items['cap_data'] = $cap_data;
             }
 
-             if($cap_time){
+            if($cap_time){
                 $items['cap_time'] = $cap_time;
             }
 
@@ -589,12 +545,20 @@ class PermanentUsersController extends AppController {
             if(isset($this->request->data['profile_id'])){
                 $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
                 $profile_name = $q_r['Profile']['name'];
+
+				//==Set Profile Name==
+				$this->request->data['profile'] = $profile_name;
+
                 $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
             }
 
             if(isset($this->request->data['realm_id'])){
                 $q_r = ClassRegistry::init('Realm')->findById($this->data['realm_id']);
                 $realm_name = $q_r['Realm']['name'];
+
+				//==Set Realm Name==
+				$this->request->data['realm'] = $realm_name;
+
                 $this->_replace_radcheck_item($username,'Rd-Realm',$realm_name);
             }
 
@@ -634,6 +598,32 @@ class PermanentUsersController extends AppController {
                     array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Cap-Type-Data'), false
                 );
             }
+
+			//What about the IP Address?
+			if(isset($this->request->data['static_ip'])){
+				if($this->request->data['static_ip']== ''){
+					ClassRegistry::init('Radreply')->deleteAll(
+		                array('Radreply.username' => $username,'Radreply.attribute' => 'Service-Type'), false
+		            );
+					ClassRegistry::init('Radreply')->deleteAll(
+		                array('Radreply.username' => $username,'Radreply.attribute' => 'Framed-IP-Address'), false
+		            );
+				}else{
+					$this->_replace_radreply_item($username,'Service-Type','Framed-User');
+					$this->_replace_radreply_item($username,'Framed-IP-Address',$this->request->data['static_ip']);
+				}
+			}else{
+				ClassRegistry::init('Radreply')->deleteAll(
+		                array('Radreply.username' => $username,'Radreply.attribute' => 'Service-Type'), false
+		            );
+				ClassRegistry::init('Radreply')->deleteAll(
+	                array('Radreply.username' => $username,'Radreply.attribute' => 'Framed-IP-Address'), false
+	            );
+			}
+		
+			//Finally update the user's table entry of the permanent user
+			$this->User->save($this->request->data);
+
         }
 
         $this->set(array(
@@ -1860,8 +1850,7 @@ class PermanentUsersController extends AppController {
         $c['contain']   = array(
                             'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'Owner'     => array('Owner.username'),
-                            'Group',
-                            'Radcheck'       
+                            'Group'     
                         );
 
         //===== SORT =====
@@ -1890,34 +1879,7 @@ class PermanentUsersController extends AppController {
             foreach($filter as $f){
                 //Strings
                 if($f->type == 'string'){
-
-                    if($f->field == 'realm'){
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck_realm',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck_realm.username = User.username')
-                        )); 
-                        array_push($c['conditions'],array(
-                            'Radcheck_realm.attribute'  => 'Rd-Realm',
-                            "Radcheck_realm.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'profile'){                       
-                        //Add a search clause
-                        //Join the Radcheck table - only together with clause:
-                        array_push($c['joins'],array(
-                            'table'         => 'radcheck',
-                            'alias'         => 'Radcheck_profile',
-                            'type'          => 'LEFT',
-                            'conditions'    => array('Radcheck_profile.username = User.username')
-                        ));
-                        array_push($c['conditions'],array(
-                            'Radcheck_profile.attribute'  => 'User-Profile',
-                            "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
-                        ));
-                    }elseif($f->field == 'owner'){
+                    if($f->field == 'owner'){
                         array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
@@ -2061,6 +2023,20 @@ class PermanentUsersController extends AppController {
         $d['Radcheck']['value']     = $value;
         $rc->save($d);
         $rc->id         = null;
+    }
+
+	 private function _replace_radreply_item($username,$item,$value,$op = ":="){
+        $rr = ClassRegistry::init('Radreply');
+        $rr->deleteAll(
+            array('Radreply.username' => $username,'Radreply.attribute' => $item), false
+        );
+        $rr->create();
+        $d['Radreply']['username']  = $username;
+        $d['Radreply']['op']        = $op;
+        $d['Radreply']['attribute'] = $item;
+        $d['Radreply']['value']     = $value;
+        $rr->save($d);
+        $rr->id         = null;
     }
 
     private function _radius_format_date($d){
