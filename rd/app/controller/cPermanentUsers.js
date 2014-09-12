@@ -90,7 +90,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         }
         me.inited = true;
 
-        me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
+      //  me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
         me.control({
             '#permanentUsersWin'    : {
                 beforeshow:      me.winClose,
@@ -588,11 +588,11 @@ Ext.define('Rd.controller.cPermanentUsers', {
             });
         }
     },
-    onStorePermanentUsersLoaded: function() {
+  /*  onStorePermanentUsersLoaded: function() {
         var me      = this;
         var count   = me.getStore('sPermanentUsers').getTotalCount();
         me.getGrid().down('#count').update({count: count});
-    },
+    },*/
 
     csvExport: function(button,format) {
         var me          = this;

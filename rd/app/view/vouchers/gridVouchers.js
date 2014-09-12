@@ -25,7 +25,6 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             }  
         ];
 
-
         var filters = {
             ftype   : 'filters',
             encode  : true, 

@@ -295,6 +295,21 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                 }
                             ]
                         },
+						{ 
+                            'title' : 'Optional fields',
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items       : [
+								{
+                                    xtype		: 'textfield',
+                                    fieldLabel	: 'Static IP',
+                                    name 		: "static_ip",
+                                    allowBlank	:true
+                                }   
+                            ]   
+                        },
                         { 
                             'title' : i18n('sTracking'),
                             'layout'    : 'anchor',

@@ -14,11 +14,17 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
         loadMask:true
     },
     urlMenu: '/cake2/rd_cake/permanent_users/menu_for_grid.json',
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
     initComponent: function(){
         var me      = this;
+		me.bbar     =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
+
         var filters = {
             ftype   : 'filters',
             encode  : true, 
@@ -29,7 +35,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
 
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridPermanentUsers1'},
-            { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers2'},
+            { text: i18n('sOwner'),        dataIndex: 'owner',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers2', hidden: true},
             { text: i18n('sUsername'),     dataIndex: 'username',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers3'},
             { text: i18n('sAuth_type'),    dataIndex: 'auth_type',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridPermanentUsers4'},
             { text: i18n('sRealm'),        dataIndex: 'realm',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridPermanentUsers5'},
@@ -167,6 +173,15 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                     }
                 },stateId: 'StateGridPermanentUsers19'
             },
+			{
+                text        : 'Static IP',
+                flex        : 1,
+                dataIndex   : 'static_ip',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'},
+				stateId		: 'StateGridPermanentUsers20'
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
@@ -175,7 +190,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridPermanentUsers20'
+                dataIndex: 'notes',stateId: 'StateGridPermanentUsers21'
             }      
         ];
 
