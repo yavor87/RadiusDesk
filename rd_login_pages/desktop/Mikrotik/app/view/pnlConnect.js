@@ -77,15 +77,14 @@ Ext.define('Mikrotik.view.pnlConnect', {
 
 		//Form items depends on what is specified with user_login_check and voucher_login_check
 		var frm_items_bottom = [
-			
-            {
-                xtype       : 'displayfield',
-                fieldLabel  : 'Terms & Conditions',
-                labelStyle  : 'font-weight: bold; color: blue; font-size:120%;',
-                fieldStyle  : 'color: #888282; font-style:italic; font-size:120%;',
-                value       : "<a href='"+me.jsonData.settings.t_c_url+"' target='_blank'>"+me.jsonData.settings.t_c_url+"</a>",
-                hidden      : t_c_hidden
-            },
+			{
+				xtype		: 'button',
+				text		: 'View Terms & Conditions',
+				margin		: '10 0 0 0',
+				href		: me.jsonData.settings.t_c_url,
+				anchor		: '100%',
+				hidden      : t_c_hidden
+			},
             {
                 boxLabel  : 'Accept T&C',
                 name      : 'chkTcCheck',

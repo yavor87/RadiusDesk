@@ -42,6 +42,9 @@ Ext.define('CoovaChilli.controller.cMain', {
             'frmConnect #btnClickToConnect': {
                 tap         : 'onBtnClickToConnectTap'
             },
+			'frmConnect #btnViewTC': {
+                tap         : 'onBtnViewTCTap'
+            },
 			'cntStatus #tpStatus': {
                 activeitemchange    : 'onActiveItemChange'
             }
@@ -87,6 +90,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     frmPayUExist        : false,
     sPayUPricesLoaded   : false,
+	jsonData	: undefined,
     
     //called when the Application is launched, remove if not needed
     launch: function(app) {
@@ -771,6 +775,10 @@ Ext.define('CoovaChilli.controller.cMain', {
         var me = this;
         window.open(CoovaChilli.config.Config.getRedirectTo(), '_blank');
     },
+	onBtnViewTCTap: function(button){
+		var me = this;
+		window.open(me.jsonData.settings.t_c_url, '_blank');	
+	},
 	onActiveItemChange : function(tabpanel){
 		var me 		= this;
 		var active	= tabpanel.getActiveItem();
