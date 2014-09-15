@@ -518,7 +518,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-09-04 11:18:46',1,1,0,'walt',1,120);
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-09-15 07:02:18',1,1,0,'walt',1,120);
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1009,7 +1009,7 @@ CREATE TABLE `mesh_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1018,7 +1018,6 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-INSERT INTO `mesh_settings` VALUES (2,35,1,0,0,0,1,1,1000,20,'2014-08-09 05:04:55','2014-08-09 05:04:55');
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1037,7 +1036,7 @@ CREATE TABLE `mesh_specifics` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1046,7 +1045,6 @@ CREATE TABLE `mesh_specifics` (
 
 LOCK TABLES `mesh_specifics` WRITE;
 /*!40000 ALTER TABLE `mesh_specifics` DISABLE KEYS */;
-INSERT INTO `mesh_specifics` VALUES (76,35,'map_zoom','19','2014-07-30 14:15:27','2014-08-02 19:57:23'),(77,35,'map_type','HYBRID','2014-07-30 14:15:27','2014-08-02 19:57:23'),(78,35,'map_lat','-25.74391237898505','2014-07-30 14:15:27','2014-08-02 19:57:23'),(79,35,'map_lng','28.29459029402664','2014-07-30 14:15:27','2014-08-02 19:57:24');
 /*!40000 ALTER TABLE `mesh_specifics` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1433,7 +1431,7 @@ CREATE TABLE `node_mp_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1493,8 +1491,11 @@ CREATE TABLE `node_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `password_hash` varchar(100) NOT NULL DEFAULT '',
+  `eth_br_chk` tinyint(1) NOT NULL DEFAULT '0',
+  `eth_br_with` int(11) NOT NULL DEFAULT '0',
+  `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1503,7 +1504,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (14,35,'admin',100,1,11,44,60,300,'2014-07-26 04:22:20','2014-08-11 12:14:12','$1$vNSzDtxr$5gx1cm954F8qeiXIUKdS81'),(15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','');
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0);
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1606,7 +1607,7 @@ CREATE TABLE `nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1615,6 +1616,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (5,35,'A8-40-41-13-60-E3','A8-40-41-13-60-E3','A8-40-41-13-60-E3','dragino',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2014-09-15 10:43:40','2014-09-15 10:43:40');
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2574,4 +2576,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-12 10:40:09
+-- Dump completed on 2014-09-15 15:33:16

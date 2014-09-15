@@ -10,6 +10,21 @@ if not exists (select * from information_schema.columns
     alter table node_settings add column `password_hash` varchar(100) NOT NULL DEFAULT '';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'eth_br_chk' and table_name = 'node_settings' and table_schema = 'rd') then
+    alter table node_settings add column `eth_br_chk` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'eth_br_with' and table_name = 'node_settings' and table_schema = 'rd') then
+    alter table node_settings add column `eth_br_with` int(11) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'eth_br_for_all' and table_name = 'node_settings' and table_schema = 'rd') then
+    alter table node_settings add column `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
 end//
 
 delimiter ;
