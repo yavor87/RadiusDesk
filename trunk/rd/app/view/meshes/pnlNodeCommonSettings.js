@@ -90,6 +90,30 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                         value       : 600,
                         maxValue    : 21600,
                         minValue    : 300
+                    },
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Bridge Ethernet port',
+                        name        : 'eth_br_chk',
+                        inputValue  : 'eth_br_chk',
+						itemId		: 'eth_br_chk',
+                        checked     : true,
+                        labelClsExtra: 'lblRd'
+                    },
+					{
+						xtype		: 'cmbEthBridgeOptions',
+						meshId		: me.meshId,
+						disabled	: true
+					},
+					{
+                        xtype       : 'checkbox',      
+                        fieldLabel  : 'Apply bridge to all nodes',
+                        name        : 'eth_br_for_all',
+                        inputValue  : 'eth_br_for_all',
+						itemId		: 'eth_br_for_all',
+                        checked     : true,
+                        labelClsExtra: 'lblRd',
+						disabled	: true
                     }
                 ],
                 buttons: [
