@@ -280,7 +280,11 @@ $config['common_node_settings']['two_chan']  		= 6; //% Channel to use on 2.4G w
 $config['common_node_settings']['five_chan'] 		= 44; //% Channel to use on 5G wifi
 $config['common_node_settings']['heartbeat_interval']  = 60; //Send a heartbeat pulse through every interval seconds
 $config['common_node_settings']['heartbeat_dead_after'] = 300; //Mark a device as dead if we have not had heartbeats in this time
- 
+
+//New features
+$config['common_node_settings']['eth_br_chk']		= false;	//set to true to bridge the ethernet ports of non-gw units	
+$config['common_node_settings']['eth_br_with']		= 0; 		//Zero has a special meaning which is the LAN
+$config['common_node_settings']['eth_br_for_all']	= false; 		//Apply this bridge to all non-gateway nodes
 
 //== Device types for MESHdesk ==
 
