@@ -165,6 +165,8 @@ class NodesController extends AppController {
         $captive_portal_data 	= array();
 
 
+//=================================
+
         //loopback if
         array_push( $network,
             array(
@@ -178,8 +180,37 @@ class NodesController extends AppController {
                )
             ));
 
+//---------------------
+		//We add a new feature - we can specify for NON Gateway nodes to which their LAN port should be connected with
+		if($mesh['NodeSetting']['eth_br_chk'] != ''){
+			$eth_br_chk 		= $mesh['NodeSetting']['eth_br_chk'];
+			$eth_br_with	    = $mesh['NodeSetting']['eth_br_with'];
+			$eth_br_for_all	    = $mesh['NodeSetting']['eth_br_for_all'];
+		}else{
+			$c_n_s 				= Configure::read('common_node_settings'); //Read the defaults
+			$eth_br_chk 		= $c_n_s['eth_br_chk'];
+			$eth_br_with	    = $c_n_s['eth_br_with'];
+			$eth_br_for_all	    = $c_n_s['eth_br_for_all'];
+		}
+
+		$lan_bridge_flag 	= false;
+
+		//If we need to bridge and it is with the LAN (the easiest)
+		if(
+			($eth_br_chk)&&
+			($eth_br_with == 0)
+		){
+			$lan_bridge_flag = true;
+		}
+
         //LAN
 		$br_int = $this->_eth_br_for($this->Hardware);
+		if($lan_bridge_flag){
+			$br_int = "$br_int bat0.100";
+		}
+//----------------------
+
+
         array_push( $network,
             array(
                 "interface"    => "lan",
@@ -217,6 +248,8 @@ class NodesController extends AppController {
                )
             ));
 
+//================================
+
         //Now we will loop all the defined exits **that has entries assigned** to them and add them as bridges as we loop. 
         //The members of these bridges will be determined by which entries are assigned to them and specified
         //in the wireless configuration file
@@ -236,7 +269,7 @@ class NodesController extends AppController {
 
             $has_entries_attached   = false;
             $if_name                = 'ex_'.$this->_number_to_word($start_number);
-            $entry_id               = $me['id'];
+            $exit_id                = $me['id'];
             $type                   = $me['type'];
             $vlan                   = $me['vlan'];
 
@@ -253,6 +286,27 @@ class NodesController extends AppController {
             }
             
             if($has_entries_attached == true){
+
+				//____ Check if we need to bridge the Ethernet ports ____
+				if(
+					($eth_br_chk)&&
+					($eth_br_with != 0)
+				){
+					if(
+						($exit_id == $eth_br_with)&&
+						(!$gateway)		//Bridge only non gateway nodes's LANs
+					){
+						$n_count = 0;
+						foreach($network as $nw){
+							if($nw['interface'] == 'lan'){
+								$current = $network[$n_count]['options']['ifname'];
+								$network[$n_count]['options']['ifname'] ="$current bat0.".$start_number;
+								break;
+							}
+							$n_count++;	
+						}
+					}
+				}
 
                 //=======================================
                 //========= GATEWAY NODES ===============

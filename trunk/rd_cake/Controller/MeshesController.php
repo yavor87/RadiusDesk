@@ -819,6 +819,34 @@ class MeshesController extends AppController {
         ));
     }
 
+	public function mesh_exit_view_eth_br(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $exit = ClassRegistry::init('MeshExit');
+        $exit->contain();
+
+        $id    = $this->request->query['mesh_id'];
+        $q_r   = $exit->findAllByMeshId($id);
+		$data  = array();
+		array_push($data,array('id' => 0, 'name' => 'LAN')); //First entry
+
+		foreach($q_r as $i){
+			$id 	= $i['MeshExit']['id'];
+			$name 	= $i['MeshExit']['name'];
+			array_push($data, array('id'=> $id,'name' => $name));
+		}
+
+        $this->set(array(
+            'items'     => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
     public function mesh_exit_delete(){
 
        if (!$this->request->is('post')) {
@@ -1285,7 +1313,7 @@ class MeshesController extends AppController {
 
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
             //so we have to check for them
-            $check_items = array('all_power');
+            $check_items = array('all_power','eth_br_chk','eth_br_for_all');
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
                     $this->request->data[$i] = 1;
