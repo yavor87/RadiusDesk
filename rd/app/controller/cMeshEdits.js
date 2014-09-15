@@ -8,7 +8,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
         'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap',	'meshes.winMeshMapPreferences',
-		'meshes.winMeshMapNodeAdd'
+		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
@@ -114,6 +114,9 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             'pnlNodeCommonSettings #save': {
                 click:  me.btnNodeCommonSettingsSave
+            },
+			'pnlNodeCommonSettings  #eth_br_chk' : {
+                change:  me.chkEthBrChange
             },
             //Here nodes start
             'gridNodes #reload': {
@@ -635,6 +638,19 @@ Ext.define('Rd.controller.cMeshEdits', {
         var meshId  = tab.meshId;
         form.load({url:me.urlViewNodeCommonSettings, method:'GET',params:{mesh_id:meshId}});
     },
+	chkEthBrChange: function(chk){
+		var me 		= this;
+		var form	= chk.up('form');
+		var cmbBr	= form.down('#eth_br_with');
+		var chkAll	= form.down('#eth_br_for_all');
+		if(chk.getValue()){
+			cmbBr.setDisabled(false);
+			chkAll.setDisabled(false);
+		}else{
+			cmbBr.setDisabled(true);
+			chkAll.setDisabled(true);
+		}
+	},
     btnNodeCommonSettingsSave: function(button){
         var me      = this;
         var form    = button.up('form');
