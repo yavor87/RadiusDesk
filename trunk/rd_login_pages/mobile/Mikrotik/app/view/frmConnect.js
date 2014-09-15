@@ -179,11 +179,12 @@ Ext.define('Mikrotik.view.frmConnect', {
                         disabled: rm_hidden
                     },
                     {
-                        itemId  : 'lblTC',
-                        xtype   : 'label',
-                        html    : "<b>T&C:</b> <a href='"+config.jsonData.settings.t_c_url+"' target='_blank'>"+config.jsonData.settings.t_c_url+"</a>",
-                        hidden  : t_c_hidden
-                    },
+				        xtype       : 'button',
+				        text        : 'View Terms & Conditions',
+						margin		: '10 0 0 0',
+				        itemId      : 'btnViewTC',
+						hidden		: t_c_hidden
+				    },
                     {
                         label   : 'Accept T&C',
                         name    : 'chkTcCheck',

@@ -38,6 +38,9 @@ Ext.define('Mikrotik.controller.cMain', {
             'frmConnect #btnClickToConnect': {
                 tap         : 'onBtnClickToConnectTap'
             },
+			'frmConnect #btnViewTC': {
+                tap         : 'onBtnViewTCTap'
+            },
 			'cntStatus #tpStatus': {
                 activeitemchange    : 'onActiveItemChange'
             }
@@ -76,6 +79,7 @@ Ext.define('Mikrotik.controller.cMain', {
     mac_username    : undefined,
 
     currentSlide    : 0,
+	jsonData		: undefined,
         
     //called when the Application is launched, remove if not needed
     launch: function(app) {
@@ -668,11 +672,15 @@ Ext.define('Mikrotik.controller.cMain', {
             },
             scope: me //VERY VERY VERY important
         });
-    },
+    },	
     onBtnGoInternetTap: function(button){
         var me = this;
         window.open(Mikrotik.config.Config.getRedirectTo(), '_blank');
     },
+	onBtnViewTCTap: function(button){
+		var me = this;
+		window.open(me.jsonData.settings.t_c_url, '_blank');	
+	},
 	onActiveItemChange : function(tabpanel){
 		var me 		= this;
 		var active	= tabpanel.getActiveItem();
