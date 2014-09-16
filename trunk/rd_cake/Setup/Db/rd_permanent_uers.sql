@@ -6,14 +6,36 @@ create procedure users_addcolumns()
 begin
 
 if not exists (select * from information_schema.columns
-    where column_name = 'time_cap_type' and table_name = 'users' and table_schema = 'rd') then
-    alter table users add `time_cap_type` enum('hard','soft') DEFAULT 'soft';
+    where column_name = 'data_used' and table_name = 'users' and table_schema = 'rd') then
+    alter table users add `data_used` bigint(20) DEFAULT NULL;
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'data_cap' and table_name = 'users' and table_schema = 'rd') then
+    alter table users add `data_cap` bigint(20) DEFAULT NULL;
 end if;
 
 if not exists (select * from information_schema.columns
     where column_name = 'data_cap_type' and table_name = 'users' and table_schema = 'rd') then
     alter table users add `data_cap_type` enum('hard','soft') DEFAULT 'soft';
 end if;
+
+
+if not exists (select * from information_schema.columns
+    where column_name = 'time_used' and table_name = 'users' and table_schema = 'rd') then
+    alter table users add `time_used` int(12) DEFAULT NULL;
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'time_cap' and table_name = 'users' and table_schema = 'rd') then
+    alter table users add `time_cap` int(12) DEFAULT NULL;
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'time_cap_type' and table_name = 'users' and table_schema = 'rd') then
+    alter table users add `time_cap_type` enum('hard','soft') DEFAULT 'soft';
+end if;
+
 
 if not exists (select * from information_schema.columns
     where column_name = 'realm' and table_name = 'users' and table_schema = 'rd') then
