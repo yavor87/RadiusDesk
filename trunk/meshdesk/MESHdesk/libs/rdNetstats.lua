@@ -10,12 +10,15 @@ function rdNetstats:rdNetstats()
 
 	require('rdLogger');
 	require('rdExternal');
+	local uci 		= require("uci")
 
 	self.version 	= "1.0.0"
-	self.json	= require("json")
-	self.logger	= rdLogger()
+	self.json		= require("json")
+	self.logger		= rdLogger()
 	self.external	= rdExternal()
-	self.debug	= true
+	self.debug		= true
+	self.x			= uci.cursor(nil,'/var/state')
+
 end
         
 function rdNetstats:getVersion()
@@ -28,6 +31,18 @@ function rdNetstats:getWifi()
 end
 
 function rdNetstats:getEthernet()
+
+	local wifi = self.x.get('meshdesk', 'settings','hardware')
+	self.x.foreach('meshdesk', 'hardware',
+		function(a)
+			if(a['.name'] == hardware)then
+				self.led = a['morse_led']
+				if(a['swap_on_off'] == '1')then
+					--print("Swapping on and off")
+					self:swapOnOff()
+				end
+			end	
+		end)
 
 
 end
@@ -123,8 +138,19 @@ function rdNetstats._getWifi(self)
 			i_info['type']	= line
 			local stations 	= self._getStations(self,i_info['name'])
 			--This is our last search now we can add the info
+			
+			--Sometimes the ssid is not listed per interface, then we have to search for it
+			if(i_info['ssid'] == nil)then
+				i_info['ssid'] = self._getSsidForInterface(self,i_info['name']);
+				--print(i_info['ssid']);	
+			end
+
 			table.insert(w['radios'][phy]['interfaces'],{name= i_info['name'],mac = i_info['mac'], ssid = i_info['ssid'], type= i_info['type'],stations = stations})
+
+			i_info['ssid'] = nil --zero it again for the next round
 		end
+
+
 	end
 	return self.json.encode(w)
 end 
@@ -171,4 +197,17 @@ function rdNetstats._getStations(self,interface)
 		end
 	end
 	return s
+end
+
+function rdNetstats._getSsidForInterface(self,interface)
+	local retval = nil
+	self.x.foreach('wireless','wifi-iface', 
+		function(a)
+			--print(a['.name'].." "..interface)
+			--Check the name--
+			if(string.find(a['ifname'],interface))then
+				retval = a['ssid']
+			end
+ 		end)
+	return retval
 end
