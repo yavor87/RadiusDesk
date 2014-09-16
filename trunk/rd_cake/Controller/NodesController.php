@@ -287,20 +287,29 @@ class NodesController extends AppController {
             
             if($has_entries_attached == true){
 
+				$non_lan_eth_bridge_flag 	= false;
+				$non_lan_eth				= false;
+				$non_lan_eth_on				= false;
+
 				//____ Check if we need to bridge the Ethernet ports ____
 				if(
 					($eth_br_chk)&&
-					($eth_br_with != 0)
+					($eth_br_with != 0) //NOT LAN
 				){
 					if(
 						($exit_id == $eth_br_with)&&
 						(!$gateway)		//Bridge only non gateway nodes's LANs
 					){
+						//To add the Ethernet ports to the exit point; we have to remove the LAN entry all together
 						$n_count = 0;
 						foreach($network as $nw){
 							if($nw['interface'] == 'lan'){
-								$current = $network[$n_count]['options']['ifname'];
-								$network[$n_count]['options']['ifname'] ="$current bat0.".$start_number;
+
+								$non_lan_eth_bridge_flag = true;
+								$non_lan_eth 	= $network[$n_count]['options']['ifname'];
+								$non_lan_eth_on	= $n_count;
+
+								unset($network[$n_count]); //Remove the LAN bridge
 								break;
 							}
 							$n_count++;	
@@ -391,6 +400,12 @@ class NodesController extends AppController {
 
                 if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')||($type =='captive_portal')){
                     $interfaces =  "bat0.".$start_number;
+
+					//===Check if this standard node has an ethernet bridge that has to be included here (NON LAN bridge)
+					if(($non_lan_eth_bridge_flag)&&($non_lan_eth_on == $start_number)){
+						$interfaces ="$non_lan_eth	$interfaces";
+					}
+
                     array_push($network,
                         array(
                             "interface"    => "$if_name",
