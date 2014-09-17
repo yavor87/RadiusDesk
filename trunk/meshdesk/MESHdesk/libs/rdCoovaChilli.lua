@@ -100,6 +100,7 @@ function rdCoovaChilli.__doConfigs(self,p)
 			dns_string = 	"dns1  '"..dns[1].."'\n"..
 					"dns2  '"..dns[2].."'\n"
 		end
+
 		
 		local s_content = "radiusserver1  '"..v['radius_1'].."'\n"..
 			"radiusserver2  '".. r2 .."'\n"..
@@ -113,6 +114,15 @@ function rdCoovaChilli.__doConfigs(self,p)
 			"unixipc    'chilli." .. v['hslan_if'] .. ".ipc'\n"..
 			"pidfile    '/var/run/chilli." .. v['hslan_if'] .. ".pid'\n"..
 			dns_string
+
+		if(v['mac_auth'])then
+			s_content = s_content.."macauth\n"
+		end
+
+		if(v['swap_octets'])then
+			s_content = s_content.."swapoctets\n"
+		end
+
 		
 		--print(s_content) 
 		--Write this to the config file
