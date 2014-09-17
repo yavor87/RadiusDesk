@@ -637,6 +637,18 @@ class MeshesController extends AppController {
 
                 $captive_portal = ClassRegistry::init('MeshExitCaptivePortal');
                 $captive_portal->create();
+
+				$check_items = array(
+					'swap_octets',
+					'mac_auth'
+				);
+			    foreach($check_items as $i){
+			        if(isset($this->request->data[$i])){
+			            $this->request->data[$i] = 1;
+			        }else{
+			            $this->request->data[$i] = 0;
+			        }
+			    }
                 if(!($captive_portal->save($this->request->data))){
                     $exit->delete($new_id, true); //Remove the newly created exit point since the captive portal add failed
                     $this->set(array(
@@ -720,6 +732,19 @@ class MeshesController extends AppController {
                     $cp_id = $q_r['MeshExitCaptivePortal']['id'];
                     $cp_data['id'] = $cp_id;
                     $captive_portal->id = $cp_id;
+
+					$check_items = array(
+						'swap_octets',
+						'mac_auth'
+					);
+					foreach($check_items as $i){
+					    if(isset($this->request->data[$i])){
+					        $cp_data[$i] = 1;
+					    }else{
+					        $cp_data[$i] = 0;
+					    }
+					}
+
                    // print_r($cp_data);
                     if(!($captive_portal->save($cp_data))){
                         $this->set(array(
@@ -806,6 +831,7 @@ class MeshesController extends AppController {
             $q_r['MeshExit']['uam_secret']      = $q_r['MeshExitCaptivePortal']['uam_secret'];
             $q_r['MeshExit']['walled_garden']   = $q_r['MeshExitCaptivePortal']['walled_garden'];
             $q_r['MeshExit']['swap_octets']     = $q_r['MeshExitCaptivePortal']['swap_octets'];
+			$q_r['MeshExit']['mac_auth']        = $q_r['MeshExitCaptivePortal']['mac_auth'];
         }
 
         $data = $q_r['MeshExit'];
