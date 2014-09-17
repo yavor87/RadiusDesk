@@ -25,6 +25,11 @@ if not exists (select * from information_schema.columns
     alter table node_settings add column `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'mac_auth' and table_name = 'mesh_exit_captive_portals' and table_schema = 'rd') then
+    alter table mesh_exit_captive_portals add column `mac_auth` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
 end//
 
 delimiter ;
