@@ -1154,12 +1154,18 @@ class VouchersController extends AppController {
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',  
+                    'xtype'     => 'splitbutton',
                     'glyph'     => Configure::read('icnAdd'),   
                     'scale'     => 'large', 
                     'itemId'    => 'add',      
-                    'tooltip'   => __('Add')));
+                    'tooltip'   => __('Add'),
+                    'menu'  => array(
+                                 'items' => array(
+                                     array( 'text'  => _('Single field'),   'itemId'    => 'addSingle', 'group' => 'add', 'checked' => true ),
+                                     array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false)
+                                 )
+                             )
+           			));
             }
             //Delete
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
