@@ -278,16 +278,19 @@ class DesktopController extends AppController {
                     array(
                         array(
                             'text'      => __('Paypal'),
-                            'iconCls'   => 'key',  
                             'glyph'     => Configure::read('icnOnlineShop'),
                             'itemId'    => 'cFinPaypalTransactions'
                         ),
                         array(
                             'text'      => __('PayU'), 
-                            'iconCls'   => 'realms',
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinPayUTransactions'
                         ),
+					/*	array(
+                            'text'      => __('Premium SMS'), 
+                            'glyph'     => Configure::read('icnOnlineShop'), 
+                            'itemId'    => 'cFinPremiumSmsTransactions'
+                        ),*/
                     )
                 )
             ),
