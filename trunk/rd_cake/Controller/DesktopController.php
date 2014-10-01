@@ -285,8 +285,8 @@ class DesktopController extends AppController {
                             'text'      => __('PayU'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinPayUTransactions'
-                        ),
-					/*	array(
+                        ),/*
+						array(
                             'text'      => __('Premium SMS'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinPremiumSmsTransactions'
