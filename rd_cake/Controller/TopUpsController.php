@@ -89,7 +89,7 @@ class TopUpsController extends AppController {
         $user_id    = $user['id'];
 
         //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
 
