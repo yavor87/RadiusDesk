@@ -191,6 +191,19 @@ $config['paypal']['RDVoucher']['rd_v1']['12Hours'] = array(
                                                         'user_id'           => '44'
                                                     );
 
+//== Premium SMS ==
+
+$config['premium_sms']['50MB'] = array(
+                                    'precede'           => '',
+                                    'profile_id'        => 9,
+									'profile'			=> 'Data-Standard-1G',
+                                    'realm_id'          => 34,
+									'realm'				=> 'Residence Inn',
+                                    'sel_language'      => '4_4',
+                                    'user_id'           => '44'
+                                );
+
+
 //======== END WORK IN PROGRESS ==========
 
 //==== Define glyphs -> We'll use glyphs insteadd of icons
