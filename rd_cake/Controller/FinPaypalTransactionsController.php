@@ -21,18 +21,18 @@ class FinPaypalTransactionsController extends AppController {
         'voucher_id'
     );
 
-    protected $voucher_data = array(
-        'activate_on_login' => '1',
-        'days_valid'        => 2,
-        'expire'            => '05/31/2015',
-        'precede'           => '',
-        'profile_id'        => 7,
-        'pwd_length'        => 3,
-        'realm_id'          => 34,
-        'sel_language'      => '4_4',
-        'user_id'           => '44'
-    );
-   
+	private $singleField	= true;
+	private $wordPool 		= array(
+		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
+		'was', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'fig',
+		'new', 'now', 'old', 'see', 'way', 'who', 'boy', 'did', 'its', 'let', 'fin',
+		'put', 'say', 'she', 'too', 'use', 'dad', 'mom', 'try',	'why', 'act', 'bar',
+		'car', 'dew', 'eat', 'far', 'gym', 'hey', 'ink', 'jet',	'key', 'log', 'mad',
+		'nap', 'odd', 'pal', 'ram',	'saw', 'tan', 'urn', 'vet', 'wed', 'yap', 'zoo',
+		'win', 'wax', 'tee', 'tin', 'til', 'tel', 'sit', 'sin', 'rim', 'red', 'rye',
+		'pin', 'pix', 'pad', 'pen', 'off', 'map', 'mas', 'lay', 'lin', 'lox', 'low',
+		'kin', 'hod', 'ego', 'dog', 'die', 'dam', 'dig', 'dim', 'cat', 'cot', 'com',  
+	);
 
     public function index(){
 
@@ -798,6 +798,7 @@ class FinPaypalTransactionsController extends AppController {
                 $q_r = $this->{$this->modelClass}->findById($id);
                 if($q_r){
                     if($q_r['FinPaypalTransaction']['voucher_id'] == ''){ //Voucher ID is empty
+
                         //We need to create a voucher
                         $v  = ClassRegistry::init('Voucher');
                         $v->contain(); //Make it lean
@@ -811,10 +812,26 @@ class FinPaypalTransactionsController extends AppController {
 
                         $data               = Configure::read('paypal.'.$item_name.'.'.$item_number.'.'.$option_selection1);
                         if($data != null){
+
+							//---!!We do a single field thing!!---
+							$this->v_names = array();
+							$t_v_names = $v->find('all',array('fields' => array('Voucher.name')));
+							foreach($t_v_names as $n){
+								$v_name = $n['Voucher']['name'];
+								array_push($this->v_names,$v_name);
+							}
+
+							if($this->singleField){
+								$pwd = $this->_generateVoucher();
+								$data['name']      = $pwd; 
+								$data['password']  = $pwd;
+							}
+							//--!!End single field thing!!---
+
                             if($v->save($data)) {
                                 $voucher_id     = $v->id;
                                 //Update the transaction entry....
-                                $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id));
+                                $this->{$this->modelClass}->save(array('id' => $id,'voucher_id' => $voucher_id));
                                 $this->_email_voucher_detail($payer_email,$voucher_id,$txn_id);
                             }else{
                                 //Add log entry do record the failure
@@ -889,6 +906,42 @@ class FinPaypalTransactionsController extends AppController {
             return __("orphaned");
         }
     }
+
+	function _generateVoucher(){
+		//We will take two random words from the pool and then sandwitch them with random digits
+		$duplicate_flag = true;
+		while($duplicate_flag){		
+			//Generate a value
+			$pool_count = (count($this->wordPool)-1);
+			$d1 		= rand (1,9);
+			$d2 		= rand (1,9);
+			$w1			= rand(0,$pool_count);
+			$w2			= rand(0,$pool_count);
+			$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
+			//Test if not already taken
+			if(!in_array("v_value", $this->v_names)){
+				$duplicate_flag = false; //Break the loop - we ar unique;
+				array_push($this->v_names, $v_value);
+			}
+		}
+		return $v_value; //We are unique and we added ourselves to the existing list
+	}
+
+	 private function _is_sibling_of($parent_id,$user_id){
+        $this->User->contain();//No dependencies
+        $q_r        = $this->User->getPath($user_id);
+        if($q_r){
+            foreach($q_r as $i){
+                $id = $i['User']['id'];
+                if($id == $parent_id){
+                    return true;
+                }
+            }
+        }
+        //No match
+        return false;
+    }
+
 
 //-----------------------------------------------
 }
