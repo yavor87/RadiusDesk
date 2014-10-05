@@ -297,7 +297,7 @@ class FinPayUTransactionsController extends AppController {
                     $valid_for      = $q['Voucher']['time_valid'];
                     $profile        = $q['Voucher']['profile'];
                     $extra_name     = $q['Voucher']['extra_name'];
-                    $exta_value     = $q['Voucher']['exta_value'];
+                    $extra_value     = $q['Voucher']['extra_value'];
                     $this->set(array(
                         'data'   => array('username' => $username,'password' => $password,'profile' => $profile,'valid_for' => $valid_for),
                         'success' => true,
@@ -472,14 +472,14 @@ class FinPayUTransactionsController extends AppController {
                 $valid_for      = $q['Voucher']['time_valid'];
                 $profile        = $q['Voucher']['profile'];
                 $extra_name     = $q['Voucher']['extra_name'];
-                $exta_value     = $q['Voucher']['exta_value'];
+                $extra_value     = $q['Voucher']['extra_value'];
               //  print_r("The username is $username and password is $password");
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
                 $Email->config('gmail');
                 $Email->subject('Your voucher detail');
                 $Email->to($to);
-                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
                 $Email->template('voucher_detail', 'voucher_notify');
                 $Email->emailFormat('html');
                 $Email->send();
@@ -871,7 +871,7 @@ class FinPayUTransactionsController extends AppController {
             $valid_for      = $q['Voucher']['time_valid'];
             $profile        = $q['Voucher']['profile'];
             $extra_name     = $q['Voucher']['extra_name'];
-            $exta_value     = $q['Voucher']['exta_value'];
+            $extra_value     = $q['Voucher']['extra_value'];
             $message            = '';
           //  print_r("The username is $username and password is $password");
             App::uses('CakeEmail', 'Network/Email');
@@ -879,7 +879,7 @@ class FinPayUTransactionsController extends AppController {
             $Email->config('gmail');
             $Email->subject('PayU #'.$PayUReference);
             $Email->to($email);
-            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
             $Email->template('voucher_detail', 'voucher_notify');
             $Email->emailFormat('html');
             $Email->send();
