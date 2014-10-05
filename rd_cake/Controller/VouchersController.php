@@ -1022,7 +1022,7 @@ class VouchersController extends AppController {
             $valid_for      = $q_r['Voucher']['time_valid'];
             $profile        = $q_r['Voucher']['profile'];
             $extra_name     = $q_r['Voucher']['extra_name'];
-            $exta_value     = $q_r['Voucher']['exta_value'];
+            $extra_value     = $q_r['Voucher']['extra_value'];
 
             //  print_r("The username is $username and password is $password");
             App::uses('CakeEmail', 'Network/Email');
@@ -1030,7 +1030,7 @@ class VouchersController extends AppController {
             $Email->config('smtp');
             $Email->subject('Your voucher detail');
             $Email->to($to);
-            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','exta_value','message'));
+            $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
             $Email->template('voucher_detail', 'voucher_notify');
             $Email->emailFormat('html');
             $Email->send();
