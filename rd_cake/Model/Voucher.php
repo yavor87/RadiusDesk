@@ -182,7 +182,7 @@ class Voucher extends AppModel {
 
     function _determine_voucher_name(){
 
-        $precede = $this->data['Voucher']['precede'];
+        $precede = @$this->data['Voucher']['precede'];
         if($precede == ''){
             $this->contain();
             $reply  =   $this->find('first',array(
@@ -205,7 +205,8 @@ class Voucher extends AppModel {
                                                         'conditions'=>array('Voucher.name LIKE' => $precede.'%'),
                                                         'order'=> array( 'Voucher.name DESC'))
                                             );
-            $last_entry     =($reply['Voucher']['name']);
+            $last_entry = 0;
+            $last_entry =@$reply['Voucher']['name'];
             $voucher_name;
 
             if(!$last_entry){
