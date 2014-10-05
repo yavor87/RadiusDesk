@@ -56,7 +56,7 @@
         $stripe = !($stripe);
     }
 
-    if($exta_value != ''){
+    if($extra_value != ''){
 
         if($stripe){
             print('<tr bgcolor="#eef3f3">');
