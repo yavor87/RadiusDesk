@@ -93,7 +93,8 @@ function rdGateway.__dhcpGwEnable(self,network,start,limit)
 end
 
 function rdGateway.__dhcpGwDisable(self)
-	self.x.delete('dhcp','lan','ignore')
+	self.x.set('dhcp','lan','ignore',1)                  
+    self.x.commit('dhcp')                                        
 	self.x.delete('dhcp',self.conf_zone)
 	--Remove any previous NAT points (if there were any) the will start with ex_
 	self.x.foreach('dhcp','dhcp', 
