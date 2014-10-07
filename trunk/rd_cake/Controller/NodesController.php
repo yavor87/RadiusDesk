@@ -220,14 +220,25 @@ class NodesController extends AppController {
 		}
 //==================
 
-		if($include_lan_dhcp){	
+		if($include_lan_dhcp){
+
+			//We need to se the non-gw nodes to have:
+			//1.) DNS Masq must not be running
+			//2.) The LAN must now have DHCP client since this will trigger the setup script as soon as the interface get an IP
+			//3.) This will cause a perpetiual loop since it will kick off the setup script and reconfigure itself.
+			//4.) The gateway however still needs to maintain its dhcp client status.
+			$proto = 'dhcp';
+			if(($lan_bridge_flag)&&($gateway == false)){
+				$proto = 'static';
+			}
+
 		    array_push( $network,
 		        array(
 		            "interface"    => "lan",
 		            "options"   => array(
 		                "ifname"        => "$br_int", 
 		                "type"          => "bridge",
-		                "proto"         => "dhcp"
+		                "proto"         => "$proto"
 		           )
 		   	));
 		}
