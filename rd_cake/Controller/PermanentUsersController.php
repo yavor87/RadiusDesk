@@ -225,7 +225,7 @@ class PermanentUsersController extends AppController {
 
 
    	public function fix_tree(){
-		$this->User->recover('tree');
+		$this->User->recover('parent','44');
 		$this->set(array('success' => true, '_serialize' => array('success')));
   	}
 
@@ -378,7 +378,7 @@ class PermanentUsersController extends AppController {
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
+                    $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                     $this->_delete_clean_up_user($username);
                 }else{
                     $fail_flag = true;
@@ -386,7 +386,7 @@ class PermanentUsersController extends AppController {
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
                 $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
+                $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                 $this->_delete_clean_up_user($username);
             }
    
@@ -400,7 +400,7 @@ class PermanentUsersController extends AppController {
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
-                        $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
+                        $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                         $this->_delete_clean_up_user($username);
                     }else{
                         $fail_flag = true;
@@ -408,7 +408,7 @@ class PermanentUsersController extends AppController {
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover();     //This is a (potential) ugly hack
+                    $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                     $this->_delete_clean_up_user($username);
                 }
             }

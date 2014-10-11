@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class VouchersController extends AppController {
 
     public $name       = 'Vouchers';
-    public $components = array('Aa');
+    public $components = array('Aa','VoucherGenerator');
     public $uses       = array('Voucher','User','Profile','Realm');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
@@ -15,22 +15,10 @@ class VouchersController extends AppController {
         );
 
 	private $singleField	= true;
-	private $wordPool 		= array(
-		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
-		'was', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'fig',
-		'new', 'now', 'old', 'see', 'way', 'who', 'boy', 'did', 'its', 'let', 'fin',
-		'put', 'say', 'she', 'too', 'use', 'dad', 'mom', 'try',	'why', 'act', 'bar',
-		'car', 'dew', 'eat', 'far', 'gym', 'hey', 'ink', 'jet',	'key', 'log', 'mad',
-		'nap', 'odd', 'pal', 'ram',	'saw', 'tan', 'urn', 'vet', 'wed', 'yap', 'zoo',
-		'win', 'wax', 'tee', 'tin', 'til', 'tel', 'sit', 'sin', 'rim', 'red', 'rye',
-		'pin', 'pix', 'pad', 'pen', 'off', 'map', 'mas', 'lay', 'lin', 'lox', 'low',
-		'kin', 'hod', 'ego', 'dog', 'die', 'dam', 'dig', 'dim', 'cat', 'cot', 'com',  
-	);
 
     //-------- BASIC CRUD -------------------------------
 
-
-     public function export_csv(){
+  	public function export_csv(){
 
         set_time_limit(60); //Double it 
 
@@ -359,8 +347,6 @@ class VouchersController extends AppController {
         }
         //______ END of Realm and Profile check _____
 
-		$this->v_names = array();
-
 		//Check if this is a single field voucher or not
 		$single_field = true; //Default = true
 		if(array_key_exists('single_field',$this->request->data)){
@@ -372,7 +358,7 @@ class VouchersController extends AppController {
 				$t_v_names = $this->Voucher->find('all',array('fields' => array('Voucher.name')));
 				foreach($t_v_names as $n){
 					$v_name = $n['Voucher']['name'];
-					array_push($this->v_names,$v_name);
+					array_push($this->VoucherGenerator->voucherNames, $v_name);
 				}	
 			}
 		}
@@ -386,7 +372,7 @@ class VouchersController extends AppController {
 				//Set the voucher's name and password
 				$pwd = false;
 				if($single_field){
-					$pwd = $this->_generateVoucher();
+					$pwd = $this->VoucherGenerator->generateVoucher();
 					$this->request->data['name']      = $pwd; 
 		        	$this->request->data['password']  = $pwd;
 				}
@@ -1025,9 +1011,10 @@ class VouchersController extends AppController {
             $extra_value     = $q_r['Voucher']['extra_value'];
 
             //  print_r("The username is $username and password is $password");
+			$email_server = Configure::read('EmailServer');
             App::uses('CakeEmail', 'Network/Email');
             $Email = new CakeEmail();
-            $Email->config('smtp');
+            $Email->config($email_server);
             $Email->subject('Your voucher detail');
             $Email->to($to);
             $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
@@ -1525,26 +1512,6 @@ class VouchersController extends AppController {
         }
         return "$month_count/$day/$year";
     }
-
-	function _generateVoucher(){
-		//We will take two random words from the pool and then sandwitch them with random digits
-		$duplicate_flag = true;
-		while($duplicate_flag){		
-			//Generate a value
-			$pool_count = (count($this->wordPool)-1);
-			$d1 		= rand (1,9);
-			$d2 		= rand (1,9);
-			$w1			= rand(0,$pool_count);
-			$w2			= rand(0,$pool_count);
-			$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
-			//Test if not already taken
-			if(!in_array("v_value", $this->v_names)){
-				$duplicate_flag = false; //Break the loop - we ar unique;
-				array_push($this->v_names, $v_value);
-			}
-		}
-		return $v_value; //We are unique and we added ourselves to the existing list
-	}
 
 }
 ?>

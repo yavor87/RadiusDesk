@@ -1,19 +1,18 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class FinPremiumSmsTransactionsController extends AppController {
+class FinAuthorizeNetTransactionsController extends AppController {
 
-    public $name       = 'FinPremiumSmsTransactions';
+    public $name       = 'FinAuthorizeNetTransactions';
     public $components = array('Aa','VoucherGenerator');
-    public $uses       = array('FinPremiumSmsTransaction','User');
+    public $uses       = array('FinAuthorizeNetTransaction','User');
 
 	//var $scaffold;
 
-    protected $base    = "Access Providers/Controllers/FinPremiumSmsTransactions/";
-    protected $premium_sms_user_id = 44; //What is this?
+    protected $base    = "Access Providers/Controllers/FinAuthorizeNetTransactions/";
 
     protected $fields  = array(
-	  'mobile','description', 'created', 'modified',         'id'
+	  'mobile','description', 'created', 'modified', 'id'
     );
 
 	private $singleField	= true;
@@ -56,15 +55,15 @@ class FinPremiumSmsTransactionsController extends AppController {
            // print_r($i);
             $row = array();
             foreach($this->fields as $field){
-                if(array_key_exists($field,$i['FinPremiumSmsTransaction'])){
+                if(array_key_exists($field,$i['FinAuthorizeNetTransaction'])){
 
-                    $row["$field"]= $i['FinPremiumSmsTransaction']["$field"];
+                    $row["$field"]= $i['FinAuthorizeNetTransaction']["$field"];
                 }
             }
 
             //Create notes flag
             $notes_flag  = false;
-            foreach($i['FinPremiumSmsTransactionNote'] as $nn){
+            foreach($i['FinAuthorizeNetTransactionNote'] as $nn){
                 if(!$this->_test_for_private_parent($nn['Note'],$user)){
                     $notes_flag = true;
                     break;
@@ -72,7 +71,7 @@ class FinPremiumSmsTransactionsController extends AppController {
             }
 
             //Voucher id and name
-            if($i['FinPremiumSmsTransaction']['voucher_id'] != ''){
+            if($i['FinAuthorizeNetTransaction']['voucher_id'] != ''){
                 $row['voucher_name'] = "Orphaned!"; //Default
             }
 
@@ -130,27 +129,27 @@ class FinPremiumSmsTransactionsController extends AppController {
 
     public function voucher_info_for(){
 
-        if(!(isset($this->request->query['PremiumSmsReference']))){
+        if(!(isset($this->request->query['AuthorizeNetReference']))){
             $this->set(array(
-                'message'   => "Missing PremiumSmsReference in query string",
+                'message'   => "Missing AuthorizeNetReference in query string",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
             return;
         }
 
-        $PremiumSmsReference = $this->request->query['PremiumSmsReference'];
+        $AuthorizeNetReference = $this->request->query['AuthorizeNetReference'];
 
         $data = array();
         $q_r = $this->{$this->modelClass}->find('first', 
-				array('conditions' => array('FinPremiumSmsTransaction.premiumSmsReference' => $PremiumSmsReference))
+				array('conditions' => array('FinAuthorizeNetTransaction.authorizeNetReference' => $AuthorizeNetReference))
 		);
 
         if($q_r){
-            $voucher_id = $q_r['FinPremiumSmsTransaction']['voucher_id'];
+            $voucher_id = $q_r['FinAuthorizeNetTransaction']['voucher_id'];
             if($voucher_id != ''){
                 $v  = ClassRegistry::init('Voucher');
-                $voucher_id = $q_r['FinPremiumSmsTransaction']['voucher_id'];
+                $voucher_id = $q_r['FinAuthorizeNetTransaction']['voucher_id'];
                 $q  = $v->findById($voucher_id);
                 if($q){
                     $username       = $q['Voucher']['name'];
@@ -169,7 +168,7 @@ class FinPremiumSmsTransactionsController extends AppController {
                 }
             }else{
                $this->set(array(
-                    'message'   => "Premium Sms Reference: $PremiumSmsReference has no voucher associated to it - please contact helpdesk",
+                    'message'   => "Authorize.Net Reference: $AuthorizeNetReference has no voucher associated to it - please contact helpdesk",
                     'success' => false,
                     '_serialize' => array('success','message')
                 ));
@@ -178,7 +177,7 @@ class FinPremiumSmsTransactionsController extends AppController {
 
         }else{
             $this->set(array(
-                'message'   => "No data available for $PremiumSmsReference",
+                'message'   => "No data available for $AuthorizeNetReference",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
@@ -333,7 +332,7 @@ class FinPremiumSmsTransactionsController extends AppController {
 
         if($q_r){
             $v  = ClassRegistry::init('Voucher');
-            $voucher_id = $q_r['FinPremiumSmsTransaction']['voucher_id'];
+            $voucher_id = $q_r['FinAuthorizeNetTransaction']['voucher_id'];
             $q  = $v->findById($voucher_id);
             if($q){
                 $username       = $q['Voucher']['name'];
@@ -374,10 +373,10 @@ class FinPremiumSmsTransactionsController extends AppController {
         $items = array();
         if(isset($this->request->query['for_id'])){
             $tag_id = $this->request->query['for_id'];
-            $q_r    = $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->find('all', 
+            $q_r    = $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('FinPremiumSmsTransactionNote.fin_premium_sms_transaction_id' => $tag_id)
+                    'conditions'    => array('FinAuthorizeNetTransactionNote.fin_authorize_net_transaction_id' => $tag_id)
                 )
             );
             foreach($q_r as $i){
@@ -427,14 +426,14 @@ class FinPremiumSmsTransactionsController extends AppController {
 
         $success    = false;
         $msg        = array('message' => __('Could not create note'));
-        $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->create(); 
+        $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->create(); 
         //print_r($this->request->data);
-        if ($this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->save($this->request->data)) {
+        if ($this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->save($this->request->data)) {
             $d                      = array();
-            $d['FinPremiumSmsTransactionNote']['fin_premium_sms_transaction_id']   = $this->request->data['for_id'];
-            $d['FinPremiumSmsTransactionNote']['note_id'] = $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->id;
-            $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->create();
-            if ($this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->save($d)) {
+            $d['FinAuthorizeNetTransactionNote']['fin_authorize_net_transaction_id']   = $this->request->data['for_id'];
+            $d['FinAuthorizeNetTransactionNote']['note_id'] = $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->id;
+            $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->create();
+            if ($this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->save($d)) {
                 $success = true;
             }
         }
@@ -471,35 +470,35 @@ class FinPremiumSmsTransactionsController extends AppController {
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->findById($this->data['id']);
+            $item       = $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->findById($this->data['id']);
             $owner_id   = $item['Note']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->id = $this->data['id'];
-                    $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->delete($this->data['id'],true);
+                    $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->id = $this->data['id'];
+                    $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->delete($this->data['id'],true);
                 }else{
                     $fail_flag = true;
                 }
             }else{
-                $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->id = $this->data['id'];
-                $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->delete($this->data['id'],true);
+                $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->id = $this->data['id'];
+                $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->findById($d['id']);
+                $item       = $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->findById($d['id']);
                 $owner_id   = $item['Note']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->id = $d['id'];
-                        $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->delete($d['id'],true);
+                        $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->id = $d['id'];
+                        $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->delete($d['id'],true);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
-                    $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->id = $d['id'];
-                    $this->FinPremiumSmsTransaction->FinPremiumSmsTransactionNote->Note->delete($d['id'],true);
+                    $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->id = $d['id'];
+                    $this->FinAuthorizeNetTransaction->FinAuthorizeNetTransactionNote->Note->delete($d['id'],true);
                 }
    
             }
@@ -621,14 +620,14 @@ class FinPremiumSmsTransactionsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'FinPremiumSmsTransactionNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'FinAuthorizeNetTransactionNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'User',
                             'Voucher'
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'FinPremiumSmsTransaction.created';
+        $sort   = 'FinAuthorizeNetTransaction.created';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
@@ -681,7 +680,7 @@ class FinPremiumSmsTransactionsController extends AppController {
                 if($i_id != $user_id){ //upstream
                     array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
                 }else{
-                    array_push($tree_array,array('FinPremiumSmsTransaction.user_id' => $i_id));
+                    array_push($tree_array,array('FinAuthorizeNetTransaction.user_id' => $i_id));
                 }
             }
             //** ALL the AP's children
@@ -730,7 +729,7 @@ class FinPremiumSmsTransactionsController extends AppController {
 
 //-----------------------------------------------
    
-    private function _email_voucher_detail($email,$voucher_id,$PremiumSmsReference){
+    private function _email_voucher_detail($email,$voucher_id,$AuthorizeNetReference){
 
         $v          = ClassRegistry::init('Voucher');
         $voucher_id = $voucher_id;
@@ -748,7 +747,7 @@ class FinPremiumSmsTransactionsController extends AppController {
             App::uses('CakeEmail', 'Network/Email');
             $Email = new CakeEmail();
             $Email->config($email_server);
-            $Email->subject('PremiumSms #'.$PremiumSmsReference);
+            $Email->subject('AuthorizeNet #'.$AuthorizeNetReference);
             $Email->to($email);
             $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
             $Email->template('voucher_detail', 'voucher_notify');
@@ -783,7 +782,8 @@ class FinPremiumSmsTransactionsController extends AppController {
         }
     }
 
-	private function _is_sibling_of($parent_id,$user_id){
+	
+	 private function _is_sibling_of($parent_id,$user_id){
         $this->User->contain();//No dependencies
         $q_r        = $this->User->getPath($user_id);
         if($q_r){
