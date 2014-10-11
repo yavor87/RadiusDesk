@@ -1,10 +1,10 @@
-Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
+Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
     extend		:'Ext.grid.Panel',
-    alias 		: 'widget.gridPremiumSmsTransactions',
+    alias 		: 'widget.gridAuthorizeNetTransactions',
     multiSelect	: true,
-    store 		: 'sFinPremiumSmsTransactions',
+    store 		: 'sFinAuthorizeNetTransactions',
     stateful	: true,
-    stateId		: 'StateGridPremiumSmsTransactions',
+    stateId		: 'StateGridAuthorizeNetTransactions',
     stateEvents	:['groupclick','columnhide'],
     border		: true,
     requires	: [
@@ -13,7 +13,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
     viewConfig	: {
         loadMask:true
     },
-    urlMenu		: '/cake2/rd_cake/fin_premium_sms_transactions/menu_for_grid.json',
+    urlMenu		: '/cake2/rd_cake/fin_authorize_net_transactions/menu_for_grid.json',
     bbar		: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
@@ -38,7 +38,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
         me.features = [filters];
 
         me.columns  = [
-            { xtype: 'rownumberer',stateId: 'StateGridPremiumSmsTransactions1'},
+            { xtype: 'rownumberer',stateId: 'StateGridAuthorizeNetTransactions1'},
             { 
 
                 text        :'Owner', 
@@ -47,7 +47,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 flex        : 1,
                 hidden      : true,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridPremiumSmsTransactions2'
+                stateId     : 'StateGridAuthorizeNetTransactions2'
             },
             { 
 
@@ -56,7 +56,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridPremiumSmsTransactions3'
+                stateId     : 'StateGridAuthorizeNetTransactions3'
             },
             { 
 
@@ -67,7 +67,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 flex        : 1,
                 hidden      : false,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridPremiumSmsTransactions4'
+                stateId     : 'StateGridAuthorizeNetTransactions4'
             },
             { 
 
@@ -77,7 +77,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 hidden      : false, 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridPremiumSmsTransactions5'
+                stateId     : 'StateGridAuthorizeNetTransactions5'
             },
             { 
                 text        : 'Created',
@@ -87,7 +87,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridPremiumSmsTransactions6'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridAuthorizeNetTransactions6'
             },
             { 
                 text        : 'Modified',
@@ -97,7 +97,7 @@ Ext.define('Rd.view.finPremiumSmsTransactions.gridPremiumSmsTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridPremiumSmsTransactions7'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridAuthorizeNetTransactions7'
             },
             { 
                 text    : i18n('sNotes'),
