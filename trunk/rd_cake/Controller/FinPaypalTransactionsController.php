@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class FinPaypalTransactionsController extends AppController {
 
     public $name       = 'FinPaypalTransactions';
-    public $components = array('Aa');
+    public $components = array('Aa','VoucherGenerator');
     public $uses       = array('FinPaypalTransaction','User');
     protected $base    = "Access Providers/Controllers/FinPaypalTransactions/";
 
@@ -22,17 +22,7 @@ class FinPaypalTransactionsController extends AppController {
     );
 
 	private $singleField	= true;
-	private $wordPool 		= array(
-		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
-		'was', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'fig',
-		'new', 'now', 'old', 'see', 'way', 'who', 'boy', 'did', 'its', 'let', 'fin',
-		'put', 'say', 'she', 'too', 'use', 'dad', 'mom', 'try',	'why', 'act', 'bar',
-		'car', 'dew', 'eat', 'far', 'gym', 'hey', 'ink', 'jet',	'key', 'log', 'mad',
-		'nap', 'odd', 'pal', 'ram',	'saw', 'tan', 'urn', 'vet', 'wed', 'yap', 'zoo',
-		'win', 'wax', 'tee', 'tin', 'til', 'tel', 'sit', 'sin', 'rim', 'red', 'rye',
-		'pin', 'pix', 'pad', 'pen', 'off', 'map', 'mas', 'lay', 'lin', 'lox', 'low',
-		'kin', 'hod', 'ego', 'dog', 'die', 'dam', 'dig', 'dim', 'cat', 'cot', 'com',  
-	);
+	
 
     public function index(){
 
@@ -316,9 +306,10 @@ class FinPaypalTransactionsController extends AppController {
                 $extra_name     = $q['Voucher']['extra_name'];
                 $extra_value     = $q['Voucher']['extra_value'];
                 //  print_r("The username is $username and password is $password");
+				$email_server = Configure::read('EmailServer');
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
-                $Email->config('smtp');
+                $Email->config($email_server);
                 $Email->subject('Your voucher detail');
                 $Email->to($to);
                 $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
@@ -814,15 +805,14 @@ class FinPaypalTransactionsController extends AppController {
                         if($data != null){
 
 							//---!!We do a single field thing!!---
-							$this->v_names = array();
 							$t_v_names = $v->find('all',array('fields' => array('Voucher.name')));
 							foreach($t_v_names as $n){
 								$v_name = $n['Voucher']['name'];
-								array_push($this->v_names,$v_name);
+								array_push($this->VoucherGenerator->voucherNames,$v_name);
 							}
 
 							if($this->singleField){
-								$pwd = $this->_generateVoucher();
+								$pwd = $this->VoucherGenerator->generateVoucher();
 								$data['name']      = $pwd; 
 								$data['password']  = $pwd;
 							}
@@ -870,9 +860,10 @@ class FinPaypalTransactionsController extends AppController {
             $extra_value     = $q['Voucher']['extra_value'];
             $message        = '';
             //  print_r("The username is $username and password is $password");
+			$email_server = Configure::read('EmailServer');
             App::uses('CakeEmail', 'Network/Email');
             $Email = new CakeEmail();
-            $Email->config('smtp');
+            $Email->config($email_server);
             $Email->subject('PayPal #'.$txn_id);
             $Email->to($payer_email);
             $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
@@ -906,26 +897,6 @@ class FinPaypalTransactionsController extends AppController {
             return __("orphaned");
         }
     }
-
-	function _generateVoucher(){
-		//We will take two random words from the pool and then sandwitch them with random digits
-		$duplicate_flag = true;
-		while($duplicate_flag){		
-			//Generate a value
-			$pool_count = (count($this->wordPool)-1);
-			$d1 		= rand (1,9);
-			$d2 		= rand (1,9);
-			$w1			= rand(0,$pool_count);
-			$w2			= rand(0,$pool_count);
-			$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
-			//Test if not already taken
-			if(!in_array("v_value", $this->v_names)){
-				$duplicate_flag = false; //Break the loop - we ar unique;
-				array_push($this->v_names, $v_value);
-			}
-		}
-		return $v_value; //We are unique and we added ourselves to the existing list
-	}
 
 	 private function _is_sibling_of($parent_id,$user_id){
         $this->User->contain();//No dependencies

@@ -474,9 +474,10 @@ class FinPayUTransactionsController extends AppController {
                 $extra_name     = $q['Voucher']['extra_name'];
                 $extra_value     = $q['Voucher']['extra_value'];
               //  print_r("The username is $username and password is $password");
+				$email_server = Configure::read('EmailServer');
                 App::uses('CakeEmail', 'Network/Email');
                 $Email = new CakeEmail();
-                $Email->config('gmail');
+                $Email->config($email_server);
                 $Email->subject('Your voucher detail');
                 $Email->to($to);
                 $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
@@ -874,9 +875,10 @@ class FinPayUTransactionsController extends AppController {
             $extra_value     = $q['Voucher']['extra_value'];
             $message            = '';
           //  print_r("The username is $username and password is $password");
+			$email_server = Configure::read('EmailServer');
             App::uses('CakeEmail', 'Network/Email');
             $Email = new CakeEmail();
-            $Email->config('gmail');
+            $Email->config($email_server);
             $Email->subject('PayU #'.$PayUReference);
             $Email->to($email);
             $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
