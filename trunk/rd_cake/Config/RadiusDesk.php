@@ -56,7 +56,7 @@ $config['voucher_formats'][6]     = array('name' => 'Avery 5164',               
 $config['voucher_formats'][7]     = array('name' => 'Avery 8600',               'id' => '8600',             'active' => true); 
 $config['voucher_formats'][8]     = array('name' => 'Avery L7160',              'id' => 'L7160',            'active' => true); 
 $config['voucher_formats'][9]     = array('name' => 'Avery L7161',              'id' => 'L7161',            'active' => true); 
-$config['voucher_formats'][10]     = array('name' => 'Avery L7163',              'id' => 'L7163',            'active' => true); 
+$config['voucher_formats'][10]    = array('name' => 'Avery L7163',              'id' => 'L7163',            'active' => true); 
 
 
 
@@ -104,6 +104,9 @@ $config['MikrotikDynamicLogin']['desktop']     = '/rd_login_pages/desktop/Mikrot
 
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
 $config['UserCanRemoveDevice']              = true;
+
+//SMTP configs are defined in the Config/email.php file. Here we specify which one to use application wide
+$config['EmailServer']						= 'default';
 
 
 //========== WORK IN PROGRES =============
