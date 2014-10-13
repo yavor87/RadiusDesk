@@ -81,6 +81,14 @@ function do_fw_config()
     --kill potential existing batman_neighbours.lua instance
 	ext:stop('batman_neighbours.lui')
 
+	-- 13-10-14-- Disable the DHCP things
+	-- Break down the gateways --
+	require("rdGateway")
+	local a = rdGateway()
+	a:disable()
+	a:restartServices()
+	-- 13-10-14--
+
     require("rdNetwork")
 
 	-- LAN we flash "I"
