@@ -288,10 +288,10 @@ Ext.define('Rd.controller.cFinAuthorizeNetTransactions', {
 
                 //Determine the selected record:
                 var sr              = me.getGrid().getSelectionModel().getLastSelected();
-                var email           = sr.get('payer_email');
+                var email           = sr.get('x_email');
                 var voucher_name    = sr.get('voucher_name');
                 var voucher_id      = sr.get('voucher_id');
-                var txn_id          = sr.get('txn_id');
+                var x_trans_id      = sr.get('x_trans_id');
 
                 //We can't mail if there is now voucher associated with transaction
                 if(voucher_id == 0){
@@ -311,7 +311,7 @@ Ext.define('Rd.controller.cFinAuthorizeNetTransactions', {
                             authorizenetId: sr.getId(),
                             email       : email,
                             voucher_name: voucher_name,
-                            txn_id      : txn_id
+                            x_trans_id  : x_trans_id
                         });
                     me.application.runAction('cDesktop','Add',w);       
                 }

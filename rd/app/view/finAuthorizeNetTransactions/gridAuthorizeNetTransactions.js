@@ -38,7 +38,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
         me.features = [filters];
 
         me.columns  = [
-            { xtype: 'rownumberer',stateId: 'StateGridAuthorizeNetTransactions1'},
+            { xtype: 'rownumberer',stateId: 'SGANT1'},
             { 
 
                 text        :'Owner', 
@@ -47,7 +47,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 flex        : 1,
                 hidden      : true,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridAuthorizeNetTransactions2'
+                stateId     : 'SGANT2'
             },
             { 
 
@@ -56,18 +56,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridAuthorizeNetTransactions3'
-            },
-            { 
-
-                text        :'Mobile', 
-                dataIndex   : 'mobile',          
-                tdCls       : 'gridTree',
-                hidden      : false, 
-                flex        : 1,
-                hidden      : false,
-                filter      : {type: 'string'},
-                stateId     : 'StateGridAuthorizeNetTransactions4'
+                stateId     : 'SGANT3'
             },
             { 
 
@@ -77,8 +66,152 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 hidden      : false, 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridAuthorizeNetTransactions5'
+                stateId     : 'SGANT4'
             },
+
+/*Start Transaction Specifics */
+			{ 
+
+                text        : 'Response code', 
+                dataIndex   : 'x_response_code',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT5'
+            },
+			{ 
+
+                text        : 'Card type', 
+                dataIndex   : 'x_card_type',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT6'
+            },
+			{ 
+
+                text        : 'Account number', 
+                dataIndex   : 'x_account_number',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT7'
+            },
+			{ 
+
+                text        : 'First name', 
+                dataIndex   : 'x_first_name',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT8'
+            },
+			{ 
+
+                text        : 'Last name', 
+                dataIndex   : 'x_last_name',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT9'
+            },
+			{ 
+
+                text        : 'Company', 
+                dataIndex   : 'x_company',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT10'
+            },
+			{ 
+
+                text        : 'Address', 
+                dataIndex   : 'x_address',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT11'
+            },
+			{ 
+
+                text        : 'City', 
+                dataIndex   : 'x_city',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT12'
+            },
+			{ 
+
+                text        : 'State', 
+                dataIndex   : 'x_state',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT13'
+            },
+			{ 
+
+                text        : 'Country', 
+                dataIndex   : 'x_country',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT14'
+            },
+			{ 
+
+                text        : 'Phone', 
+                dataIndex   : 'x_phone',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT15'
+            },
+			{ 
+
+                text        : 'email', 
+                dataIndex   : 'x_email',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT16'
+            },
+			{ 
+
+                text        : 'Amount', 
+                dataIndex   : 'x_amount',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT17'
+            },
+			{ 
+
+                text        : 'Catalog link id', 
+                dataIndex   : 'x_catalog_link_id',          
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT18'
+            },
+/*End Transaction Specifics */
+
             { 
                 text        : 'Created',
                 dataIndex   : 'created', 
@@ -87,7 +220,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridAuthorizeNetTransactions6'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'SGANT19'
             },
             { 
                 text        : 'Modified',
@@ -97,7 +230,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridAuthorizeNetTransactions7'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'SGANT20'
             },
             { 
                 text    : i18n('sNotes'),
@@ -107,7 +240,7 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridDevices8'
+                dataIndex: 'notes',stateId: 'SGANT21'
             }  
         ];
 
