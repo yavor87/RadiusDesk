@@ -7,12 +7,18 @@ class FinAuthorizeNetTransactionsController extends AppController {
     public $components = array('Aa','VoucherGenerator');
     public $uses       = array('FinAuthorizeNetTransaction','User');
 
-	//var $scaffold;
+	var $scaffold;
 
     protected $base    = "Access Providers/Controllers/FinAuthorizeNetTransactions/";
 
     protected $fields  = array(
-	  'mobile','description', 'created', 'modified', 'id'
+	  	'id', 			'user_id',			'voucher_id',			'voucher_name',				'top_up_id',
+		'description',	'x_response_code',	'x_response_subcode',	'x_response_reason_code',	'x_response_reason_text',
+		'x_auth_code',	'x_avs_code',		'x_trans_id',			'x_method',					'x_card_type',
+		'x_account_number',	'x_first_name',	'x_last_name',			'x_company',				'x_addres',
+		'x_city',		'x_state',			'x_zip',				'x_country',				'x_phone',
+		'x_fax',		'x_email',			'x_amount',				'x_catalog_link_id',		'created',
+		'modified'
     );
 
 	private $singleField	= true;
@@ -97,52 +103,22 @@ class FinAuthorizeNetTransactionsController extends AppController {
         ));
     }
 
-	public function add(){
-
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id = $user['id'];
-
-		//Get the creator's id
-        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
-            $this->request->data['user_id'] = $user_id;
-        }
-
-        $this->{$this->modelClass}->create();
-        if ($this->{$this->modelClass}->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        } else {
-            $message = 'Error';
-            $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
-    }
-
     public function voucher_info_for(){
 
-        if(!(isset($this->request->query['AuthorizeNetReference']))){
+        if(!(isset($this->request->query['x_trans_id']))){
             $this->set(array(
-                'message'   => "Missing AuthorizeNetReference in query string",
+                'message'   => "Missing x_trans_id in query string",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
             return;
         }
 
-        $AuthorizeNetReference = $this->request->query['AuthorizeNetReference'];
+        $x_trans_id = $this->request->query['x_trans_id'];
 
         $data = array();
         $q_r = $this->{$this->modelClass}->find('first', 
-				array('conditions' => array('FinAuthorizeNetTransaction.authorizeNetReference' => $AuthorizeNetReference))
+				array('conditions' => array('FinAuthorizeNetTransaction.x_trans_id' => $x_trans_id))
 		);
 
         if($q_r){
@@ -168,7 +144,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
                 }
             }else{
                $this->set(array(
-                    'message'   => "Authorize.Net Reference: $AuthorizeNetReference has no voucher associated to it - please contact helpdesk",
+                    'message'   => "Authorize.Net Reference: $x_trans_id has no voucher associated to it - please contact helpdesk",
                     'success' => false,
                     '_serialize' => array('success','message')
                 ));
@@ -177,7 +153,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
 
         }else{
             $this->set(array(
-                'message'   => "No data available for $AuthorizeNetReference",
+                'message'   => "No data available for $x_trans_id",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
@@ -212,9 +188,12 @@ class FinAuthorizeNetTransactionsController extends AppController {
         $id  = $this->request->query['id'];
         $q_r = $this->{$this->modelClass}->findById($id);
 
-        if($q_r){
+        if($q_r){	//We have found the item, now we need to look it up to see what is in it for us....
+		
+			Configure::load('AuthorizeDotNet');
         
-            $data 	= Configure::read('premium_sms.50MB');
+			$item_id 	= $q_r['FinAuthorizeNetTransaction']['x_catalog_link_id'];
+            $data 		= Configure::read('authorize_dot_net.'.$item_id);
 
             if($data != null){
 				$v  = ClassRegistry::init('Voucher');
@@ -233,7 +212,13 @@ class FinAuthorizeNetTransactionsController extends AppController {
                 if($v->save($data)) {
                     $success_flag = true;
                     $voucher_id   = $v->id;
-                    $this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => $voucher_id,'description' => $pwd));
+                    $this->{$this->modelClass}->save(
+							array(
+									'id' 			=> $id,
+									'voucher_id'    => $voucher_id,
+									'voucher_name' 	=> $pwd,
+									'description'	=> $data['description'] //We also update the description again from the config file's data
+							));
                 }else{
 
                     $message = 'Error';
@@ -291,7 +276,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
 
         if($q_r){
 
-            if($this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => null))){
+            if($this->{$this->modelClass}->save(array('id' => $id,'voucher_id'    => null, 'description' => '', 'voucher_name' => ''))){
                 $success_flag = true;
             }else{
                 $message = 'Error';
@@ -360,6 +345,84 @@ class FinAuthorizeNetTransactionsController extends AppController {
             '_serialize' => array('success')
         ));
     }
+
+	public function silent_post(){
+
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+		//Some defaults which will get changed if all tests pass
+		$voucher_id 	= null;
+		$voucher_name	= '';
+		$description	= '';
+		$success 		= false;
+
+		//We need at least a value for: x_catalog_link_id
+		if (array_key_exists('x_catalog_link_id', $this->request->data)) {
+			Configure::load('AuthorizeDotNet');
+			$item_id 	= $this->request->data['x_catalog_link_id'];
+            $data 		= Configure::read('authorize_dot_net.'.$item_id);
+
+			if($data){
+				$description = $data['description'];
+				if($this->request->data['x_response_code'] == 1){ //Only if the transaction was OK
+					//First we generate a voucher with the info we got from the config file:
+					$v  = ClassRegistry::init('Voucher');
+					$t_v_names = $v->find('all',array('fields' => array('Voucher.name')));
+					foreach($t_v_names as $n){
+						$v_name = $n['Voucher']['name'];
+						array_push($this->VoucherGenerator->voucherNames,$v_name);
+					}
+
+					if($this->singleField){
+						$pwd = $this->VoucherGenerator->generateVoucher();
+						$data['name']      = $pwd; 
+						$data['password']  = $pwd;
+					}
+
+				    if($v->save($data)) {
+				        $success_flag = true;
+				        $voucher_id   = $v->id;
+						if (array_key_exists('x_email', $this->request->data)) {
+							$payer_email = $this->request->data['x_email'];
+							$x_trans_id  = $this->request->data['x_trans_id'];
+							if(empty($payer_email)){
+								$this->log("Authorize.net -> No valid email address in transaction please do manual intervention");
+							}else{
+								$this->_email_voucher_detail($payer_email,$voucher_id,$x_trans_id);
+							}
+						}  
+				    }else{
+						$this->log("Authorize.net -> Could not create a Voucher for x_catalog_link_id: $item_id please do manual intervention");
+            			$this->log($v->validationErrors);
+					}
+				}
+
+			}else{
+				$this->log("Authorize.net -> Failed to find info in AuthorizeDotNet config file for x_catalog_link_id: $item_id please do manual intervention");
+			}
+		}else{
+			$this->log("Authorize.net -> POST from Authorise.Net did not include compulsory **x_catalog_link_id**");
+		}
+
+		//We save each POST regardless
+		$this->request->data['voucher_id'] 		= $voucher_id;
+		$this->request->data['voucher_name'] 	= $voucher_name;
+		$this->request->data['description'] 	= $description;
+
+		if($this->{$this->modelClass}->save($this->request->data)){
+			$success = true;
+		}else{
+			$this->log("Authorize.net -> Failed to add Authorize.Net transaction");
+            $this->log($this->{$this->modelClass}->validationErrors);
+		}
+
+		$this->set(array(
+            'success' => $success,
+            '_serialize' => array('success')
+        ));
+	}
 
     public function note_index(){
 
@@ -729,7 +792,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
 
 //-----------------------------------------------
    
-    private function _email_voucher_detail($email,$voucher_id,$AuthorizeNetReference){
+    private function _email_voucher_detail($email,$voucher_id,$x_trans_id){
 
         $v          = ClassRegistry::init('Voucher');
         $voucher_id = $voucher_id;
@@ -740,14 +803,13 @@ class FinAuthorizeNetTransactionsController extends AppController {
             $valid_for      = $q['Voucher']['time_valid'];
             $profile        = $q['Voucher']['profile'];
             $extra_name     = $q['Voucher']['extra_name'];
-            $extra_value     = $q['Voucher']['extra_value'];
-            $message            = '';
-          //  print_r("The username is $username and password is $password");
+            $extra_value    = $q['Voucher']['extra_value'];
+            $message        = '';
 			$email_server = Configure::read('EmailServer');
             App::uses('CakeEmail', 'Network/Email');
             $Email = new CakeEmail();
             $Email->config($email_server);
-            $Email->subject('AuthorizeNet #'.$AuthorizeNetReference);
+            $Email->subject('AuthorizeNet #'.$x_trans_id);
             $Email->to($email);
             $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
             $Email->template('voucher_detail', 'voucher_notify');
