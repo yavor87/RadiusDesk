@@ -8,7 +8,7 @@ Ext.define('Rd.store.sFinAuthorizeNetTransactions', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/fin_uuthorize_net_transactions/index.json',
+            url     : '/cake2/rd_cake/fin_authorize_net_transactions/index.json',
             reader: {
                 type			: 'json',
                 root			: 'items',
@@ -17,5 +17,5 @@ Ext.define('Rd.store.sFinAuthorizeNetTransactions', {
             },
             simpleSortMode		: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
-    autoLoad	: false
+    autoLoad	: true
 });
