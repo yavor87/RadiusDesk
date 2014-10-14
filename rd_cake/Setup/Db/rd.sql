@@ -648,9 +648,32 @@ CREATE TABLE `fin_authorize_net_transactions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `voucher_id` int(11) DEFAULT NULL,
+  `voucher_name` char(50) NOT NULL DEFAULT '',
   `top_up_id` int(11) DEFAULT NULL,
-  `mobile` varchar(255) DEFAULT NULL,
-  `description` varchar(255) NOT NULL,
+  `description` char(50) NOT NULL DEFAULT '',
+  `x_response_code` int(2) DEFAULT NULL,
+  `x_response_subcode` int(4) DEFAULT NULL,
+  `x_response_reason_code` int(4) DEFAULT NULL,
+  `x_response_reason_text` char(200) NOT NULL DEFAULT '',
+  `x_auth_code` char(50) NOT NULL DEFAULT '',
+  `x_avs_code` char(50) NOT NULL DEFAULT '',
+  `x_trans_id` char(50) NOT NULL DEFAULT '',
+  `x_method` char(5) NOT NULL DEFAULT '',
+  `x_card_type` char(50) NOT NULL DEFAULT '',
+  `x_account_number` char(50) NOT NULL DEFAULT '',
+  `x_first_name` char(50) NOT NULL DEFAULT '',
+  `x_last_name` char(50) NOT NULL DEFAULT '',
+  `x_company` char(50) NOT NULL DEFAULT '',
+  `x_address` char(50) NOT NULL DEFAULT '',
+  `x_city` char(50) NOT NULL DEFAULT '',
+  `x_state` char(50) NOT NULL DEFAULT '',
+  `x_zip` char(50) NOT NULL DEFAULT '',
+  `x_country` char(50) NOT NULL DEFAULT '',
+  `x_phone` char(50) NOT NULL DEFAULT '',
+  `x_fax` char(50) NOT NULL DEFAULT '',
+  `x_email` char(50) NOT NULL DEFAULT '',
+  `x_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `x_catalog_link_id` char(50) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -849,7 +872,7 @@ CREATE TABLE `fin_premium_sms_transactions` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,6 +881,7 @@ CREATE TABLE `fin_premium_sms_transactions` (
 
 LOCK TABLES `fin_premium_sms_transactions` WRITE;
 /*!40000 ALTER TABLE `fin_premium_sms_transactions` DISABLE KEYS */;
+INSERT INTO `fin_premium_sms_transactions` VALUES (1,NULL,NULL,NULL,NULL,'','2014-10-14 12:29:22','2014-10-14 12:29:22');
 /*!40000 ALTER TABLE `fin_premium_sms_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1746,7 +1770,7 @@ CREATE TABLE `notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2082,7 +2106,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9758 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9830 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2664,7 +2688,7 @@ CREATE TABLE `vouchers` (
   `time_cap` int(12) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ak_vouchers` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=249 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=267 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2685,4 +2709,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-10-11  7:24:05
+-- Dump completed on 2014-10-14 15:01:18
