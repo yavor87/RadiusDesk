@@ -18,7 +18,7 @@ class FinAuthorizeNetTransaction extends AppModel {
 	);
 
     public $hasMany = array(
-        'FinPremiumSmsTransactionNote'  => array(
+        'FinAuthorizeNetTransactionNote'  => array(
             'dependent'     => true   
         )
     );
