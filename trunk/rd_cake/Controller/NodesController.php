@@ -243,12 +243,21 @@ class NodesController extends AppController {
 		   	));
 		}
 
+		//Add an interface called b to list the batman interface
+		array_push( $network,
+            array(
+                "interface"    => "b",
+                "options"   => array(
+                    "ifname"    => "bat0"
+               )
+            ));
+		
         //Mesh
         array_push( $network,
             array(
                 "interface"    => "mesh",
                 "options"   => array(
-                    "ifname"    => "mesh0",
+                    //"ifname"    => "mesh0", //This thing caused major problems on Barrier Breaker
                     "mtu"       => "1560",
                     "proto"     => "batadv",
                     "mesh"      => "bat0"
