@@ -72,6 +72,16 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
 /*Start Transaction Specifics */
 			{ 
 
+                text        : 'Transaction id', 
+                dataIndex   : 'x_trans_id',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANTa'
+            },
+			{ 
+
                 text        : 'Response code', 
                 dataIndex   : 'x_response_code',          
                 tdCls       : 'gridTree',
