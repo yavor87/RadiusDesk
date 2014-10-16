@@ -22,6 +22,97 @@ class FinAuthorizeNetTransactionsController extends AppController {
     );
 
 	private $singleField	= true;
+
+	public function receipt(){
+		$this->layout = false;
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+		//Some defaults which will get changed if all tests pass
+		$voucher_id 	= null;
+		$voucher_name	= '';
+		$description	= '';
+		$success 		= false;
+
+		Configure::load('AuthorizeDotNet');
+        $receipt_url = Configure::read('authorize_dot_net.receipt_url');
+		$this->set('url', $receipt_url);
+		$this->set('x_trans_id','');//Dummy blank
+
+		//Check if we have not recoreded this transaction before...
+		if (array_key_exists('x_trans_id', $this->request->data)) {
+
+			$x_trans_id = $this->request->data['x_trans_id'];
+			$this->set('x_trans_id',$x_trans_id);
+			$q_r = $this->{$this->modelClass}->find('first', 
+				array('conditions' => array('FinAuthorizeNetTransaction.x_trans_id' => $x_trans_id))
+			);
+
+			if($q_r){
+				return;
+			}	
+		}
+
+		//We need at least a value for: x_catalog_link_id
+		if (array_key_exists('x_catalog_link_id', $this->request->data)) {
+			$item_id 	= $this->request->data['x_catalog_link_id'];
+            $data 		= Configure::read('authorize_dot_net.'.$item_id);
+
+			if($data){
+				$description = $data['description'];
+				if($this->request->data['x_response_code'] == 1){ //Only if the transaction was OK
+					//First we generate a voucher with the info we got from the config file:
+					$v  = ClassRegistry::init('Voucher');
+					$t_v_names = $v->find('all',array('fields' => array('Voucher.name')));
+					foreach($t_v_names as $n){
+						$v_name = $n['Voucher']['name'];
+						array_push($this->VoucherGenerator->voucherNames,$v_name);
+					}
+
+					if($this->singleField){
+						$pwd = $this->VoucherGenerator->generateVoucher();
+						$data['name']      = $pwd; 
+						$data['password']  = $pwd;
+					}
+
+				    if($v->save($data)) {
+				        $success_flag = true;
+				        $voucher_id   = $v->id;
+						if (array_key_exists('x_email', $this->request->data)) {
+							$payer_email = $this->request->data['x_email'];
+							$x_trans_id  = $this->request->data['x_trans_id'];
+							if(empty($payer_email)){
+								$this->log("Authorize.net -> No valid email address in transaction please do manual intervention");
+							}else{
+								$this->_email_voucher_detail($payer_email,$voucher_id,$x_trans_id);
+							}
+						}  
+				    }else{
+						$this->log("Authorize.net -> Could not create a Voucher for x_catalog_link_id: $item_id please do manual intervention");
+            			$this->log($v->validationErrors);
+					}
+				}
+
+			}else{
+				$this->log("Authorize.net -> Failed to find info in AuthorizeDotNet config file for x_catalog_link_id: $item_id please do manual intervention");
+			}
+		}else{
+			$this->log("Authorize.net -> POST from Authorise.Net did not include compulsory **x_catalog_link_id**");
+		}
+
+		//We save each POST regardless
+		$this->request->data['voucher_id'] 		= $voucher_id;
+		$this->request->data['voucher_name'] 	= $voucher_name;
+		$this->request->data['description'] 	= $description;
+
+		if($this->{$this->modelClass}->save($this->request->data)){
+			$success = true;
+		}else{
+			$this->log("Authorize.net -> Failed to add Authorize.Net transaction");
+            $this->log($this->{$this->modelClass}->validationErrors);
+		}
+	}
 	
     public function index(){
 
@@ -152,11 +243,18 @@ class FinAuthorizeNetTransactionsController extends AppController {
             }
 
         }else{
+			
             $this->set(array(
-                'message'   => "No data available for $x_trans_id",
+                'message'   => "No data available for Authorize.net transaction: $x_trans_id",
                 'success' => false,
                 '_serialize' => array('success','message')
             ));
+			/*
+			$this->set(array(
+                'data'   => array('username'=> "dvdwalt"),
+                'success' => true,
+                '_serialize' => array('success','data')
+            ));*/
             return;
         }
       
@@ -357,6 +455,24 @@ class FinAuthorizeNetTransactionsController extends AppController {
 		$voucher_name	= '';
 		$description	= '';
 		$success 		= false;
+
+		//Check if we have not recoreded this transaction before...
+		if (array_key_exists('x_trans_id', $this->request->data)) {
+
+			$x_trans_id = $this->request->data['x_trans_id'];
+			$this->set('x_trans_id',$x_trans_id);
+			$q_r = $this->{$this->modelClass}->find('first', 
+				array('conditions' => array('FinAuthorizeNetTransaction.x_trans_id' => $x_trans_id))
+			);
+
+			if($q_r){
+				$this->set(array(
+				    'success' => true,
+				    '_serialize' => array('success')
+				));
+				return;
+			}	
+		}
 
 		//We need at least a value for: x_catalog_link_id
 		if (array_key_exists('x_catalog_link_id', $this->request->data)) {
