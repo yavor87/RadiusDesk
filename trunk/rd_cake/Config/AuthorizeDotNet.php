@@ -14,6 +14,8 @@ when a transaction is recorded.
 
 */
 
+$config['authorize_dot_net']['receipt_url'] = 'http://127.0.0.1/simple_login/intro.html?uamip=10.1.0.1&uamport=3990&x_trans_id=';
+
 $config['authorize_dot_net']['1abacb70-d45d-4d12-ba51-98f01523720d'] = array(
 									'description'		=> 'Basic Internet - 1Day',
                                     'precede'           => '',
