@@ -11,6 +11,30 @@ STOP=50
 DIR='/etc/MESHdesk'
 
 start() {
+
+	#Due to problems with the package postinstall script we will do a first run here
+	FIRST_RUN=`uci get meshdesk.settings.first_run`
+	echo "$FIRST_RUN"
+	if [ $FIRST_RUN == 1 ]; then
+		echo "First run - do some housekeeping"
+		if [ -e /etc/init.d/alfred ]; then
+                    echo "Disable rc.d symlink for Alfred"
+        	    /etc/init.d/alfred disable
+		    /etc/init.d/alfred stop
+		   cp /etc/MESHdesk/files/common/alfred /etc/init.d/alfred
+		fi
+
+		if [ -e /etc/init.d/odhcpd ]; then
+		    echo "Disable rc.d symlink for Odhcpd"
+		    /etc/init.d/odhcpd disable
+		    /etc/init.d/odhcpd stop
+		fi
+		uci set meshdesk.settings.first_run=0
+		uci commit
+	else
+		echo "First run completed..."
+	fi
+	
     	echo start
     	cd $DIR	
     	./a.lua &
