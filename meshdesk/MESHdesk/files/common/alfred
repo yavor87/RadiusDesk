@@ -92,10 +92,15 @@ start()
 		( for file in $facters_dir/* ; do [ -x $file ] && $file ; done )
 		if ! ( grep -q "for file in $facters_dir/\* ; do " /etc/crontabs/root 2>/dev/null ) ; then
 			#echo "*/5 * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root
-			#MESHdesk change - Make it once a minute so that we have a responsive reporting mechanism
-			echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root
-			/etc/init.d/cron enable
-			/etc/init.d/cron restart
+            #MESHdesk change - Make it once a minute so that we have a responsive reporting mechanism 
+			#-> use crontab else cron does not like this at all (worked fine in AA)!
+            cp /etc/crontabs/root /tmp/ct_root                                                                          
+            echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /tmp/ct_root         
+            crontab -u root /tmp/ct_root                                                                                
+            rm /tmp/ct_root                                                                                             
+            #echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root  
+            /etc/init.d/cron enable                                                                                     
+            /etc/init.d/cron restart  
 		fi
 	fi
 }
