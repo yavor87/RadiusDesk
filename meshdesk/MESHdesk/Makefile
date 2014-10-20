@@ -66,6 +66,10 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
         /etc/init.d/md_prerun enable
         echo "Disable rc.d symlink for Alfred"
         /etc/init.d/alfred disable
+		if [ -e /etc/init.d/alfred ]; then
+			echo "Disable rc.d symlink for Odhcpd"
+		    /etc/init.d/alfred disable
+		fi
 fi
 exit 0
 endef
