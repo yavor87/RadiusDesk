@@ -6,11 +6,10 @@ config fallback
 
 config internet 'internet1'
 	option dns 'radiusdev.webage.co'
-	option ip '192.121.166.146'
-#	option ip '192.168.1.103'
+	option ip '69.30.244.107'
 	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
-    option status_url 	'cake2/rd_cake/mesh_reports/submit_report.json'
-	option actions_url 	'cake2/rd_cake/node_actions/get_actions_for.json'
+	option status_url 'cake2/rd_cake/mesh_reports/submit_report.json'
+	option actions_url 'cake2/rd_cake/node_actions/get_actions_for.json'
 	option protocol 'http'
 
 config wifi-client 'wifi_client'
@@ -31,56 +30,53 @@ config settings 'settings'
 	option config_file '/etc/MESHdesk/configs/current.json'
 	option previous_config_file '/etc/MESHdesk/configs/previous.json'
 	option heartbeat_interval '60'
-	option heartbeat_dead_after '600'
-	option hardware 'pico2'
-    option config_server '192.168.255.20'
-    option config_port  '3000'
-    option shared_secret 'verysecure'
+	option hardware 'om2p'
+	option config_server '192.168.255.20'
+	option config_port '3000'
+	option shared_secret 'verysecure'
+	option heartbeat_dead_after '300'
+	option first_run '1'
 
 config captive_portal 'captive_portal'
 	option default_dns_1 '208.67.222.222'
 	option default_dns_2 '208.67.220.220'
-	
-#Hardware specific settings here:
 
 config hardware 'dragino'
-	option morse_led "/sys/class/leds/dragino2\:red\:sensor/brightness"
-    option internet_led "/sys/class/leds/dragino2\:red\:usb/brightness"
-	option wifi_led "dragino2:red:wlan"
-	option swap_on_off "1"
-	
-config hardware 'om2p'                                                   
-	option morse_led '/sys/class/leds/om2p:blue:lan/brightness'      
-    option internet_led '/sys/class/leds/om2p:blue:wan/brightness'   
-    option wifi_led 'om2p:green:wifi'       
-	
+	option morse_led '/sys/class/leds/dragino2:red:sensor/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option wifi_led 'dragino2:red:wlan'
+	option swap_on_off '1'
+
+config hardware 'om2p'
+	option morse_led '/sys/class/leds/om2p:blue:lan/brightness'
+	option internet_led '/sys/class/leds/om2p:blue:wan/brightness'
+	option wifi_led 'om2p:green:wifi'
+
 config hardware 'pico2'
-	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
-	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
-	option wifi_led "ubnt:green:link4"
+	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
+	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
+	option wifi_led 'ubnt:green:link4'
 
 config hardware 'pico5'
-	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
-	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
-	option wifi_led "ubnt:green:link4" 
+	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
+	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
+	option wifi_led 'ubnt:green:link4'
 
 config hardware 'nano2'
-	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
-	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
-	option wifi_led "ubnt:green:link4"  
+	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
+	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
+	option wifi_led 'ubnt:green:link4'
 
 config hardware 'nano5'
-	option morse_led "/sys/class/leds/ubnt:red:link1/brightness"
-	option internet_led "/sys/class/leds/ubnt:green:link3/brightness"
-	option wifi_led "ubnt:green:link4"       
+	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
+	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
+	option wifi_led 'ubnt:green:link4'
 
-config hardware 'unifiap'                                                   
+config hardware 'unifiap'
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
- 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
-    #option wifi_led 'om2p:green:wifi'  
+	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
 
-config hardware 'unifilrap'                                                   
+config hardware 'unifilrap'
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
- 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
-    #option wifi_led 'om2p:green:wifi'
+	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
 

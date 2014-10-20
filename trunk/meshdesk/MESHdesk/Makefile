@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
-PKG_VERSION:=1.4.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.5.1
+PKG_RELEASE:=0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -59,19 +59,6 @@ endef
 
 define Package/zzz-MESHdesk/postinst
 #!/bin/sh
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        echo "Enabling rc.d symlink for MESHdesk"
-        /etc/init.d/md_prerun enable
-        echo "Disable rc.d symlink for Alfred"
-        /etc/init.d/alfred disable
-		if [ -e /etc/init.d/odhcpd ]; then
-			echo "Disable rc.d symlink for Odhcpd"
-		    /etc/init.d/odhcpd disable
-		fi
-		#Replace the alfred script with one which is faster
-		cp /etc/MESHdesk/files/common/alfred /etc/init.d/alfred
-fi
 exit 0
 endef
 
