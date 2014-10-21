@@ -50,15 +50,20 @@ Ext.define('Rd.controller.cVouchers', {
     },
 
     views:  [
-        'components.pnlBanner',     'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
-        'components.cmbRealm',      'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
-        'components.cmbVendor',     'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
-        'vouchers.winVoucherPassword', 'components.winPdf',     'vouchers.winVoucherPdf',
-        'vouchers.cmbPdfFormats',   'components.vCmbLanguages', 'components.winCsvColumnSelect', 
-        'components.pnlUsageGraph', 'vouchers.winVoucherEmailDetail' 
+        'components.pnlBanner',     	'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
+        'components.cmbRealm',      	'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
+        'components.cmbVendor',     	'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
+        'vouchers.winVoucherPassword', 	'components.winPdf',     'vouchers.winVoucherPdf',
+        'vouchers.cmbPdfFormats',   	'components.vCmbLanguages', 'components.winCsvColumnSelect', 
+        'components.pnlUsageGraph', 	'vouchers.winVoucherEmailDetail',
+		'vouchers.gridVoucherDevices',	'vouchers.winVoucherAddDevice'
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
-    models: ['mAccessProviderTree', 'mVoucher', 'mRealm',       'mProfile', 'mPrivateAttribute', 'mRadacct', 'mPdfFormat', 'mUserStat'],
+    models: [
+		'mAccessProviderTree', 	'mVoucher', 			'mRealm',       
+		'mProfile', 			'mPrivateAttribute', 	'mRadacct', 
+		'mPdfFormat', 			'mUserStat',			'mVoucherDevice'
+	],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/vouchers/add.json',
@@ -70,6 +75,7 @@ Ext.define('Rd.controller.cVouchers', {
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
         urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',
         urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
+		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridVouchers'} ,
@@ -182,6 +188,21 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'gridVoucherPrivate  #delete': {
                 click:      me.attrDelete
+            },
+			'pnlVoucher gridVoucherDevices' : {
+                activate:      me.gridActivate
+            },
+			'winVoucherAddDevice #save' : {
+                click:  me.btnDeviceAddSave
+            },
+			'gridVoucherDevices  #add': {
+                click:      me.deviceAdd
+            },
+            'gridVoucherDevices  #reload': {
+                click:      me.deviceReload
+            },
+            'gridVoucherDevices  #delete': {
+                click:      me.deviceDelete
             },
             '#winCsvColumnSelectVouchers #save': {
                 click:  me.csvExportSubmit
@@ -873,6 +894,88 @@ Ext.define('Rd.controller.cVouchers', {
                             );
                            // grid.getStore().load();   //Update the count
                             me.reload();   
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+	deviceAdd: function(button){
+        var me      = this;
+        var pnl     = button.up("pnlVoucher");
+        
+        //Entry points present; continue 
+        var store   	= pnl.down("gridVoucherDevices").getStore();
+
+        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddDeviceId')){
+            var w = Ext.widget('winVoucherAddDevice',
+            {
+                id          :'winVoucherAddDeviceId',
+                store       : store,
+                username    : pnl.v_name	
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    btnDeviceAddSave: function(button){
+        var me      = this;
+        var win     = button.up("winVoucherAddDevice");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddDevice,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_added'),
+                    i18n('sItem_added_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+	deviceReload: function(b){
+		var me = this;
+        var grid = b.up('gridVoucherDevices');
+        grid.getStore().load();
+	},
+	deviceDelete:   function(btn){
+        var me      = this;
+        var pnl     = btn.up("pnlVoucher");
+        var grid    = pnl.down("gridVoucherDevices");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
                         },
                         failure: function(batch,options,c,d){
                             Ext.ux.Toaster.msg(
