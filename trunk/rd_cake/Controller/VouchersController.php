@@ -938,6 +938,60 @@ class VouchersController extends AppController {
             ));
         }
     }
+
+	public function voucher_device_index(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id   	= $user['id'];
+        $fail_flag 	= false;
+		$items		= array();
+		$username   = $this->request->query['username'];
+
+        $rc = ClassRegistry::init('Radcheck');
+
+		$q_r = $rc->find('all', array('conditions' => 
+			array(
+				'Radcheck.attribute' 	=> 'Rd-Voucher-Device-Owner',
+				'Radcheck.value'		=> $username
+			)
+		));
+
+		if($q_r){
+			foreach($q_r as $i){
+				$id 	= $i['Radcheck']['id'];
+				$mac	= $i['Radcheck']['username'];
+				array_push($items,array('id' => $id, 'mac' => $mac));
+			}
+		}
+
+		$this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+	}
+
+	public function voucher_device_add(){
+		$items 		= array();
+		$this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+	}
+
+	public function voucher_device_delete(){
+		$items 		= array();
+		$this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+	}
  
     public function change_password(){
 
