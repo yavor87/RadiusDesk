@@ -30,6 +30,76 @@ if not exists (select * from information_schema.columns
     alter table mesh_exit_captive_portals add column `mac_auth` tinyint(1) NOT NULL DEFAULT '0';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_enabled' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_enabled` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_mesh' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_mesh` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_entry' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_entry` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_two' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_two` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_five' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_five` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_two_chan' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_two_chan` int(4) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r0_five_chan' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r0_five_chan` int(4) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_enabled' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_enabled` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_mesh' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_mesh` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_entry' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_entry` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_two' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_two` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_five' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_five` tinyint(1) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_two_chan' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_two_chan` int(4) NOT NULL DEFAULT '1';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'r1_five_chan' and table_name = 'nodes' and table_schema = 'rd') then
+    alter table nodes add column `r1_five_chan` int(4) NOT NULL DEFAULT '44';
+end if;
+
 end//
 
 delimiter ;
