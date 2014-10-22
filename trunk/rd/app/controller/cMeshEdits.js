@@ -686,15 +686,28 @@ Ext.define('Rd.controller.cMeshEdits', {
         var form    = cmb.up('form');
         var key     = form.down('#key');
         var voip    = form.down('#tabVoip');
-        var adv     = form.down('#tabVoipAdvanced'); 
+        var adv     = form.down('#tabVoipAdvanced');
+		var radio	= form.down('#tabRadio');
         var val     = cmb.getValue();
 
 		if((val == 'mp2_basic')||(val == 'mp2_phone')){
 			voip.setDisabled(false);
 			adv.setDisabled(false);
+			adv.tab.show();
+			voip.tab.show();
 		}else{
 			voip.setDisabled(true);
 			adv.setDisabled(true);
+			adv.tab.hide();
+			voip.tab.hide();
+		}
+
+		if(val == 'tplink_n600'){
+			radio.setDisabled(false);	
+			radio.tab.show();
+		}else{
+			radio.setDisabled(true);
+			radio.tab.hide();
 		}
 	},
     addNode: function(button){
