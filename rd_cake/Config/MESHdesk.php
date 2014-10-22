@@ -197,6 +197,27 @@ $config['hardware'][10]      = array(
 		'hwmode1'	=> '11na'
 );
 
+$config['hardware'][11]      = array(
+                'name'          => __('Alix 3D2 (Dual Radio)'),
+                'id'            => 'alix3d2',
+                'radios'        => 2,
+                'active'    	=> true,
+                'eth_br'        => 'eth0',
+
+                //First radio 
+                'max_power' => '23',
+                'two'           => true,
+                'five'          => false,
+                'hwmode'        => '11ng',
+
+                //Second radio - This is extra for two radio devices
+                'max_power1'=> '23',
+                'two1'          => false,
+                'five1'         => true,
+                'hwmode1'       => '11na'
+);
+
+
 
 
 //== MESHdesk SSID/BSSID
