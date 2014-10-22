@@ -977,6 +977,70 @@ class VouchersController extends AppController {
 
 	public function voucher_device_add(){
 		$items 		= array();
+
+		//We will first search for any place this MAC might be currently specified and remove it
+		$rc 		= ClassRegistry::init('Radcheck');
+		$mac 		= $this->request->data['mac'];
+		$username	= $this->request->data['username'];
+
+		$rc->deleteAll(
+            array('Radcheck.username' => $mac), false
+        );
+
+		//Now we search for the intems belonging to the voucher
+		$q_r 	= $rc->find('all', array('conditions' => array('Radcheck.username' => $username)));
+
+		if($q_r){ //Found the voucher....
+
+			$profile 	= false;
+			$type		= false;
+			$realm		= false;
+
+			foreach($q_r as $i){
+				//profile
+				if($i['Radcheck']['attribute'] == 'User-Profile'){
+					$profile = $i['Radcheck']['value'];
+				}
+				//type
+				if($i['Radcheck']['attribute'] == 'Rd-User-Type'){
+					$type = $i['Radcheck']['value'];
+				}
+				//realm
+				if($i['Radcheck']['attribute'] == 'Rd-Realm'){
+					$realm = $i['Radcheck']['value'];
+				}
+			}
+		
+			if(($type == 'voucher')&&($realm)&&($profile)){
+
+				//User-Type = voucher-device
+				$data = array('username' => $mac,'attribute' => 'Rd-User-Type', 'op' => ':=', 'value' => 'voucher-device');
+				$rc->create();
+				$rc->save($data);
+				$rc->id = null;
+
+				//Voucher who owns this device
+				$data = array('username' => $mac,'attribute' => 'Rd-Voucher-Device-Owner', 'op' => ':=', 'value' => $username);
+				$rc->create();
+				$rc->save($data);
+				$rc->id = null;
+
+				//profile
+				$data = array('username' => $mac,'attribute' => 'Rd-Profile', 'op' => ':=', 'value' => $profile);
+				$rc->create();
+				$rc->save($data);
+				$rc->id = null;
+
+				//realm
+				$data = array('username' => $mac,'attribute' => 'Rd-Realm', 'op' => ':=', 'value' => $realm);
+				$rc->create();
+				$rc->save($data);
+				$rc->id = null;
+
+			}
+		}
+
+
 		$this->set(array(
             'items'         => $items,
             'success'       => true,
@@ -985,12 +1049,25 @@ class VouchersController extends AppController {
 	}
 
 	public function voucher_device_delete(){
-		$items 		= array();
-		$this->set(array(
-            'items'         => $items,
-            'success'       => true,
-            '_serialize'    => array('items','success')
-        ));
+		$rc 	= ClassRegistry::init('Radcheck');
+		if(isset($this->data['mac'])){   //Single item delete
+			$mac = $this->data['mac'];
+            $rc->deleteAll(
+            	array('Radcheck.username' => $mac), false
+        	);
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                $mac 	= $d['mac'];
+		        $rc->deleteAll(
+		        	array('Radcheck.username' => $mac), false
+		    	);
+            }
+        }  
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));    
 	}
  
     public function change_password(){
