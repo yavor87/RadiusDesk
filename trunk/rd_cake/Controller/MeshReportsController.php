@@ -1532,7 +1532,7 @@ class MeshReportsController extends AppController {
     }
 
 	private function _get_dead_after($mesh_id){
-
+		Configure::load('MESHdesk');
 		$data 		= Configure::read('common_node_settings'); //Read the defaults
 		$dead_after	= $data['heartbeat_dead_after'];
 		$n_s = $this->NodeSetting->find('first',array(
@@ -1547,7 +1547,8 @@ class MeshReportsController extends AppController {
 	}
 
 	private function _make_hardware_lookup(){
-		$hardware = array();        
+		$hardware = array();
+		Configure::load('MESHdesk');        
 	    $hw   = Configure::read('hardware');
 	    foreach($hw as $h){
 	        $id     = $h['id'];

@@ -109,7 +109,7 @@ class NodesController extends AppController {
 		$json['config_settings']['system'] = $system_data;
 
 		//====== Batman-adv specific config settings ======
-
+		Configure::load('MESHdesk');
         $batman_adv       = Configure::read('mesh_settings'); //Read the defaults
 		if($mesh['MeshSetting']['id']!=null){
 			unset($mesh['MeshSetting']['id']);
@@ -142,6 +142,7 @@ class NodesController extends AppController {
 			$ss['heartbeat_dead_after']	= $mesh['NodeSetting']['heartbeat_dead_after'];
 
 		}else{
+			Configure::load('MESHdesk');
 			$data = Configure::read('common_node_settings'); //Read the defaults
 			$ss['password_hash'] 		= $data['password_hash'];
 			$ss['heartbeat_interval']	= $data['heartbeat_interval'];
@@ -188,6 +189,7 @@ class NodesController extends AppController {
 			$eth_br_with	    = $mesh['NodeSetting']['eth_br_with'];
 			$eth_br_for_all	    = $mesh['NodeSetting']['eth_br_for_all'];
 		}else{
+			Configure::load('MESHdesk');
 			$c_n_s 				= Configure::read('common_node_settings'); //Read the defaults
 			$eth_br_chk 		= $c_n_s['eth_br_chk'];
 			$eth_br_with	    = $c_n_s['eth_br_with'];
@@ -634,6 +636,7 @@ class NodesController extends AppController {
 
 	private function _db_power_for($hw,$power_perc){
 		$return_val = 10; //some default
+		Configure::load('MESHdesk');
 		$ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['id'] ==$hw){
@@ -646,6 +649,7 @@ class NodesController extends AppController {
 
 	private function _get_hardware_setting($hw,$setting){
 		$return_val = false; //some default
+		Configure::load('MESHdesk');
 		$ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['id'] ==$hw){
@@ -658,6 +662,7 @@ class NodesController extends AppController {
 
 	private function _eth_br_for($hw){
 		$return_val = 'eth0'; //some default
+		Configure::load('MESHdesk');
 		$ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['id'] ==$hw){

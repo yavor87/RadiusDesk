@@ -513,7 +513,8 @@ class MeshesController extends AppController {
             return;
         }
 
-        $id         = $this->request->query['mesh_id'];  
+        $id         = $this->request->query['mesh_id']; 
+		Configure::load('MESHdesk'); 
         $data       = Configure::read('mesh_settings'); //Read the defaults
         $setting    = ClassRegistry::init('MeshSetting');
         $setting->contain();
@@ -922,7 +923,8 @@ class MeshesController extends AppController {
         $q_r        = $node->find('all',array('conditions' => array('Node.mesh_id' => $mesh_id)));
 
         //Create a hardware lookup for proper names of hardware
-        $hardware = array();        
+        $hardware = array();  
+		Configure::load('MESHdesk');      
         $hw   = Configure::read('hardware');
         foreach($hw as $h){
             $id     = $h['id'];
@@ -1311,7 +1313,8 @@ class MeshesController extends AppController {
             return;
         }
 
-        $id         = $this->request->query['mesh_id'];  
+        $id         = $this->request->query['mesh_id']; 
+		Configure::load('MESHdesk'); 
         $data       = Configure::read('common_node_settings'); //Read the defaults
         $setting    = ClassRegistry::init('NodeSetting');
         $setting->contain();
@@ -1442,6 +1445,7 @@ class MeshesController extends AppController {
     public function encryption_options(){
 
         $items = array();
+		Configure::load('MESHdesk');
         $ct = Configure::read('encryption');
         foreach($ct as $i){
             if($i['active']){
@@ -1460,6 +1464,7 @@ class MeshesController extends AppController {
     public function hardware_options(){
 
         $items = array();
+		Configure::load('MESHdesk');
         $ct = Configure::read('hardware');
         foreach($ct as $i){
             if($i['active']){
@@ -1496,7 +1501,7 @@ class MeshesController extends AppController {
 		$mesh_id = $this->request->query['mesh_id'];
 
     	$this->MeshSpecific = ClassRegistry::init('MeshSpecific');
-
+		Configure::load('MESHdesk');
     	$zoom = Configure::read('mesh_specifics.map.zoom');
     	//Check for personal overrides
     	$q_r = $this->MeshSpecific->find('first',array('conditions' => array('MeshSpecific.mesh_id' => $mesh_id,'MeshSpecific.name' => 'map_zoom')));
@@ -2191,7 +2196,7 @@ class MeshesController extends AppController {
 	}
 
 	private function _get_dead_after($mesh_id){
-
+		Configure::load('MESHdesk');
 		$data 		= Configure::read('common_node_settings'); //Read the defaults
 		$dead_after	= $data['heartbeat_dead_after'];
 		$n_s = $this->Mesh->NodeSetting->find('first',array(
