@@ -137,11 +137,11 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         },
 						{
 							title       : 'Radio settings',
-                           // layout      : 'fit',
-                            disabled    : false,
+                            disabled    : true,
 							bodyPadding	: 10,
                             itemId      : 'tabRadio',
                             autoScroll	:true,
+							hidden		: true,
                             items       : [
 								//Radio0
 								{
@@ -158,7 +158,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio0Enable',
 											name        : 'radio0_enable',
 											inputValue  : 'radio0_enable',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRdReq'
 								
 										},
@@ -168,7 +168,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio0Mesh',
 											name        : 'radio0_mesh',
 											inputValue  : 'radio0_mesh',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRd'
 								
 										},
@@ -178,7 +178,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio0Entry',
 											name        : 'radio0_entry',
 											inputValue  : 'radio0_entry',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRd'
 										},
 										{
@@ -205,7 +205,9 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    fieldLabel  : i18n('s2_pt_4G_Channel'),
 										    value       : 5,
 										    maxValue    : 14,
-										    minValue    : 1
+										    minValue    : 1,
+											hidden		: true,
+											disabled	: false
 										},
 										{
 										    xtype       : 'numberfield',
@@ -215,7 +217,9 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    value       : 44,
 										    maxValue    : 116,
 										    minValue    : 36,
-										    step        : 8
+										    step        : 8,
+											hidden		: true,
+											disabled	: false
 										}	
 									]
 								},
@@ -234,7 +238,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio1Enable',
 											name        : 'radio1_enable',
 											inputValue  : 'radio1_enable',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRdReq'
 								
 										},
@@ -244,7 +248,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio1Mesh',
 											name        : 'radio1_mesh',
 											inputValue  : 'radio1_mesh',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRd'
 								
 										},
@@ -254,7 +258,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											itemId      : 'chkRadio1Entry',
 											name        : 'radio1_entry',
 											inputValue  : 'radio1_entry',
-											checked     : false,
+											checked     : true,
 											labelClsExtra: 'lblRd'
 										},
 										{
@@ -281,7 +285,9 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    fieldLabel  : i18n('s2_pt_4G_Channel'),
 										    value       : 5,
 										    maxValue    : 14,
-										    minValue    : 1
+										    minValue    : 1,
+											hidden		: true,
+											disabled	: false
 										},
 										{
 										    xtype       : 'numberfield',
@@ -291,7 +297,9 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    value       : 44,
 										    maxValue    : 116,
 										    minValue    : 36,
-										    step        : 8
+										    step        : 8,
+											hidden		: true,
+											disabled	: false
 										}			
 									]
 								}
