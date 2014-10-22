@@ -34,6 +34,11 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
         var cmbConnectWith = Ext.create('Rd.view.meshes.cmbMeshEntryPoints',{
             labelClsExtra   : 'lblRdReq'
         });
+
+		var hide_cp = true;
+		if(me.type == 'captive_portal'){
+			hide_cp = false;
+		}
  
         cmbConnectWith.getStore().getProxy().setExtraParam('mesh_id',me.meshId);
         cmbConnectWith.getStore().getProxy().setExtraParam('exit_id',me.exitId);
@@ -145,6 +150,7 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                 anchor: '100%'
                             },
                             autoScroll:true,
+							hidden		: hide_cp,
                             items       : [         
                                 {
                                     xtype       : 'textfield',

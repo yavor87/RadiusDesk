@@ -135,11 +135,175 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 						        }
                             ]
                         },
+						{
+							title       : 'Radio settings',
+                           // layout      : 'fit',
+                            disabled    : false,
+							bodyPadding	: 10,
+                            itemId      : 'tabRadio',
+                            autoScroll	:true,
+                            items       : [
+								//Radio0
+								{
+									xtype		: 'fieldset',
+									title		: 'Radio0',
+									defaultType	: 'textfield',
+									defaults	: {
+										anchor: '100%'
+								},
+								items: [
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Enable',
+											itemId      : 'chkRadio0Enable',
+											name        : 'radio0_enable',
+											inputValue  : 'radio0_enable',
+											checked     : false,
+											labelClsExtra: 'lblRdReq'
+								
+										},
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Mesh',
+											itemId      : 'chkRadio0Mesh',
+											name        : 'radio0_mesh',
+											inputValue  : 'radio0_mesh',
+											checked     : false,
+											labelClsExtra: 'lblRd'
+								
+										},
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Entry point',
+											itemId      : 'chkRadio0Entry',
+											name        : 'radio0_entry',
+											inputValue  : 'radio0_entry',
+											checked     : false,
+											labelClsExtra: 'lblRd'
+										},
+										{
+											xtype       : 'radio',
+											fieldLabel  : '2.4G',
+											name      	: 'radio0_band',
+											inputValue	: '24',
+											id        	: 'radio024',
+											labelClsExtra: 'lblRd',
+											checked		: true
+										}, 
+										{
+											xtype       : 'radio',
+											fieldLabel  : '5G',
+											name      	: 'radio0_band',
+											inputValue	: '5',
+											id        	: 'radio05',
+											labelClsExtra: 'lblRd'
+										},
+										{
+										    xtype       : 'numberfield',
+										    anchor      : '100%',
+										    name        : 'radio0_two_chan',
+										    fieldLabel  : i18n('s2_pt_4G_Channel'),
+										    value       : 5,
+										    maxValue    : 14,
+										    minValue    : 1
+										},
+										{
+										    xtype       : 'numberfield',
+										    anchor      : '100%',
+										    name        : 'radio0_five_chan',
+										    fieldLabel  : i18n('s5G_Channel'),
+										    value       : 44,
+										    maxValue    : 116,
+										    minValue    : 36,
+										    step        : 8
+										}	
+									]
+								},
+								//Radio1
+								{
+									xtype		: 'fieldset',
+									title		: 'Radio1',
+									defaultType	: 'textfield',
+									defaults	: {
+										anchor: '100%'
+								},
+								items: [
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Enable',
+											itemId      : 'chkRadio1Enable',
+											name        : 'radio1_enable',
+											inputValue  : 'radio1_enable',
+											checked     : false,
+											labelClsExtra: 'lblRdReq'
+								
+										},
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Mesh',
+											itemId      : 'chkRadio1Mesh',
+											name        : 'radio1_mesh',
+											inputValue  : 'radio1_mesh',
+											checked     : false,
+											labelClsExtra: 'lblRd'
+								
+										},
+										{
+											xtype       : 'checkbox',      
+											fieldLabel  : 'Entry point',
+											itemId      : 'chkRadio1Entry',
+											name        : 'radio1_entry',
+											inputValue  : 'radio1_entry',
+											checked     : false,
+											labelClsExtra: 'lblRd'
+										},
+										{
+											xtype       : 'radio', 
+											fieldLabel  : '2.4G',
+											name      	: 'radio1_band',
+											inputValue	: '24',
+											id        	: 'radio124',
+											labelClsExtra: 'lblRd'
+										}, 
+										{
+											xtype       : 'radio',
+											fieldLabel  : '5G',
+											name      	: 'radio1_band',
+											inputValue	: '5',
+											id        	: 'radio15',
+											checked		: true,
+											labelClsExtra: 'lblRd'
+										},
+										{
+										    xtype       : 'numberfield',
+										    anchor      : '100%',
+										    name        : 'radio1_two_chan',
+										    fieldLabel  : i18n('s2_pt_4G_Channel'),
+										    value       : 5,
+										    maxValue    : 14,
+										    minValue    : 1
+										},
+										{
+										    xtype       : 'numberfield',
+										    anchor      : '100%',
+										    name        : 'radio1_five_chan',
+										    fieldLabel  : i18n('s5G_Channel'),
+										    value       : 44,
+										    maxValue    : 116,
+										    minValue    : 36,
+										    step        : 8
+										}			
+									]
+								}
+                            ]
+                        },
+						
                         { 
                             title       : 'VOIP',
                             layout      : 'anchor',
                             disabled    : true,
                             itemId      : 'tabVoip',
+							hidden		: true,
                             defaults    : {
                                 anchor: '100%'
                             },
@@ -194,6 +358,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                             layout      : 'anchor',
                             disabled    : true,
                             itemId      : 'tabVoipAdvanced',
+							hidden		: true,
                             defaults    : {
                                 anchor: '100%'
                             },

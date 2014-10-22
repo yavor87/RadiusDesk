@@ -469,8 +469,10 @@ Ext.define('Rd.controller.cMeshEdits', {
 
         if(type == 'captive_portal'){
             tab_capt.setDisabled(false);
+			tab_capt.tab.show();
         }else{
-            tab_capt.setDisabled(true); 
+            tab_capt.setDisabled(true);
+			tab_capt.tab.hide();
         }
         win.getLayout().setActiveItem('scrnData');
     },
@@ -583,8 +585,10 @@ Ext.define('Rd.controller.cMeshEdits', {
 
                 if(type == 'captive_portal'){
                     tab_capt.setDisabled(false);
+					tab_capt.tab.show();
                 }else{
-                    tab_capt.setDisabled(true); 
+                    tab_capt.setDisabled(true);
+					tab_capt.tab.hide(); 
                 }
                 me.loadExit(w)
             } 
