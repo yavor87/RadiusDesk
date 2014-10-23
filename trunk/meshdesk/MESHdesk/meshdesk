@@ -80,3 +80,26 @@ config hardware 'unifilrap'
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
 
+config hardware 'tplink_n600'
+	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
+	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
+	option wifi_led 'ath9k-phy0'
+
+config hardware 'alix3d2'
+	option morse_led '/sys/class/leds/alix:1/brightness'
+	option internet_led '/sys/class/leds/alix:2/brightness'
+	option wifi_led 'ath9k-phy0'
+
+config hardware 'mp2_basic'
+	option morse_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option wifi_led 'dragino2:red:wlan'
+	option swap_on_off '0'
+
+config hardware 'mp2_phone'
+	option morse_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option wifi_led 'dragino2:red:wlan'
+	option swap_on_off '0'
+
+
