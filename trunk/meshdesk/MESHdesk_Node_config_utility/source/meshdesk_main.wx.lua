@@ -26,7 +26,9 @@ local choices = {
     "NanoStation M2",
     "NanoStation M5",
     "UniFi AP", 
-    "UniFi AP-LR"
+    "UniFi AP-LR",
+    "Alix 3D2",
+    "TP-Link N600"
 }
 local hardware      = {}
 hardware[0]         = 'dragino'
@@ -39,6 +41,8 @@ hardware[6]         = 'nano2'
 hardware[7]         = 'nano5'
 hardware[8]         = 'unifiap'
 hardware[9]         = 'unifilrap'
+hardware[10]        = 'alix3d2'
+hardware[11]        = 'tplink_n600'
 
 
 function HandleEvents(event)
@@ -71,6 +75,12 @@ function HandleEvents(event)
     end
     if(event:GetSelection() == 9)then
         sbmHardware:SetBitmap(bm_unifilrap)
+    end
+    if(event:GetSelection() == 10)then
+        sbmHardware:SetBitmap(bm_alix3d2)
+    end
+    if(event:GetSelection() == 11)then
+        sbmHardware:SetBitmap(bm_n600)
     end
 end
 
@@ -209,6 +219,13 @@ function build_gui()
     
     bm_unifilrap      = wx.wxBitmap();
     bm_unifilrap:LoadFile("./graphics/unifilrap.png",wx.wxBITMAP_TYPE_ANY )
+
+    bm_alix3d2      = wx.wxBitmap();
+    bm_alix3d2:LoadFile("./graphics/alix3d2.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_n600      = wx.wxBitmap();
+    bm_n600:LoadFile("./graphics/n600.jpg",wx.wxBITMAP_TYPE_ANY )
+
 
 
     frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node config utility',
