@@ -186,7 +186,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											fieldLabel  : '2.4G',
 											name      	: 'radio0_band',
 											inputValue	: '24',
-											id        	: 'radio024',
+											itemId      : 'radio24',
 											labelClsExtra: 'lblRd',
 											checked		: true
 										}, 
@@ -195,7 +195,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											fieldLabel  : '5G',
 											name      	: 'radio0_band',
 											inputValue	: '5',
-											id        	: 'radio05',
+											itemId      : 'radio5',
 											labelClsExtra: 'lblRd'
 										},
 										{
@@ -207,7 +207,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    maxValue    : 14,
 										    minValue    : 1,
 											hidden		: true,
-											disabled	: false
+											disabled	: true,
+											itemId		: 'numRadioTwoChan'
 										},
 										{
 										    xtype       : 'numberfield',
@@ -219,7 +220,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    minValue    : 36,
 										    step        : 8,
 											hidden		: true,
-											disabled	: false
+											disabled	: true,
+											itemId		: 'numRadioFiveChan'
 										}	
 									]
 								},
@@ -266,7 +268,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											fieldLabel  : '2.4G',
 											name      	: 'radio1_band',
 											inputValue	: '24',
-											id        	: 'radio124',
+											itemId      : 'radio24',
 											labelClsExtra: 'lblRd'
 										}, 
 										{
@@ -274,7 +276,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											fieldLabel  : '5G',
 											name      	: 'radio1_band',
 											inputValue	: '5',
-											id        	: 'radio15',
+											itemId      : 'radio5',
 											checked		: true,
 											labelClsExtra: 'lblRd'
 										},
@@ -287,7 +289,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    maxValue    : 14,
 										    minValue    : 1,
 											hidden		: true,
-											disabled	: false
+											disabled	: true,
+											itemId		: 'numRadioTwoChan'
 										},
 										{
 										    xtype       : 'numberfield',
@@ -299,7 +302,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										    minValue    : 36,
 										    step        : 8,
 											hidden		: true,
-											disabled	: false
+											disabled	: true,
+											itemId		: 'numRadioFiveChan'
 										}			
 									]
 								}
