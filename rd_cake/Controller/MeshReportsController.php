@@ -1116,6 +1116,13 @@ class MeshReportsController extends AppController {
                     $this->log('The node id of '.$id.' is '.$node_id, 'debug');
                     $rad_zero_int = $ni['radios'][0]['interfaces'];
                     $this->_do_radio_interfaces($mesh_id,$node_id,$rad_zero_int);
+
+					//If it is a dual radio --- report on it also ----
+					if(array_key_exists(1,$ni['radios'])){
+						$this->log('Second RADIO reported for '.$id.' is '.$node_id, 'debug');
+						$rad_one_int = $ni['radios'][1]['interfaces'];
+						$this->_do_radio_interfaces($mesh_id,$node_id,$rad_one_int);
+					}
                 }else{
                     $this->log('Node with MAC '.$id.' was not found', 'debug');
                 }
