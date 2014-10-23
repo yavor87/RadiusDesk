@@ -1074,6 +1074,16 @@ class MeshesController extends AppController {
 				$this->_add_or_edit_mp_settings($new_id); //$this->request will be available in that method we only send the new node_id
 			}
 
+			//___ Do a check if the device is a dual radio device and if so; send it way to be delt with
+			//FIXME do a lookup on the model's radio count and if it == two we do it
+			if(
+				($this->request->data['hardware'] == 'alix3d2')||
+				($this->request->data['hardware'] == 'tplink_n600')
+			){
+				$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
+			}
+
+
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
@@ -1167,6 +1177,16 @@ class MeshesController extends AppController {
 				){
 					$this->_add_or_edit_mp_settings($new_id); //$this->request will be available in that method we only send the new node_id
 				}
+
+				//___ Do a check if the device is a dual radio device and if so; send it way to be delt with
+				//FIXME do a lookup on the model's radio count and if it == two we do it
+				if(
+					($this->request->data['hardware'] == 'alix3d2')||
+					($this->request->data['hardware'] == 'tplink_n600')
+				){
+					$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
+				}
+
 
 
                 $this->set(array(
@@ -2310,6 +2330,78 @@ config secn 'asterisk'
             $node_mp_setting->save($data);
 			$node_mp_setting->id= null;
 		}
+	}
+
+	private function _add_or_edit_dual_radio_settings($node_id){
+
+		$dual_radio = array();
+		//Default is off for everything unless enabled
+		$set_to_zero = array(
+			'radio0_enable','radio0_mesh','radio0_entry',
+			'radio1_enable','radio1_mesh','radio1_entry',
+		);
+
+		foreach($set_to_zero as $i){
+			$dual_radio[$i] = 0;
+		}
+
+		$dual_radio['id']	= $node_id;
+		
+		//Radio0
+		if (array_key_exists('radio0_enable', $this->request->data)) {
+
+			$dual_radio['radio0_enable'] = 1; //Enable radio
+
+			if (array_key_exists('radio0_mesh', $this->request->data)) {
+				$dual_radio['radio0_mesh'] = 1;
+			}
+
+			if (array_key_exists('radio0_entry', $this->request->data)) {
+				$dual_radio['radio0_entry'] = 1;
+			}
+
+			if (array_key_exists('radio0_band', $this->request->data)) {
+				$dual_radio['radio0_band'] 	= $this->request->data['radio0_band'];
+			}
+
+			if (array_key_exists('radio0_two_chan', $this->request->data)) {
+				$dual_radio['radio0_two_chan'] 	= $this->request->data['radio0_two_chan'];
+			}
+
+			if (array_key_exists('radio0_five_chan', $this->request->data)) {
+				$dual_radio['radio0_five_chan'] 	= $this->request->data['radio0_five_chan'];
+			}
+		}
+
+		//Radio1
+		if (array_key_exists('radio1_enable', $this->request->data)) {
+
+			$dual_radio['radio1_enable'] = 1; //Enable radio
+
+			if (array_key_exists('radio1_mesh', $this->request->data)) {
+				$dual_radio['radio1_mesh'] = 1;
+			}
+
+			if (array_key_exists('radio1_entry', $this->request->data)) {
+				$dual_radio['radio1_entry'] = 1;
+			}
+
+			if (array_key_exists('radio1_band', $this->request->data)) {
+				$dual_radio['radio1_band'] 	= $this->request->data['radio1_band'];
+			}
+
+			if (array_key_exists('radio1_two_chan', $this->request->data)) {
+				$dual_radio['radio1_two_chan'] 	= $this->request->data['radio1_two_chan'];
+			}
+
+			if (array_key_exists('radio1_five_chan', $this->request->data)) {
+				$dual_radio['radio1_five_chan'] 	= $this->request->data['radio1_five_chan'];
+			}
+		}
+
+		$n      = ClassRegistry::init('Node');
+		$n->create();
+		$n->save($dual_radio);
 	}
 
 }
