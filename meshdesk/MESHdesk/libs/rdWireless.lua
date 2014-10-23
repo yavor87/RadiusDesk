@@ -81,9 +81,11 @@ function rdWireless.__newWireless(self)
 		os.execute("wifi detect >> "..self.config)
 	end
 	os.execute("wifi detect >> "..self.config)
-	os.execute("uci delete wireless.@wifi-iface[0]")
 	--This is if we have two radios!
 	os.execute("uci delete wireless.@wifi-iface[1]")
+	os.execute("uci commit wireless")
+
+	os.execute("uci delete wireless.@wifi-iface[0]")
 	os.execute("uci commit wireless")
 end
 
