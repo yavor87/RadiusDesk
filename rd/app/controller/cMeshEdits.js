@@ -149,6 +149,20 @@ Ext.define('Rd.controller.cMeshEdits', {
 			'winMeshEditNode cmbHardwareOptions': {
                 change: me.cmbHardwareOptionsChange
             },
+			//Dual RADIO Choices
+			'#chkRadio0Enable'	: {
+				change	: me.chkRadioEnableChange
+			},
+			'#chkRadio1Enable' : {
+				change	: me.chkRadioEnableChange
+			},
+			'#chkRadio0Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+			'#chkRadio1Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+
 			//VOIP Choices
 			'#chkSip'	: {
 				change	: me.chkSipChange
@@ -844,6 +858,47 @@ Ext.define('Rd.controller.cMeshEdits', {
             failure: Ext.ux.formFail
         });
     },
+
+	//___ Dual RADIO _____
+	chkRadioEnableChange: function(chk){
+		var me 		= this;
+		var fs    	= chk.up('fieldset');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',fs);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+	},
+	chkRadioMeshChange: function(chk){
+		var me 		= this;
+		var fs    	= chk.up('fieldset');
+		var t_band	= fs.down('#radio24');
+		var n_t		= fs.down('#numRadioTwoChan');
+		var n_v		= fs.down('#numRadioFiveChan');
+
+		if(chk.getValue() == false){
+			if(t_band.getValue()){	//2.4 selected... show it
+				n_t.setVisible(true);
+				n_t.setDisabled(false);
+				n_v.setVisible(false);
+				n_v.setDisabled(true);
+			}else{
+				n_t.setVisible(false);
+				n_t.setDisabled(true);
+				n_v.setVisible(true);
+				n_v.setDisabled(false);
+			}
+		}else{
+			//hide and disable both
+			n_t.setVisible(false);
+			n_t.setDisabled(true);
+			n_v.setVisible(false);
+			n_v.setDisabled(true);
+		}		
+	},
+
 	//____ VOIP _____
 	chkSipChange: function(chk){
 		var me 		= this;
