@@ -1633,7 +1633,7 @@ CREATE TABLE `node_settings` (
   `eth_br_with` int(11) NOT NULL DEFAULT '0',
   `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1642,7 +1642,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0);
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0),(17,40,'admin',100,1,6,44,60,300,'2014-10-23 05:44:19','2014-10-23 05:44:19','',0,0,0);
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1746,22 +1746,20 @@ CREATE TABLE `nodes` (
   `photo_file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `r0_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `r0_mesh` tinyint(1) NOT NULL DEFAULT '1',
-  `r0_entry` tinyint(1) NOT NULL DEFAULT '1',
-  `r0_two` tinyint(1) NOT NULL DEFAULT '1',
-  `r0_five` tinyint(1) NOT NULL DEFAULT '0',
-  `r0_two_chan` int(4) NOT NULL DEFAULT '1',
-  `r0_five_chan` int(4) NOT NULL DEFAULT '1',
-  `r1_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `r1_mesh` tinyint(1) NOT NULL DEFAULT '1',
-  `r1_entry` tinyint(1) NOT NULL DEFAULT '1',
-  `r1_two` tinyint(1) NOT NULL DEFAULT '0',
-  `r1_five` tinyint(1) NOT NULL DEFAULT '1',
-  `r1_two_chan` int(4) NOT NULL DEFAULT '1',
-  `r1_five_chan` int(4) NOT NULL DEFAULT '44',
+  `radio0_enable` tinyint(1) NOT NULL DEFAULT '1',
+  `radio0_mesh` tinyint(1) NOT NULL DEFAULT '1',
+  `radio0_entry` tinyint(1) NOT NULL DEFAULT '1',
+  `radio0_band` tinyint(3) NOT NULL DEFAULT '24',
+  `radio0_two_chan` int(4) NOT NULL DEFAULT '1',
+  `radio0_five_chan` int(4) NOT NULL DEFAULT '44',
+  `radio1_enable` tinyint(1) NOT NULL DEFAULT '1',
+  `radio1_mesh` tinyint(1) NOT NULL DEFAULT '1',
+  `radio1_entry` tinyint(1) NOT NULL DEFAULT '1',
+  `radio1_band` tinyint(3) NOT NULL DEFAULT '5',
+  `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
+  `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1770,7 +1768,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (6,35,'Phone-2','Phone-2','A8-40-41-13-66-FF','mp2_phone',100,'10.5.5.1','2014-10-18 11:56:57',0,NULL,NULL,'logo.jpg','2014-10-18 10:09:19','2014-10-18 11:56:57',1,1,1,1,0,1,1,1,1,1,0,1,1,44),(7,35,'Phone-1','Phone-1','A8-40-41-13-66-FB','mp2_phone',100,'10.5.5.2','2014-10-18 11:56:57',0,NULL,NULL,'logo.jpg','2014-10-18 10:40:57','2014-10-18 11:56:57',1,1,1,1,0,1,1,1,1,1,0,1,1,44),(8,35,'Phone-3','Phone-3','A8-40-41-13-65-5B','mp2_phone',100,'10.5.5.3','2014-10-18 11:56:57',0,NULL,NULL,'logo.jpg','2014-10-18 10:50:52','2014-10-18 11:56:57',1,1,1,1,0,1,1,1,1,1,0,1,1,44);
+INSERT INTO `nodes` VALUES (10,40,'t','t','aa-bb-bb-bb-bb-bb','tplink_n600',100,NULL,NULL,0,NULL,NULL,'logo.jpg','2014-10-23 04:46:46','2014-10-23 09:43:19',1,1,1,24,1,44,1,1,0,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2729,4 +2727,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-10-22 20:30:37
+-- Dump completed on 2014-10-23  9:44:59
