@@ -163,7 +163,10 @@ class VoucherGeneratorComponent extends Component {
 			$n				= rand(0,$noun_count);
 			$v_value 	    = $this->adjectives[$a].$this->nouns[$n];
 			//Test if not already taken
-			if(!in_array("v_value", $this->voucherNames)){
+			if(
+				(!in_array("v_value", $this->voucherNames))&&
+				(strlen($v_value)<=16) //Coova does not like passwords longer than 16 Characters
+			){
 				$duplicate_flag = false; //Break the loop - we ar unique;
 				array_push($this->voucherNames, $v_value);
 			}
