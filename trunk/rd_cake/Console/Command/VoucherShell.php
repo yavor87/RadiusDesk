@@ -27,7 +27,11 @@ class VoucherShell extends AppShell {
         $this->out("<info>Voucher => $name</info>");
 
         //Test for depleted
-        $time_left_from_login = $this->Usage->time_left_from_login($name);
+		$ret_val 				= $this->Usage->time_left_from_login($name);
+
+		$time_left_from_login 	= $ret_val[0];
+		$time_avail 			= $ret_val[1];
+
         if($time_left_from_login){
             if($time_left_from_login == 'depleted'){
                 //Mark time usage as 100% and voucher as depleted
@@ -38,9 +42,25 @@ class VoucherShell extends AppShell {
                     $d['Voucher']['precede']        = '';
                     $d['Voucher']['perc_time_used'] = 100;
                     $d['Voucher']['status']         = 'depleted';
+					if($time_avail){
+						$d['Voucher']['time_cap']       = $time_avail;
+						$d['Voucher']['time_used']      = $time_avail; //Make them equal
+					}
                     $this->Voucher->save($d);
                 }
-            }
+            }else{
+				if($time_avail){
+					$time_used 	= $time_avail - $time_left_from_login;
+					$q_r 		= $this->Voucher->findByName($name);
+				    if($q_r){
+				        $this->Voucher->id              = $q_r['Voucher']['id'];
+				        $d['Voucher']['id']             = $q_r['Voucher']['id'];
+						$d['Voucher']['time_cap']       = $time_avail;
+						$d['Voucher']['time_used']      = $time_used; //Make them equal
+				        $this->Voucher->save($d);
+				    }
+				}
+			}
         }
 
         //Test for expired

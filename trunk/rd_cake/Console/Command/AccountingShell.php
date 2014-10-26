@@ -38,7 +38,10 @@ class AccountingShell extends AppShell {
                         $time_left = $counters['time']['value'] - $counters['time']['usage'];
 
                         //Compare with days_from start time left
-                        $time_left_from_login = $this->Usage->time_left_from_login($username);
+                        $ret_val 				= $this->Usage->time_left_from_login($username);
+						$time_left_from_login 	= $ret_val[0];
+						$time_avail 			= $ret_val[1];
+
                         if($time_left_from_login){
                             if($time_left_from_login == 'depleted'){
                                 //Mark time usage as 100% and voucher as depleted
@@ -49,6 +52,10 @@ class AccountingShell extends AppShell {
                                     $d['Voucher']['precede']        = '';
                                     $d['Voucher']['perc_time_used'] = 100;
                                     $d['Voucher']['status']         = 'depleted';
+									if($time_avail){
+										$d['Voucher']['time_cap']       = $time_avail;
+										$d['Voucher']['time_used']      = $time_avail; //Make them equal
+									}
                                     $this->Voucher->save($d);
                                 }
                                 $not_depleted = false;
@@ -92,6 +99,10 @@ class AccountingShell extends AppShell {
                                 $d['Voucher']['precede']        = '';
                                 $d['Voucher']['perc_time_used'] = $perc_time_used;
                                 $d['Voucher']['status']         = 'used';
+								if($time_avail){
+									$d['Voucher']['time_cap']       = $time_avail;
+									$d['Voucher']['time_used']      = $time_left; //Make them equal
+								}
                                 $this->Voucher->save($d);
                             }
                         }
@@ -99,7 +110,15 @@ class AccountingShell extends AppShell {
                 }else{
 
                     //If there are not a time based counter we at least want to see if there's a countdown from login attribute..
+					$ret_val 				= $this->Usage->time_left_from_login($username);
+					$time_left_from_login 	= $ret_val[0];
+					$time_avail 			= $ret_val[1];
+
+
+					//FIXME => We can actually skip the next step since we can get the values from the first step
                     $perc_used_from_login = $this->Usage->perc_used_from_login($username);
+					//END FIXME
+
                     print_r($perc_used_from_login);
                     if($perc_used_from_login){
                         if($perc_used_from_login == 'depleted'){
@@ -111,6 +130,10 @@ class AccountingShell extends AppShell {
                                 $d['Voucher']['precede']        = '';
                                 $d['Voucher']['perc_time_used'] = 100;
                                 $d['Voucher']['status']         = 'depleted';
+								if($time_avail){
+									$d['Voucher']['time_cap']       = $time_avail;
+									$d['Voucher']['time_used']      = $time_avail; //Make them equal
+								}
                                 $this->Voucher->save($d);
                             }
 
@@ -122,6 +145,11 @@ class AccountingShell extends AppShell {
                                 $d['Voucher']['precede']        = '';
                                 $d['Voucher']['perc_time_used'] = $perc_used_from_login;
                                 $d['Voucher']['status']         = 'used';
+								if($time_avail){
+									$time_used 	= $time_avail - $time_left_from_login;
+									$d['Voucher']['time_cap']       = $time_avail;
+									$d['Voucher']['time_used']      = $time_used; //Make them equal
+								}
                                 $this->Voucher->save($d);
                             }
                         }
