@@ -145,7 +145,8 @@ class UsageTask extends Shell {
     }
 
     public function time_left_from_login($username){
-        $time_left =false;
+        $time_left  = false;
+		$time_avail = false;
          //See if it has an exprire from first login value
         $q_r = $this->Radcheck->find('first',array('conditions' => array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Voucher')));
         if($q_r){
@@ -163,7 +164,7 @@ class UsageTask extends Shell {
                 $time_left = 'depleted';  
             }
         }
-        return $time_left;
+        return array($time_left,$time_avail);
     }
 
     public function perc_used_from_login($username){
