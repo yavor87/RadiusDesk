@@ -1026,7 +1026,7 @@ class VouchersController extends AppController {
 				$rc->id = null;
 
 				//profile
-				$data = array('username' => $mac,'attribute' => 'Rd-Profile', 'op' => ':=', 'value' => $profile);
+				$data = array('username' => $mac,'attribute' => 'User-Profile', 'op' => ':=', 'value' => $profile);
 				$rc->create();
 				$rc->save($data);
 				$rc->id = null;
