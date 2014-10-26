@@ -105,7 +105,7 @@ class RadacctsController extends AppController {
 		}else{
 			$this->set(array(
                 'success'   => false,
-                'message'   => array('message' => "Require a valud MAC address and username in the query string"),
+                'message'   => array('message' => "Require a valid MAC address and username in the query string"),
                 '_serialize' => array('success','message')
             ));
 		}

@@ -504,6 +504,9 @@ class VouchersController extends AppController {
                 //"profile_id":7,"realm_id":34,"activate_on_login":"activate_on_login","days_valid":"2","never_expire":false,"expire":"5\/31\/2015"}
                 $items['profile_id']    = intval($q_r['Voucher']['profile_id']);
                 $items['realm_id']      = intval($q_r['Voucher']['realm_id']);
+				$items['profile_id']    = intval($q_r['Voucher']['profile_id']);
+                $items['realm']         = $q_r['Voucher']['realm_id'];
+				$items['profile']       = $q_r['Voucher']['realm_id'];
                 $items['extra_name']    = $q_r['Voucher']['extra_name'];
                 $items['extra_value']   = $q_r['Voucher']['extra_value'];
 
