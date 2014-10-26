@@ -271,17 +271,14 @@ class Voucher extends AppModel {
                 
             }
         }
+		//Auto-populate the time_cap field with the value for time_valid
+		if(array_key_exists('time_valid', $this->data['Voucher'])){
+			$expire		= $this->data['Voucher']['time_valid'];
+			$pieces     = explode("-", $expire);
+            $time_avail = ($pieces[0] * 86400)+($pieces[1] * 3600)+($pieces[2] * 60)+($pieces[3]);
+			$this->data['Voucher']['time_cap'] = $time_avail;
+		}
+
+
     }
-
-	function _generateVoucher(){
-		//We will take two random words from the pool and then sandwitch them with random digits
-		$pool_count = (count($this->wordPool)-1);
-		$d1 		= rand (1,9);
-		$d2 		= rand (1,9);
-		$w1			= rand(0,$pool_count);
-		$w2			= rand(0,$pool_count);
-		$v_value 	= $this->wordPool[$w1].$d1.$this->wordPool[$w2].$d2;
-		return $v_value;
-	}
-
 }
