@@ -66,7 +66,7 @@ class RadacctsController extends AppController {
 				}
 
 				if($type == 'voucher'){
-					$this->Voucher = ClassRegistry::init('Radcheck');
+					$this->Voucher = ClassRegistry::init('Voucher');
 					$this->Voucher->contain();
 					$q_v 		= $this->Voucher->find('first',
 						array('conditions' => array('Voucher.name' => $username))
