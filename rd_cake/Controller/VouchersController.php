@@ -945,11 +945,11 @@ class VouchersController extends AppController {
 	public function voucher_device_index(){
 
         //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id   	= $user['id'];
+     //   $user = $this->_ap_right_check();
+     //   if(!$user){
+    //        return;
+    //    }
+    //    $user_id   	= $user['id'];
         $fail_flag 	= false;
 		$items		= array();
 		$username   = $this->request->query['username'];
