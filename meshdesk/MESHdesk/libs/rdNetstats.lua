@@ -65,35 +65,51 @@ end
 
 function rdNetstats.__mapEthWithMeshMac(self)
 
-	local m 	= {}
-	local mesh  = 'mesh0'
+	--This part is used for us so we can have a mapping between eth0 (the 'id' of the Node)
+	--And the various mesh interfaces (mesh0... mesh5)-----
+	--We have to go though each one since anit can have mesh1 running but not mesh0 , or both can be on...
+
+	local m 	= {};
 
 	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
 	io.input("/sys/class/net/eth0/address")                                                                      
 	m['eth0']       = io.read("*line")
-	
-	local file_to_check = "/sys/class/net/" .. mesh .. "/address"
 
-	--Check if file exists
-	local f=io.open(file_to_check,"r")                                                   
-    if f~=nil then 
-		io.close(f)
-	else
-		m['mesh0'] = ""
-		return self.json.encode(m)
+	--Our loopy-de-loop
+	local i 	= 0;
+	while i  <= 2 do
+
+		local mesh  = 'mesh'..i
+		local file_to_check = "/sys/class/net/" .. mesh .. "/address"
+
+		--Check if file exists
+		local f=io.open(file_to_check,"r")                                                   
+		if f~=nil then --This file exists
+			io.close(f)
+
+			--Read the file now we know it exists
+			io.input(file_to_check)
+			local mac 	= io.read("*line")
+			m[mesh] 	= mac
+
+		else
+
+			m[mesh] = false	--If there are no
+
+		end
+
+		--Increment the loop	
+		i = i + 1;
+
 	end
 
 	--Also record if this node is a gateway or not
 	m['gateway'] = 0
-    local f=io.open('/tmp/gw',"r")
-    if f~=nil then
+	local f=io.open('/tmp/gw',"r")
+	if f~=nil then
   		m['gateway'] = 1
 	end
 
-	--Read the file now we know it exists
-	io.input(file_to_check)
-	local mac 	= io.read("*line")
-	m['mesh0'] 	= mac
 	return self.json.encode(m)
 end
 

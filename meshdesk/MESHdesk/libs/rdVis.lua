@@ -100,10 +100,20 @@ function rdVis.__buildMacMap(self)
         for i, row in ipairs(rows) do
             local node, value 	= unpack(row)
             local j_val 		= self.json.decode(value)
-			local m				= j_val.mesh0
 			local dashes, count = string.gsub(j_val.eth0, ":", "-")
-	    	dashes 				= string.upper(dashes)
-			mac_lookup[m]		= { eth0 = dashes, gateway = j_val.gateway }	
+			dashes 				= string.upper(dashes)
+			--Create a mini loop for mesh0 -> mesh2 (3 wifi cards) and check which are populated
+			--{ "96:28:50:73:0d:06", "{\"mesh1\":false,\"gateway\":1,\"mesh2\":false,\"mesh0\":\"ac:86:74:10:03:0a\",\"eth0\":\"ac:86:74:10:03:08\"}\x0a" },
+
+			local if_start = 0
+			while if_start  <= 2 do
+				local if_name = 'mesh'..if_start
+				local m		  = j_val[if_name]
+				if(m ~= false)then
+					mac_lookup[m]		= { eth0 = dashes, gateway = j_val.gateway }
+				end
+				if_start = if_start + 1
+			end		
         end
     end
 	self.mac_map = mac_lookup
