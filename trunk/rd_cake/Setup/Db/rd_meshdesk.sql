@@ -102,6 +102,7 @@ CREATE TABLE `node_neighbors` (
   `gateway`             enum('yes','no') DEFAULT 'no',
   `neighbor_id`     	int(11) DEFAULT NULL,
   `metric`              decimal(6,4) NOT NULL,
+  `hwmode` 				char(4) DEFAULT 'g',
   `created`             datetime NOT NULL,
   `modified`            datetime NOT NULL,
   PRIMARY KEY (`id`)
