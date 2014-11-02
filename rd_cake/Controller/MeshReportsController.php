@@ -1176,6 +1176,10 @@ class MeshReportsController extends AppController {
 						$neighbor_mac = $n['eth0'];
 						$neighbor_id  = false;
 						$metric		  = $n['metric'];
+						$hwmode 	  = 'g';
+						if(array_key_exists('hwmode',$n)){
+							$hwmode		  = $n['hwmode'];
+						}
 						if(!array_key_exists($neighbor_mac,$mac_lookup)){
 							//Find the ID of the neighbor
 							$q_n = $this->Node->findByMac($neighbor_mac);
@@ -1202,6 +1206,7 @@ class MeshReportsController extends AppController {
 							$d['neighbor_id']	= $neighbor_id;
 							$d['metric']	    = $metric;
 							$d['gateway']	    = $gw_val;
+							$d['hwmode']		= $hwmode;
 							$this->NodeNeighbor->saveAll($d);
 
 						}
