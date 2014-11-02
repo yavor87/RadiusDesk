@@ -13,7 +13,9 @@ class MeshReportsController extends AppController {
 	private $l_green 	= '#4bd765';
 	private $d_green 	= "#117c25";
 	private	$green	 	= '#01823d';	//Green until dead time then grey
+	private	$blue	 	= '#0a3cf6';	//Blue until dead time then grey
 	private	$grey	 	= '#505351';	//Green until dead time then grey
+	private	$blue_grey	= '#adbcf6';	//Blue until dead time then blue_grey
 	private $yellow		= '#f8d908'; 
 	private $thickness  = 9;
 	private $gw_size	= 20;
@@ -182,20 +184,33 @@ class MeshReportsController extends AppController {
 					$now	= time();
 					$weight	= round((1/$metric*$this->thickness),2);
 
-					//What color the line must be
+
 					$green_cut	= $now - $dead_after;
 					$grey_cut	= $now - $cut_off;
 					
 					if($last >= $green_cut){
 						$c = $this->green;
+
+						//5G we make blue
+						if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
+							$c = $this->blue;
+						}
+
 						//How clear the line must be
 						$green_range 	= $now - $green_cut;
 						$green_percent	= ($last- $green_cut)/$green_range;
 						$o_val			= ($green_percent * 0.5)+0.5;
 						$o_val			= round($o_val,2);	
 					}elseif(($last >= $grey_cut)&&($last <= $green_cut)){
+
 						//How clear the line must be
 						$c				= $this->grey; //Default
+
+						//5G we make blue
+						if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
+							$c = $this->blue_grey;
+						}
+
 						$grey_range 	= $green_cut - $grey_cut;
 						$grey_percent	= ($last- $grey_cut)/$grey_range;
 						$o_val			= ($grey_percent * 0.5)+0.5;
@@ -310,8 +325,6 @@ class MeshReportsController extends AppController {
 
 		//Some defaults for the spiderweb
 		$thickness 	= 9;	//The bigger the metric; ther thinner this line
-		$green		= '#01823d';	//Green until dead time then grey
-		$grey		= '#505351';	//Green until dead time then grey
 		$opacity	= 1;	//The older a line is the more opacity it will have (tend to zero)
 		$cut_off	= 3 * $dead_after;
 
@@ -353,7 +366,12 @@ class MeshReportsController extends AppController {
 						$grey_cut	= $now - $cut_off;
 						
 						if($last >= $green_cut){
-							$c = $green;
+
+							$c = $this->green;
+							if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
+								$c = $this->blue;
+							}
+
 							//How clear the line must be
 							$green_range 	= $now - $green_cut;
 							$green_percent	= ($last- $green_cut)/$green_range;
@@ -361,7 +379,10 @@ class MeshReportsController extends AppController {
 							$o_val			= round($o_val,2);	
 						}else{
 							//How clear the line must be
-							$c			= $grey; //Default
+							$c 				= $this->grey;
+							if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
+								$c = $this->blue_grey;
+							}
 							$grey_range 	= $green_cut - $grey_cut;
 							$grey_percent	= ($last- $grey_cut)/$grey_range;
 							$o_val			= ($grey_percent * 0.5)+0.5;
