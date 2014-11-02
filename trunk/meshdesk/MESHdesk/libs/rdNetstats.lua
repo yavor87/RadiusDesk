@@ -18,6 +18,7 @@ function rdNetstats:rdNetstats()
 	self.external	= rdExternal()
 	self.debug		= true
 	self.x			= uci.cursor(nil,'/var/state')
+	
 
 end
         
@@ -43,11 +44,11 @@ function rdNetstats:getEthernet()
 				end
 			end	
 		end)
-
-
 end
 
 function rdNetstats:mapEthWithMeshMac()
+	--Prime the object with easy lookups
+	self:_createWirelessLookup()
 	return self:__mapEthWithMeshMac()
 end
 
@@ -92,6 +93,11 @@ function rdNetstats.__mapEthWithMeshMac(self)
 			local mac 	= io.read("*line")
 			m[mesh] 	= mac
 
+			--Also record the hwmode of this interface (we need this to show different coulors on the spiderweb)
+			local device 		= self[mesh]['device'];
+			local hwmode 		= self[device]['hwmode'];
+			m['hwmode_'..mesh]  = hwmode;
+
 		else
 
 			m[mesh] = false	--If there are no
@@ -105,6 +111,7 @@ function rdNetstats.__mapEthWithMeshMac(self)
 
 	--Also record if this node is a gateway or not
 	m['gateway'] = 0
+
 	local f=io.open('/tmp/gw',"r")
 	if f~=nil then
   		m['gateway'] = 1
@@ -226,4 +233,33 @@ function rdNetstats._getSsidForInterface(self,interface)
 			end
  		end)
 	return retval
+end
+
+function rdNetstats._createWirelessLookup(self)
+	--This will create a lookup on the object to determine the hardware mode a wifi-device has
+	--So we only call this once
+ 
+	local default_val = 'g' --We specify a 'sane' default of g	
+	self.x.foreach('wireless','wifi-device', 
+	function(a)
+		local dev_name 	= a['.name'];
+		local hwmode 	= a['hwmode'];
+		if(hwmode == nil)then
+			hwmode = default_val;
+		end
+		self[dev_name] = {}; --empty table
+		self[dev_name]['hwmode'] = hwmode;
+	end)
+
+	self.x.foreach('wireless','wifi-iface', 
+		function(a)
+			--print(a['.name'].." "..interface)
+			--Check the name--
+			local ifname = a['ifname'];
+			local device = a['device'];
+			if(ifname ~= nil)then
+				self[ifname] = a;
+				--print(self[ifname]['device']);	
+			end
+	end)
 end

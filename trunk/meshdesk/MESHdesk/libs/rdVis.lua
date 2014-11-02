@@ -67,7 +67,11 @@ function rdVis.__getVis(self)
 					for j, n in ipairs(row.neighbors) do
 						local n_lookup= self.mac_map[n.neighbor]
 						if(n_lookup)then
-							table.insert(fb_wip.neighbors, {eth0 = n_lookup.eth0, metric = n.metric})
+							local hwmode = false
+							if(n_lookup.hwmode ~= nil)then
+								hwmode = n_lookup.hwmode
+							end
+							table.insert(fb_wip.neighbors, {eth0 = n_lookup.eth0, metric = n.metric,hwmode = hwmode})
 							--print(n.neighbor);
 							--print(n.metric);
 						end
@@ -110,7 +114,8 @@ function rdVis.__buildMacMap(self)
 				local if_name = 'mesh'..if_start
 				local m		  = j_val[if_name]
 				if(m ~= false)then
-					mac_lookup[m]		= { eth0 = dashes, gateway = j_val.gateway }
+					local hwmode  		= j_val['hwmode_'..if_name]
+					mac_lookup[m]		= { eth0 = dashes, gateway = j_val.gateway, hwmode = hwmode}
 				end
 				if_start = if_start + 1
 			end		
