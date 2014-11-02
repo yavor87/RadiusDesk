@@ -13,7 +13,7 @@ class MeshReportsController extends AppController {
 	private $l_green 	= '#4bd765';
 	private $d_green 	= "#117c25";
 	private	$green	 	= '#01823d';	//Green until dead time then grey
-	private	$blue	 	= '#0a3cf6';	//Blue until dead time then grey
+	private	$dark_blue	= '#0a3cf6';	//Blue until dead time then grey
 	private	$grey	 	= '#505351';	//Green until dead time then grey
 	private	$blue_grey	= '#adbcf6';	//Blue until dead time then blue_grey
 	private $yellow		= '#f8d908'; 
@@ -193,7 +193,7 @@ class MeshReportsController extends AppController {
 
 						//5G we make blue
 						if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
-							$c = $this->blue;
+							$c = $this->dark_blue;
 						}
 
 						//How clear the line must be
@@ -369,7 +369,7 @@ class MeshReportsController extends AppController {
 
 							$c = $this->green;
 							if(($n['hwmode'] == '11a')||($n['hwmode'] == '11na')){
-								$c = $this->blue;
+								$c = $this->dark_blue;
 							}
 
 							//How clear the line must be
