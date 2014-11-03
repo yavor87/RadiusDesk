@@ -81,7 +81,7 @@ config hardware 'unifilrap'
 config hardware 'tplink_n600'
 	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
 	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
-	option wifi_led 'ath9k-phy0'
+	option wifi_led 'tp-link:green:wlan2g'
 
 config hardware 'alix3d2'
 	option morse_led '/sys/class/leds/alix:1/brightness'
