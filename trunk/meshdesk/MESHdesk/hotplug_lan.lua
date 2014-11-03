@@ -61,10 +61,10 @@ function interface_switch()
 		if((act == 'ifdown')and(int == 'lan'))then
 			lan_idown_trigger();
 		end
-		if((act == 'ifup')and(int == 'client'))then
+		if((act == 'ifup')and(string.find(int,"client")))then
 			wifi_up_trigger();
 		end
-		if((act == 'ifdown')and(int == 'client'))then
+		if((act == 'ifdown')and(string.find(int,"client")))then
 			wifi_down_trigger();
 		end
 	end

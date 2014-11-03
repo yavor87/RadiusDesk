@@ -13,3 +13,9 @@ config interface 'lan'
 config interface 'client'
 	option proto 'dhcp'
 
+config interface 'client_0'
+  	option proto 'dhcp' 
+        
+config interface 'client_1'
+  	option proto 'dhcp' 
+
