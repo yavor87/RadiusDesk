@@ -31,9 +31,17 @@ function rdWireless:newWireless()
 	self:__newWireless()
 end
 
-function rdWireless:connectClient()
+function rdWireless:getRadioCount()
+	self:log("==Getting the radio count==")
+	return self:__getRadioCount()
+end
+
+function rdWireless:connectClient(radio_number)
 	self:log("==Connect as Client to MESHdesk mesh==")
-	self:__connectClient()
+	if(radio_number == nil)then
+		radio_number = 0
+	end
+	self:__connectClient(radio_number)
 end
 
 function rdWireless:configureFromJson(file)
@@ -80,38 +88,61 @@ function rdWireless.__newWireless(self)
 		self:log("Generating a new "..self.config)
 		os.execute("wifi detect >> "..self.config)
 	end
-	os.execute("wifi detect >> "..self.config)
-	--This is if we have two radios!
-	os.execute("uci delete wireless.@wifi-iface[1]")
-	os.execute("uci commit wireless")
 
+	--This is if we have two radios!
+	local radio_count = self:__getRadioCount()
+
+	if(radio_count == 2)then
+		os.execute("uci delete wireless.@wifi-iface[1]")
+		os.execute("uci commit wireless")
+	end
+
+	--We should have at least one
 	os.execute("uci delete wireless.@wifi-iface[0]")
 	os.execute("uci commit wireless")
 end
 
 
-function rdWireless.__connectClient(self)
+function rdWireless.__connectClient(self,radio_number)
+
+	--We can set up a client connection on any of the available radios
 	local client_settings = self.x.get_all('meshdesk','wifi_client')
 	if(client_settings ~= nil)then
 		self:log("Starting clean")
 		self:__newWireless()
-	
-		local device 	= client_settings.device
-		local name	= client_settings['.name']
+
+		device			= 'radio'..radio_number
+
+		local name		= client_settings['.name'].."_"..radio_number
 		self:log("Enabling radio on "..device)
 		self.x.set('wireless',device,'disabled',0)
 		self:log("Add wifi-iface "..name)
 		self.x.set('wireless',name,'wifi-iface')
-		for k, v in pairs(client_settings)do                                  
+		for k, v in pairs(client_settings)do                        
 			if(not(string.find(k,'^%.')))then -- we are not interested in the hidden values.
-		        	self.x.set('wireless',name,k,v)                                                              
+		        	self.x.set('wireless',name,k,v)                                                             
 		      	end                                                                             
-		end  
+		end
+
+		-- We removed network and device from the meshdesk config file in order to support multiple radios --
+		self.x.set('wireless',	name,'ifname',name..'.'..radio_number)	--give it a unique interface name
+		self.x.set('wireless',	name,'device',device)					--device typically radio0 or radio1
+		self.x.set('wireless',	name,'network','client_'..radio_number) --give it a unique network name
 		self.x.commit('wireless')
+
 		self:log("Reload the network and restart wifi")
 		os.execute("/etc/init.d/network reload")
 		os.execute("wifi")
 	end
+end
+
+function rdWireless.__getRadioCount(self)
+	local radio_count = 0 --begin empty
+	self.x.foreach('wireless','wifi-device', 
+	function(a)
+		radio_count = radio_count +1
+	end)
+	return radio_count
 end
 
 function rdWireless.__configureFromJson(self,json_file)

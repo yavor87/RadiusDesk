@@ -39,6 +39,10 @@ l			            = rdLogger()
 ext 			        = rdExternal()
 alfred                  = rdAlfred()
 
+--Keep track of the radios
+current_radio			= 0
+radio_count				= 1
+
 
 --======================================
 ---- Some general functions ------------
@@ -121,7 +125,9 @@ function wait_for_lan()
 	require("rdWireless")
 	
 	local wireless = rdWireless()
-	wireless:newWireless()	
+	wireless:newWireless()
+	--After this we can fetch a count of the radios
+	radio_count = wireless:getRadioCount()
 	
     require("rdNetwork")
 	
@@ -164,7 +170,8 @@ function wait_for_lan()
 		sleep(10)
 		try_settings_through_lan()
 	else
-		wait_for_wifi()		
+		--wait_for_wifi(0)
+		try_wifi(0)		
 	end
 	
 end
@@ -204,7 +211,8 @@ function try_settings_through_lan()
 	end
 	if(lan_config_fail)then	
 		log("Could not fetch settings through LAN")
-		wait_for_wifi()
+		--wait_for_wifi(0) --We try the first radio (0)
+		try_wifi(0)
 	else
 		--flash D--
 		os.execute("/etc/MESHdesk/main_led.lua start d")
@@ -212,15 +220,29 @@ function try_settings_through_lan()
 	end
 end
 
-function wait_for_wifi()
+function try_wifi(radio)
+	local next_radio = wait_for_wifi(radio)
+	if(next_radio > 0)then
+		wait_for_wifi(next_radio)
+	end
+end
+
+
+function wait_for_wifi(radio_number)
+
+	if(radio_number == nil)then
+		radio_number = 0
+	end
+
 	-- WiFi we flash "C"
 	log("Try settings through WiFi network")
 	os.execute("/etc/MESHdesk/main_led.lua start c")
 	
 	-- Start the WiF interface
 	require("rdWireless")
-	local w = rdWireless()                                            
-	w:connectClient()
+	local w = rdWireless()
+                             
+	w:connectClient(radio_number)
 	
 	local start_time=os.time()
 	local loop=true
@@ -236,10 +258,22 @@ function wait_for_wifi()
 		end
 		
 		local time_diff = os.difftime(os.time(), start_time)
-		if(time_diff >= lan_timeout)then
-			print("WiFi is not coming up. Try the previous settings")
-			log("WiFi is not coming up. Try the previous settings")
-			loop=false --This will break the loop
+		if(time_diff >= wifi_timeout)then
+			--print("WiFi is not coming up. Try the previous settings")
+			--log("WiFi is not coming up. Try the previous settings")
+			--loop=false --This will break the loop
+
+			if(radio_count > (current_radio+1))then
+				print("WiFi is not coming up on radio "..current_radio.."Try next radio")
+				local next_radio = current_radio+1
+				return(next_radio)
+			else
+				print("Failed to get settings through Wi-Fi see if older ones exists")
+				log("Failed to get settings through Wi-Fi see if older ones exists")
+				check_for_previous_settings()
+			end
+
+
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
 		end
@@ -289,9 +323,17 @@ function try_settings_through_wifi()
 		end
 	end
 	if(wifi_config_fail)then	
-		print("Failed to get settings through Wi-Fi see if older ones exists")
-		log("Failed to get settings through Wi-Fi see if older ones exists")
-		check_for_previous_settings()
+		print("The radio count is "..radio_count.." The current radio is "..current_radio)
+		--Here we need to specify the radio to try eg 0,1,2 etc to try all avaible radios of the device--
+		--If we then exhausted all the radios on the device we use the previous settings--
+		if(radio_count > (current_radio+1))then
+			current_radio = current_radio+1
+			wait_for_wifi(current_radio)
+		else
+			print("Failed to get settings through Wi-Fi see if older ones exists")
+		    log("Failed to get settings through Wi-Fi see if older ones exists")
+			check_for_previous_settings()
+		end
 	else
 		--flash D--
 		os.execute("/etc/MESHdesk/main_led.lua start d")
