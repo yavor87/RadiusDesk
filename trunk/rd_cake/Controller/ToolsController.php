@@ -24,12 +24,16 @@ class ToolsController extends AppController {
         $items      = array();
 
         foreach($q_r as $i){
+
+			$mac 	= $i['Radacct']['callingstationid'];
+			$vendor	= $this->_lookup_vendor($mac);
 			array_push($items,
                 array(
 					'callingstationid'  => $i['Radacct']['callingstationid'],
 					'username'          => $i['Radacct']['username'],
 					'framedipaddress'   => $i['Radacct']['framedipaddress'],
-					'acctsessionid'		=> $i['Radacct']['acctsessionid']
+					'acctsessionid'		=> $i['Radacct']['acctsessionid'],
+					'vendor'			=> $vendor
 				)
 			);
         }
@@ -79,6 +83,46 @@ class ToolsController extends AppController {
             '_serialize' => array('success','data')
         ));
 	}
+
+	 private function _lookup_vendor($mac){
+        $vendor_file = APP.DS."Setup".DS."Scripts".DS."mac_lookup.txt";
+        $this->out("<info>Looking up vendor from file: $vendor_file </info>");
+
+        //Convert the MAC to be in the same format as the file 
+        $mac    = strtoupper($mac);
+        $pieces = explode("-", $mac);
+
+        $big_match      = $pieces[0].":".$pieces[1].":".$pieces[2].":".$pieces[3].":".$pieces[4];
+        $small_match    = $pieces[0].":".$pieces[1].":".$pieces[2];
+        $lines          = file($vendor_file);
+
+        $big_match_found = false;
+        foreach($lines as $i){
+            if(preg_match("/^$big_match/",$i)){
+                $big_match_found = true;
+                $this->out("<info>Found vendor for $mac -> $i</info>");
+                //Transform this line
+                $vendor = preg_replace("/$big_match\s?/","",$i);
+                $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                $vendor = rtrim($vendor);
+                return $vendor;   
+            }
+        }
+       
+        if(!$big_match_found){
+            foreach($lines as $i){
+                if(preg_match("/^$small_match/",$i)){
+                    $this->out("<info>Found vendor for $mac -> $i</info>");
+                    //Transform this line
+                    $vendor = preg_replace("/$small_match\s?/","",$i);
+                    $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                    $vendor = rtrim($vendor);
+                    return $vendor;
+                }
+            }
+        }
+        $vendor = "Unkown";
+    }
  
    
 }
