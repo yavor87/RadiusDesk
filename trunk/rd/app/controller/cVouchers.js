@@ -1089,14 +1089,28 @@ Ext.define('Rd.controller.cVouchers', {
             url                 : me.urlChangePassword,
             params              : extra_params,
             success             : function(form, action) {
-                win.close();
-                me.reload();
-                Ext.ux.Toaster.msg(
-                    i18n('sPassword_changed'),
-                    i18n('sPassword_changed_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
+
+				if(action.result.success == false){
+
+					Ext.ux.Toaster.msg(
+		                    'Problem encountered',
+		                    action.result.message.message,
+		                    Ext.ux.Constants.clsError,
+		                    Ext.ux.Constants.msgError
+		        	);
+
+				}else{
+
+				    win.close();
+				    me.reload();
+				    Ext.ux.Toaster.msg(
+				        i18n('sPassword_changed'),
+				        i18n('sPassword_changed_fine'),
+				        Ext.ux.Constants.clsInfo,
+				        Ext.ux.Constants.msgInfo
+				    );
+
+				}
             },
             failure             : Ext.ux.formFail
         });
