@@ -612,6 +612,8 @@ class VouchersController extends AppController {
         }
         //______ END of Realm and Profile check _____
 
+		$this->request->data['status'] = 'new'; //Make it new so it changes visibly
+
         //VERY VERY important to cascade throught to the radcheck entries
         $this->request->data['do_radcheck'] = true;
 
@@ -1091,36 +1093,60 @@ class VouchersController extends AppController {
             (isset($this->request->data['name'])) //Can also change by specifying name
             ){
 
+			$single_field = false;
+
             if(isset($this->request->data['name'])){
+				$this->{$this->modelClass}->contain();
                 $q_n = $this->{$this->modelClass}->findByName($this->request->data['name']);
                 if($q_n){
                     $this->request->data['voucher_id'] = $q_n['Voucher']['id'];
+					if($q_n['Voucher']['name'] == $q_n['Voucher']['password']){	//Test to see if it is not perhaps a single field voucher
+						$single_field = true;
+					}
                 }
-            }
-        
-            $this->request->data['id']      = $this->request->data['voucher_id'];
-            $this->{$this->modelClass}->id  = $this->request->data['voucher_id'];
-            $this->{$this->modelClass}->save($this->request->data);
+            }else{
+
+				$this->{$this->modelClass}->contain();
+                $q_n = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
+                if($q_n){
+					if($q_n['Voucher']['name'] == $q_n['Voucher']['password']){	//Test to see if it is not perhaps a single field voucher
+						$single_field = true;
+					}
+                }
+			}
+
+			//We refuse to change tha password of single field vouchers
+			if($single_field){
+				$this->set(array(
+				    'success' => false,
+					'message'	=> array('message' => 'Cannot change the password of a single field voucher'),
+				    '_serialize' => array('success','message')
+				));
+			}else{
+
+		        $this->request->data['id']      = $this->request->data['voucher_id'];
+		        $this->{$this->modelClass}->id  = $this->request->data['voucher_id'];
+		        $this->{$this->modelClass}->save($this->request->data);
 
 
-            //Get the name of this voucher
-            if(!(isset($this->request->data['name']))){
-                $this->{$this->modelClass}->contain();
-                $q_r                            = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
-                $this->request->data['name']    = $q_r['Voucher']['name'];
-            }
+		        //Get the name of this voucher
+		        if(!(isset($this->request->data['name']))){
+		            $this->{$this->modelClass}->contain();
+		            $q_r                            = $this->{$this->modelClass}->findById($this->request->data['voucher_id']);
+		            $this->request->data['name']    = $q_r['Voucher']['name'];
+		        }
 
-            if(isset($this->request->data['name'])){
-                $this->_replace_radcheck_item($this->request->data['name'],'Cleartext-Password',$this->request->data['password']);
-                $success    = true; 
-            }
+		        if(isset($this->request->data['name'])){
+		            $this->_replace_radcheck_item($this->request->data['name'],'Cleartext-Password',$this->request->data['password']);
+		            $success    = true; 
+		        }
 
+				$this->set(array(
+				    'success' => $success,
+				    '_serialize' => array('success',)
+				));
+			}
         }
-
-        $this->set(array(
-            'success' => $success,
-            '_serialize' => array('success',)
-        ));
     }
 
     public function email_voucher_details(){
