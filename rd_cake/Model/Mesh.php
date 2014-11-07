@@ -91,6 +91,7 @@ class Mesh extends AppModel {
 
     private function _determine_mesh_bssid(){
         //Get the first one:
+		Configure::load('MESHdesk'); 
         $current_value  = Configure::read('MEHSdesk.bssid');
         $reply          =   $this->find('first',array(
                             'order'         => array('Mesh.bssid DESC'))
