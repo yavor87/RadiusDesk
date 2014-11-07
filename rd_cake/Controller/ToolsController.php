@@ -86,7 +86,7 @@ class ToolsController extends AppController {
 
 	 private function _lookup_vendor($mac){
         $vendor_file = APP.DS."Setup".DS."Scripts".DS."mac_lookup.txt";
-        $this->out("<info>Looking up vendor from file: $vendor_file </info>");
+       // $this->out("<info>Looking up vendor from file: $vendor_file </info>");
 
         //Convert the MAC to be in the same format as the file 
         $mac    = strtoupper($mac);
@@ -100,7 +100,7 @@ class ToolsController extends AppController {
         foreach($lines as $i){
             if(preg_match("/^$big_match/",$i)){
                 $big_match_found = true;
-                $this->out("<info>Found vendor for $mac -> $i</info>");
+               // $this->out("<info>Found vendor for $mac -> $i</info>");
                 //Transform this line
                 $vendor = preg_replace("/$big_match\s?/","",$i);
                 $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
@@ -112,7 +112,7 @@ class ToolsController extends AppController {
         if(!$big_match_found){
             foreach($lines as $i){
                 if(preg_match("/^$small_match/",$i)){
-                    $this->out("<info>Found vendor for $mac -> $i</info>");
+                  //  $this->out("<info>Found vendor for $mac -> $i</info>");
                     //Transform this line
                     $vendor = preg_replace("/$small_match\s?/","",$i);
                     $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
