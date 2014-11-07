@@ -101,6 +101,7 @@ class Node extends AppModel {
                     }
                 }              
             }else{ //The very first entry
+				Configure::load('MESHdesk'); 
                 $ip                         = Configure::read('mesh_node.start_ip');
                 $this->data['Node']['ip']   = $ip;
             }
