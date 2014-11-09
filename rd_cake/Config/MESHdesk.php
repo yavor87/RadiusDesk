@@ -15,6 +15,11 @@ when a transaction is recorded.
 */
 
 //===== MESHdesk ======
+
+//== Client WPA2 Personal passphrase (key)
+$config['MESHdesk']['client_key']	= 'radiusdesk'; 
+
+
 //== Encryption types ==
 //Define the encryption types and if they are active or not
 $config['encryption'][0]     = array('name' => __('None'),              'id' => 'none',     'active' => true);
