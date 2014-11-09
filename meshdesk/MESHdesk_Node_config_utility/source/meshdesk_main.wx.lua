@@ -13,7 +13,7 @@ local shared_secret = 'verysecure'
 local app           = wx.wxGetApp()
 
 --Some GUI variables (global)
-local frame,tc_shared_secret,tc_timestamp,tc_eth0,tc_c_srvr,tc_firmware,choice_hw,tc_new_secret,tc_new_srvr
+local frame,tc_shared_secret,tc_timestamp,tc_eth0,tc_c_srvr,tc_c_key,tc_firmware,choice_hw,tc_new_secret,tc_new_srvr,tc_new_key
 
 --Some hardware
 local choices = {
@@ -112,6 +112,12 @@ function get_info(sock)
         fw = string.gsub(fw, "|", "\n")
         tc_firmware:SetValue(fw)
     end
+    
+    if(string.find(i, "key="))then
+        local key = string.gsub(i, "key=", "")
+        key = string.gsub(key, "|", "\n")
+        tc_c_key:SetValue(key)
+    end
 
     sock:Write("ok\n")
     open_sock_input(sock)
@@ -124,8 +130,11 @@ function set_info(sock)
     if(tc_new_srvr:GetValue() ~= '')then
         table.insert(a, 'server='..tc_new_srvr:GetValue())
     end
-     if(tc_new_secret:GetValue() ~= '')then
+    if(tc_new_secret:GetValue() ~= '')then
         table.insert(a, 'secret='..tc_new_secret:GetValue())
+    end
+    if(tc_new_key:GetValue() ~= '')then
+        table.insert(a, 'key='..tc_new_key:GetValue())
     end
     table.insert(a,'last')
     for i, v in ipairs(a) do
@@ -229,7 +238,7 @@ function build_gui()
 
 
     frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node config utility',
-        wx.wxDefaultPosition, wx.wxSize(520, 600),
+        wx.wxDefaultPosition, wx.wxSize(520, 650),
                     wx.wxDEFAULT_FRAME_STYLE)
                     
         local statusBar = frame:CreateStatusBar(1)
@@ -287,7 +296,7 @@ function build_gui()
         
         vbox:Add(wx.wxStaticLine(frame,wx.wxID_ANY),0,  wx.wxALL + wx.wxGROW ,10)
         
-        local space = 5
+        local space = 3
         
         --Node info box--
         local sb2   = wx.wxStaticBox( frame, wx.wxID_ANY, "Node info")
@@ -313,9 +322,16 @@ function build_gui()
         hbox3:Add(st3, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         hbox3:Add(tc_c_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
     
+        local hbox3a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+        local st3a   = wx.wxStaticText(frame, wx.wxID_ANY, 'Current WPA2 Key ')
+        tc_c_key     = wx.wxTextCtrl(frame, wx.wxID_ANY)
+        hbox3a:Add(st3a, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox3a:Add(tc_c_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+    
                 hbox_left:Add(hboxts, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
                 hbox_left:Add(hbox2, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
                 hbox_left:Add(hbox3, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
+                hbox_left:Add(hbox3a, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
             sbs2:Add(hbox_left, 1,  wx.wxALIGN_LEFT + wx.wxALL, space)
             
         local hbox_right = wx.wxBoxSizer(wx.wxHORIZONTAL)
@@ -349,7 +365,8 @@ function build_gui()
                            choices)
         choice_hw:SetSelection(0)
         hbox6:Add(st6, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+        
 
         local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st7   = wx.wxStaticText(frame, wx.wxID_ANY, 'Change secret to ')
@@ -357,8 +374,16 @@ function build_gui()
         hbox7:Add(st7, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
+        local hbox8 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+        local st8   = wx.wxStaticText(frame, wx.wxID_ANY, 'WPA2 Key ')
+        tc_new_key  = wx.wxTextCtrl(frame, wx.wxID_ANY)
+        hbox8:Add(st8, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        
+        
         sbs3:Add(hbox6, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
         sbs3:Add(hbox5, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
+        sbs3:Add(hbox8, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
         sbs3:Add(hbox7, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
         
          --Fit the image in

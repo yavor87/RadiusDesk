@@ -127,16 +127,21 @@ function rdFirmwareConfig.__send_my_info(self)
     --Insert eth0
     local eth0      = self.network:getMac()
     table.insert(a, 'eth0='..eth0)
+
     --Insert server
     local server    = self.x.get('meshdesk', 'internet1','ip')
     table.insert(a, 'server='..server)
+
     --Insert firmware
     io.input("/etc/openwrt_release")
 	local v = io.read("*all")
     v       = string.gsub(v, "\n", "|")
     v       = string.gsub(v, "DISTRIB_", "")
-
     table.insert(a, 'firmware='..v)
+
+	--Insert the current client key
+	local key = self.x.get('meshdesk','wifi_client','key')
+	table.insert(a, 'key='..key)
 
     for i, v in ipairs(a) do
 	    self:__sData('b')
@@ -174,6 +179,12 @@ function rdFirmwareConfig.__get_my_settings(self)
         if(string.find(s, "secret="))then
             local secret = string.gsub(s, "secret=", "")
             self.x.set('meshdesk','settings','shared_secret',secret)
+            self.x.commit('meshdesk')
+        end
+
+		if(string.find(s, "key="))then
+            local secret = string.gsub(s, "key=", "")
+			self.x.set('meshdesk','wifi_client','key',secret)
             self.x.commit('meshdesk')
         end
 
