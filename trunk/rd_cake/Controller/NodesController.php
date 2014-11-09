@@ -431,171 +431,13 @@ class NodesController extends AppController {
         return array($network,$entry_point_data,$nat_data,$captive_portal_data);
     }
 
-/*
-    private function _build_wireless($mesh,$entry_point_data){
+
+	private function _build_wireless($mesh,$entry_point_data){
 
         $wireless = array();
 
-        //Get the channel
-        $channel    = $mesh['NodeSetting']['two_chan'];
-	
-		//Hardware mode for 5G
-		$hwmode		= '11ng';	//Sane default
-		$hw_temp    = $this->_get_hardware_setting($this->Hardware,'hwmode');
-		if($hw_temp){
-			$hwmode	= $hw_temp;
-		}
-
-		//Channel (if 5)
-		if($this->_get_hardware_setting($this->Hardware,'five')){
-			$channel    = $mesh['NodeSetting']['five_chan'];
-		}
-
-        //The radio's channel
-		//Get the power - If the node settings has it to apply to all we do not consider the node's individual power setting
-		//The dbm value also depends on the node's hardware
-		if($mesh['NodeSetting']['all_power'] == 1){
-			$power_perc = $mesh['NodeSetting']['power'];
-			$db_power   = $this->_db_power_for($this->Hardware,$power_perc);
-		}else{
-			$db_power   = $this->_db_power_for($this->Hardware,$this->Power);
-		}
-
-        array_push( $wireless,
-                array(
-                    "wifi-device"   => "radio0",
-                    "options"       => array(
-                        'channel'       => $channel,
-                        'disabled'      => 0,
-                        'hwmode'        => $hwmode,
-						'txpower'		=> $db_power
-                    ),
-                    'lists'          => array(
-                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
-                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-40'),  
-                        //array('name'    => 'ht_capab', 'value'  => 'RX-STBC1'),
-                        //array('name'    => 'ht_capab', 'value'  => 'DSSS_CCK-40')  
-                    )
-                ));
-
-
-        //Get the mesh's BSSID and SSID
-        $bssid      = $mesh['Mesh']['bssid'];
-        $ssid       = $mesh['Mesh']['ssid'];
-
-        //Add the ad-hoc if for mesh
-        $zero = $this->_number_to_word(0);
-        array_push( $wireless,
-                array(
-                    "wifi-iface"   => "$zero",
-                    "options"       => array(
-                        "device"        => "radio0",
-                        "ifname"        => "mesh0",
-                        "network"       => "mesh",
-                        "mode"          => "adhoc",
-                        "ssid"          => $ssid,
-                        "bssid"         => $bssid
-                    )
-                ));
-
-        //Add the hidden config VAP
-        $one = $this->_number_to_word(1);
-        array_push( $wireless,
-                array(
-                    "wifi-iface"    => "$one",
-                    "options"   => array(
-                        "device"        => "radio0",
-                        "ifname"        => "$one"."0",
-                        "mode"          => "ap",
-                        "encryption"    => "psk-mixed",
-                        "network"       => $one,
-                        "ssid"          => "meshdesk_config",
-                        "key"           => "radiusdesk",
-                        "hidden"        => "1"
-                   )
-                ));
-
-        $start_number = 2;
-
-        //Check if we need to add this wireless VAP
-        foreach($mesh['MeshEntry'] as $me){
-            $to_all     = false;
-            $if_name    = $this->_number_to_word($start_number);
-            $entry_id   = $me['id'];
-            $start_number++;
-            if($me['apply_to_all'] == 1){
-
-                //Check if it is assigned to an exit point
-                foreach($entry_point_data as $epd){
-                    if($epd['entry_id'] == $entry_id){ //We found our man :-)
-                        array_push( $wireless,
-                            array(
-                                "wifi-iface"    => "$if_name",
-                                "options"   => array(
-                                    "device"        => "radio0",
-                                    "ifname"        => "$if_name"."0",
-                                    "mode"          => "ap",
-                                    "network"       => $epd['network'],
-                                    "encryption"    => $me['encryption'],
-                                    "ssid"          => $me['name'],
-                                    "key"           => $me['key'],
-                                    "hidden"        => $me['hidden'],
-                                    "isolate"       => $me['isolate'],
-                                    "auth_server"   => $me['auth_server'],
-                                    "auth_secret"   => $me['auth_secret']
-                               )
-                            ));
-                        break;
-                    }
-                }
-            }else{
-                //Check if this entry point is statically attached to the node
-               // print_r($mesh['Node']);
-                foreach($mesh['Node'] as $node){
-                    if($node['id'] == $this->NodeId){   //We have our node
-                        foreach($node['NodeMeshEntry'] as $nme){
-                            if($nme['mesh_entry_id'] == $entry_id){
-                                //Check if it is assigned to an exit point
-                                foreach($entry_point_data as $epd){
-                                    //We have a hit; we have to  add this entry
-                                    if($epd['entry_id'] == $entry_id){ //We found our man :-)
-                                        array_push( $wireless,
-                                            array(
-                                                "wifi-iface"    => "$if_name",
-                                                "options"   => array(
-                                                    "device"        => "radio0",
-                                                    "ifname"        => "$if_name"."0",
-                                                    "mode"          => "ap",
-                                                    "network"       => $epd['network'],
-                                                    "encryption"    => $me['encryption'],
-                                                    "ssid"          => $me['name'],
-                                                    "key"           => $me['key'],
-                                                    "hidden"        => $me['hidden'],
-                                                    "isolate"       => $me['isolate'],
-                                                    "auth_server"   => $me['auth_server'],
-                                                    "auth_secret"   => $me['auth_secret']
-                                               )
-                                            ));
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-       // print_r($wireless);
-        return $wireless;
-    }
-
-*/
-
-	   private function _build_wireless($mesh,$entry_point_data){
-
-
-        $wireless = array();
+		Configure::load('MESHdesk');
+		$client_key = Configure::read('MESHdesk.client_key');
 
 		//Check if it is a dual radio node:
 		$radios   = $this->_get_hardware_setting($this->Hardware,'radios');
@@ -678,7 +520,7 @@ class NodesController extends AppController {
                         "encryption"    => "psk-mixed",
                         "network"       => $one,
                         "ssid"          => "meshdesk_config",
-                        "key"           => "radiusdesk",
+                        "key"           => $client_key,
                         "hidden"        => "1"
                    )
                 ));
@@ -761,6 +603,9 @@ class NodesController extends AppController {
 	private function _build_dual_radio_wireless($mesh,$entry_point_data){
 
         $wireless = array();
+
+		Configure::load('MESHdesk');
+		$client_key = Configure::read('MESHdesk.client_key');
 
         //Get the channel that the mesh needs to be on
         $mesh_channel_two    = $mesh['NodeSetting']['two_chan'];
@@ -912,7 +757,7 @@ class NodesController extends AppController {
 		                    "encryption"    => "psk-mixed",
 		                    "network"       => $one,
 		                    "ssid"          => "meshdesk_config",
-		                    "key"           => "radiusdesk",
+		                    "key"           => $client_key,
 		                    "hidden"        => "1"
 		               )
 		            ));
@@ -930,7 +775,7 @@ class NodesController extends AppController {
 		                    "encryption"    => "psk-mixed",
 		                    "network"       => $one,
 		                    "ssid"          => "meshdesk_config",
-		                    "key"           => "radiusdesk",
+		                    "key"           => $client_key,
 		                    "hidden"        => "1"
 		               )
 		            ));
