@@ -21,7 +21,7 @@ class ProfilesController extends AppController {
         }
 
         $user_id    = null;
-        $admin_flag = true;
+        $admin_flag = false;
 
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $user_id    = $user['id'];
@@ -103,6 +103,38 @@ class ProfilesController extends AppController {
                         );
                     }
                 }
+				//----------------
+				//FIXME: There might be more of the hierarchical things that needs this add-on 
+				//We also need to list all the Profiles for this Access Provider NOT available to siblings
+				//------------------
+				$r        = $this->Profile->find('all',array('conditions' => array('Profile.user_id' => $ap_id, 'Profile.available_to_siblings' => false)));
+                foreach($r  as $j){
+                    $id     = $j['Profile']['id'];
+                    $name   = $j['Profile']['name'];
+
+                    $data_cap_in_profile = false; 
+                    $time_cap_in_profile = false; 
+                    foreach($j['Radusergroup'] as $cmp){
+                        foreach($cmp['Radgroupcheck'] as $chk){
+                            if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+                                $data_cap_in_profile = true;
+                            }
+                            if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+                                $time_cap_in_profile = true;
+                            }
+                        } 
+                        unset($cmp['Radgroupcheck']);
+                    }
+                    
+                    array_push($items,
+                        array(
+                            'id'                    => $id, 
+                            'name'                  => $name,
+                            'data_cap_in_profile'   => $data_cap_in_profile,
+                            'time_cap_in_profile'   => $time_cap_in_profile
+                        )
+                    );
+				}
             }
 
         }
