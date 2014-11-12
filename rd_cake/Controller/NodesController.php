@@ -281,6 +281,17 @@ class NodesController extends AppController {
                )
             ));
 
+		//***With its VLAN***
+		 array_push($network,
+            array(
+                "interface"    => "bat_vlan_one",
+                "options"   => array(
+                    "ifname"    	=> "bat0.1",
+                    "proto"     	=> "batadv_vlan",
+                    'ap_isolation' 	=> '0'
+               )
+            ));
+
 //================================
 
         //Now we will loop all the defined exits **that has entries assigned** to them and add them as bridges as we loop. 
@@ -341,6 +352,20 @@ class NodesController extends AppController {
                                 "type"      => "bridge"
                         ))
                     );
+
+					//***With its VLAN***
+					$nr = $this->_number_to_word($start_number);
+					array_push($network,
+						array(
+							"interface"    => "bat_vlan_".$nr,
+							"options"   => array(
+							    "ifname"    	=> "bat0.".$start_number,
+							    "proto"     	=> "batadv_vlan",
+							    'ap_isolation' 	=> '0'
+						   )
+					));
+
+
                     $start_number++;
                     continue;   //We don't car about the other if's
                 }
@@ -359,6 +384,20 @@ class NodesController extends AppController {
                                 'proto'     => 'static'
                         ))
                     );
+
+					//***With its VLAN***
+					$nr = $this->_number_to_word($start_number);
+					array_push($network,
+						array(
+							"interface"    => "bat_vlan_".$nr,
+							"options"   => array(
+							    "ifname"    	=> $interfaces,
+							    "proto"     	=> "batadv_vlan",
+							    'ap_isolation' 	=> '0'
+						   )
+					));
+
+
                     //Push the nat data
                     array_push($nat_data,$if_name);
                     $start_number++;
@@ -392,6 +431,20 @@ class NodesController extends AppController {
                                 "type"      => "bridge" 
                         ))
                     );
+
+					//***With its VLAN***
+					$nr = $this->_number_to_word($start_number);
+					array_push($network,
+						array(
+							"interface"    => "bat_vlan_".$nr,
+							"options"   => array(
+							    "ifname"    	=> $interfaces,
+							    "proto"     	=> "batadv_vlan",
+							    'ap_isolation' 	=> '0'
+						   )
+					));
+
+
                     $start_number++;
                     continue; //We dont care about the other if's
 
@@ -421,6 +474,20 @@ class NodesController extends AppController {
                                 "type"      => "bridge" 
                         ))
                     );
+
+					//***With its VLAN***
+					$nr = $this->_number_to_word($start_number);
+					array_push($network,
+						array(
+							"interface"    => "bat_vlan_".$nr,
+							"options"   => array(
+							    "ifname"    	=> $interfaces,
+							    "proto"     	=> "batadv_vlan",
+							    'ap_isolation' 	=> '0'
+						   )
+					));
+
+
                     $start_number++;
                     continue; //We dont care about the other if's
                 }
