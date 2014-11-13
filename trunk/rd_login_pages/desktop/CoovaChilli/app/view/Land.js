@@ -30,24 +30,12 @@ Ext.define('CoovaChilli.view.Land' ,{
         },me);
 
         me.items    = [
-/*           {       
-                height      : 90,
-                bodyStyle   :{"background-color":"#2a2a2a"}, 
-                layout  : {
-                    type    : 'hbox',
-                    pack    : 'center'
-                }, 
-                items   : { xtype: 'image', src: 'resources/images/logo.png', 'height': 90 } 
-            },
-*/
-
            {       
-                height  : 75, 
+                height  : 75,
+				cls		: 'pnlBanner', 
                 layout  : {
                     type    : 'fit'
-                }, 
-                xtype   : 'image', 
-                src     : 'resources/images/banner.png'
+                }
             },
 
             {

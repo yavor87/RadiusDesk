@@ -239,3 +239,11 @@
 	padding: 7px 0px 0px 0px;
 }
 
+.pnlBanner .x-panel-body {
+	background-color:transparent;
+	background-image:url(../images/banner.png) !important;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position:center;
+}
+
