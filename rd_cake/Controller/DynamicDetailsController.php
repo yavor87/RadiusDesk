@@ -113,6 +113,37 @@ class DynamicDetailsController extends AppController {
     }
 
     public function chilli_browser_detect(){
+
+		$conditions = array("OR" =>array());
+
+		foreach(array_keys($this->request->query) as $key){
+                array_push($conditions["OR"],
+                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+                ); //OR query all the keys
+       	}
+
+       	$this->{$this->modelClass}->DynamicPair->contain('DynamicDetail');
+      	$q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
+                array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
+
+		//See which Theme are selected
+		$theme = 'Default';
+		if($q_r){
+            $theme_selected =  $q_r['DynamicDetail']['theme'];
+		}
+
+		Configure::load('DynamicLogin'); 
+        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		if(!$pages){
+			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		}
+
+		$redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
+        if($this->request->is('mobile')){
+            $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
+        }
+
+/*
         $match_found = $this->_use_jquery_mobile();  
         if($match_found){
                 $redir_to = Configure::read('CoovaDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
@@ -122,10 +153,43 @@ class DynamicDetailsController extends AppController {
                 $redir_to = Configure::read('CoovaDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
             }
         }
+*/
         $this->response->header('Location', $redir_to);
     }
 
     public function mikrotik_browser_detect(){
+
+		$conditions = array("OR" =>array());
+
+		foreach(array_keys($this->request->query) as $key){
+                array_push($conditions["OR"],
+                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+                ); //OR query all the keys
+       	}
+
+       	$this->{$this->modelClass}->DynamicPair->contain('DynamicDetail');
+      	$q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
+                array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
+
+		//See which Theme are selected
+		$theme = 'Default';
+		if($q_r){
+            $theme_selected =  $q_r['DynamicDetail']['theme'];
+		}
+
+		Configure::load('DynamicLogin'); 
+        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		if(!$pages){
+			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		}
+
+		$redir_to = $pages['mikrotik_desktop'].'?'.$_SERVER['QUERY_STRING'];
+        if($this->request->is('mobile')){
+            $redir_to = $pages['mikrotik_mobile'].'?'.$_SERVER['QUERY_STRING'];
+        }
+
+
+/*
         $match_found = $this->_use_jquery_mobile();  
         if($match_found){
             $redir_to = Configure::read('MikrotikDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
@@ -135,6 +199,7 @@ class DynamicDetailsController extends AppController {
                 $redir_to = Configure::read('MikrotikDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
             }
         }
+*/
         $this->response->header('Location', $redir_to);
     }
 
@@ -1262,6 +1327,23 @@ class DynamicDetailsController extends AppController {
             ));
         }
     }
+
+	public function available_themes(){
+
+        $items = array();
+        Configure::load('DynamicLogin'); 
+        $data       = Configure::read('DynamicLogin.theme');
+        foreach(array_keys($data) as $i){
+           array_push($items, array('name' => $i,'id' => $i));
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
 
     //----- Menus ------------------------
     public function menu_for_grid(){
