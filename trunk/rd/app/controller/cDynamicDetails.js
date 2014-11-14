@@ -52,10 +52,11 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
-        'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect'        
+        'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect',
+		'dynamicDetails.cmbThemes'       
     ],
-    stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers'],
-    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair'],
+    stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers', 'sThemes'],
+    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair', 'mTheme'],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
