@@ -33,6 +33,11 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                         name        : "id",
                         hidden      : true
                     },
+					{ 
+				        xtype       : 'cmbThemes', 
+				        labelClsExtra : 'lblRdReq',
+				        allowBlank  : false 
+				    },
 					{
                         xtype       : 'checkbox',      
                         fieldLabel  : 'User login',
