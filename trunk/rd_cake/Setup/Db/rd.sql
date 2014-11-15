@@ -519,7 +519,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-11-14 11:07:17',1,1,0,'walt',1,120,'Grey');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2014-11-15 17:22:22',1,1,0,'walt',1,120,'Green');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2717,7 +2717,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (1,'dryday','','used',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-10-16 13:30:46','2014-10-16 13:30:46','','','dryday','Residence Inn',34,'Data-Standard-1G',9,'','',NULL,NULL,NULL,NULL),(2,'cheerypet','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-10-16 14:05:44','2014-11-14 12:45:12','','','cheerypet','Residence Inn',34,'Data-Standard-1G',9,'','1-00-00-00',NULL,NULL,0,86400),(3,'candidthrone','','used',NULL,NULL,'2014-10-24 12:39:15',NULL,'127.0.0.1',NULL,NULL,44,'2014-10-16 14:07:25','2014-11-14 12:45:13','','','candidthrone','Residence Inn',34,'Data-Standard-1G',9,'','0-00-02-00',NULL,NULL,0,120);
+INSERT INTO `vouchers` VALUES (1,'dryday','','used',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-10-16 13:30:46','2014-10-16 13:30:46','','','dryday','Residence Inn',34,'Data-Standard-1G',9,'','',NULL,NULL,NULL,NULL),(2,'cheerypet','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2014-10-16 14:05:44','2014-11-15 17:30:08','','','cheerypet','Residence Inn',34,'Data-Standard-1G',9,'','1-00-00-00',NULL,NULL,0,86400),(3,'candidthrone','','used',NULL,NULL,'2014-10-24 12:39:15',NULL,'127.0.0.1',NULL,NULL,44,'2014-10-16 14:07:25','2014-11-15 17:30:08','','','candidthrone','Residence Inn',34,'Data-Standard-1G',9,'','0-00-02-00',NULL,NULL,0,120);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -2730,4 +2730,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-14 12:47:20
+-- Dump completed on 2014-11-15 17:30:21
