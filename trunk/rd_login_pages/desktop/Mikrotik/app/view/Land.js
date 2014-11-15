@@ -41,14 +41,12 @@ Ext.define('Mikrotik.view.Land' ,{
 */
 
             {       
-                height  : 75, 
+                height  : 75,
+				cls		: 'pnlBanner', 
                 layout  : {
                     type    : 'fit'
-                }, 
-                xtype   : 'image', 
-                src     : 'resources/images/banner.png'
+                }
             },
-
             {
                 layout  : {
                     type    : 'hbox',
