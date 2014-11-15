@@ -4,7 +4,7 @@ Ext.define('Rd.model.mDynamicDetail', {
          {name: 'id',       type: 'int'     },
          {name: 'name',     type: 'string'  },
          {name: 'owner',    type: 'string'  },
-         'phone','fax', 'cell', 'email','url', 'street_no', 'street','town_suburb','city','country','lat','lon',
+         'phone','fax', 'cell', 'email','url', 'street_no', 'street','town_suburb','city','country','lat','lon','theme',
          {name: 'available_to_siblings',  type: 'bool'},
          {name: 'notes',   type: 'bool'},
          {name: 'update',  type: 'bool'},

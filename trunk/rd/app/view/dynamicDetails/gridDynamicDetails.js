@@ -33,6 +33,7 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetails' ,{
             { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridDynamicDetails6'},
             { text: i18n('s_email'),   dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridDynamicDetails7'},
             { text: i18n('sURL'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridDynamicDetails8'},
+			{ text: 'Theme',           dataIndex: 'theme',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},stateId: 'StateGridDynamicDetails8a'},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  
