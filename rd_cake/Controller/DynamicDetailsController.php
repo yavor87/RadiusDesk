@@ -203,6 +203,51 @@ class DynamicDetailsController extends AppController {
         $this->response->header('Location', $redir_to);
     }
 
+
+	//----- Give better preview pages -----
+	public function preview_chilli_desktop(){
+
+		$this->{$this->modelClass}->contain();
+		$q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+      	
+		//See which Theme are selected
+		$theme = 'Default';
+		if($q_r){
+            $theme_selected =  $q_r['DynamicDetail']['theme'];
+		}
+
+		Configure::load('DynamicLogin'); 
+        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		if(!$pages){
+			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		}
+
+		$redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
+        $this->response->header('Location', $redir_to);
+
+	}
+
+	public function preview_chilli_mobile(){
+
+		$this->{$this->modelClass}->contain();
+		$q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+      	
+		//See which Theme are selected
+		$theme = 'Default';
+		if($q_r){
+            $theme_selected =  $q_r['DynamicDetail']['theme'];
+		}
+
+		Configure::load('DynamicLogin'); 
+        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		if(!$pages){
+			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		}
+
+		$redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
+        $this->response->header('Location', $redir_to);
+	}
+
     public function export_csv(){
 
         $this->autoRender   = false;
@@ -338,6 +383,7 @@ class DynamicDetailsController extends AppController {
                 'lon'                   => $i['DynamicDetail']['lon'],
                 't_c_check'             => $i['DynamicDetail']['t_c_check'],
                 't_c_url'               => $i['DynamicDetail']['t_c_url'],
+				'theme'					=> $i['DynamicDetail']['theme'],
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']
@@ -729,6 +775,7 @@ class DynamicDetailsController extends AppController {
 				$items['auto_suffix']               = $q_r['DynamicDetail']['auto_suffix'];
 				$items['usage_show_check']          = $q_r['DynamicDetail']['usage_show_check'];
 				$items['usage_refresh_interval']    = $q_r['DynamicDetail']['usage_refresh_interval'];
+				$items['theme']    					= $q_r['DynamicDetail']['theme'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
