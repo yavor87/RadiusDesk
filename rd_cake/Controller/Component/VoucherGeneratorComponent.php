@@ -3,6 +3,7 @@ class VoucherGeneratorComponent extends Component {
 
 	//private	$nameType  		= 'word_number_word_number';
 	private $nameType		= 'adjective_noun'; 
+	//private $nameType		= 'random_number'; //For Freddy :-) Just comment out the line above and uncommet this line
 
 	private $wordPool 		= array(
 		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
@@ -129,6 +130,10 @@ class VoucherGeneratorComponent extends Component {
 		}  
 		if($this->nameType == 'adjective_noun'){
 			return $this->_adjective_noun();
+		}
+
+		if($this->nameType == 'random_number'){
+			return $this->_random_number();
 		}   
     }
 
@@ -173,5 +178,17 @@ class VoucherGeneratorComponent extends Component {
 		}
 		return $v_value; //We are unique and we added ourselves to the existing list
     }
+
+	private function _random_number(){
+		$duplicate_flag = true;
+		while($duplicate_flag){		
+			$v_value = rand ( 1000,999999);
+			if(!in_array("v_value", $this->voucherNames)){
+				$duplicate_flag = false; //Break the loop - we ar unique;
+				array_push($this->voucherNames, $v_value);
+			}
+		}
+		return $v_value; //We are unique and we added ourselves to the existing list
+	}
 }
 ?>
