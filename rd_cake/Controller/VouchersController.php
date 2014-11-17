@@ -372,9 +372,16 @@ class VouchersController extends AppController {
 				//Set the voucher's name and password
 				$pwd = false;
 				if($single_field){
-					$pwd = $this->VoucherGenerator->generateVoucher();
-					$this->request->data['name']      = $pwd; 
-		        	$this->request->data['password']  = $pwd;
+					if(
+						(array_key_exists('name',$this->request->data))&& //Both name and password has to be present
+						(array_key_exists('password',$this->request->data))
+					){
+						$this->log('Add a voucher with name and password specified', 'debug');
+					}else{
+						$pwd = $this->VoucherGenerator->generateVoucher();
+						$this->request->data['name']      = $pwd; 
+		        		$this->request->data['password']  = $pwd;
+					}	
 				}
 
                 $this->{$this->modelClass}->create();
