@@ -270,6 +270,7 @@ function wait_for_wifi(radio_number)
 			else
 				print("Failed to get settings through Wi-Fi see if older ones exists")
 				log("Failed to get settings through Wi-Fi see if older ones exists")
+				loop=false --This will break the loop
 				check_for_previous_settings()
 			end
 
