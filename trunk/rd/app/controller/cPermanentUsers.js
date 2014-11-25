@@ -325,11 +325,11 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
                             var w = Ext.widget('winPermanentUserAddWizard',{
-                                id:'winPermanentUserAddWizardId',
-                                startScreen: 'scrnData',
-                                user_id:'0',
-                                owner: i18n('sLogged_in_user'), 
-                                no_tree: true,
+                                id			:'winPermanentUserAddWizardId',
+                                startScreen	: 'scrnData',
+                                user_id		:'0',
+                                owner		: i18n('sLogged_in_user'), 
+                                no_tree		: true,
                                 selLanguage : me.application.getSelLanguage()
                             });
                             me.application.runAction('cDesktop','Add',w);         
@@ -349,6 +349,14 @@ Ext.define('Rd.controller.cPermanentUsers', {
             var win = button.up('winPermanentUserAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#parent_id').setValue(sr.getId());
+
+			//We need to update the Store of the Realms and Profile select list to reflect the specific Access Provider
+            win.down('#realm').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            win.down('#realm').getStore().load();
+
+            win.down('#profile').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            win.down('#profile').getStore().load();    
+
             win.getLayout().setActiveItem('scrnData');
         }else{
             Ext.ux.Toaster.msg(
@@ -401,7 +409,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         var value   = cmb.getValue();
         var s = cmb.getStore();
         var r = s.getById(value);
-        console.log("Profile changed");
+        //console.log("Profile changed");
         if(r != null){
             var data_cap = r.get('data_cap_in_profile');
             if(data_cap){

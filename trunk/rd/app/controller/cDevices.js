@@ -125,6 +125,9 @@ Ext.define('Rd.controller.cDevices', {
             'winDeviceAddWizard #profile' : {
                 change:  me.cmbProfileChange
             },
+			'winDeviceAddWizard #owner' : {
+                change:  me.cmbOwnerChange
+            },
             'winDeviceAddWizard #always_active' : {
                 change:  me.chkAlwaysActiveChange
             },
@@ -188,7 +191,8 @@ Ext.define('Rd.controller.cDevices', {
                 render:  me.renderEventProfile
             },
             'pnlDevice #owner' : {
-                render:      me.renderEventOwner
+                render:  me.renderEventOwner,
+                change:  me.cmbOwnerChange
             },
             'pnlDevice #always_active' : {
                 change:  me.chkAlwaysActiveChange
@@ -295,6 +299,15 @@ Ext.define('Rd.controller.cDevices', {
             failure: Ext.ux.formFail
         });
     },
+	cmbOwnerChange: function(cmb){
+		var me      = this;
+		var value   = cmb.getValue();
+		var rec 	= cmb.getStore().getById(value);
+		var ap_id	= rec.get('owner_id');
+		var form    = cmb.up('form');
+		form.down('cmbProfile').getStore().getProxy().setExtraParam('ap_id',ap_id);
+		form.down('cmbProfile').getStore().load();
+	},
     cmbProfileChange:   function(cmb){
         var me      = this;
         var form    = cmb.up('form');

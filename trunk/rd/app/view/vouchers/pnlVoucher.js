@@ -1,17 +1,19 @@
 Ext.define('Rd.view.vouchers.pnlVoucher', {
-    extend: 'Ext.tab.Panel',
-    alias: 'widget.pnlVoucher',
-    border: false,
-    v_id: null,
-    v_name: null,
-    record: null, //We will supply each instance with a reference to the selected record.
-    plain: true,
+    extend	: 'Ext.tab.Panel',
+    alias	: 'widget.pnlVoucher',
+    border	: false,
+    v_id	: null,
+    v_name	: null,
+    record	: null, //We will supply each instance with a reference to the selected record.
+    plain	: true,
     initComponent: function(){
         var me      = this;
         //Set default values for from and to:
         var dtFrom  = new Date();
         var dtTo    = new Date();
         dtTo.setYear(dtTo.getFullYear() + 1);
+
+		var ap_id	= me.record.get('user_id');
 
         me.items = [
         {   
@@ -41,13 +43,15 @@ Ext.define('Rd.view.vouchers.pnlVoucher', {
                         xtype       : 'cmbRealm',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'realm'
+                        itemId      : 'realm',
+						extraParam  : ap_id
                     },
                     {
                         xtype       : 'cmbProfile',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'profile'
+                        itemId      : 'profile',
+						extraParam  : ap_id
                     },
                     {
                         xtype       : 'checkbox',      

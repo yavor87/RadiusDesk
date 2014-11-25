@@ -13,6 +13,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
         var dtTo    = new Date();
         dtTo.setYear(dtTo.getFullYear() + 1);
 
+		var ap_id	= me.record.get('owner_id');
+
         me.items = [
         {   
             title:  i18n('sBasic_info'),
@@ -40,13 +42,15 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         xtype       : 'cmbRealm',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'realm'
+                        itemId      : 'realm',
+						extraParam  : ap_id
                     },
                     {
                         xtype       : 'cmbProfile',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'profile'
+                        itemId      : 'profile',
+						extraParam  : ap_id
                     },
                     {
                         xtype       : 'cmbCap',
