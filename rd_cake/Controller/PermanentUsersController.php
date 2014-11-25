@@ -180,6 +180,7 @@ class PermanentUsersController extends AppController {
                 array(
                     'id'        => $i['User']['id'], 
                     'owner'     => $owner_tree,
+					'owner_id'	=> $i['User']['parent_id'],
                     'username'  => $i['User']['username'],
                     'name'      => $i['User']['name'],
                     'surname'   => $i['User']['surname'], 
