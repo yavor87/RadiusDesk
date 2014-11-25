@@ -322,6 +322,26 @@ class DesktopController extends AppController {
                     )
                 )
             ),
+
+			//Dynamic Firewalls
+            array(  'text'  => __('Dynamic Firewalls'),  'glyph' => Configure::read('icnLock') ,'menu'  =>
+                 array( 'items' =>
+                    array(
+                        array(
+                            'text'      => __('Dynamic Firewall Components'),
+                            'glyph'     => Configure::read('icnComponent'),
+                            'itemId'    => 'cDynamicFirewallComponents'
+                        ),
+                        array(
+                            'text'      => __('Dynamic Firewalls'), 
+                            'glyph'     => Configure::read('icnLock'), 
+                            'itemId'    => 'cDevices'
+                        )
+                    )
+                )
+            ),
+
+
             array(  'text'  => __('Vouchers'),        'iconCls' => 'vouchers','glyph' => Configure::read('icnVoucher'), 'itemId' => 'cVouchers'),
         );
 
