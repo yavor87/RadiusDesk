@@ -43,6 +43,9 @@ alfred                  = rdAlfred()
 current_radio			= 0
 radio_count				= 1
 
+--Reboot on SOS
+sos_reboot_timeout		= 30
+
 
 --======================================
 ---- Some general functions ------------
@@ -76,22 +79,75 @@ function readAll(file)
         return content                     
 end
 
+function getMac(interface)
+	interface = interface or "eth0"
+	io.input("/sys/class/net/" .. interface .. "/address")
+	t = io.read("*line")
+	dashes, count = string.gsub(t, ":", "-")
+	dashes = string.upper(dashes)
+	return dashes
+end
+
 --==============================
 -- End Some general functions --
 --==============================
 
--- FW configuration --
+
+--======================================
+---- Some test functions ---------------
+--======================================
+function did_lan_came_up()
+	local lan_up_file=fetch_config_value('meshdesk.settings.lan_up_file')
+	if(file_exists(lan_up_file))then
+		return true		
+	else
+		return false
+	end
+end
+
+function did_wifi_came_up()
+	local wifi_up_file=fetch_config_value('meshdesk.settings.wifi_up_file')
+	if(file_exists(wifi_up_file))then
+		return true		
+	else
+		return false
+	end
+end
+
+function reboot_on_sos()
+    --When the device is in SOS mode we might as well just reboot it again to keep on trying
+	local start_time	= os.time()
+	local loop			= true
+
+	--**********LOOP**********
+	while (loop) do
+		sleep(sleep_time)
+		local time_diff = os.difftime(os.time(), start_time)
+		if(time_diff >= sos_reboot_timeout)then
+			os.execute("reboot")
+			break
+		end
+	end
+	--**********LOOP END**********
+end
+
+
+--==============================
+-- End Some test functions -----
+--==============================
+
+--===========================
+-- Firmware Configuration ---
+--===========================
 function do_fw_config()
     --kill potential existing batman_neighbours.lua instance
-	ext:stop('batman_neighbours.lui')
+	ext:stop('batman_neighbours.lua')
 
-	-- 13-10-14-- Disable the DHCP things
 	-- Break down the gateways --
 	require("rdGateway")
 	local a = rdGateway()
 	a:disable()
 	a:restartServices()
-	-- 13-10-14--
 
     require("rdNetwork")
 
@@ -107,19 +163,23 @@ function do_fw_config()
     f:runConfig()
 end
 
-
+--=====================
 -- Start-up function --
+--=====================
 function wait_for_lan()
 	                 
 	--kill potential existing batman_neighbours.lua instance
-	ext:stop('batman_neighbours.lui')	
+	ext:stop('batman_neighbours.lua')
+	ext:stop('heartbeat.lua')
+	ext:stop('actions_checker')	
+	os.execute("/etc/init.d/alfred stop")
 
 	-- LAN we flash "A"
 	log("Starting LAN wait")
 	os.execute("/etc/MESHdesk/main_led.lua start a")
-	local start_time=os.time()
-	local loop=true
-	local lan_is_up=false
+	local start_time	= os.time()
+	local loop			= true
+	local lan_is_up		= false
 	
 	--Do a clean start with the wireless--
 	require("rdWireless")
@@ -134,20 +194,20 @@ function wait_for_lan()
 	local network = rdNetwork()
 	network:dhcpStart()
 	
+	--**********LOOP**********
 	while (loop) do
 		sleep(sleep_time)
 		-- If the lan came up we will try to get the settings
 		if(did_lan_came_up())then
-			loop = false
-			lan_is_up = true
+			lan_is_up 	= true
+			break	--no need to continiue
 		end
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= lan_timeout)then
 			log("LAN is not coming up. Try the WiFi")
 			print("LAN is not coming up. Try the WiFi")
-			loop=false --This will break the loop
+			break
 		else
-			
 			log("Waiting for LAN to come up now for " .. time_diff .. " seconds")
 			print("Waiting for LAN to come up now for " .. time_diff .. " seconds")
 		end
@@ -157,10 +217,11 @@ function wait_for_lan()
 		--TODO This will be large on second runs! - fix this
 		if((os.time() > 4000) and (start_time < 4000))then
 			log('Detected a very lage value for os time asume the LAN and NTP working')
-			loop = false
-			lan_is_up = true
+			lan_is_up 	= true
+			break	--no need to continiue
 		end
 	end
+	--*********LOOP END*********
 	
 	--See what happended and how we should handle it
 	if(lan_is_up)then
@@ -172,43 +233,35 @@ function wait_for_lan()
 	else
 		--wait_for_wifi(0)
 		try_wifi(0)		
-	end
-	
+	end	
 end
 
-function did_lan_came_up()
-	local lan_up_file=fetch_config_value('meshdesk.settings.lan_up_file')
-	if(file_exists(lan_up_file))then
-		return true		
-	else
-		return false
-	end
-end
 
 function try_settings_through_lan() 
 	log("LAN up now try fetch the settings")
 	print("LAN up now try fetch the settings")
 	
 	-- See if we can ping it
-	local server = fetch_config_value('meshdesk.internet1.ip')
-	local c = rdConfig()
-	local lan_config_fail=true                                          
+	local server 			= fetch_config_value('meshdesk.internet1.ip')
+	local c 				= rdConfig()
+	local lan_config_fail	=true                                          
 	if(c:pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
 		log("Ping os server was OK try to fetch the settings")
 --		local id	= "A8-40-41-13-60-E3"
-		local id	= getMac('eth0')
+		local id		= getMac('eth0')
 		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
 		local url   	= fetch_config_value('meshdesk.internet1.url')
 		local query     = proto .. "://" .. server .. "/" .. url 
 		print("Query url is " .. query )
 		if(c:fetchSettings(query,id,true))then
-			print("Cool, settings gekry")
+			print("Funky -> got settings through LAN")
 			lan_config_fail=false
 		end
 	else 
 		log("Ping os server was NOT OK!")
 	end
+
 	if(lan_config_fail)then	
 		log("Could not fetch settings through LAN")
 		--wait_for_wifi(0) --We try the first radio (0)
@@ -222,8 +275,11 @@ end
 
 function try_wifi(radio)
 	local next_radio = wait_for_wifi(radio)
-	if(next_radio > 0)then
-		wait_for_wifi(next_radio)
+
+	if(next_radio ~= nil)then --Normally nothing will be returned
+		if(next_radio > 0)then
+			wait_for_wifi(next_radio)
+		end
 	end
 end
 
@@ -244,25 +300,22 @@ function wait_for_wifi(radio_number)
                              
 	w:connectClient(radio_number)
 	
-	local start_time=os.time()
-	local loop=true
-	local wifi_is_up=false
+	local start_time	= os.time()
+	local loop			= true
+	local wifi_is_up	= false --default
 	
 	while (loop) do
 		sleep(sleep_time)
 		
-		-- If the lan came up we will try to get the settings
+		-- If the wifi came up we will try to get the settings
 		if(did_wifi_came_up())then
-			loop = false
 			wifi_is_up = true
+			break
 		end
 		
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= wifi_timeout)then
-			--print("WiFi is not coming up. Try the previous settings")
-			--log("WiFi is not coming up. Try the previous settings")
-			--loop=false --This will break the loop
-
+			
 			if(radio_count > (current_radio+1))then
 				print("WiFi is not coming up on radio "..current_radio.."Try next radio")
 				local next_radio = current_radio+1
@@ -270,11 +323,8 @@ function wait_for_wifi(radio_number)
 			else
 				print("Failed to get settings through Wi-Fi see if older ones exists")
 				log("Failed to get settings through Wi-Fi see if older ones exists")
-				loop=false --This will break the loop
-				check_for_previous_settings()
+				break
 			end
-
-
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
 		end
@@ -319,7 +369,7 @@ function try_settings_through_wifi()
 		local query     = proto .. "://" .. server .. "/" .. url 
 		print("Query url is " .. query )
 		if(c:fetchSettings(query,id,false))then
-			print("Cool, settings gekry")
+			print("Funky -> got settings through WIFI")
 			wifi_config_fail=false
 		end
 	end
@@ -329,7 +379,7 @@ function try_settings_through_wifi()
 		--If we then exhausted all the radios on the device we use the previous settings--
 		if(radio_count > (current_radio+1))then
 			current_radio = current_radio+1
-			wait_for_wifi(current_radio)
+			try_wifi(current_radio)
 		else
 			print("Failed to get settings through Wi-Fi see if older ones exists")
 		    log("Failed to get settings through Wi-Fi see if older ones exists")
@@ -342,14 +392,7 @@ function try_settings_through_wifi()
 	end
 end
 
-function did_wifi_came_up()
-	local wifi_up_file=fetch_config_value('meshdesk.settings.wifi_up_file')
-	if(file_exists(wifi_up_file))then
-		return true		
-	else
-		return false
-	end
-end
+
 
 function check_for_previous_settings()
 	print("Checking for previous settings")
@@ -360,6 +403,8 @@ function check_for_previous_settings()
 	else
 		--Nothing we can do but flash an SOS
 		os.execute("/etc/MESHdesk/main_led.lua start sos")
+		--This will result in a reboot to try again
+		reboot_on_sos()
 	end
 end
 
@@ -461,19 +506,14 @@ function configure_device(config)
 --]]--
 end
 
-function getMac(interface)
 
-	interface = interface or "eth0"
-	io.input("/sys/class/net/" .. interface .. "/address")
-	t = io.read("*line")
-	dashes, count = string.gsub(t, ":", "-")
-	dashes = string.upper(dashes)
-	return dashes
-
-end
-
---Pre-setup: Configure Firmware is there is a server running on the correct IP and port
+--=====================
+--Pre-setup: ----------
+--Configure Firmware is there is a server running on the correct IP and port
+--=====================
 do_fw_config()
 
+--=====================
 -- Kick off by waiting for the LAN
+--=====================
 wait_for_lan()
