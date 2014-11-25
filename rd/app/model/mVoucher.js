@@ -3,6 +3,7 @@ Ext.define('Rd.model.mVoucher', {
     fields: [
          {name: 'id',           type: 'int'     },
          {name: 'owner',        type: 'string'  },
+		 {name: 'user_id',      type: 'int'  },
          {name: 'realm',        type: 'string'  },
          {name: 'realm_id'},
          {name: 'profile',      type: 'string'  },

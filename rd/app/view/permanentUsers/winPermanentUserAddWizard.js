@@ -16,9 +16,9 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
     defaults: {
             border: false
     },
-    no_tree: false, //If the user has no children we don't bother giving them a branchless tree
-    user_id: '',
-    owner: '',
+    no_tree	: false, //If the user has no children we don't bother giving them a branchless tree
+    user_id	: '',
+    owner	: '',
     startScreen: 'scrnApTree', //Default start screen
     selLanguage: null,
     requires: [
@@ -168,13 +168,16 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                 {
                                     xtype       : 'cmbRealm',
                                     allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+									itemId      : 'realm',
+									extraParam  : me.user_id
                                 },
                                 {
                                     xtype       : 'cmbProfile',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'profile'
+                                    itemId      : 'profile',
+									extraParam  : me.user_id
                                 },
                                 {
                                     xtype       : 'cmbCap',

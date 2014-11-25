@@ -502,7 +502,7 @@ Ext.define('Rd.controller.cVouchers', {
                     return;
                 }
 
-                var v_tab_name = sr.get('name');
+                var v_tab_name 	= sr.get('name');
                 //Tab not there - add one
                 tp.add({ 
                     title :     v_tab_name,
@@ -511,7 +511,7 @@ Ext.define('Rd.controller.cVouchers', {
                     iconCls:    'edit',
                     glyph       : Rd.config.icnEdit,
                     layout:     'fit', 
-                    items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name, record: sr }
+                    items:      {'xtype' : 'pnlVoucher',v_id: v_id, v_name: v_tab_name, record: sr}
                 });
                 tp.setActiveTab(v_tab_id); //Set focus on Add Tab
             });
