@@ -17,8 +17,6 @@ require("rdConfig")
 --Alfred object
 require("rdAlfred")
 
-
-
 function fetch_config_value(item)
 	local handle = io.popen('uci get '..item)
 	local result = handle:read("*a")
@@ -39,10 +37,6 @@ l			            = rdLogger()
 ext 			        = rdExternal()
 alfred                  = rdAlfred()
 
---Keep track of the radios
-current_radio			= 0
-radio_count				= 1
-
 --Reboot on SOS
 sos_reboot_timeout		= 30
 
@@ -50,6 +44,8 @@ sos_reboot_timeout		= 30
 --======================================
 ---- Some general functions ------------
 --======================================
+
+
 
 function log(m,p)
 	if(debug)then
@@ -231,8 +227,7 @@ function wait_for_lan()
 		sleep(10)
 		try_settings_through_lan()
 	else
-		--wait_for_wifi(0)
-		try_wifi(0)		
+		try_wifi()		
 	end	
 end
 
@@ -264,8 +259,7 @@ function try_settings_through_lan()
 
 	if(lan_config_fail)then	
 		log("Could not fetch settings through LAN")
-		--wait_for_wifi(0) --We try the first radio (0)
-		try_wifi(0)
+		try_wifi()
 	else
 		--flash D--
 		os.execute("/etc/MESHdesk/main_led.lua start d")
@@ -273,13 +267,33 @@ function try_settings_through_lan()
 	end
 end
 
-function try_wifi(radio)
-	local next_radio = wait_for_wifi(radio)
-
-	if(next_radio ~= nil)then --Normally nothing will be returned
-		if(next_radio > 0)then
-			wait_for_wifi(next_radio)
+function try_wifi()
+	local got_new_config = false
+	--Here we will go through each of the radios
+	log("Try to fetch the settings through the WiFi radios")
+	log("Device has "..radio_count.." radios")
+	local radio = 0 --first radio
+	while(radio < radio_count) do
+		log("Try to get settings using radio "..radio)
+		--Bring up the Wifi
+		local wifi_is_up = wait_for_wifi(radio)
+		if(wifi_is_up)then
+			local got_settings = try_settings_through_wifi()
+			if(got_settings)then
+				--flash D--
+				got_new_config = true
+				os.execute("/etc/MESHdesk/main_led.lua start d")
+				configure_device(config_file)
+			end
 		end
+		--Try next radio
+		radio = radio+1
+	end
+
+	if(got_new_config == false)then
+		print("Settings could not be fetched through WiFi see if older ones exists")
+		log("Settings could not be fetched through WiFi see if older ones exists")
+		check_for_previous_settings()
 	end
 end
 
@@ -315,16 +329,9 @@ function wait_for_wifi(radio_number)
 		
 		local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= wifi_timeout)then
-			
-			if(radio_count > (current_radio+1))then
-				print("WiFi is not coming up on radio "..current_radio.."Try next radio")
-				local next_radio = current_radio+1
-				return(next_radio)
-			else
-				print("Failed to get settings through Wi-Fi see if older ones exists")
-				log("Failed to get settings through Wi-Fi see if older ones exists")
-				break
-			end
+			print("Failed to get settings through Wi-Fi see if older ones exists")
+			log("Failed to get settings through Wi-Fi see if older ones exists")
+			break
 		else
 			print("Waiting for WIFI to come up now for " .. time_diff .. " seconds")
 		end
@@ -336,19 +343,15 @@ function wait_for_wifi(radio_number)
 			wifi_is_up = true
 		end
 	end
-	
+
 	--See what happended and how we should handle it
 	if(wifi_is_up)then
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
 		print("Wifi is up try to get the settings through WiFi")
 		log("Wifi is up try to get the settings through WiFi")
-		try_settings_through_wifi()
-	else
-		print("Settings could not be fetched through WiFi see if older ones exists")
-		log("Settings could not be fetched through WiFi see if older ones exists")
-		check_for_previous_settings()
 	end
+	return wifi_is_up
 end
 
 function try_settings_through_wifi()
@@ -356,9 +359,9 @@ function try_settings_through_wifi()
 	log("Wifi up now try fetch the settings")
 	
 	-- See if we can ping it
-	local server = fetch_config_value('meshdesk.internet1.ip')
-	local c = rdConfig()
-	local wifi_config_fail=true                                          
+	local server 		= fetch_config_value('meshdesk.internet1.ip')
+	local c 			= rdConfig()
+	local got_settings	=false                                          
 	if(c:pingTest(server))then
 		print("Ping os server was OK try to fetch the settings")
 		log("Ping os server was OK try to fetch the settings")
@@ -370,26 +373,10 @@ function try_settings_through_wifi()
 		print("Query url is " .. query )
 		if(c:fetchSettings(query,id,false))then
 			print("Funky -> got settings through WIFI")
-			wifi_config_fail=false
+			got_settings=true
 		end
 	end
-	if(wifi_config_fail)then	
-		print("The radio count is "..radio_count.." The current radio is "..current_radio)
-		--Here we need to specify the radio to try eg 0,1,2 etc to try all avaible radios of the device--
-		--If we then exhausted all the radios on the device we use the previous settings--
-		if(radio_count > (current_radio+1))then
-			current_radio = current_radio+1
-			try_wifi(current_radio)
-		else
-			print("Failed to get settings through Wi-Fi see if older ones exists")
-		    log("Failed to get settings through Wi-Fi see if older ones exists")
-			check_for_previous_settings()
-		end
-	else
-		--flash D--
-		os.execute("/etc/MESHdesk/main_led.lua start d")
-		configure_device(config_file)
-	end
+	return got_settings
 end
 
 
