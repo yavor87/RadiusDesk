@@ -6,15 +6,15 @@ Ext.define('Rd.view.meshes.cmbStaticExits', {
     queryMode       : 'local',
     valueField      : 'id',
     displayField    : 'name',
-    allowBlank      : false,
+    allowBlank      : true,
     editable        : false,
     mode            : 'local',
     itemId          : 'static_exits',
     name            : 'static_exits[]',
-    value           : 0,
     labelClsExtra   : 'lblRd',
     meshId          : '' ,
     nodeId          : '',
+	multiSelect     : true,
     initComponent: function(){
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
