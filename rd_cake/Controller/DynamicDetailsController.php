@@ -127,7 +127,8 @@ class DynamicDetailsController extends AppController {
                 array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
 
 		//See which Theme are selected
-		$theme = 'Default';
+		$theme 			= 'Default';
+		$theme_selected = 'Default';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
