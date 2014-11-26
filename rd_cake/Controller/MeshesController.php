@@ -628,6 +628,7 @@ class MeshesController extends AppController {
         $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
         $exit           = ClassRegistry::init('MeshExit'); 
         $exit->create();
+
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
 
@@ -680,14 +681,16 @@ class MeshesController extends AppController {
                 }
             }
 
+
             //Only if empty was not specified
             if((!$empty_flag)&&(count($entry_ids)>0)){
-                $entry_point->create();
-                $data = array();
-                foreach($entry_ids as $id){
+                foreach($entry_ids as $id){	
+                    $data = array();
                     $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
                     $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
+					$entry_point->create();
                     $entry_point->save($data);
+					$entry_point->id = null;
                 }
             }
 
@@ -786,13 +789,13 @@ class MeshesController extends AppController {
 
                 //Only if empty was not specified
                 if((!$empty_flag)&&(count($entry_ids)>0)){
-                    $entry_point->create();
-                    $data = array();
                     foreach($entry_ids as $id){
-                        $entry_point->create();
+						$data = array();
                         $data['MeshExitMeshEntry']['mesh_exit_id']  = $new_id;
                         $data['MeshExitMeshEntry']['mesh_entry_id'] = $id;
+						$entry_point->create();
                         $entry_point->save($data);
+						$entry_point->id = null;
                     }
                 }
 
@@ -1016,6 +1019,7 @@ class MeshesController extends AppController {
             $empty_flag = false;
 
             if (array_key_exists('static_entries', $this->request->data)) {
+
                 foreach($this->request->data['static_entries'] as $e){
                     if($this->request->data['static_entries'][$count] == 0){
                         $empty_flag = true;
@@ -1028,13 +1032,14 @@ class MeshesController extends AppController {
             }
 
             //Only if empty was not specified
-            if((!$empty_flag)&&(count($entry_ids)>0)){
-                $static_entry->create();
-                $data = array();
+            if((!$empty_flag)&&(count($entry_ids)>0)){  
                 foreach($entry_ids as $id){
+                	$data = array();
                     $data['NodeMeshEntry']['node_id']       = $new_id;
                     $data['NodeMeshEntry']['mesh_entry_id'] = $id;
+					$static_entry->create();
                     $static_entry->save($data);
+					$static_entry->id = null;	
                 }
             }
 
@@ -1057,12 +1062,13 @@ class MeshesController extends AppController {
 
             //Only if empty was not specified
             if((!$e_flag)&&(count($exit_ids)>0)){
-                $static_exit->create();
-                $data = array();
                 foreach($entry_ids as $id){
+                    $data = array();
                     $data['NodeMeshExit']['node_id']       = $new_id;
                     $data['NodeMeshExit']['mesh_exit_id']  = $id;
+					$static_exit->create();
                     $static_exit->save($data);
+					$static_exit->id = null;
                 }
             }
 
@@ -1115,6 +1121,9 @@ class MeshesController extends AppController {
             if ($node->save($this->request->data)) {
                 $new_id = $node->id;
 
+				//Clear previous ones first:
+                $static_entry->deleteAll(array('NodeMeshEntry.node_id' => $new_id), false);
+
                 //Add the entry points
                 $count      = 0;
                 $entry_ids  = array();
@@ -1134,14 +1143,18 @@ class MeshesController extends AppController {
 
                 //Only if empty was not specified
                 if((!$empty_flag)&&(count($entry_ids)>0)){
-                    $static_entry->create();
-                    $data = array();
                     foreach($entry_ids as $id){
+                        $data = array();
                         $data['NodeMeshEntry']['node_id']       = $new_id;
                         $data['NodeMeshEntry']['mesh_entry_id'] = $id;
+						$static_entry->create();
                         $static_entry->save($data);
+						$static_entry->id = null;
                     }
                 }
+
+				//Clear previous ones first:
+                $static_exit->deleteAll(array('NodeMeshExit.node_id' => $new_id), false);
 
                 //Add the exit points
                 $count      = 0;
@@ -1162,12 +1175,13 @@ class MeshesController extends AppController {
 
                 //Only if empty was not specified
                 if((!$e_flag)&&(count($exit_ids)>0)){
-                    $static_exit->create();
-                    $data = array();
                     foreach($entry_ids as $id){
+                    	$data = array();
                         $data['NodeMeshExit']['node_id']       = $new_id;
                         $data['NodeMeshExit']['mesh_exit_id']  = $id;
+						$static_exit->create();
                         $static_exit->save($data);
+						$static_exit->id = null;
                     }
                 }
 
@@ -2323,10 +2337,10 @@ config secn 'asterisk'
 		$settings_to_add['dialout']     = $this->request->data['dialout'];
 	
 		foreach(array_keys($settings_to_add) as $k){
-            $node_mp_setting->create();
             $data['node_id']  	= $node_id;
             $data['name'] 		= $k;
 			$data['value'] 		= $settings_to_add["$k"];
+			$node_mp_setting->create();
             $node_mp_setting->save($data);
 			$node_mp_setting->id= null;
 		}
