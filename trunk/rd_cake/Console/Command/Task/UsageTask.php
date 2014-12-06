@@ -7,13 +7,12 @@ class UsageTask extends Shell {
         print_r($counter_data);
         $query_string = false;
         if($counter_data['reset'] =='never'){
-            $query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE $field='$username' AND callingstationid='$mac'"; 
+          	$query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE $field='$username'"; 
         }else{
             $start_time = $this->_find_start_time($counter_data);
             if($start_time){
-                $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($month_start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
-                                "FROM radacct WHERE $field='$username' AND callingstationid='$mac' ".
-								"AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+            	$query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
+                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'"; 
             }
         }
 
@@ -30,12 +29,14 @@ class UsageTask extends Shell {
         print_r($counter_data);
         $query_string = false;
         if($counter_data['reset'] =='never'){
-            $query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE $field='$username'"; 
+			 $query_string = "SELECT IFNULL(SUM(AcctSessionTime),0) as used FROM radacct WHERE username='$username' AND callingstationid='$mac'"; 
+             
         }else{
             $start_time = $this->_find_start_time($counter_data);
             if($start_time){
-                $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($month_start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
-                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+				 $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
+                                "FROM radacct WHERE username='$username' AND callingstationid='$mac' ".
+								"AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
             }
         }
 
