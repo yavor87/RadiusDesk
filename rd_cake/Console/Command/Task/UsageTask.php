@@ -11,8 +11,8 @@ class UsageTask extends Shell {
         }else{
             $start_time = $this->_find_start_time($counter_data);
             if($start_time){
-            	$query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
-                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'"; 
+            	 $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)),0) as used ".
+                                "FROM radacct WHERE $field='$username' AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
             }
         }
 
@@ -34,9 +34,10 @@ class UsageTask extends Shell {
         }else{
             $start_time = $this->_find_start_time($counter_data);
             if($start_time){
-				 $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)) ".
+				   $query_string = "SELECT IFNULL(SUM(acctsessiontime - GREATEST(($start_time - UNIX_TIMESTAMP(acctstarttime)), 0)),0) as used ".
                                 "FROM radacct WHERE username='$username' AND callingstationid='$mac' ".
-								"AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+                                                                "AND UNIX_TIMESTAMP(acctstarttime) + acctsessiontime > '$start_time'";
+
             }
         }
 
