@@ -76,7 +76,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
 		};
 
 		//Form items depends on what is specified with user_login_check and voucher_login_check
-		var frm_items_bottom = [
+		var frm_items_bottom = [	
 			{
 				xtype		: 'button',
 				text		: 'View Terms & Conditions',
@@ -114,7 +114,24 @@ Ext.define('Mikrotik.view.pnlConnect', {
 				componentCls: 'ttt',
 				glyph   	: Mikrotik.config.icnDelete,
 				hidden  	: true
-			} 
+			},
+
+//==============
+			{
+				xtype		: 'button',
+				text		: 'Register as new user',
+				margin		: '10 0 0 0',
+				itemId		: 'btnNewUser',
+				anchor		: '100%',
+			},
+			{
+				xtype		: 'button',
+				text		: 'Lost password',
+				margin		: '10 0 0 0',
+				itemId		: 'btnLostPassword',
+				anchor		: '100%',
+			}
+//===============
 		];
 
         //The default

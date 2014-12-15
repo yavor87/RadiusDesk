@@ -17,7 +17,7 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     //---
     counter         : undefined, //refresh counter's id
-    timeUntilStatus : 20, //interval to refresh
+    timeUntilStatus : 20, //interval to refresh 
     refreshInterval : 20, //ditto
 
 	timeUntilUsage 	: 60, //defaults
@@ -27,7 +27,7 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 1, //Make it high to start with --- sometimes it really takes long! FIXME: Ancrease after development
     currentRetry    : 0,
 
     userName        : undefined,
@@ -80,7 +80,26 @@ Ext.define('Mikrotik.controller.Desktop', {
             },
 			'pnlConnect #tabVoucher' : {
                 activate: me.onTabVoucherActivate
-            }
+            },
+			//==== NEW USER REGISTRATION ===
+
+			'pnlConnect #btnNewUser' : {
+				click: me.onBtnNewUserClick		
+			},
+			'winNewUser #btnIntroNext'	: {
+				click: me.onBtnIntroNextClick
+			},
+			'winNewUser #btnDetailBack'	: {
+				click: me.onBtnDetailBackClick
+			},
+			'winNewUser #btnDetailNext'	: {
+				click: me.onBtnDetailNextClick
+			},
+			'winNewUser #btnLastNext'	: {
+				click:	function(b){
+					b.up('window').close();
+				}
+			}
         });    
     },
 	onBtnRemoveMac : function(button){
@@ -718,5 +737,44 @@ Ext.define('Mikrotik.controller.Desktop', {
         me.getConnect().hide();
         me.getStatus().hide();
         me.getNotHotspot().show();
-    }
+    },
+
+	//=========== NEW USER REG ============
+	onBtnNewUserClick : function(){
+		var me = this;
+		var c = Ext.ComponentQuery.query('#winNewUser');
+		if(Ext.isEmpty(c)){
+			Ext.create('Mikrotik.view.winNewUser', { glyph: Mikrotik.config.icnAdd,	id: 'winNewUser'}).show();
+		}else{
+			console.log("Already shown");
+		}
+	},
+	onBtnIntroNextClick	: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnDetail');		
+	},
+	onBtnDetailBackClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnIntro');		
+	},
+	onBtnDetailNextClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		var form    = win.down('form');
+        form.submit({
+            clientValidation	: true,
+            url					: me.application.config.urlAdd,
+            success				: function(form, action) {
+              	console.log("Good register");
+				win.getLayout().setActiveItem('scrnEnd');
+            },
+            //Focus on the first tab as this is the most likely cause of error 
+            failure				: function(form,action){
+				console.log("Fail to register");
+                //Ext.ux.formFail(form,action)
+            }
+        });
+	}
 });
