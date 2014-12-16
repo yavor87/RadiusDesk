@@ -10,6 +10,7 @@ Ext.define('Mikrotik.view.winNewUser', {
     plain		: true,
     border		: false,
     layout		: 'card',
+	mac			: undefined,
     defaults: {
             border: false
     },
@@ -29,17 +30,19 @@ Ext.define('Mikrotik.view.winNewUser', {
             scrnIntro,
             scrnDetail,
 			scrnEnd
-        ]; 
+        ];
         me.callParent(arguments);
         me.getLayout().setActiveItem(scrnIntro);
     },
 	mkScrnIntro: function(){
         me 		= this;
         var pnl = Ext.create('Ext.panel.Panel',{
-			itemId	: 'scrnIntro', 
+			itemId	: 'scrnIntro',
+			bodyCls	: 'pnlNewUser',
 			html	: [
-				"<h1>Intro here</h1>",
-				"Get one month of usage for free",
+				"<h1>Sign-up for free Internet</h1>",
+				"We would like to give you some free Internet!<br>",
+				"Before we can do that though, please sign up with us.",
 			],
 			buttons : [
                  {
@@ -73,30 +76,39 @@ Ext.define('Mikrotik.view.winNewUser', {
             },
 			items       : [
 				{
+                    itemId  : 'mac',
+                    xtype   : 'textfield',
+                    name    : "mac",
+                    hidden  : true,
+					value	: me.mac
+                }, 
+				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Name',
                     name        : "name",
                     allowBlank  : false,
                     blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq'
-					
+                    labelClsExtra: 'fieldReq',
+					value		: 'Dirk'	
                 },
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Surname',
-                    name        : "name",
+                    name        : "surname",
                     allowBlank  : false,
                     blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq'
+                    labelClsExtra: 'fieldReq',
+					value		: 'van der Walt'
                 },
 				{
                     xtype       : 'textfield',
-                    fieldLabel  : 'Email',
+                    fieldLabel  : 'Email (username)',
                     name        : "email",
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
-					vtype		: 'email' // applies email validation rules to this field
+					vtype		: 'email', // applies email validation rules to this field
+					value		: 'dirk@gmail.com'
                 },
 				{
                     xtype       : 'textfield',
@@ -106,7 +118,8 @@ Ext.define('Mikrotik.view.winNewUser', {
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
 					minLength 	: 5,
-					minLengthText 	: 'Password needs to be 5 characters or more'
+					minLengthText 	: 'Password needs to be 5 characters or more',
+					value		: 'verysecure'
                 },
 				{
                     xtype       : 'textfield',
@@ -116,7 +129,8 @@ Ext.define('Mikrotik.view.winNewUser', {
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
 					regex		: /^\d{10}$/i,
-					maskRe		: /\d/i
+					maskRe		: /\d/i,
+					value		: '0128047041'
                 }
 			],   
 			buttons : [
@@ -143,10 +157,12 @@ Ext.define('Mikrotik.view.winNewUser', {
 
 		me 		= this;
         var pnl = Ext.create('Ext.panel.Panel',{
-			itemId	: 'scrnEnd', 
+			itemId	: 'scrnEnd',
+			bodyCls	: 'pnlNewUser', 
 			html	: [
-				"<h1>Conclusion here</h1>",
-				"Thank you for registring with us",
+				"<h1>Thank you!</h1>",
+				"Thank you for registring with us<br>",
+				"Your username and password are already populated, simply click the <b>Connect</b> button to start using the Internet."
 			],
 			buttons : [
                  {
