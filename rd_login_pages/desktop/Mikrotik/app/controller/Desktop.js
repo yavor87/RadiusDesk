@@ -742,9 +742,12 @@ Ext.define('Mikrotik.controller.Desktop', {
 	//=========== NEW USER REG ============
 	onBtnNewUserClick : function(){
 		var me = this;
+		//We get the MAC Addy of the device to prevent users double registring
+		var mac = "AA-BB-CC-DD-EE-FF";
+
 		var c = Ext.ComponentQuery.query('#winNewUser');
 		if(Ext.isEmpty(c)){
-			Ext.create('Mikrotik.view.winNewUser', { glyph: Mikrotik.config.icnAdd,	id: 'winNewUser'}).show();
+			Ext.create('Mikrotik.view.winNewUser', { glyph: Mikrotik.config.icnAdd,	id: 'winNewUser',mac:mac}).show();
 		}else{
 			console.log("Already shown");
 		}
@@ -763,18 +766,23 @@ Ext.define('Mikrotik.controller.Desktop', {
 		var me 		= this;
 		var win		= b.up('window');
 		var form    = win.down('form');
+		form.setLoading('Registring new user...');
         form.submit({
             clientValidation	: true,
             url					: me.application.config.urlAdd,
-            success				: function(form, action) {
-              	console.log("Good register");
+            success				: function(f, action) {
+				var un = me.getConnect().down('#inpUsername');
+				var pw = me.getConnect().down('#inpPassword');
+				un.setValue(action.result.data.username);
+				pw.setValue(action.result.data.password);
+				f.reset();
+				form.setLoading(false);
 				win.getLayout().setActiveItem('scrnEnd');
             },
-            //Focus on the first tab as this is the most likely cause of error 
-            failure				: function(form,action){
-				console.log("Fail to register");
-                //Ext.ux.formFail(form,action)
+            failure				: function(f,action){
+				form.setLoading(false);
             }
         });
 	}
+	//=== End New user REG======
 });
