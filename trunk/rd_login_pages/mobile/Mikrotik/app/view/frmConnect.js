@@ -192,7 +192,6 @@ Ext.define('Mikrotik.view.frmConnect', {
                         itemId  : 'chkTcCheck',
                         hidden  : t_c_hidden
                     }
-                    
                 ]
         });
 
