@@ -1,6 +1,6 @@
 Ext.define('Mikrotik.controller.cMain', {
     extend: 'Ext.app.Controller',
-    requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView'],
+    requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView','Ext.MessageBox'],
     config: {
         refs: {
             cntStatus       : '#cntStatus',
@@ -13,7 +13,8 @@ Ext.define('Mikrotik.controller.cMain', {
             cntPhotos       : '#cntPhotos',
             cntShop         : '#cntShop',
             tabMain         : '#tabMain',
-            datThumb        : '#datThumb'
+            datThumb        : '#datThumb',
+			navNewUser		: '#navNewUser'
         },
         control: {
         
@@ -43,13 +44,20 @@ Ext.define('Mikrotik.controller.cMain', {
             },
 			'cntStatus #tpStatus': {
                 activeitemchange    : 'onActiveItemChange'
-            }
+            },
+			'navNewUser #navBtnNext' : {
+				tap			: 'onNavBtnNextTap'
+			}
         },
         views: [
             'cntNotPresent',
             'tabMain',
-            'frmConnect'
-        ] 
+            'frmConnect',
+			'frmNewUser'
+        ],
+		models:	[
+			'mNewUser'
+		] 
     },
  
     counter     	: undefined, //refresh counter's id
@@ -63,7 +71,7 @@ Ext.define('Mikrotik.controller.cMain', {
 
     sessionData 	: undefined,
 
-    retryCount  	: 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount  	: 1, //Make it high to start with --- sometimes it really takes long! FIXME Reduce after development
     currentRetry	: 0,
 
     userName    	: '',
@@ -699,5 +707,48 @@ Ext.define('Mikrotik.controller.cMain', {
 			ls.setHidden(false);
 			lu.setHidden(true);
 		}
+	},
+	onNavBtnNextTap	: function(btn){
+		var me 			= this;
+		var view		= btn.up('navNewUser');
+		var activeId	= view.getActiveItem().getItemId();
+		console.log(activeId);
+		if(activeId == 'pnlUsrRegIntro'){	
+			view.push({
+				title	: 'Supply detail',
+			    xtype	: 'frmNewUser',
+				itemId	: 'frmNewUser'
+			});	
+		}
+
+		if(activeId == 'frmNewUser'){	
+			console.log("Now we need to do some error checking");
+			var errorString 	= '';
+			var form 			= view.down('formpanel');
+			var fields 			= form.query("field");
+
+			// remove the style class from all fields
+		   	for (var i=0; i<fields.length; i++) {
+				fields[i].removeCls('invalidField');
+		   	}
+		 
+			// dump form fields into new model instance
+			var model 			= Ext.create("Mikrotik.model.mNewUser", form.getValues());
+		 
+			// validate form fields
+			var errors = model.validate();
+		 
+			if (!errors.isValid()) {
+			  	// loop through validation errors and generate a message to the user
+			  	errors.each(function (errorObj){
+					errorString += errorObj.getField() + " " + errorObj.getMessage() + " ";
+					var s = Ext.String.format('field[name={0}]',errorObj.getField());
+					form.down(s).addCls('invalidField');
+			  	});
+			  	Ext.Msg.alert('Errors in your input',errorString);
+			 } else {
+			  	Ext.Msg.alert("Data is valid","Success");
+			 }
+		}	
 	}
 });

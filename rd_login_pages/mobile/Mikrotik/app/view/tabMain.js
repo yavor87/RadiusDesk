@@ -8,7 +8,8 @@ Ext.define('Mikrotik.view.tabMain', {
         'Mikrotik.view.cntNotHotspot',
         'Mikrotik.view.cntPhotos',
         'Mikrotik.view.cntAbout',
-        'Mikrotik.view.cntPayAd'
+        'Mikrotik.view.cntPayAd',
+		'Mikrotik.view.navNewUser'
     ],
     config: {
         tabBar : {
@@ -114,6 +115,12 @@ Ext.define('Mikrotik.view.tabMain', {
                 ]
             }
 			*/
+			,{
+				title		: 'New user',
+				xtype		: 'navNewUser',
+				iconCls     : 'add',
+				itemId		: 'navNewUser'
+			}
         ];
 
         me.callParent([config]);
