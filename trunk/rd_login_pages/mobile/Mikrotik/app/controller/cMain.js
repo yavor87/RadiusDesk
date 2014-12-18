@@ -46,7 +46,7 @@ Ext.define('Mikrotik.controller.cMain', {
                 activeitemchange    : 'onActiveItemChange'
             },
 			'navNewUser #navBtnNext' : {
-				tap			: 'onNavBtnNextTap'
+				tap		: 'onNavBtnNextTap'
 			}
         },
         views: [
@@ -711,6 +711,7 @@ Ext.define('Mikrotik.controller.cMain', {
 	onNavBtnNextTap	: function(btn){
 		var me 			= this;
 		var view		= btn.up('navNewUser');
+		
 		var activeId	= view.getActiveItem().getItemId();
 		console.log(activeId);
 		if(activeId == 'pnlUsrRegIntro'){	
@@ -762,7 +763,9 @@ Ext.define('Mikrotik.controller.cMain', {
 						view.push({
 							title	: 'Result',
 							itemId	: 'pnlEnd'
-						});	
+						});
+						var navigationBar = view.getNavigationBar();
+						navigationBar.query('button')[0].hide();
                     },
                     failure: function(f, result) {
 						Ext.iterate(result.errors, function(key, value) {
@@ -775,6 +778,15 @@ Ext.define('Mikrotik.controller.cMain', {
                     }                       
                 });
 			 }
-		}	
+		}
+
+		if(activeId == 'pnlEnd'){
+			view.pop(2);
+		}
+	},
+	onNavBtnBackTap: function(a,b){
+		var me = this;
+		console.log(a);
+		console.log(b);
 	}
 });
