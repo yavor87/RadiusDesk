@@ -25,6 +25,7 @@ Ext.define('Mikrotik.view.navNewUser', {
     },
 	onBackButtonTap:function(){
 		var me = this;
+		console.log("Back button tapped");
         me.callParent(arguments);
     }
 });

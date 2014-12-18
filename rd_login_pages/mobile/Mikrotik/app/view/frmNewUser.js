@@ -22,31 +22,36 @@ Ext.define('Mikrotik.view.frmNewUser', {
 		                xtype   	: 'textfield',
 		                name    	: 'name',
 		                placeHolder : 'Name',
-		                itemId  	: 'name'
+		                itemId  	: 'name',
+						value		: 'Dirk'
 		            },
 					{
 		                xtype   	: 'textfield',
 		                name    	: 'surname',
 		                placeHolder : 'Surname',
-		                itemId  	: 'surname'
+		                itemId  	: 'surname',
+						value		: 'van der Walt'
 		            },
 					{
 				        xtype 		: 'emailfield',
 				        name 		: 'email',
 				        placeHolder : 'Email (username)',
-						itemId		: 'email'
+						itemId		: 'email',
+						value		: 'dirk@gmail.com'
 				    },
 					{
 		                xtype   	: 'textfield',
 		                name    	: 'password',
 		                placeHolder : 'Password',
-		                itemId  	: 'password'
+		                itemId  	: 'password',
+						value		: 'verysecure'
 		            },
 					{
 		                xtype   	: 'textfield',
 		                name    	: 'phone',
 		                placeHolder : 'Cell',
-		                itemId  	: 'phone'
+		                itemId  	: 'phone',
+						value		: '0128043331'
 		            }
 		        ]
 			}
