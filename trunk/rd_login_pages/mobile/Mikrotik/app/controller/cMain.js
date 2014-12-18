@@ -741,13 +741,39 @@ Ext.define('Mikrotik.controller.cMain', {
 			if (!errors.isValid()) {
 			  	// loop through validation errors and generate a message to the user
 			  	errors.each(function (errorObj){
-					errorString += errorObj.getField() + " " + errorObj.getMessage() + " ";
+					errorString += errorObj.getField() + ": " + errorObj.getMessage() + " <br>";
 					var s = Ext.String.format('field[name={0}]',errorObj.getField());
 					form.down(s).addCls('invalidField');
 			  	});
 			  	Ext.Msg.alert('Errors in your input',errorString);
 			 } else {
-			  	Ext.Msg.alert("Data is valid","Success");
+		  		//Ext.Msg.alert("Data is valid","Success");
+				// Validation successful - show loader
+                view.down('formpanel').setMasked({
+                    xtype:'loadmask',
+                    message:'Registring user'
+                });
+                view.down('formpanel').submit({
+                    url		: Mikrotik.config.Config.getUrlAdd(),
+                    method	: 'POST',
+                    success	: function(f, result) {
+						console.log("Pass");
+                        view.down('formpanel').setMasked(false);
+						view.push({
+							title	: 'Result',
+							itemId	: 'pnlEnd'
+						});	
+                    },
+                    failure: function(f, result) {
+						Ext.iterate(result.errors, function(key, value) {
+							errorString += key + ": " + value + " <br>";
+							var s = Ext.String.format('field[name={0}]',key);
+							form.down(s).addCls('invalidField');
+			  			});
+						view.down('formpanel').setMasked(false);
+			  			Ext.Msg.alert('Failed to register',errorString);     
+                    }                       
+                });
 			 }
 		}	
 	}
