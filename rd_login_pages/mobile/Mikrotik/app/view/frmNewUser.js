@@ -8,16 +8,23 @@ Ext.define('Mikrotik.view.frmNewUser', {
 		'Ext.field.Email'
     ],
     config: {
-        layout: 'vbox',
-		items : [
+        layout: 'vbox'
+    },
+	constructor: function(config) {
+		var me          = this;
+		config.items =  [
 			{
 				xtype		: 'fieldset',
 				title       : 'Required info',
 		        instructions: 'Scroll down to see all fields',
-		        //defaults    : { 'labelWidth' : '35%'},
 		        scrollable  : true,
 		        flex        : 1,
 				items: [
+					{
+		                xtype		: 'hiddenfield',
+		                name		: 'mac',
+		                value		: config.mac
+		            },
 		            {
 		                xtype   	: 'textfield',
 		                name    	: 'name',
@@ -55,6 +62,7 @@ Ext.define('Mikrotik.view.frmNewUser', {
 		            }
 		        ]
 			}
-		]
-    }
+		];
+        me.callParent([config]);
+	}
 });

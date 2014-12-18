@@ -18,8 +18,12 @@ Ext.define('Mikrotik.view.navNewUser', {
 		items:	[
 			{
 				title		: 'Read first',
-				html		: "Read first text",
-				itemId		: 'pnlUsrRegIntro'
+				html		: "<h1>Sign-up for free Internet</h1>"+
+				"We would like to give you some free Internet!<br>"+
+				"Before we can do that though, please sign up with us.",
+				itemId		: 'pnlUsrRegIntro',
+				styleHtmlContent : true,
+				styleHtmlCls: 'regHtml'
 			}
 		]
     },

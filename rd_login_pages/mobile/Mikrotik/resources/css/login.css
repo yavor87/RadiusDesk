@@ -196,4 +196,18 @@
   background-color: red !important;
 }
 
+.regHtml {
+	color: #057612;
+    font-weight: normal;
+    padding: 10px;
+}
+
+.regHtml h1 {
+	color: #495982;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    font-size:150%;
+}
+
 
