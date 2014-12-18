@@ -715,10 +715,12 @@ Ext.define('Mikrotik.controller.cMain', {
 		var activeId	= view.getActiveItem().getItemId();
 		console.log(activeId);
 		if(activeId == 'pnlUsrRegIntro'){	
+			var mac = 'aa-bb-cc-dd-ee-ff';
 			view.push({
 				title	: 'Supply detail',
 			    xtype	: 'frmNewUser',
-				itemId	: 'frmNewUser'
+				itemId	: 'frmNewUser',
+				mac		: mac
 			});	
 		}
 
@@ -762,10 +764,20 @@ Ext.define('Mikrotik.controller.cMain', {
                         view.down('formpanel').setMasked(false);
 						view.push({
 							title	: 'Result',
-							itemId	: 'pnlEnd'
+							itemId	: 'pnlEnd',
+							html	: "<h1>Thank you!</h1>"+
+									  "Thank you for registring with us<br>"+
+									  "Your username and password are already populated,"+
+									  " simply click the <b>Connect</b> button to start using the Internet.",
+							styleHtmlContent : true,
+							styleHtmlCls: 'regHtml'
 						});
 						var navigationBar = view.getNavigationBar();
 						navigationBar.query('button')[0].hide();
+						//populate the usernam and password fields
+						var frmC = me.getFrmConnect();
+						frmC.down('#inpUsername').setValue(result.data.username);
+						frmC.down('#inpPassword').setValue(result.data.password);
                     },
                     failure: function(f, result) {
 						Ext.iterate(result.errors, function(key, value) {
@@ -781,7 +793,7 @@ Ext.define('Mikrotik.controller.cMain', {
 		}
 
 		if(activeId == 'pnlEnd'){
-			view.pop(2);
+			view.pop(2); //Remove the last two screens; ending with screen one
 		}
 	},
 	onNavBtnBackTap: function(a,b){
