@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class PermanentUsersController extends AppController {
 
     public $name       = 'PermanentUsers';
-    public $uses       = array('User','Profile','Realm');
+    public $uses       = array('PermanentUser','Profile','Realm','User');
     public $components = array('Aa','Kicker');
     protected $base    = "Access Providers/Controllers/PermanentUsers/";
 
@@ -13,27 +13,6 @@ class PermanentUsersController extends AppController {
             'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
             'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password'
         );
-
-    //--- FROM THE OLD ---
-    /* json_index json_add json_del json_view json_edit 
-        // json_prepaid_list json_tabs json_send_message csv json_change_profile 
-        // json_private_attributes json_add_private json_del_private json_edit_private
-        // json_test_auth json_disable json_usage json_kick json_notify_detail json_notify_save
-        // json_view_activity json_del_activity json_password 
-        // json_actions json_actions_for_user_private json_actions_for_user_profile json_actions_for_user_activity
-    */
-
-    //-- NOTES on users:
-    //-- Each user belongs to (A) group (group_id) = Permanent Users. (B) a realm (realm_id) (C) a creator (user_id)
-    //-- (D) Profile ID (profile_id) (E) a Language ID (language_id) (F) an Auth Method id (auth_method_id)
-
-    //-- Each user will have a token which should be used in the URL to do Ajax calls
-
-    //-- NOTES on rights:
-    //-- Most controller actions will require a token in the query string to determine who originated the request
-    //-- The rights of that person will then be checked and also against who it is attempting to be done.
-
-
     //-------- BASIC CRUD -------------------------------
 
 
@@ -77,14 +56,14 @@ class PermanentUsersController extends AppController {
                     $column_name = $c->name;
                     if($column_name == 'notes'){
                         $notes   = '';
-                        foreach($i['UserNote'] as $n){
+                        foreach($i['PermanentUserNote'] as $n){
                             if(!$this->_test_for_private_parent($n['Note'],$user)){
                                 $notes = $notes.'['.$n['Note']['note'].']';    
                             }
                         }
                         array_push($csv_line,$notes);
                     }elseif($column_name =='owner'){
-                        $owner_id       = $i['User']['parent_id'];
+                        $owner_id       = $i['User']['parent_id']; //FIXME
                         $owner_tree     = $this->_find_parents($owner_id);
                         array_push($csv_line,$owner_tree); 
                     }elseif($column_name =='realm'){
@@ -104,7 +83,7 @@ class PermanentUsersController extends AppController {
                         }
                         array_push($csv_line,$profile); 
                     }else{
-                        array_push($csv_line,$i['User']["$column_name"]);  
+                        array_push($csv_line,$i['PermanentUser']["$column_name"]);  
                     }
                 }
                 fputcsv($fp, $csv_line,';','"');
@@ -134,7 +113,7 @@ class PermanentUsersController extends AppController {
             return;
         }
         $user_id    = $user['id'];
-        $c = $this->_build_common_query($user); 
+        $c 			= $this->_build_common_query($user); 
 
         //===== PAGING (MUST BE LAST) ======
         $limit  = 50;   //Defaults
@@ -159,12 +138,12 @@ class PermanentUsersController extends AppController {
         $realms     = array();
 
         foreach($q_r as $i){ 
-            $owner_id       = $i['Owner']['id'];
+            $owner_id       = $i['PermanentUser']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
 
             //Create notes flag
             $notes_flag  = false;
-            foreach($i['UserNote'] as $un){
+            foreach($i['PermanentUserNote'] as $un){
                 if(!$this->_test_for_private_parent($un['Note'],$user)){
                     $notes_flag = true;
                     break;
@@ -174,42 +153,41 @@ class PermanentUsersController extends AppController {
             $action_flags = array();
             $action_flags['update'] = false;
             $action_flags['delete'] = false;
-            $action_flags   = $this->_get_action_flags($user,$owner_id,$i['User']['realm_id']);
+            $action_flags   = $this->_get_action_flags($user,$owner_id,$i['PermanentUser']['realm_id']);
 
             array_push($items,
                 array(
-                    'id'        => $i['User']['id'], 
-                    'owner'     => $owner_tree,
-					'owner_id'	=> $i['User']['parent_id'],
-                    'username'  => $i['User']['username'],
-                    'name'      => $i['User']['name'],
-                    'surname'   => $i['User']['surname'], 
-                    'phone'     => $i['User']['phone'], 
-                    'email'     => $i['User']['email'],
-                    'address'   => $i['User']['address'],
-                    'auth_type' => $i['User']['auth_type'],
+                    'id'        			=> $i['PermanentUser']['id'], 
+                    'owner'     			=> $owner_tree,				//FIXME
+					'owner_id'				=> $i['PermanentUser']['user_id'], //FIXME
+                    'username'  			=> $i['PermanentUser']['username'],
+                    'name'      			=> $i['PermanentUser']['name'],
+                    'surname'   			=> $i['PermanentUser']['surname'], 
+                    'phone'     			=> $i['PermanentUser']['phone'], 
+                    'email'     			=> $i['PermanentUser']['email'],
+                    'address'   			=> $i['PermanentUser']['address'],
+                    'auth_type' 			=> $i['PermanentUser']['auth_type'],
 
-                    'perc_time_used'=> $i['User']['perc_time_used'],
-                    'perc_data_used'=> $i['User']['perc_data_used'],
-                    'active'    => $i['User']['active'], 
-                    'monitor'   => $i['User']['monitor'],
-                    'last_accept_time'      => $i['User']['last_accept_time'],
-                    'last_accept_nas'       => $i['User']['last_accept_nas'],
-                    'last_reject_time'      => $i['User']['last_reject_time'],
-                    'last_reject_nas'       => $i['User']['last_reject_nas'],
-                    'last_reject_message'   => $i['User']['last_reject_message'],
+                    'perc_time_used'		=> $i['PermanentUser']['perc_time_used'],
+                    'perc_data_used'		=> $i['PermanentUser']['perc_data_used'],
+                    'active'    			=> $i['PermanentUser']['active'], 
+                    'last_accept_time'      => $i['PermanentUser']['last_accept_time'],
+                    'last_accept_nas'       => $i['PermanentUser']['last_accept_nas'],
+                    'last_reject_time'      => $i['PermanentUser']['last_reject_time'],
+                    'last_reject_nas'       => $i['PermanentUser']['last_reject_nas'],
+                    'last_reject_message'   => $i['PermanentUser']['last_reject_message'],
 
-                    'data_used'             => $i['User']['data_used'],
-                    'data_cap'              => $i['User']['data_cap'],
-					'time_used'             => $i['User']['time_used'],
-                    'time_cap'              => $i['User']['time_cap'],
-					'time_cap_type'         => $i['User']['time_cap_type'],
-                    'date_cap_type'         => $i['User']['data_cap_type'],
-					'realm'                 => $i['User']['realm'],
-					'realm_id'              => $i['User']['realm_id'],
-					'profile'               => $i['User']['profile'],
-					'profile_id'            => $i['User']['profile_id'],
-                    'static_ip'             => $i['User']['static_ip'],
+                    'data_used'             => $i['PermanentUser']['data_used'],
+                    'data_cap'              => $i['PermanentUser']['data_cap'],
+					'time_used'             => $i['PermanentUser']['time_used'],
+                    'time_cap'              => $i['PermanentUser']['time_cap'],
+					'time_cap_type'         => $i['PermanentUser']['time_cap_type'],
+                    'date_cap_type'         => $i['PermanentUser']['data_cap_type'],
+					'realm'                 => $i['PermanentUser']['realm'],
+					'realm_id'              => $i['PermanentUser']['realm_id'],
+					'profile'               => $i['PermanentUser']['profile'],
+					'profile_id'            => $i['PermanentUser']['profile_id'],
+                    'static_ip'             => $i['PermanentUser']['static_ip'],
                     'notes'                 => $notes_flag,
                     'update'                => $action_flags['update'],
                     'delete'                => $action_flags['delete']
@@ -223,12 +201,6 @@ class PermanentUsersController extends AppController {
             '_serialize'    => array('items','success','totalCount')
         ));
     }
-
-
-   	public function fix_tree(){
-		$this->User->recover('parent','44');
-		$this->set(array('success' => true, '_serialize' => array('success')));
-  	}
 
   	public function add(){
 
@@ -250,8 +222,8 @@ class PermanentUsersController extends AppController {
             $this->request->data['monitor'] = 1;
         }
 
-        if(($this->request->data['parent_id'] == '0')||($this->request->data['parent_id'] == '')){ //This is the holder of the token
-            $this->request->data['parent_id'] = $user['id'];
+        if(($this->request->data['user_id'] == '0')||($this->request->data['user_id'] == '')){ //This is the holder of the token
+            $this->request->data['user_id'] = $user['id'];
         }
 
         if(!array_key_exists('language',$this->request->data)){
@@ -325,8 +297,6 @@ class PermanentUsersController extends AppController {
         }
         //______ END of Realm and Profile check _____
 
-
-
         //Get the group ID for AP's
         $group_name = Configure::read('group.user');
         $q_r        = ClassRegistry::init('Group')->find('first',array('conditions' =>array('Group.name' => $group_name)));
@@ -373,13 +343,12 @@ class PermanentUsersController extends AppController {
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id   = $item['User']['parent_id'];
-            $username   = $item['User']['username'];
+            $owner_id   = $item['PermanentUser']['user_id']; 
+            $username   = $item['PermanentUser']['username'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                     $this->_delete_clean_up_user($username);
                 }else{
                     $fail_flag = true;
@@ -387,7 +356,6 @@ class PermanentUsersController extends AppController {
             }else{
                 $this->{$this->modelClass}->id = $this->data['id'];
                 $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                 $this->_delete_clean_up_user($username);
             }
    
@@ -395,13 +363,12 @@ class PermanentUsersController extends AppController {
             foreach($this->data as $d){
 
                 $item       = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id   = $item['User']['parent_id'];
-                $username   = $item['User']['username'];
+                $owner_id   = $item['PermanentUser']['user_id']; 
+                $username   = $item['PermanentUser']['username'];  
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
-                        $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                         $this->_delete_clean_up_user($username);
                     }else{
                         $fail_flag = true;
@@ -409,7 +376,6 @@ class PermanentUsersController extends AppController {
                 }else{
                     $this->{$this->modelClass}->id = $d['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->recover('parent','44');     //This is a (potential) ugly hack
                     $this->_delete_clean_up_user($username);
                 }
             }
@@ -464,7 +430,7 @@ class PermanentUsersController extends AppController {
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
 
-			$items['static_ip'] = $q_r['User']['static_ip'];
+			$items['static_ip'] = $q_r['PermanentUser']['static_ip'];
 
             foreach($q_r['Radcheck'] as $rc){
 
@@ -541,7 +507,7 @@ class PermanentUsersController extends AppController {
         //TODO Check if the owner of this user is in the chain of the APs
         if(isset($this->request->data['id'])){
             $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
-            $username   = $q_r['User']['username'];
+            $username   = $q_r['PermanentUser']['username'];
 
             if(isset($this->request->data['profile_id'])){
                 $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
@@ -623,7 +589,7 @@ class PermanentUsersController extends AppController {
 			}
 		
 			//Finally update the user's table entry of the permanent user
-			$this->User->save($this->request->data);
+			$this->PermanentUser->save($this->request->data);
 
         }
 
@@ -649,13 +615,13 @@ class PermanentUsersController extends AppController {
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
            // print_r($q_r);
             if($q_r){
-                $language = $q_r['User']['country_id'].'_'.$q_r['User']['language_id'];
+                $language = $q_r['PermanentUser']['country_id'].'_'.$q_r['PermanentUser']['language_id'];
                 $items['language']  = $language;
-                $items['name']      = $q_r['User']['name'];
-                $items['surname']   = $q_r['User']['surname'];
-                $items['phone']     = $q_r['User']['phone'];
-                $items['address']   = $q_r['User']['address'];
-                $items['email']     = $q_r['User']['email'];
+                $items['name']      = $q_r['PermanentUser']['name'];
+                $items['surname']   = $q_r['PermanentUser']['surname'];
+                $items['phone']     = $q_r['PermanentUser']['phone'];
+                $items['address']   = $q_r['PermanentUser']['address'];
+                $items['email']     = $q_r['PermanentUser']['email'];
             }
         }
 
@@ -687,7 +653,7 @@ class PermanentUsersController extends AppController {
         $this->request->data['language_id'] = $language;
         $this->request->data['country_id']  = $country;
 
-        if ($this->User->save($this->request->data)) {
+        if ($this->PermanentUser->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
@@ -1071,7 +1037,7 @@ class PermanentUsersController extends AppController {
         //TODO Check if the owner of this user is in the chain of the APs
         if(isset($this->request->data['id'])){
             $q_r        = $this->{$this->modelClass}->findById($this->request->data['id']);
-            $username   = $q_r['User']['username'];
+            $username   = $q_r['PermanentUser']['username'];
            
             //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth) 
             if(!isset($this->request->data['track_auth'])){
@@ -1175,7 +1141,7 @@ class PermanentUsersController extends AppController {
             if(isset($this->request->data['username'])){
                 $q_un = $this->{$this->modelClass}->findByUsername($this->request->data['username']);
                 if($q_un){
-                    $this->request->data['user_id'] = $q_un['User']['id'];
+                    $this->request->data['user_id'] = $q_un['PermanentUser']['id'];
                 }
             }
 
@@ -1186,10 +1152,9 @@ class PermanentUsersController extends AppController {
             $group_id    = $q_r['Group']['id'];
             $user_id    = $this->request->data['user_id'];
 
-            $d['User']['id']        = $this->request->data['user_id'];
-            $d['User']['group_id']  = $group_id;  
-            $d['User']['password']  = $this->request->data['password'];
-            $d['User']['token']     = '';
+            $d['PermanentUser']['id']        = $this->request->data['user_id'];
+            $d['PermanentUser']['password']  = $this->request->data['password'];
+            $d['PermanentUser']['token']     = '';
             $this->{$this->modelClass}->id  = $this->request->data['user_id'];
             $this->{$this->modelClass}->save($d);
 
@@ -1207,12 +1172,12 @@ class PermanentUsersController extends AppController {
 
             //Check if we need to add or remove actvation and expiry dates
 
-            $this->User             = ClassRegistry::init('User');
-            $this->User->contain();
-            $q_user = $this->User->findById($this->request->data['user_id']);
+            $this->PermanentUser             = ClassRegistry::init('User');
+            $this->PermanentUser->contain();
+            $q_user = $this->PermanentUser->findById($this->request->data['user_id']);
 
             if($q_user){
-                $username = $q_user['User']['username'];
+                $username = $q_user['PermanentUser']['username'];
 
                 if(isset($this->request->data['to_date'])){
                     $expiration = $this->_radius_format_date($this->request->data['to_date']);
@@ -1312,21 +1277,14 @@ class PermanentUsersController extends AppController {
 
 
         if($rb == 'enable'){
-            $d['User']['active'] = 1;
+            $d['PermanentUser']['active'] = 1;
         }else{
-            $d['User']['active'] = 0;
+            $d['PermanentUser']['active'] = 0;
         }
-
-        //We need to give the group_id to trigger the radcheck modifications.
-        $group_name  = Configure::read('group.user');
-        $q_r         = $this->{$this->modelClass}->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
-        $group_id    = $q_r['Group']['id'];
-
-        $d['User']['group_id'] = $group_id;
 
         foreach(array_keys($this->request->data) as $key){
             if(preg_match('/^\d+/',$key)){
-                $d['User']['id']                = $key;
+                $d['PermanentUser']['id']       = $key;
                 $this->{$this->modelClass}->id  = $key;
                 $this->{$this->modelClass}->save($d);   
             }
@@ -1350,10 +1308,10 @@ class PermanentUsersController extends AppController {
         $items = array();
         if(isset($this->request->query['for_id'])){
             $u_id   = $this->request->query['for_id'];
-            $q_r    = $this->User->UserNote->find('all', 
+            $q_r    = $this->PermanentUser->PermanentUserNote->find('all', 
                 array(
                     'contain'       => array('Note'),
-                    'conditions'    => array('UserNote.user_id' => $u_id)
+                    'conditions'    => array('PermanentUserNote.permanent_user_id' => $u_id)
                 )
             );
             foreach($q_r as $i){
@@ -1402,14 +1360,14 @@ class PermanentUsersController extends AppController {
 
         $success    = false;
         $msg        = array('message' => __('Could not create note'));
-        $this->User->UserNote->Note->create(); 
+        $this->PermanentUser->PermanentUserNote->Note->create(); 
         //print_r($this->request->data);
-        if ($this->User->UserNote->Note->save($this->request->data)) {
+        if ($this->PermanentUser->PermanentUserNote->Note->save($this->request->data)) {
             $d                          = array();
-            $d['UserNote']['user_id']   = $this->request->data['for_id'];
-            $d['UserNote']['note_id']   = $this->User->UserNote->Note->id;
-            $this->User->UserNote->create();
-            if ($this->User->UserNote->save($d)) {
+            $d['PermanentUserNote']['permanent_user_id']   	= $this->request->data['for_id'];
+            $d['PermanentUserNote']['note_id']   			= $this->PermanentUser->PermanentUserNote->Note->id;
+            $this->PermanentUser->PermanentUserNote->create();
+            if ($this->PermanentUser->PermanentUserNote->save($d)) {
                 $success = true;
             }
         }
@@ -1440,42 +1398,42 @@ class PermanentUsersController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->User = ClassRegistry::init('User');
+        $this->PermanentUser = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
 
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item       = $this->User->UserNote->Note->findById($this->data['id']);
+            $item       = $this->PermanentUser->PermanentUserNote->Note->findById($this->data['id']);
             $owner_id   = $item['Note']['user_id'];
             if($owner_id != $user_id){
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->User->UserNote->Note->id = $this->data['id'];
-                    $this->User->UserNote->Note->delete($this->data['id'],true);
+                    $this->PermanentUser->PermanentUserNote->Note->id = $this->data['id'];
+                    $this->PermanentUser->PermanentUserNote->Note->delete($this->data['id'],true);
                 }else{
                     $fail_flag = true;
                 }
             }else{
-                $this->User->UserNote->Note->id = $this->data['id'];
-                $this->User->UserNote->Note->delete($this->data['id'],true);
+                $this->PermanentUser->PermanentUserNote->Note->id = $this->data['id'];
+                $this->PermanentUser->PermanentUserNote->Note->delete($this->data['id'],true);
             }
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
 
-                $item       = $this->User->UserNote->Note->findById($d['id']);
+                $item       = $this->PermanentUser->PermanentUserNote->Note->findById($d['id']);
                 $owner_id   = $item['Note']['user_id'];
                 if($owner_id != $user_id){
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->User->UserNote->Note->id = $d['id'];
-                        $this->User->UserNote->Note->delete($d['id'],true);
+                        $this->PermanentUser->PermanentUserNote->Note->id = $d['id'];
+                        $this->PermanentUser->PermanentUserNote->Note->delete($d['id'],true);
                     }else{
                         $fail_flag = true;
                     }
                 }else{
-                    $this->User->UserNote->Note->id = $d['id'];
-                    $this->User->UserNote->Note->delete($d['id'],true);
+                    $this->PermanentUser->PermanentUserNote->Note->id = $d['id'];
+                    $this->PermanentUser->PermanentUserNote->Note->delete($d['id'],true);
                 }
  
             }
@@ -1849,18 +1807,17 @@ class PermanentUsersController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'UserNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
-                            'Owner'     => array('Owner.username'),
-                            'Group'     
+                            'PermanentUserNote' => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
+                            'User'
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'User.username';
+        $sort   = 'PermanentUser.username';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
-            if($this->request->query['sort'] == 'owner'){
+            if($this->request->query['sort'] == 'owner'){	//FIXME
                 $sort = 'User.username';
             }elseif(($this->request->query['sort'] == 'profile')||($this->request->query['sort'] == 'realm')){
                 $sort = 'Radcheck.value';
@@ -1895,15 +1852,11 @@ class PermanentUsersController extends AppController {
             }
         }
 
-	//=== Check if the combobox send us a filter request ===
+		//=== Check if the combobox send us a filter request ===
         if(isset($this->request->query['query'])){
             $un = $this->request->query['query'];
-            array_push($c['conditions'],array("User.username LIKE" => '%'.$un.'%'));  
+            array_push($c['conditions'],array("PermanentUser.username LIKE" => '%'.$un.'%'));  
         }
-    
-        //== ONLY Permanent Users ==
-        $p_user_name = Configure::read('group.user');
-        array_push($c['conditions'],array('Group.name' => $p_user_name ));
 
         //====== END REQUEST FILTER =====
 
@@ -1915,7 +1868,7 @@ class PermanentUsersController extends AppController {
                 $ap_clause      = array();
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($ap_clause,array($this->modelClass.'.parent_id' => $id));
+                    array_push($ap_clause,array($this->modelClass.'.user_id' => $id));
                 }      
                 //Add it as an OR clause
                 array_push($c['conditions'],array('OR' => $ap_clause));  
