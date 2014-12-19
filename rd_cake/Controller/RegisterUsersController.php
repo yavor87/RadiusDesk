@@ -6,11 +6,15 @@ class RegisterUsersController extends AppController {
 
 	public function new_permanent_user(){
 
-		$data = array('profile' => true);
+		$data = array('username' => 'dvdwalt', 'password' => 'dvdwalt');
 		$this->set(array(
             'success'   => true,
+			'errors'	=> array(
+        		'name' 	=> "Client not found",
+				'email' => "Already registered - use lost password utility"
+    		),
             'data'      => $data,
-            '_serialize' => array('success','data')
+            '_serialize' => array('success','data','errors')
         ));	
 	}
 }
