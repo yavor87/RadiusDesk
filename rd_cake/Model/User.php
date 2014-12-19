@@ -2,21 +2,11 @@
 App::uses('AppModel', 'Model');
 App::uses('AuthComponent', 'Controller/Component');
 
-/**
- * User Model
- *
- * @property Group $Group
- */
 class User extends AppModel {
 
     //Used to build the list of children an Access Provider may have up to the end nodes.
     private $ap_children    = array();
 
-/**
- * Validation rules
- *
- * @var array
- */
 	public $validate = array(
 		'username' => array(
             'required' => array(
@@ -79,21 +69,9 @@ class User extends AppModel {
         'UserSetting' => array(
             'dependent'     => true   
         ),
-        'Radcheck' => array(
-            'className'     => 'Radcheck',
-            'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radcheck.* FROM radcheck AS Radcheck, users WHERE users.username=Radcheck.username AND users.id={$__cakeID__$}',
-            'dependent'     => true
-        ),
-        'Radreply' => array(
-            'className'     => 'Radreply',
-            'foreignKey'	=> false,
-            'finderQuery'   => 'SELECT Radreply.* FROM radreply AS Radreply, users WHERE users.username=Radreply.username AND users.id={$__cakeID__$}',
-            'dependent'     => true
-        ),
-        'Device' => array(
+		'PermanentUser' => array(
             'dependent'     => true   
-        ),
+        )
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
@@ -115,194 +93,7 @@ class User extends AppModel {
 
     public function afterSave($created){
 
-        if($created){
-            $group_name  = Configure::read('group.user');
-            $q_r        = $this->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
-            $group_id   = $q_r['Group']['id'];
-            //Check if this is a permanent user
-            if($this->data['User']['group_id'] == $group_id){
-                $this->_add_radius_user();
-            }
-        }else{
-            if(array_key_exists('group_id',$this->data['User'])){
-               
-                $group_name  = Configure::read('group.user');
-                $q_r        = $this->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
-                $group_id   = $q_r['Group']['id'];
-                //Check if this is a permanent user
-                if($this->data['User']['group_id'] == $group_id){
-                    $this->_update_radius_user();
-                }
-            }
-        }
-    }
-
-    private function _update_radius_user(){
-
-        $user_id    = $this->data['User']['id']; //The user's ID should always be present!
-        //Get the username
-        $q_r        = $this->findById($user_id);
-        $username   = $q_r['User']['username'];
-
-        //enabled or disabled (Rd-Account-Disabled)
-        if(array_key_exists('active',$this->data['User'])){ //It may be missing; you never know...
-          //  if($this->data['User']['active'] != null){ //TODO Figure out why it takes a zero (0) as '' or null??? //So we had to leave this out to allow for disabling
-                if($this->data['User']['active'] == 1){ //Reverse the logic...
-                    $dis = 0;
-                }else{
-                    $dis = 1;
-                }
-                
-                $this->_replace_radcheck_item($username,'Rd-Account-Disabled',$dis);
-          //  }
-        }
-
-        //Password (Cleartext-Password)
-        if(array_key_exists('password',$this->data['User'])){ //Usually used to change the password               
-            $this->_replace_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
-        }
-
-    }
-
-    private function _add_radius_user(){
-        //The username with it's password (Cleartext-Password)
-        $username                   = $this->data['User']['username'];
-        $this->_add_radcheck_item($username,'Cleartext-Password',$this->clearPwd);
-        $this->_add_radcheck_item($username,'Rd-User-Type','user');
-
-        //Realm (Rd-Realm)
-        if(array_key_exists('realm_id',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['realm_id'] != ''){
-                $q_r = ClassRegistry::init('Realm')->findById($this->data['User']['realm_id']);
-                $realm_name = $q_r['Realm']['name'];
-                $this->_add_radcheck_item($username,'Rd-Realm',$realm_name);
-            }
-        }
-
-        //Auth Type (Rd-Auth-Type) = sql by default
-
-        //$this->_add_radcheck_item($username,'Rd-Auth-Type','sql');
-
-        //Profile name (User-Profile)
-        if(array_key_exists('profile_id',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['profile_id'] != ''){
-                $q_r = ClassRegistry::init('Profile')->findById($this->data['User']['profile_id']);
-                $profile_name = $q_r['Profile']['name']; 
-                $this->_add_radcheck_item($username,'User-Profile',$profile_name);
-            }
-        }
-
-        //cap type (Rd-Cap-Type-Time this will dertermine if we enforce a counter or not) 
-        if(array_key_exists('cap_time',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['cap_time'] != ''){      
-                $this->_add_radcheck_item($username,'Rd-Cap-Type-Time',$this->data['User']['cap_time']);
-            }
-        } 
-
-        //cap type (Rd-Cap-Type-Data this will dertermine if we enforce a counter or not) 
-        if(array_key_exists('cap_data',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['cap_data'] != ''){      
-                $this->_add_radcheck_item($username,'Rd-Cap-Type-Data',$this->data['User']['cap_data']);
-            }
-        }  
-        
-        //enabled or disabled (Rd-Account-Disabled)
-        if(array_key_exists('active',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['active'] != ''){
-                if($this->data['User']['active'] == 1){ //Reverse the logic...
-                    $dis = 0;
-                }else{
-                    $dis = 1;
-                }
-                $this->_add_radcheck_item($username,'Rd-Account-Disabled',$dis);
-            }
-        }
-
-        //Activation date (Rd-Account-Activation-Time)
-        if(array_key_exists('from_date',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['from_date'] != ''){       
-                $expiration = $this->_radius_format_date($this->data['User']['from_date']);
-                $this->_add_radcheck_item($username,'Rd-Account-Activation-Time',$expiration);
-            }
-        }  
-
-        //Expiration date (Expiration)
-        if(array_key_exists('to_date',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['to_date'] != ''){       
-                $expiration = $this->_radius_format_date($this->data['User']['to_date']);
-                $this->_add_radcheck_item($username,'Expiration',$expiration);
-            }
-        }
-
-        //Not Track auth (Rd-Not-Track-Auth) *By default we will (in post-auth)
-        if(!array_key_exists('track_auth',$this->data['User'])){ //It may be missing; you never know...     
-            $this->_add_radcheck_item($username,'Rd-Not-Track-Auth',1);
-        }
-
-        //Not Track acct (Rd-Not-Track-Acct) *By default we will (in pre-acct)
-        if(!array_key_exists('track_acct',$this->data['User'])){ //It may be missing; you never know...
-            $this->_add_radcheck_item($username,'Rd-Not-Track-Acct',1);
-        }
-
-		//Static IP
-        if(array_key_exists('static_ip',$this->data['User'])){ //It may be missing; you never know...
-            if($this->data['User']['static_ip'] != ''){       
-                $static_ip = $this->data['User']['static_ip'];
-				$this->_add_radreply_item($username,'Service-Type','Framed-User');
-                $this->_add_radreply_item($username,'Framed-IP-Address',$static_ip);
-            }
-        }
- 
-    }
-
-    private function _radius_format_date($d){
-        //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
-        $arr_date   = explode('/',$d);
-        $month      = intval($arr_date[0]);
-        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-        $day        = intval($arr_date[1]);
-        $year       = intval($arr_date[2]);
-        return "$day ".$m_arr[($month-1)]." $year";
-    }
-
-    private function _add_radcheck_item($username,$item,$value,$op = ":="){
-
-        $this->Radcheck = ClassRegistry::init('Radcheck');
-        $this->Radcheck->create();
-        $d['Radcheck']['username']  = $username;
-        $d['Radcheck']['op']        = $op;
-        $d['Radcheck']['attribute'] = $item;
-        $d['Radcheck']['value']     = $value;
-        $this->Radcheck->save($d);
-        $this->Radcheck->id         = null;
-    }
-
-	private function _add_radreply_item($username,$item,$value,$op = ":="){
-
-        $this->Radreply = ClassRegistry::init('Radreply');
-        $this->Radreply->create();
-        $d['Radreply']['username']  = $username;
-        $d['Radreply']['op']        = $op;
-        $d['Radreply']['attribute'] = $item;
-        $d['Radreply']['value']     = $value;
-        $this->Radreply->save($d);
-        $this->Radreply->id         = null;
-    }
-
-
-    private function _replace_radcheck_item($username,$item,$value,$op = ":="){
-
-        $this->Radcheck = ClassRegistry::init('Radcheck');
-        $this->Radcheck->deleteAll(
-            array('Radcheck.username' => $username,'Radcheck.attribute' => $item), false
-        );
-        $this->Radcheck->create();
-        $d['Radcheck']['username']  = $username;
-        $d['Radcheck']['op']        = $op;
-        $d['Radcheck']['attribute'] = $item;
-        $d['Radcheck']['value']     = $value;
-        $this->Radcheck->save($d);
-        $this->Radcheck->id         = null;
+      
     }
 
     //This function is required for the Acl behaviour....
