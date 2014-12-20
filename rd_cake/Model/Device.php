@@ -20,9 +20,9 @@ class Device extends AppModel {
     );
 
     public $belongsTo = array(
-        'User' => array(
-            'className'     => 'User',
-			'foreignKey'    => 'user_id'
+        'PermanentUser' => array(
+            'className'     => 'PermanentUser',
+			'foreignKey'    => 'permanent_user_id'
         )
 	);
 
@@ -77,8 +77,8 @@ class Device extends AppModel {
 
 
         //We add the MAC with the same profile name that the owner belongs to:
-        $this->User->contain('Radcheck');
-        $q_r = $this->User->findById($this->data['Device']['user_id']);
+        $this->PermanentUser->contain('Radcheck');
+        $q_r = $this->PermanentUser->findById($this->data['Device']['permanent_user_id']);
         if($q_r){
             $realm = false;
             foreach($q_r['Radcheck'] as $rc){
@@ -90,7 +90,7 @@ class Device extends AppModel {
                 $this->_add_radcheck_item($username,'Rd-Realm',$realm);
             }
             //Add the owner for FreeRADIUS to check owner restrictions....
-            $this->_add_radcheck_item($username,'Rd-Device-Owner',$q_r['User']['username']);
+            $this->_add_radcheck_item($username,'Rd-Device-Owner',$q_r['PermanentUser']['username']);
         }
 
         //Auth Type (Rd-Auth-Type) = sql by default
