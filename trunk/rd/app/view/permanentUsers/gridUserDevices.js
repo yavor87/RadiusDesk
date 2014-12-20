@@ -153,7 +153,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 format  : 'json',
                 batchActions: true, 
                 url     : '/cake2/rd_cake/devices/index.json',
-                extraParams: { 'user_id' : me.user_id },
+                extraParams: { 'permanent_user_id' : me.user_id },
                 reader: {
                     type: 'json',
                     root: 'items',

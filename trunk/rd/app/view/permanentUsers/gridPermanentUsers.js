@@ -182,6 +182,24 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 filter      : {type: 'string'},
 				stateId		: 'StateGridPermanentUsers20'
             },
+			{
+                text        : 'Extra name',
+                flex        : 1,
+                dataIndex   : 'extra_name',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'},
+				stateId		: 'StateGridPermanentUsers21'
+            },
+			{
+                text        : 'Extra value',
+                flex        : 1,
+                dataIndex   : 'extra_value',
+                tdCls       : 'gridTree',
+                hidden      : true,
+                filter      : {type: 'string'},
+				stateId		: 'StateGridPermanentUsers22'
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
@@ -190,7 +208,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridPermanentUsers21'
+                dataIndex: 'notes',stateId: 'StateGridPermanentUsers23'
             }      
         ];
 
