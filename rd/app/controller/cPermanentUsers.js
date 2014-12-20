@@ -348,7 +348,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
         if(sr){    
             var win = button.up('winPermanentUserAddWizard');
             win.down('#owner').setValue(sr.get('username'));
-            win.down('#parent_id').setValue(sr.getId());
+            win.down('#user_id').setValue(sr.getId());
 
 			//We need to update the Store of the Realms and Profile select list to reflect the specific Access Provider
             win.down('#realm').getStore().getProxy().setExtraParam('ap_id',sr.getId());

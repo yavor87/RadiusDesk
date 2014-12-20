@@ -26,6 +26,8 @@ Ext.define('Rd.model.mPermanentUser', {
          'data_cap',
          'time_cap',
 		 {name: 'static_ip',    type: 'string'  },
+		 {name: 'extra_name',   type: 'string'  },
+		 {name: 'extra_value',  type: 'string'  },
          {name: 'notes',        type: 'bool'},
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'}
