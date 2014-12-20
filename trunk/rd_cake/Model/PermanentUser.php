@@ -72,7 +72,7 @@ class PermanentUser extends AppModel {
             'foreignKey'    => 'profile_id'
         ),
 		'Realm' => array(
-            'className'     => 'Profile',
+            'className'     => 'Realm',
             'foreignKey'    => 'realm_id'
         )     
 	);
