@@ -1,7 +1,7 @@
 <?php
 class AutoAddDevicesShell extends AppShell {
 
-    public $uses    = array('User','AutoDevice','Device','Profile');
+    public $uses    = array('AutoDevice','Device','Profile','PermanentUser');
     public $tasks   = array('FindMac');
 
     public function main() {
@@ -23,9 +23,8 @@ class AutoAddDevicesShell extends AppShell {
             $this->out("<info>Device $mac not found - Add it</info>");
             $vendor = $this->FindMac->return_vendor_for_mac($mac);
             //Find the Permanent user that this device belongs to:
-            $this->User->contain('Radcheck','Group');
-            $p_user_name = Configure::read('group.user');
-            $q_r = $this->User->find('first',array('conditions' => array('User.username' => $username,'Group.name' => $p_user_name)));
+            $this->PermanentUser->contain('Radcheck','Group');
+            $q_r = $this->PermanentUser->find('first',array('conditions' => array('PermanentUser.username' => $username)));
             if($q_r){
                // print_r($q_r);
                 //Gather the relevant info (We only need the user_id and profile_id
@@ -42,13 +41,13 @@ class AutoAddDevicesShell extends AppShell {
                 }
                 if($profile_id){
                     $d = array();
-                    $d['Device']['profile_id']  = $profile_id;
-                    $d['Device']['user_id']     = $q_r['User']['id'];
-                    $d['Device']['name']        = $mac;
-                    $d['Device']['description'] = "Auto add ( $vendor )";
-                    $d['Device']['active']      = 1;
-                    $d['Device']['track_auth']  = false;
-                    $d['Device']['track_acct']  = true;
+                    $d['Device']['profile_id']  		= $profile_id;
+                    $d['Device']['permanent_user_id']   = $q_r['PermanentUser']['id'];
+                    $d['Device']['name']        		= $mac;
+                    $d['Device']['description'] 		= "Auto add ( $vendor )";
+                    $d['Device']['active']      		= 1;
+                    $d['Device']['track_auth']  		= false;
+                    $d['Device']['track_acct']  		= true;
                     $this->Device->create();
                     $this->Device->save($d);
                     $this->out("<info>Added device $mac as Auto add ( $vendor )</info>");
