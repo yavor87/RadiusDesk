@@ -178,24 +178,24 @@ class DevicesController extends AppController {
 
             array_push($items,
                 array(
-                    'id'            => $i['Device']['id'], 
-                    'user'          => $i['User']['username'],
-                    'user_id'       => $i['User']['id'],
-                    'name'          => $i['Device']['name'],
-                    'description'   => $i['Device']['description'], 
-                    'realm'         => $realm,
-                    'profile'       => $profile,
+                    'id'            		=> $i['Device']['id'], 
+                    'user'          		=> $i['PermanentUser']['username'],
+                    'permanent_user_id'     => $i['PermanentUser']['id'],
+                    'name'          		=> $i['Device']['name'],
+                    'description'   		=> $i['Device']['description'], 
+                    'realm'         		=> $realm,
+                    'profile'       		=> $profile,
                     //'profile_id'    => $profiles[$profile],
-                    'profile_id'    => $p_id,
-                    'perc_time_used'=> $i['Device']['perc_time_used'],
-                    'perc_data_used'=> $i['Device']['perc_data_used'],
-                    'active'        => $i['Device']['active'],
+                    'profile_id'    		=> $p_id,
+                    'perc_time_used'		=> $i['Device']['perc_time_used'],
+                    'perc_data_used'		=> $i['Device']['perc_data_used'],
+                    'active'        		=> $i['Device']['active'],
                     'last_accept_time'      => $i['Device']['last_accept_time'],
                     'last_accept_nas'       => $i['Device']['last_accept_nas'],
                     'last_reject_time'      => $i['Device']['last_reject_time'],
                     'last_reject_nas'       => $i['Device']['last_reject_nas'],
                     'last_reject_message'   => $i['Device']['last_reject_message'],
-                    'notes'         => $notes_flag,
+                    'notes'         		=> $notes_flag,
                     'update'                => $action_flags['update'],
                     'delete'                => $action_flags['delete']
                 )
@@ -394,8 +394,8 @@ class DevicesController extends AppController {
 
 
             if($owner){
-                $q_r = $this->User = ClassRegistry::init('User')->findByUsername($owner);
-                $items['user_id'] = intval($q_r['User']['id']);
+                $q_r = $this->User = ClassRegistry::init('PermanentUser')->findByUsername($owner);
+                $items['permanent_user_id'] = intval($q_r['PermanentUser']['id']);
             }
 
 
@@ -446,11 +446,11 @@ class DevicesController extends AppController {
                 $this->_replace_radcheck_item($username,'User-Profile',$profile_name);
             }
 
-            if(isset($this->request->data['user_id'])){
-                $u = ClassRegistry::init('User');
+            if(isset($this->request->data['permanent_user_id'])){
+                $u = ClassRegistry::init('PermanentUser');
                 $u->contain();
-                $q_r = $u->findById($this->data['user_id']);
-                $owner_name = $q_r['User']['username'];
+                $q_r = $u->findById($this->data['permanent_user_id']);
+                $owner_name = $q_r['PermanentUser']['username'];
                 $this->_replace_radcheck_item($username,'Rd-Device-Owner',$owner_name);
             }
 
@@ -1370,7 +1370,7 @@ class DevicesController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'User',     
+                            'PermanentUser',     
                             'Radcheck',
                             'DeviceNote'  => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                                

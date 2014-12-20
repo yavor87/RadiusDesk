@@ -391,8 +391,8 @@ class FreeRadiusController extends AppController {
         if(isset($this->request->data['user_type'])){
 
             if($this->request->data['user_type'] == 'permanent'){
-                $q_r        = ClassRegistry::init('User')->findById($this->request->data['user_id']);
-                $username   = $q_r['User']['username'];
+                $q_r        = ClassRegistry::init('PermanentUser')->findById($this->request->data['user_id']);
+                $username   = $q_r['PermanentUser']['username'];
                 $q_r        = ClassRegistry::init('Radcheck')->find('first', 
                     array('conditions' =>
                         array('Radcheck.username' => $username,'Radcheck.attribute' => 'Cleartext-Password')
