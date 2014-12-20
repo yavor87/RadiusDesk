@@ -40,6 +40,7 @@ class Note extends AppModel {
         'FinPaypalTransactionNote'  		=> array('dependent'    => true),
 		'FinPayUTransactionNote'  			=> array('dependent'    => true),
 		'FinPremiumSmsTransactionNote'  	=> array('dependent'    => true),
-		'FinAuthorizeNetTransactionNote'	=> array('dependent'    => true)
+		'FinAuthorizeNetTransactionNote'	=> array('dependent'    => true),
+		'PermanentUserNote'					=> array('dependent'    => true),
     );
 }

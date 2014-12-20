@@ -10,7 +10,7 @@ class TopUp extends AppModel {
 			'foreignKey'    => 'user_id'
         ),
         'PermanentUser' => array(
-            'className'     => 'User',
+            'className'     => 'PermanentUser',
             'foreignKey'    => 'permanent_user_id'
         )
 	);
@@ -24,12 +24,12 @@ class TopUp extends AppModel {
             (array_key_exists('permanent_user',$this->data['TopUp']))&&
             (!array_key_exists('permanent_user_id',$this->data['TopUp']))
         ){
-            $this->User = ClassRegistry::init('User'); 
-            $this->User->contain();
+            $this->PermanentUser = ClassRegistry::init('PermanentUser'); 
+            $this->PermanentUser->contain();
             $username = $this->data['TopUp']['permanent_user'];
-            $q_r = $this->User->find('first',array('conditions' => array('User.username' => $username)));
+            $q_r = $this->PermanentUser->find('first',array('conditions' => array('PermenentUser.username' => $username)));
             if($q_r){
-                $this->data['TopUp']['permanent_user_id'] = $q_r['User']['id'];
+                $this->data['TopUp']['permanent_user_id'] = $q_r['PermanentUser']['id'];
             }else{
                 return false;
             }        
@@ -39,12 +39,12 @@ class TopUp extends AppModel {
             (array_key_exists('permanent_user_id',$this->data['TopUp']))&&
             (!array_key_exists('permanent_user',$this->data['TopUp']))
         ){
-            $this->User = ClassRegistry::init('User');
-            $this->User->contain(); 
+            $this->PermanentUser = ClassRegistry::init('PermanentUser');
+            $this->PermanentUser->contain(); 
             $id = $this->data['TopUp']['permanent_user_id'];
-            $q_r = $this->User->findById($id);
+            $q_r = $this->PermanentUser->findById($id);
             if($q_r){
-                $this->data['TopUp']['permanent_user'] = $q_r['User']['username'];
+                $this->data['TopUp']['permanent_user'] = $q_r['PermanentUser']['username'];
             }else{
                 return false;
             }        
@@ -63,11 +63,11 @@ class TopUp extends AppModel {
         $permanent_user_id  = $this->field('permanent_user_id');
         $data               = $this->field('data');
         $time               = $this->field('time');
-        $this->User = ClassRegistry::init('User');
-        $this->User->contain();
-        $q_r = $this->User->findById($permanent_user_id);
+        $this->PermanentUser = ClassRegistry::init('PermanentUser');
+        $this->PermanentUser->contain();
+        $q_r = $this->PermanentUser->findById($permanent_user_id);
         if($q_r){
-            $username = $q_r['User']['username'];
+            $username = $q_r['PermanentUser']['username'];
             $this->Radcheck = ClassRegistry::init('Radcheck');
 
             //Are we dealing with data or time
@@ -158,8 +158,5 @@ class TopUp extends AppModel {
         $this->Radcheck->save($d);
         $this->Radcheck->id         = null;
     }
-
-    
-
 }
 ?>
