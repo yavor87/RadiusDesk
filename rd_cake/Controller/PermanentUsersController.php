@@ -48,6 +48,8 @@ class PermanentUsersController extends AppController {
 
         foreach($q_r as $i){
 
+			//print_r($i);
+
             $columns    = array();
             $csv_line   = array();
             if(isset($this->request->query['columns'])){
@@ -65,23 +67,7 @@ class PermanentUsersController extends AppController {
                     }elseif($column_name =='owner'){
                         $owner_id       = $i['User']['parent_id']; //FIXME
                         $owner_tree     = $this->_find_parents($owner_id);
-                        array_push($csv_line,$owner_tree); 
-                    }elseif($column_name =='realm'){
-                        $realm = 'n/a';
-                        foreach($i['Radcheck'] as $rc){       
-                            if($rc['attribute'] == 'Rd-Realm'){
-                                $realm = $rc['value'];
-                            }
-                        }
-                        array_push($csv_line,$realm); 
-                    }elseif($column_name =='profile'){
-                        $profile = 'n/a';
-                        foreach($i['Radcheck'] as $rc){       
-                            if($rc['attribute'] == 'User-Profile'){
-                                $profile = $rc['value'];
-                            }
-                        }
-                        array_push($csv_line,$profile); 
+                        array_push($csv_line,$owner_tree);
                     }else{
                         array_push($csv_line,$i['PermanentUser']["$column_name"]);  
                     }
