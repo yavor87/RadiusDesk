@@ -188,6 +188,8 @@ class PermanentUsersController extends AppController {
 					'profile'               => $i['PermanentUser']['profile'],
 					'profile_id'            => $i['PermanentUser']['profile_id'],
                     'static_ip'             => $i['PermanentUser']['static_ip'],
+					'extra_name'            => $i['PermanentUser']['extra_name'],
+					'extra_value'           => $i['PermanentUser']['extra_value'],
                     'notes'                 => $notes_flag,
                     'update'                => $action_flags['update'],
                     'delete'                => $action_flags['delete']
@@ -296,12 +298,6 @@ class PermanentUsersController extends AppController {
             return;
         }
         //______ END of Realm and Profile check _____
-
-        //Get the group ID for AP's
-        $group_name = Configure::read('group.user');
-        $q_r        = ClassRegistry::init('Group')->find('first',array('conditions' =>array('Group.name' => $group_name)));
-        $group_id   = $q_r['Group']['id'];
-        $this->request->data['group_id'] = $group_id;
 
         //Zero the token to generate a new one for this user:
         $this->request->data['token'] = '';
@@ -430,7 +426,9 @@ class PermanentUsersController extends AppController {
             $this->{$this->modelClass}->contain('Radcheck');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['user_id']);
 
-			$items['static_ip'] = $q_r['PermanentUser']['static_ip'];
+			$items['static_ip'] 	= $q_r['PermanentUser']['static_ip'];
+			$items['extra_name'] 	= $q_r['PermanentUser']['extra_name'];
+			$items['extra_value'] 	= $q_r['PermanentUser']['extra_value'];
 
             foreach($q_r['Radcheck'] as $rc){
 
@@ -462,12 +460,14 @@ class PermanentUsersController extends AppController {
         
             //Now we do the rest....
             if($profile){
-                $q_r = $this->User = ClassRegistry::init('Profile')->findByName($profile);
+				$this->Profile->contain();
+                $q_r = $this->Profile->findByName($profile);
                 $items['profile_id'] = intval($q_r['Profile']['id']);
             }
 
             if($realm){
-                $q_r = $this->User = ClassRegistry::init('Realm')->findByName($realm);
+				$this->Realm->contain();
+                $q_r = $this->Realm->findByName($realm);
                 $items['realm_id'] = intval($q_r['Realm']['id']);
             }
 
@@ -510,7 +510,8 @@ class PermanentUsersController extends AppController {
             $username   = $q_r['PermanentUser']['username'];
 
             if(isset($this->request->data['profile_id'])){
-                $q_r = ClassRegistry::init('Profile')->findById($this->data['profile_id']);
+				$this->Profile->contain();
+                $q_r = $this->Profile->findById($this->data['profile_id']);
                 $profile_name = $q_r['Profile']['name'];
 
 				//==Set Profile Name==
@@ -520,12 +521,12 @@ class PermanentUsersController extends AppController {
             }
 
             if(isset($this->request->data['realm_id'])){
-                $q_r = ClassRegistry::init('Realm')->findById($this->data['realm_id']);
+				$this->Realm->contain();
+                $q_r = $this->Realm->findById($this->data['realm_id']);
                 $realm_name = $q_r['Realm']['name'];
 
 				//==Set Realm Name==
 				$this->request->data['realm'] = $realm_name;
-
                 $this->_replace_radcheck_item($username,'Rd-Realm',$realm_name);
             }
 
@@ -1145,23 +1146,17 @@ class PermanentUsersController extends AppController {
                 }
             }
 
-            $d           = array();
-            //We need to give the group_id to trigger the radcheck modifications.
-            $group_name  = Configure::read('group.user');
-            $q_r         = $this->{$this->modelClass}->Group->find('first',array('conditions' =>array('Group.name' => $group_name)));
-            $group_id    = $q_r['Group']['id'];
-            $user_id    = $this->request->data['user_id'];
-
-            $d['PermanentUser']['id']        = $this->request->data['user_id'];
-            $d['PermanentUser']['password']  = $this->request->data['password'];
-            $d['PermanentUser']['token']     = '';
+            $d           					= array();
+            $d['PermanentUser']['id']       = $this->request->data['user_id'];
+            $d['PermanentUser']['password'] = $this->request->data['password'];
+            $d['PermanentUser']['token']    = '';
             $this->{$this->modelClass}->id  = $this->request->data['user_id'];
             $this->{$this->modelClass}->save($d);
 
             //Check if there are auto add devices and wipe them out (These devices will start with "Auto add");
             $this->Device           = ClassRegistry::init('Device');
             $this->Device->contain();
-            $q_r = $this->Device->find('all',array('conditions' =>array('Device.user_id' => $user_id,'Device.description LIKE' => 'Auto add%')));
+            $q_r = $this->Device->find('all',array('conditions' =>array('Device.permanent_user_id' => $user_id,'Device.description LIKE' => 'Auto add%')));
             
             foreach($q_r as $i){
                 $username           = $i['Device']['name'];
@@ -1171,8 +1166,6 @@ class PermanentUsersController extends AppController {
             }
 
             //Check if we need to add or remove actvation and expiry dates
-
-            $this->PermanentUser             = ClassRegistry::init('User');
             $this->PermanentUser->contain();
             $q_user = $this->PermanentUser->findById($this->request->data['user_id']);
 
@@ -1398,7 +1391,6 @@ class PermanentUsersController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $this->PermanentUser = ClassRegistry::init('User');
         $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
