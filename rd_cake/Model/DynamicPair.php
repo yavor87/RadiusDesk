@@ -1,10 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
-/**
- * Realm Model
- *
- * @property User $User
- */
+
 class DynamicPair extends AppModel {
 
     public $actsAs = array('Containable');
