@@ -1146,7 +1146,7 @@ Ext.define('Rd.controller.cDevices', {
         pnlDevice.cmbOwnerRendered  = true;
         if(pnlDevice.record != undefined){
             var un      = pnlDevice.record.get('user');
-            var u_id    = pnlDevice.record.get('user_id');
+            var u_id    = pnlDevice.record.get('permanent_user_id');
             var rec     = Ext.create('Rd.model.mPermanentUser', {username: un, id: u_id});
             cmb.getStore().loadData([rec],false);
         }
