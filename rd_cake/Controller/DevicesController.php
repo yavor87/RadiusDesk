@@ -5,7 +5,7 @@ class DevicesController extends AppController {
 
     public $name       = 'Devices';
     public $components = array('Aa');
-    public $uses       = array('Device','User');
+    public $uses       = array('Device','User','PermanentUser');
     protected $base    = "Access Providers/Controllers/Devices/"; //Required for AP Rights
     protected  $read_only_attributes = array(
             'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
@@ -171,7 +171,7 @@ class DevicesController extends AppController {
             $action_flags['delete'] = false;
 
             if($realm != 'not defined'){
-                $owner_id       = $i['User']['parent_id'];
+                $owner_id       = $i['PermanentUser']['user_id'];
                 $q_r            = ClassRegistry::init('Realm')->findByName($realm);
                 $action_flags   = $this->_get_action_flags_for_devices($user,$owner_id,$q_r['Realm']['id']);
             }
@@ -180,7 +180,7 @@ class DevicesController extends AppController {
                 array(
                     'id'            		=> $i['Device']['id'], 
                     'user'          		=> $i['PermanentUser']['username'],
-                    'permanent_user_id'     => $i['PermanentUser']['id'],
+                    'permanent_user_id'     => $i['Device']['permanent_user_id'],
                     'name'          		=> $i['Device']['name'],
                     'description'   		=> $i['Device']['description'], 
                     'realm'         		=> $realm,
@@ -396,6 +396,7 @@ class DevicesController extends AppController {
             if($owner){
                 $q_r = $this->User = ClassRegistry::init('PermanentUser')->findByUsername($owner);
                 $items['permanent_user_id'] = intval($q_r['PermanentUser']['id']);
+				$items['user_id'] = intval($q_r['PermanentUser']['id']);
             }
 
 
