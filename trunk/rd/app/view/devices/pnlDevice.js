@@ -48,6 +48,7 @@ Ext.define('Rd.view.devices.pnlDevice', {
                     {
                         xtype       : 'cmbPermanentUser',
                         allowBlank  : false,
+						name		: 'permanent_user_id',
                         labelClsExtra: 'lblRdReq',
                         itemId      : 'owner'
                     },             

@@ -130,7 +130,8 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                     xtype       : 'cmbPermanentUser',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'owner'
+                                    itemId      : 'owner',
+									name		: 'permanent_user_id'
                                 },
                                 {
                                     xtype       : 'cmbProfile',
