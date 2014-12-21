@@ -14,6 +14,10 @@ class Country extends AppModel {
         'User'  => array(
             'className'     => 'User',
             'foreignKey'    => 'language_id'
+        ),
+		'PermanentUser'  => array(
+            'className'     => 'PermanentUser',
+            'foreignKey'    => 'language_id'
         )
     );
 
