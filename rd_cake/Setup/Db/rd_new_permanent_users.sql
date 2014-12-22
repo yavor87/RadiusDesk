@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS `permanent_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permanent_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
@@ -44,12 +41,8 @@ CREATE TABLE `permanent_users` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 
-DROP TABLE IF EXISTS `permanent_user_notes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permanent_user_notes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `permanent_user_id` int(11) NOT NULL,
@@ -58,12 +51,8 @@ CREATE TABLE `permanent_user_notes` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 
-DROP TABLE IF EXISTS `permanent_user_settings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permanent_user_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `permanent_user_id` int(11) NOT NULL,
@@ -73,32 +62,4 @@ CREATE TABLE `permanent_user_settings` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-DROP TABLE IF EXISTS `devices`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `devices` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0',
-  `last_accept_time` datetime DEFAULT NULL,
-  `last_reject_time` datetime DEFAULT NULL,
-  `last_accept_nas` varchar(128) DEFAULT NULL,
-  `last_reject_nas` varchar(128) DEFAULT NULL,
-  `last_reject_message` varchar(255) DEFAULT NULL,
-  `permanent_user_id` int(11) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `perc_time_used` int(6) DEFAULT NULL,
-  `perc_data_used` int(6) DEFAULT NULL,
-  `data_used` bigint(20) DEFAULT NULL,
-  `data_cap` bigint(20) DEFAULT NULL,
-  `time_used` int(12) DEFAULT NULL,
-  `time_cap` int(12) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
