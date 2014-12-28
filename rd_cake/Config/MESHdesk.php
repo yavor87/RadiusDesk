@@ -1,18 +1,4 @@
 <?php
-/*
-
-This file is used to match the authorize.net Simple Payment button id's with a product.
-Here we will use it to pick which voucher it will generate
-The silent POST function of A.net will contain this:
-
-x_catalog_link_id=1abacb70-d45d-4d12-ba51-98f01523720d
-
-We will then use this in the controller to determine what the voucher should contain by means of this lookup
-
-Since we have no means to know what the description of the catalog is, we have to add our own which will be inserted 
-when a transaction is recorded.
-
-*/
 
 //===== MESHdesk ======
 
