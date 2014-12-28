@@ -78,14 +78,14 @@ Ext.define('Mikrotik.view.winNewUser', {
 				{
                     itemId  : 'mac',
                     xtype   : 'textfield',
-                    name    : "mac",
+                    name    : 'mac',
                     hidden  : true,
 					value	: me.mac
                 }, 
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Name',
-                    name        : "name",
+                    name        : 'name',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
@@ -94,7 +94,7 @@ Ext.define('Mikrotik.view.winNewUser', {
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Surname',
-                    name        : "surname",
+                    name        : 'surname',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
@@ -103,7 +103,7 @@ Ext.define('Mikrotik.view.winNewUser', {
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Email (username)',
-                    name        : "email",
+                    name        : 'username',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
@@ -113,7 +113,7 @@ Ext.define('Mikrotik.view.winNewUser', {
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Password',
-                    name        : "password",
+                    name        : 'password',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
@@ -124,7 +124,7 @@ Ext.define('Mikrotik.view.winNewUser', {
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Cell',
-                    name        : "phone",
+                    name        : 'phone',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
