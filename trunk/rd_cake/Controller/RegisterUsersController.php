@@ -2,16 +2,51 @@
 class RegisterUsersController extends AppController {
 
     public $name       = 'RegisterUsers';
-    public $uses       = array('User','Profile','Realm');
+    public $uses       = array('User','Profile','Realm','PermanentUser');
 
 	public function new_permanent_user(){
 
 
 		//Some dummy data
-		//$data 			= array('username' => 'dvdwalt1', 'password' => 'dvdwalt');
+		//$data 			= array('username' => 'dvdwalt', 'password' => 'dvdwalt');
 
 		//
 		Configure::load('RegisterUsers');
+
+		//--Do the MAC test --
+		$force_mac = Configure::read('register_users.default.force_mac');
+		if($force_mac){
+			if(array_key_exists('mac',$this->request->data)){
+				$mac = $this->request->data['mac'];
+				//Check if this MAC did not perhaps alreade registered with us.
+				$this->PermanentUser->contain();
+				$q_r	= $this->PermanentUser->find('first',
+					array('conditions' => 
+						array(
+							'PermanentUser.extra_name' 	=> 'mac',
+							'PermanentUser.extra_value' => $mac,
+						)
+					));
+				if($q_r){
+					$already_username = $q_r['PermanentUser']['username'];
+					$this->set(array(
+						'success'   => false,
+						'errors'	=> array('username' => "MAC Address $mac in use by $already_username"),
+							'_serialize' => array('success','errors')
+					));	
+					return;
+				}
+			}else{
+
+				$this->set(array(
+					'success'   => false,
+					'errors'	=> array('username' => 'MAC Address missing'),
+						'_serialize' => array('success','errors')
+				));	
+				return;
+			}
+		}
+
 
 		//Get the token of the owner
         $owner 		= Configure::read('register_users.default.creator');
@@ -36,6 +71,9 @@ class RegisterUsersController extends AppController {
         $language   = '4_4';
         $parent_id  = 0;        
         $url        = 'http://127.0.0.1/cake2/rd_cake/permanent_users/add.json';
+
+		$username	= $this->request->data['username'];
+		$password	= $this->request->data['password'];
          
         // The data to send to the API
         $postData = array(
@@ -46,10 +84,10 @@ class RegisterUsersController extends AppController {
             'profile_id'    => $profile_id,
             'realm_id'      => $realm_id,
             'token'         => $token,
-            'username'      => $this->request->data['username'],
-            'password'      => $this->request->data['password'],
+            'username'      => $username,
+            'password'      => $password,
 			'extra_name'	=> 'mac',
-			'extra_value'	=> $this->request->data['mac'],
+			'extra_value'	=> $mac,
         );
      
         // Setup cURL
@@ -85,6 +123,12 @@ class RegisterUsersController extends AppController {
 		}
 
 		if($responseData['success'] == true){
+
+			//Check if we need to email them
+			if(Configure::read('register_users.default.send_email')){
+				$this->_email_user_detail($username,$password);
+			}
+
 			$this->set(array(
             'success'   => $responseData['success'],
 			'data'		=> $postData,
@@ -92,5 +136,20 @@ class RegisterUsersController extends AppController {
 		    ));	
 		}
 	}
+
+	private function _email_user_detail($username,$password){
+
+		$email_server = Configure::read('EmailServer');
+        App::uses('CakeEmail', 'Network/Email');
+        $Email = new CakeEmail();
+        $Email->config('gmail');
+        $Email->subject('New user registration');
+        $Email->to($username);
+        $Email->viewVars(compact( 'username', 'password'));
+        $Email->template('user_detail', 'user_notify');
+        $Email->emailFormat('html');
+        $Email->send();
+    }
+
 }
 ?>
