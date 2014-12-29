@@ -741,9 +741,9 @@ Ext.define('Mikrotik.controller.Desktop', {
 
 	//=========== NEW USER REG ============
 	onBtnNewUserClick : function(){
-		var me = this;
+		var me 	= this;
 		//We get the MAC Addy of the device to prevent users double registring
-		var mac = "AA-BB-CC-DD-EE-FF";
+		var mac = me.queryObj.mac;
 
 		var c = Ext.ComponentQuery.query('#winNewUser');
 		if(Ext.isEmpty(c)){
