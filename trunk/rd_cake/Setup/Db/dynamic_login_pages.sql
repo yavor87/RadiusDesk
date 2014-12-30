@@ -94,6 +94,16 @@ if not exists (select * from information_schema.columns
     alter table dynamic_details add column `theme` char(200) NOT NULL DEFAULT 'Default';
 end if;
 
+if not exists (select * from information_schema.columns
+    where column_name = 'register_users' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `register_users` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'lost_password' and table_name = 'dynamic_details' and table_schema = 'rd') then
+    alter table dynamic_details add column `lost_password` tinyint(1) NOT NULL DEFAULT '0';
+end if;
+
 
 if not exists (select * from information_schema.columns
     where column_name = 'url' and table_name = 'dynamic_photos' and table_schema = 'rd') then
