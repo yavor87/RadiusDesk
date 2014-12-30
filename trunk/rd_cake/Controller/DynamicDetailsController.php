@@ -86,6 +86,8 @@ class DynamicDetailsController extends AppController {
 			$items['settings']['auto_suffix']       = $q_r['DynamicDetail']['auto_suffix'];
 			$items['settings']['usage_show_check']  = $q_r['DynamicDetail']['usage_show_check'];
 			$items['settings']['usage_refresh_interval'] 	= $q_r['DynamicDetail']['usage_refresh_interval'];
+			$items['settings']['register_users']    = $q_r['DynamicDetail']['register_users'];
+			$items['settings']['lost_password']    	= $q_r['DynamicDetail']['lost_password'];
         }
 
         $success = true;
@@ -385,6 +387,8 @@ class DynamicDetailsController extends AppController {
                 't_c_check'             => $i['DynamicDetail']['t_c_check'],
                 't_c_url'               => $i['DynamicDetail']['t_c_url'],
 				'theme'					=> $i['DynamicDetail']['theme'],
+				'register_users'		=> $i['DynamicDetail']['register_users'],
+				'lost_password'			=> $i['DynamicDetail']['lost_password'],
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
                 'delete'                => $action_flags['delete']
@@ -520,6 +524,18 @@ class DynamicDetailsController extends AppController {
             $this->request->data['t_c_check'] = 0;
         }
 
+		if(isset($this->request->data['register_users'])){
+            $this->request->data['register_users'] = 1;
+        }else{
+            $this->request->data['register_users'] = 0;
+        }
+
+		if(isset($this->request->data['lost_password'])){
+            $this->request->data['lost_password'] = 1;
+        }else{
+            $this->request->data['lost_password'] = 0;
+        }
+
 
         if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
@@ -623,6 +639,20 @@ class DynamicDetailsController extends AppController {
             $this->request->data['usage_show_check'] = 1;
         }else{
             $this->request->data['usage_show_check'] = 0;
+        }
+
+		//redirect_check compulsory check
+        if(isset($this->request->data['register_users'])){
+            $this->request->data['register_users'] = 1;
+        }else{
+            $this->request->data['register_users'] = 0;
+        }
+
+		//redirect_check compulsory check
+        if(isset($this->request->data['lost_password'])){
+            $this->request->data['lost_password'] = 1;
+        }else{
+            $this->request->data['lost_password'] = 0;
         }
 
         if ($this->DynamicDetail->save($this->request->data)) {
@@ -777,6 +807,8 @@ class DynamicDetailsController extends AppController {
 				$items['usage_show_check']          = $q_r['DynamicDetail']['usage_show_check'];
 				$items['usage_refresh_interval']    = $q_r['DynamicDetail']['usage_refresh_interval'];
 				$items['theme']    					= $q_r['DynamicDetail']['theme'];
+				$items['register_users']    		= $q_r['DynamicDetail']['register_users'];
+				$items['lost_password']    			= $q_r['DynamicDetail']['lost_password'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
             }
