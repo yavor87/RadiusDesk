@@ -13,7 +13,9 @@ Ext.define('CoovaChilli.controller.cMain', {
             cntPhotos       : '#cntPhotos',
             cntShop         : '#cntShop',
             tabMain         : '#tabMain',
-            datThumb        : '#datThumb'
+            datThumb        : '#datThumb',
+			navNewUser		: '#navNewUser',
+			navLostPassword : '#navLostPassword'
           //  frmPayU         : '#frmPayU'
         },
         control: {
@@ -47,18 +49,28 @@ Ext.define('CoovaChilli.controller.cMain', {
             },
 			'cntStatus #tpStatus': {
                 activeitemchange    : 'onActiveItemChange'
-            }
+            },
+			'navNewUser #navBtnNext' : {
+				tap		: 'onNavBtnNextTap'
+			},
+			'navLostPassword #navBtnNext' : {
+				tap		: 'onLpNavBtnNextTap'
+			}
         },
         views: [
             'cntNotPresent',
             'tabMain',
-            'frmConnect'
+            'frmConnect',
+			'frmNewUser',
+			'frmLostPassword'
         ],
         stores: [
             'sPrices'
         ],
         models : [
-            'mPrice'
+            'mPrice',
+			'mNewUser',
+			'mLostPassword'
         ] 
     },
     uamIp       	: undefined,   //ip of coova hotspot
@@ -924,5 +936,174 @@ Ext.define('CoovaChilli.controller.cMain', {
         if (gb < 1)  return mb + ' '+'Megabytes';
 
         return gb + ' '+'Gigabytes';
-    }
+    },
+	//New user registation
+	onNavBtnNextTap	: function(btn){
+		var me 			= this;
+		var view		= btn.up('navNewUser');
+		
+		var activeId	= view.getActiveItem().getItemId();
+		//console.log(activeId);
+		if(activeId == 'pnlUsrRegIntro'){	
+			var mac = me.queryObj.mac;
+			view.push({
+				title	: 'Supply detail',
+			    xtype	: 'frmNewUser',
+				itemId	: 'frmNewUser',
+				mac		: mac
+			});	
+		}
+
+		if(activeId == 'frmNewUser'){	
+			//console.log("Now we need to do some error checking");
+			var errorString 	= '';
+			var form 			= view.down('formpanel');
+			var fields 			= form.query("field");
+
+			// remove the style class from all fields
+		   	for (var i=0; i<fields.length; i++) {
+				fields[i].removeCls('invalidField');
+		   	}
+		 
+			// dump form fields into new model instance
+			var model 			= Ext.create("CoovaChilli.model.mNewUser", form.getValues());
+		 
+			// validate form fields
+			var errors = model.validate();
+		 
+			if (!errors.isValid()) {
+			  	// loop through validation errors and generate a message to the user
+			  	errors.each(function (errorObj){
+					errorString += errorObj.getField() + ": " + errorObj.getMessage() + " <br>";
+					var s = Ext.String.format('field[name={0}]',errorObj.getField());
+					form.down(s).addCls('invalidField');
+			  	});
+			  	Ext.Msg.alert('Errors in your input',errorString);
+			 } else {
+		  		//Ext.Msg.alert("Data is valid","Success");
+				// Validation successful - show loader
+                view.down('formpanel').setMasked({
+                    xtype:'loadmask',
+                    message:'Registring user'
+                });
+                view.down('formpanel').submit({
+                    url		: CoovaChilli.config.Config.getUrlAdd(),
+                    method	: 'POST',
+                    success	: function(f, result) {
+						//console.log("Pass");
+                        view.down('formpanel').setMasked(false);
+						view.push({
+							title	: 'Result',
+							itemId	: 'pnlEnd',
+							html	: "<h1>Thank you!</h1>"+
+									  "Thank you for registring with us<br>"+
+									  "Your username and password are already populated,"+
+									  " simply click the <b>Connect</b> button to start using the Internet.",
+							styleHtmlContent : true,
+							styleHtmlCls: 'regHtml'
+						});
+						var navigationBar = view.getNavigationBar();
+						navigationBar.query('button')[0].hide();
+						//populate the usernam and password fields
+						var frmC = me.getFrmConnect();
+						frmC.down('#inpUsername').setValue(result.data.username);
+						frmC.down('#inpPassword').setValue(result.data.password);
+                    },
+                    failure: function(f, result) {
+						Ext.iterate(result.errors, function(key, value) {
+							errorString += key + ": " + value + " <br>";
+							var s = Ext.String.format('field[name={0}]',key);
+							form.down(s).addCls('invalidField');
+			  			});
+						view.down('formpanel').setMasked(false);
+			  			Ext.Msg.alert('Failed to register',errorString);     
+                    }                       
+                });
+			 }
+		}
+
+		if(activeId == 'pnlEnd'){
+			view.pop(2); //Remove the last two screens; ending with screen one
+		}
+	},
+	//Lost password
+	onLpNavBtnNextTap	: function(btn){
+		var me 			= this;
+		var view		= btn.up('navLostPassword');
+		
+		var activeId	= view.getActiveItem().getItemId();
+		//console.log(activeId);
+		if(activeId == 'pnlUsrRegIntro'){	
+			view.push({
+				title	: 'Supply detail',
+			    xtype	: 'frmLostPassword',
+				itemId	: 'frmLostPassword'
+			});	
+		}
+
+		if(activeId == 'frmLostPassword'){	
+			var errorString 	= '';
+			var form 			= view.down('formpanel');
+			var fields 			= form.query("field");
+
+			// remove the style class from all fields
+		   	for (var i=0; i<fields.length; i++) {
+				fields[i].removeCls('invalidField');
+		   	}
+		 
+			// dump form fields into new model instance
+			var model 			= Ext.create("CoovaChilli.model.mLostPassword", form.getValues());
+		 
+			// validate form fields
+			var errors = model.validate();
+		 
+			if (!errors.isValid()) {
+			  	// loop through validation errors and generate a message to the user
+			  	errors.each(function (errorObj){
+					errorString += errorObj.getField() + ": " + errorObj.getMessage() + " <br>";
+					var s = Ext.String.format('field[name={0}]',errorObj.getField());
+					form.down(s).addCls('invalidField');
+			  	});
+			  	Ext.Msg.alert('Errors in your input',errorString);
+			 } else {
+		  		//Ext.Msg.alert("Data is valid","Success");
+				// Validation successful - show loader
+                view.down('formpanel').setMasked({
+                    xtype:'loadmask',
+                    message:'Submitting data...'
+                });
+                view.down('formpanel').submit({
+                    url		: CoovaChilli.config.Config.getUrlLostPw(),
+                    method	: 'POST',
+                    success	: function(f, result) {
+						//console.log("Pass");
+                        view.down('formpanel').setMasked(false);
+						view.push({
+							title	: 'Result',
+							itemId	: 'pnlEnd',
+							html	: "<h1>Check your email!</h1>"+
+									  "Your credentials has been emailed to you<br>",
+							styleHtmlContent : true,
+							styleHtmlCls: 'regHtml'
+						});
+						var navigationBar = view.getNavigationBar();
+						navigationBar.query('button')[0].hide();
+                    },
+                    failure: function(f, result) {
+						Ext.iterate(result.errors, function(key, value) {
+							errorString += key + ": " + value + " <br>";
+							var s = Ext.String.format('field[name={0}]',key);
+							form.down(s).addCls('invalidField');
+			  			});
+						view.down('formpanel').setMasked(false);
+			  			Ext.Msg.alert('Failed to send email',errorString);     
+                    }                       
+                });
+			 }
+		}
+
+		if(activeId == 'pnlEnd'){
+			view.pop(2); //Remove the last two screens; ending with screen one
+		}
+	}
 });

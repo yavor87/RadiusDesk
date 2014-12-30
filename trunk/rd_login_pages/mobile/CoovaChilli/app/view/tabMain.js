@@ -10,7 +10,9 @@ Ext.define('CoovaChilli.view.tabMain', {
         'CoovaChilli.view.cntAbout',
         'CoovaChilli.view.cntPayAd',
         'CoovaChilli.view.cntPayPal',
-        'CoovaChilli.view.frmPayU'
+        'CoovaChilli.view.frmPayU',
+		'CoovaChilli.view.navNewUser',
+		'CoovaChilli.view.navLostPassword'
     ],
     config: {
         tabBar : {
@@ -35,7 +37,7 @@ Ext.define('CoovaChilli.view.tabMain', {
 
         },me);
 
-        config.items = [
+        var i = [
             {
                 title       : 'Connect',
                 iconCls     : 'star',
@@ -138,6 +140,31 @@ Ext.define('CoovaChilli.view.tabMain', {
                 ]
             }*/
         ];
+
+		
+		if(config.jsonData.settings.register_users){
+			i = Ext.Array.merge(i, [
+				{
+					title		: 'New user',
+					xtype		: 'navNewUser',
+					iconCls     : 'add',
+					itemId		: 'navNewUser'
+				}
+			]);
+		}
+
+		if(config.jsonData.settings.lost_password){
+			i = Ext.Array.merge(i, [
+				{
+					title		: 'Lost password',
+					xtype		: 'navLostPassword',
+					iconCls     : 'reply',
+					itemId		: 'navLostPassword'
+				}
+			]);
+		}
+
+        config.items = i;
 
         me.callParent([config]);
     }
