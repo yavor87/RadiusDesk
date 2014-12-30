@@ -17,7 +17,8 @@ Ext.define('Mikrotik.view.Land' ,{
         'Mikrotik.view.pnlPhotos',
         'Mikrotik.view.pnlAbout',
         'Mikrotik.view.pnlPayAd',
-		'Mikrotik.view.winNewUser'
+		'Mikrotik.view.winNewUser',
+		'Mikrotik.view.winLostPassword'
     ],
     initComponent: function() { 
         var me      = this;

@@ -27,7 +27,7 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 1, //Make it high to start with --- sometimes it really takes long! FIXME: Ancrease after development
+    retryCount      : 10, //Make it high to start with --- sometimes it really takes long! FIXME: Ancrease after development
     currentRetry    : 0,
 
     userName        : undefined,
@@ -96,6 +96,26 @@ Ext.define('Mikrotik.controller.Desktop', {
 				click: me.onBtnDetailNextClick
 			},
 			'winNewUser #btnLastNext'	: {
+				click:	function(b){
+					b.up('window').close();
+				}
+			},
+
+			//=== LOST Password ===
+
+			'pnlConnect #btnLostPassword' : {
+				click: me.onBtnLostPasswordClick		
+			},
+			'winLostPassword #btnIntroNext'	: {
+				click: me.onBtnLpIntroNextClick
+			},
+			'winLostPassword #btnDetailBack'	: {
+				click: me.onBtnLpDetailBackClick
+			},
+			'winLostPassword #btnDetailNext'	: {
+				click: me.onBtnLpDetailNextClick
+			},
+			'winLostPassword #btnLastNext'	: {
 				click:	function(b){
 					b.up('window').close();
 				}
@@ -783,6 +803,43 @@ Ext.define('Mikrotik.controller.Desktop', {
 				form.setLoading(false);
             }
         });
+	},
+
+	//=========== LOST PASSWORD ============
+	onBtnLostPasswordClick : function(){
+		
+		var c = Ext.ComponentQuery.query('#winLostPassword');
+		if(Ext.isEmpty(c)){
+			Ext.create('Mikrotik.view.winLostPassword', { glyph: Mikrotik.config.icnLock,	id: 'winLostPassword'}).show();
+		}
+	},
+	onBtnLpIntroNextClick	: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnDetail');		
+	},
+	onBtnLpDetailBackClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnIntro');		
+	},
+	onBtnLpDetailNextClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		var form    = win.down('form');
+		form.setLoading('Submitting request...');
+        form.submit({
+            clientValidation	: true,
+            url					: me.application.config.urlLostPw,
+            success				: function(f, action) {
+				f.reset();
+				form.setLoading(false);
+				win.getLayout().setActiveItem('scrnEnd');
+            },
+            failure				: function(f,action){
+				form.setLoading(false);
+            }
+        });
 	}
-	//=== End New user REG======
+
 });
