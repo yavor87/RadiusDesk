@@ -1,10 +1,10 @@
-Ext.define('Mikrotik.view.winNewUser', {
+Ext.define('Mikrotik.view.winLostPassword', {
     extend      : 'Ext.window.Window',
-    alias       : 'widget.winNewUser',
+    alias       : 'widget.winLostPassword',
 	closable	: true,
     draggable	: true,
     resizable	: true,
-    title		: 'New user registration',
+    title		: 'Lost password',
     width		: 400,
     height		: 400,
     plain		: true,
@@ -40,9 +40,9 @@ Ext.define('Mikrotik.view.winNewUser', {
 			itemId	: 'scrnIntro',
 			bodyCls	: 'pnlNewUser',
 			html	: [
-				"<h1>Sign-up for free Internet</h1>",
-				"We would like to give you some free Internet!<br>",
-				"Before we can do that though, please sign up with us.",
+				"<h1>Supply your email address</h1>",
+				"If you are registered with us<br>",
+				"we will send you your credentials."
 			],
 			buttons : [
                  {
@@ -74,58 +74,15 @@ Ext.define('Mikrotik.view.winNewUser', {
 			defaults    : {
                 anchor: '100%'
             },
-			items       : [
-				{
-                    itemId  : 'mac',
-                    xtype   : 'textfield',
-                    name    : 'mac',
-                    hidden  : true,
-					value	: me.mac
-                }, 
-				{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Name',
-                    name        : 'name',
-                    allowBlank  : false,
-                    blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq'	
-                },
-				{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Surname',
-                    name        : 'surname',
-                    allowBlank  : false,
-                    blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq'
-                },
+			items       : [			
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Email (username)',
-                    name        : 'username',
+                    name        : 'email',
                     allowBlank  : false,
                     blankText   : 'Supply a value',
                     labelClsExtra: 'fieldReq',
 					vtype		: 'email'
-                },
-				{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Password',
-                    name        : 'password',
-                    allowBlank  : false,
-                    blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq',
-					minLength 	: 5,
-					minLengthText 	: 'Password needs to be 5 characters or more'
-                },
-				{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Cell',
-                    name        : 'phone',
-                    allowBlank  : false,
-                    blankText   : 'Supply a value',
-                    labelClsExtra: 'fieldReq',
-					regex		: /^\d{10}$/i,
-					maskRe		: /\d/i
                 }
 			],   
 			buttons : [
@@ -155,9 +112,8 @@ Ext.define('Mikrotik.view.winNewUser', {
 			itemId	: 'scrnEnd',
 			bodyCls	: 'pnlNewUser', 
 			html	: [
-				"<h1>Thank you!</h1>",
-				"Thank you for registring with us<br>",
-				"Your username and password are already populated, simply click the <b>Connect</b> button to start using the Internet."
+				"<h1>Action complete!</h1>",
+				"Please check your email<br>"
 			],
 			buttons : [
                  {

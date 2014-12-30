@@ -114,25 +114,32 @@ Ext.define('Mikrotik.view.pnlConnect', {
 				componentCls: 'ttt',
 				glyph   	: Mikrotik.config.icnDelete,
 				hidden  	: true
-			},
-
-//==============
-			{
-				xtype		: 'button',
-				text		: 'Register as new user',
-				margin		: '10 0 0 0',
-				itemId		: 'btnNewUser',
-				anchor		: '100%',
-			},
-			{
-				xtype		: 'button',
-				text		: 'Lost password',
-				margin		: '10 0 0 0',
-				itemId		: 'btnLostPassword',
-				anchor		: '100%',
 			}
-//===============
 		];
+
+		if(me.jsonData.settings.register_users){
+			frm_items_bottom = Ext.Array.merge(frm_items_bottom, [
+				{
+					xtype		: 'button',
+					text		: 'Register as new user',
+					margin		: '10 0 0 0',
+					itemId		: 'btnNewUser',
+					anchor		: '100%',
+				}
+			]);
+		}
+
+		if(me.jsonData.settings.lost_password){
+			frm_items_bottom = Ext.Array.merge(frm_items_bottom, [
+				{
+					xtype		: 'button',
+					text		: 'Lost password',
+					margin		: '10 0 0 0',
+					itemId		: 'btnLostPassword',
+					anchor		: '100%',
+				}
+			]);
+		}
 
         //The default
 		if(

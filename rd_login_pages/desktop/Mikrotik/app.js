@@ -39,7 +39,8 @@ Ext.application({
         urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
         urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
 		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
-		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json'
+		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
+		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json'
     },
     //____ End of Configuration settings _____
 
