@@ -9,7 +9,8 @@ Ext.define('Mikrotik.view.tabMain', {
         'Mikrotik.view.cntPhotos',
         'Mikrotik.view.cntAbout',
         'Mikrotik.view.cntPayAd',
-		'Mikrotik.view.navNewUser'
+		'Mikrotik.view.navNewUser',
+		'Mikrotik.view.navLostPassword'
     ],
     config: {
         tabBar : {
@@ -34,7 +35,7 @@ Ext.define('Mikrotik.view.tabMain', {
 
         },me);
 
-        config.items = [
+		var i = [
             {
                 title       : 'Connect',
                 iconCls     : 'star',
@@ -115,13 +116,31 @@ Ext.define('Mikrotik.view.tabMain', {
                 ]
             }
 			*/
-			,{
-				title		: 'New user',
-				xtype		: 'navNewUser',
-				iconCls     : 'add',
-				itemId		: 'navNewUser'
-			}
         ];
+
+		if(config.jsonData.settings.register_users){
+			i = Ext.Array.merge(i, [
+				{
+					title		: 'New user',
+					xtype		: 'navNewUser',
+					iconCls     : 'add',
+					itemId		: 'navNewUser'
+				}
+			]);
+		}
+
+		if(config.jsonData.settings.lost_password){
+			i = Ext.Array.merge(i, [
+				{
+					title		: 'Lost password',
+					xtype		: 'navLostPassword',
+					iconCls     : 'reply',
+					itemId		: 'navLostPassword'
+				}
+			]);
+		}
+
+        config.items = i
 
         me.callParent([config]);
     }

@@ -1,6 +1,6 @@
-Ext.define('Mikrotik.view.navNewUser', {
+Ext.define('Mikrotik.view.navLostPassword', {
     extend	: 'Ext.navigation.View',
-    xtype	: 'navNewUser',
+    xtype	: 'navLostPassword',
     requires: [
     ],
 	activeItem	: 0,
@@ -18,9 +18,9 @@ Ext.define('Mikrotik.view.navNewUser', {
 		items:	[
 			{
 				title		: 'Read first',
-				html		: "<h1>Sign-up for free Internet</h1>"+
-				"We would like to give you some free Internet!<br>"+
-				"Before we can do that though, please sign up with us.",
+				html		: "<h1>Supply you email address</h1>"+
+				"If you are registered with us "+
+				"we will email your credentials to you.",
 				itemId		: 'pnlUsrRegIntro',
 				styleHtmlContent : true,
 				styleHtmlCls: 'regHtml'
