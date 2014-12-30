@@ -83,7 +83,48 @@ Ext.define('CoovaChilli.controller.Desktop', {
             },
 			'pnlConnect #tabVoucher' : {
                 activate: me.onTabVoucherActivate
-            }
+            },
+
+			//==== NEW USER REGISTRATION ===
+
+			'pnlConnect #btnNewUser' : {
+				click: me.onBtnNewUserClick		
+			},
+			'winNewUser #btnIntroNext'	: {
+				click: me.onBtnIntroNextClick
+			},
+			'winNewUser #btnDetailBack'	: {
+				click: me.onBtnDetailBackClick
+			},
+			'winNewUser #btnDetailNext'	: {
+				click: me.onBtnDetailNextClick
+			},
+			'winNewUser #btnLastNext'	: {
+				click:	function(b){
+					b.up('window').close();
+				}
+			},
+			
+			//=== LOST Password ===
+
+			'pnlConnect #btnLostPassword' : {
+				click: me.onBtnLostPasswordClick		
+			},
+			'winLostPassword #btnIntroNext'	: {
+				click: me.onBtnLpIntroNextClick
+			},
+			'winLostPassword #btnDetailBack'	: {
+				click: me.onBtnLpDetailBackClick
+			},
+			'winLostPassword #btnDetailNext'	: {
+				click: me.onBtnLpDetailNextClick
+			},
+			'winLostPassword #btnLastNext'	: {
+				click:	function(b){
+					b.up('window').close();
+				}
+			}
+
         });    
     },
     onBtnDisconnectClick: function(b){
@@ -867,5 +908,88 @@ Ext.define('CoovaChilli.controller.Desktop', {
         if (gb < 1)  return mb + ' '+'Megabytes';
 
         return gb + ' '+'Gigabytes';
-    }
+    },
+
+	//=========== NEW USER REG ============
+	onBtnNewUserClick : function(){
+		var me 	= this;
+		//We get the MAC Addy of the device to prevent users double registring
+		var mac = me.queryObj.mac;
+
+		var c = Ext.ComponentQuery.query('#winNewUser');
+		if(Ext.isEmpty(c)){
+			Ext.create('CoovaChilli.view.winNewUser', { glyph: CoovaChilli.config.icnAdd,	id: 'winNewUser',mac:mac}).show();
+		}
+	},
+	onBtnIntroNextClick	: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnDetail');		
+	},
+	onBtnDetailBackClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnIntro');		
+	},
+	onBtnDetailNextClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		var form    = win.down('form');
+		form.setLoading('Registring new user...');
+        form.submit({
+            clientValidation	: true,
+            url					: me.application.config.urlAdd,
+            success				: function(f, action) {
+				var un = me.getConnect().down('#inpUsername');
+				var pw = me.getConnect().down('#inpPassword');
+				un.setValue(action.result.data.username);
+				pw.setValue(action.result.data.password);
+				f.reset();
+				form.setLoading(false);
+				win.getLayout().setActiveItem('scrnEnd');
+            },
+            failure				: function(f,action){
+				form.setLoading(false);
+            }
+        });
+	},
+	//=== End New user REG======
+
+
+	//=========== LOST PASSWORD ============
+	onBtnLostPasswordClick : function(){
+		
+		var c = Ext.ComponentQuery.query('#winLostPassword');
+		if(Ext.isEmpty(c)){
+			Ext.create('CoovaChilli.view.winLostPassword', { glyph: CoovaChilli.config.icnLock,	id: 'winLostPassword'}).show();
+		}
+	},
+	onBtnLpIntroNextClick	: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnDetail');		
+	},
+	onBtnLpDetailBackClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnIntro');		
+	},
+	onBtnLpDetailNextClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		var form    = win.down('form');
+		form.setLoading('Submitting request...');
+        form.submit({
+            clientValidation	: true,
+            url					: me.application.config.urlLostPw,
+            success				: function(f, action) {
+				f.reset();
+				form.setLoading(false);
+				win.getLayout().setActiveItem('scrnEnd');
+            },
+            failure				: function(f,action){
+				form.setLoading(false);
+            }
+        });
+	}
 });

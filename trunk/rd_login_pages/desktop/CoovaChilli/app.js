@@ -40,7 +40,9 @@ Ext.application({
         jsonTimeout 	: 10000,
         urlPayPalVoucher: infoServer+'/cake2/rd_cake/fin_paypal_transactions/voucher_info_for.json',
         urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
-		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json'
+		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
+		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
+		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json'
     //____ End of Configuration settings _____
 	},
     init: function(){
@@ -79,6 +81,10 @@ Ext.application({
         Ext.namespace('CoovaChilli.config');
         //Declare some constants
         Ext.namespace('CoovaChilli').config = {
+			buttonMargin    : '10 15 10 15',
+            fieldMargin     : 15,
+            labelWidth      : 150,
+            maxWidth        : 400,
             icnLock         : 57495,    //Glyphs
             icnYes          : 57605,
             icnMenu         : 57594,

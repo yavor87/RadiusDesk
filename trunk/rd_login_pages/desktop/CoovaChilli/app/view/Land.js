@@ -18,7 +18,9 @@ Ext.define('CoovaChilli.view.Land' ,{
         'CoovaChilli.view.pnlAbout',
         'CoovaChilli.view.pnlPayPal',
         'CoovaChilli.view.pnlPayAd',
-        'CoovaChilli.view.pnlPayU'
+        'CoovaChilli.view.pnlPayU',
+		'CoovaChilli.view.winNewUser',
+		'CoovaChilli.view.winLostPassword'
     ],
     initComponent: function() { 
         var me      = this;
