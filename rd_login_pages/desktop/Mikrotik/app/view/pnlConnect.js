@@ -124,7 +124,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
 					text		: 'Register as new user',
 					margin		: '10 0 0 0',
 					itemId		: 'btnNewUser',
-					anchor		: '100%',
+					anchor		: '100%'
 				}
 			]);
 		}
@@ -136,7 +136,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
 					text		: 'Lost password',
 					margin		: '10 0 0 0',
 					itemId		: 'btnLostPassword',
-					anchor		: '100%',
+					anchor		: '100%'
 				}
 			]);
 		}
