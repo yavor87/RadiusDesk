@@ -14,17 +14,25 @@ Ext.define('Mikrotik.view.navNewUser', {
 				align	: 'right',
 				itemId	: 'navBtnNext'
 			}]
-		},
-		items:	[
+		}
+    },
+	constructor: function(config) {
+        var me 	= this;
+		
+		var strVar	= "";
+		strVar += "<h1>Sign-up for free Internet</h1>";
+		strVar += "We would like to give you some free Internet!<br>";
+		strVar += "Before we can do that though, please sign up with us.";
+
+        config.items    =	[
 			{
 				title		: 'Read first',
-				html		: "<h1>Sign-up for free Internet</h1>"+
-				"We would like to give you some free Internet!<br>"+
-				"Before we can do that though, please sign up with us.",
+				html		: strVar,
 				itemId		: 'pnlUsrRegIntro',
 				styleHtmlContent : true,
 				styleHtmlCls: 'regHtml'
 			}
-		]
+		]; 
+        me.callParent([config]); 
     }
 });
