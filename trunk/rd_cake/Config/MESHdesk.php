@@ -55,7 +55,7 @@ $config['hardware'][0]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 $config['hardware'][1]      = array(
@@ -67,7 +67,7 @@ $config['hardware'][1]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 $config['hardware'][2]      = array(
@@ -79,7 +79,7 @@ $config['hardware'][2]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 
@@ -92,7 +92,7 @@ $config['hardware'][3]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 $config['hardware'][4]      = array(
@@ -104,7 +104,7 @@ $config['hardware'][4]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'
+		'hwmode'	=> '11g'
 );
 
 $config['hardware'][5]      = array(
@@ -116,7 +116,7 @@ $config['hardware'][5]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> false,
 		'five'		=> true,
-		'hwmode'	=> '11na'
+		'hwmode'	=> '11a'
 );
 
 $config['hardware'][6]      = array(
@@ -128,7 +128,7 @@ $config['hardware'][6]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'
+		'hwmode'	=> '11g'
 );
 
 
@@ -141,7 +141,7 @@ $config['hardware'][7]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> false,
 		'five'		=> true,
-		'hwmode'	=> '11na'	
+		'hwmode'	=> '11a'	
 );
 
 $config['hardware'][8]      = array(
@@ -153,7 +153,7 @@ $config['hardware'][8]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 $config['hardware'][9]      = array(
@@ -165,7 +165,7 @@ $config['hardware'][9]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng'	
+		'hwmode'	=> '11g'	
 );
 
 $config['hardware'][10]      = array(
@@ -179,13 +179,13 @@ $config['hardware'][10]      = array(
 		'max_power' => '20',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11ng',
+		'hwmode'	=> '11g',
 
 		//Second radio - This is extra for two radio devices
 		'max_power1'=> '23',
 		'two1'		=> false,
 		'five1'		=> true,
-		'hwmode1'	=> '11na'
+		'hwmode1'	=> '11a'
 );
 
 $config['hardware'][11]      = array(
@@ -199,13 +199,13 @@ $config['hardware'][11]      = array(
                 'max_power' => '23',
                 'two'           => true,
                 'five'          => false,
-                'hwmode'        => '11ng',
+                'hwmode'        => '11g',
 
                 //Second radio - This is extra for two radio devices
                 'max_power1'=> '23',
                 'two1'          => false,
                 'five1'         => true,
-                'hwmode1'       => '11na'
+                'hwmode1'       => '11a'
 );
 
 
