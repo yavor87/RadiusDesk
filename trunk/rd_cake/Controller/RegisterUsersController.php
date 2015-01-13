@@ -137,6 +137,16 @@ class RegisterUsersController extends AppController {
 		}
 	}
 
+	public function lost_password(){
+
+		$this->set(array(
+            'success'   => true,
+			'data'		=> array(),
+		        '_serialize' => array('success','data')
+		    ));
+	}
+
+
 	private function _email_user_detail($username,$password){
 
 		$email_server = Configure::read('EmailServer');
