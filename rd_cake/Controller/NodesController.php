@@ -517,7 +517,7 @@ class NodesController extends AppController {
         $channel    = $mesh['NodeSetting']['two_chan'];
 	
 		//Hardware mode for 5G
-		$hwmode		= '11ng';	//Sane default
+		$hwmode		= '11g';	//Sane default
 		$hw_temp    = $this->_get_hardware_setting($this->Hardware,'hwmode');
 		if($hw_temp){
 			$hwmode	= $hw_temp;
