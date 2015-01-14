@@ -284,6 +284,7 @@ function try_wifi()
 				got_new_config = true
 				os.execute("/etc/MESHdesk/main_led.lua start d")
 				configure_device(config_file)
+				break -- We already got the new config and can break our search of next radio
 			end
 		end
 		--Try next radio
