@@ -7,14 +7,27 @@ class "rdGateway"
 
 --Init function for object
 function rdGateway:rdGateway()
-	local uci 	= require("uci")
+
+	require('rdLogger')
+	
+	local uci 		= require("uci")
 	self.version 	= "1.0.0"
-	self.x		= uci.cursor(nil,'/var/state')
+	self.debug	    = true
+	self.x			= uci.cursor(nil,'/var/state')
+	self.logger	    = rdLogger()
+
 	self.conf_zone  = 'one' -- network interface 'one' is the admin interface
+	self.conf_rule	= 'one_rule' -- The name of the firewall rule that allow traffic to conf server.
 end
         
 function rdGateway:getVersion()
 	return self.version
+end
+
+function rdGateway:log(m,p)
+	if(self.debug)then
+		self.logger:log(m,p)
+	end
 end
  
 function rdGateway:enable(exPoints)
@@ -139,7 +152,7 @@ function rdGateway.__fwGwEnable(self,network,forward)
 		self.x.set('firewall',zone_name,'network',	network)	
 		self.x.set('firewall',zone_name,'INPUT',	'ACCEPT')	
 		self.x.set('firewall',zone_name,'OUTPUT',	'ACCEPT')	
-		self.x.set('firewall',zone_name,'FORWARD',	'ACCEPT')	
+		self.x.set('firewall',zone_name,'FORWARD',	'REJECT') -- By default we are not forwarding traffic
 		self.x.set('firewall',zone_name,'conntrack',	'1')	
 	end
 	
@@ -166,12 +179,46 @@ function rdGateway.__fwGwEnable(self,network,forward)
 				no_forwarding = false
 			end
 		end)
-	if(no_forwarding and (forward == 'yes'))then -- Only if we specified to add a forward rule
+
+	--We are not adding a forward rule for the conf_zone for security reasons
+	if(no_forwarding and (forward == 'yes')and(network ~= self.conf_zone))then -- Only if we specified to add a forward rule
 		local f = self.x.add('firewall', 'forwarding')
 		self.x.set('firewall',f,'src',network)
 		self.x.set('firewall',f,'dst','lan')
 	end
 	self.x.commit('firewall')
+
+	--only for the config zone
+	--We need to add a rule to allow traffic to the config server for the config zone
+	
+	if(network == self.conf_zone)then 
+
+		--Avoid duplicates
+		local no_conf_accept_rule = true
+		self.x.foreach('firewall','rule',
+			function(a)
+				if(a['name'] == self.conf_rule)then
+					no_conf_accetp_rule = false --We found the entry
+				end
+			end)
+
+		--Get the IP of the config server
+		local conf_srv = self.x.get('meshdesk','internet1','ip')
+
+		--Add a rule for conf server 
+		if(no_conf_accept_rule)then
+			local r = self.x.add('firewall','rule')
+			self.x.set('firewall',r,'src', network)
+			self.x.set('firewall',r,'dest', 'lan')
+			self.x.set('firewall',r,'dest_ip', conf_srv)
+			self.x.set('firewall',r,'target', 'ACCEPT')
+			self.x.set('firewall',r,'name', self.conf_rule)
+			self.x.set('firewall',r,'proto', 'all') --required to include ping
+			self.x.commit('firewall')
+		end
+
+	end
+
 end
 
 function rdGateway.__fwGwDisable(self)
@@ -207,7 +254,16 @@ function rdGateway.__fwGwDisable(self)
 				self.x.delete('firewall',fwd_name)
 			end
 		end)
-			
+
+	--Remove the rule allowing traffic to config server
+	self.x.foreach('firewall', 'rule',
+		function(a)
+			if(a.name == self.conf_rule)then
+				local r	  = a['.name']
+				self.x.delete('firewall',r)
+			end
+		end)
+	
 	self.x.commit('firewall')
 		
 end
