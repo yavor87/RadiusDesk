@@ -5,10 +5,10 @@ Ext.define('Mikrotik.model.mNewUser', {
         validations: [
             { type	: 'presence', 	field	: 'name' 	},
             { type	: 'presence', 	field	: 'surname' },
-			{ type	: 'presence', 	field	: 'email' 	},
+			{ type	: 'presence', 	field	: 'username' 	},
             { type	: 'presence', 	field	: 'password'},
 			{ type	: 'presence', 	field	: 'phone'	},
-			{ type	: 'email', 	    field	: 'email'	},
+			{ type	: 'email', 	    field	: 'username'},
 			{ type	: 'format', 	field	: 'phone', 		matcher: /^\d{10}$/i},
 			{ type	: 'length', 	field	: 'password', 	min: 5, max: 15},
             { type	: 'length', 	field	: 'name', 		max: 30 },
