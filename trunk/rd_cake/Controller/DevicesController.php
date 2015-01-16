@@ -264,7 +264,7 @@ class DevicesController extends AppController {
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:
             $this->{$this->modelClass}->contain('User');
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $ap_id      = $item['User']['parent_id'];
+            $ap_id      = $item['PermanetUser']['user_id'];
             $username   = $item['Device']['name'];
             if($ap_id != $user_id){
                 if($this->_is_sibling_of($user_id,$ap_id)== true){
@@ -284,7 +284,7 @@ class DevicesController extends AppController {
             foreach($this->data as $d){
 
                 $item       = $this->{$this->modelClass}->findById($d['id']);
-                $ap_id      = $item['User']['parent_id'];
+                $ap_id      = $item['PermanentUser']['user_id'];
                 $username   = $item['Device']['name'];
                 if($ap_id != $user_id){
                     if($this->_is_sibling_of($user_id,$ap_id) == true){
@@ -1397,9 +1397,9 @@ class DevicesController extends AppController {
         //==== END SORT ===
 
         //======= For a specified owner filter *Usually on the edit permanent user ======
-        if(isset($this->request->query['user_id'])){
-            $u_id = $this->request->query['user_id'];
-            array_push($c['conditions'],array($this->modelClass.".user_id" => $u_id));
+        if(isset($this->request->query['permanent_user_id'])){
+            $u_id = $this->request->query['permanent_user_id'];
+            array_push($c['conditions'],array($this->modelClass.".permanent_user_id" => $u_id));
         }
 
 
