@@ -39,9 +39,9 @@ Ext.define('CoovaChilli.view.frmNewUser', {
 		            },
 					{
 				        xtype 		: 'emailfield',
-				        name 		: 'email',
+				        name 		: 'username',
 				        placeHolder : 'Email (username)',
-						itemId		: 'email'
+						itemId		: 'username'
 				    },
 					{
 		                xtype   	: 'textfield',
