@@ -8,7 +8,9 @@ class AutoAddDevicesShell extends AppShell {
         $this->out("<comment>Auto Add Devices start ".APP."</comment>");
         $qr = $this->AutoDevice->find('all');
         foreach($qr as $i){
-            $this->process_auto_device($i['AutoDevice']['mac'],$i['AutoDevice']['username']);
+			if($i['AutoDevice']['mac'] != 'aa-aa-aa-aa-aa-aa'){ //We do not add this as this mac is for testing
+            	$this->process_auto_device($i['AutoDevice']['mac'],$i['AutoDevice']['username']);
+			}
         }
 
         //Clear the table for the next lot
@@ -23,7 +25,7 @@ class AutoAddDevicesShell extends AppShell {
             $this->out("<info>Device $mac not found - Add it</info>");
             $vendor = $this->FindMac->return_vendor_for_mac($mac);
             //Find the Permanent user that this device belongs to:
-            $this->PermanentUser->contain('Radcheck','Group');
+            $this->PermanentUser->contain('Radcheck');
             $q_r = $this->PermanentUser->find('first',array('conditions' => array('PermanentUser.username' => $username)));
             if($q_r){
                // print_r($q_r);
