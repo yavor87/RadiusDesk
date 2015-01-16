@@ -1,6 +1,6 @@
 Ext.define('CoovaChilli.controller.cMain', {
     extend: 'Ext.app.Controller',
-    requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView'],
+    requires: ['Ext.data.JsonP','Ext.util.Cookies','Ext.dataview.DataView','Ext.MessageBox'],
     config: {
         refs: {
             cntStatus       : '#cntStatus',
