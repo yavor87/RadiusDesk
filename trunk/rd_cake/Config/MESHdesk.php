@@ -169,6 +169,27 @@ $config['hardware'][9]      = array(
 );
 
 $config['hardware'][10]      = array(
+		'name' 		=> __('UniFi AP PRO (Dual Radio)'),	
+		'id'    	=> 'unifiappro',
+		'radios'	=> 2, 
+		'active'    => true,
+		'eth_br'	=> 'eth0 eth1',
+
+		//First radio 
+		'max_power' => '30',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11g',
+
+		//Second radio - This is extra for two radio devices
+		'max_power1'=> '23',
+		'two1'		=> false,
+		'five1'		=> true,
+		'hwmode1'	=> '11a'
+);
+
+
+$config['hardware'][11]      = array(
 		'name' 		=> __('TP-Link N600 (Dual Radio)'),	
 		'id'    	=> 'tplink_n600',
 		'radios'	=> 2, 
@@ -188,7 +209,7 @@ $config['hardware'][10]      = array(
 		'hwmode1'	=> '11a'
 );
 
-$config['hardware'][11]      = array(
+$config['hardware'][12]      = array(
                 'name'          => __('Alix 3D2 (Dual Radio)'),
                 'id'            => 'alix3d2',
                 'radios'        => 2,
@@ -203,6 +224,38 @@ $config['hardware'][11]      = array(
 
                 //Second radio - This is extra for two radio devices
                 'max_power1'=> '23',
+                'two1'          => false,
+                'five1'         => true,
+                'hwmode1'       => '11a'
+);
+
+$config['hardware'][13]      = array(
+		'name' 		=> __('Generic 1 Radio'),	
+		'id'    	=> 'genoneradio',
+		'radios'	=> 1, 
+		'active'    => true, 
+		'max_power' => '18',
+		'eth_br'	=> 'eth0',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11g'	
+);
+
+$config['hardware'][14]      = array(
+                'name'          => __('Generic 2 Radio'),
+                'id'            => 'gentworadio',
+                'radios'        => 2,
+                'active'    	=> true,
+                'eth_br'        => 'eth0',
+
+                //First radio 
+                'max_power' => '18',
+                'two'           => true,
+                'five'          => false,
+                'hwmode'        => '11g',
+
+                //Second radio - This is extra for two radio devices
+                'max_power1'=> '18',
                 'two1'          => false,
                 'five1'         => true,
                 'hwmode1'       => '11a'
