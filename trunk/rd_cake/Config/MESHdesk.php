@@ -173,19 +173,19 @@ $config['hardware'][10]      = array(
 		'id'    	=> 'unifiappro',
 		'radios'	=> 2, 
 		'active'    => true,
-		'eth_br'	=> 'eth0 eth1',
+		'eth_br'	=> 'eth0',
 
 		//First radio 
-		'max_power' => '30',
-		'two'		=> true,
-		'five'		=> false,
-		'hwmode'	=> '11g',
+		'max_power' => '17',
+		'two'		=> false,
+		'five'		=> true,
+		'hwmode'	=> '11a',
 
 		//Second radio - This is extra for two radio devices
-		'max_power1'=> '23',
-		'two1'		=> false,
-		'five1'		=> true,
-		'hwmode1'	=> '11a'
+		'max_power1'=> '30',
+		'two1'		=> true,
+		'five1'		=> false,
+		'hwmode1'	=> '11g'
 );
 
 
