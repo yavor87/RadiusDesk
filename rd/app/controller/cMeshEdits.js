@@ -716,7 +716,12 @@ Ext.define('Rd.controller.cMeshEdits', {
 			voip.tab.hide();
 		}
 
-		if((val == 'tplink_n600')||(val == 'alix3d2')){
+		if(
+			(val == 'tplink_n600')||
+			(val == 'alix3d2')||
+			(val == 'unifiappro')||
+			(val == 'gentworadio')
+		){
 			radio.setDisabled(false);	
 			radio.tab.show();
 		}else{
