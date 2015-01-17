@@ -78,6 +78,11 @@ config hardware 'unifilrap'
 	option morse_led '/sys/class/leds/ubnt:green:dome/brightness'
 	option internet_led '/sys/class/leds/ubnt:orange:dome/brightness'
 
+config hardware 'unifiappro'
+	option morse_led '/sys/class/leds/ubnt:blue:dome/brightness'
+	option internet_led '/sys/class/leds/ubnt:white:dome/brightness'
+
+
 config hardware 'tplink_n600'
 	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
 	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
@@ -116,4 +121,14 @@ config hardware 'bulm2'
  	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
  	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
  	option wifi_led 'ubnt:green:link4'
+
+config hardware 'genoneradio'
+	option morse_led '/sys/class/leds/led0/brightness'
+	option internet_led '/sys/class/leds/led1/brightness'
+	option wifi_led 'led3'
+
+config hardware 'gentworadio'
+	option morse_led '/sys/class/leds/led0/brightness'
+	option internet_led '/sys/class/leds/led1/brightness'
+	option wifi_led 'led3'
 
