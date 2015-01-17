@@ -27,8 +27,11 @@ local choices = {
     "NanoStation M5",
     "UniFi AP", 
     "UniFi AP-LR",
+    "UniFi AP PRO",
     "Alix 3D2",
-    "TP-Link N600"
+    "TP-Link N600",
+    "Generic 1 Radio",
+    "Generic 2 Radio"
 }
 local hardware      = {}
 hardware[0]         = 'dragino'
@@ -41,8 +44,11 @@ hardware[6]         = 'nano2'
 hardware[7]         = 'nano5'
 hardware[8]         = 'unifiap'
 hardware[9]         = 'unifilrap'
-hardware[10]        = 'alix3d2'
-hardware[11]        = 'tplink_n600'
+hardware[10]        = 'unifiappro'
+hardware[11]        = 'alix3d2'
+hardware[12]        = 'tplink_n600'
+hardware[13]        = 'genoneradio'
+hardware[14]        = 'gentworadio'
 
 
 function HandleEvents(event)
@@ -77,11 +83,21 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_unifilrap)
     end
     if(event:GetSelection() == 10)then
-        sbmHardware:SetBitmap(bm_alix3d2)
+        sbmHardware:SetBitmap(bm_unifiappro)
     end
     if(event:GetSelection() == 11)then
+        sbmHardware:SetBitmap(bm_alix3d2)
+    end
+    if(event:GetSelection() == 12)then
         sbmHardware:SetBitmap(bm_n600)
     end
+    if(event:GetSelection() == 13)then
+        sbmHardware:SetBitmap(bm_genoneradio)
+    end
+    if(event:GetSelection() == 14)then
+        sbmHardware:SetBitmap(bm_gentworadio)
+    end
+    
 end
 
 function md5sum_to_client(sock)
@@ -228,12 +244,24 @@ function build_gui()
     
     bm_unifilrap      = wx.wxBitmap();
     bm_unifilrap:LoadFile("./graphics/unifilrap.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_unifiappro    = wx.wxBitmap();
+    bm_unifiappro:LoadFile("./graphics/unifiappro.png",wx.wxBITMAP_TYPE_ANY )
 
     bm_alix3d2      = wx.wxBitmap();
     bm_alix3d2:LoadFile("./graphics/alix3d2.jpg",wx.wxBITMAP_TYPE_ANY )
     
     bm_n600      = wx.wxBitmap();
     bm_n600:LoadFile("./graphics/n600.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_n600      = wx.wxBitmap();
+    bm_n600:LoadFile("./graphics/n600.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_genoneradio      = wx.wxBitmap();
+    bm_genoneradio:LoadFile("./graphics/genoneradio.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_gentworadio      = wx.wxBitmap();
+    bm_gentworadio:LoadFile("./graphics/gentworadio.png",wx.wxBITMAP_TYPE_ANY )
 
 
 
