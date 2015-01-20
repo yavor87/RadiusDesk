@@ -64,14 +64,8 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                         minValue    : 1
                     },
                     {
-                        xtype       : 'numberfield',
-                        anchor      : '100%',
-                        name        : 'five_chan',
-                        fieldLabel  : i18n('s5G_Channel'),
-                        value       : 44,
-                        maxValue    : 116,
-                        minValue    : 36,
-                        step        : 8
+                        xtype       : 'cmbFiveGigChannels',
+                        anchor      : '100%'
                     },
                     {
                         xtype       : 'numberfield',
