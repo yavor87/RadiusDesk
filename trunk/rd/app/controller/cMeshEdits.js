@@ -8,7 +8,8 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.pnlNodeCommonSettings', 'meshes.gridNodes',     'meshes.winMeshAddNode',
         'meshes.cmbHardwareOptions', 'meshes.cmbStaticEntries', 'meshes.cmbStaticExits',
         'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap',	'meshes.winMeshMapPreferences',
-		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions'
+		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions',
+		'components.cmbFiveGigChannels'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
