@@ -1081,11 +1081,7 @@ class MeshesController extends AppController {
 			}
 
 			//___ Do a check if the device is a dual radio device and if so; send it way to be delt with
-			//FIXME do a lookup on the model's radio count and if it == two we do it
-			if(
-				($this->request->data['hardware'] == 'alix3d2')||
-				($this->request->data['hardware'] == 'tplink_n600')
-			){
+			if($this->_get_radio_count_for($this->request->data['hardware']) == 2){
 				$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
 			}
 
@@ -1193,11 +1189,9 @@ class MeshesController extends AppController {
 				}
 
 				//___ Do a check if the device is a dual radio device and if so; send it way to be delt with
-				//FIXME do a lookup on the model's radio count and if it == two we do it
-				if(
-					($this->request->data['hardware'] == 'alix3d2')||
-					($this->request->data['hardware'] == 'tplink_n600')
-				){
+
+				if($this->_get_radio_count_for($this->request->data['hardware']) == 2){
+
 					$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
 				}
 
@@ -2344,6 +2338,19 @@ config secn 'asterisk'
             $node_mp_setting->save($data);
 			$node_mp_setting->id= null;
 		}
+	}
+
+	private function _get_radio_count_for($hardware){
+		$radio_count 	= 1;
+		Configure::load('MESHdesk'); 
+        $hardware_list 	= Configure::read('hardware'); //Read the defaults
+
+		foreach($hardware_list as $i){
+			if($i['id'] == $hardware){
+				$radio_count = $i['radios'];
+			}
+		}
+		return $radio_count;
 	}
 
 	private function _add_or_edit_dual_radio_settings($node_id){
