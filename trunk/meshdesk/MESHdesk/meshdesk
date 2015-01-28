@@ -132,3 +132,8 @@ config hardware 'gentworadio'
 	option internet_led '/sys/class/leds/led1/brightness'
 	option wifi_led 'led3'
 
+config hardware 'tl841n'                                                  
+        option morse_led '/sys/class/leds/tp-link:green:qss/brightness'  
+        option internet_led '/sys/class/leds/tp-link:green:wan/brightness'
+        option wifi_led 'tp-link:green:wlan'
+
