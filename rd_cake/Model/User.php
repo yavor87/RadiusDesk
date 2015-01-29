@@ -71,6 +71,12 @@ class User extends AppModel {
         ),
 		'PermanentUser' => array(
             'dependent'     => true   
+        ),
+		'Voucher' => array(
+            'dependent'     => true   
+        ),
+		'FinPaymentPlan' => array(
+            'dependent'     => true   
         )
     );
 
