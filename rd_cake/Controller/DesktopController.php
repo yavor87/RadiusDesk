@@ -276,6 +276,11 @@ class DesktopController extends AppController {
             array(  'text'  => __('Finances'),  'iconCls' => 'realms',  'glyph' => Configure::read('icnFinance') ,'menu'  =>
                  array( 'items' =>
                     array(
+						array(
+                            'text'      => __('Payment Plans'),
+                            'glyph'     => Configure::read('icnTag'),
+                            'itemId'    => 'cFinPaymentPlans'
+                        ),
                         array(
                             'text'      => __('Paypal'),
                             'glyph'     => Configure::read('icnOnlineShop'),
@@ -290,7 +295,9 @@ class DesktopController extends AppController {
                             'text'      => __('Authorize.Net'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinAuthorizeNetTransactions'
-                        ),/*
+                        ),
+
+						/*
 						array(
                             'text'      => __('Premium SMS'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
