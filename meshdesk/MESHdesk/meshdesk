@@ -82,7 +82,6 @@ config hardware 'unifiappro'
 	option morse_led '/sys/class/leds/ubnt:blue:dome/brightness'
 	option internet_led '/sys/class/leds/ubnt:white:dome/brightness'
 
-
 config hardware 'tplink_n600'
 	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
 	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
@@ -104,23 +103,6 @@ config hardware 'mp2_phone'
 	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
 	option wifi_led 'dragino2:red:wlan'
 	option swap_on_off '0'
-
-config hardware 'airgw'
- 	option morse_led '/sys/class/leds/ubnt:blue:wlan/brightness'
- 	option internet_led '/sys/class/leds/ubnt:white:status/brightness'
-
-config hardware 'airrouter'
- 	option morse_led '/sys/class/leds/ubnt:green:globe/brightness'
- 	option internet_led '/sys/class/leds/ubnt:green:power/brightness'
-
-config hardware 'airrouterlr'
- 	option morse_led '/sys/class/leds/ubnt:green:globe/brightness'
- 	option internet_led '/sys/class/leds/ubnt:green:power/brightness'
-
-config hardware 'bulm2'
- 	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
- 	option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
- 	option wifi_led 'ubnt:green:link4'
 
 config hardware 'genoneradio'
 	option morse_led '/sys/class/leds/led0/brightness'
