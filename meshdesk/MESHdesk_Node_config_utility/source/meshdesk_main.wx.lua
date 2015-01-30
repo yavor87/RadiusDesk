@@ -28,8 +28,14 @@ local choices = {
     "UniFi AP", 
     "UniFi AP-LR",
     "UniFi AP PRO",
+    "AirGateway",
+    "AirRouter",
+    "AirRouter HP",
+    "BulletM2",
+    "RB433 2 Radio",
     "Alix 3D2",
     "TP-Link N600",
+    "TP-Link WR841N",
     "Generic 1 Radio",
     "Generic 2 Radio"
 }
@@ -45,10 +51,16 @@ hardware[7]         = 'nano5'
 hardware[8]         = 'unifiap'
 hardware[9]         = 'unifilrap'
 hardware[10]        = 'unifiappro'
-hardware[11]        = 'alix3d2'
-hardware[12]        = 'tplink_n600'
-hardware[13]        = 'genoneradio'
-hardware[14]        = 'gentworadio'
+hardware[11]        = 'airgw'
+hardware[12]        = 'airrouter'
+hardware[13]        = 'airrouterhp'
+hardware[14]        = 'bulm2'
+hardware[15]        = 'rb433'
+hardware[16]        = 'alix3d2'
+hardware[17]        = 'tplink_n600'
+hardware[18]        = 'tl841n'
+hardware[19]        = 'genoneradio'
+hardware[20]        = 'gentworadio'
 
 
 function HandleEvents(event)
@@ -86,18 +98,35 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_unifiappro)
     end
     if(event:GetSelection() == 11)then
-        sbmHardware:SetBitmap(bm_alix3d2)
+        sbmHardware:SetBitmap(bm_airgw)
     end
     if(event:GetSelection() == 12)then
-        sbmHardware:SetBitmap(bm_n600)
+        sbmHardware:SetBitmap(bm_airrouter)
     end
     if(event:GetSelection() == 13)then
-        sbmHardware:SetBitmap(bm_genoneradio)
+        sbmHardware:SetBitmap(bm_airrouterhp)
     end
     if(event:GetSelection() == 14)then
+        sbmHardware:SetBitmap(bm_bulm2)
+    end
+    if(event:GetSelection() == 15)then
+        sbmHardware:SetBitmap(bm_rb433)
+    end
+    if(event:GetSelection() == 16)then
+        sbmHardware:SetBitmap(bm_alix3d2)
+    end
+    if(event:GetSelection() == 17)then
+        sbmHardware:SetBitmap(bm_n600)
+    end
+    if(event:GetSelection() == 18)then
+        sbmHardware:SetBitmap(bm_tl841n)
+    end
+    if(event:GetSelection() == 19)then
+        sbmHardware:SetBitmap(bm_genoneradio)
+    end
+    if(event:GetSelection() == 20)then
         sbmHardware:SetBitmap(bm_gentworadio)
     end
-    
 end
 
 function md5sum_to_client(sock)
@@ -247,6 +276,21 @@ function build_gui()
     
     bm_unifiappro    = wx.wxBitmap();
     bm_unifiappro:LoadFile("./graphics/unifiappro.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_airgw    = wx.wxBitmap();
+    bm_airgw:LoadFile("./graphics/airgw.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_airrouter    = wx.wxBitmap();
+    bm_airrouter:LoadFile("./graphics/airrouter.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_airrouterhp    = wx.wxBitmap();
+    bm_airrouterhp:LoadFile("./graphics/airrouter.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_bulm2    = wx.wxBitmap();
+    bm_bulm2:LoadFile("./graphics/bulm2.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_rb433    = wx.wxBitmap();
+    bm_rb433:LoadFile("./graphics/rb433.png",wx.wxBITMAP_TYPE_ANY )
 
     bm_alix3d2      = wx.wxBitmap();
     bm_alix3d2:LoadFile("./graphics/alix3d2.jpg",wx.wxBITMAP_TYPE_ANY )
@@ -256,6 +300,9 @@ function build_gui()
     
     bm_n600      = wx.wxBitmap();
     bm_n600:LoadFile("./graphics/n600.jpg",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_tl841n      = wx.wxBitmap();
+    bm_tl841n:LoadFile("./graphics/tl841n.png",wx.wxBITMAP_TYPE_ANY )
     
     bm_genoneradio      = wx.wxBitmap();
     bm_genoneradio:LoadFile("./graphics/genoneradio.png",wx.wxBITMAP_TYPE_ANY )
