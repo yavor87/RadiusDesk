@@ -133,7 +133,29 @@ config hardware 'gentworadio'
 	option wifi_led 'led3'
 
 config hardware 'tl841n'                                                  
-        option morse_led '/sys/class/leds/tp-link:green:qss/brightness'  
-        option internet_led '/sys/class/leds/tp-link:green:wan/brightness'
-        option wifi_led 'tp-link:green:wlan'
+    option morse_led '/sys/class/leds/tp-link:green:qss/brightness'  
+    option internet_led '/sys/class/leds/tp-link:green:wan/brightness'
+   	option wifi_led 'tp-link:green:wlan'
+
+config hardware 'airgw'
+   	option morse_led '/sys/class/leds/ubnt:blue:wlan/brightness'
+    option internet_led '/sys/class/leds/ubnt:white:status/brightness'
+
+config hardware 'airrouter'
+	option morse_led '/sys/class/leds/ubnt:green:globe/brightness'
+    option internet_led '/sys/class/leds/ubnt:green:power/brightness'
+
+config hardware 'airrouterhp'
+	option morse_led '/sys/class/leds/ubnt:green:globe/brightness'
+    option internet_led '/sys/class/leds/ubnt:green:power/brightness'
+
+config hardware 'bulm2'
+	option morse_led '/sys/class/leds/ubnt:red:link1/brightness'
+    option internet_led '/sys/class/leds/ubnt:green:link3/brightness'
+    option wifi_led 'ubnt:green:link4'
+
+config hardware 'rb433'
+    option morse_led '/sys/class/leds/rb4xx:yellow:user/brightness'
+    option internet_led '/sys/class/leds/rb4xx:green:led4/brightness'
+	option wifi_led 'rb4xx:green:led2'
 
