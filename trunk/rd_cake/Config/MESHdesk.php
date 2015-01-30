@@ -275,8 +275,71 @@ $config['hardware'][15]      = array(
                 'hwmode1'       => '11a'
 );
 
+$config['hardware'][16]      = array(
+	'name'    		=> __('AirGateway'),       
+    'id'          	=> 'airgw',
+    'radios'      	=> 1,
+    'active'    	=> true,
+    'max_power' 	=> 18,
+    'eth_br'      	=> 'eth0 eth1',
+    'two'         	=> true,
+    'five'        	=> false,
+    'hwmode'      	=> '11g'     
+);
 
+$config['hardware'][17]      = array(
+	'name'     		=> __('AirRouter'),        
+    'id'          	=> 'airrouter' ,  
+   	'radios'      	=> 1,
+    'active'    	=> true,
+ 	'max_power' 	=> '19',
+   	'eth_br'      	=> 'eth0',
+   	'two'         	=> true,
+   	'five'        	=> false,
+  	'hwmode'      	=> '11g'     
+);
 
+$config['hardware'][18]      = array(
+	'name'          => __('AirRouterHP'),      
+	'id'          	=> 'airrouterhp' ,  
+	'radios'      	=> 1,
+	'active'    	=> true,
+	'max_power'   	=> '26',
+	'eth_br'      	=> 'eth0',
+	'two'         	=> true,
+	'five'        	=> false,
+	'hwmode'      	=> '11g' 
+);
+
+$config['hardware'][19]      = array(
+  	'name'          => __('BulletM2'),         
+  	'id'          	=> 'bulm2',
+  	'radios'      	=> 1,
+	'active'    	=> true,
+  	'max_power' 	=> 28,
+  	'eth_br'      	=> 'eth0',
+  	'two'         	=> true,
+  	'five'        	=> false,
+  	'hwmode'      	=> '11g'
+);
+
+$config['hardware'][20]      = array(
+  	'name'          => __('RB433 (Dual Radio)'),      
+  	'id'          	=> 'rb433',
+  	'radios'      	=> 2,
+  	'active'    	=> true,
+  	'eth_br'      	=> 'eth0 eth1',
+  	//First radio
+  	'max_power' 	=> '27',
+  	'two'         	=> true,
+  	'five'        	=> false,
+  	'hwmode'      	=> '11g',
+  	//Second radio - This is extra for two radio devices
+  	'max_power1'	=> '27',
+  	'two1'        	=> false,
+  	'five1'        	=> true,
+  	'hwmode1'     	=> '11a'
+);
 
 
 //== MESHdesk SSID/BSSID
