@@ -12,7 +12,7 @@ class FinPaymentPlan extends AppModel {
 			'foreignKey'    => 'user_id'
         ),
         'Profile'   => array(
-            'className'     => 'Voucher',
+            'className'     => 'Profile',
 			'foreignKey'    => 'profile_id'
         )
 	);
