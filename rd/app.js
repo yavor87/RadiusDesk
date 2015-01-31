@@ -276,7 +276,6 @@ Ext.application({
 
         //<-- Toaster --
 
-
         //--- Form Fail message --->
         Ext.ux.formFail = function(form,action){
             switch (action.failureType) {
@@ -341,6 +340,7 @@ Ext.application({
         Ext.ux.centsToHuman = function(cents) {
             return (cents/100).toFixed(2); 
         }
+
     }
 });
 

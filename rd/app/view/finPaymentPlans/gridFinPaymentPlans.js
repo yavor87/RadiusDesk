@@ -60,7 +60,7 @@ Ext.define('Rd.view.finPaymentPlans.gridFinPaymentPlans' ,{
             { 
 
                 text        : 'Description', 
-                dataIndex   : 'mobile',          
+                dataIndex   : 'description',          
                 tdCls       : 'gridTree',
                 hidden      : false, 
                 flex        : 1,
@@ -120,14 +120,14 @@ Ext.define('Rd.view.finPaymentPlans.gridFinPaymentPlans' ,{
                 stateId     : 'StateGridFinPaymentPlans8'
             },
 			{ 
-
-                text        : 'Active', 
-                dataIndex   : 'active',          
-                tdCls       : 'gridTree',
-                hidden      : false, 
-                flex        : 1,
-                filter      : {type: 'string'},
-                stateId     : 'StateGridFinPaymentPlans9'
+                text        : i18n('sActive'),  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                            ),
+                dataIndex   : 'active',
+                filter      : { type: 'boolean'},stateId: 'StateGridFinPaymentPlans9'
             },
             { 
                 text        : 'Created',

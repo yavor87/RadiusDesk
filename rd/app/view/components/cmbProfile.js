@@ -32,7 +32,7 @@ Ext.define('Rd.view.components.cmbProfile', {
         });
 
         if(me.extraParam){
-            s.getProxy().setExtraParam('ap_id',me.extraParam);
+        	s.getProxy().setExtraParam('ap_id',me.extraParam);
         }
 
         me.store = s;
