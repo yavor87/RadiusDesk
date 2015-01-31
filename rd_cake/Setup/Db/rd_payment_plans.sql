@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `fin_payment_plan_notes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fin_payment_plan_notes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fin_fin_payment_plan_id` int(11) NOT NULL,
+  `fin_payment_plan_id` int(11) NOT NULL,
   `note_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
