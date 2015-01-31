@@ -53,7 +53,7 @@ class FinPaymentPlansController extends AppController {
 
          foreach($q_r as $i){
 
-           // print_r($i);
+            //print_r($i);
             $row = array();
             foreach($this->fields as $field){
                 if(array_key_exists($field,$i['FinPaymentPlan'])){
@@ -69,6 +69,9 @@ class FinPaymentPlansController extends AppController {
                     break;
                 }
             }
+
+			$row['profile']		= $i['Profile']['name'];
+			$row['profile_id']	= $i['Profile']['id'];
 
             $row['notes']       = $notes_flag;
             $row['user_id']     = $i['User']['id'];
@@ -87,16 +90,17 @@ class FinPaymentPlansController extends AppController {
         ));
     }
 
-	public function add(){
+	public function add() {
 
+        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
-        $user_id = $user['id'];
+        $user_id    = $user['id'];
 
-		//Get the creator's id
-        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
 
@@ -114,6 +118,124 @@ class FinPaymentPlansController extends AppController {
                 'message'   => array('message' => __('Could not create item')),
                 '_serialize' => array('errors','success','message')
             ));
+        }
+	}
+
+
+    public function delete($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag = false;
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item           = $this->{$this->modelClass}->findById($this->data['id']);
+            $owner_id       = $item['FinPaymentPlan']['user_id'];
+            if($owner_id != $user_id){
+                if($this->_is_sibling_of($user_id,$owner_id)== true){
+                    $this->{$this->modelClass}->id = $this->data['id'];
+                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                }else{
+                    $fail_flag = true;
+                }
+            }else{
+                $this->{$this->modelClass}->id = $this->data['id'];
+                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+            }
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                $item           = $this->{$this->modelClass}->findById($d['id']);
+                $owner_id       = $item['FinPaymentPlan']['user_id'];
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                        $this->{$this->modelClass}->id = $d['id'];
+                        $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                    }else{
+                        $fail_flag = true;
+                    }
+                }else{
+                    $this->{$this->modelClass}->id = $d['id'];
+                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                }
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
+	}
+
+	public function view(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $id         = $this->request->query['plan_id']; 
+		$q_r   		= $this->FinPaymentPlan->findById($id);
+		//print_r($q_r);
+		$data		= array();
+		if($q_r){
+			$data 				= $q_r['FinPaymentPlan'];
+			unset($data['profile_id']);	//Else it wreak havoc!
+		}
+
+        $this->set(array(
+            'data'      => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+
+    public function edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if ($this->request->is('post')) {
+
+            //Unfortunately there are many check items which means they will not be in the POST if unchecked
+            //so we have to check for them
+            $check_items = array(
+				'active'
+			);
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
+
+            if ($this->FinPaymentPlan->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
         }
     }
 
@@ -347,6 +469,24 @@ class FinPaymentPlansController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
+
+	function currency_codes(){
+
+		$items = array(
+			array('id' => 'GBP', 'name' => 'GBP'),
+			array('id' => 'ZAR', 'name' => 'ZAR'),
+			array('id' => 'USD', 'name' => 'USD'),
+			array('id' => 'EUR', 'name' => 'EUR'),
+		);
+
+		 $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+
+	}
+
 
     function _build_common_query($user){
 
