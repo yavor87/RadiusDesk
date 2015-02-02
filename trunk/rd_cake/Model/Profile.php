@@ -22,45 +22,20 @@ class Profile extends AppModel {
             'finderQuery'   => 'SELECT Radusergroup.* FROM radusergroup AS Radusergroup, profiles WHERE profiles.name=Radusergroup.username AND profiles.id={$__cakeID__$} ORDER BY Radusergroup.priority ASC',
             'dependent'     => true
         ),
-		'PaymentPlan'
+		'FinPaymentPlan'
     );
 
-/*
-    public $validate = array(
-        'name' => array(
-            'validate' => array(
-                'rule' => array('validateUnique', array('name','iso_code')),
-                'message' => 'You already have an entry',
-                'required' => true
-            ),
+    public $validate 	= array(
+		'name' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'Country name is required',
-                'required' => true
-            )
-        ),
-        'iso_code' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'ISO code is required',
-                'required' => true
+                'message' => 'Value is required'
             ),
-            'maxl' => array(
-                'rule'    => array('maxLength', 2),
-                'message' => 'Iso codes can not be more than two characters'
-            ),
-            'minl' => array(
-                'rule'    => array('minLength', 2),
-                'message' => 'Minimum length of 2 characters'
-            )
-        ),
-        'icon_file' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'Supply a name for the icon file'
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This name is already taken'
             )
         )
-    );
-*/
+	);
 }
 ?>
