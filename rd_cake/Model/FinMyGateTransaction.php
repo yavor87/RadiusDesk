@@ -1,9 +1,9 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class FinPaymentPlan extends AppModel {
+class FinMyGateTransaction extends AppModel {
 
-    public $name        = 'FinPaymentPlan';
+    public $name        = 'FinMyGateTransaction';
     public $actsAs      = array('Containable');
 
     public $belongsTo = array(
@@ -11,17 +11,11 @@ class FinPaymentPlan extends AppModel {
             'className'     => 'User',
 			'foreignKey'    => 'user_id'
         ),
-        'Profile'   => array(
+        'FinMyGateToken'   => array(
             'className'     => 'Profile',
-			'foreignKey'    => 'profile_id'
+			'foreignKey'    => 'fin_my_gate_token_id'
         )
 	);
-
-    public $hasMany = array(
-        'FinPaymentPlanNote'  => array(
-            'dependent'     => true   
-        )
-    );
 
 	public $validate 	= array(
 		'name' => array(
