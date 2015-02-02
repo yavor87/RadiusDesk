@@ -177,8 +177,9 @@ Ext.define('Rd.view.finPaymentPlans.winFinPaymentPlanAddWizard', {
 				{
                     xtype       : 'textfield',
                     fieldLabel  : 'Tax %',
-                    name        : "value",
+                    name        : "tax",
                     allowBlank  : false,
+					value		: '0.00',
                     labelClsExtra: 'lblRdReq',
 					regex		: /^\s*(\+|-)?((\d+(\.\d\d)?)|(\.\d\d))\s*$/i,
 					maskRe		: /\d|\./i,
