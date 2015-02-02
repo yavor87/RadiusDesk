@@ -296,6 +296,11 @@ class DesktopController extends AppController {
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinAuthorizeNetTransactions'
                         ),
+						array(
+                            'text'      => __('MyGate'), 
+                            'glyph'     => Configure::read('icnOnlineShop'), 
+                            'itemId'    => 'cMyGateTransactions'
+                        ),
 
 						/*
 						array(
