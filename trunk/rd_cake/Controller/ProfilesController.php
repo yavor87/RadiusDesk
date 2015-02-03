@@ -82,15 +82,17 @@ class ProfilesController extends AppController {
                         $data_cap_in_profile = false; 
                         $time_cap_in_profile = false; 
                         foreach($j['Radusergroup'] as $cmp){
-                            foreach($cmp['Radgroupcheck'] as $chk){
-                                if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                                    $data_cap_in_profile = true;
-                                }
-                                if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                                    $time_cap_in_profile = true;
-                                }
-                            } 
-                            unset($cmp['Radgroupcheck']);
+							if(array_key_exists('Radgroupcheck',$cmp)){
+		                        foreach($cmp['Radgroupcheck'] as $chk){
+		                            if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+		                                $data_cap_in_profile = true;
+		                            }
+		                            if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+		                                $time_cap_in_profile = true;
+		                            }
+		                        } 
+		                        unset($cmp['Radgroupcheck']);
+							}
                         }
                         
                         array_push($items,
@@ -115,15 +117,17 @@ class ProfilesController extends AppController {
                     $data_cap_in_profile = false; 
                     $time_cap_in_profile = false; 
                     foreach($j['Radusergroup'] as $cmp){
-                        foreach($cmp['Radgroupcheck'] as $chk){
-                            if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                                $data_cap_in_profile = true;
-                            }
-                            if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                                $time_cap_in_profile = true;
-                            }
-                        } 
-                        unset($cmp['Radgroupcheck']);
+						if(array_key_exists('Radgroupcheck',$cmp)){
+		                    foreach($cmp['Radgroupcheck'] as $chk){
+		                        if($chk['attribute'] == 'Rd-Reset-Type-Data'){
+		                            $data_cap_in_profile = true;
+		                        }
+		                        if($chk['attribute'] == 'Rd-Reset-Type-Time'){
+		                            $time_cap_in_profile = true;
+		                        }
+		                    } 
+		                    unset($cmp['Radgroupcheck']);
+						}
                     }
                     
                     array_push($items,
