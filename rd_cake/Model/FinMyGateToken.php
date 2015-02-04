@@ -1,9 +1,9 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class FinMyGateToken extends AppModel {
+class FinMyGateTokens extends AppModel {
 
-    public $name        = 'FinMyGateToken';
+    public $name        = 'FinMyGateTokens';
     public $actsAs      = array('Containable');
 
     public $belongsTo = array(
@@ -11,13 +11,13 @@ class FinMyGateToken extends AppModel {
             'className'     => 'User',
 			'foreignKey'    => 'user_id'
         ),
-        'FinPaymentPlan'   => array(
-            'className'     => 'Profile',
-			'foreignKey'    => 'fin_payment_plan_id'
-        ),
 		'PermanentUser'   => array(
-            'className'     => 'Profile',
+            'className'     => 'PermanentUser',
 			'foreignKey'    => 'permanent_user_id'
+        )
+        'PaymentPlan'   => array(
+            'className'     => 'PaymentPlan',
+			'foreignKey'    => 'payment_plan_id'
         )
 	);
 
@@ -28,7 +28,27 @@ class FinMyGateToken extends AppModel {
     );
 
 	public $validate 	= array(
-		'name' => array(
+		'client_uid' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This name is already taken'
+            )
+        ),
+		'client_pin' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Value is required'
+            ),
+            'unique' => array(
+                'rule'    => 'isUnique',
+                'message' => 'This name is already taken'
+            )
+        ),
+		'client_uci' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Value is required'
