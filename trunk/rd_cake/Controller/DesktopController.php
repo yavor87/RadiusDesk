@@ -299,15 +299,13 @@ class DesktopController extends AppController {
 						array(
                             'text'      => __('MyGate'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
-                            'itemId'    => 'cMyGateTransactions'
+                            'itemId'    => 'cFinMyGateTransactions'
                         ),
-
-						/*
 						array(
                             'text'      => __('Premium SMS'), 
                             'glyph'     => Configure::read('icnOnlineShop'), 
                             'itemId'    => 'cFinPremiumSmsTransactions'
-                        ),*/
+                        ),
                     )
                 )
             ),
