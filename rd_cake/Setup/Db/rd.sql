@@ -776,7 +776,7 @@ CREATE TABLE `fin_payment_plan_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -785,6 +785,7 @@ CREATE TABLE `fin_payment_plan_notes` (
 
 LOCK TABLES `fin_payment_plan_notes` WRITE;
 /*!40000 ALTER TABLE `fin_payment_plan_notes` DISABLE KEYS */;
+INSERT INTO `fin_payment_plan_notes` VALUES (1,6,78,'2015-02-01 18:34:51','2015-02-01 18:34:51');
 /*!40000 ALTER TABLE `fin_payment_plan_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -809,7 +810,7 @@ CREATE TABLE `fin_payment_plans` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -818,7 +819,7 @@ CREATE TABLE `fin_payment_plans` (
 
 LOCK TABLES `fin_payment_plans` WRITE;
 /*!40000 ALTER TABLE `fin_payment_plans` DISABLE KEYS */;
-INSERT INTO `fin_payment_plans` VALUES (2,44,8,'Test','test one','user','USD','0.00','0.00',0,'2015-01-31 06:47:24','2015-01-31 16:17:00');
+INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR','10.99','0.00',1,'2015-02-01 18:33:38','2015-02-01 18:33:55');
 /*!40000 ALTER TABLE `fin_payment_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1065,7 +1066,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2014-08-11 12:14:59'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2014-08-11 12:17:26'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21'),(58,42,'Keermat Wifi',0,0,0,'none','','','',0,'2015-01-21 04:31:49','2015-01-21 04:32:59');
+INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2014-08-11 12:14:59'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2014-08-11 12:17:26'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1127,7 +1128,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(78,33,52,'2014-09-17 08:52:07','2014-09-17 08:52:07'),(79,39,58,'2015-01-21 04:32:18','2015-01-21 04:32:18');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(78,33,52,'2014-09-17 08:52:07','2014-09-17 08:52:07');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1157,7 +1158,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2014-09-17 08:52:07'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17'),(39,42,'br','bridge',1,NULL,'2015-01-21 04:32:18','2015-01-21 04:32:18');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2014-09-17 08:52:07'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1217,7 +1218,7 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-INSERT INTO `mesh_settings` VALUES (1,42,1,0,0,1,1,1,1000,20,'2015-01-21 04:31:58','2015-01-21 04:31:58'),(2,NULL,0,0,0,0,0,0,1000,20,'2015-01-31 16:01:29','2015-01-31 16:01:29');
+INSERT INTO `mesh_settings` VALUES (2,NULL,0,0,0,0,0,0,1000,20,'2015-01-31 16:01:29','2015-01-31 16:01:29');
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1273,7 +1274,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46'),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29'),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42'),(42,'MulitpleVendor','02_CA_FE_CA_00_04','02:CA:FE:CA:00:04',44,'2015-01-21 04:30:43','2015-01-21 04:30:43');
+INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46'),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29'),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42');
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1562,7 +1563,7 @@ CREATE TABLE `node_loads` (
 
 LOCK TABLES `node_loads` WRITE;
 /*!40000 ALTER TABLE `node_loads` DISABLE KEYS */;
-INSERT INTO `node_loads` VALUES (1,6,63275008,27561984,'21 min','00:21:02',0.05,0.14,0.19,'2014-10-18 10:27:03','2014-10-18 11:56:57'),(2,7,63275008,26509312,'24 min','00:24:01',0.28,0.23,0.32,'2014-10-18 10:56:42','2014-10-18 11:56:57'),(3,8,63275008,27639808,'24 min','00:24:02',0.34,0.18,0.15,'2014-10-18 11:19:59','2014-10-18 11:56:57'),(5,4,62976000,34750464,'26 min','08:50:01',0.00,0.01,0.06,'2015-01-23 16:52:08','2015-01-23 17:16:25');
+INSERT INTO `node_loads` VALUES (1,6,63275008,27561984,'21 min','00:21:02',0.05,0.14,0.19,'2014-10-18 10:27:03','2014-10-18 11:56:57'),(2,7,63275008,26509312,'24 min','00:24:01',0.28,0.23,0.32,'2014-10-18 10:56:42','2014-10-18 11:56:57'),(3,8,63275008,27639808,'24 min','00:24:02',0.34,0.18,0.15,'2014-10-18 11:19:59','2014-10-18 11:56:57');
 /*!40000 ALTER TABLE `node_loads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1589,7 +1590,6 @@ CREATE TABLE `node_mesh_entries` (
 
 LOCK TABLES `node_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `node_mesh_entries` DISABLE KEYS */;
-INSERT INTO `node_mesh_entries` VALUES (2,3,58,'2015-01-21 05:15:49','2015-01-21 05:15:49');
 /*!40000 ALTER TABLE `node_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1708,7 +1708,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0),(17,40,'admin',100,1,6,161,60,300,'2014-10-23 05:44:19','2015-01-20 13:27:09','',0,0,0),(18,42,'admin',100,1,6,44,60,300,'2015-01-21 04:32:47','2015-01-21 04:32:47','',0,0,0);
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0),(17,40,'admin',100,1,6,161,60,300,'2014-10-23 05:44:19','2015-01-20 13:27:09','',0,0,0);
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1785,7 +1785,7 @@ CREATE TABLE `node_systems` (
 
 LOCK TABLES `node_systems` WRITE;
 /*!40000 ALTER TABLE `node_systems` DISABLE KEYS */;
-INSERT INTO `node_systems` VALUES (1,6,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(2,6,'machine','Dragino Dragino v2','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(3,6,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(4,6,'BogoMIPS','265.42','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(5,6,'DISTRIB_ID','OpenWrt','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(6,6,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(7,6,'DISTRIB_REVISION','r40757','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(8,6,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(9,6,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(10,6,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(11,7,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(12,7,'machine','Dragino Dragino v2','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(13,7,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(14,7,'BogoMIPS','265.42','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(15,7,'DISTRIB_ID','OpenWrt','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(16,7,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(17,7,'DISTRIB_REVISION','r40757','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(18,7,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(19,7,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(20,7,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(21,8,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(22,8,'machine','Dragino Dragino v2','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(23,8,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(24,8,'BogoMIPS','265.42','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(25,8,'DISTRIB_ID','OpenWrt','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(26,8,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(27,8,'DISTRIB_REVISION','r40757','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(28,8,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(29,8,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(30,8,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(42,4,'system_type','Atheros AR9330 rev 1','cpu','2015-01-23 16:52:08','2015-01-23 16:52:08'),(43,4,'machine','Dragino Dragino v2','cpu','2015-01-23 16:52:08','2015-01-23 16:52:08'),(44,4,'cpu_model','MIPS 24Kc V7.4','cpu','2015-01-23 16:52:08','2015-01-23 16:52:08'),(45,4,'BogoMIPS','265.42','cpu','2015-01-23 16:52:08','2015-01-23 16:52:08'),(46,4,'DISTRIB_ID','OpenWrt','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(47,4,'DISTRIB_RELEASE','Barrier Breaker','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(48,4,'DISTRIB_REVISION','r43962','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(49,4,'DISTRIB_CODENAME','barrier_breaker','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(50,4,'DISTRIB_TARGET','ar71xx/generic','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(51,4,'DISTRIB_DESCRIPTION','OpenWrt Barrier Breaker 14.07','release','2015-01-23 16:52:08','2015-01-23 16:52:08'),(52,4,'DISTRIB_TAINTS','no-all','release','2015-01-23 16:52:08','2015-01-23 16:52:08');
+INSERT INTO `node_systems` VALUES (1,6,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(2,6,'machine','Dragino Dragino v2','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(3,6,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(4,6,'BogoMIPS','265.42','cpu','2014-10-18 10:27:03','2014-10-18 10:27:03'),(5,6,'DISTRIB_ID','OpenWrt','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(6,6,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(7,6,'DISTRIB_REVISION','r40757','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(8,6,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(9,6,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(10,6,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 10:27:03','2014-10-18 10:27:03'),(11,7,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(12,7,'machine','Dragino Dragino v2','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(13,7,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(14,7,'BogoMIPS','265.42','cpu','2014-10-18 10:56:42','2014-10-18 10:56:42'),(15,7,'DISTRIB_ID','OpenWrt','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(16,7,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(17,7,'DISTRIB_REVISION','r40757','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(18,7,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(19,7,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(20,7,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 10:56:42','2014-10-18 10:56:42'),(21,8,'system_type','Atheros AR9330 rev 1','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(22,8,'machine','Dragino Dragino v2','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(23,8,'cpu_model','MIPS 24Kc V7.4','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(24,8,'BogoMIPS','265.42','cpu','2014-10-18 11:19:59','2014-10-18 11:19:59'),(25,8,'DISTRIB_ID','OpenWrt','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(26,8,'DISTRIB_RELEASE','Attitude Adjustment','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(27,8,'DISTRIB_REVISION','r40757','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(28,8,'DISTRIB_CODENAME','attitude_adjustment','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(29,8,'DISTRIB_TARGET','ar71xx/generic','release','2014-10-18 11:19:59','2014-10-18 11:19:59'),(30,8,'DISTRIB_DESCRIPTION','OpenWrt Attitude Adjustment 12.09.1','release','2014-10-18 11:19:59','2014-10-18 11:19:59');
 /*!40000 ALTER TABLE `node_systems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1834,7 +1834,6 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (3,42,'a','a','04-f0-21-0a-fa-54','unifiappro',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2015-01-21 04:34:13','2015-01-21 05:15:50',1,1,0,5,1,44,1,0,1,24,5,44),(4,40,'1','1','A8-40-41-13-60-E3','dragino',100,'10.5.5.1','2015-01-23 17:16:25',0,NULL,NULL,'logo.jpg','2015-01-23 16:49:39','2015-01-23 17:16:25',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1853,7 +1852,7 @@ CREATE TABLE `notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1862,7 +1861,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'This is a note',1,182,'2014-01-07 22:12:23','2014-01-07 22:12:23');
+INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'This is a note',1,182,'2014-01-07 22:12:23','2014-01-07 22:12:23'),(78,'Up the price a bit',1,44,'2015-02-01 18:34:51','2015-02-01 18:34:51');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2136,7 +2135,7 @@ CREATE TABLE `profile_components` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2145,7 +2144,7 @@ CREATE TABLE `profile_components` (
 
 LOCK TABLES `profile_components` WRITE;
 /*!40000 ALTER TABLE `profile_components` DISABLE KEYS */;
-INSERT INTO `profile_components` VALUES (46,'250M',1,44,'2013-08-24 21:20:20','2013-08-24 21:20:20'),(48,'500M',1,44,'2013-08-24 21:21:09','2013-08-24 21:21:09'),(49,'1G',1,44,'2013-08-24 21:21:23','2013-08-24 21:21:23'),(50,'BW-384Kb',1,44,'2013-08-24 21:22:05','2013-08-24 21:22:05'),(52,'BW-1Gb',1,44,'2013-08-24 21:23:01','2013-08-24 21:23:01'),(53,'1Hour',1,44,'2013-08-24 21:24:08','2013-08-24 21:24:08'),(55,'4Hour',1,44,'2013-08-24 21:42:43','2013-08-24 21:42:43'),(56,'5M-every-hour',1,44,'2014-05-27 19:34:26','2014-05-27 19:34:26');
+INSERT INTO `profile_components` VALUES (46,'250M',1,44,'2013-08-24 21:20:20','2013-08-24 21:20:20'),(48,'500M',1,44,'2013-08-24 21:21:09','2013-08-24 21:21:09'),(49,'1G',1,44,'2013-08-24 21:21:23','2013-08-24 21:21:23'),(50,'BW-384Kb',1,44,'2013-08-24 21:22:05','2013-08-24 21:22:05'),(52,'BW-1Gb',1,44,'2013-08-24 21:23:01','2013-08-24 21:23:01'),(53,'1Hour',1,44,'2013-08-24 21:24:08','2013-08-24 21:24:08'),(55,'4Hour',1,44,'2013-08-24 21:42:43','2013-08-24 21:42:43'),(56,'5M-every-hour',1,44,'2014-05-27 19:34:26','2014-05-27 19:34:26'),(57,'Test component',0,44,'2015-02-02 13:03:07','2015-02-02 13:03:07');
 /*!40000 ALTER TABLE `profile_components` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2190,7 +2189,7 @@ CREATE TABLE `profiles` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2199,7 +2198,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (7,'Data-Standard-250',1,44,'2013-08-24 21:17:06','2013-08-24 21:17:06'),(8,'Data-Standard-500',1,44,'2013-08-24 21:17:33','2013-08-24 21:17:33'),(9,'Data-Standard-1G',1,44,'2013-08-24 21:17:58','2013-08-24 21:17:58'),(10,'Time-Standard-1Hour',1,44,'2013-08-24 22:08:54','2013-08-24 22:08:54'),(11,'1024MB',1,44,'2014-05-08 04:40:00','2014-05-08 04:40:00'),(12,'5M-every-hour',1,44,'2014-05-27 18:52:38','2014-05-27 18:52:38');
+INSERT INTO `profiles` VALUES (7,'Data-Standard-250',1,44,'2013-08-24 21:17:06','2013-08-24 21:17:06'),(8,'Data-Standard-500',1,44,'2013-08-24 21:17:33','2013-08-24 21:17:33'),(9,'Data-Standard-1G',1,44,'2013-08-24 21:17:58','2013-08-24 21:17:58'),(10,'Time-Standard-1Hour',1,44,'2013-08-24 22:08:54','2013-08-24 22:08:54'),(11,'1024MB',1,44,'2014-05-08 04:40:00','2014-05-08 04:40:00'),(12,'5M-every-hour',1,44,'2014-05-27 18:52:38','2014-05-27 18:52:38'),(13,'TestProfile',1,44,'2015-02-02 13:02:33','2015-02-02 13:04:19');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2450,7 +2449,7 @@ CREATE TABLE `radusergroup` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2459,7 +2458,7 @@ CREATE TABLE `radusergroup` (
 
 LOCK TABLES `radusergroup` WRITE;
 /*!40000 ALTER TABLE `radusergroup` DISABLE KEYS */;
-INSERT INTO `radusergroup` VALUES (13,'Data-Standard-500','BW-384Kb',100),(14,'Data-Standard-500','500M',80),(15,'Data-Standard-250','BW-384Kb',100),(16,'Data-Standard-250','250M',80),(17,'Data-Standard-1G','BW-384Kb',100),(18,'Data-Standard-1G','1G',80),(19,'Time-Standard-1Hour','BW-384Kb',100),(20,'Time-Standard-1Hour','1Hour',80),(21,'5M-every-hour','5M-every-hour',100);
+INSERT INTO `radusergroup` VALUES (13,'Data-Standard-500','BW-384Kb',100),(15,'Data-Standard-250','BW-384Kb',100),(16,'Data-Standard-250','250M',80),(17,'Data-Standard-1G','BW-384Kb',100),(18,'Data-Standard-1G','1G',80),(19,'Time-Standard-1Hour','BW-384Kb',100),(20,'Time-Standard-1Hour','1Hour',80),(21,'5M-every-hour','5M-every-hour',100);
 /*!40000 ALTER TABLE `radusergroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2886,4 +2885,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-01-31 16:52:37
+-- Dump completed on 2015-02-04  9:09:29
