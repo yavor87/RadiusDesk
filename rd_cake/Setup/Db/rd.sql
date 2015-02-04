@@ -694,6 +694,121 @@ INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `fin_my_gate_token_notes`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_token_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_token_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_my_gate_token_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_token_notes`
+--
+
+LOCK TABLES `fin_my_gate_token_notes` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_token_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_token_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_tokens`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `payment_plan_id` int(11) DEFAULT NULL,
+  `client_pin` varchar(50) NOT NULL,
+  `client_uci` varchar(50) NOT NULL,
+  `client_uid` varchar(50) NOT NULL,
+  `override` decimal(15,2) DEFAULT '0.00',
+  `override_completed` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_tokens`
+--
+
+LOCK TABLES `fin_my_gate_tokens` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_my_gate_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_transaction_notes`
+--
+
+LOCK TABLES `fin_my_gate_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `fin_my_gate_token_id` int(11) DEFAULT NULL,
+  `status` enum('pending','success','fail','submitted') DEFAULT 'pending',
+  `amount` decimal(15,2) DEFAULT '0.00',
+  `my_gate_reference` varchar(255) NOT NULL DEFAULT '',
+  `message` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_transactions`
+--
+
+LOCK TABLES `fin_my_gate_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `fin_pay_u_transaction_notes`
 --
 
@@ -2885,4 +3000,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-04  9:09:29
+-- Dump completed on 2015-02-04 11:38:08
