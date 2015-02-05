@@ -2,7 +2,7 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
     extend		:'Ext.grid.Panel',
     alias 		: 'widget.gridFinMyGateTokens',
     multiSelect	: true,
-    store 		: 'sFinMyGateTransactions',
+    store 		: 'sFinMyGateTokens',
     stateful	: true,
     stateId		: 'StateGridFinMyGateTokens',
     stateEvents	:['groupclick','columnhide'],

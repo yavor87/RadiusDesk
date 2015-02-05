@@ -201,7 +201,9 @@ Ext.application({
             icnSubtract     : 57520,
             icnView         : 57650,
 			icnConfigure	: 57583,
-			icnWatch		: 57628
+			icnWatch		: 57628,
+			icnStar			: 57585,
+			icnGrid			: 57600
         };
     },
     addUx: function(){
