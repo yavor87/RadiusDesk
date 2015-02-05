@@ -261,6 +261,8 @@ $config['icnCut']       = 57551;
 $config['icnTopUp']     = 57419;
 $config['icnSubtract']  = 57520;
 $config['icnWatch']     = 57628;
+$config['icnStar']      = 57585;
+$config['icnGrid']      = 57600;
 
 
 
