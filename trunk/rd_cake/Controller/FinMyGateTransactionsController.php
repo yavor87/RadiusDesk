@@ -12,8 +12,8 @@ class FinMyGateTransactionsController extends AppController {
 
 	//These fields will be included in the index method's feedback
     protected $fields  = array(
-	  	'name',		'description', 	'type', 	'currency_code', 
-		'created', 	'modified', 	'id', 		'value', 			'tax', 		'active'
+	  	'status',		'amount', 		'my_gate_reference', 	'message', 
+		'created', 	    'modified', 	'id', 					'fin_my_gate_token_id'
     );
 
 	private $singleField	= true;
@@ -70,8 +70,8 @@ class FinMyGateTransactionsController extends AppController {
                 }
             }
 
-			$row['profile']		= $i['Profile']['name'];
-			$row['profile_id']	= $i['Profile']['id'];
+			$row['FinMyGateToken']			= $i['FinMyGateToken']['name'];
+			$row['fin_my_gate_token_id']	= $i['FinMyGateToken']['id'];
 
             $row['notes']       = $notes_flag;
             $row['user_id']     = $i['User']['id'];
@@ -198,7 +198,7 @@ class FinMyGateTransactionsController extends AppController {
 		$data		= array();
 		if($q_r){
 			$data 				= $q_r['FinMyGateTransaction'];
-			unset($data['profile_id']);	//Else it wreak havoc!
+			unset($data['fin_my_gate_transaction_id']);	//Else it wreak havoc!
 		}
 
         $this->set(array(
@@ -499,7 +499,7 @@ class FinMyGateTransactionsController extends AppController {
         $c['contain']   = array(
                             'FinMyGateTransactionNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'User',
-							'Profile'
+							'FinMyGateToken'
                         );
 
         //===== SORT =====

@@ -12,8 +12,9 @@ class FinMyGateTokensController extends AppController {
 
 	//These fields will be included in the index method's feedback
     protected $fields  = array(
-	  	'name',		'description', 	'type', 	'currency_code', 
-		'created', 	'modified', 	'id', 		'value', 			'tax', 		'active'
+	  	'client_pin',			'client_uci', 	'client_uid', 	'override', 
+		'override_completed', 	'active',		'created',		'modified',
+		'id'
     );
 
 	private $singleField	= true;
@@ -70,8 +71,11 @@ class FinMyGateTokensController extends AppController {
                 }
             }
 
-			$row['profile']		= $i['Profile']['name'];
-			$row['profile_id']	= $i['Profile']['id'];
+			$row['fin_paymen_plan']		= $i['FinPaymentPlan']['name'];
+			$row['fin_paymen_plan_id']	= $i['FinPaymentPlan']['id'];
+
+			$row['permanent_plan']		= $i['PermanentUser']['name'];
+			$row['permanent_plan_id']	= $i['PermanentUser']['id'];
 
             $row['notes']       = $notes_flag;
             $row['user_id']     = $i['User']['id'];
@@ -198,7 +202,7 @@ class FinMyGateTokensController extends AppController {
 		$data		= array();
 		if($q_r){
 			$data 				= $q_r['FinMyGateToken'];
-			unset($data['profile_id']);	//Else it wreak havoc!
+			unset($data['token_id']);	//Else it wreak havoc!
 		}
 
         $this->set(array(
@@ -459,7 +463,23 @@ class FinMyGateTokensController extends AppController {
                         'itemId'    => 'csv',      
                         'tooltip'   => __('Export CSV')
                     ),
-                ))     
+                )),
+				array('xtype' => 'buttongroup','title' => __('Extra actions'), 'width' => 100, 'items' => array(
+                    array(
+                        'xtype'     => 'button',
+                        'glyph'     => Configure::read('icnStar'), 
+                        'scale'     => 'large',
+                        'itemId'    => 'tokenize',
+                        'tooltip'   => __('Tokenize use')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnGrid'),   
+                        'scale'     => 'large',
+                        'itemId'    => 'batch',      
+                        'tooltip'   => __('Generate new transaction batch')
+                    ),
+                ))        
             );
         }
 
@@ -469,23 +489,6 @@ class FinMyGateTokensController extends AppController {
             '_serialize'    => array('items','success')
         ));
     }
-
-	function currency_codes(){
-
-		$items = array(
-			array('id' => 'GBP', 'name' => 'GBP'),
-			array('id' => 'ZAR', 'name' => 'ZAR'),
-			array('id' => 'USD', 'name' => 'USD'),
-			array('id' => 'EUR', 'name' => 'EUR'),
-		);
-
-		 $this->set(array(
-            'items'         => $items,
-            'success'       => true,
-            '_serialize'    => array('items','success')
-        ));
-
-	}
 
 
     function _build_common_query($user){
@@ -499,7 +502,8 @@ class FinMyGateTokensController extends AppController {
         $c['contain']   = array(
                             'FinMyGateTokenNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                             'User',
-							'Profile'
+							'PermanentUser',
+							'FinPaymentPlan'
                         );
 
         //===== SORT =====
