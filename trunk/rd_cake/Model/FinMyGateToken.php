@@ -1,7 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class FinMyGateTokens extends AppModel {
+class FinMyGateToken extends AppModel {
 
     public $name        = 'FinMyGateTokens';
     public $actsAs      = array('Containable');
@@ -14,9 +14,9 @@ class FinMyGateTokens extends AppModel {
 		'PermanentUser'   => array(
             'className'     => 'PermanentUser',
 			'foreignKey'    => 'permanent_user_id'
-        )
-        'PaymentPlan'   => array(
-            'className'     => 'PaymentPlan',
+        ),
+        'FinPaymentPlan'   => array(
+            'className'     => 'FinPaymentPlan',
 			'foreignKey'    => 'payment_plan_id'
         )
 	);
