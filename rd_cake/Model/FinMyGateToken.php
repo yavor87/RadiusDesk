@@ -17,7 +17,7 @@ class FinMyGateToken extends AppModel {
         ),
         'FinPaymentPlan'   => array(
             'className'     => 'FinPaymentPlan',
-			'foreignKey'    => 'payment_plan_id'
+			'foreignKey'    => 'fin_payment_plan_id'
         )
 	);
 
