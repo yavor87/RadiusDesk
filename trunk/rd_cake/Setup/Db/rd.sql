@@ -730,7 +730,7 @@ CREATE TABLE `fin_my_gate_tokens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `permanent_user_id` int(11) DEFAULT NULL,
-  `payment_plan_id` int(11) DEFAULT NULL,
+  `fin_payment_plan_id` int(11) DEFAULT NULL,
   `client_pin` varchar(50) NOT NULL,
   `client_uci` varchar(50) NOT NULL,
   `client_uid` varchar(50) NOT NULL,
@@ -790,9 +790,11 @@ CREATE TABLE `fin_my_gate_transactions` (
   `user_id` int(11) DEFAULT NULL,
   `fin_my_gate_token_id` int(11) DEFAULT NULL,
   `status` enum('pending','success','fail','submitted') DEFAULT 'pending',
+  `type` enum('credit_card','debit_order') DEFAULT 'credit_card',
   `amount` decimal(15,2) DEFAULT '0.00',
   `my_gate_reference` varchar(255) NOT NULL DEFAULT '',
   `message` varchar(255) NOT NULL DEFAULT '',
+  `permanent_user` varchar(255) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -1172,7 +1174,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1234,7 +1236,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1264,7 +1266,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1380,7 +1382,7 @@ CREATE TABLE `meshes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1669,7 +1671,7 @@ CREATE TABLE `node_loads` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1696,7 +1698,7 @@ CREATE TABLE `node_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1814,7 +1816,7 @@ CREATE TABLE `node_settings` (
   `eth_br_with` int(11) NOT NULL DEFAULT '0',
   `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1891,7 +1893,7 @@ CREATE TABLE `node_systems` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1940,7 +1942,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2304,7 +2306,7 @@ CREATE TABLE `profiles` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2564,7 +2566,7 @@ CREATE TABLE `radusergroup` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3000,4 +3002,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-05 14:07:39
+-- Dump completed on 2015-02-08 21:24:35
