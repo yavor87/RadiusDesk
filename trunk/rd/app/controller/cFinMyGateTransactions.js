@@ -52,7 +52,8 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
     views:  [
         'components.pnlBanner',             'finMyGateTransactions.gridFinMyGateTokens',
 		'finMyGateTransactions.gridFinMyGateTransactions',
-        'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd'
+        'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd',
+		'finMyGateTransactions.winFinMyGateTokenAddWizard'
     ],
     stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree'],
     models: ['mFinMyGateToken', 'mFinMyGateTransaction',  	'mAccessProviderTree' ],
@@ -88,23 +89,20 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 			'gridFinMyGateTransactions #reload': {
                 click:      me.reload
             },
+			'gridFinMyGateTokens #add'   : {
+                click:      me.addToken
+            },
+		    'winFinMyGateTokenAddWizard #btnTreeNext' : {
+                click:  me.btnTreeNextToken
+            },
+            'winFinMyGateTokenAddWizard #btnDataPrev' : {
+                click:  me.btnDataPrevToken
+            },
+            'winFinMyGateTokenAddWizard #btnDataNext' : {
+                click:  me.btnDataNextToken
+            },
 /*
-            'gridPremiumSmsTransactions #reload menuitem[group=refresh]' : {
-                click:      me.reloadOptionClick
-            }, 
-            'gridPremiumSmsTransactions #attach': {
-                click:      function(){
-                    me.attach_detach('attach');
-                }
-            },
-            'gridPremiumSmsTransactions #detach': {
-                click:       function(){
-                    me.attach_detach('detach');
-                }
-            },
-            'gridPremiumSmsTransactions #email': {
-                click:    me.email
-            },
+            
             'gridPremiumSmsTransactions #note'   : {
                 click:      me.note
             },
@@ -150,6 +148,81 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 	gridActivate: function(g){
         var me = this;
         g.getStore().load();
+    },
+	addToken: function(button){   
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                        
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winFinMyGateTokenAddWizardId')){
+                            var w = Ext.widget('winFinMyGateTokenAddWizard',{id:'winFinMyGateTokenAddWizardId'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winFinMyGateTokenAddWizardId')){
+                            var w = Ext.widget('winFinMyGateTokenAddWizard',
+                                {id:'winFinMyGateTokenAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                            );
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+    },
+    btnTreeNextToken: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winFinMyGateTokenAddWizard');
+            win.down('#owner').setValue(sr.get('username'));
+            //win.down('#user_id').setValue(sr.getId());
+
+			//win.down('#profile').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            //win.down('#profile').getStore().load();    
+
+            win.getLayout().setActiveItem('scrnData');
+        }else{
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnDataPrevToken:  function(button){
+        var me      = this;
+        var win     = button.up('winFinMyGateTokenAddWizard');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnDataNextToken:  function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddToken,
+            success: function(form, action) {
+                win.close();
+                me.getStore('sFinPaymentPlans').load();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
 
 
