@@ -38,7 +38,129 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
 
         me.columns  = [
             { xtype: 'rownumberer',stateId: 'StateGridFinMyGateTokens1'},
-            
+			{ 
+
+                text        : 'Owner', 
+                dataIndex   : 'user',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens2'
+            },
+			{ 
+
+                text        : 'Permanet User', 
+                dataIndex   : 'permanent_user',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens3'
+            },
+			{ 
+
+                text        : 'Payment Plan', 
+                dataIndex   : 'fin_payment_plan',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens4'
+            },
+			{ 
+
+                text        : 'Client Pin', 
+                dataIndex   : 'client_pin',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens5'
+            },
+			{ 
+
+                text        : 'Client Uci', 
+                dataIndex   : 'client_uci',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens6'
+            },
+			{ 
+
+                text        : 'Client Uid', 
+                dataIndex   : 'client_uid',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : true,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens7'
+            },
+			{ 
+
+                text        : 'Override', 
+                dataIndex   : 'override',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridFinMyGateTokens8'
+            },
+			{ 
+
+                text        : 'Override Completed', 
+				width   	: 140,
+                dataIndex   : 'override_completed',          
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                            ),
+                filter      : { type: 'boolean'},stateId: 'StateGridFinMyGateTokens9'
+            },
+			{ 
+
+                text        : 'Active', 
+                dataIndex   : 'active',          
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                            ),
+                filter      : { type: 'boolean'},stateId: 'StateGridFinMyGateTokens10'
+            },
+			{ 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                xtype       : 'datecolumn',   
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinPaymentPlans11'
+            },
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                flex        : 1,
+                xtype       : 'datecolumn',   
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinPaymentPlans12'
+            },
+            { 
+                text    : i18n('sNotes'),
+                sortable: false,
+                width   : 130,
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                                "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
+                ),
+                dataIndex: 'notes',stateId: 'StateGridFinPaymentPlans13'
+            }  
         ];
 
         //Create a mask and assign is as a property to the window
