@@ -5,8 +5,8 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenAddWizard', {
     draggable	: true,
     resizable	: true,
     title		: 'New MyGate Token',
-    width		: 400,
-    height		: 400,
+    width		: 500,
+    height		: 500,
     plain		: true,
     border		: false,
     layout		: 'card',
@@ -95,16 +95,14 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenAddWizard', {
                 anchor: '100%'
             },
             fieldDefaults: {
-                msgTarget: 'under',
-                labelClsExtra: 'lblRd',
-                labelAlign: 'left',
-                labelSeparator: '',
-                margin: 15
+                msgTarget		: 'under',
+                labelClsExtra	: 'lblRd',
+                labelAlign		: 'left',
+                labelSeparator	: '',
+                margin			: 15,
+				labelWidth		: Rd.config.labelWidth
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[ 
 				{
                     itemId  : 'user_id',
@@ -125,13 +123,59 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenAddWizard', {
                     value       : me.owner,
                     labelClsExtra: 'lblRdReq'
                 },
-			/*	{
-                    xtype       : 'cmbFinPaymentPlan',
+				{
+                    xtype       	: 'cmbPermanentUser',
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq',
+                    itemId      	: 'permanent_user_id',
+					fieldLabel  	: 'Permanent User',
+					name			: 'permanent_user_id'
+                },
+				{
+                    xtype       	: 'cmbFinPaymentPlans',
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq',
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: "Client PIN",
+                    name        	: "client_pin",
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: "Client UCI",
+                    name        	: "client_uci",
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq'
+                },
+				{
+                    xtype       : 'textfield',
+                    fieldLabel  : "Client UID",
+                    name        : "client_uid",
                     allowBlank  : false,
-                    labelClsExtra: 'lblRdReq',
-					extraParam  : me.user_id
-                },*/
-				
+                    labelClsExtra: 'lblRdReq'
+                },
+				{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Override',
+                    name        : "override",
+                    allowBlank  : true,
+                    labelClsExtra: 'lblRd',
+					regex		: /^\s*(\+|-)?((\d+(\.\d\d)?)|(\.\d\d))\s*$/i,
+					maskRe		: /\d|\./i,
+					regexText   : 'Currency format please e.g. 10.95'
+                },
+				{
+					xtype       : 'checkbox',      
+					fieldLabel  : 'Override completed',
+					name        : 'override_completed',
+                    inputValue  : 'override_completed',
+                    checked     : false,
+                    boxLabelCls : 'lblRdCheck'
+		
+				},
 				{
 					xtype       : 'checkbox',      
 					fieldLabel  : i18n('sActive'),

@@ -53,10 +53,15 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
         'components.pnlBanner',             'finMyGateTransactions.gridFinMyGateTokens',
 		'finMyGateTransactions.gridFinMyGateTransactions',
         'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd',
-		'finMyGateTransactions.winFinMyGateTokenAddWizard'
+		'finMyGateTransactions.winFinMyGateTokenAddWizard',
+		'components.cmbPermanentUser',		'components.cmbFinPaymentPlans'
     ],
-    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree'],
-    models: ['mFinMyGateToken', 'mFinMyGateTransaction',  	'mAccessProviderTree' ],
+    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers',
+		'sFinPaymentPlans'
+	],
+    models: ['mFinMyGateToken', 'mFinMyGateTransaction',  	'mAccessProviderTree',	'mPermanentUser', 
+		'mFinPaymentPlan'
+	],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
