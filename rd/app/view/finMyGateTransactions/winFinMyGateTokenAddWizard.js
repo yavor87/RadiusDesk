@@ -24,8 +24,7 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenAddWizard', {
         'Ext.layout.container.Card',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Ext.form.FieldContainer',
-		//'Rd.view.finPaymentPlans.cmbFinPaymentPlan'
+        'Ext.form.FieldContainer'
     ],
     initComponent: function() {
         var me = this;
