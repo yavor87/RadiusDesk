@@ -1,30 +1,26 @@
-Ext.define('Rd.view.finPaymentPlans.winFinPaymentPlanEdit', {
+Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenEdit', {
     extend      : 'Ext.window.Window',
-    alias       : 'widget.winFinPaymentPlanEdit',
+    alias       : 'widget.winFinMyGateTokenEdit',
     closable    : true,
     draggable   : true,
     resizable   : true,
-    title       : 'Edit Payment Plan',
-    width       : 400,
-    height      : 500,
+    title       : 'Edit Token',
+    width       : 500,
+    height      : 400,
     plain       : true,
     border      : false,
     layout      : 'fit',
     iconCls     : 'edit',
     glyph       : Rd.config.icnEdit,
     autoShow    : false,
-    planId      : '',
-	apId		: false,
-	hidePower	: false,
+	tokenId		: false,
     defaults: {
             border: false
     },
     requires: [
         'Ext.tab.Panel',
         'Ext.form.Panel',
-        'Ext.form.field.Text',
-		'Rd.view.finPaymentPlans.cmbCurrency',
-		'Rd.view.finPaymentPlans.cmbPaymentPlanType'
+        'Ext.form.field.Text'
     ],
      initComponent: function() {
         var me 		= this; 
@@ -63,67 +59,62 @@ Ext.define('Rd.view.finPaymentPlans.winFinPaymentPlanEdit', {
                     xtype   : 'textfield',
                     name    : "id",
                     hidden  : true,
-                    value   : me.planId
+                    value   : me.tokenId
+                },
+				{
+                    xtype       	: 'cmbPermanentUser',
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq',
+                    itemId      	: 'permanent_user_id',
+					fieldLabel  	: 'Permanent User',
+					name			: 'permanent_user_id'
+                },
+				{
+                    xtype       	: 'cmbFinPaymentPlans',
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq',
+					itemId			: 'fin_payment_plan_id'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: "Client PIN",
+                    name        	: "client_pin",
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: "Client UCI",
+                    name        	: "client_uci",
+                    allowBlank  	: false,
+                    labelClsExtra	: 'lblRdReq'
                 },
 				{
                     xtype       : 'textfield',
-                    fieldLabel  : i18n('sName'),
-                    name        : "name",
+                    fieldLabel  : "Client UID",
+                    name        : "client_uid",
                     allowBlank  : false,
-                    blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 },
 				{
                     xtype       : 'textfield',
-                    fieldLabel  : i18n('sDescription'),
-                    name        : "description",
+                    fieldLabel  : 'Override',
+                    name        : "override",
                     allowBlank  : true,
-                    labelClsExtra: 'lblRd'
-                },
-				{
-                    xtype       : 'cmbProfile',
-                    allowBlank  : false,
-                    labelClsExtra: 'lblRdReq',
-                    itemId      : 'profile',
-					extraParam  : me.apId,
-					name		: 'profile_id'
-                },
-				{ 
-                    xtype       : 'cmbPaymentPlanType', 
-                    width       : 350, 
-                    fieldLabel  : 'Type',  
-                    name        : 'type',
-                    allowBlank  : false,
-                    labelClsExtra: 'lblRdReq' 
-                },
-				{ 
-                    xtype       : 'cmbCurrency', 
-                    width       : 350, 
-                    fieldLabel  : 'Currency',  
-                    name        : 'currency_code',
-                    allowBlank  : false,
-                    labelClsExtra: 'lblRdReq' 
-                },
-				{
-                    xtype       : 'textfield',
-                    fieldLabel  : i18n('sValue'),
-                    name        : "value",
-                    allowBlank  : false,
-                    labelClsExtra: 'lblRdReq',
+                    labelClsExtra: 'lblRd',
 					regex		: /^\s*(\+|-)?((\d+(\.\d\d)?)|(\.\d\d))\s*$/i,
 					maskRe		: /\d|\./i,
 					regexText   : 'Currency format please e.g. 10.95'
                 },
 				{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Tax %',
-                    name        : "tax",
-                    allowBlank  : false,
-                    labelClsExtra: 'lblRdReq',
-					regex		: /^\s*(\+|-)?((\d+(\.\d\d)?)|(\.\d\d))\s*$/i,
-					maskRe		: /\d|\./i,
-					regexText   : 'Max two decimal places e.g. 10.95'
-                },
+					xtype       : 'checkbox',      
+					fieldLabel  : 'Override completed',
+					name        : 'override_completed',
+                    inputValue  : 'override_completed',
+                    checked     : false,
+                    boxLabelCls : 'lblRdCheck'
+		
+				},
 				{
 					xtype       : 'checkbox',      
 					fieldLabel  : i18n('sActive'),
@@ -131,6 +122,7 @@ Ext.define('Rd.view.finPaymentPlans.winFinPaymentPlanEdit', {
                     inputValue  : 'active',
                     checked     : true,
                     boxLabelCls : 'lblRdCheck'
+		
 				}
         
             ]

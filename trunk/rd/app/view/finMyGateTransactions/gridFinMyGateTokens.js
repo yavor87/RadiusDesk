@@ -115,8 +115,8 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
                 dataIndex   : 'override_completed',          
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                                "<tpl if='override_completed == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='override_completed == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 filter      : { type: 'boolean'},stateId: 'StateGridFinMyGateTokens9'
             },

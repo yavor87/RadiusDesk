@@ -54,7 +54,8 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		'finMyGateTransactions.gridFinMyGateTransactions',
         'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd',
 		'finMyGateTransactions.winFinMyGateTokenAddWizard',
-		'components.cmbPermanentUser',		'components.cmbFinPaymentPlans'
+		'components.cmbPermanentUser',		'components.cmbFinPaymentPlans',
+		'finMyGateTransactions.winFinMyGateTokenEdit',
     ],
     stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers',
 		'sFinPaymentPlans'
@@ -65,15 +66,15 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv    : '/cake2/rd_cake/fin_premium_sms_transactions/export_csv',
-        urlNoteAdd      : '/cake2/rd_cake/fin_premium_sms_transactions/note_add.json',
-        urlEmailSend    : '/cake2/rd_cake/fin_premium_sms_transactions/email_voucher_details.json',
-        urlVoucherAttach: '/cake2/rd_cake/fin_premium_sms_transactions/voucher_attach.json',
-        urlVoucherDetach: '/cake2/rd_cake/fin_premium_sms_transactions/voucher_detach.json',
+		urlAddToken 	: '/cake2/rd_cake/fin_my_gate_tokens/add.json', 
+		urlDeleteToken	: '/cake2/rd_cake/fin_my_gate_tokens/delete.json',
+		urlEditToken	: '/cake2/rd_cake/fin_my_gate_tokens/edit.json',
+		urlViewToken	: '/cake2/rd_cake/fin_my_gate_tokens/view.json'
     },
     refs: [
         {  ref: 'gridTransaction',  selector: 'gridFinMyGateTransactions'},
-		{  ref: 'gridToken',  		selector: 'gridFinMyGateTokens'},       
+		{  ref: 'gridToken',  		selector: 'gridFinMyGateTokens'},
+		{  ref: 'editWin', 			selector: 'winFinMyGateTokenEdit'}         
     ],
     init: function() {
         var me = this;
@@ -106,6 +107,24 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             'winFinMyGateTokenAddWizard #btnDataNext' : {
                 click:  me.btnDataNextToken
             },
+			'gridFinMyGateTokens #delete'   : {
+                click:      me.delToken
+            },
+			'gridFinMyGateTokens #edit'   : {
+                click:      me.editToken
+            },
+			'winFinMyGateTokenEdit': {
+                beforeshow:      me.loadToken
+            },
+			'winFinMyGateTokenEdit #permanent_user_id' : {
+                render:  me.renderEventPermanentUser
+            },
+			'winFinMyGateTokenEdit #fin_payment_plan_id' : {
+                render:  me.renderEventFinPaymentPlan
+            },
+			'winFinMyGateTokenEdit #save': {
+                click: me.btnEditSaveToken
+            }
 /*
             
             'gridPremiumSmsTransactions #note'   : {
@@ -150,6 +169,11 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
         grid.getSelectionModel().deselectAll(true);
         grid.getStore().load();
     },
+	reloadToken: function(){
+		var me = this;
+		me.getGridToken().getSelectionModel().deselectAll(true);
+		me.getGridToken().getStore().load();
+	},
 	gridActivate: function(g){
         var me = this;
         g.getStore().load();
@@ -189,11 +213,7 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
         if(sr){    
             var win = button.up('winFinMyGateTokenAddWizard');
             win.down('#owner').setValue(sr.get('username'));
-            //win.down('#user_id').setValue(sr.getId());
-
-			//win.down('#profile').getStore().getProxy().setExtraParam('ap_id',sr.getId());
-            //win.down('#profile').getStore().load();    
-
+			win.down('#user_id').setValue(sr.getId());
             win.getLayout().setActiveItem('scrnData');
         }else{
             Ext.ux.Toaster.msg(
@@ -218,10 +238,141 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             url: me.urlAddToken,
             success: function(form, action) {
                 win.close();
-                me.getStore('sFinPaymentPlans').load();
+                me.getStore('sFinMyGateTokens').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+	delToken:   function(){
+        var me      = this;     
+        //Find out if there was something selected
+        if(me.getGridToken().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+
+                    var selected    = me.getGridToken().getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+
+                    Ext.Ajax.request({
+                        url: me.urlDeleteToken,
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.reloadToken(); //Reload from server
+                        },                                    
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.reloadToken(); //Reload from server
+                        }
+                    });
+                }
+            });
+        }
+    },
+	editToken: function(button){
+        var me      = this;
+        var store   = me.getGridToken().getStore();
+
+        if( me.getGridToken().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr      =  me.getGridToken().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+			var apId	= sr.get('user_id');
+            if(!me.application.runAction('cDesktop','AlreadyExist','winFinMyGateTokenEditId')){
+                var w = Ext.widget('winFinMyGateTokenEdit',
+                {
+                    id          :'winFinMyGateTokenEditId',
+                    store       : store,
+                    tokenId     : id,
+					apId		: apId,
+					record		: sr
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }else{
+                var w       = me.getEditWin();
+                w.tokenId   = id;
+				w.apId		= apId;
+				w.record	= sr;
+                me.load(w)
+            } 
+
+        }     
+    },
+	renderEventPermanentUser: function(cmb){
+        var me          = this;
+        var w           = cmb.up('winFinMyGateTokenEdit');
+        if(w.record != undefined){
+            var pu      = w.record.get('permanent_user');
+            var pu_id   = w.record.get('permanent_user_id');
+            var rec     = Ext.create('Rd.model.mPermanentUser', {username: pu, id: pu_id});
+            cmb.getStore().loadData([rec],false);
+			cmb.setValue(pu_id);
+        }
+    },
+	renderEventFinPaymentPlan: function(cmb){
+        var me          = this;
+        var w           = cmb.up('winFinMyGateTokenEdit');
+        if(w.record != undefined){
+            var pp      = w.record.get('fin_payment_plan');
+            var pp_id   = w.record.get('fin_payment_plan_id');
+            var rec     = Ext.create('Rd.model.mFinPaymentPlan', {name: pp, id: pp_id});
+            cmb.getStore().loadData([rec],false);
+			cmb.setValue(pp_id);
+        }
+    },
+	loadToken: function(win){
+        var me      = this; 
+        var form    = win.down('form');
+        var tokenId 	= win.tokenId;
+		form.load({url:me.urlViewToken, method:'GET',params:{token_id:tokenId}});
+    },
+    btnEditSaveToken:  function(button){
+        var me      = this;
+        var win     = button.up("winFinMyGateTokenEdit");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditToken,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
