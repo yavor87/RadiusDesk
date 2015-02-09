@@ -71,11 +71,11 @@ class FinMyGateTokensController extends AppController {
                 }
             }
 
-			$row['fin_paymen_plan']		= $i['FinPaymentPlan']['name'];
-			$row['fin_paymen_plan_id']	= $i['FinPaymentPlan']['id'];
+			$row['permanent_user']		= $i['PermanentUser']['username'];
+			$row['permanent_user_id']	= $i['PermanentUser']['id'];
 
-			$row['permanent_plan']		= $i['PermanentUser']['name'];
-			$row['permanent_plan_id']	= $i['PermanentUser']['id'];
+			$row['fin_payment_plan']	= $i['FinPaymentPlan']['name'];
+			$row['fin_payment_plan_id']	= $i['FinPaymentPlan']['id'];
 
             $row['notes']       = $notes_flag;
             $row['user_id']     = $i['User']['id'];
@@ -106,6 +106,14 @@ class FinMyGateTokensController extends AppController {
         //Get the creator's id
          if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
+        }
+
+		if(array_key_exists('override_completed',$this->request->data)){
+            $this->request->data['override_completed'] = 1;
+        }
+
+		if(array_key_exists('active',$this->request->data)){
+            $this->request->data['active'] = 1;
         }
 
         $this->{$this->modelClass}->create();
@@ -202,7 +210,8 @@ class FinMyGateTokensController extends AppController {
 		$data		= array();
 		if($q_r){
 			$data 				= $q_r['FinMyGateToken'];
-			unset($data['token_id']);	//Else it wreak havoc!
+			unset($data['permanent_user_id']);	//Else it wreak havoc!
+			unset($data['fin_payment_plan_id']);	//Else it wreak havoc!
 		}
 
         $this->set(array(
@@ -224,7 +233,7 @@ class FinMyGateTokensController extends AppController {
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
             //so we have to check for them
             $check_items = array(
-				'active'
+				'active','override_completed'
 			);
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
