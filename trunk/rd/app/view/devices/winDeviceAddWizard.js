@@ -85,7 +85,8 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
                 labelSeparator: '',
-                margin: 15
+                margin: 15,
+				labelWidth: Rd.config.labelWidth
             },
             defaultType: 'textfield',
             tbar: [
