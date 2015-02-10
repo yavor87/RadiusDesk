@@ -252,6 +252,26 @@ class FinMyGateTokensController extends AppController {
         }
     }
 
+	public function tokenize() {
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //Get the creator's id
+         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+	
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
     public function note_index(){
 
         //__ Authentication + Authorization __
@@ -479,7 +499,7 @@ class FinMyGateTokensController extends AppController {
                         'glyph'     => Configure::read('icnStar'), 
                         'scale'     => 'large',
                         'itemId'    => 'tokenize',
-                        'tooltip'   => __('Tokenize use')
+                        'tooltip'   => __('Tokenize user')
                     ),
                     array(
                         'xtype'     => 'button', 
