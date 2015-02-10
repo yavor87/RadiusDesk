@@ -50,12 +50,14 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
     },
 
     views:  [
-        'components.pnlBanner',             'finMyGateTransactions.gridFinMyGateTokens',
-		'finMyGateTransactions.gridFinMyGateTransactions',
-        'components.winCsvColumnSelect',    'components.winNote', 'components.winNoteAdd',
-		'finMyGateTransactions.winFinMyGateTokenAddWizard',
+        'components.pnlBanner',    			'components.winNoteAdd',         
+        'components.winCsvColumnSelect',    'components.winNote', 
 		'components.cmbPermanentUser',		'components.cmbFinPaymentPlans',
+		'finMyGateTransactions.gridFinMyGateTokens',
+		'finMyGateTransactions.winFinMyGateTokenAddWizard',
 		'finMyGateTransactions.winFinMyGateTokenEdit',
+		'finMyGateTransactions.winFinMyGateTokenizeWizard',
+		'finMyGateTransactions.gridFinMyGateTransactions'
     ],
     stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers',
 		'sFinPaymentPlans'
@@ -69,7 +71,8 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		urlAddToken 	: '/cake2/rd_cake/fin_my_gate_tokens/add.json', 
 		urlDeleteToken	: '/cake2/rd_cake/fin_my_gate_tokens/delete.json',
 		urlEditToken	: '/cake2/rd_cake/fin_my_gate_tokens/edit.json',
-		urlViewToken	: '/cake2/rd_cake/fin_my_gate_tokens/view.json'
+		urlViewToken	: '/cake2/rd_cake/fin_my_gate_tokens/view.json',
+		urlTokenize		: '/cake2/rd_cake/fin_my_gate_tokens/tokenize.json'
     },
     refs: [
         {  ref: 'gridTransaction',  selector: 'gridFinMyGateTransactions'},
@@ -124,7 +127,19 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             },
 			'winFinMyGateTokenEdit #save': {
                 click: me.btnEditSaveToken
-            }
+            },
+			'gridFinMyGateTokens #tokenize'   : {
+                click:      me.tokenize
+            },
+			'winFinMyGateTokenizeWizard #btnTreeNext' : {
+                click:  me.btnTreeNextTokenize
+            },
+            'winFinMyGateTokenizeWizard #btnDataPrev' : {
+                click:  me.btnDataPrevTokenize
+            },
+            'winFinMyGateTokenizeWizard #btnDataNext' : {
+                click:  me.btnDataNextTokenize
+            },
 /*
             
             'gridPremiumSmsTransactions #note'   : {
@@ -380,7 +395,76 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             failure: Ext.ux.formFail
         });
     },
-
+	tokenize: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.urlApChildCheck,
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){                       
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winFinMyGateTokenizeWizardId')){
+                            var w = Ext.widget('winFinMyGateTokenizeWizard',{id:'winFinMyGateTokenizeWizardId'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winFinMyGateTokenizeWizardId')){
+                            var w = Ext.widget('winFinMyGateTokenizeWizard',
+                                {id:'winFinMyGateTokenizeWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                            );
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+    },
+	btnTreeNextTokenize: function(button){
+        var me = this;
+        var tree = button.up('treepanel');
+        //Get selection:
+        var sr = tree.getSelectionModel().getLastSelected();
+        if(sr){    
+            var win = button.up('winFinMyGateTokenizeWizard');
+            win.down('#owner').setValue(sr.get('username'));
+			win.down('#user_id').setValue(sr.getId());
+            win.getLayout().setActiveItem('scrnData');
+        }else{
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_owner'),
+                        i18n('sFirst_select_an_Access_Provider_who_will_be_the_owner'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }
+    },
+    btnDataPrevTokenize:  function(button){
+        var me      = this;
+        var win     = button.up('winFinMyGateTokenizeWizard');
+        win.getLayout().setActiveItem('scrnApTree');
+    },
+    btnDataNextTokenize:  function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlTokenize,
+            success: function(form, action) {
+                win.close();
+                me.getStore('sFinMyGateTokens').load();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
 
 /*
     winClose:   function(){
