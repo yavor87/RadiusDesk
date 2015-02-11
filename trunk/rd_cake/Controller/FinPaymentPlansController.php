@@ -17,6 +17,29 @@ class FinPaymentPlansController extends AppController {
     );
 
 	private $singleField	= true;
+
+	
+	public function login_page_index(){
+
+		$this->{$this->modelClass}->contain();
+		$total  = $this->{$this->modelClass}->find('count'); 
+		$this->{$this->modelClass}->contain();
+		$q_r 	= $this->{$this->modelClass}->find('all');
+
+		$items 	= array();
+
+		foreach($q_r as $i){
+			array_push($items, array('id' => $i['FinPaymentPlan']['id'], 'name' => $i['FinPaymentPlan']['name']));
+		}
+
+		$this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+
+	}
 	
     public function index(){
 

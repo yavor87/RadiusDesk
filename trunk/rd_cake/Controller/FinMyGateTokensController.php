@@ -261,15 +261,65 @@ class FinMyGateTokensController extends AppController {
         }
         $user_id    = $user['id'];
 
-        //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
-            $this->request->data['user_id'] = $user_id;
-        }
-	
-        $this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
-        ));
+		//If the username instead of the the permanent_user_id is used we first need to find that username
+
+		//We need to check if the user is not already tokenized
+		if(array_key_exists('permanent_user_id',$this->request->data)){
+			$this->{$this->modelClass}->contain();
+			$count  = $this->{$this->modelClass}->find('count',array('conditions' => 
+						array($this->modelClass.'.permanent_user_id' => $this->request->data['permanent_user_id'])
+					)); 
+
+        	if($count > 0){
+				$message = 'Error';
+		        $this->set(array(
+		            'errors'    => array('permanent_user_id' => "User already tokenized"),
+		            'success'   => false,
+		            'message'   => array('message' => __('User already tokenized')),
+		            '_serialize' => array('errors','success','message')
+		        ));	
+			}else{
+
+				//Get the creator's id
+				if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+				    $this->request->data['user_id'] = $user_id;
+				}
+
+				$token_results = $this->_get_token();
+				
+				if($token_results['Result'] == 0){
+					$this->request->data['client_uid'] 	= $token_results['ClientIndex'];
+					$this->request->data['active'] 		= 1;
+					$this->request->data['client_pin'] 	= $this->request->data['permanent_user_id'];
+					$this->request->data['client_uci'] 	= $this->request->data['permanent_user_id'];
+				}
+
+				$this->{$this->modelClass}->create();
+				if ($this->{$this->modelClass}->save($this->request->data)) {
+				    $this->set(array(
+				        'success' => true,
+				        '_serialize' => array('success')
+				    ));
+				} 
+			} 
+        }else{
+
+			//print_r($this->_get_token());
+		    $this->set(array(
+		        'success' => true,
+		        '_serialize' => array('success')
+		    ));
+		}
+	}
+
+	public function cc_to_token() {
+
+		//print_r($this->_get_token());
+	    $this->set(array(
+	        'success' => true,
+	        '_serialize' => array('success')
+	    ));
+
 	}
 
     public function note_index(){
@@ -678,7 +728,50 @@ class FinMyGateTokensController extends AppController {
         //No match
         return false;
     }
-
-
 //-----------------------------------------------
+
+	private function _get_token(){
+
+		//We will use $this->request->data['permanent_user_id'] for both pin and uci
+		Configure::load('MyGate');
+		$url 			= Configure::read('my_gate.url_add_pin');
+		$merchant_id 	= Configure::read('my_gate.merchant_id');
+		$application_id = Configure::read('my_gate.application_id');
+		$card_type 		= Configure::read('my_gate.card_type');
+
+		//These should have been included already...
+		$permanent_user_id	= $this->request->data['permanent_user_id'];
+		$client_pin			= $permanent_user_id;
+		$client_uci			= $permanent_user_id;
+		$card_holder		= $this->request->data['card_holder'];
+		$card_number		= $this->request->data['card_number'];
+		$expiry_month		= $this->request->data['expiry_month'];
+		$expiry_year		= $this->request->data['expiry_year'];
+
+		$client 			= new SoapClient($url);
+		$arrResults 		= $client->fLoadPinCC(
+			$merchant_id,
+			$application_id,
+			$card_number,
+			$card_holder,
+			$expiry_month,
+			$expiry_year,
+			$card_type,
+			$client_pin,
+			$client_uci
+		);
+
+		$return_array = array();
+
+		foreach ($arrResults as $result){
+			$pieces = explode("||", $result);
+			$key 	= $pieces[0];
+			$value	= $pieces[1];
+			$return_array["$key"] = $value;
+		}
+
+		return $return_array;
+	}
+
+
 }
