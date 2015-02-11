@@ -4,6 +4,8 @@ Ext.define('Mikrotik.controller.Desktop', {
     views       : [
         'Land'
     ],
+	stores  : ['sFinPaymentPlans'],
+    models  : ['mFinPaymentPlan' ],
     refs: [
         { ref: 'vp',        selector: '',               xtype: 'vp',        autoCreate: true},
         { ref: 'land',      selector: '',               xtype: 'land'},        
@@ -13,8 +15,6 @@ Ext.define('Mikrotik.controller.Desktop', {
         { ref: 'frmPayU',   selector: 'frmPayU',        xtype: '' },      //Not a hotspot panel
         { ref: 'datThumb',  selector: '#datThumb',      xtype: '' }      //Thumb view
     ],
-   
-
     //---
     counter         : undefined, //refresh counter's id
     timeUntilStatus : 20, //interval to refresh 
@@ -27,7 +27,7 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 10, //Make it high to start with --- sometimes it really takes long! FIXME: Ancrease after development
+    retryCount      : 1, //Make it high to start with --- sometimes it really takes long! FIXME: Ancrease after development
     currentRetry    : 0,
 
     userName        : undefined,
@@ -52,6 +52,17 @@ Ext.define('Mikrotik.controller.Desktop', {
 
     init: function() {
         var me = this;
+
+		//Apply some Vtypes:
+		Ext.apply(Ext.form.field.VTypes, {
+			creditcard: function(value,field){
+				return value.replace(/[ \-]/g,'').length == 16;
+			},
+			creditcardText: 'Wrong credit card number',
+			creditcardMask: /[ \d\-]/
+		});
+
+
         //Connect some events
         me.control({
             'pnlConnect #btnConnect' : {
@@ -119,7 +130,27 @@ Ext.define('Mikrotik.controller.Desktop', {
 				click:	function(b){
 					b.up('window').close();
 				}
+			},
+
+			//=== CC Sign up =====
+			'pnlConnect #btnCreditCard' : {
+				click: me.onBtnCreditCardClick		
+			},
+			'winCreditCard #btnIntroNext'	: {
+				click: me.onBtnCCIntroNextClick
+			},
+			'winCreditCard #btnDetailBack'	: {
+				click: me.onBtnCCDetailBackClick
+			},
+			'winCreditCard #btnDetailNext'	: {
+				click: me.onBtnCCDetailNextClick
+			},
+			'winCreditCard #btnLastNext'	: {
+				click:	function(b){
+					b.up('window').close();
+				}
 			}
+
         });    
     },
 	onBtnRemoveMac : function(button){
@@ -831,6 +862,43 @@ Ext.define('Mikrotik.controller.Desktop', {
         form.submit({
             clientValidation	: true,
             url					: me.application.config.urlLostPw,
+            success				: function(f, action) {
+				f.reset();
+				form.setLoading(false);
+				win.getLayout().setActiveItem('scrnEnd');
+            },
+            failure				: function(f,action){
+				form.setLoading(false);
+            }
+        });
+	},
+
+	//=========== CC Sign-up ============
+	onBtnCreditCardClick : function(){
+		
+		var c = Ext.ComponentQuery.query('#winCreditCard');
+		if(Ext.isEmpty(c)){
+			Ext.create('Mikrotik.view.winCreditCard', { glyph: Mikrotik.config.icnShop,	id: 'winCreditCard'}).show();
+		}
+	},
+	onBtnCCIntroNextClick	: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnDetail');		
+	},
+	onBtnCCDetailBackClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		win.getLayout().setActiveItem('scrnIntro');		
+	},
+	onBtnCCDetailNextClick: function(b){
+		var me 		= this;
+		var win		= b.up('window');
+		var form    = win.down('form');
+		form.setLoading('Submitting request...');
+        form.submit({
+            clientValidation	: true,
+            url					: me.application.config.urlMyGateToken,
             success				: function(f, action) {
 				f.reset();
 				form.setLoading(false);
