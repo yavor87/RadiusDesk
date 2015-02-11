@@ -84,6 +84,17 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
         if (me.inited) {
             return;
         }
+
+		//Apply some Vtypes:
+		Ext.apply(Ext.form.field.VTypes, {
+			creditcard: function(value,field){
+				return value.replace(/[ \-]/g,'').length == 16;
+			},
+			creditcardText: 'Wrong credit card number',
+			creditcardMask: /[ \d\-]/
+		});
+
+
         me.inited = true;
         me.control({
 			'gridFinMyGateTokens': {
@@ -456,8 +467,8 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
                 win.close();
                 me.getStore('sFinMyGateTokens').load();
                 Ext.ux.Toaster.msg(
-                    i18n('sNew_item_created'),
-                    i18n('sItem_created_fine'),
+                    'User credit card detail tokenized',
+                    'User credit card detail tokenized fine',
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );

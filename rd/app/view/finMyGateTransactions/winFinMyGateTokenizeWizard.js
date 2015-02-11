@@ -137,7 +137,7 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenizeWizard', {
                 },
 				{
                     xtype       	: 'textfield',
-                    fieldLabel  	: 'Cardholder name',
+                    fieldLabel  	: 'Card holder',
                     name        	: 'card_holder',
                     allowBlank  	: false,
                     blankText   	: 'Supply a value',
@@ -146,8 +146,8 @@ Ext.define('Rd.view.finPaymentPlans.winFinMyGateTokenizeWizard', {
                 },
 				{
 					xtype       	: 'textfield',
-					fieldLabel		: 'Credit card',
-					name			: 'credit',
+					fieldLabel		: 'Card number',
+					name			: 'card_number',
 					vtype			: 'creditcard',
 					allowBlank  	: false,
 					blankText   	: 'Supply a value',
