@@ -40,7 +40,8 @@ Ext.application({
         urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
 		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
 		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
-		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json'
+		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json',
+		urlMyGateToken	: infoServer+'/cake2/rd_cake/fin_my_gate_tokens/cc_to_token.json'
     },
     //____ End of Configuration settings _____
 

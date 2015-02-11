@@ -141,6 +141,17 @@ Ext.define('Mikrotik.view.pnlConnect', {
 			]);
 		}
 
+		//WIP
+		frm_items_bottom = Ext.Array.merge(frm_items_bottom, [
+			{
+				xtype		: 'button',
+				text		: 'Pay with Credit Card',
+				margin		: '10 0 0 0',
+				itemId		: 'btnCreditCard',
+				anchor		: '100%'
+			}
+		]);
+
         //The default
 		if(
 			(me.jsonData.settings.voucher_login_check == false)&&
