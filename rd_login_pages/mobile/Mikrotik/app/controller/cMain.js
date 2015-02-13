@@ -15,7 +15,8 @@ Ext.define('Mikrotik.controller.cMain', {
             tabMain         : '#tabMain',
             datThumb        : '#datThumb',
 			navNewUser		: '#navNewUser',
-			navLostPassword : '#navLostPassword'
+			navLostPassword : '#navLostPassword',
+			navMyGateCreditCard : '#navMyGateCreditCard'
         },
         control: {
         
@@ -51,14 +52,18 @@ Ext.define('Mikrotik.controller.cMain', {
 			},
 			'navLostPassword #navBtnNext' : {
 				tap		: 'onLpNavBtnNextTap'
-			}
+			},
+			'navMyGateCreditCard #navBtnNext' : {
+				tap		: 'onMGCCNavBtnNextTap'
+			},
         },
         views: [
             'cntNotPresent',
             'tabMain',
             'frmConnect',
 			'frmNewUser',
-			'frmLostPassword'
+			'frmLostPassword',
+			'frmMyGateCreditCard'
         ],
 		models:	[
 			'mNewUser',
@@ -77,7 +82,7 @@ Ext.define('Mikrotik.controller.cMain', {
 
     sessionData 	: undefined,
 
-    retryCount  	: 10, //Make it high to start with --- sometimes it really takes long! FIXME Reduce after development
+    retryCount  	: 1, //Make it high to start with --- sometimes it really takes long! FIXME Reduce after development
     currentRetry	: 0,
 
     userName    	: '',
@@ -845,6 +850,84 @@ Ext.define('Mikrotik.controller.cMain', {
 			 } else {
 		  		//Ext.Msg.alert("Data is valid","Success");
 				// Validation successful - show loader
+                view.down('formpanel').setMasked({
+                    xtype:'loadmask',
+                    message:'Submitting data...'
+                });
+                view.down('formpanel').submit({
+                    url		: Mikrotik.config.Config.getUrlLostPw(),
+                    method	: 'POST',
+                    success	: function(f, result) {
+						//console.log("Pass");
+                        view.down('formpanel').setMasked(false);
+						view.push({
+							title	: 'Result',
+							itemId	: 'pnlEnd',
+							html	: "<h1>Check your email!</h1>"+
+									  "Your credentials has been emailed to you<br>",
+							styleHtmlContent : true,
+							styleHtmlCls: 'regHtml'
+						});
+						var navigationBar = view.getNavigationBar();
+						navigationBar.query('button')[0].hide();
+                    },
+                    failure: function(f, result) {
+						Ext.iterate(result.errors, function(key, value) {
+							errorString += key + ": " + value + " <br>";
+							var s = Ext.String.format('field[name={0}]',key);
+							form.down(s).addCls('invalidField');
+			  			});
+						view.down('formpanel').setMasked(false);
+			  			Ext.Msg.alert('Failed to send email',errorString);     
+                    }                       
+                });
+			 }
+		}
+
+		if(activeId == 'pnlEnd'){
+			view.pop(2); //Remove the last two screens; ending with screen one
+		}
+	},
+	onMGCCNavBtnNextTap	: function(btn){
+		var me 			= this;
+		var view		= btn.up('navMyGateCreditCard');
+		
+		var activeId	= view.getActiveItem().getItemId();
+		//console.log(activeId);
+		if(activeId == 'pnlMyGateCreditCardIntro'){	
+			view.push({
+				title		: 'Supply detail',
+			    xtype		: 'frmMyGateCreditCard',
+				itemId		: 'frmMyGateCreditCard',
+				scrollable  : false,
+			});	
+		}
+
+		if(activeId == 'frmMyGateCreditCard'){	
+			var errorString 	= '';
+			var form 			= view.down('formpanel');
+			var fields 			= form.query("field");
+
+			// remove the style class from all fields
+		   	for (var i=0; i<fields.length; i++) {
+				fields[i].removeCls('invalidField');
+		   	}
+		 
+			// dump form fields into new model instance
+			var model 			= Ext.create("Mikrotik.model.mMyGateCreditCard", form.getValues());
+		 
+			// validate form fields
+			var errors = model.validate();
+		 
+			if (!errors.isValid()) {
+			  	// loop through validation errors and generate a message to the user
+			  	errors.each(function (errorObj){
+					errorString += errorObj.getField() + ": " + errorObj.getMessage() + " <br>";
+					var s = Ext.String.format('field[name={0}]',errorObj.getField());
+					form.down(s).addCls('invalidField');
+			  	});
+			  	Ext.Msg.alert('Errors in your input',errorString);
+			 } else {
                 view.down('formpanel').setMasked({
                     xtype:'loadmask',
                     message:'Submitting data...'
