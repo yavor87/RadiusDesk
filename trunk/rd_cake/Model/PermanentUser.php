@@ -231,6 +231,11 @@ class PermanentUser extends AppModel {
                 $this->_add_radreply_item($username,'Framed-IP-Address',$static_ip);
             }
         }
+
+		//Auto add MAC
+		if(array_key_exists('auto_add',$this->data['PermanentUser'])){ 
+            $this->_add_radcheck_item($username,'Rd-Auto-Mac',1);
+        }
     }
 
     private function _radius_format_date($d){
