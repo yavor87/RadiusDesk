@@ -324,7 +324,16 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
 						            fieldLabel  : 'Extra field value',
 						            allowBlank  : true,
 						            labelClsExtra: 'lblRd'
-						        }   
+						        },
+								{
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : 'Auto-add device after authentication',
+                                    name        : 'auto_add',
+                                    inputValue  : 'auto_add',
+                                    checked     : false,
+                                    boxLabelCls : 'lblRdCheck',
+                                    itemId      : 'auto_add'
+                                }  
                             ]   
                         },
                         { 
