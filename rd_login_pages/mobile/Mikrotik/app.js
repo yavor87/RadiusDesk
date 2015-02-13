@@ -20,6 +20,10 @@ Ext.application({
     controllers: [
         'cMain'
     ],
+	//Optional - can remove	-
+	models: ['mFinPaymentPlan'],
+    stores: ['sFinPaymentPlans'],
+	//Optional - can remove end -
 
     icon: {
         '57': 'resources/icons/Icon.png',
