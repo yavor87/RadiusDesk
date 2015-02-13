@@ -10,13 +10,15 @@ Ext.define('Mikrotik.view.tabMain', {
         'Mikrotik.view.cntAbout',
         'Mikrotik.view.cntPayAd',
 		'Mikrotik.view.navNewUser',
-		'Mikrotik.view.navLostPassword'
+		'Mikrotik.view.navLostPassword',
+		'Mikrotik.view.navMyGateCreditCard'
     ],
     config: {
         tabBar : {
-            docked  : 'top',
-            centered: 'true',
-            ui      : 'light'
+            docked  	: 'top',
+            centered	: 'true',
+            ui      	: 'light',
+			scrollable 	: 'horizontal'
         },
         listeners: {
                 activate: function (panel) {                   
@@ -134,6 +136,17 @@ Ext.define('Mikrotik.view.tabMain', {
 				{
 					title		: 'Lost password',
 					xtype		: 'navLostPassword',
+					iconCls     : 'reply',
+					itemId		: 'navLostPassword'
+				}
+			]);
+		}
+
+		if(true){
+			i = Ext.Array.merge(i, [
+				{
+					title		: 'Payment',
+					xtype		: 'navMyGateCreditCard',
 					iconCls     : 'reply',
 					itemId		: 'navLostPassword'
 				}
