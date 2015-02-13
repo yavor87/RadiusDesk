@@ -210,9 +210,16 @@ class PermanentUsersController extends AppController {
             $this->request->data['monitor'] = 1;
         }
 
+		//auto_add device
+		if(array_key_exists('auto_add',$this->request->data)){
+            $this->request->data['auto_add'] = 1;
+        }
+
         if(($this->request->data['user_id'] == '0')||($this->request->data['user_id'] == '')){ //This is the holder of the token
             $this->request->data['user_id'] = $user['id'];
         }
+
+		
 
         if(!array_key_exists('language',$this->request->data)){
             $this->request->data['language'] = Configure::read('language.default');
