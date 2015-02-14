@@ -5,7 +5,7 @@ class FinMyGateTokensController extends AppController {
 
     public $name       = 'FinMyGateTokens';
     public $components = array('Aa');
-    public $uses       = array('FinMyGateToken','User');
+    public $uses       = array('FinMyGateToken','User','PermanentUser','FinPaymentPlan');
 
 	//var $scaffold;
     protected $base    = "Access Providers/Controllers/FinMyGateTokens/";
@@ -314,12 +314,138 @@ class FinMyGateTokensController extends AppController {
 
 	public function cc_to_token() {
 
-		//print_r($this->_get_token());
-	    $this->set(array(
-	        'success' => true,
-	        '_serialize' => array('success')
-	    ));
 
+		//== Here we have to do various tests:
+		/*
+			1.) Test if username is known to us
+			2.) Test if the username is not already tokenized
+			3.) Ensure the all the required fields are included
+		*/
+
+		//Change if you need to 
+		$this->request->data['user_id'] = 44; //root
+
+		//---- REQUIRED FIELD TEST ------
+		$required_fields = array(
+			'username',		'fin_payment_plan_id', 	'card_holder', 
+			'card_number',	'expiry_month',			'expiry_year',
+		);
+
+		foreach($required_fields as $f){
+			if(!array_key_exists($f,$this->request->data)){
+				 $this->set(array(
+		            'errors'    => array("$f" => "Required field missing"),
+		            'success'   => false,
+		            'message'   => array('message' => __("Required field missing: ".$f)),
+		            '_serialize' => array('errors','success','message')
+		        ));
+				return;		
+			}
+		}
+		//---- END REQUIRED FIELD TEST -----
+
+		//---- TEST FOR EXISTANCE OF usename under permanent_users
+		$username = $this->request->data['username'];
+		$this->PermanentUser->contain();
+		$q_r = $this->PermanentUser->find('first',array('conditions' => array('PermanentUser.username' => $username)));
+		if(!$q_r){
+			$this->set(array(
+	            'errors'    => array("username" => "User ".$username." is not registered"),
+	            'success'   => false,
+	            'message'   => array('message' => "User ".$username." is not registered"),
+	            '_serialize' => array('errors','success','message')
+	        ));
+			return;
+		}
+
+		$permanent_user_id = $q_r['PermanentUser']['id'];
+		$this->request->data['permanent_user_id'] = $permanent_user_id;
+
+		$q_r = $this->FinMyGateToken->find('first',
+			array('conditions' => array('FinMyGateToken.permanent_user_id' => $permanent_user_id)
+		));
+
+		if($q_r){
+			$this->set(array(
+	            'errors'    => array("username" => "User ".$username." is already tokenized"),
+	            'success'   => false,
+	            'message'   => array('message' => "User ".$username." is already tokenized"),
+	            '_serialize' => array('errors','success','message')
+	        ));
+			return;
+		}
+
+		$token_results = $this->_get_token();
+				
+		if($token_results['Result'] == 0){
+			$this->request->data['client_uid'] 	= $token_results['ClientIndex'];
+			$this->request->data['active'] 		= 1;
+			$this->request->data['client_pin'] 	= $this->request->data['permanent_user_id'];
+			$this->request->data['client_uci'] 	= $this->request->data['permanent_user_id'];
+
+			//If we have a good uid; we need to calculate the amount the user needs to pay to complete this month
+			$fin_payment_plan_id 	= $this->request->data['fin_payment_plan_id'];
+			$override 				= $this->_find_outstanding_amount($fin_payment_plan_id);
+			$this->request->data['override'] = $override;
+			
+			$this->{$this->modelClass}->create();
+			if ($this->{$this->modelClass}->save($this->request->data)) {
+			    $this->set(array(
+			        'success' => true,
+			        '_serialize' => array('success')
+			    ));
+			}
+			return;
+		}
+
+		if($token_results['Result'] != 0){
+			if(array_key_exists('ErrorCode',$token_results)){
+				$error = $token_results['ErrorCode'];
+				$error = (strlen($error) > 60) ? substr($error,0,57).'...' : $error;
+				$this->set(array(
+			        'errors'    => array("card_number" => $error),
+			        'success'   => false,
+			        'message'   => array('message' => $error),
+			        '_serialize' => array('errors','success','message')
+			    ));
+
+				//FIXME List this in the failures tab... (To be coded)
+				//Another Alert!! There are many test / dummy cc numbers it just accepts... this will cause problems
+				return;
+			}
+		}
+
+	   $this->set(array(
+            'errors'    => array("username" => "Unknown error"),
+            'success'   => false,
+            'message'   => array('message' => "Unknown error"),
+            '_serialize' => array('errors','success','message')
+        ));
+	}
+
+	private function _find_outstanding_amount($fin_payment_plan_id){
+
+		$override 	= 0;
+		$this->FinPaymentPlan->contain();
+		$q_r 		= $this->FinPaymentPlan->findById($fin_payment_plan_id);
+		$value 		= $q_r['FinPaymentPlan']['value'];
+
+		if($value > $override){
+			//Find the days until the end of the month
+			//'t' Number of days in the given month (28 through 31)
+			//'j' Day of the month without leading zeros (1 to 31)
+			$timestamp 		= strtotime("now");
+			$daysRemaining 	= (int)date('t', $timestamp) - (int)date('j', $timestamp)-1; //We minus one to not calculate today
+			if($daysRemaining > 0){
+				//Find the days in the month
+				$days_in_month 	= date("t");
+				//Amount to pay is the $value / $days_in_month * $daysRemaining;
+				$override = ($value / $days_in_month) * $daysRemaining;
+				$override = round($override, 2);
+			}
+
+		}
+		return $override;
 	}
 
     public function note_index(){
@@ -767,6 +893,10 @@ class FinMyGateTokensController extends AppController {
 			$pieces = explode("||", $result);
 			$key 	= $pieces[0];
 			$value	= $pieces[1];
+			if($key == 'ErrorCode'){
+				array_shift($pieces);
+				$value = implode(" ", $pieces);
+			}
 			$return_array["$key"] = $value;
 		}
 
