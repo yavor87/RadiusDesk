@@ -14,6 +14,11 @@ class RegisterUsersController extends AppController {
 		Configure::load('RegisterUsers');
 
 		//--Do the MAC test --
+		$mac = '';
+		if(array_key_exists('mac',$this->request->data)){
+			$mac = $this->request->data['mac'];
+		}
+
 		$force_mac = Configure::read('register_users.default.force_mac');
 		if($force_mac){
 			if(array_key_exists('mac',$this->request->data)){
@@ -74,6 +79,11 @@ class RegisterUsersController extends AppController {
 
 		$username	= $this->request->data['username'];
 		$password	= $this->request->data['password'];
+
+		//--- ADD ON ---- Expire them after 30 days
+		$from_date	=  date("n/j/Y");
+		$plus_30  	= mktime(0, 0, 0, date("m"),   date("d")+31,   date("Y")); //We actually put 31 since today is already gone
+		$to_date	=  date("n/j/Y",$plus_30);
          
         // The data to send to the API
         $postData = array(
@@ -88,6 +98,8 @@ class RegisterUsersController extends AppController {
             'password'      => $password,
 			'extra_name'	=> 'mac',
 			'extra_value'	=> $mac,
+			'from_date'		=> $from_date,
+			'to_date'		=> $to_date,
         );
      
         // Setup cURL
@@ -152,7 +164,7 @@ class RegisterUsersController extends AppController {
 		$email_server = Configure::read('EmailServer');
         App::uses('CakeEmail', 'Network/Email');
         $Email = new CakeEmail();
-        $Email->config('gmail');
+        $Email->config($email_server);
         $Email->subject('New user registration');
         $Email->to($username);
         $Email->viewVars(compact( 'username', 'password'));
