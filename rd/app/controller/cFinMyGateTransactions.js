@@ -38,6 +38,7 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
                             plain   : true,
                             items   : [
                                 { 'title' : 'Tokens',       	xtype: 'gridFinMyGateTokens'		},
+								{ 'title' : 'Failed tokens',    xtype: 'gridFinMyGateTokenFailures'	},
                                 { 'title' : 'Transactions',   	xtype: 'gridFinMyGateTransactions'	}
                             ]}
                         ]
@@ -57,10 +58,10 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		'finMyGateTransactions.winFinMyGateTokenAddWizard',
 		'finMyGateTransactions.winFinMyGateTokenEdit',
 		'finMyGateTransactions.winFinMyGateTokenizeWizard',
+		'finMyGateTransactions.gridFinMyGateTokenFailures',
 		'finMyGateTransactions.gridFinMyGateTransactions'
     ],
-    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers',
-		'sFinPaymentPlans'
+    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers'
 	],
     models: ['mFinMyGateToken', 'mFinMyGateTransaction',  	'mAccessProviderTree',	'mPermanentUser', 
 		'mFinPaymentPlan'
@@ -72,11 +73,13 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		urlDeleteToken	: '/cake2/rd_cake/fin_my_gate_tokens/delete.json',
 		urlEditToken	: '/cake2/rd_cake/fin_my_gate_tokens/edit.json',
 		urlViewToken	: '/cake2/rd_cake/fin_my_gate_tokens/view.json',
-		urlTokenize		: '/cake2/rd_cake/fin_my_gate_tokens/tokenize.json'
+		urlTokenize		: '/cake2/rd_cake/fin_my_gate_tokens/tokenize.json',
+		urlDelFailure	: '/cake2/rd_cake/fin_my_gate_tokens/delete_failure.json',
     },
     refs: [
         {  ref: 'gridTransaction',  selector: 'gridFinMyGateTransactions'},
 		{  ref: 'gridToken',  		selector: 'gridFinMyGateTokens'},
+		{  ref: 'gridTokenFailure', selector: 'gridFinMyGateTokenFailures'},
 		{  ref: 'editWin', 			selector: 'winFinMyGateTokenEdit'}         
     ],
     init: function() {
@@ -100,10 +103,16 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 			'gridFinMyGateTokens': {
                 activate:      me.gridActivate
             },
+			'gridFinMyGateTokenFailures': {
+                activate:      me.gridActivate
+            },
 			'gridFinMyGateTransactions': {
                 activate:      me.gridActivate
             },
             'gridFinMyGateTokens #reload': {
+                click:      me.reload
+            },
+			'gridFinMyGateTokenFailures #reload': {
                 click:      me.reload
             },
 			'gridFinMyGateTransactions #reload': {
@@ -151,6 +160,9 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             'winFinMyGateTokenizeWizard #btnDataNext' : {
                 click:  me.btnDataNextTokenize
             },
+			'gridFinMyGateTokenFailures #delete'   : {
+                click:      me.delTokenFailure
+            }
 /*
             
             'gridPremiumSmsTransactions #note'   : {
@@ -199,6 +211,11 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		var me = this;
 		me.getGridToken().getSelectionModel().deselectAll(true);
 		me.getGridToken().getStore().load();
+	},
+	reloadTokenFailure: function(){
+		var me = this;
+		me.getGridTokenFailure().getSelectionModel().deselectAll(true);
+		me.getGridTokenFailure().getStore().load();
 	},
 	gridActivate: function(g){
         var me = this;
@@ -476,6 +493,54 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             failure: Ext.ux.formFail
         });
     },
+	delTokenFailure:   function(){
+        var me      = this;     
+        //Find out if there was something selected
+        if(me.getGridTokenFailure().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+
+                    var selected    = me.getGridTokenFailure().getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+
+                    Ext.Ajax.request({
+                        url: me.urlDelFailure,
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            me.reloadTokenFailure(); //Reload from server
+                        },                                    
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            me.reloadTokenFailure(); //Reload from server
+                        }
+                    });
+                }
+            });
+        }
+    }
 
 /*
     winClose:   function(){
