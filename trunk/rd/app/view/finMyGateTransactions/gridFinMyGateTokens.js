@@ -139,7 +139,7 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      : 'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinPaymentPlans11'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinMyGateTokens11'
             },
             { 
                 text        : 'Modified',
@@ -149,7 +149,7 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      : 'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinPaymentPlans12'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridFinMyGateTokens12'
             },
             { 
                 text    : i18n('sNotes'),
@@ -159,7 +159,7 @@ Ext.define('Rd.view.finMyGateTransactions.gridFinMyGateTokens' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridFinPaymentPlans13'
+                dataIndex: 'notes',stateId: 'StateGridFinMyGateTokens13'
             }  
         ];
 
