@@ -694,6 +694,34 @@ INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `fin_my_gate_token_failures`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_token_failures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_token_failures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `fin_payment_plan_id` int(11) DEFAULT NULL,
+  `error_code` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9827 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_token_failures`
+--
+
+LOCK TABLES `fin_my_gate_token_failures` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_token_failures` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_token_failures` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `fin_my_gate_token_notes`
 --
 
@@ -740,7 +768,7 @@ CREATE TABLE `fin_my_gate_tokens` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -936,7 +964,7 @@ CREATE TABLE `fin_payment_plans` (
 
 LOCK TABLES `fin_payment_plans` WRITE;
 /*!40000 ALTER TABLE `fin_payment_plans` DISABLE KEYS */;
-INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR','10.99','0.00',1,'2015-02-01 18:33:38','2015-02-01 18:33:55');
+INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR','100.00','0.00',1,'2015-02-01 18:33:38','2015-02-14 21:38:16');
 /*!40000 ALTER TABLE `fin_payment_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2114,7 +2142,7 @@ CREATE TABLE `permanent_users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2123,7 +2151,7 @@ CREATE TABLE `permanent_users` (
 
 LOCK TABLES `permanent_users` WRITE;
 /*!40000 ALTER TABLE `permanent_users` DISABLE KEYS */;
-INSERT INTO `permanent_users` VALUES (187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','52190fff-a800-48eb-b1f2-478bc0a80167','','','','','','sql',1,'2014-10-21 13:51:54','2014-10-21 13:51:49','127.0.0.1','127.0.0.1','N/A',NULL,0,84483,1000000000,NULL,NULL,'soft','soft','Residence Inn',34,'Data-Standard-1G',9,NULL,NULL,0,1,'','','',4,4,44,'2013-09-04 10:51:36','2014-09-17 08:58:44'),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','52190fff-a800-48eb-b1f2-478bc0a80167','','','','','','sql',1,'2014-09-02 15:24:41',NULL,'127.0.0.1',NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'soft','soft','Residence Inn',34,'5M-every-hour',12,NULL,NULL,0,1,'','','',4,4,44,'2014-05-27 19:41:32','2014-09-17 08:59:14');
+INSERT INTO `permanent_users` VALUES (187,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','52190fff-a800-48eb-b1f2-478bc0a80167','','','','','','sql',1,'2014-10-21 13:51:54','2014-10-21 13:51:49','127.0.0.1','127.0.0.1','N/A',NULL,0,84483,1000000000,NULL,NULL,'soft','soft','Residence Inn',34,'Data-Standard-1G',9,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,1,'','','',4,4,44,'2013-09-04 10:51:36','2015-02-11 11:22:34'),(197,'click_to_connect@Struisbaai','2d7b59408a4b5ce7c3362e55c55863d68ac3f396','52190fff-a800-48eb-b1f2-478bc0a80167','','','','','','sql',1,'2014-09-02 15:24:41',NULL,'127.0.0.1',NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,'soft','soft','Residence Inn',34,'5M-every-hour',12,NULL,NULL,0,1,'','','',4,4,44,'2014-05-27 19:41:32','2014-09-17 08:59:14');
 /*!40000 ALTER TABLE `permanent_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2420,7 +2448,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9791 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9836 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2429,7 +2457,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(9191,'dvdwalt','Rd-Total-Data',':=','7517241344'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0'),(9704,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9705,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9706,'dvdwalt','Rd-Cap-Type-Data',':=','hard'),(9707,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9708,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9709,'click_to_connect@Struisbaai','Rd-Cap-Type-Data',':=','hard'),(9779,'AA-BB-BB-DD-EE-F1','Rd-User-Type',':=','voucher-device'),(9780,'AA-BB-BB-DD-EE-F1','Rd-Voucher-Device-Owner',':=','cheerypet'),(9781,'AA-BB-BB-DD-EE-F1','User-Profile',':=','Data-Standard-1G'),(9782,'AA-BB-BB-DD-EE-F1','Rd-Realm',':=','Residence Inn'),(9783,'fairtoe','Cleartext-Password',':=','fairtoe'),(9784,'fairtoe','Rd-User-Type',':=','voucher'),(9789,'fairtoe','Rd-Realm',':=','Residence Inn'),(9790,'fairtoe','User-Profile',':=','Data-Standard-250');
+INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(9191,'dvdwalt','Rd-Total-Data',':=','7517241344'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0'),(9707,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9708,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9709,'click_to_connect@Struisbaai','Rd-Cap-Type-Data',':=','hard'),(9779,'AA-BB-BB-DD-EE-F1','Rd-User-Type',':=','voucher-device'),(9780,'AA-BB-BB-DD-EE-F1','Rd-Voucher-Device-Owner',':=','cheerypet'),(9781,'AA-BB-BB-DD-EE-F1','User-Profile',':=','Data-Standard-1G'),(9782,'AA-BB-BB-DD-EE-F1','Rd-Realm',':=','Residence Inn'),(9783,'fairtoe','Cleartext-Password',':=','fairtoe'),(9784,'fairtoe','Rd-User-Type',':=','voucher'),(9789,'fairtoe','Rd-Realm',':=','Residence Inn'),(9790,'fairtoe','User-Profile',':=','Data-Standard-250'),(9796,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9797,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9798,'dvdwalt','Rd-Cap-Type-Data',':=','hard');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2511,7 +2539,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3002,4 +3030,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-08 21:24:35
+-- Dump completed on 2015-02-16  1:04:43
