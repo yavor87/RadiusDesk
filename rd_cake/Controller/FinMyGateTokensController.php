@@ -5,7 +5,7 @@ class FinMyGateTokensController extends AppController {
 
     public $name       = 'FinMyGateTokens';
     public $components = array('Aa');
-    public $uses       = array('FinMyGateToken','User','PermanentUser','FinPaymentPlan');
+    public $uses       = array('FinMyGateToken','User','PermanentUser','FinPaymentPlan','FinMyGateTokenFailure');
 
 	//var $scaffold;
     protected $base    = "Access Providers/Controllers/FinMyGateTokens/";
@@ -17,7 +17,71 @@ class FinMyGateTokensController extends AppController {
 		'id'
     );
 
-	private $singleField	= true;
+
+	public function index_failures(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //===== PAGING (MUST BE LAST) ======
+        $limit  = 50;   //Defaults
+        $page   = 1;
+        $offset = 0;
+        if(isset($this->request->query['limit'])){
+            $limit  = $this->request->query['limit'];
+            $page   = $this->request->query['page'];
+            $offset = $this->request->query['start'];
+        }
+
+		$c					= array();
+        $c_page             = $c;
+        $c_page['page']     = $page;
+        $c_page['limit']    = $limit;
+        $c_page['offset']   = $offset;
+
+        $total  = $this->FinMyGateTokenFailure->find('count',$c);       
+        $q_r    = $this->FinMyGateTokenFailure->find('all',$c_page);
+
+        //print_r($q_r);
+
+        $items      	= array();
+
+		$fail_fields 	= array(
+			'error_code',		'created',		'modified',		'id'
+		);
+
+         foreach($q_r as $i){
+
+            //print_r($i);
+            $row = array();
+            foreach($fail_fields as $field){
+                if(array_key_exists($field,$i['FinMyGateTokenFailure'])){
+                    $row["$field"]= $i['FinMyGateTokenFailure']["$field"];
+                }
+            }
+
+			$row['permanent_user']		= $i['PermanentUser']['username'];
+			$row['permanent_user_id']	= $i['PermanentUser']['id'];
+			$row['fin_payment_plan']	= $i['FinPaymentPlan']['name'];
+			$row['fin_payment_plan_id']	= $i['FinPaymentPlan']['id'];
+            $row['user_id']     		= $i['User']['id'];
+            $row['user']        		= $i['User']['username'];
+            array_push($items,$row);
+        }
+
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+    }
+
+
 	
     public function index(){
 
@@ -197,6 +261,38 @@ class FinMyGateTokensController extends AppController {
         }
 	}
 
+	public function delete_failure($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag 	= false;
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+            $this->FinMyGateTokenFailure->id = $this->data['id'];
+            $this->FinMyGateTokenFailure->delete($this->FinMyGateTokenFailure->id, true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){   
+                $this->FinMyGateTokenFailure->id = $d['id'];
+                $this->FinMyGateTokenFailure->delete($this->FinMyGateTokenFailure->id, true);     
+            }
+        }
+
+		$this->set(array(
+		    'success' => true,
+		    '_serialize' => array('success')
+		));
+	}
+
+
 	public function view(){
 
 		$user = $this->_ap_right_check();
@@ -292,24 +388,52 @@ class FinMyGateTokensController extends AppController {
 					$this->request->data['active'] 		= 1;
 					$this->request->data['client_pin'] 	= $this->request->data['permanent_user_id'];
 					$this->request->data['client_uci'] 	= $this->request->data['permanent_user_id'];
+
+					//If we have a good uid; we need to calculate the amount the user needs to pay to complete this month
+					$fin_payment_plan_id 	= $this->request->data['fin_payment_plan_id'];
+					$override 				= $this->_find_outstanding_amount($fin_payment_plan_id);
+					$this->request->data['override'] = $override;
+
+					$this->{$this->modelClass}->create();
+					if ($this->{$this->modelClass}->save($this->request->data)) {
+						$this->set(array(
+							'success' => true,
+							'_serialize' => array('success')
+						));
+					}
+					return;
 				}
 
-				$this->{$this->modelClass}->create();
-				if ($this->{$this->modelClass}->save($this->request->data)) {
-				    $this->set(array(
-				        'success' => true,
-				        '_serialize' => array('success')
-				    ));
-				} 
-			} 
-        }else{
+				if($token_results['Result'] != 0){
+					if(array_key_exists('ErrorCode',$token_results)){
+						$error = $token_results['ErrorCode'];
+						$error = (strlen($error) > 60) ? substr($error,0,57).'...' : $error;
+						$this->set(array(
+							'errors'    => array("card_number" => $error),
+							'success'   => false,
+							'message'   => array('message' => $error),
+							'_serialize' => array('errors','success','message')
+						));
+						//We record this failure
+						$this->FinMyGateTokenFailure->create();
+						$this->request->data['error_code'] = $token_results['ErrorCode'];
+						$this->FinMyGateTokenFailure->save($this->request->data);
+						//================================================
+						//Another Alert!! There are many test / dummy cc numbers MyGate just accepts... this will cause problems
+						//================================================
+						return;
+					}
+				}
 
-			//print_r($this->_get_token());
-		    $this->set(array(
-		        'success' => true,
-		        '_serialize' => array('success')
-		    ));
-		}
+			   $this->set(array(
+				    'errors'    => array("username" => "Unknown error"),
+				    'success'   => false,
+				    'message'   => array('message' => "Unknown error"),
+				    '_serialize' => array('errors','success','message')
+				));
+				return;
+			} 
+        }
 	}
 
 	public function cc_to_token() {
@@ -387,6 +511,9 @@ class FinMyGateTokensController extends AppController {
 			$fin_payment_plan_id 	= $this->request->data['fin_payment_plan_id'];
 			$override 				= $this->_find_outstanding_amount($fin_payment_plan_id);
 			$this->request->data['override'] = $override;
+
+			//Expire the user the first of next month:
+			$this->_extend_expiration($username);
 			
 			$this->{$this->modelClass}->create();
 			if ($this->{$this->modelClass}->save($this->request->data)) {
@@ -408,9 +535,13 @@ class FinMyGateTokensController extends AppController {
 			        'message'   => array('message' => $error),
 			        '_serialize' => array('errors','success','message')
 			    ));
-
-				//FIXME List this in the failures tab... (To be coded)
-				//Another Alert!! There are many test / dummy cc numbers it just accepts... this will cause problems
+				//We record this failure
+				$this->FinMyGateTokenFailure->create();
+				$this->request->data['error_code'] = $token_results['ErrorCode'];
+				$this->FinMyGateTokenFailure->save($this->request->data);
+				//================================================
+				//Another Alert!! There are many test / dummy cc numbers MyGate just accepts... this will cause problems
+				//================================================
 				return;
 			}
 		}
@@ -422,6 +553,40 @@ class FinMyGateTokensController extends AppController {
             '_serialize' => array('errors','success','message')
         ));
 	}
+
+	private function _extend_expiration($username){
+		//We extend the user's expiry date on for one month
+		$this->Radcheck     = ClassRegistry::init('Radcheck');
+		$q_r = $this->Radcheck->find('first', 
+			array('conditions' => array('Radcheck.username' => $username,'attribute' => 'Expiration'))
+		);
+
+		if($q_r){
+			$id  			= $q_r['Radcheck']['id'];
+			$data['id'] 	= $id;
+		}
+
+		$nextmonth  		= mktime(0, 0, 0, date("m")+1,   1,   date("Y")); 
+		$to_date			=  $this->_radius_format_date(date("n/j/Y",$nextmonth));
+		$data['value']		= $to_date;
+		$data['attribute']  = 'Expiration';
+		$data['username']   = $username;
+		$data['op']   		= ':=';
+
+		$this->Radcheck->create();
+		$this->Radcheck->save($data);
+
+	}
+
+	private function _radius_format_date($d){
+        //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
+        $arr_date   = explode('/',$d);
+        $month      = intval($arr_date[0]);
+        $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $day        = intval($arr_date[1]);
+        $year       = intval($arr_date[2]);
+        return "$day ".$m_arr[($month-1)]." $year";
+    }
 
 	private function _find_outstanding_amount($fin_payment_plan_id){
 
