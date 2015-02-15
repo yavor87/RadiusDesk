@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 
 class FinMyGateToken extends AppModel {
 
-    public $name        = 'FinMyGateTokens';
+    public $name        = 'FinMyGateToken';
     public $actsAs      = array('Containable');
 
     public $belongsTo = array(
