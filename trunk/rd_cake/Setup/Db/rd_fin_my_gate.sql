@@ -18,6 +18,21 @@ CREATE TABLE `fin_my_gate_tokens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `fin_my_gate_token_failures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_token_failures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `fin_payment_plan_id` int(11) DEFAULT NULL,
+  `error_code` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 DROP TABLE IF EXISTS `fin_my_gate_token_notes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
