@@ -61,7 +61,8 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		'finMyGateTransactions.gridFinMyGateTokenFailures',
 		'finMyGateTransactions.gridFinMyGateTransactions'
     ],
-    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers'
+    stores: ['sFinMyGateTokens', 'sFinMyGateTransactions',	'sAccessProvidersTree',	'sPermanentUsers',
+		'sFinPaymentPlans'
 	],
     models: ['mFinMyGateToken', 'mFinMyGateTransaction',  	'mAccessProviderTree',	'mPermanentUser', 
 		'mFinPaymentPlan'
@@ -74,7 +75,7 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
 		urlEditToken	: '/cake2/rd_cake/fin_my_gate_tokens/edit.json',
 		urlViewToken	: '/cake2/rd_cake/fin_my_gate_tokens/view.json',
 		urlTokenize		: '/cake2/rd_cake/fin_my_gate_tokens/tokenize.json',
-		urlDelFailure	: '/cake2/rd_cake/fin_my_gate_tokens/delete_failure.json',
+		urlDelFailure	: '/cake2/rd_cake/fin_my_gate_tokens/delete_failure.json'
     },
     refs: [
         {  ref: 'gridTransaction',  selector: 'gridFinMyGateTransactions'},
@@ -162,7 +163,7 @@ Ext.define('Rd.controller.cFinMyGateTransactions', {
             },
 			'gridFinMyGateTokenFailures #delete'   : {
                 click:      me.delTokenFailure
-            }
+            },
 /*
             
             'gridPremiumSmsTransactions #note'   : {
