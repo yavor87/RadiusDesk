@@ -27,7 +27,7 @@ class TopUp extends AppModel {
             $this->PermanentUser = ClassRegistry::init('PermanentUser'); 
             $this->PermanentUser->contain();
             $username = $this->data['TopUp']['permanent_user'];
-            $q_r = $this->PermanentUser->find('first',array('conditions' => array('PermenentUser.username' => $username)));
+			$q_r = $this->PermanentUser->find('first',array('conditions' => array('PermanentUser.username' => $username)));
             if($q_r){
                 $this->data['TopUp']['permanent_user_id'] = $q_r['PermanentUser']['id'];
             }else{
