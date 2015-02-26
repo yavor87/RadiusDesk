@@ -182,6 +182,78 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                                         labelClsExtra: 'lblRd'
                                     }
                                 ]
+                            },
+							{ 
+                                'title'     : 'Social media',
+                                'layout'    : 'anchor',
+                                itemId      : 'tabSocial',
+                                defaults    : {
+                                    anchor: '100%'
+                                },
+                                autoScroll:true,
+                                items       : [         
+                                    {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Twitter',
+                                        name        : 'twitter',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    },
+									{
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Facebook',
+                                        name        : 'facebook',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    },
+									{
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Youtube',
+                                        name        : 'youtube',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    },
+									{
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Google+',
+                                        name        : 'google_plus',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    },
+									{
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'LinkedIn',
+                                        name        : 'linkedin',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    }
+                                ]
+                            },
+							{ 
+                                'title'     : 'T&C',
+                                'layout'    : 'anchor',
+                                itemId      : 'tabTandC',
+                                defaults    : {
+                                    anchor: '100%'
+                                },
+                                autoScroll:true,
+                                items       : [         
+                                    {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Title',
+                                        name        : 't_c_title',
+                                        allowBlank  : true,
+                                        vtype       : 'url'
+                                    },
+									{
+										xtype     	: 'textareafield',
+										grow      	: true,
+										name      	: 't_c_content',
+										allowBlank 	: true,
+										fieldLabel	: 'Content',
+										anchor    	: '100%'
+									}
+                                ]
                             }
                         ]
                     }
