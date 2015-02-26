@@ -2660,6 +2660,13 @@ CREATE TABLE `realms` (
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `twitter` varchar(255) NOT NULL DEFAULT '',
+  `facebook` varchar(255) NOT NULL DEFAULT '',
+  `youtube` varchar(255) NOT NULL DEFAULT '',
+  `google_plus` varchar(255) NOT NULL DEFAULT '',
+  `linkedin` varchar(255) NOT NULL DEFAULT '',
+  `t_c_title` varchar(255) NOT NULL DEFAULT '',
+  `t_c_content` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2670,7 +2677,7 @@ CREATE TABLE `realms` (
 
 LOCK TABLES `realms` WRITE;
 /*!40000 ALTER TABLE `realms` DISABLE KEYS */;
-INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','','','','','','','','','','',0,0,44,'2013-08-24 22:18:31','2014-05-29 17:08:38'),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47'),(36,'realm_freddy',1,'logo.jpg','','','','','','','','','','',0,0,190,'2013-10-25 21:15:54','2013-10-25 21:15:54');
+INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','','','','','','','','','','',0,0,44,'2013-08-24 22:18:31','2015-02-26 16:08:16','http://twitter.com','http://facebook.com','http://youtube.com','http://google.com','http://linkedin.com','Help + T&C','Connect to SSID Residence Inn.\nOpen your browser.\nGo to a website that starts with \'http://\'.\nA login page will appear.\nSupply the voucher and click \'connect\'.\n'),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47','','','','','','',''),(36,'realm_freddy',1,'logo.jpg','','','','','','','','','','',0,0,190,'2013-10-25 21:15:54','2013-10-25 21:15:54','','','','','','','');
 /*!40000 ALTER TABLE `realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3030,4 +3037,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-16  1:04:43
+-- Dump completed on 2015-02-26 16:09:07
