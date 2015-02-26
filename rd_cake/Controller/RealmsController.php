@@ -636,6 +636,14 @@ class RealmsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+
+		//Fields
+		$fields  	= array(
+			'id',		'name',			'phone',		'fax',			'cell',		'email',
+			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
+			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
+			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings'	
+		);
       
         $c = $this->_build_common_query($user);
 
@@ -673,27 +681,19 @@ class RealmsController extends AppController {
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
 
-            array_push($items,array(
-                'id'                    => $i['Realm']['id'], 
-                'name'                  => $i['Realm']['name'],
-                'owner'                 => $owner_tree, 
-                'available_to_siblings' => $i['Realm']['available_to_siblings'],
-                'phone'                 => $i['Realm']['phone'],
-                'fax'                   => $i['Realm']['fax'],
-                'cell'                  => $i['Realm']['cell'],
-                'email'                 => $i['Realm']['email'],
-                'url'                   => $i['Realm']['url'],
-                'street_no'             => $i['Realm']['street_no'],
-                'street'                => $i['Realm']['street'],
-                'town_suburb'           => $i['Realm']['town_suburb'],
-                'city'                  => $i['Realm']['city'],
-                'country'               => $i['Realm']['country'],
-                'lat'                   => $i['Realm']['lat'],
-                'lon'                   => $i['Realm']['lon'], 
-                'notes'                 => $notes_flag,
-                'update'                => $action_flags['update'],
-                'delete'                => $action_flags['delete']
-            ));
+			$row = array();
+            foreach($fields as $field){
+                if(array_key_exists($field,$i['Realm'])){
+                    $row["$field"]= $i['Realm']["$field"];
+                }
+            }
+
+			$row['owner']		= $owner_tree;
+			$row['notes']		= $notes_flag;
+			$row['update']		= $action_flags['update'];
+			$row['delete']		= $action_flags['delete'];
+
+			array_push($items,$row);
         }
 
         //___ FINAL PART ___
@@ -903,29 +903,27 @@ class RealmsController extends AppController {
         }
         $user_id    = $user['id'];
 
+		//Fields
+		$fields  	= array(
+			'id',		'name',			'phone',		'fax',			'cell',		'email',
+			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
+			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
+			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings',	'icon_file_name'	
+		);
+
         $items = array();
         if(isset($this->request->query['realm_id'])){
             $this->{$this->modelClass}->contain();
             $q_r = $this->{$this->modelClass}->findById($this->request->query['realm_id']);
             if($q_r){
-                $owner_tree                         = $this->_find_parents($q_r['Realm']['user_id']);
-                $items['id']                        = $q_r['Realm']['id'];
-                $items['name']                      = $q_r['Realm']['name'];
-                $items['available_to_siblings']     = $q_r['Realm']['available_to_siblings'];
-                $items['phone']                     = $q_r['Realm']['phone'];
-                $items['fax']                       = $q_r['Realm']['fax'];
-                $items['cell']                      = $q_r['Realm']['cell'];
-                $items['email']                     = $q_r['Realm']['email'];
-                $items['url']                       = $q_r['Realm']['url'];
-                $items['street_no']                 = $q_r['Realm']['street_no'];
-                $items['street']                    = $q_r['Realm']['street'];
-                $items['town_suburb']               = $q_r['Realm']['town_suburb'];
-                $items['city']                      = $q_r['Realm']['city'];
-                $items['country']                   = $q_r['Realm']['country'];
-                $items['lat']                       = $q_r['Realm']['lat'];
-                $items['lon']                       = $q_r['Realm']['lon'];
-                $items['owner']                     = $owner_tree;
-                $items['icon_file_name']            = $q_r['Realm']['icon_file_name'];
+
+		        foreach($fields as $field){
+		            if(array_key_exists($field,$q_r['Realm'])){
+		                $items["$field"]= $q_r['Realm']["$field"];
+		            }
+		        }
+				$owner_tree                         = $this->_find_parents($q_r['Realm']['user_id']);
+				$items['owner']                     = $owner_tree;
             }
         }
         
