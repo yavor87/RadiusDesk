@@ -36,6 +36,13 @@ Ext.define('Rd.view.realms.gridRealms' ,{
             { text: i18n('sCell'),     dataIndex: 'cell',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms6'},
             { text: i18n('s_email'),   dataIndex: 'email',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms7'},
             { text: i18n('sURL'),      dataIndex: 'url',       tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGridRealms8'},
+			{ text: 'Twitter',      dataIndex: 'twitter',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR9'},
+			{ text: 'Facebook', 	dataIndex: 'facebook',     tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR10'},
+			{ text: 'Youtube', 		dataIndex: 'youtube',      tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR11'},
+			{ text: 'Google+', 		dataIndex: 'google_plus',  	tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR12'},
+			{ text: 'LinkedIn', 	dataIndex: 'linkedin', 		tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR13'},
+			{ text: 'T&C Title', 	dataIndex: 't_c_title', 	tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR14'},
+			{ text: 'T&C Content', 	dataIndex: 't_c_content', 	tdCls: 'gridTree', flex: 1, filter: {type: 'string'},   hidden: true,stateId: 'StateGR15'},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
                 flex: 1,  

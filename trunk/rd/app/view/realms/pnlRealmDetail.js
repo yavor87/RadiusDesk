@@ -242,8 +242,7 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                                         xtype       : 'textfield',
                                         fieldLabel  : 'Title',
                                         name        : 't_c_title',
-                                        allowBlank  : true,
-                                        vtype       : 'url'
+                                        allowBlank  : true
                                     },
 									{
 										xtype     	: 'textareafield',

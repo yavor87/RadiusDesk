@@ -623,21 +623,28 @@ td.grdEditable div {
 
 
 .combo-wrapper {
-    border: 1px solid #ccc;
-    padding: 2px;
+    border	: 1px solid #ccc;
+    padding	: 1px;
+	margin	: 2px;	
+	border-radius: 5px;
 }
+
+.combo-wrapper img{
+    float: right;
+}
+
+
 .combo-country {
     font-weight: bold;
     font-size: 16px;
 }
 
-.combo-country img{
-    float: right;
-}
 .combo-language {
     font-size: 12px;
     color: #666666;
 }
+
+
 
 .combo-main {
     font-weight: bold;

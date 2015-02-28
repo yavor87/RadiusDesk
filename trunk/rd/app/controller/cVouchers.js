@@ -75,7 +75,8 @@ Ext.define('Rd.controller.cVouchers', {
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
         urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',
         urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
-		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json'
+		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json',
+		urlPdfExportLoad:	'/cake2/rd_cake/vouchers/pdf_export_settings.json'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridVouchers'} ,
@@ -221,6 +222,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'winVoucherPdf  #save': {
                 click:  me.pdfExportSubmit
+            },
+			'winVoucherPdf' : {
+                beforeshow:      me.frmPdfExportLoad
             },
             'pnlVoucher #pnlUsageGraphs #daily' : {
                 activate:      me.loadGraph
@@ -631,6 +635,11 @@ Ext.define('Rd.controller.cVouchers', {
             win.setSrc(urlPdf);
             win.setTitle(title);
         }
+    },
+	frmPdfExportLoad: function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        form.load({url:me.urlPdfExportLoad, method:'GET'});
     },
     csvExport: function(button,format) {
         var me          = this;
