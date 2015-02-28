@@ -59,7 +59,6 @@ $config['voucher_formats'][9]     = array('name' => 'Avery L7161',              
 $config['voucher_formats'][10]    = array('name' => 'Avery L7163',              'id' => 'L7163',            'active' => true); 
 
 
-
 //FIXME To incorporate
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
 
