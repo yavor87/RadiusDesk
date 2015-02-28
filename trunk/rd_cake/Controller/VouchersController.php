@@ -18,6 +18,18 @@ class VouchersController extends AppController {
 
     //-------- BASIC CRUD -------------------------------
 
+	public function pdf_export_settings(){
+
+		Configure::load('Vouchers'); 
+        $data       = Configure::read('voucher_dafaults'); //Read the defaults
+
+		$this->set(array(
+            'data'     => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+	}
+
   	public function export_csv(){
 
         set_time_limit(60); //Double it 
@@ -92,6 +104,7 @@ class VouchersController extends AppController {
         $user_id    = $user['id'];
 
         App::import('Vendor', 'generic_pdf');
+		App::import('Vendor', 'voucher_pdf');
         App::import('Vendor', 'label_pdf');
         
         $this->response->type('application/pdf');
