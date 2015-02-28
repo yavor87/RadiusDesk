@@ -5,7 +5,7 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
     layout: 'fit',
     autoShow: false,
     width:    450,
-    height:   300,
+    height:   400,
     iconCls: 'pdf',
     glyph   : Rd.config.icnPdf,
     requires: [
@@ -15,27 +15,35 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
         'Rd.model.mPdfFormat'
     ],
     initComponent: function() {
-        var me = this;
-        
-        var controlls = [
-            { 
-                xtype           : 'cmbPdfFormats', 
-                name            : 'language',
-                labelClsExtra   : 'lblRdReq',
-                allowBlank      : false 
-            },
-            { 
-                xtype           : 'cmbLanguages', 
-                fieldLabel      : i18n('sLanguage'),  
-                name            : 'language',
-                allowBlank      : false,
-                labelClsExtra   : 'lblRdReq',
-                allowBlank      : false
-            }
-        ];
+        var me 			= this;
+		var orientation = Ext.create('Ext.data.Store', {
+			fields: ['id', 'name'],
+			data : [
+				{"id":"P", "name":"Portrait"},
+				{"id":"L", "name":"Landscape"}
+			]
+		});
 
-        if(me.selecteds == true){
-            Ext.Array.push(controlls, {
+
+		var basic_controlls = [
+				{ 
+					xtype           : 'cmbPdfFormats', 
+					name            : 'format',
+					labelClsExtra   : 'lblRdReq',
+					allowBlank      : false 
+				},
+				{ 
+					xtype           : 'cmbLanguages', 
+					fieldLabel      : i18n('sLanguage'),  
+					name            : 'language',
+					allowBlank      : false,
+					labelClsExtra   : 'lblRdReq',
+					allowBlank      : false
+				}  
+		    ];
+
+		 if(me.selecteds == true){
+            Ext.Array.push(basic_controlls, {
                 xtype           : 'checkbox',      
                 fieldLabel      : i18n('sOnly_selected'),
                 name            : 'selected_only',
@@ -45,39 +53,114 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
             });
         }
 
+		var controlls = [{
+                    xtype   : 'tabpanel',
+                    layout  : 'fit',
+                    xtype   : 'tabpanel',
+                    margins : '0 0 0 0',
+                    plain   : true,
+                    tabPosition: 'bottom',
+                    border  : false,
+                    items   : [
+                        { 
+                            title     	: 'Basic',
+                            itemId      : 'tabBasic',
+							layout		: 'anchor',
+							defaults: {
+						        anchor: '100%'
+						    },
+                            autoScroll	: true,
+                            items       : basic_controlls
+                        },
+						{
+							title       : 'Advanced',
+                            itemId      : 'tabAdvanced',
+							layout		: 'anchor',
+							defaults: {
+						        anchor: '100%'
+						    },
+                            autoScroll	:true,
+                            items       : [
+								{
+									xtype			: 'combobox',
+									fieldLabel		: 'Orientation',
+									store			: orientation,
+									queryMode		: 'local',
+									displayField	: 'name',
+									valueField		: 'id',
+									name			: 'orientation'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Include QR code',
+									name            : 'q_r',
+									inputValue      : 'q_r',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Include date',
+									name            : 'date',
+									inputValue      : 'date',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Social media links',
+									name            : 'social_media',
+									inputValue      : 'social_media',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Realm detail',
+									name            : 'realm_detail',
+									inputValue      : 'realm_detail',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Profile detail',
+									name            : 'profile_detail',
+									inputValue      : 'profile_detail',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								}
+                            ]
+                        }
+					]
+			}];
 
-        this.items = [
+        me.items = [
             {
-                xtype: 'form',
-                border:     false,
-                layout:     'anchor',
-                autoScroll: true,
-                defaults: {
-                    anchor: '100%'
-                },
+                xtype		: 'form',
+                border		: false,
+                layout		: 'fit',
+                autoScroll	: true,
                 fieldDefaults: {
-                    msgTarget: 'under',
-                    labelClsExtra: 'lblRd',
-                    labelAlign: 'left',
-                    labelSeparator: '',
+                    msgTarget		: 'under',
+                    labelClsExtra	: 'lblRd',
+                    labelAlign		: 'left',
+                    labelSeparator	: '',
                     margin          : 15,
-                    labelWidth      : 150
+                    labelWidth      : 170
                 },
                 defaultType: 'textfield',
-                tbar: [
-                    { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                ],
                 items: controlls,
                 buttons: [
                     {
-                        itemId: 'save',
-                        text: i18n('sOK'),
-                        formBind: true,
-                        scale: 'large',
-                        iconCls: 'b-next',
-                        glyph   : Rd.config.icnYes,
-                        formBind: true,
-                        margin: '0 20 40 0'
+                        itemId		: 'save',
+                        text		: i18n('sOK'),
+                        formBind	: true,
+                        scale		: 'large',
+                        iconCls		: 'b-next',
+                        glyph   	: Rd.config.icnYes,
+                        formBind	: true,
+                        margin		: '0 10 20 0'
                     }
                 ]
             }
