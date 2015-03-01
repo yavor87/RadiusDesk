@@ -5,7 +5,7 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
     layout: 'fit',
     autoShow: false,
     width:    450,
-    height:   400,
+    height:   350,
     iconCls: 'pdf',
     glyph   : Rd.config.icnPdf,
     requires: [
@@ -48,6 +48,7 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
                 fieldLabel      : i18n('sOnly_selected'),
                 name            : 'selected_only',
                 inputValue      : 'selected_only',
+				itemId			: 'selected_only',
                 checked         : true,
                 labelClsExtra   : 'lblRd'
             });
@@ -103,6 +104,14 @@ Ext.define('Rd.view.vouchers.winVoucherPdf', {
 									fieldLabel      : 'Include date',
 									name            : 'date',
 									inputValue      : 'date',
+									checked         : true,
+									labelClsExtra   : 'lblRd'
+								},
+								{
+									xtype           : 'checkbox',      
+									fieldLabel      : 'Include T&C',
+									name            : 't_and_c',
+									inputValue      : 't_and_c',
 									checked         : true,
 									labelClsExtra   : 'lblRd'
 								},
