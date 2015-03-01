@@ -581,14 +581,13 @@ Ext.define('Rd.controller.cVouchers', {
     pdfExportSubmit: function(button){
         var me      = this;      
         var form    = button.up('form');
-        //Get the format
-        var format  = form.down('cmbPdfFormats').getValue();
-        //Get the language
-        var language = form.down('cmbLanguages').getValue();
-        //Token
-        var token = Ext.util.Cookies.get("Token"); //No token?
 
-        var url_to_add = 'sel_language='+language+"&format="+format+'&token='+token+'&';
+		//Get the values from the form:
+		form_to_string 	= form.getForm().getValues(true);
+        //Token
+        var token 		= Ext.util.Cookies.get("Token"); //No token?
+        var url_to_add 	= form_to_string+'&token='+token+'&';
+		console.log(url_to_add);
 
         //Check for filter
         var filter = me.getGrid().filters.getFilterData();
@@ -601,7 +600,7 @@ Ext.define('Rd.controller.cVouchers', {
         //Check if the 'selected_only' was chosen
         var form = button.up('form');
         if(form.down('checkbox') != undefined){
-            if(form.down('checkbox').getValue()){
+            if(form.down('#selected_only').getValue()){
                 //console.log("Get selection...");
                 var selected = [];
                 Ext.each(me.getGrid().getSelectionModel().getSelection(), function(sr,index){
