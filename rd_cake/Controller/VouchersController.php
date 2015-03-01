@@ -103,36 +103,48 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        App::import('Vendor', 'generic_pdf');
+        //App::import('Vendor', 'generic_pdf');
 		App::import('Vendor', 'voucher_pdf');
         App::import('Vendor', 'label_pdf');
+
         
         $this->response->type('application/pdf');
         $this->layout = 'pdf';
 
-        $language   = '4_4'; //default
-        $format     = 'a4'; 
+		//We improve this function by also allowing the user to specify certain values
+		//which in turn will influence the outcome of the PDF
+		Configure::load('Vouchers');
+ 
+        $output_instr  	= Configure::read('voucher_dafaults'); //Read the defaults
 
-        //Compulsory to know the **format** and **language**
-        if(isset($this->request->query['sel_language'])){
-            $language = $this->request->query['sel_language'];
-        }
+		foreach(array_keys($output_instr) as $k){
+			if(isset($this->request->query[$k])){
+				if(($k == 'language')||($k == 'format')||($k == 'orientation')){
+					$output_instr["$k"] 	= $this->request->query["$k"];
+				}else{
+					$output_instr["$k"] = true;
+				}    
+		    }else{
+				if(!(($k == 'language')||($k == 'format')||($k == 'orientation'))){
+					$output_instr["$k"] = false;
+				}
+			}
+		}
 
-        if(isset($this->request->query['format'])){
-            $format = $this->request->query['format'];
-        }
-        $this->set('format',$format);
+		
 
-        $pieces = explode('_',$language);
+        $pieces = explode('_',$output_instr['language']);
         $l      = ClassRegistry::init('Language');
         $l->contain();
         $l_q    = $l->findById($pieces[1]);
         //print_r($l_q);
         if($l_q['Language']['rtl'] == '1'){
-            $this->set('rtl',true);
+			$output_instr['rtl'] = true;
         }else{
-            $this->set('rtl',false);
+			$output_instr['rtl'] = false;
         }
+
+		$this->set('output_instr',$output_instr);
 
         //==== Selected items is the easiest =====
         //We need to see if there are a selection:
