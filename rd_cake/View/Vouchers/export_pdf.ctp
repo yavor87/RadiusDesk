@@ -1,9 +1,21 @@
 <?php
 
 
-if(($format == 'a4')||($format == 'a4_page')){
+if(($output_instr['format'] == 'a4')||($output_instr['format'] == 'a4_page')){
 
-    $pdf = new GenericPdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	/*We use contants which had default values:
+	TCPDF::__construct 	( 	  	
+			$orientation = 'P',
+		  	$unit = 'mm',
+		  	$format = 'A4',
+		  	$unicode = true,
+		  	$encoding = 'UTF-8',
+		  	$diskcache = false,
+		  	$pdfa = false 
+	) 
+	*/		
+
+    $pdf = new VoucherPdf($output_instr['orientation'], PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
      
     // set document (meta) information
     $pdf->SetCreator(PDF_CREATOR);
@@ -13,33 +25,45 @@ if(($format == 'a4')||($format == 'a4_page')){
     $pdf->SetKeywords(__('Internet Access Voucher'));
      
     $pdf->Title = __("Internet Access Voucher"); 
-    $pdf->setRTL($rtl);
+    $pdf->setRTL($output_instr['rtl']);
+
+	//We attach the output instructions to the PDF
+	$pdf->OutputInstr = $output_instr;
 
     //A4 all vouchers per realm
-    if($format == 'a4'){
+    if($output_instr['format'] == 'a4'){
         foreach(array_keys($voucher_data) as $key){
             $d = $voucher_data["$key"];
-            // add a page
-            $pdf->AddPage();
+
+			//Set logo first as this will be added to header
+          	$pdf->Logo 			= 'img/realms/'.$d['icon_file_name'];
+			$pdf->RealmDetail	= $d;
+
+			// add a page
+            $pdf->AddPage(); 
+			
+			//$pdf->
+
+			//$pdf->addSocialMedia();
             //Define logo
-            $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
-            $pdf->AddRealm($d);
+          //  $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
+          //  $pdf->AddRealm($d);
           //  $pdf->SetXY( 10, 20 );
-            $pdf->AddVouchers($d['vouchers']);
+           // $pdf->AddVouchers($d['vouchers']);
         } 
     }
 
     //A4 page per voucher
-    if($format == 'a4_page'){
+    if($output_instr['format'] == 'a4_page'){
         foreach(array_keys($voucher_data) as $key){
             $d = $voucher_data["$key"];
             foreach($d['vouchers'] as $v){
                 // add a page
                 $pdf->AddPage();
                 //Define logo
-                $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
-                $pdf->AddRealm($d);
-                $pdf->AddVouchers(array($v));
+              //  $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
+             //   $pdf->AddRealm($d);
+              //  $pdf->AddVouchers(array($v));
             }
         } 
     }
@@ -47,8 +71,8 @@ if(($format == 'a4')||($format == 'a4_page')){
     $pdf->Output('test.pdf', 'I');
 }else{
     App::import('Vendor', 'label_pdf');
-    $pdf = new LabelPdf($format);
-    $pdf->setRTL($rtl);
+    $pdf = new LabelPdf($output_instr['format']);
+    $pdf->setRTL($output_instr['rtl']);
     $pdf->AddPage();
     foreach(array_keys($voucher_data) as $key){
         $d = $voucher_data["$key"];
