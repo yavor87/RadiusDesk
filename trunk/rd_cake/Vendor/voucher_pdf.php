@@ -7,6 +7,7 @@ class VoucherPdf extends TCPDF {
     var $Logo           = 'img/realms/logo.jpg';       //Default Logo
     var $Title          = 'Set The Title';
     var $Language       = 'en';
+
 	//We specify a max hight and max width for the logo - beyond that we force a scale
 	var $logo_max_x_px	= 800;
 	var $logo_max_y_px	= 100;
@@ -15,7 +16,21 @@ class VoucherPdf extends TCPDF {
 	var $incl_logo		= true;
 	var $incl_title		= true;
 
+	var $padding		= 10;
+	var $t_and_c_start	= false;
+
 	var $OutputInstr	= array(); //Dummy value - will be set just after instantiation
+
+	//Global style to use for QR
+	var	$QrStyle		= array(
+			'border' 		=> 2,
+			'vpadding' 		=> 'auto',
+			'hpadding' 		=> 'auto',
+			'fgcolor' 		=> array(0,0,0),
+			'bgcolor' 		=> false, //array(255,255,255)
+			'module_width' 	=> 1, // width of a single module in points
+			'module_height' => 1 // height of a single module in points
+	);
 
 	public function Header() {
 
@@ -48,19 +63,9 @@ class VoucherPdf extends TCPDF {
 			$this->_doRealmDetail();
 		}
 
-/*
-		$style = array(
-			'border' => 2,
-			'vpadding' => 'auto',
-			'hpadding' => 'auto',
-			'fgcolor' => array(0,0,0),
-			'bgcolor' => false, //array(255,255,255)
-			'module_width' => 1, // width of a single module in points
-			'module_height' => 1 // height of a single module in points
-		);
-
-*/
-		//$this->write2DBarcode('www.radiusdesk.com', 'QRCODE,L', 20, 30, 20, 20, $style, 'N');
+		if($this->OutputInstr['t_and_c']){
+			$this->_doTC();
+		}
 		
 	}
 
@@ -123,24 +128,39 @@ class VoucherPdf extends TCPDF {
 
 	private function _doSocialMedia(){
 
-		
+		$sm = array();
 
-		//Calculate the amount of items we will fit into a row
-		$sm = array(
-			array('name' 	=> 'facebook', 		'url' => "http://facebook.com"),
-			array('name' 	=> 'twitter', 		'url' => 'http://twitter.com'),
-			array('name' 	=> 'youtube',		'url' => 'http://youtube.com'),
-			array('name' 	=> 'google_plus',	'url' => 'http://google.com'),
-			//array('name' 	=> 'linkedin',	    'url' => 'http://linkedin.com'),
-		);
+		$fields = array('facebook','twitter','google_plus','youtube','linkedin');
+
+		if($this->CurOrientation == 'P'){
+			$limit = 4;
+		}else{
+			$limit = 5;
+		}
+
+		$count = 1;
+		foreach($fields as $f){	
+			if($count <= $limit){
+				if($this->RealmDetail["$f"] != ''){
+					$count++;
+					$url = $this->RealmDetail["$f"];
+					array_push($sm,array('name' 	=> "$f", 		'url' => "$url"));
+				}
+			}
+		}
 
 		//Find out how many there are
 		$sm_items = count($sm);
 
+		if($sm_items == 0){
+			$this->OutputInstr['social_media'] = false; //There is nothing so it should be false for subsequent spacings
+			return;
+		}
+
 		$page_width 	= $this->w;
 		$section		= $page_width / $sm_items;
 		$padding		= 10;
-		$y_start		= 45;
+		$y_start		= 44;
 		$width			= 35;
 
 		$height         = 17;               //Hight of borders
@@ -153,17 +173,7 @@ class VoucherPdf extends TCPDF {
 
 			$this->Image(WWW_ROOT."img/social_media/".$s['name'].'.png', $x_start+$radius, $y_start+1, 10,10, '', false, '', true, 300, '', false, false, 0, false, false, false);
 
-			$style = array(
-				'border' => 2,
-				'vpadding' => 'auto',
-				'hpadding' => 'auto',
-				'fgcolor' => array(0,0,0),
-				'bgcolor' => false, //array(255,255,255)
-				'module_width' => 1, // width of a single module in points
-				'module_height' => 1 // height of a single module in points
-			);
-
-			$this->write2DBarcode($s['url'], 'QRCODE,L', $x_start+$width-$radius-15, $y_start+1, 15, 15, $style, 'N');
+			$this->write2DBarcode($s['url'], 'QRCODE,L', $x_start+$width-$radius-15, $y_start+1, 15, 15, $this->QrStyle, 'N');
 
 			//Increase the offset
 			$x_start = $x_start + $section;
@@ -183,13 +193,24 @@ class VoucherPdf extends TCPDF {
        
         //===== 2 x Borders =======
         //We start by placing two rounded borders which within we will place the realm info.
-        $x_start        = $this->w - 200;   //Page width minus 200 start X position
+
+		$page_width 	= $this->w;
+		$section		= $page_width / 2;
+		$padding		= 10;
+
+        $x_start        = $padding;   		
         $x_txt          = $x_start+5;
 
-        $x_start_mid    = $this->w - 100;   //Middle of page start position
+        $x_start_mid    = $section+$padding;   //Middle of page start position
         $x_mid_txt      = $x_start_mid+5;
 
-        $y_start        = 70;               //Start Y position of the borders
+		if($this->OutputInstr['social_media']){
+			$y_start        = 65;               //Start Y position of the borders
+		}else{
+			$y_start        = 44;               //Start Y position of the borders
+		}
+
+        
         $y_txt          = $y_start+2;
         $width          = 90;               //How wide the borders will be
         $height         = 35;               //Hight of borders
@@ -257,52 +278,207 @@ class VoucherPdf extends TCPDF {
             $this->SetFont($font_type_2,$font_format_i,8);
             $this->Cell($cell_width,3,$d['fax'].' ('.__('cell').')',$cell_outline,2);
         }
-    
+
+		$this->write2DBarcode($d['url'], 'QRCODE,L', $x_mid_txt+60, $y_start+10, 20, 20, $this->QrStyle, 'N');
 	}
 
-	public function addSocialMedia(){
+	private function  _doTC(){
 
+		$font_type_1    = 'dejavusans';
+        $font_type_2    = 'dejavusans';
+        $font_encode    = 'windows-1252';
+        $font_format_b  = 'B';
+        $font_format_i  = '';
+		$this->SetFont($font_type_2,$font_format_i,8);
+
+		if($this->RealmDetail['t_c_title'] != ''){
+			$t_and_c_formatted = "<h2>".$this->RealmDetail['t_c_title']."</h2><ul>";
+		}else{
+			$t_and_c_formatted = "<ul>";
+		}
+
+		$t_c['content']	= explode("\n", $this->RealmDetail['t_c_content']);
+		$content_rows	= count($t_c['content']);
+
+		if($content_rows == 0){
+			$this->OutputInstr['t_and_c'] = false; //There is nothing so it should be false for subsequent spacings
+			return;
+		}
+
+		$h 	= $this->h;
+		$y	= $h-26-($content_rows*4);
+
+		$this->t_and_c_start = $y;
+
+		$this->SetXY( 10, $y);
+
+		foreach($t_c['content'] as $i){
+			if($i != ''){
+				$t_and_c_formatted = $t_and_c_formatted."<li>".$i."</li>";
+			}
+		}
+
+		$t_and_c_formatted = $t_and_c_formatted.'</ul>';
+
+		// output the HTML content
+		$this->writeHTML($t_and_c_formatted, true, false, true, false, '');
+
+	}
+
+	  //This will loop throug the vouchers, creating them
+    function addVouchers($vouchers)
+    {
+        //Initial positioning
+		$this->x_start = $this->padding;
+		$this->_determine_y_start();
+
+        foreach($vouchers as $i){
+
+		//	print_r($i);
+            $this->_addVoucher($i);
+        }
+    }
+
+    //Voucher detail window
+    private function _addVoucher($voucher)
+    {
+
+		$columns = 2;
+		if($this->CurOrientation == 'L'){
+			$columns = 3;
+		}
+       
 		$page_width 	= $this->w;
-		$mid_page		= $page_width / 2;
+		$section		= $page_width / $columns;
 		$padding		= 10;
-		$y_start		= 40;
-		$width			= $mid_page - (2*$padding);
+		$width			= 80;
 
-			//===== 2 x Borders =======
-        //We start by placing two rounded borders which within we will place the realm info.
-    
-       // $width          = 90;               //How wide the borders will be
-        $height         = 22;               //Hight of borders
+		$height         = 30;               //Hight of borders
         $radius         = 2.5;              //Radius of corners
 
+		$font_type      = 'dejavusans';
+        $font_encode    = 'windows-1252';
+        $font_format_b  = 'B';
+        $font_format_i  = '';
 
-        //Border starts left side of page
-        $this->RoundedRect($padding,$y_start,$width,$height,$radius,'1111','',
-            array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(122, 122, 143)),array());
+		$text_size      = 8;    //Up this value to increase the text inside the voucher
+        $cell_height    = 4;    //Up this value to increase the space between the lines in the voucher
 
-        //Border starts in middle of page
-        $this->RoundedRect($mid_page+$padding,$y_start,$width,$height,$radius,'1111','',
-            array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(122, 122, 143)),array());
+        $this->RoundedRect($this->x_start,$this->y_start,$width,$height,$radius,'1111','',
+            array('width' => 0.2, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(122, 122, 143)),array());
 
-		//Place the image:
-		$this->Image(WWW_ROOT."img/social_media/facebook.png", $padding+$radius, $y_start+2, 15,15, '', false, '', true, 300, '', false, false, 0, false, false, false);
+		$this->SetXY( $this->x_start,$this->y_start);
+        $this->SetFont( $font_type, $font_format_b, 10);
+		$this->SetTextColor(157,157,167);
+        $this->Cell($width,5, $this->Title, 0, 2, "C");
+		 $this->SetTextColor(0,0,0);
 
-		$this->Image(WWW_ROOT."img/social_media/twitter.png", $mid_page+$padding+$radius, $y_start+2, 15,15, '', false, '', true, 300, '', false, false, 0, false, false, false);
+		if($voucher['username'] == $voucher['password']){	//Assume single field
 
+			$this->SetX($this->x_start+2);
+			$this->SetFont( 'dejavusans','', 11);
+			$this->Cell(20,$cell_height, __("Voucher"), 0, 0, "L");
 
-		$style = array(
-			'border' => 2,
-			'vpadding' => 'auto',
-			'hpadding' => 'auto',
-			'fgcolor' => array(0,0,0),
-			'bgcolor' => false, //array(255,255,255)
-			'module_width' => 1, // width of a single module in points
-			'module_height' => 1 // height of a single module in points
-		);
+			$this->SetFont( 'dejavusans', $font_format_b, 11);
+			$this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
 
-		$this->write2DBarcode('www.facebook.com', 'QRCODE,L', $padding+$width-$radius-20, $y_start+1, 20, 20, $style, 'N');
+		}else{
+			$this->SetX($this->x_start+2);
+			$this->SetFont( 'dejavusans','', 8);
+			$this->Cell(22,$cell_height, __("Username"), 0, 0, "L");
 
-		$this->write2DBarcode('www.twitter.com', 'QRCODE,L', $mid_page+$padding+$width-$radius-20, $y_start+1, 20, 20, $style, 'N');
+			$this->SetFont( 'dejavusans', $font_format_b, 8);
+			$this->Cell(30,$cell_height, $voucher['username'], 0, 2, "L");
+
+			//--Password----
+			$this->SetFont( 'dejavusans', '', 8);
+			$this->SetX($this->x_start+2);
+			$this->Cell(22,$cell_height,__("Password"), 0, 0, "L");
+
+			$this->SetFont('dejavusans', $font_format_b, 8);
+			$this->Cell(30,$cell_height, $voucher['password'], 0, 2, "L");
+		}
+
+		if($this->OutputInstr['profile_detail']){
+			//Profile
+			$this->SetTextColor(157,157,167);
+			$this->SetFont( $font_type, $font_format_i, $text_size);
+			$this->SetX($this->x_start+2);
+			$this->Cell(20,$cell_height,__("Profile") , 0, 0, "L");
+
+			$this->SetFont( $font_type, $font_format_b, $text_size);
+			$this->Cell(30,$cell_height, $voucher['profile'], 0, 2, "L");
+
+			//---Duration---
+			//Do not print the days_valid if it is not specified....
+			if($voucher['days_valid'] != ''){
+
+				$this->SetFont( $font_type, $font_format_i, $text_size);
+				$this->SetX($this->x_start+2);
+				$this->Cell(20,$cell_height,__("Valid for") , 0, 0, "L");
+
+				$this->SetFont( $font_type, $font_format_b, $text_size);
+				$this->Cell(30,$cell_height, $voucher['days_valid'], 0, 2, "L");
+			}
+
+			//---Expiry Date---
+			if($voucher['expiration'] != ''){
+				$this->SetFont( $font_type, $font_format_i, $text_size);
+				$this->SetX($this->x_start+2);
+				$this->Cell(20,$cell_height,__("Expiry date") , 0, 0, "L");
+
+				$this->SetFont( $font_type, $font_format_b, $text_size);
+				$this->Cell(30,$cell_height, $voucher['expiration'], 0, 2, "L");
+			}
+			//Reset again
+			$this->SetTextColor(0,0,0);
+		}
+
+		if($voucher['username'] == $voucher['password']){	//Assume single field
+			//Only for the passphrases
+			if($this->OutputInstr['q_r']){
+				$this->write2DBarcode(
+					$voucher['username'], 
+					'QRCODE,L', 
+					$this->x_start+58, 
+					$this->y_start+7, 20, 20, $this->QrStyle, 'N');
+			}
+		}
+
+		if(($this->x_start+$width+$this->padding+10) < ($this->w)){
+			$this->x_start	= $this->x_start + $section;
+		}else{
+			$this->x_start = $this->padding;
+			$this->y_start = $this->y_start + 40;
+
+			if(($this->t_and_c_start)&&(($this->y_start+$height+3) > $this->t_and_c_start)){
+				//New page pappie
+				$this->AddPage();
+				$this->x_start = $this->padding;
+				$this->_determine_y_start();
+			}else{
+				if(($this->y_start+$height+3) > $this->w){
+					$this->AddPage();
+					$this->x_start = $this->padding;
+					$this->_determine_y_start();
+				}
+			}
+		}
+
+    }
+
+	private function _determine_y_start(){
+
+		//Where we start on the page depends on whether we included the social media and or realms info
+
+		$this->y_start 	= 45; //No social media or Realm info
+		if($this->OutputInstr['social_media']){
+			$this->y_start = $this->y_start + 25;
+		}
+
+		if($this->OutputInstr['realm_detail']){
+			$this->y_start = $this->y_start + 40;
+		}
 	}
 
 }
