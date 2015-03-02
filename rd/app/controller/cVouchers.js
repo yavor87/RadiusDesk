@@ -599,7 +599,7 @@ Ext.define('Rd.controller.cVouchers', {
 
         //Check if the 'selected_only' was chosen
         var form = button.up('form');
-        if(form.down('checkbox') != undefined){
+        if(form.down('#selected_only') != undefined){
             if(form.down('#selected_only').getValue()){
                 //console.log("Get selection...");
                 var selected = [];
