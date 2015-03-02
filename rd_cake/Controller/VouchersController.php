@@ -103,7 +103,6 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        //App::import('Vendor', 'generic_pdf');
 		App::import('Vendor', 'voucher_pdf');
         App::import('Vendor', 'label_pdf');
 
