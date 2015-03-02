@@ -40,16 +40,9 @@ if(($output_instr['format'] == 'a4')||($output_instr['format'] == 'a4_page')){
 			$pdf->RealmDetail	= $d;
 
 			// add a page
-            $pdf->AddPage(); 
-			
-			//$pdf->
-
-			//$pdf->addSocialMedia();
-            //Define logo
-          //  $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
-          //  $pdf->AddRealm($d);
-          //  $pdf->SetXY( 10, 20 );
-           // $pdf->AddVouchers($d['vouchers']);
+            $pdf->AddPage();
+			// do the vouchers
+            $pdf->AddVouchers($d['vouchers']);
         } 
     }
 
