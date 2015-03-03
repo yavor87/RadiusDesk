@@ -88,26 +88,36 @@ class VoucherPdf extends TCPDF {
 		list($width, $height, $type, $attr) = getimagesize(WWW_ROOT.$this->Logo);
 
 		if($width > $this->logo_max_x_px){ //If it is to wide - we make it less wide
-			$we_do = 'x scaling';
-			$w 		= $this->logo_max_x_px / $this->px_to_mm;
-			$h		= 0;
+		
+			//Scale if ceiling is hit
+			if($height > $this->logo_max_y_px){
+				$h		= $this->logo_max_y_px / $this->px_to_mm;
+				$w		= 0;
+			}else{
+				$h 		= 0;
+				$w 		= $this->logo_max_x_px / $this->px_to_mm;
+			}
 
 		}elseif($height > $this->logo_max_y_px){ //If it is to high - we make it less high
-			$we_do = 'y scaling';
-			$w 		= 0;
-			$h		= $this->logo_max_y_px / $this->px_to_mm;
+
+			//Scale if ceiling is hit
+			if($width > $this->logo_max_x_px){
+				$w		= $this->logo_max_x_px / $this->px_to_mm;
+				$h		= 0;
+			}else{
+				$w 		= 0;
+				$h		= $this->logo_max_y_px / $this->px_to_mm;
+			}
 
 		}else{ //it fits both sides - Normal size here
 			$this->setImageScale(1.53);
 			$w		= 0;
 			$h		= 0;
-
 		}
 
 		// Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='',
 		// $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
-		$this->Image(WWW_ROOT.$this->Logo, 0, 16, $w, $h, '', false, 'N', true, 300, 'C', false, false, 0, false, false, false);
-
+		$this->Image(WWW_ROOT.$this->Logo, 0, 4, $w, $h, '', false, 'N', true, 300, 'C', false, false, 0, false, false, false);
 	}
 
 	private function _setBasics(){
@@ -371,7 +381,7 @@ class VoucherPdf extends TCPDF {
         $this->SetFont( $font_type, $font_format_b, 10);
 		$this->SetTextColor(157,157,167);
         $this->Cell($width,5, $this->Title, 0, 2, "C");
-		 $this->SetTextColor(0,0,0);
+		$this->SetTextColor(0,0,0);
 
 		if($voucher['username'] == $voucher['password']){	//Assume single field
 
@@ -457,7 +467,7 @@ class VoucherPdf extends TCPDF {
 				$this->x_start = $this->padding;
 				$this->_determine_y_start();
 			}else{
-				if(($this->y_start+$height+3) > $this->w){
+				if(($this->y_start+$height+10) > $this->h){ //Up the space he a bit 
 					$this->AddPage();
 					$this->x_start = $this->padding;
 					$this->_determine_y_start();
