@@ -203,7 +203,10 @@ Ext.application({
 			icnConfigure	: 57583,
 			icnWatch		: 57628,
 			icnStar			: 57585,
-			icnGrid			: 57600
+			icnGrid			: 57600,
+			icnFacebook		: 57558,
+			icnGoogle		: 57614,
+			icnTwitter		: 57574
         };
     },
     addUx: function(){

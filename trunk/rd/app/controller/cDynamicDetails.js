@@ -53,10 +53,15 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
         'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect',
-		'dynamicDetails.cmbThemes'       
+		'dynamicDetails.cmbThemes',			'components.cmbPermanentUsers',				'components.cmbRealms',
+		'components.cmbProfiles',			'dynamicDetails.pnlDynamicDetailSocialLogin'       
     ],
-    stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers', 'sThemes'],
-    models: ['mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 'mDynamicPage', 'mDynamicPair', 'mTheme'],
+    stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers', 'sThemes', 'sPermanentUsers','sProfiles','sRealms'],
+    models: [
+		'mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 
+		'mDynamicPage', 'mDynamicPair', 'mTheme','mPermanentUser',
+		'mProfile',		'mRealm'
+	],
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/dynamic_details/add.json',
@@ -77,7 +82,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlAddPair:         '/cake2/rd_cake/dynamic_details/add_pair.json',
         urlEditPair:        '/cake2/rd_cake/dynamic_details/edit_pair.json',
         urlPreviewMobile:   '/cake2/rd_cake/dynamic_details/preview_chilli_mobile',
-        urlPreviewDesktop:  '/cake2/rd_cake/dynamic_details/preview_chilli_desktop'
+        urlPreviewDesktop:  '/cake2/rd_cake/dynamic_details/preview_chilli_desktop',
+		urlViewSocial:		'/cake2/rd_cake/dynamic_details/view_social_login.json',
+		urlEditSocial:		'/cake2/rd_cake/dynamic_details/edit_social_login.json'
     },
     refs: [
          {  ref:    'grid',           selector:   'gridDynamicDetails'}
@@ -272,6 +279,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabClickToConect': {
                 activate:       me.tabDetailActivate
             },
+			'pnlDynamicDetail #tabSocialLogin': {
+                activate:       me.tabSocialLoginActivate
+            },
             'pnlDynamicDetail pnlDynamicDetailSettings #save' : {
                 click:  function(b){
                     var me = this;
@@ -282,6 +292,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 click:  function(b){
                     var me = this;
                     me.editSubmit(b,me.urlEditClickToConnect);
+                }
+            },
+			'pnlDynamicDetail pnlDynamicDetailSocialLogin #save' : {
+                click:  function(b){
+                    var me = this;
+                    me.editSubmit(b,me.urlEditSocial);
                 }
             }    
         });
@@ -1391,5 +1407,12 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 window.open(me.urlPreviewDesktop+"?dynamic_id="+record.getId())
             }         
         }
+    },
+	tabSocialLoginActivate : function(tab){
+        var me      = this;
+		console.log("lllll");
+        var form    = tab.down('form');
+        var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
+        form.load({url:me.urlViewSocial, method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
     }
 });
