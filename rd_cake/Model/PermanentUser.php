@@ -236,6 +236,14 @@ class PermanentUser extends AppModel {
 		if(array_key_exists('auto_add',$this->data['PermanentUser'])){ 
             $this->_add_radcheck_item($username,'Rd-Auto-Mac',1);
         }
+
+		//If this is an LDAP user
+		if(array_key_exists('auth_type',$this->data['PermanentUser'])){ 
+			if($this->data['PermanentUser']['auth_type'] != 'sql'){ //SQL is the default so we do not need to add the default
+            	$this->_add_radcheck_item($username,'Rd-Auth-Type',$this->data['PermanentUser']['auth_type']);
+			}
+        }
+
     }
 
     private function _radius_format_date($d){
