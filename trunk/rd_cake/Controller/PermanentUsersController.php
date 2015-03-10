@@ -581,6 +581,15 @@ class PermanentUsersController extends AppController {
 	                array('Radreply.username' => $username,'Radreply.attribute' => 'Framed-IP-Address'), false
 	            );
 			}
+
+			//Auth Type (for LDAP users)
+			if(isset($this->request->data['auth_type'])){
+                $this->_replace_radcheck_item($username,'Rd-Auth-Type',$this->request->data['auth_type']);
+            }else{              //Clean up if there were previous ones
+                ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Auth-Type'), false
+                );
+            }
 		
 			//Finally update the user's table entry of the permanent user
 			$this->PermanentUser->save($this->request->data);
