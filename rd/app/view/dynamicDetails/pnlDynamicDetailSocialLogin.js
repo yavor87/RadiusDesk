@@ -54,21 +54,23 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSocialLogin', {
 									{
 								        xtype       : 'textfield',
 								        name        : "id",
-								        hidden      : true
+								        hidden      : true,
+										value		: me.dynamic_detail_id
 								    },
 									{
 								        xtype       : 'checkbox',      
 								        fieldLabel  : 'Enable',
 								        itemId      : 'chkEnableSocialLogin',
-								        name        : 'enable_social_login',
-								        inputValue  : 'enable_social_login',
+								        name        : 'social_enable',
+								        inputValue  : 'social_enable',
 								        checked     : true,
 								        labelClsExtra: 'lblRdReq'
 								    },
 									{
 										xtype       : 'cmbPermanentUser',
 										fieldLabel  : 'Temp login user',
-										allowBlank  : true
+										allowBlank  : true,
+										name		: 'social_temp_permanent_user_id'
 									}
                                 ]
                             },
