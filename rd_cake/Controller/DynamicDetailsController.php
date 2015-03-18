@@ -1268,9 +1268,77 @@ class DynamicDetailsController extends AppController {
 
 		//FIXME: Complete code
 
-		$this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
+		 //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $this->{$this->modelClass}->contain(array('DynamicDetailSocialLogin' => array('Realm.name','Profile.name'),'PermanentUser.username'));
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_detail_id']);
+			//print_r($q_r);
+
+            if($q_r){
+                
+				$items['social_enable']    					= $q_r['DynamicDetail']['social_enable'];
+				$items['id']    							= $q_r['DynamicDetail']['id'];
+				$items['social_temp_permanent_user_id'] 	= intval($q_r['DynamicDetail']['social_temp_permanent_user_id']);
+				$items['social_temp_permanent_user_name'] 	= $q_r['PermanentUser']['username'];
+
+				//Some default values
+
+				foreach($q_r['DynamicDetailSocialLogin'] as $i){
+
+					if($i['name'] == 'facebook'){
+						$items['fb_enable'] 		= $i['enable'];
+						$items['fb_record_info'] 	= $i['record_info'];
+						$items['fb_id'] 			= $i['key'];
+						$items['fb_secret'] 		= $i['secret'];
+						$items['fb_active'] 		= $i['enable'];
+						$items['fb_profile'] 	    = intval($i['profile_id']);
+						$items['fb_profile_name'] 	= $i['Profile']['name'];
+						$items['fb_realm'] 			= intval($i['realm_id']);
+						$items['fb_realm_name'] 	= $i['Realm']['name'];
+						$items['fb_voucher_or_user']= $i['type'];
+					}
+
+					if($i['name'] == 'google'){
+						$items['gp_enable'] 		= $i['enable'];
+						$items['gp_record_info'] 	= $i['record_info'];
+						$items['gp_id'] 			= $i['key'];
+						$items['gp_secret'] 		= $i['secret'];
+						$items['gp_active'] 		= $i['enable'];
+						$items['gp_profile'] 	    = intval($i['profile_id']);
+						$items['gp_profile_name'] 	= $i['Profile']['name'];
+						$items['gp_realm'] 			= intval($i['realm_id']);
+						$items['gp_realm_name'] 	= $i['Realm']['name'];
+						$items['gp_voucher_or_user']= $i['type'];
+					}
+
+					if($i['name'] == 'twitter'){
+						$items['tw_enable'] 		= $i['enable'];
+						$items['tw_record_info'] 	= $i['record_info'];
+						$items['tw_id'] 			= $i['key'];
+						$items['tw_secret'] 		= $i['secret'];
+						$items['tw_active'] 		= $i['enable'];
+						$items['tw_profile'] 	    = intval($i['profile_id']);
+						$items['tw_profile_name'] 	= $i['Profile']['name'];
+						$items['tw_realm'] 			= intval($i['realm_id']);
+						$items['tw_realm_name'] 	= $i['Realm']['name'];
+						$items['tw_voucher_or_user']= $i['type'];
+					}
+				}
+               
+            }
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
         ));
 	}
 
@@ -1416,58 +1484,64 @@ class DynamicDetailsController extends AppController {
 				return;
 			}
 
-			//Facebook
-			$fb_data = array();
-			$fb_data['name'] 				= 'facebook';
-			$fb_data['dynamic_detail_id'] 	= $id;
-			$fb_data['profile_id'] 			= $this->request->data["fb_profile"];
-			$fb_data['type'] 				= $this->request->data["fb_voucher_or_user"];
-			$fb_data['key'] 				= $this->request->data["fb_id"];
-			$fb_data['secret'] 				= $this->request->data["fb_secret"];
-			$fb_data['realm_id'] 			= $this->request->data["fb_realm"];
-			$fb_data['secret'] 				= $this->request->data["fb_secret"];
-			$fb_data['record_info']			= $this->request->data["fb_record_info"];
-			$fb_data['enable']				= $this->request->data["fb_enable"];
+			if($this->request->data['fb_enable'] == 1){
+				//Facebook
+				$fb_data = array();
+				$fb_data['name'] 				= 'facebook';
+				$fb_data['dynamic_detail_id'] 	= $id;
+				$fb_data['profile_id'] 			= $this->request->data["fb_profile"];
+				$fb_data['type'] 				= $this->request->data["fb_voucher_or_user"];
+				$fb_data['key'] 				= $this->request->data["fb_id"];
+				$fb_data['secret'] 				= $this->request->data["fb_secret"];
+				$fb_data['realm_id'] 			= $this->request->data["fb_realm"];
+				$fb_data['secret'] 				= $this->request->data["fb_secret"];
+				$fb_data['record_info']			= $this->request->data["fb_record_info"];
+				$fb_data['enable']				= $this->request->data["fb_enable"];
 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($fb_data);
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($fb_data);
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+			}
 
-			//Google Plus
-			$gp_data = array();
-			$gp_data['name'] 				= 'google';
-			$fb_data['dynamic_detail_id'] 	= $id;
-			$gp_data['profile_id'] 			= $this->request->data["gp_profile"];
-			$gp_data['type'] 				= $this->request->data["gp_voucher_or_user"];
-			$gp_data['key'] 				= $this->request->data["gp_id"];
-			$gp_data['secret'] 				= $this->request->data["gp_secret"];
-			$gp_data['realm_id'] 			= $this->request->data["gp_realm"];
-			$gp_data['secret'] 				= $this->request->data["gp_secret"];
-			$gp_data['record_info']			= $this->request->data["gp_record_info"];
-			$gp_data['enable']				= $this->request->data["gp_enable"];
+			if($this->request->data['gp_enable'] == 1){
 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($gp_data);
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+				//Google Plus
+				$gp_data = array();
+				$gp_data['name'] 				= 'google';
+				$gp_data['dynamic_detail_id'] 	= $id;
+				$gp_data['profile_id'] 			= $this->request->data["gp_profile"];
+				$gp_data['type'] 				= $this->request->data["gp_voucher_or_user"];
+				$gp_data['key'] 				= $this->request->data["gp_id"];
+				$gp_data['secret'] 				= $this->request->data["gp_secret"];
+				$gp_data['realm_id'] 			= $this->request->data["gp_realm"];
+				$gp_data['secret'] 				= $this->request->data["gp_secret"];
+				$gp_data['record_info']			= $this->request->data["gp_record_info"];
+				$gp_data['enable']				= $this->request->data["gp_enable"];
 
-			//Twitter
-			$tw_data = array();
-			$tw_data['name'] 				= 'twitter';
-			$tw_data['dynamic_detail_id'] 	= $id;
-			$tw_data['profile_id'] 			= $this->request->data["tw_profile"];
-			$tw_data['type'] 				= $this->request->data["tw_voucher_or_user"];
-			$tw_data['key'] 				= $this->request->data["tw_id"];
-			$tw_data['secret'] 				= $this->request->data["tw_secret"];
-			$tw_data['realm_id'] 			= $this->request->data["tw_realm"];
-			$tw_data['secret'] 				= $this->request->data["tw_secret"];
-			$tw_data['record_info']			= $this->request->data["tw_record_info"];
-			$tw_data['enable']				= $this->request->data["tw_enable"];
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($gp_data);
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+			}
 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($tw_data);
-			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+			if($this->request->data['tw_enable'] == 1){
 
-		
+				//Twitter
+				$tw_data = array();
+				$tw_data['name'] 				= 'twitter';
+				$tw_data['dynamic_detail_id'] 	= $id;
+				$tw_data['profile_id'] 			= $this->request->data["tw_profile"];
+				$tw_data['type'] 				= $this->request->data["tw_voucher_or_user"];
+				$tw_data['key'] 				= $this->request->data["tw_id"];
+				$tw_data['secret'] 				= $this->request->data["tw_secret"];
+				$tw_data['realm_id'] 			= $this->request->data["tw_realm"];
+				$tw_data['secret'] 				= $this->request->data["tw_secret"];
+				$tw_data['record_info']			= $this->request->data["tw_record_info"];
+				$tw_data['enable']				= $this->request->data["tw_enable"];
+
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($tw_data);
+				$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+			}
 
             $this->set(array(
                 'success' => true,
