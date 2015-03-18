@@ -53,7 +53,10 @@ class DynamicDetail extends AppModel {
         ),
         'DynamicDetailNote' => array(
             'dependent' => true
-        )
+        ),
+		'DynamicDetailSocialLogin' => array(
+			'dependent' => true
+		),
 	);
 
     public $belongsTo = array(
@@ -80,4 +83,5 @@ class DynamicDetail extends AppModel {
         }
         return $alias;
     }
+
 }
