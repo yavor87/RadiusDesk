@@ -1140,7 +1140,7 @@ Ext.define('Rd.controller.cVouchers', {
         }
     },
     renderEventRealm: function(cmb){
-        var me                      = this;
+        var me                  = this;
         var pnlPu               = cmb.up('pnlVoucher');
         pnlPu.cmbRealmRendered  = true;
         if(pnlPu.record != undefined){

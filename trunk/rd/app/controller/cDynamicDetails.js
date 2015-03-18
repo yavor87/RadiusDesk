@@ -53,8 +53,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
         'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect',
-		'dynamicDetails.cmbThemes',			'components.cmbPermanentUsers',				'components.cmbRealms',
-		'components.cmbProfiles',			'dynamicDetails.pnlDynamicDetailSocialLogin'       
+		'dynamicDetails.cmbThemes',			'components.cmbPermanentUser',				'components.cmbRealm',
+		'components.cmbProfile',			'dynamicDetails.pnlDynamicDetailSocialLogin'       
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree','sWallpapers', 'sThemes', 'sPermanentUsers','sProfiles','sRealms'],
     models: [
@@ -299,7 +299,16 @@ Ext.define('Rd.controller.cDynamicDetails', {
                     var me = this;
                     me.editSubmit(b,me.urlEditSocial);
                 }
-            }    
+            },/*
+			'pnlDynamicDetailSocialLogin #socialTempUser' : {
+                render:  me.renderEventSocialTempUser
+            },
+            'pnlDynamicDetailSocialLogin #fbRealm' : {
+                render:      me.renderEventFbRealm
+            },
+			'pnlDynamicDetailSocialLogin #profile' : {
+                render:  me.renderEventFbProfile
+            }*/
         });
     },
     reload: function(){
@@ -535,7 +544,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         url: me.urlDelete,
                         method: 'POST',          
                         jsonData: list,
-                        success: function(batch,options){console.log('success');
+                        success: function(batch,options){
                             Ext.ux.Toaster.msg(
                                 i18n('sItem_deleted'),
                                 i18n('sItem_deleted_fine'),
@@ -1410,9 +1419,112 @@ Ext.define('Rd.controller.cDynamicDetails', {
     },
 	tabSocialLoginActivate : function(tab){
         var me      = this;
-		console.log("lllll");
         var form    = tab.down('form');
         var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
-        form.load({url:me.urlViewSocial, method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
+
+		Ext.define('SocialForm', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{name: 'id',       							type: 'int'},
+				{name: 'social_temp_permanent_user_id',     type: 'int'},
+				{name: 'social_temp_permanent_user_name',   type: 'string'},
+				{name: 'social_enable',    					type: 'boolean', defaultValue: false},
+				{name: 'fb_enable',    					    type: 'boolean', defaultValue: false},
+				{name: 'fb_record_info',    				type: 'boolean', defaultValue: false},
+				{name: 'fb_id',    							type: 'string'},
+				{name: 'fb_secret',    						type: 'string'},
+				{name: 'fb_profile',    					type: 'int'},
+				{name: 'fb_profile_name',    				type: 'string'},
+				{name: 'fb_realm',    						type: 'int'},
+				{name: 'fb_realm_name',    					type: 'string'},
+				{name: 'fb_voucher_or_user',    			type: 'string'},
+				{name: 'gp_enable',    					    type: 'boolean', defaultValue: false},
+				{name: 'gp_record_info',    				type: 'boolean', defaultValue: false},
+				{name: 'gp_id',    							type: 'string'},
+				{name: 'gp_secret',    						type: 'string'},
+				{name: 'gp_profile',    					type: 'int'},
+				{name: 'gp_profile_name',    				type: 'string'},
+				{name: 'gp_realm',    						type: 'int'},
+				{name: 'gp_realm_name',    					type: 'string'},
+				{name: 'gp_voucher_or_user',    			type: 'string'},
+				{name: 'tw_enable',    					    type: 'boolean', defaultValue: false},
+				{name: 'tw_record_info',    				type: 'boolean', defaultValue: false},
+				{name: 'tw_id',    							type: 'string'},
+				{name: 'tw_secret',    						type: 'string'},
+				{name: 'tw_profile',    					type: 'int'},
+				{name: 'tw_profile_name',    				type: 'string'},
+				{name: 'tw_realm',    						type: 'int'},
+				{name: 'tw_realm_name',    					type: 'string'},
+				{name: 'tw_voucher_or_user',    			type: 'string'}
+			]
+		});
+
+		//Fetch the info for this tab manually and load the combo's and form
+		Ext.Ajax.request({
+            url		: me.urlViewSocial,
+            method	: 'GET',
+			params	:{dynamic_detail_id:dynamic_detail_id},
+            success	: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                   
+					var instance = Ext.create('SocialForm', jsonData.data);
+					form.loadRecord(instance);
+					//temp username 
+					var tu_id   = instance.get('social_temp_permanent_user_id');
+					var tu_n    = instance.get('social_temp_permanent_user_name');
+
+					var tu_rec   = Ext.create('Rd.model.mPermanentUser', {username: tu_n, id: tu_id});
+					form.down('#socialTempUser').getStore().loadData([tu_rec],false);
+					form.down('#socialTempUser').setValue(tu_id);
+
+					//fb profile
+					var fb_p_id     = instance.get('fb_profile');
+					var fb_p_name   = instance.get('fb_profile_name');
+					var fb_p_rec    = Ext.create('Rd.model.mProfile', {name: fb_p_name, id: fb_p_id});
+					form.down('#fbProfile').getStore().loadData([fb_p_rec],false);
+					form.down('#fbProfile').setValue(fb_p_id);
+					
+					//fb realm
+					var fb_r_id     = instance.get('fb_realm');
+					var fb_r_name   = instance.get('fb_realm_name');
+					var fb_r_rec    = Ext.create('Rd.model.mRealm', {name: fb_r_name, id: fb_r_id});
+					form.down('#fbRealm').getStore().loadData([fb_r_rec],false);
+					form.down('#fbRealm').setValue(fb_r_id);
+
+					//gp profile
+					var gp_p_id     = instance.get('gp_profile');
+					var gp_p_name   = instance.get('gp_profile_name');
+					var gp_p_rec    = Ext.create('Rd.model.mProfile', {name: gp_p_name, id: gp_p_id});
+					form.down('#gpProfile').getStore().loadData([gp_p_rec],false);
+					form.down('#gpProfile').setValue(gp_p_id);
+					
+					//gp realm
+					var gp_r_id     = instance.get('gp_realm');
+					var gp_r_name   = instance.get('gp_realm_name');
+					var gp_r_rec    = Ext.create('Rd.model.mRealm', {name: gp_r_name, id: gp_r_id});
+					form.down('#gpRealm').getStore().loadData([fb_r_rec],false);
+					form.down('#gpRealm').setValue(gp_r_id);
+
+					//tw profile
+					var tw_p_id     = instance.get('tw_profile');
+					var tw_p_name   = instance.get('tw_profile_name');
+					var tw_p_rec    = Ext.create('Rd.model.mProfile', {name: tw_p_name, id: tw_p_id});
+					form.down('#twProfile').getStore().loadData([tw_p_rec],false);
+					form.down('#twProfile').setValue(tw_p_id);
+					
+					//tw realm
+					var tw_r_id     = instance.get('tw_realm');
+					var tw_r_name   = instance.get('tw_realm_name');
+					var tw_r_rec    = Ext.create('Rd.model.mRealm', {name: tw_r_name, id: tw_r_id});
+					form.down('#twRealm').getStore().loadData([tw_r_rec],false);
+					form.down('#twRealm').setValue(tw_r_id);
+
+                }   
+            },
+            scope: me
+        });
+        //form.load({url:me.urlViewSocial, method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
     }
+		
 });

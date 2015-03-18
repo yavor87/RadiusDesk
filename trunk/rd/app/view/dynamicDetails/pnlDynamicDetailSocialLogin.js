@@ -69,8 +69,9 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSocialLogin', {
 									{
 										xtype       : 'cmbPermanentUser',
 										fieldLabel  : 'Temp login user',
-										allowBlank  : true,
-										name		: 'social_temp_permanent_user_id'
+										allowBlank  : false,
+										name		: 'social_temp_permanent_user_id',
+										itemId		: 'socialTempUser'
 									}
                                 ]
                             },
@@ -127,17 +128,16 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSocialLogin', {
 										itemId      	: 'fbRealm',
 										extraParam  	: me.user_id,
 										name			: 'fb_realm',
-										allowBlank  	: true
+										allowBlank  	: false
 		                            },
 		                            {
 		                                xtype       	: 'cmbProfile',
-		                                allowBlank  	: true,
 		                                labelClsExtra	: 'lblRdReq',
 		                                itemId      	: 'fbProfile',
 										extraParam  	: me.user_id,
 										name			: 'fb_profile',
 										allowBlank  	: true
-		                            }      
+		                            }     
                                 ]
                             },
 							{ 
