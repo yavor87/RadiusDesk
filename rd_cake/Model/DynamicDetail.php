@@ -17,6 +17,8 @@ class DynamicDetail extends AppModel {
  */
 	public $displayField = 'name';
 
+
+
 /**
  * Validation rules
  *
@@ -63,6 +65,10 @@ class DynamicDetail extends AppModel {
         'User' => array(
             'className'     => 'User',
 			'foreignKey'    => 'user_id'
+        ),
+		'PermanentUser' => array(
+            'className'     => 'PermanentUser',
+			'foreignKey'    => 'social_temp_permanent_user_id'
         )
 	);
 
