@@ -88,6 +88,19 @@ class DynamicDetailsController extends AppController {
 			$items['settings']['usage_refresh_interval'] 	= $q_r['DynamicDetail']['usage_refresh_interval'];
 			$items['settings']['register_users']    = $q_r['DynamicDetail']['register_users'];
 			$items['settings']['lost_password']    	= $q_r['DynamicDetail']['lost_password'];
+
+			//FIXME: Complete code (Dummy values)
+			$items['settings']['social_login']		= array(
+				'active'			=> true,
+				'temp_username'		=> 'dvdwalt',
+				'temp_password'		=> 'dvdwalt',
+				'items'				=> array(
+					array('name'	=> 'Facebook'),
+					array('name'	=> 'Google'),
+					array('name'	=> 'Twitter')
+				)
+			);
+
         }
 
         $success = true;
@@ -1248,6 +1261,229 @@ class DynamicDetailsController extends AppController {
             'success' => true,
             '_serialize' => array('success')
         ));
+	}
+
+
+	public function view_social_login(){
+
+		//FIXME: Complete code
+
+		$this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+	public function edit_social_login(){
+
+		//FIXME: Complete code
+
+		//We need the social_temp_permanent_user_id else we fail it if it is enabbled...
+		//social_enable check 
+        if(isset($this->request->data['social_enable'])){
+            $this->request->data['social_enable'] = 1;
+        }else{
+            $this->request->data['social_enable'] = 0;
+        }
+
+		//Check which is enabled:
+		if(isset($this->request->data['fb_enable'])){
+            $this->request->data['fb_enable'] = 1;
+        }else{
+            $this->request->data['fb_enable'] = 0;
+        }
+
+		//Check which is enabled:
+		if(isset($this->request->data['gp_enable'])){
+            $this->request->data['gp_enable'] = 1;
+        }else{
+            $this->request->data['gp_enable'] = 0;
+        }
+
+		//Check which is enabled:
+		if(isset($this->request->data['tw_enable'])){
+            $this->request->data['tw_enable'] = 1;
+        }else{
+            $this->request->data['tw_enable'] = 0;
+        }
+
+		//Set the *_record_info
+		if(isset($this->request->data['fb_record_info'])){
+            $this->request->data['fb_record_info'] = 1;
+        }else{
+            $this->request->data['fb_record_info'] = 0;
+        }
+		if(isset($this->request->data['gp_record_info'])){
+            $this->request->data['gp_record_info'] = 1;
+        }else{
+            $this->request->data['gp_record_info'] = 0;
+        }
+		if(isset($this->request->data['tw_record_info'])){
+            $this->request->data['tw_record_info'] = 1;
+        }else{
+            $this->request->data['tw_record_info'] = 0;
+        }
+
+
+
+		//We have to have a temp user else we fail it
+		if(($this->request->data['social_enable'] == 1)&&($this->request->data['social_temp_permanent_user_id'] == '')){
+			 $this->set(array(
+                'errors'    => array('social_temp_permanent_user_id' => "Temp user cannot be empty"),
+                'success'   => false,
+                'message'   => array('message' => 'Could not save data'),
+                '_serialize' => array('errors','success','message')
+            ));
+			return;
+		}
+
+		//=== FACEBOOK (fb)====
+		//Do some more check and reject them if they are not valid
+		if(
+			($this->request->data['social_enable'] == 1)&&
+			($this->request->data['fb_enable'] == 1)
+		){
+
+			$fb_check_for  = array('fb_voucher_or_user','fb_secret','fb_id','fb_realm','fb_profile');
+			foreach($fb_check_for as $i){
+				if($this->request->data["$i"] == ''){
+					$this->set(array(
+				        'errors'    => array("$i" => $i." is required"),
+				        'success'   => false,
+				        'message'   => array('message' => 'Could not save data'),
+				        '_serialize' => array('errors','success','message')
+				    ));
+					return;
+				}
+			}
+		}
+
+		//=== GOOGLE PLUS (gp)====
+		//Do some more check and reject them if they are not valid
+		if(
+			($this->request->data['social_enable'] == 1)&&
+			($this->request->data['gp_enable'] == 1)
+		){	
+			$gp_check_for  = array('gp_voucher_or_user','gp_secret','gp_id','gp_realm','gp_profile');
+			foreach($gp_check_for as $i){
+				if($this->request->data["$i"] == ''){
+					$this->set(array(
+				        'errors'    => array("$i" => $i." is required"),
+				        'success'   => false,
+				        'message'   => array('message' => 'Could not save data'),
+				        '_serialize' => array('errors','success','message')
+				    ));
+					return;
+				}
+			}
+		}
+
+
+		//=== TWITTER (tw)====
+		//Do some more check and reject them if they are not valid
+		if(
+			($this->request->data['social_enable'] == 1)&&
+			($this->request->data['tw_enable'] == 1)
+		){
+			$tw_check_for  = array('tw_voucher_or_user','tw_secret','tw_id','tw_realm','tw_profile');
+			foreach($tw_check_for as $i){
+				if($this->request->data["$i"] == ''){
+					$this->set(array(
+				        'errors'    => array("$i" => $i." is required"),
+				        'success'   => false,
+				        'message'   => array('message' => 'Could not save data'),
+				        '_serialize' => array('errors','success','message')
+				    ));
+					return;
+				}
+			}
+		}
+
+		//If it got here without a return we can surely then add the social logins the user defined
+		//First we delete the existing ones:
+		$id = $this->request->data['id'];
+		$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->deleteAll(array('DynamicDetailSocialLogin.dynamic_detail_id' => $id), true);
+
+		if ($this->{$this->modelClass}->save($this->request->data)) {
+
+			if($this->request->data['social_enable'] == 0){
+			
+				//if not enabled we don't care ....
+				$this->set(array(
+		            'success' => true,
+		            '_serialize' => array('success')
+		        ));
+				return;
+			}
+
+			//Facebook
+			$fb_data = array();
+			$fb_data['name'] 				= 'facebook';
+			$fb_data['dynamic_detail_id'] 	= $id;
+			$fb_data['profile_id'] 			= $this->request->data["fb_profile"];
+			$fb_data['type'] 				= $this->request->data["fb_voucher_or_user"];
+			$fb_data['key'] 				= $this->request->data["fb_id"];
+			$fb_data['secret'] 				= $this->request->data["fb_secret"];
+			$fb_data['realm_id'] 			= $this->request->data["fb_realm"];
+			$fb_data['secret'] 				= $this->request->data["fb_secret"];
+			$fb_data['record_info']			= $this->request->data["fb_record_info"];
+			$fb_data['enable']				= $this->request->data["fb_enable"];
+
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($fb_data);
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+
+			//Google Plus
+			$gp_data = array();
+			$gp_data['name'] 				= 'google';
+			$fb_data['dynamic_detail_id'] 	= $id;
+			$gp_data['profile_id'] 			= $this->request->data["gp_profile"];
+			$gp_data['type'] 				= $this->request->data["gp_voucher_or_user"];
+			$gp_data['key'] 				= $this->request->data["gp_id"];
+			$gp_data['secret'] 				= $this->request->data["gp_secret"];
+			$gp_data['realm_id'] 			= $this->request->data["gp_realm"];
+			$gp_data['secret'] 				= $this->request->data["gp_secret"];
+			$gp_data['record_info']			= $this->request->data["gp_record_info"];
+			$gp_data['enable']				= $this->request->data["gp_enable"];
+
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($gp_data);
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+
+			//Twitter
+			$tw_data = array();
+			$tw_data['name'] 				= 'twitter';
+			$tw_data['dynamic_detail_id'] 	= $id;
+			$tw_data['profile_id'] 			= $this->request->data["tw_profile"];
+			$tw_data['type'] 				= $this->request->data["tw_voucher_or_user"];
+			$tw_data['key'] 				= $this->request->data["tw_id"];
+			$tw_data['secret'] 				= $this->request->data["tw_secret"];
+			$tw_data['realm_id'] 			= $this->request->data["tw_realm"];
+			$tw_data['secret'] 				= $this->request->data["tw_secret"];
+			$tw_data['record_info']			= $this->request->data["tw_record_info"];
+			$tw_data['enable']				= $this->request->data["tw_enable"];
+
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->create(); 
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->save($tw_data);
+			$this->{$this->modelClass}->{'DynamicDetailSocialLogin'}->id = null;
+
+		
+
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+
+        } else {
+
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not save data'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
 	}
 
 
