@@ -12,9 +12,11 @@ class DynamicDetailsController extends AppController {
 
         $items = array();
 
+		$sl_items	= array();
+
         if(isset($this->request->query['dynamic_id'])){ //preview link will call this page ?dynamic_id=<id>
 
-            $this->{$this->modelClass}->contain('DynamicPage','DynamicPhoto');
+            $this->{$this->modelClass}->contain('DynamicPage','DynamicPhoto','DynamicDetailSocialLogin');
             $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
             if($q_r){
                 //Modify the photo path:
@@ -25,6 +27,8 @@ class DynamicDetailsController extends AppController {
                 }
                 $items['photos']                    = $q_r['DynamicPhoto'];
                 $items['pages']                     = $q_r['DynamicPage'];
+
+				$sl_items = $q_r['DynamicDetailSocialLogin'];
             }
 
         }else{ //Build a query since it was not called from the preview link
@@ -35,7 +39,10 @@ class DynamicDetailsController extends AppController {
                     array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
                 ); //OR query all the keys
             }
-            $this->{$this->modelClass}->DynamicPair->contain(array('DynamicDetail' => array('DynamicPhoto','DynamicPage')));
+            $this->{$this->modelClass}->DynamicPair->contain(
+				array('DynamicDetail' => array('DynamicPhoto','DynamicPage','DynamicDetailSocialLogin'))
+			);
+
             $q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
                 array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
 
@@ -49,8 +56,11 @@ class DynamicDetailsController extends AppController {
                 }
                 $items['photos']                    = $q_r['DynamicDetail']['DynamicPhoto'];
                 $items['pages']                     = $q_r['DynamicDetail']['DynamicPage'];
+
+				$sl_items = $q_r['DynamicDetail']['DynamicDetailSocialLogin'];
             }
         }
+		//print_r($q_r);
 
         //Get the detail for the page
         if($q_r){
@@ -89,18 +99,24 @@ class DynamicDetailsController extends AppController {
 			$items['settings']['register_users']    = $q_r['DynamicDetail']['register_users'];
 			$items['settings']['lost_password']    	= $q_r['DynamicDetail']['lost_password'];
 
-			//FIXME: Complete code (Dummy values)
-			$items['settings']['social_login']		= array(
-				'active'			=> true,
-				'temp_username'		=> 'dvdwalt',
-				'temp_password'		=> 'dvdwalt',
-				'items'				=> array(
-					array('name'	=> 'Facebook'),
-					array('name'	=> 'Google'),
-					array('name'	=> 'Twitter')
-				)
-			);
+			if($q_r['DynamicDetail']['social_enable']){
+				$items['settings']['social_login']['active'] = true;
+				
+				//Find the temp username and password
+				$temp_user_id = $q_r['DynamicDetail']['social_temp_permanent_user_id'];
+				$user_detail  = $this->_find_username_and_password($temp_user_id);
+				$items['settings']['social_login']['temp_username'] = $user_detail['username'];
+				$items['settings']['social_login']['temp_password'] = $user_detail['password'];
+				//Find if there are any defined
+				$items['settings']['items'] = array();
+				foreach($sl_items as $i){
+					$n = $i['name'];
+					array_push($items['settings']['items'], array('name' => $n));
+				}
 
+			}else{
+				$items['settings']['social_login']['active'] = false;
+			}
         }
 
         $success = true;
@@ -1266,8 +1282,6 @@ class DynamicDetailsController extends AppController {
 
 	public function view_social_login(){
 
-		//FIXME: Complete code
-
 		 //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
@@ -1292,7 +1306,7 @@ class DynamicDetailsController extends AppController {
 
 				foreach($q_r['DynamicDetailSocialLogin'] as $i){
 
-					if($i['name'] == 'facebook'){
+					if($i['name'] == 'Facebook'){
 						$items['fb_enable'] 		= $i['enable'];
 						$items['fb_record_info'] 	= $i['record_info'];
 						$items['fb_id'] 			= $i['key'];
@@ -1305,7 +1319,7 @@ class DynamicDetailsController extends AppController {
 						$items['fb_voucher_or_user']= $i['type'];
 					}
 
-					if($i['name'] == 'google'){
+					if($i['name'] == 'Google'){
 						$items['gp_enable'] 		= $i['enable'];
 						$items['gp_record_info'] 	= $i['record_info'];
 						$items['gp_id'] 			= $i['key'];
@@ -1318,7 +1332,7 @@ class DynamicDetailsController extends AppController {
 						$items['gp_voucher_or_user']= $i['type'];
 					}
 
-					if($i['name'] == 'twitter'){
+					if($i['name'] == 'Twitter'){
 						$items['tw_enable'] 		= $i['enable'];
 						$items['tw_record_info'] 	= $i['record_info'];
 						$items['tw_id'] 			= $i['key'];
@@ -1344,7 +1358,6 @@ class DynamicDetailsController extends AppController {
 
 	public function edit_social_login(){
 
-		//FIXME: Complete code
 
 		//We need the social_temp_permanent_user_id else we fail it if it is enabbled...
 		//social_enable check 
@@ -1487,7 +1500,7 @@ class DynamicDetailsController extends AppController {
 			if($this->request->data['fb_enable'] == 1){
 				//Facebook
 				$fb_data = array();
-				$fb_data['name'] 				= 'facebook';
+				$fb_data['name'] 				= 'Facebook';
 				$fb_data['dynamic_detail_id'] 	= $id;
 				$fb_data['profile_id'] 			= $this->request->data["fb_profile"];
 				$fb_data['type'] 				= $this->request->data["fb_voucher_or_user"];
@@ -1507,7 +1520,7 @@ class DynamicDetailsController extends AppController {
 
 				//Google Plus
 				$gp_data = array();
-				$gp_data['name'] 				= 'google';
+				$gp_data['name'] 				= 'Google';
 				$gp_data['dynamic_detail_id'] 	= $id;
 				$gp_data['profile_id'] 			= $this->request->data["gp_profile"];
 				$gp_data['type'] 				= $this->request->data["gp_voucher_or_user"];
@@ -1527,7 +1540,7 @@ class DynamicDetailsController extends AppController {
 
 				//Twitter
 				$tw_data = array();
-				$tw_data['name'] 				= 'twitter';
+				$tw_data['name'] 				= 'Twitter';
 				$tw_data['dynamic_detail_id'] 	= $id;
 				$tw_data['profile_id'] 			= $this->request->data["tw_profile"];
 				$tw_data['type'] 				= $this->request->data["tw_voucher_or_user"];
@@ -2275,5 +2288,27 @@ class DynamicDetailsController extends AppController {
         }
         return $match_found;
     }
+
+	private function _find_username_and_password($id){
+		$this->PermanentUser = ClassRegistry::init('PermanentUser');
+		$this->PermanentUser->contain();
+		$q_r = $this->PermanentUser->findById($id);
+		$user_data = array('username' => 'notfound','password' => 'notfound');
+		if($q_r){
+			$un = $q_r['PermanentUser']['username'];
+			$user_data['username'] = $un;
+			$this->Radcheck = ClassRegistry::init('Radcheck');
+
+			$q_pw = $this->Radcheck->find('first', 
+				array('conditions' => array('Radcheck.username' => $un,'Radcheck.attribute' => 'Cleartext-Password'))
+			);
+
+			if($q_pw){
+				$user_data['password'] = $q_pw['Radcheck']['value'];
+			}
+		}
+
+		return $user_data;
+	}
 
 }
