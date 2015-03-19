@@ -108,10 +108,10 @@ class DynamicDetailsController extends AppController {
 				$items['settings']['social_login']['temp_username'] = $user_detail['username'];
 				$items['settings']['social_login']['temp_password'] = $user_detail['password'];
 				//Find if there are any defined
-				$items['settings']['items'] = array();
+				$items['settings']['social_login']['items'] = array();
 				foreach($sl_items as $i){
 					$n = $i['name'];
-					array_push($items['settings']['items'], array('name' => $n));
+					array_push($items['settings']['social_login']['items'], array('name' => $n));
 				}
 
 			}else{
