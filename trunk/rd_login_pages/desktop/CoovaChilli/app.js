@@ -42,7 +42,9 @@ Ext.application({
         urlPayUVoucher  : infoServer+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
 		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
 		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
-		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json'
+		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json',
+		urlSocialBase	: 'http://rd01.wificity.asia'+'/cake2/rd_cake/auth/', //Facebook does not like IP wants DNS!!
+		urlSocialInfoFor: infoServer+'/cake2/rd_cake/third_party_auths/info_for.json' //To pull the username and password associated with this ID + type
     //____ End of Configuration settings _____
 	},
     init: function(){
@@ -137,7 +139,10 @@ Ext.application({
             icnMesh         : 57460,
             icnShop         : 57554,
             icnConnect      : 57489,
-            icnOptions      : 57596
+            icnOptions      : 57596,
+			icnFacebook		: 57558,
+			icnGoogle		: 57614,
+			icnTwitter		: 57574
         };
     }
 });
