@@ -33,7 +33,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount      : 1, //Make it high to start with --- sometimes it really takes long! //FIXME
     currentRetry    : 0,
 
     userName        : undefined,
@@ -43,6 +43,8 @@ Ext.define('CoovaChilli.controller.Desktop', {
     queryObj        : undefined,
 
     currentSlide    : 0,
+
+	notRequired		: [ 'q', 'res',	'challenge', 'called', 'mac', 'ip', 'sessionid', 'userurl', 'md'],
 
     //--- 
 
@@ -123,6 +125,11 @@ Ext.define('CoovaChilli.controller.Desktop', {
 				click:	function(b){
 					b.up('window').close();
 				}
+			},
+
+			//=== Social Login ==
+			'pnlConnect	[type="socialButton"]' : {
+				click:	me.socialButtonClicked
 			}
 
         });    
@@ -259,6 +266,9 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
+
+		//WIP Social login
+		me.checkSocialLoginReturn();
         
         //Check if we need to start a slideshow
         me.checkForSlideshow(data);
@@ -991,5 +1001,300 @@ Ext.define('CoovaChilli.controller.Desktop', {
 				form.setLoading(false);
             }
         });
-	}
+	},
+
+	//========== Social Login =======
+	socialButtonClicked: function(b){
+		var me 				= this;
+		me.SocialName 		= b.getItemId().toLowerCase();
+        var urlStatus 		= 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
+
+		me.getConnect().setLoading('Starting social login for '+me.SocialName);
+
+        Ext.data.JsonP.request({
+            url			: urlStatus,
+            timeout		: me.application.config.jsonTimeout,
+            callbackKey	: 'callback',
+            success: function(j){
+                me.currentRetry = 0;
+				me.getConnect().setLoading();
+                if(j.clientState == 0){
+					me.userName = b.up('pnlConnect').jsonData.settings.social_login.temp_username; //Makes this unique
+        			me.password = b.up('pnlConnect').jsonData.settings.social_login.temp_password;  
+                    me.socialTempEncPwd(j.challenge);
+                }
+                if(j.clientState == 1){
+                    if(me.application.config.noStatus == true){
+                        window.location=me.application.config.redirectTo;
+                    }else{              
+                        me.coovaRefresh(); //Refresh 
+                    }
+                }           
+            },
+            failure: function(){
+				me.getConnect().setLoading();
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Before login - Retry to fetch Coova status "+me.currentRetry);
+                    me.socialButtonClicked();
+                }else{
+                    me.showLoginError('Could not fetch coova status');
+                }
+            },
+            scope: me 
+        });
+    },
+    socialTempEncPwd: function(challenge){
+		var me = this;
+		me.getConnect().setLoading('Encrypting password for temp connection'); 
+        //In order to prevent the cleartext password to traverse the line; we to a JSONP https call
+        var me = this;
+        Ext.data.JsonP.request({
+            url: me.application.config.urlUam, //This needs to be https!
+            callbackKey: 'callback',
+            params: {
+                challenge: challenge,
+                password: me.password
+            },
+            success: function(j){
+				me.getConnect().setLoading();
+                me.socialTempLogin(j.response);
+            },
+            failure: function(){
+               // console.log("UAM service is down");
+				me.getConnect().setLoading();
+                me.showLoginError("UAM service is down"); 
+            },
+            scope: me 
+        });
+    },
+    socialTempLogin:  function(encPwd){
+        var me = this;
+		me.getConnect().setLoading('Trying temp connection');
+        var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
+        Ext.data.JsonP.request({
+            url: urlLogin,
+            timeout: me.application.config.jsonTimeout,
+            callbackKey: 'callback',
+            params: {
+                username: me.userName,
+                password: encPwd
+            },
+            success: me.socialTempLoginResults,           
+            failure: function(){
+				me.getConnect().setLoading();
+                //We will retry for me.retryCount
+				me.getConnect().setLoading();
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Retry to log in "+me.currentRetry);
+                    me.socialTempLogin(encPwd);
+                }else{
+                    me.showLoginError("Coova login service is down");
+                }
+            },
+            scope: me 
+        });
+    },
+    socialTempLoginResults : function(j){
+        var me = this;
+
+		me.getConnect().setLoading('Checking feedback results');
+
+        me.currentRetry = 0;    //Reset if there were retries
+        if(j.clientState == 0){    
+            var msg = 'Temp Social Login user failed authentication'
+            if(j.message != undefined){
+                msg =j.message;
+            }
+			me.getConnect().setLoading();
+            me.showLoginError(msg);
+        }else{
+            console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+			//We need to add a query string but do not need to add ALL the items
+			var keys 		= Ext.Object.getKeys(me.queryObj);
+			var required 	= {}; //Empty object
+			Ext.Array.forEach(keys,function(item,count,items){
+				if(Ext.Array.contains(me.notRequired, item) == false){
+					required[item] = me.queryObj[item];
+				} 
+				console.log(item);
+			});
+			required.pathname   	= window.location.pathname;
+            required.hostname   	= window.location.hostname;
+            required.protocol   	= window.location.protocol;
+			required.social_login 	= 1;
+			var q_s 				= Ext.Object.toQueryString(required);
+			console.log(q_s);
+			//Dynamically build the redirect URL to which Social Login we will use...
+			window.location=me.application.config.urlSocialBase+me.SocialName+"?"+q_s;
+			//window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
+        }
+    },
+	checkSocialLoginReturn: function(){
+		var me = this;
+       	if(	(me.queryObj.sl_type 	!= undefined)&& //e.g. user or voucher
+			(me.queryObj.sl_name 	!= undefined)&& //e.g. Facebook
+			(me.queryObj.sl_value 	!= undefined)   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
+		){ 
+			//console.log("Finding transaction details for "+ me.queryObj.tx);
+			Ext.Ajax.request({
+				url     : me.application.config.urlSocialInfoFor,
+				method  : 'GET',
+				params: {
+					sl_type		: me.queryObj.sl_type,
+					sl_name		: me.queryObj.sl_name,
+					sl_value	: me.queryObj.sl_value
+				},
+				success : function(response){
+					var jsonData    = Ext.JSON.decode(response.responseText);
+
+					if(jsonData.success){   
+						me.userName = jsonData.data.username; //Makes this unique
+						me.password = jsonData.data.password;   
+						console.log(jsonData.data.username);
+						console.log(jsonData.data.password);
+						me.socialTempDisconnect();
+					}else{
+						console.log("big problems");
+					}       
+				},
+				scope: me
+			});
+        }
+	},
+	socialTempDisconnect: function(){
+        var me = this;
+		me.getConnect().setLoading('Disconnecting temp user');
+        var urlLogoff = 'http://'+me.uamIp+':'+me.uamPort+'/json/logoff';
+        Ext.data.JsonP.request({
+            url: urlLogoff,
+            timeout: me.application.config.jsonTimeout,
+            callbackKey: 'callback',
+            success: function (){
+                me.currentRetry = 0;
+				console.log("Disconnected well - now connect with the final userzzz");
+				me.getConnect().setLoading();
+				me.socialFinalSatus();
+            },           
+            failure: function(){
+				me.getConnect().setLoading();
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                    me.socialTempDisconnect();
+                }else{
+                    me.showLoginError("Failed to disconnect");
+                }
+            },
+            scope: me //VERY VERY VERY important
+        });
+    },
+	socialFinalSatus: function(){
+		var me 				= this;
+        var urlStatus 		= 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
+        Ext.data.JsonP.request({
+            url			: urlStatus,
+            timeout		: me.application.config.jsonTimeout,
+            callbackKey	: 'callback',
+            success: function(j){
+                me.currentRetry = 0;
+				me.getConnect().setLoading();
+                if(j.clientState == 0){
+                    me.socialFinalEncPwd(j.challenge);
+                }
+                if(j.clientState == 1){
+                    if(me.application.config.noStatus == true){
+                        window.location=me.application.config.redirectTo;
+                    }else{              
+                        me.coovaRefresh(); //Refresh 
+                    }
+                }           
+            },
+            failure: function(){
+				me.getConnect().setLoading();
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Before login - Retry to fetch Coova status "+me.currentRetry);
+                    me.socialFinalSatus();
+                }else{
+                    me.showLoginError('Could not fetch coova status');
+                }
+            },
+            scope: me 
+        });
+    },
+	socialFinalEncPwd: function(challenge){
+
+        var me = this;
+		me.getConnect().setLoading('Encrypting final password');
+        //In order to prevent the cleartext password to traverse the line; we to a JSONP https call
+
+        Ext.data.JsonP.request({
+            url: me.application.config.urlUam, //This needs to be https!
+            callbackKey: 'callback',
+            params: {
+                challenge: challenge,
+                password: me.password
+            },
+            success: function(j){
+				me.getConnect().setLoading();
+                me.socialFinalLogin(j.response);
+            },
+            failure: function(){
+               // console.log("UAM service is down");
+				me.getConnect().setLoading();
+                me.showLoginError("UAM service is down"); 
+            },
+            scope: me 
+        });
+    },
+    socialFinalLogin:  function(encPwd){
+        var me = this;
+		me.getConnect().setLoading('Doing final login');
+        var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
+        Ext.data.JsonP.request({
+            url: urlLogin,
+            timeout: me.application.config.jsonTimeout,
+            callbackKey: 'callback',
+            params: {
+                username: me.userName,
+                password: encPwd
+            },
+            success: me.socialFinalLoginResults,           
+            failure: function(){
+				me.getConnect().setLoading();
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Retry to log in "+me.currentRetry);
+                    me.socialFinalLogin(encPwd);
+                }else{
+                    me.showLoginError("Coova login service is down");
+                }
+            },
+            scope: me 
+        });
+    },
+    socialFinalLoginResults : function(j){
+        var me = this;
+		me.getConnect().setLoading();
+        me.currentRetry = 0;    //Reset if there were retries
+        if(j.clientState == 0){    
+            var msg = 'Temp Social Login user failed authentication'
+            if(j.message != undefined){
+                msg =j.message;
+            }
+			me.showConnect();
+            me.showLoginError(msg);
+        }else{
+			if(me.application.config.noStatus == true){
+                window.location=me.application.config.redirectTo;
+            }else{              
+                me.coovaRefresh(); //Refresh 
+            }
+        }
+    }
 });
