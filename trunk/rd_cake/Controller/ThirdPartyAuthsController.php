@@ -21,7 +21,15 @@ class ThirdPartyAuthsController extends AppController {
 		$wanted_query_items = array();
 		foreach(array_keys($query) as $k){
 			//We don't care for :protocol/hostname pathaname and q
-			if(($k != 'protocol')&&($k != 'hostname')&&($k != 'pathname')&&($k != 'q')){ 
+			if(
+				($k != 'protocol')&&
+				($k != 'hostname')&&
+				($k != 'pathname')&&
+				($k != 'q')&&
+				($k != 'sl_type')&&
+				($k != 'sl_value')&&
+				($k != 'sl_name')
+			){ 
 				if($following){
 					$new_query_string = $new_query_string."&".$k."=".$query["$k"];
 				}else{ //First time
@@ -69,7 +77,7 @@ class ThirdPartyAuthsController extends AppController {
 				//$this->data['auth']['uid']
 				$extra_name 	= $this->data['auth']['provider'];
 				$dd_id			= $social_login_info['dynamic_detail_id'];
-				$extra_value	= $dd_id."_".$this->data['auth']['uid'];
+				$extra_value	= 'sl_'.$dd_id."_".$this->data['auth']['uid']; //Add social login to work on permanent usernames
 				$type			= $social_login_info['type'];
 
 				if($type == 'voucher'){
@@ -104,7 +112,7 @@ class ThirdPartyAuthsController extends AppController {
 
 		$new_query_string=$new_query_string."&sl_type=$type&sl_value=$extra_value"."&sl_name=$extra_name";
 
-		print_r($new_query_string);
+		//print_r($new_query_string);
 
 		//$redirect_url = urldecode($query['protocol']).urldecode($query['hostname']).urldecode($query['pathname']).urldecode($new_query_string);
 		$redirect_url = 'http://'.urldecode($query['hostname']).urldecode($query['pathname']).urldecode($new_query_string);
@@ -114,14 +122,41 @@ class ThirdPartyAuthsController extends AppController {
 	}
 
 	public function info_for(){
-		
-		$this->set(array(
-	            'data'         => array('username' => 'rviljoen','password' => 'rviljoen'),
-        	    'success'       => true,
-            	    '_serialize'    => array('data','success')
-        	));
 
+		if(
+			(array_key_exists('sl_type',$this->request->query))&&
+			(array_key_exists('sl_name',$this->request->query))&&
+			(array_key_exists('sl_value',$this->request->query))
+		){
 
+			if($this->request->query['sl_type'] == 'voucher'){
+				$voucher_info = $this->_find_vouchername_and_password($this->request->query['sl_name'],$this->request->query['sl_value']);
+				$this->set(array(
+                    'data'         => $voucher_info,
+                    'success'       => true,
+                    '_serialize'    => array('data','success')
+                ));
+				return;
+			}
+			
+			if($this->request->query['sl_type'] == 'user'){
+				$user_info = $this->_find_username_and_password($this->request->query['sl_name'],$this->request->query['sl_value']);
+				$this->set(array(
+                    'data'         => $user_info,
+                    'success'       => true,
+                    '_serialize'    => array('data','success')
+                ));
+				return;
+			}
+
+		}else{
+			$this->set(array(
+				'success'   => false,
+				'errors'	=> array('errors' => "Missing values in query string"),
+				'_serialize' => array('success','errors')
+			));	
+			return;
+		}
 	}
 
 	private function _queryToArray($qry){
@@ -147,7 +182,6 @@ class ThirdPartyAuthsController extends AppController {
 	}
 
 	private function _addVoucher($i){
-
 		$url = 'http://127.0.0.1/cake2/rd_cake/vouchers/add.json';
 		$this->User 	= ClassRegistry::init('User');
 		$this->User->contain();
@@ -182,13 +216,11 @@ class ThirdPartyAuthsController extends AppController {
 	}
 
 	private function _addPermanentUser($i){
-
 		$url = 'http://127.0.0.1/cake2/rd_cake/permanent_users/add.json';
 		$this->User 	= ClassRegistry::init('User');
 		$this->User->contain();
 		$q_r			= $this->User->find('first',array('conditions' => array('User.username' => 'root')));
 		$root_token 	= $q_r['User']['token'];
-
 		$password		= $this->_generatePassword();
 
 		$postData = array(
@@ -224,7 +256,6 @@ class ThirdPartyAuthsController extends AppController {
 	}
 
 	private function _generatePassword ($length = 8){
-
         // start with a blank password
         $password = "";
         // define possible characters
@@ -247,5 +278,48 @@ class ThirdPartyAuthsController extends AppController {
         return $password;
     }
 
+	private function _find_username_and_password($extra_name,$extra_value){
+		$this->PermanentUser = ClassRegistry::init('PermanentUser');
+		$this->PermanentUser->contain();
+		$q_r = $this->PermanentUser->find('first',
+			array('conditions' => array('PermanentUser.extra_name' => $extra_name,'PermanentUser.extra_value' => $extra_value)));
+		$user_data = array('username' => 'notfound','password' => 'notfound');
+		if($q_r){
+			$un = $q_r['PermanentUser']['username'];
+			$user_data['username'] = $un;
+			$this->Radcheck = ClassRegistry::init('Radcheck');
 
+			$q_pw = $this->Radcheck->find('first', 
+				array('conditions' => array('Radcheck.username' => $un,'Radcheck.attribute' => 'Cleartext-Password'))
+			);
+
+			if($q_pw){
+				$user_data['password'] = $q_pw['Radcheck']['value'];
+			}
+		}
+
+		return $user_data;
+	}
+
+	private function _find_vouchername_and_password($extra_name,$extra_value){
+		$this->Voucher = ClassRegistry::init('Voucher');
+		$this->Voucher->contain();
+		$q_r = $this->Voucher->find('first',
+			array('conditions' => array('Voucher.extra_name' => $extra_name,'Voucher.extra_value' => $extra_value)));
+		$voucher_data = array('username' => 'notfound','password' => 'notfound');
+		if($q_r){
+			$un = $q_r['Voucher']['username'];
+			$voucher_data['username'] = $un;
+			$this->Radcheck = ClassRegistry::init('Radcheck');
+
+			$q_pw = $this->Radcheck->find('first', 
+				array('conditions' => array('Radcheck.username' => $un,'Radcheck.attribute' => 'Cleartext-Password'))
+			);
+
+			if($q_pw){
+				$voucher_data['password'] = $q_pw['Radcheck']['value'];
+			}
+		}
+		return $voucher_data;
+	}
 }
