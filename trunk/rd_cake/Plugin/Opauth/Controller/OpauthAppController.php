@@ -37,60 +37,13 @@ class OpauthAppController extends AppController {
 		$qs = $_SERVER['QUERY_STRING'];
         if(preg_match('/social_login=1/',$qs)){	
         	CakeSession::write('rd.qs',$qs );
+			CakeSession::write('rd.strategy',$which_one);
         }
 
-		$qs = CakeSession::read('rd.qs');
-		if($qs){	
-			//Build the URL	
-			$query = $this->_queryToArray($qs);
-			$conditions = array("OR" =>array());
-      
-		    foreach(array_keys($query) as $key){
-		        array_push($conditions["OR"],
-		            array("DynamicPair.name" => $key, "DynamicPair.value" =>  $query[$key])
-		        ); //OR query all the keys
-		    }
-
-		    $this->DynamicDetail->DynamicPair->contain(
-				array('DynamicDetail' => array('DynamicDetailSocialLogin'))
-			);
-
-		    $q_r = $this->DynamicDetail->DynamicPair->find('first', 
-		        array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
-
-			//No match - return rathe
-			if(!$q_r){
-				echo '<strong style="color: red;">Error: </strong>No Dynamic Info for query string '."$qs<br>\n";
-				return;
-			}
-
-			//Loop through all the DynamicDetailSocialLogin entries and see if one compares with 
-			//$this->data[auth][provider]
-			$social_login_info = array();
-			foreach($q_r['DynamicDetail']['DynamicDetailSocialLogin'] as $i){
-				if(strtolower($i['name']) == $which_one){
-					$social_login_info = $i;
-					break; //No need to go on
-				}
-			}
-
-			if(!$social_login_info){
-				echo '<strong style="color: red;">Error: </strong>No configuration for '."$which_one<br>\n";
-				return;
-			}else{
-
-				$strategy 	= $social_login_info['name'];
-				$s_key		= $social_login_info['key'];
-				$s_secret	= $social_login_info['secret'];
-
-				Configure::write('Opauth.Strategy.'.$strategy, array(
-				   'app_id' 	=> "$s_key",
-				   'app_secret' => "$s_secret"
-				));
-
-				$this->_loadOpauth();
-				$this->Opauth->run();
-			}
+		//Set up strategy....
+		if($this->_set_up_strategy()){
+			$this->_loadOpauth();
+			$this->Opauth->run();
 		}
 	}
 	
@@ -99,6 +52,12 @@ class OpauthAppController extends AppController {
 	 */
 	public function callback(){
 		$response = null;
+
+		//Set up strategy....
+		if(!$this->_set_up_strategy()){
+			echo '<strong style="color: red;">Error: </strong>Problems with the session data stored for the strategy .'."<br>\n";
+			return;
+		}
 		
 		/**
 		* Fetch auth response, based on transport configuration for callback
@@ -222,5 +181,62 @@ class OpauthAppController extends AppController {
 			$result[$key] = $val;
 		}
 		return empty($result) ? false : $result;
+	}
+
+	private function _set_up_strategy(){
+
+		$qs 		= CakeSession::read('rd.qs');
+		$which_one	= CakeSession::read('rd.strategy');
+
+		if($qs){	
+			//Build the URL	
+			$query = $this->_queryToArray($qs);
+			$conditions = array("OR" =>array());
+      
+		    foreach(array_keys($query) as $key){
+		        array_push($conditions["OR"],
+		            array("DynamicPair.name" => $key, "DynamicPair.value" =>  $query[$key])
+		        ); //OR query all the keys
+		    }
+
+		    $this->DynamicDetail->DynamicPair->contain(
+				array('DynamicDetail' => array('DynamicDetailSocialLogin'))
+			);
+
+		    $q_r = $this->DynamicDetail->DynamicPair->find('first', 
+		        array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
+
+			//No match - return rathe
+			if(!$q_r){
+				echo '<strong style="color: red;">Error: </strong>No Dynamic Info for query string '."$qs<br>\n";
+				return false;
+			}
+
+			//Loop through all the DynamicDetailSocialLogin entries and see if one compares with 
+			//$this->data[auth][provider]
+			$social_login_info = array();
+			foreach($q_r['DynamicDetail']['DynamicDetailSocialLogin'] as $i){
+				if(strtolower($i['name']) == $which_one){
+					$social_login_info = $i;
+					break; //No need to go on
+				}
+			}
+
+			if(!$social_login_info){
+				echo '<strong style="color: red;">Error: </strong>No configuration for '."$which_one<br>\n";
+				return false;
+			}else{
+
+				$strategy 	= $social_login_info['name'];
+				$s_key		= $social_login_info['key'];
+				$s_secret	= $social_login_info['secret'];
+
+				Configure::write('Opauth.Strategy.'.$strategy, array(
+				   'app_id' 	=> "$s_key",
+				   'app_secret' => "$s_secret"
+				));
+				return true;	
+			}
+		}
 	}
 }
