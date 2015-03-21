@@ -183,12 +183,7 @@ CakeLog::config('error', array(
 //Add the config file:
 Configure::load('RadiusDesk');
 
-//WORK IN PROGRESS
+//Social Login Plugin
 CakePlugin::load('Opauth', array('routes' => true, 'bootstrap' => true));
 Configure::write('Opauth.path', '/cake2/rd_cake/auth/');
 
-// Using Facebook strategy as an example
-Configure::write('Opauth.Strategy.Facebook', array(
-   'app_id' => '1582420028636702',
-   'app_secret' => 'a2f6ee880670a716d84daad77fa724c3'
-));
