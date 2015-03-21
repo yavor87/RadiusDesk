@@ -43,7 +43,7 @@ Ext.application({
 		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
 		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
 		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json',
-		urlSocialBase	: 'http://rd01.wificity.asia'+'/cake2/rd_cake/auth/', //Facebook does not like IP wants DNS!!
+		urlSocialBase	: infoServer+'/cake2/rd_cake/auth/', //Be sure this is the same as specified in FB e.g. IP or DNS!!
 		urlSocialInfoFor: infoServer+'/cake2/rd_cake/third_party_auths/info_for.json' //To pull the username and password associated with this ID + type
     //____ End of Configuration settings _____
 	},
