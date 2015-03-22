@@ -219,6 +219,9 @@ Ext.define('CoovaChilli.controller.cMain', {
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
 
+		//Social login
+		me.checkSocialLoginReturn();
+
         //Check if we need to start a slideshow
         me.checkForSlideshow(jsonData);
 
