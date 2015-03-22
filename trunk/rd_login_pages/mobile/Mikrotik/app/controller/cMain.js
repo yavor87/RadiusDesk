@@ -1052,7 +1052,7 @@ Ext.define('Mikrotik.controller.cMain', {
 		){ 
 			//console.log("Finding transaction details for "+ me.queryObj.tx);
 			Ext.Ajax.request({
-				url     : CoovaChilli.config.Config.getUrlSocialInfoFor(),
+				url     : Mikrotik.config.Config.getUrlSocialInfoFor(),
 				method  : 'GET',
 				params: {
 					sl_type		: me.queryObj.sl_type,
