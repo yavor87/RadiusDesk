@@ -55,6 +55,10 @@ Ext.define('CoovaChilli.controller.cMain', {
 			},
 			'navLostPassword #navBtnNext' : {
 				tap		: 'onLpNavBtnNextTap'
+			},
+			//=== Social Login ==
+			'frmConnect	[type="socialButton"]' : {
+				tap		: 'socialButtonClicked'
 			}
         },
         views: [
@@ -87,7 +91,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     sessionData : undefined,
 
-    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 1, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : '',
@@ -1105,5 +1109,319 @@ Ext.define('CoovaChilli.controller.cMain', {
 		if(activeId == 'pnlEnd'){
 			view.pop(2); //Remove the last two screens; ending with screen one
 		}
-	}
+	},
+
+	//========== Social Login =======
+	socialButtonClicked: function(b){
+		var me 				= this;
+		me.SocialName 		= b.getItemId().toLowerCase();
+        var urlStatus 		= 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
+
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Starting social login for '+me.SocialName
+        });
+
+        Ext.data.JsonP.request({
+            url			: urlStatus,
+            timeout		: CoovaChilli.config.Config.getJsonTimeout(),
+            callbackKey	: 'callback',
+            success: function(j){
+                me.currentRetry = 0;
+				Ext.Viewport.setMasked(false);
+                if(j.clientState == 0){
+					me.userName = b.up('frmConnect').config.jsonData.settings.social_login.temp_username; //Makes this unique
+        			me.password = b.up('frmConnect').config.jsonData.settings.social_login.temp_password;  
+                    me.socialTempEncPwd(j.challenge);
+                }
+                if(j.clientState == 1){
+                    if(CoovaChilli.config.Config.getNoStatus() == true){
+                        window.location=CoovaChilli.config.Config.getRedirectTo();
+                    }else{              
+                        me.coovaRefresh(); //Refresh 
+                    }
+                }           
+            },
+            failure: function(){
+				Ext.Viewport.setMasked(false);
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Before login - Retry to fetch Coova status "+me.currentRetry);
+                    me.socialButtonClicked();
+                }else{
+                    me.showLoginError('Could not fetch coova status');
+                }
+            },
+            scope: me 
+        });
+    },
+    socialTempEncPwd: function(challenge){
+		var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Encrypting password for temp connection'
+        });
+        //In order to prevent the cleartext password to traverse the line; we to a JSONP https call
+        var me = this;
+        Ext.data.JsonP.request({
+            url: CoovaChilli.config.Config.getUrlUam(), //This needs to be https!
+            callbackKey: 'callback',
+            params: {
+                challenge: challenge,
+                password: me.password
+            },
+            success: function(j){
+				Ext.Viewport.setMasked(false);
+                me.socialTempLogin(j.response);
+            },
+            failure: function(){
+               // console.log("UAM service is down");
+				Ext.Viewport.setMasked(false);
+                me.showLoginError("UAM service is down"); 
+            },
+            scope: me 
+        });
+    },
+    socialTempLogin:  function(encPwd){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Trying temp connection'
+        });
+        var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
+        Ext.data.JsonP.request({
+            url: urlLogin,
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
+            callbackKey: 'callback',
+            params: {
+                username: me.userName,
+                password: encPwd
+            },
+            success: me.socialTempLoginResults,           
+            failure: function(){
+				Ext.Viewport.setMasked(false);
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Retry to log in "+me.currentRetry);
+                    me.socialTempLogin(encPwd);
+                }else{
+                    me.showLoginError("Coova login service is down");
+                }
+            },
+            scope: me 
+        });
+    },
+    socialTempLoginResults : function(j){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Checking feedback results'
+        });
+
+        me.currentRetry = 0;    //Reset if there were retries
+        if(j.clientState == 0){    
+            var msg = 'Temp Social Login user failed authentication'
+            if(j.message != undefined){
+                msg =j.message;
+            }
+			Ext.Viewport.setMasked(false);
+            me.showLoginError(msg);
+        }else{
+            console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+			//We need to add a query string but do not need to add ALL the items
+			var keys 		= Ext.Object.getKeys(me.queryObj);
+			var required 	= {}; //Empty object
+			Ext.Array.forEach(keys,function(item,count,items){
+				if(Ext.Array.contains(me.notRequired, item) == false){
+					required[item] = me.queryObj[item];
+				} 
+				console.log(item);
+			});
+			required.pathname   	= window.location.pathname;
+            required.hostname   	= window.location.hostname;
+            required.protocol   	= window.location.protocol;
+			required.social_login 	= 1;
+			var q_s 				= Ext.Object.toQueryString(required);
+			console.log(q_s);
+			//Dynamically build the redirect URL to which Social Login we will use...
+			window.location=CoovaChilli.config.Config.getUrlSocialBase()+me.SocialName+"?"+q_s;
+			//window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
+        }
+    },
+	checkSocialLoginReturn: function(){
+		var me = this;
+       	if(	(me.queryObj.sl_type 	!= undefined)&& //e.g. user or voucher
+			(me.queryObj.sl_name 	!= undefined)&& //e.g. Facebook
+			(me.queryObj.sl_value 	!= undefined)   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
+		){ 
+			//console.log("Finding transaction details for "+ me.queryObj.tx);
+			Ext.Ajax.request({
+				url     : CoovaChilli.config.Config.getUrlSocialInfoFor(),
+				method  : 'GET',
+				params: {
+					sl_type		: me.queryObj.sl_type,
+					sl_name		: me.queryObj.sl_name,
+					sl_value	: me.queryObj.sl_value
+				},
+				success : function(response){
+					var jsonData    = Ext.JSON.decode(response.responseText);
+
+					if(jsonData.success){   
+						me.userName = jsonData.data.username; //Makes this unique
+						me.password = jsonData.data.password;   
+						console.log(jsonData.data.username);
+						console.log(jsonData.data.password);
+						me.socialTempDisconnect();
+					}else{
+						console.log("big problems");
+					}       
+				},
+				scope: me
+			});
+        }
+	},
+	socialTempDisconnect: function(){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Disconnecting temp user'
+        });
+
+        var urlLogoff = 'http://'+me.uamIp+':'+me.uamPort+'/json/logoff';
+        Ext.data.JsonP.request({
+            url: urlLogoff,
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
+            callbackKey: 'callback',
+            success: function (){
+                me.currentRetry = 0;
+				console.log("Disconnected well - now connect with the final userzzz");
+				Ext.Viewport.setMasked(false);
+				me.socialFinalSatus();
+            },           
+            failure: function(){
+				Ext.Viewport.setMasked(false);
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                    me.socialTempDisconnect();
+                }else{
+                    me.showLoginError("Failed to disconnect");
+                }
+            },
+            scope: me //VERY VERY VERY important
+        });
+    },
+	socialFinalSatus: function(){
+		var me 				= this;
+        var urlStatus 		= 'http://'+me.uamIp+':'+me.uamPort+'/json/status';
+        Ext.data.JsonP.request({
+            url			: urlStatus,
+            timeout		: CoovaChilli.config.Config.getJsonTimeout(),
+            callbackKey	: 'callback',
+            success: function(j){
+                me.currentRetry = 0;
+				Ext.Viewport.setMasked(false);
+                if(j.clientState == 0){
+                    me.socialFinalEncPwd(j.challenge);
+                }
+                if(j.clientState == 1){
+                    if(CoovaChilli.config.Config.getNoStatus() == true){
+                        window.location=CoovaChilli.config.Config.getRedirectTo();
+                    }else{              
+                        me.coovaRefresh(); //Refresh 
+                    }
+                }           
+            },
+            failure: function(){
+				Ext.Viewport.setMasked(false);
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Before login - Retry to fetch Coova status "+me.currentRetry);
+                    me.socialFinalSatus();
+                }else{
+                    me.showLoginError('Could not fetch coova status');
+                }
+            },
+            scope: me 
+        });
+    },
+	socialFinalEncPwd: function(challenge){
+
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Encrypting final password'
+        });
+        //In order to prevent the cleartext password to traverse the line; we to a JSONP https call
+
+        Ext.data.JsonP.request({
+            url: me.application.config.urlUam, //This needs to be https!
+            callbackKey: 'callback',
+            params: {
+                challenge: challenge,
+                password: me.password
+            },
+            success: function(j){
+				Ext.Viewport.setMasked(false);
+                me.socialFinalLogin(j.response);
+            },
+            failure: function(){
+               // console.log("UAM service is down");
+				Ext.Viewport.setMasked(false);
+                me.showLoginError("UAM service is down"); 
+            },
+            scope: me 
+        });
+    },
+    socialFinalLogin:  function(encPwd){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Doing final login'
+        });
+        var urlLogin = 'http://'+me.uamIp+':'+me.uamPort+'/json/logon';
+        Ext.data.JsonP.request({
+            url: urlLogin,
+            timeout: CoovaChilli.config.Config.getJsonTimeout(),
+            callbackKey: 'callback',
+            params: {
+                username: me.userName,
+                password: encPwd
+            },
+            success: me.socialFinalLoginResults,           
+            failure: function(){
+				Ext.Viewport.setMasked(false);
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                  //  console.log("Retry to log in "+me.currentRetry);
+                    me.socialFinalLogin(encPwd);
+                }else{
+                    me.showLoginError("Coova login service is down");
+                }
+            },
+            scope: me 
+        });
+    },
+    socialFinalLoginResults : function(j){
+        var me = this;
+		Ext.Viewport.setMasked(false);
+        me.currentRetry = 0;    //Reset if there were retries
+        if(j.clientState == 0){    
+            var msg = 'Temp Social Login user failed authentication'
+            if(j.message != undefined){
+                msg =j.message;
+            }
+			me.showConnect();
+            me.showLoginError(msg);
+        }else{
+			if(CoovaChilli.config.Config.getNoStatus() == true){
+                window.location=CoovaChilli.config.Config.getRedirectTo();
+            }else{              
+                me.coovaRefresh(); //Refresh 
+            }
+        }
+    }
 });
