@@ -91,7 +91,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     sessionData : undefined,
 
-    retryCount  : 1, //Make it high to start with --- sometimes it really takes long!
+    retryCount  : 10, //Make it high to start with --- sometimes it really takes long!
     currentRetry: 0,
 
     userName    : '',
@@ -102,7 +102,8 @@ Ext.define('CoovaChilli.controller.cMain', {
 
     queryObj    : undefined,
 
-    currentSlide : 0,
+    currentSlide: 0,
+	notRequired	: [ 'q', 'res',	'challenge', 'called', 'mac', 'ip', 'sessionid', 'userurl', 'md'],
 
     frmPayUExist        : false,
     sPayUPricesLoaded   : false,
@@ -136,7 +137,7 @@ Ext.define('CoovaChilli.controller.cMain', {
     
     onPayUStoreLoaded: function(){
         var me = this;
-        console.log("PayU store loaded");
+        //console.log("PayU store loaded");
         me.sPayUPricesLoaded = true;
         if(me.frmPayUExist){
             var fieldset    = me.getCntShop().down('fieldset');
@@ -147,13 +148,13 @@ Ext.define('CoovaChilli.controller.cMain', {
                     value: item.get('id'),
                     label: item.get('name')
                 }));
-                console.log(item.get('name'), index);
+                //console.log(item.get('name'), index);
             });
         }
     },
     onFrmPayUInit : function(f){
         var me = this;
-        console.log("PayU form inited");
+        //console.log("PayU form inited");
         me.frmPayUExist = true;
         if(me.sPayUPricesLoaded){
             var fieldset    = f.down('fieldset');
@@ -379,7 +380,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         var start   = delay;
 
         //Check if they need to accept T&C
-        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+        if(me.getFrmConnect().down('#chkTcCheck') != null){
             if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
                 me.showLoginError('First accept T&C');
                 return;
@@ -412,34 +413,30 @@ Ext.define('CoovaChilli.controller.cMain', {
         if(c_to_c != true){
           
 			//Check if there is a username controll and it is not empty
-			if(
-				(!(me.getFrmConnect().down('#inpUsername').isHidden()))&&
-				(me.getFrmConnect().down('#inpUsername').getValue() != '')
+			if(me.getFrmConnect().down('#inpUsername') != null){
+				if(me.getFrmConnect().down('#inpUsername').getValue() != ''){
+				    me.userName = me.getFrmConnect().down('#inpUsername').getValue();
+		        	me.password = me.getFrmConnect().down('#inpPassword').getValue();
+		        	me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
 
-			){
-		        me.userName = me.getFrmConnect().down('#inpUsername').getValue();
-            	me.password = me.getFrmConnect().down('#inpPassword').getValue();
-            	me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
-
-				//Auto suffix for permanent users only
-				if(auto_suffix_check){
-					//Check if not already in username
-					var re = new RegExp(".*"+auto_suffix+"$");
-					if(me.userName.match(re)==null){
-						me.userName = me.userName+auto_suffix;
+					//Auto suffix for permanent users only
+					if(auto_suffix_check){
+						//Check if not already in username
+						var re = new RegExp(".*"+auto_suffix+"$");
+						if(me.userName.match(re)==null){
+							me.userName = me.userName+auto_suffix;
+						}
 					}
 				}
 			}
 
 			//Check if there is a voucher controll and it is not empty
-			if(
-				(!(me.getFrmConnect().down('#inpVoucher').isHidden()))&&
-				(me.getFrmConnect().down('#inpVoucher').getValue() != '')
-
-			){
-		        me.userName = me.getFrmConnect().down('#inpVoucher').getValue();
-		        me.password = me.getFrmConnect().down('#inpVoucher').getValue();
-				me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+			if(me.getFrmConnect().down('#inpVoucher') != null){
+				if(me.getFrmConnect().down('#inpVoucher').getValue() != ''){
+				    me.userName = me.getFrmConnect().down('#inpVoucher').getValue();
+				    me.password = me.getFrmConnect().down('#inpVoucher').getValue();
+					me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+				}
 			}
 
         }else{
@@ -455,7 +452,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         }
 
         //Check if they need to accept T&C
-        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+        if(me.getFrmConnect().down('#chkTcCheck') != null){
             if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
                 me.showLoginError('First accept T&C');
                 return;
@@ -821,7 +818,6 @@ Ext.define('CoovaChilli.controller.cMain', {
     onBtnPayUTap: function(button){
         var me      = this;
         var form    = button.up('formpanel');
-        console.log("Gooi hom!");
         var firstName = form.down('#firstName').getValue();
         var lastName  = form.down('#lastName').getValue();
         var email     = form.down('#email').getValue();
@@ -1231,7 +1227,7 @@ Ext.define('CoovaChilli.controller.cMain', {
 			Ext.Viewport.setMasked(false);
             me.showLoginError(msg);
         }else{
-            console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+            //console.log("Temp social login user logged in fine.... time to check if we are authenticated");
 			//We need to add a query string but do not need to add ALL the items
 			var keys 		= Ext.Object.getKeys(me.queryObj);
 			var required 	= {}; //Empty object
@@ -1239,14 +1235,13 @@ Ext.define('CoovaChilli.controller.cMain', {
 				if(Ext.Array.contains(me.notRequired, item) == false){
 					required[item] = me.queryObj[item];
 				} 
-				console.log(item);
 			});
 			required.pathname   	= window.location.pathname;
             required.hostname   	= window.location.hostname;
             required.protocol   	= window.location.protocol;
 			required.social_login 	= 1;
 			var q_s 				= Ext.Object.toQueryString(required);
-			console.log(q_s);
+			//console.log(q_s);
 			//Dynamically build the redirect URL to which Social Login we will use...
 			window.location=CoovaChilli.config.Config.getUrlSocialBase()+me.SocialName+"?"+q_s;
 			//window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
@@ -1273,11 +1268,11 @@ Ext.define('CoovaChilli.controller.cMain', {
 					if(jsonData.success){   
 						me.userName = jsonData.data.username; //Makes this unique
 						me.password = jsonData.data.password;   
-						console.log(jsonData.data.username);
-						console.log(jsonData.data.password);
+						//console.log(jsonData.data.username);
+						//console.log(jsonData.data.password);
 						me.socialTempDisconnect();
 					}else{
-						console.log("big problems");
+						//console.log("big problems");
 					}       
 				},
 				scope: me
@@ -1298,7 +1293,7 @@ Ext.define('CoovaChilli.controller.cMain', {
             callbackKey: 'callback',
             success: function (){
                 me.currentRetry = 0;
-				console.log("Disconnected well - now connect with the final userzzz");
+				//console.log("Disconnected well - now connect with the final userzzz");
 				Ext.Viewport.setMasked(false);
 				me.socialFinalSatus();
             },           
@@ -1360,7 +1355,7 @@ Ext.define('CoovaChilli.controller.cMain', {
         //In order to prevent the cleartext password to traverse the line; we to a JSONP https call
 
         Ext.data.JsonP.request({
-            url: me.application.config.urlUam, //This needs to be https!
+            url: CoovaChilli.config.Config.getUrlUam(), //This needs to be https!
             callbackKey: 'callback',
             params: {
                 challenge: challenge,

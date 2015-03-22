@@ -148,7 +148,7 @@ Ext.define('Mikrotik.view.tabMain', {
 					title		: 'Payment',
 					xtype		: 'navMyGateCreditCard',
 					iconCls     : 'reply',
-					itemId		: 'navLostPassword'
+					itemId		: 'navMyGateCreditCard'
 				}
 			]);
 		}
