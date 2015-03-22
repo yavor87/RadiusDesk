@@ -16,7 +16,9 @@ Ext.define('Mikrotik.config.Config', {
         urlPayUVoucher  : 'http://'+document.location.hostname+'/cake2/rd_cake/fin_pay_u_transactions/voucher_info_for.json',
 		urlUsage		: 'http://'+document.location.hostname+'/cake2/rd_cake/radaccts/get_usage.json',
 		urlAdd			: 'http://'+document.location.hostname+'/cake2/rd_cake/register_users/new_permanent_user.json',
-		urlLostPw		: 'http://'+document.location.hostname+'/cake2/rd_cake/register_users/lost_password.json'
+		urlLostPw		: 'http://'+document.location.hostname+'/cake2/rd_cake/register_users/lost_password.json',
+		urlSocialBase	: 'http://'+document.location.hostname+'/cake2/rd_cake/auth/', 
+		urlSocialInfoFor: 'http://'+document.location.hostname+'/cake2/rd_cake/third_party_auths/info_for.json' 
     },
  
     constructor: function(config) {

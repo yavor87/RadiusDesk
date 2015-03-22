@@ -56,6 +56,10 @@ Ext.define('Mikrotik.controller.cMain', {
 			'navMyGateCreditCard #navBtnNext' : {
 				tap		: 'onMGCCNavBtnNextTap'
 			},
+			//=== Social Login ==
+			'frmConnect	[type="socialButton"]' : {
+				tap		: 'socialButtonClicked'
+			}
         },
         views: [
             'cntNotPresent',
@@ -99,6 +103,8 @@ Ext.define('Mikrotik.controller.cMain', {
 
     currentSlide    : 0,
 	jsonData		: undefined,
+
+	notRequired		: ['q'],
         
     //called when the Application is launched, remove if not needed
     launch: function(app) {
@@ -169,6 +175,9 @@ Ext.define('Mikrotik.controller.cMain', {
 
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
+
+		//Social login
+		me.checkSocialLoginReturn();
 
         //Check if we need to start a slideshow
         me.checkForSlideshow(jsonData);
@@ -314,7 +323,7 @@ Ext.define('Mikrotik.controller.cMain', {
         var start   = delay;
 
         //Check if they need to accept T&C
-        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+        if(me.getFrmConnect().down('#chkTcCheck') != null){
             if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
                 me.showLoginError('First accept T&C');
                 return;
@@ -346,34 +355,30 @@ Ext.define('Mikrotik.controller.cMain', {
         if(c_to_c != true){
            
 			//Check if there is a username controll and it is not empty
-			if(
-				(!(me.getFrmConnect().down('#inpUsername').isHidden()))&&
-				(me.getFrmConnect().down('#inpUsername').getValue() != '')
+			if(me.getFrmConnect().down('#inpUsername') != null){
+				if(me.getFrmConnect().down('#inpUsername').getValue() != ''){
+				    me.userName = me.getFrmConnect().down('#inpUsername').getValue();
+		        	me.password = me.getFrmConnect().down('#inpPassword').getValue();
+		        	me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
 
-			){
-		        me.userName = me.getFrmConnect().down('#inpUsername').getValue();
-            	me.password = me.getFrmConnect().down('#inpPassword').getValue();
-            	me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
-
-				//Auto suffix for permanent users only
-				if(auto_suffix_check){
-					//Check if not already in username
-					var re = new RegExp(".*"+auto_suffix+"$");
-					if(me.userName.match(re)==null){
-						me.userName = me.userName+auto_suffix;
+					//Auto suffix for permanent users only
+					if(auto_suffix_check){
+						//Check if not already in username
+						var re = new RegExp(".*"+auto_suffix+"$");
+						if(me.userName.match(re)==null){
+							me.userName = me.userName+auto_suffix;
+						}
 					}
 				}
 			}
 
 			//Check if there is a voucher controll and it is not empty
-			if(
-				(!(me.getFrmConnect().down('#inpVoucher').isHidden()))&&
-				(me.getFrmConnect().down('#inpVoucher').getValue() != '')
-
-			){
-		        me.userName = me.getFrmConnect().down('#inpVoucher').getValue();
-		        me.password = me.getFrmConnect().down('#inpVoucher').getValue();
-				me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+			if(me.getFrmConnect().down('#inpVoucher') != null){
+				if(me.getFrmConnect().down('#inpVoucher').getValue() != ''){
+				    me.userName = me.getFrmConnect().down('#inpVoucher').getValue();
+				    me.password = me.getFrmConnect().down('#inpVoucher').getValue();
+					me.remember = me.getFrmConnect().down('#inpRememberMe').isChecked();
+				}
 			}
 
         }else{
@@ -389,7 +394,7 @@ Ext.define('Mikrotik.controller.cMain', {
         }
 
         //Check if they need to accept T&C
-        if(me.getFrmConnect().down('#chkTcCheck').getHidden() == false){
+        if(me.getFrmConnect().down('#chkTcCheck') != null){
             if(me.getFrmConnect().down('#chkTcCheck').isChecked() == false){
                 me.showLoginError('First accept T&C');
                 return;
@@ -965,5 +970,181 @@ Ext.define('Mikrotik.controller.cMain', {
 		if(activeId == 'pnlEnd'){
 			view.pop(2); //Remove the last two screens; ending with screen one
 		}
-	}
+	},
+
+	//========== Social Login =======
+
+	socialButtonClicked: function(b){
+
+		var me 				= this;
+		me.SocialName 		= b.getItemId().toLowerCase();
+
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Starting social login for '+me.SocialName
+        });
+
+		me.userName = b.up('frmConnect').config.jsonData.settings.social_login.temp_username; //Makes this unique
+        me.password = b.up('frmConnect').config.jsonData.settings.social_login.temp_password;
+  
+        me.doSocialTempLogin();
+    },
+	doSocialTempLogin: function(){
+		var me = this;
+		var xtraParams = { 
+            'username': me.userName,
+            'password': me.password
+        }
+
+        Ext.data.JsonP.request({
+            url         : me.queryObj.link_login_only,
+            callbackKey : 'var',
+            params      : xtraParams,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
+            success: function(j){
+                me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
+
+                //If ok (logon.html)
+                if(j.logged_in == 'yes'){  
+                     //console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+					//We need to add a query string but do not need to add ALL the items
+					var keys 		= Ext.Object.getKeys(me.queryObj);
+					var required 	= {}; //Empty object
+					Ext.Array.forEach(keys,function(item,count,items){
+						if(Ext.Array.contains(me.notRequired, item) == false){
+							required[item] = me.queryObj[item];
+						} 
+					});
+					required.pathname   	= window.location.pathname;
+				    required.hostname   	= window.location.hostname;
+				    required.protocol   	= window.location.protocol;
+					required.social_login 	= 1;
+					var q_s 				= Ext.Object.toQueryString(required);
+					//console.log(q_s);
+					//Dynamically build the redirect URL to which Social Login we will use...
+					window.location=Mikrotik.config.Config.getUrlSocialBase()+me.SocialName+"?"+q_s;
+					//window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
+                }
+
+                //If failed (login.html -> if caluse)
+                if(j.logged_in == 'no'){
+					var msg = 'Temp authentication failure please try again'
+                    if(j.error_orig != undefined){
+                        msg     = j.error_orig;
+                    }
+                    me.showLoginError(msg);
+                }      
+            },
+            failure: function(){
+                //We will retry for me.retryCount
+                me.showLoginError("Failed to log into Mikrotik");
+
+            },
+            scope: me //VERY VERY VERY important
+        });
+		//-------
+	},
+	checkSocialLoginReturn: function(){
+		var me = this;
+       	if(	(me.queryObj.sl_type 	!= undefined)&& //e.g. user or voucher
+			(me.queryObj.sl_name 	!= undefined)&& //e.g. Facebook
+			(me.queryObj.sl_value 	!= undefined)   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
+		){ 
+			//console.log("Finding transaction details for "+ me.queryObj.tx);
+			Ext.Ajax.request({
+				url     : CoovaChilli.config.Config.getUrlSocialInfoFor(),
+				method  : 'GET',
+				params: {
+					sl_type		: me.queryObj.sl_type,
+					sl_name		: me.queryObj.sl_name,
+					sl_value	: me.queryObj.sl_value
+				},
+				success : function(response){
+					var jsonData    = Ext.JSON.decode(response.responseText);
+
+					if(jsonData.success){   
+						me.userName = jsonData.data.username; //Makes this unique
+						me.password = jsonData.data.password;   
+						console.log(jsonData.data.username);
+						console.log(jsonData.data.password);
+						me.socialTempDisconnect();
+					}else{
+						console.log("big problems");
+					}       
+				},
+				scope: me
+			});
+        }
+	},
+	socialTempDisconnect: function(){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Disconnecting temp user'
+        });
+
+        Ext.data.JsonP.request({
+            url         : me.queryObj.link_logout,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
+            callbackKey : 'var',
+            success: function (){
+                me.currentRetry = 0;
+                me.socialFinalLogin();
+            },           
+            failure: function(){
+                //We will retry for me.retryCount
+                me.currentRetry = me.currentRetry+1;
+                if(me.currentRetry <= me.retryCount){
+                    me.socialTempDisconnect();
+                }else{
+                    me.showLoginError("Failed to disconnect");
+                }
+            },
+            scope: me //VERY VERY VERY important
+        });
+    },
+    socialFinalLogin:  function(){
+        var me = this;
+		Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            message: 'Doing final login'
+        });
+
+        var xtraParams = { 
+            'username': me.userName,
+            'password': me.password
+        }
+
+        Ext.data.JsonP.request({
+            url         : me.queryObj.link_login_only,
+            callbackKey : 'var',
+            params      : xtraParams,
+            timeout     : Mikrotik.config.Config.getJsonTimeout(),
+            success: function(j){
+                me.currentRetry = 0 //Reset the current retry if it was perhaps already some value
+
+                //If ok (logon.html)
+                if(j.logged_in == 'yes'){  
+                	 me.mtRefresh(); //Refresh     
+                }
+
+                //If failed (login.html -> if caluse)
+                if(j.logged_in == 'no'){
+                    me.showConnect();
+					var msg = 'Social authentication failure please try again'
+                    if(j.error_orig != undefined){
+                        msg     = j.error_orig;
+                    }
+                    me.showLoginError(msg);
+                }      
+            },
+            failure: function(){
+                //We will retry for me.retryCount
+                me.showLoginError("Failed to log into Mikrotik");
+
+            },
+            scope: me //VERY VERY VERY important
+        });
+		//-------
+    }
 });

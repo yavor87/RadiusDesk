@@ -14,27 +14,8 @@ Ext.define('Mikrotik.view.frmConnect', {
         var me          = this;
         var scaler_url = Mikrotik.config.Config.getUrlScaler();
 
-        var t_c_hidden = true;
-        if(config.jsonData.settings.t_c_check == true){
-            t_c_hidden = false;
-        }
-
-		//Some sane defaults
-        var un_hidden = false;
-        var pw_hidden = false;
-        var rm_hidden = false;
-		var v_hidden  = true;
-		var or_hidden = true;
-
-        if(config.jsonData.settings.connect_only == true){
-            un_hidden = true;
-            pw_hidden = true;
-            rm_hidden = true;
-			v_hidden  = true;
-			or_hidden = true;
-        }
-
         var buttons;
+
 
         if(config.jsonData.settings.connect_check == true){
             if(config.jsonData.settings.connect_only == true){
@@ -87,41 +68,99 @@ Ext.define('Mikrotik.view.frmConnect', {
                 ];
         }
 
-		//We need to turn the controlls on and off depending what is selected:		
-		if(
-			(config.jsonData.settings.voucher_login_check 	== false)&&
-			(config.jsonData.settings.user_login_check 		== true)&&
-			(config.jsonData.settings.connect_only 			== false)
+
+		//Build the fieldset items
+		var fs_items	= [{
+                        xtype       : 'container',
+                        tpl: [
+                                '<div class="rdCenter">',
+                                '<h2>{name}</h2><img src="'+scaler_url+'?height=90&width=90&image={icon_file_name}">',
+                                '</div>'
+                        ],
+                        data : config.jsonData.detail
+                    }];
+
+	    if((config.jsonData.settings.voucher_login_check)&&
+			(config.jsonData.settings.connect_only == false)
 		){
-			un_hidden = false;
-		    pw_hidden = false;
-		    rm_hidden = false;
-			v_hidden  = true;
-			or_hidden = true;
+			fs_items  = Ext.Array.merge(fs_items, [{
+                xtype   	: 'textfield',
+                name    	: 'name',
+                placeHolder : 'Voucher',
+                itemId  	: 'inpVoucher'
+            }]);
 		}
 
-		if(
-			(config.jsonData.settings.voucher_login_check 	== true)&&
-			(config.jsonData.settings.user_login_check 		== false)&&
-			(config.jsonData.settings.connect_only 			== false)
+		if((config.jsonData.settings.voucher_login_check 	== true)&&
+			(config.jsonData.settings.user_login_check 		== true)&&
+			(config.jsonData.settings.connect_only == false)
 		){
-			un_hidden = true;
-		    pw_hidden = true;
-		    rm_hidden = false;
-			v_hidden  = false;
-			or_hidden = true;
+			fs_items  = Ext.Array.merge(fs_items, [{
+				xtype	: 'label',
+				html	: '-OR-',
+				baseCls : 'lblSeperator'
+			}]);
 		}
 
-		if(
-			(config.jsonData.settings.voucher_login_check 	== true)&&
-			(config.jsonData.settings.user_login_check 		== true)&&
-			(config.jsonData.settings.connect_only 			== false)
+		if((config.jsonData.settings.user_login_check == true)&&
+			(config.jsonData.settings.connect_only == false)
 		){
-			un_hidden = false;
-		    pw_hidden = false;
-		    rm_hidden = false;
-			v_hidden  = false;
-			or_hidden = false;
+			fs_items  = Ext.Array.merge(fs_items, [{
+                xtype   	: 'textfield',
+                name    	: 'name',
+                placeHolder : 'Username',
+                itemId  	: 'inpUsername'
+            },
+            {
+                xtype   	: 'passwordfield',
+                name    	: 'password',
+                placeHolder : 'Password',
+                itemId  	: 'inpPassword'
+            }]);
+		}
+
+		if(config.jsonData.settings.connect_only == false){
+			fs_items  = Ext.Array.merge(fs_items, [{
+		        xtype   	: 'checkboxfield',
+		        name    	: 'remember_me',
+		        label   	: 'Remember me',
+				placeHolder : 'Remember me',
+		        itemId  	: 'inpRememberMe'
+		    }]);
+		}
+
+		if(config.jsonData.settings.t_c_check){
+            fs_items  = Ext.Array.merge(fs_items, [{
+		        xtype       : 'button',
+		        text        : 'View Terms & Conditions',
+				margin		: '10 0 0 0',
+		        itemId      : 'btnViewTC'
+		    },
+            {
+                label   	: 'Accept T&C',
+                name    	: 'chkTcCheck',
+                xtype   	: 'checkboxfield',
+                itemId  	: 'chkTcCheck'
+            }]);
+        }
+
+		//Social Login Buttons
+		if((config.jsonData.settings.social_login.active)&&
+			(config.jsonData.settings.connect_only == false)){
+
+			Ext.Array.forEach(config.jsonData.settings.social_login.items,function(item,index,allItems){
+					var n = item.name;
+					fs_items = Ext.Array.merge(fs_items, [
+						{
+							xtype       : 'button',
+							text		: 'Login with '+n,
+							margin		: '10 0 0 0',
+							itemId      : n,
+							type		: 'socialButton'
+						}
+					]);
+				}
+			);
 		}
 
         var fs = Ext.create('Ext.form.FieldSet',{
@@ -130,69 +169,7 @@ Ext.define('Mikrotik.view.frmConnect', {
                 defaults    : { 'labelWidth' : '35%'},
                 scrollable  : true,
                 flex        : 1,
-                items: [
-                    {
-                        xtype       : 'container',
-                        tpl: [
-                                '<div class="rdCenter">',
-                                '<h2>{name}</h2><img src="'+scaler_url+'?height=90&width=90&image={icon_file_name}">',
-                                '</div>'
-                        ],
-                        data : config.jsonData.detail
-                    },
-					{
-                        xtype   : 'textfield',
-                        name    : 'name',
-                        label   : 'Voucher',
-                        itemId  : 'inpVoucher',
-                        hidden  : v_hidden,
-                        disabled: v_hidden
-                    },
-					{
-						xtype	: 'label',
-						html	: '-OR-',
-						baseCls : 'lblSeperator',
-						hidden	: or_hidden 
-					},
-                    {
-                        xtype   : 'textfield',
-                        name    : 'name',
-                        label   : 'Username',
-                        itemId  : 'inpUsername',
-                        hidden  : un_hidden,
-                        disabled: un_hidden
-                    },
-                    {
-                        xtype   : 'passwordfield',
-                        name    : 'password',
-                        label   : 'Password',
-                        itemId  : 'inpPassword',
-                        hidden  : pw_hidden,
-                        disabled: pw_hidden
-                    },
-                    {
-                        xtype   : 'checkboxfield',
-                        name    : 'remember_me',
-                        label   : 'Remember me',
-                        itemId  : 'inpRememberMe',
-                        hidden  : rm_hidden,
-                        disabled: rm_hidden
-                    },
-                    {
-				        xtype       : 'button',
-				        text        : 'View Terms & Conditions',
-						margin		: '10 0 0 0',
-				        itemId      : 'btnViewTC',
-						hidden		: t_c_hidden
-				    },
-                    {
-                        label   : 'Accept T&C',
-                        name    : 'chkTcCheck',
-                        xtype   : 'checkboxfield',
-                        itemId  : 'chkTcCheck',
-                        hidden  : t_c_hidden
-                    }
-                ]
+                items		: fs_items
         });
 
         config.items = [
