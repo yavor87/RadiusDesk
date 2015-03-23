@@ -88,7 +88,7 @@ Ext.define('Mikrotik.view.winCreditCard', {
 				{
                     xtype       	: 'cmbFinPaymentPlans',
                     allowBlank  	: false,
-                    labelClsExtra	: 'fieldReq',
+                    labelClsExtra	: 'fieldReq'
                 },
 				{
                     xtype       	: 'textfield',
