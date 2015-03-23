@@ -141,7 +141,28 @@ Ext.define('Mikrotik.view.pnlConnect', {
 			]);
 		}
 
+		if(me.jsonData.settings.social_login.active){
+			Ext.Array.forEach(me.jsonData.settings.social_login.items,function(item,index,allItems){
+					var n = item.name;
+					frm_items_bottom = Ext.Array.merge(frm_items_bottom, [
+						{
+							xtype		: 'button',
+							text		: 'Login with '+n,
+							textAlign	: 'left',
+							margin		: '10 0 0 0',
+							itemId		: n,
+							anchor		: '100%',
+							glyph		: Mikrotik['config']['icn'+n],
+							type		: 'socialButton'
+						}
+					]);
+				}
+			);
+		}
+
+
 		//WIP
+/*
 		frm_items_bottom = Ext.Array.merge(frm_items_bottom, [
 			{
 				xtype		: 'button',
@@ -151,7 +172,7 @@ Ext.define('Mikrotik.view.pnlConnect', {
 				anchor		: '100%'
 			}
 		]);
-
+*/
         //The default
 		if(
 			(me.jsonData.settings.voucher_login_check == false)&&

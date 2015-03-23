@@ -33,7 +33,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 
     sessionData     : undefined,
 
-    retryCount      : 1, //Make it high to start with --- sometimes it really takes long! //FIXME
+    retryCount      : 10, //Make it high to start with --- sometimes it really takes long! //FIXME
     currentRetry    : 0,
 
     userName        : undefined,
@@ -267,7 +267,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
         //Check if this was perhaps the return of a payment gateway
         me.checkPaymentGwReturn();
 
-		//WIP Social login
+		//Social login
 		me.checkSocialLoginReturn();
         
         //Check if we need to start a slideshow
@@ -1111,7 +1111,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
 			me.getConnect().setLoading();
             me.showLoginError(msg);
         }else{
-            console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+            //console.log("Temp social login user logged in fine.... time to check if we are authenticated");
 			//We need to add a query string but do not need to add ALL the items
 			var keys 		= Ext.Object.getKeys(me.queryObj);
 			var required 	= {}; //Empty object
@@ -1119,14 +1119,13 @@ Ext.define('CoovaChilli.controller.Desktop', {
 				if(Ext.Array.contains(me.notRequired, item) == false){
 					required[item] = me.queryObj[item];
 				} 
-				console.log(item);
 			});
 			required.pathname   	= window.location.pathname;
             required.hostname   	= window.location.hostname;
             required.protocol   	= window.location.protocol;
 			required.social_login 	= 1;
 			var q_s 				= Ext.Object.toQueryString(required);
-			console.log(q_s);
+			//console.log(q_s);
 			//Dynamically build the redirect URL to which Social Login we will use...
 			window.location=me.application.config.urlSocialBase+me.SocialName+"?"+q_s;
 			//window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
@@ -1153,11 +1152,11 @@ Ext.define('CoovaChilli.controller.Desktop', {
 					if(jsonData.success){   
 						me.userName = jsonData.data.username; //Makes this unique
 						me.password = jsonData.data.password;   
-						console.log(jsonData.data.username);
-						console.log(jsonData.data.password);
+						//console.log(jsonData.data.username);
+						//console.log(jsonData.data.password);
 						me.socialTempDisconnect();
 					}else{
-						console.log("big problems");
+						//console.log("big problems");
 					}       
 				},
 				scope: me
@@ -1174,7 +1173,7 @@ Ext.define('CoovaChilli.controller.Desktop', {
             callbackKey: 'callback',
             success: function (){
                 me.currentRetry = 0;
-				console.log("Disconnected well - now connect with the final userzzz");
+				//console.log("Disconnected well - now connect with the final userzzz");
 				me.getConnect().setLoading();
 				me.socialFinalSatus();
             },           
