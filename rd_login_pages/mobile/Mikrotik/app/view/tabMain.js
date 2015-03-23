@@ -141,7 +141,7 @@ Ext.define('Mikrotik.view.tabMain', {
 				}
 			]);
 		}
-
+/*
 		if(true){
 			i = Ext.Array.merge(i, [
 				{
@@ -152,6 +152,7 @@ Ext.define('Mikrotik.view.tabMain', {
 				}
 			]);
 		}
+*/
 
         config.items = i
 
