@@ -907,7 +907,7 @@ Ext.define('Mikrotik.controller.cMain', {
 				title		: 'Supply detail',
 			    xtype		: 'frmMyGateCreditCard',
 				itemId		: 'frmMyGateCreditCard',
-				scrollable  : false,
+				scrollable  : false
 			});	
 		}
 
