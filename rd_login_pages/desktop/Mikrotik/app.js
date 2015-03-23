@@ -41,7 +41,9 @@ Ext.application({
 		urlUsage		: infoServer+'/cake2/rd_cake/radaccts/get_usage.json',
 		urlAdd			: infoServer+'/cake2/rd_cake/register_users/new_permanent_user.json',
 		urlLostPw		: infoServer+'/cake2/rd_cake/register_users/lost_password.json',
-		urlMyGateToken	: infoServer+'/cake2/rd_cake/fin_my_gate_tokens/cc_to_token.json'
+		urlMyGateToken	: infoServer+'/cake2/rd_cake/fin_my_gate_tokens/cc_to_token.json',
+		urlSocialBase	: infoServer+'/cake2/rd_cake/auth/', //Be sure this is the same as specified in FB e.g. IP or DNS!!
+		urlSocialInfoFor: infoServer+'/cake2/rd_cake/third_party_auths/info_for.json' //To pull the username and password associated with this ID + type
     },
     //____ End of Configuration settings _____
 
@@ -137,7 +139,10 @@ Ext.application({
             icnMesh         : 57460,
             icnShop         : 57554,
             icnConnect      : 57489,
-            icnOptions      : 57596
+            icnOptions      : 57596,
+			icnFacebook		: 57558,
+			icnGoogle		: 57614,
+			icnTwitter		: 57574
         };
     }
 });
