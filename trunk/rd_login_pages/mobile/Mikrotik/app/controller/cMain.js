@@ -86,7 +86,7 @@ Ext.define('Mikrotik.controller.cMain', {
 
     sessionData 	: undefined,
 
-    retryCount  	: 1, //Make it high to start with --- sometimes it really takes long! FIXME Reduce after development
+    retryCount  	: 10, //Make it high to start with --- sometimes it really takes long! FIXME Reduce after development
     currentRetry	: 0,
 
     userName    	: '',
@@ -511,18 +511,21 @@ Ext.define('Mikrotik.controller.cMain', {
 
     showNotHotspot: function(){
         var me = this;
+		Ext.Viewport.setMasked(false);
         me.getFrmConnect().hide();
         me.getCntNotHotspot().show();
         me.getCntStatus().hide();
     },
     showConnect:  function(){
         var me = this;
+		Ext.Viewport.setMasked(false);
         me.getFrmConnect().show();
         me.getCntNotHotspot().hide();
         me.getCntStatus().hide();
     },
     showStatus: function(){
         var me = this;
+		Ext.Viewport.setMasked(false);
         me.getFrmConnect().hide();
         me.getCntNotHotspot().hide();
         me.getCntStatus().show();
