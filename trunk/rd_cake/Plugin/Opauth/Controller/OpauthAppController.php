@@ -231,10 +231,26 @@ class OpauthAppController extends AppController {
 				$s_key		= $social_login_info['key'];
 				$s_secret	= $social_login_info['secret'];
 
-				Configure::write('Opauth.Strategy.'.$strategy, array(
-				   'app_id' 	=> "$s_key",
-				   'app_secret' => "$s_secret"
-				));
+				if($strategy == 'Facebook'){ //Facebook = app_id and app_secret
+					Configure::write('Opauth.Strategy.'.$strategy, array(
+					   'app_id' 	=> "$s_key",
+					   'app_secret' => "$s_secret"
+					));
+				}
+
+				if($strategy == 'Google'){ //Google = client_id and client_secret
+					Configure::write('Opauth.Strategy.'.$strategy, array(
+					   'client_id' 	=> "$s_key",
+					   'client_secret' => "$s_secret"
+					));
+				}
+
+				if($strategy == 'Twitter'){ //Twitter = key and secret
+					Configure::write('Opauth.Strategy.'.$strategy, array(
+					   'key' 	=> "$s_key",
+					   'secret' => "$s_secret"
+					));
+				}
 				return true;	
 			}
 		}
