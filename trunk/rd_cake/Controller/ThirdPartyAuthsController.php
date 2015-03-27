@@ -44,6 +44,8 @@ class ThirdPartyAuthsController extends AppController {
 		//If the person authenticated fine ($this-data[validated] ==1) then we can search for it among the vouchers or users
 		if($this->data['validated'] ==1){
 
+			$record_info = false;
+
 			$conditions = array("OR" =>array());
       
 		    foreach(array_keys($wanted_query_items) as $key){
@@ -80,6 +82,11 @@ class ThirdPartyAuthsController extends AppController {
 				$extra_value	= 'sl_'.$dd_id."_".$this->data['auth']['uid']; //Add social login to work on permanent usernames
 				$type			= $social_login_info['type'];
 
+				//Check if this one wants to record / update info
+				if($social_login_info['record_info'] == true){
+					$record_info = true;
+				}
+
 				if($type == 'voucher'){
 					$this->Voucher = ClassRegistry::init('Voucher');
 					$q_voucher =  $this->Voucher->find('first', 
@@ -108,6 +115,12 @@ class ThirdPartyAuthsController extends AppController {
 					}
 				}
 			}
+
+			//Check if we should record / update this user's detail
+			if($record_info){
+				$this->_record_or_update_info();
+			}
+
 		}
 
 		$new_query_string=$new_query_string."&sl_type=$type&sl_value=$extra_value"."&sl_name=$extra_name";
@@ -322,4 +335,59 @@ class ThirdPartyAuthsController extends AppController {
 		}
 		return $voucher_data;
 	}
+
+	private function _record_or_update_info(){
+
+		$common_info 	= array('image', 'name', 'first_name', 'last_name', 'email');
+
+		$facebook_info 	= array('gender','locale','timezone');
+		$google_info	= array('locale','timezone'); 
+
+		//First check if there are a social_login_user with this uuid from the provider and then update the entry
+		$provider 	= $this->data['auth']['provider'];
+		$uid		= $this->data['auth']['uid'];
+
+		$data		= array()
+
+		$this->SocialLoginUser = ClassRegistry::init('SocialLoginUser');
+		$q_r = $this->SocialLoginUser->find('first',array('conditions' 
+			=> array('SocialLoginUser.provider' => $provider,'SocialLoginUser.uid' =>$uid)
+		));
+
+		if($q_r){
+			$data['id'] = $q_r['SocialLoginUser']['id'];	
+		}
+
+		//Common info
+		foreach($common_info as $i){
+			if(array_key_exists($i,$this->data['auth']['info'])){
+				$data["$i"] = $this->data['auth']['info']["$i"];
+			}
+		}
+
+		//Gather the data
+		if($this->data['auth']['provider'] == 'Facebook'){
+			foreach($facebook_info as $f){
+				if(array_key_exists($f,$this->data['auth']['raw'])){
+					$data["$f"] = $this->data['auth']['info']["$f"];
+				}
+			}	
+		}
+
+		//Gather the data
+		if($this->data['auth']['provider'] == 'Google'){
+			foreach($facebook_info as $g){
+				if(array_key_exists($g,$this->data['auth']['raw'])){
+					$data["$g"] = $this->data['auth']['info']["$g"];
+				}
+			}	
+		}
+
+		//Update the last_connect_time
+		$data['last_connect_time'] =date('Y-m-d H:i:s'); 
+
+		//Save the data
+		$this->SocialLoginUser->save($data);
+	}
+
 }
