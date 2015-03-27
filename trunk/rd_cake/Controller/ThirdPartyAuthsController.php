@@ -347,7 +347,9 @@ class ThirdPartyAuthsController extends AppController {
 		$provider 	= $this->data['auth']['provider'];
 		$uid		= $this->data['auth']['uid'];
 
-		$data		= array()
+		$data		= array();
+
+		$data['provider']	= $provider;
 
 		$this->SocialLoginUser = ClassRegistry::init('SocialLoginUser');
 		$q_r = $this->SocialLoginUser->find('first',array('conditions' 
@@ -369,7 +371,7 @@ class ThirdPartyAuthsController extends AppController {
 		if($this->data['auth']['provider'] == 'Facebook'){
 			foreach($facebook_info as $f){
 				if(array_key_exists($f,$this->data['auth']['raw'])){
-					$data["$f"] = $this->data['auth']['info']["$f"];
+					$data["$f"] = $this->data['auth']['raw']["$f"];
 				}
 			}	
 		}
@@ -378,7 +380,7 @@ class ThirdPartyAuthsController extends AppController {
 		if($this->data['auth']['provider'] == 'Google'){
 			foreach($facebook_info as $g){
 				if(array_key_exists($g,$this->data['auth']['raw'])){
-					$data["$g"] = $this->data['auth']['info']["$g"];
+					$data["$g"] = $this->data['auth']['raw']["$g"];
 				}
 			}	
 		}
