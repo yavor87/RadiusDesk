@@ -16,7 +16,7 @@ if not exists (select * from information_schema.columns
 		`email` varchar(100) NOT NULL DEFAULT '',
 		`image` varchar(100) NOT NULL DEFAULT '',
 		`locale` varchar(5) NOT NULL DEFAULT '',
-		`timezone` tinyint(1) NOT NULL DEFAULT '0',
+		`timezone` tinyint(3) NOT NULL DEFAULT '0',
 		`date_of_birth` date DEFAULT NULL,
 		`gender` enum('male','female') DEFAULT 'male',
 		`last_connect_time` datetime DEFAULT NULL,
