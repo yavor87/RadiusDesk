@@ -111,6 +111,10 @@ class ThirdPartyAuthsController extends AppController {
 						$social_login_info['name'] 		    = $this->data['auth']['info']['first_name'];
 						$social_login_info['surname'] 		= $this->data['auth']['info']['last_name'];
 
+						$social_login_info['email']			= '';
+						if(array_key_exists('email',$this->data['auth']['info'])){
+							$social_login_info['email'] = $this->data['auth']['info']['email'];
+						}
 						$this->_addPermanentUser($social_login_info);
 					}
 				}
@@ -235,6 +239,7 @@ class ThirdPartyAuthsController extends AppController {
 		$q_r			= $this->User->find('first',array('conditions' => array('User.username' => 'root')));
 		$root_token 	= $q_r['User']['token'];
 		$password		= $this->_generatePassword();
+
 
 		$postData = array(
 			'active'			=> 'active',
