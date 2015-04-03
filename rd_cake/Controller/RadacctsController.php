@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
-    public $components = array('Aa','Kicker');
+    public $components = array('Aa','Kicker', 'Counters');
     public $uses       = array('Radacct','User');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
@@ -21,6 +21,8 @@ class RadacctsController extends AppController {
 			$data_cap	= null;
 			$time_used	= null;
 			$time_cap	= null;
+
+			//We need a civilized way to tell the query if there are NO accountig data yet BUT there is a CAP (time_cap &| data_cap)! 
 
 			//$data_used	= 10000;
 			//$data_cap	= 50000;
@@ -42,7 +44,8 @@ class RadacctsController extends AppController {
 				$time_used	= $q_m_u['MacUsage']['time_used'];
 				$time_cap	= $q_m_u['MacUsage']['time_cap'];
 			}else{
-				//Check what type of user it is
+				//Check what type of user it is since there was no record under MacUsage table....
+
 				$this->Radcheck = ClassRegistry::init('Radcheck');
 				$type 			= 'unknown';
 				$q_r 			= $this->Radcheck->find('first',
@@ -51,6 +54,8 @@ class RadacctsController extends AppController {
 				if($q_r){
 				    $type = $q_r['Radcheck']['value'];
 				}
+
+				$found_data = true;
 
 				if($type == 'user'){
 					$this->User->contain();
@@ -62,6 +67,8 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_u['User']['data_cap'];
 						$time_used	= $q_u['User']['time_used'];
 						$time_cap	= $q_u['User']['time_cap'];
+					}else{
+						$found_data = false;
 					}
 				}
 
@@ -76,6 +83,8 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_v['Voucher']['data_cap'];
 						$time_used	= $q_v['Voucher']['time_used'];
 						$time_cap	= $q_v['Voucher']['time_cap'];
+					}else{
+						$found_data = false;
 					}
 				}
 
@@ -90,6 +99,24 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_v['Device']['data_cap'];
 						$time_used	= $q_v['Device']['time_used'];
 						$time_cap	= $q_v['Device']['time_cap'];
+					}else{
+						$found_data = false;
+					}
+				}
+			}
+
+			//If we don't have any data yet for this user ..we just specify its cap and 0 used....
+			if($found_data == false){
+				$profile = $this->_find_user_profile($username);
+            	if($profile){
+					$counters = $this->Counters->return_counter_data($profile,$type);
+					if(array_key_exists('time', $counters)){
+						$time_cap = $counters['time']['value'];
+						$time_used= 0;
+					}
+					if(array_key_exists('data', $counters)){
+						$data_cap = $counters['data']['value'];
+						$data_used= 0;
 					}
 				}
 			}
@@ -696,5 +723,15 @@ class RadacctsController extends AppController {
             }
         }
     }
+
+	private function _find_user_profile($username){
+        $profile = false;
+        $q_r = $this->Radcheck->find('first',array('conditions' => array('Radcheck.username' => $username,'Radcheck.attribute' => 'User-Profile')));
+        if($q_r){
+            $profile = $q_r['Radcheck']['value'];
+        }
+        return $profile;
+    }
+
 
 }
