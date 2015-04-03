@@ -113,7 +113,7 @@ class ThirdPartyAuthsController extends AppController {
 
 						$social_login_info['email']			= '';
 						if(array_key_exists('email',$this->data['auth']['info'])){
-							$social_login_info['email'] = $this->data['auth']['info']['email'];
+							$social_login_info['email'] 	= $this->data['auth']['info']['email'];
 						}
 						$this->_addPermanentUser($social_login_info);
 					}
