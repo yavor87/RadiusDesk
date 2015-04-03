@@ -5,7 +5,7 @@ class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
     public $components = array('Aa','Kicker', 'Counters');
-    public $uses       = array('Radacct','User');
+    public $uses       = array('Radacct','User','PermanentUser');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
 
@@ -58,15 +58,15 @@ class RadacctsController extends AppController {
 				$found_data = true;
 
 				if($type == 'user'){
-					$this->User->contain();
-					$q_u 		= $this->User->find('first',
-						array('conditions' => array('User.username' => $username))
+					$this->PermanentUser->contain();
+					$q_u 		= $this->PermanentUser->find('first',
+						array('conditions' => array('PermanentUser.username' => $username))
 					);
 					if($q_u){
-						$data_used	= $q_u['User']['data_used'];
-						$data_cap	= $q_u['User']['data_cap'];
-						$time_used	= $q_u['User']['time_used'];
-						$time_cap	= $q_u['User']['time_cap'];
+						$data_used	= $q_u['PermanentUser']['data_used'];
+						$data_cap	= $q_u['PermanentUser']['data_cap'];
+						$time_used	= $q_u['PermanentUser']['time_used'];
+						$time_cap	= $q_u['PermanentUser']['time_cap'];
 					}else{
 						$found_data = false;
 					}
