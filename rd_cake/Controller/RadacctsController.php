@@ -55,7 +55,7 @@ class RadacctsController extends AppController {
 				    $type = $q_r['Radcheck']['value'];
 				}
 
-				$found_data = true;
+				$new_entry = false;
 
 				if($type == 'user'){
 					$this->PermanentUser->contain();
@@ -67,8 +67,9 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_u['PermanentUser']['data_cap'];
 						$time_used	= $q_u['PermanentUser']['time_used'];
 						$time_cap	= $q_u['PermanentUser']['time_cap'];
-					}else{
-						$found_data = false;
+						if(($time_cap == null)&&($data_cap == null)){
+							$new_entry = true;
+						}
 					}
 				}
 
@@ -83,8 +84,9 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_v['Voucher']['data_cap'];
 						$time_used	= $q_v['Voucher']['time_used'];
 						$time_cap	= $q_v['Voucher']['time_cap'];
-					}else{
-						$found_data = false;
+						if(($time_cap == null)&&($data_cap == null)){
+							$new_entry = true;
+						}
 					}
 				}
 
@@ -99,14 +101,15 @@ class RadacctsController extends AppController {
 						$data_cap	= $q_v['Device']['data_cap'];
 						$time_used	= $q_v['Device']['time_used'];
 						$time_cap	= $q_v['Device']['time_cap'];
-					}else{
-						$found_data = false;
+						if(($time_cap == null)&&($data_cap == null)){
+							$new_entry = true;
+						}
 					}
 				}
 			}
 
 			//If we don't have any data yet for this user ..we just specify its cap and 0 used....
-			if($found_data == false){
+			if($new_entry){
 				$profile = $this->_find_user_profile($username);
             	if($profile){
 					$counters = $this->Counters->return_counter_data($profile,$type);
