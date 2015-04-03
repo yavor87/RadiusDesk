@@ -255,7 +255,8 @@ class ThirdPartyAuthsController extends AppController {
 			'user_id'			=> intval($i['user_id']),
 			'username'			=> $i['extra_value'],
 			'name'				=> $i['name'],
-			'surname'			=> $i['surname']
+			'surname'			=> $i['surname'],
+			'email'				=> $i['email']
         );
 
 		// Setup cURL
