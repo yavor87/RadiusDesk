@@ -264,7 +264,7 @@ class DevicesController extends AppController {
             //NOTE: we first check of the user_id is the logged in user OR a sibling of them:
             $this->{$this->modelClass}->contain('User');
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
-            $ap_id      = $item['PermanetUser']['user_id'];
+            $ap_id      = $item['PermanentUser']['user_id'];
             $username   = $item['Device']['name'];
             if($ap_id != $user_id){
                 if($this->_is_sibling_of($user_id,$ap_id)== true){
@@ -1461,7 +1461,7 @@ class DevicesController extends AppController {
                 $ap_clause      = array();
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($ap_clause,array('User.parent_id' => $id));
+                    array_push($ap_clause,array('PermanentUser.user_id' => $id));
                 }      
                 //Add it as an OR clause
                 array_push($c['conditions'],array('OR' => $ap_clause));  
