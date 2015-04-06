@@ -3,7 +3,7 @@
 //===== Vouchers ======
 
 //== Defaults for the export to pdf options ==
-$config['voucher_dafaults']['orientation']		= 'L'; //P or L
+$config['voucher_dafaults']['orientation']		= 'P'; //P or L
 $config['voucher_dafaults']['language']			= '4_4';
 $config['voucher_dafaults']['format']			= 'a4';
 $config['voucher_dafaults']['q_r']				= true;
