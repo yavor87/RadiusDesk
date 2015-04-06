@@ -50,13 +50,14 @@ if(($output_instr['format'] == 'a4')||($output_instr['format'] == 'a4_page')){
     if($output_instr['format'] == 'a4_page'){
         foreach(array_keys($voucher_data) as $key){
             $d = $voucher_data["$key"];
+			//print_r($d);
             foreach($d['vouchers'] as $v){
+				$pdf->RealmDetail = $d;
+                //Define logo
+                $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
                 // add a page
                 $pdf->AddPage();
-                //Define logo
-              //  $pdf->Logo = 'img/realms/'.$d['icon_file_name'];
-             //   $pdf->AddRealm($d);
-              //  $pdf->AddVouchers(array($v));
+                $pdf->AddVouchers(array($v));
             }
         } 
     }
