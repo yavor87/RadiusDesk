@@ -234,41 +234,43 @@ class DesktopController extends AppController {
           //  array(  'text'  => __('Vouchers'),              'iconCls' => 'vouchers'),
           //  array(  'text'  => __('Permanent users'),       'iconCls' => 'group'),
           //  array(  'text'  => __('Accounting'),            'iconCls' => 'accounting'),
-            array(  'text'  => __('Realms and Providers'),  'iconCls' => 'realms',  'glyph' => Configure::read('icnRealm') ,'menu'  =>
+            array(  'text'  => __('Realms and Providers'),  'glyph' => Configure::read('icnRealm') ,'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('Access Providers') ,'iconCls' => 'key',  'glyph' => Configure::read('icnKey'),   'itemId' => 'cAccessProviders'),
-                        array('text' => __('Realms') ,          'iconCls' => 'realms','glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'),
+                        array('text' => __('Access Providers') ,'glyph' => Configure::read('icnKey'),   'itemId' => 'cAccessProviders'),
+                        array('text' => __('Realms') ,          'glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'),
+						 array('text' => __('SSIDs') ,          'glyph' => Configure::read('icnWifi'), 'itemId' => 'cSsids'),
                     )
                 )
             ),
         //    array(  'text'  => __('Profiles'),              'iconCls' => 'profiles'),
           //  array(  'text'  => __('Activity/Stats'),        'iconCls' => 'stats'),
-            array(  'text'  => __('NAS Devices'),  'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'), 'menu'  =>
+            array(  'text'  => __('NAS Devices'), 'glyph' => Configure::read('icnNas'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('NAS Devices') ,     'iconCls' => 'nas', 'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'),
-                        array('text' => __('NAS Device tags') , 'iconCls' => 'tags','glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'),
+                        array('text' => __('NAS Devices') ,     'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'),
+                        array('text' => __('NAS Device tags') , 'glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'),
                     )
                 )
             ),
-            array(  'text'  => __('Profiles'),  'iconCls' => 'profiles', 'glyph' => Configure::read('icnProfile'), 'menu'  =>
+            array(  'text'  => __('Profiles'),  'glyph' => Configure::read('icnProfile'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('Profile Components') ,  'iconCls' => 'components', 'glyph' => Configure::read('icnComponent'),  'itemId' => 'cProfileComponents'),
-                        array('text' => __('Profiles') ,            'iconCls' => 'profiles',   'glyph' => Configure::read('icnProfile'), 'itemId' => 'cProfiles'),
+                        array('text' => __('Profile Components') ,  'glyph' => Configure::read('icnComponent'),  'itemId' => 'cProfileComponents'),
+                        array('text' => __('Profiles') ,            'glyph' => Configure::read('icnProfile'), 'itemId' => 'cProfiles'),
                     )
                 )
             ),
             array(  'text'  => __('Tools'),  'iconCls' => 'tools', 'glyph' => Configure::read('icnLight'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array(  'text'  => __('Activity monitor'),  'iconCls' => 'activity',        'glyph' => Configure::read('icnActivity'), 'itemId' => 'cActivityMonitor'),
-                        array(  'text'  => __('RADIUS client'),     'iconCls' => 'radius_client',   'glyph' => Configure::read('icnRadius'),'itemId' => 'cRadiusClient'),
-                        array(  'text'  => __('Logfile viewer'),    'iconCls' => 'logfile_viewer',  'glyph' => Configure::read('icnLog'), 'itemId' => 'cLogViewer'),
-                        array(  'text'  => __('Debug output'),      'iconCls' => 'debug',           'glyph' => Configure::read('icnBug'), 'itemId' => 'cDebug'), 
-                        array(  'text'  => __('Translation manager'), 'iconCls' => 'translate',       'glyph' => Configure::read('icnTranslate'),'itemId' => 'cI18n'),
-                        array(  'text'  => __('Rights manager'),    'iconCls' => 'rights',          'glyph' => Configure::read('icnKey'), 'itemId' => 'cAcos'),  
+                        array(  'text'  => __('Activity monitor'),  'glyph' => Configure::read('icnActivity'), 'itemId' => 'cActivityMonitor'),
+                        array(  'text'  => __('RADIUS client'),     'glyph' => Configure::read('icnRadius'),'itemId' => 'cRadiusClient'),
+                        array(  'text'  => __('Logfile viewer'),    'glyph' => Configure::read('icnLog'), 'itemId' => 'cLogViewer'),
+                        array(  'text'  => __('Debug output'),      'glyph' => Configure::read('icnBug'), 'itemId' => 'cDebug'), 
+                        array(  'text'  => __('Translation manager'), 'glyph' => Configure::read('icnTranslate'),'itemId' => 'cI18n'),
+                        array(  'text'  => __('Rights manager'),    'glyph' => Configure::read('icnKey'), 'itemId' => 'cAcos'),
+						 array( 'text'  => __('IP Pools'),         'glyph' => Configure::read('icnIP'), 'itemId' => 'cIpPools'),   
                     )
                 )
             ),
