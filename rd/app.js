@@ -206,7 +206,9 @@ Ext.application({
 			icnGrid			: 57600,
 			icnFacebook		: 57558,
 			icnGoogle		: 57614,
-			icnTwitter		: 57574
+			icnTwitter		: 57574,
+			icnWifi			: 57550,
+			icnIP			: 57479
         };
     },
     addUx: function(){
