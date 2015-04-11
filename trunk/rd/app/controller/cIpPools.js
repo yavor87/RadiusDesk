@@ -29,7 +29,8 @@ Ext.define('Rd.controller.cIpPools', {
                         region  : 'center',
                         xtype   : 'panel',
                         layout  : 'fit',
-                        border  : false
+                        border  : false,
+						xtype   : 'gridIpPools'
                     }
                 ]
             });
@@ -39,19 +40,20 @@ Ext.define('Rd.controller.cIpPools', {
     },
 
     views:  [
-        'components.pnlBanner'
+        'components.pnlBanner',			'iPPools.gridIpPools', 		'iPPools.winIpPoolsAddWizard'
     ],
-    stores: [],
-    models: [],
+    stores: ['sIpPools'	],
+    models: ['mIpPool'	],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv    : '/cake2/rd_cake/top_ups/export_csv',
-        urlAdd          : '/cake2/rd_cake/top_ups/add.json',
-        urlDelete       : '/cake2/rd_cake/top_ups/delete.json'
+        urlExportCsv    : '/cake2/rd_cake/ip_pools/export_csv',
+        urlAdd          : '/cake2/rd_cake/ip_pools/add.json',
+        urlDelete       : '/cake2/rd_cake/top_ups/delete.json',
+		urlEdit         : '/cake2/rd_cake/ip_pools/edit.json',
+        urlView       	: '/cake2/rd_cake/top_ups/view.json'
     },
     refs: [
-        //{  ref: 'grid',  selector: 'gridTopUps'}       
+        {  ref: 'grid',  selector: 'gridIpPools'}       
     ],
     init: function() {
         var me = this;
@@ -59,47 +61,50 @@ Ext.define('Rd.controller.cIpPools', {
             return;
         }
         me.inited = true;
-/*
-        me.getStore('sTopUps').addListener('load',me.onStoreTopUpsLoaded, me);
+
+        me.getStore('sIpPools').addListener('load',me.onStoreIpPoolsLoaded, me);
         me.control({
-            '#topUpsWin'    : {
-                beforeshow  : me.winClose,
-                destroy     : me.winClose
-            },
-            'gridTopUps #reload': {
+            'gridIpPools #reload': {
                 click:      me.reload
             },
-            'gridTopUps #reload menuitem[group=refresh]' : {
-                click:      me.reloadOptionClick
-            }, 
-            'gridTopUps #add': {
+            'gridIpPools #add': {
                 click:      me.add
-            }, 
-            'gridTopUps #edit': {
+            } 
+          /*  'gridIpPools #edit': {
                 click:      me.edit
             }, 
-            'gridTopUps #delete': {
+            'gridIpPools #delete': {
                 click:      me.del
             }, 
-            'gridTopUps #csv'  : {
+            'gridIpPools #csv'  : {
                 click:      me.csvExport
             },
-            'gridTopUps'   : {
+            'gridIpPools'   : {
                 select:      me.select
             },
-            'winTopUpAddWizard #btnTreeNext' : {
-                click:  me.btnTreeNext
+            'winIpPoolsAddWizard #btnTreeNext' : {
+               // click:  me.btnTreeNext
             },
-            'winTopUpAddWizard #btnDataPrev' : {
-                click:  me.btnDataPrev
+            'winIpPoolsAddWizard #btnDataPrev' : {
+                //click:  me.btnDataPrev
             },
-            'winTopUpAddWizard #btnDataNext' : {
-                click:  me.btnDataNext
-            },
-            'winTopUpAddWizard #cmbType' : {
-                change:  me.cmbTopUpTypeChanged
-            },
+            'winIpPoolsAddWizard #btnDataNext' : {
+                //click:  me.btnDataNext
+            }*/
         });
-*/
-    }
+    },
+	reload: function(){
+        var me =this;
+        me.getGrid().getSelectionModel().deselectAll(true);
+        me.getGrid().getStore().load();
+    },
+	onStoreIpPoolsLoaded: function() {
+        var me      = this;
+        var count   = me.getStore('sIpPools').getTotalCount();
+        me.getGrid().down('#count').update({count: count});
+    },
+	add: function(button){
+		var w = Ext.widget('winIpPoolsAddWizard',{id:'winIpPoolsAddWizardId'});
+    	me.application.runAction('cDesktop','Add',w);
+	}
 });
