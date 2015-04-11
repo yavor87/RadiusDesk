@@ -425,7 +425,7 @@ CREATE TABLE `devices` (
   `time_used` int(12) DEFAULT NULL,
   `time_cap` int(12) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2179,7 +2179,7 @@ CREATE TABLE `permanent_users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2485,7 +2485,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9852 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9839 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2558,6 +2558,46 @@ LOCK TABLES `radgroupreply` WRITE;
 /*!40000 ALTER TABLE `radgroupreply` DISABLE KEYS */;
 INSERT INTO `radgroupreply` VALUES (1,'BW-384Kb','Fall-Through',':=','Yes','','2013-08-24 21:25:31','2013-08-24 21:25:31'),(3,'BW-1Gb','Fall-Through',':=','Yes','','2013-08-24 21:27:22','2013-08-24 21:27:22'),(5,'500M','Fall-Through',':=','Yes','','2013-08-24 21:27:46','2013-08-24 21:27:46'),(9,'250M','Fall-Through',':=','Yes','','2013-08-24 21:28:41','2013-08-24 21:28:41'),(10,'1Hour','Fall-Through',':=','Yes','','2013-08-24 21:29:07','2013-08-24 21:29:07'),(12,'1G','Fall-Through',':=','Yes','','2013-08-24 21:29:28','2013-08-24 21:29:28'),(13,'BW-384Kb','WISPr-Bandwidth-Max-Up',':=','384000','','2013-08-24 21:31:51','2013-08-24 21:31:51'),(14,'BW-384Kb','WISPr-Bandwidth-Max-Down',':=','384000','','2013-08-24 21:31:57','2013-08-24 21:31:57'),(15,'BW-1Gb','WISPr-Bandwidth-Max-Up',':=','1000000','','2013-08-24 21:33:24','2013-08-24 21:33:24'),(16,'BW-1Gb','WISPr-Bandwidth-Max-Down',':=','1000000','','2013-08-24 21:33:30','2013-08-24 21:33:30'),(17,'4Hour','Fall-Through',':=','Yes','','2013-08-24 21:44:08','2013-08-24 21:44:08');
 /*!40000 ALTER TABLE `radgroupreply` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `radippool`
+--
+
+DROP TABLE IF EXISTS `radippool`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `radippool` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pool_name` varchar(30) NOT NULL,
+  `framedipaddress` varchar(15) NOT NULL DEFAULT '',
+  `nasipaddress` varchar(15) NOT NULL DEFAULT '',
+  `calledstationid` varchar(30) NOT NULL,
+  `callingstationid` varchar(30) NOT NULL,
+  `expiry_time` datetime DEFAULT NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `pool_key` varchar(30) NOT NULL DEFAULT '',
+  `nasidentifier` varchar(64) NOT NULL DEFAULT '',
+  `extra_name` varchar(100) NOT NULL DEFAULT '',
+  `extra_value` varchar(100) NOT NULL DEFAULT '',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `radippool_poolname_expire` (`pool_name`,`expiry_time`),
+  KEY `framedipaddress` (`framedipaddress`),
+  KEY `radippool_nasip_poolkey_ipaddress` (`nasipaddress`,`pool_key`,`framedipaddress`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `radippool`
+--
+
+LOCK TABLES `radippool` WRITE;
+/*!40000 ALTER TABLE `radippool` DISABLE KEYS */;
+/*!40000 ALTER TABLE `radippool` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3111,4 +3151,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-06  6:54:25
+-- Dump completed on 2015-04-11 12:39:12
