@@ -262,7 +262,11 @@ $config['icnSubtract']  = 57520;
 $config['icnWatch']     = 57628;
 $config['icnStar']      = 57585;
 $config['icnGrid']      = 57600;
-
+$config['icnFacebook']	= 57558;
+$config['icnGoogle']	= 57614;
+$config['icnTwitter']	= 57574;
+$config['icnWifi']		= 57550;
+$config['icnIP']		= 57479;
 
 
 //=== EXPERIMENTAL STUFF =====
