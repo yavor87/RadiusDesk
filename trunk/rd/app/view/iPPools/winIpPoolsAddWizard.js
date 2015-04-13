@@ -20,7 +20,8 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
         'Ext.layout.container.Card',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Ext.form.FieldContainer'
+        'Ext.form.FieldContainer',
+		'Rd.view.iPPools.cmbPool'
     ],
     initComponent: function() {
         var me = this;
@@ -47,7 +48,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     iconCls	: 'b-next',
                     glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin	: '0 20 40 0'
+                    margin	: Rd.config.buttonMargin
                 }
             ];
 
@@ -92,7 +93,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     scale	: 'large',
                     iconCls	: 'b-prev',
                     glyph   : Rd.config.icnBack,
-                    margin	: '0 20 40 0'
+                    margin	: Rd.config.buttonMargin
                 },
                 {
                     itemId	: 'btnNewPoolNext',
@@ -101,7 +102,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     iconCls	: 'b-next',
                     glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin	: '0 20 40 0'
+                    margin	: Rd.config.buttonMargin
                 }
             ];
 
@@ -122,7 +123,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+                { xtype: 'tbtext', text: 'New IP Pool', cls: 'lblWizard' }
             ],
             items:[
                 {
@@ -131,7 +132,28 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     name        	: "name",
                     allowBlank  	: false,
                     blankText   	: i18n('sSupply_a_value'),
-                    labelClsExtra	: 'lblRdReq'
+                    labelClsExtra	: 'lblRdReq',
+					value			: 'Test'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: 'Start IP',
+                    name        	: "pool_start",
+                    allowBlank  	: false,
+                    blankText   	: i18n('sSupply_a_value'),
+                    labelClsExtra	: 'lblRdReq',
+					vtype			: 'IPAddress',
+					value			: '192.168.1.1'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: 'End IP',
+                    name        	: "pool_end",
+                    allowBlank  	: false,
+                    blankText   	: i18n('sSupply_a_value'),
+                    labelClsExtra	: 'lblRdReq',
+					vtype			: 'IPAddress',
+					value			: '192.168.1.254'
                 }
             ],
             buttons: buttons
@@ -149,7 +171,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     scale	: 'large',
                     iconCls	: 'b-prev',
                     glyph   : Rd.config.icnBack,
-                    margin	: '0 20 40 0'
+                    margin	: Rd.config.buttonMargin
                 },
                 {
                     itemId	: 'btnExistingPoolNext',
@@ -158,7 +180,7 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
                     iconCls	: 'b-next',
                     glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin	: '0 20 40 0'
+                    margin	: Rd.config.buttonMargin
                 }
             ];
 
@@ -179,21 +201,27 @@ Ext.define('Rd.view.iPPools.winIpPoolsAddWizard', {
             },
             defaultType: 'textfield',
             tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
+                { xtype: 'tbtext', text: 'Add IP to pool', cls: 'lblWizard' }
             ],
-            items:[
-                {
+            items:[ 
+				{
+                    xtype       	: 'cmbPool',
+					labelClsExtra	: 'lblRdReq'
+                },
+				{
                     xtype       	: 'textfield',
-                    fieldLabel  	: i18n('sName'),
-                    name        	: "name",
+                    fieldLabel  	: 'IP Address',
+                    name        	: 'ip',
                     allowBlank  	: false,
                     blankText   	: i18n('sSupply_a_value'),
-                    labelClsExtra	: 'lblRdReq'
+                    labelClsExtra	: 'lblRdReq',
+					vtype			: 'IPAddress',
+					value			: '192.168.1.255'
                 }
             ],
             buttons: buttons
         });
         return frmExistingPool;
-    }   
+    },  
 
 });

@@ -295,7 +295,6 @@ Ext.define('Rd.controller.cFinPaymentPlans', {
 				w.record	= sr;
                 me.load(w)
             } 
-
         }     
     },
 	renderEventProfile: function(cmb){
