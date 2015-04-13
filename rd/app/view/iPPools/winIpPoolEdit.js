@@ -1,0 +1,98 @@
+Ext.define('Rd.view.finPaymentPlans.winIpPoolEdit', {
+    extend      : 'Ext.window.Window',
+    alias       : 'widget.winIpPoolEdit',
+    closable    : true,
+    draggable   : true,
+    resizable   : true,
+    title       : 'Edit IP Pool entry',
+    width       : 500,
+    height      : 300,
+    plain       : true,
+    border      : false,
+    layout      : 'fit',
+    iconCls     : 'edit',
+    glyph       : Rd.config.icnEdit,
+    autoShow    : false,
+    poolId      : '',
+    defaults: {
+            border: false
+    },
+    requires: [
+        'Ext.tab.Panel',
+        'Ext.form.Panel',
+        'Ext.form.field.Text'
+    ],
+    initComponent: function() {
+        var me 		= this; 
+
+        var frmData = Ext.create('Ext.form.Panel',{
+            border:     false,
+            layout:     'anchor',
+            autoScroll: true,
+            defaults: {
+                anchor: '100%'
+            },
+            fieldDefaults: {
+                msgTarget       : 'under',
+                labelClsExtra   : 'lblRd',
+                labelAlign      : 'left',
+                labelSeparator  : '',
+                labelClsExtra   : 'lblRd',
+                labelWidth      : Rd.config.labelWidth,
+                //maxWidth        : Rd.config.maxWidth, 
+                margin          : Rd.config.fieldMargin
+            },
+            defaultType: 'textfield',
+            buttons : [
+                {
+                    itemId: 'save',
+                    text: i18n('sOK'),
+                    scale: 'large',
+                    iconCls: 'b-btn_ok',
+                    glyph   : Rd.config.icnYes,
+                    formBind: true,
+                    margin: Rd.config.buttonMargin
+                }
+            ],
+            items: [
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: 'IP Address',
+                    name        	: 'ip',
+                    allowBlank  	: false,
+                    blankText   	: i18n('sSupply_a_value'),
+                    labelClsExtra	: 'lblRdReq',
+					vtype			: 'IPAddress',
+					value			: '192.168.1.255'
+                },
+				{
+                    xtype       	: 'cmbPermanentUser',
+                    allowBlank  	: true,
+                    labelClsExtra	: 'lblRd',
+                    itemId      	: 'permanent_user_id',
+                    fieldLabel  	: 'Permanent user',
+                    name        	: 'permanent_user_id'
+                    
+                },
+				{
+					xtype       	: 'checkbox',      
+					fieldLabel  	: i18n('sActive'),
+					name        	: 'active',
+                    inputValue  	: 'active',
+                    checked     	: true,
+                    boxLabelCls 	: 'lblRdCheck'
+				},
+				{
+					xtype       	: 'checkbox',      
+					fieldLabel  	: 'Clean other fields',
+					name        	: 'active',
+                    inputValue  	: 'active',
+                    checked     	: true,
+                    boxLabelCls 	: 'lblRdCheck'
+				}
+            ]
+        });
+        me.items = frmData;
+        me.callParent(arguments);
+    }
+});

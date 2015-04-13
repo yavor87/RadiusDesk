@@ -27,14 +27,14 @@ Ext.define('Rd.view.iPPools.gridIpPools' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.features = [filters];
         me.columns  = [
-            { xtype: 'rownumberer',stateId: 'StateGridIpPools1', width: 50},
+            { xtype: 'rownumberer',stateId: 'StateGridIpPools1', width: 30},
             { 
 
                 text        :'Name', 
                 dataIndex   : 'pool_name',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : true,
+                hidden      : false,
                 filter      : {type: 'string'},
                 stateId     : 'StateGridIpPools2'
             },
@@ -65,9 +65,6 @@ Ext.define('Rd.view.iPPools.gridIpPools' ,{
                 flex        : 1,
 				hidden      : true,
                 filter      : {type: 'string'},
-                renderer    : function(value){
-                    return Ext.ux.secondsToHuman(value)              
-                },
                 stateId     : 'StateGridIpPools5'
             },
 			{ 
@@ -77,9 +74,6 @@ Ext.define('Rd.view.iPPools.gridIpPools' ,{
                 flex        : 1,
 				hidden      : false,
                 filter      : {type: 'string'},
-                renderer    : function(value){
-                    return Ext.ux.secondsToHuman(value)              
-                },
                 stateId     : 'StateGridIpPools6'
             },
             { 
