@@ -5,7 +5,7 @@ class IpPoolsController extends AppController {
 
     public $name        = 'IpPools';
     public $components  = array('Aa');
-    public $uses        = array('IpPool','User');
+    public $uses        = array('IpPool','PermanentUser');
     protected $base     = "Access Providers/Controllers/IpPools/";
 
     protected $fields  = array(
@@ -228,17 +228,123 @@ class IpPoolsController extends AppController {
         }
 	}
 
-    public function view(){
+    public function edit(){
 
-        $data = array(
-            
-        );
+		if(!$this->Aa->admin_check($this)){   //Only for admin users!
+            return;
+       	}
+		
+		if ($this->request->is('post')) {
+		 	//Unfortunately there are many check items which means they will not be in the POST if unchecked
+            //so we have to check for them
+            $check_items = array(
+				'active', 'clean_up'
+			);
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
 
-        $this->set(array(
-            'data'      => $data,
-            'success'   => true,
-            '_serialize'=> array('success', 'data')
-        ));
+			if($this->request->data['clean_up'] == 1){
+				$this->request->data['nasipaddress'] 		= '';
+				$this->request->data['calledstationid'] 	= '';
+				$this->request->data['callingstationid'] 	= '';
+				$this->request->data['expiry_time'] 		= '';
+				$this->request->data['pool_key'] 			= '';
+				$this->request->data['nasidentifier'] 		= '';
+			}
+
+			//Check if there was a user attached that we perhaps need to remove first...
+			$q_r = $this->{$this->modelClass}->findById($this->request->data['id']);
+			if($q_r){
+				if($q_r['IpPool']['permanent_user_id'] != ''){
+					$d 				= array();
+					$d['id']		= $q_r['IpPool']['permanent_user_id'];
+					$d['static_ip'] = '';
+					$this->PermanentUser->save($d);
+				}
+			}
+
+
+			//Find the username assiciated with the permanent_user_id
+			$permanent_user_id = false;
+			if($this->request->data['permanent_user_id'] != ''){
+				$this->PermanentUser->contain();
+				$q_r = $this->PermanentUser->findById($this->request->data['permanent_user_id']);
+				if($q_r){
+					$this->request->data['username'] 	= $q_r['PermanentUser']['username'];
+					$permanent_user_id 					= $q_r['PermanentUser']['id'];
+				}else{
+					$this->request->data['username'] = '';
+				}
+			}else{
+				$this->request->data['username'] = '';
+			}
+
+
+
+			//We are only allowing to attach one permanent user / mac at a time to an IP Address
+			if($this->request->data['username'] != ''){
+				$username = $this->request->data['username'];
+				$entry_id = $this->request->data['id'];
+				
+				$q_r = $this->{$this->modelClass}->find('all', array('conditions' => array('IpPool.username' => $username)));
+
+				if($q_r){
+					foreach($q_r as $i){
+						if($i['IpPool']['id'] != $entry_id){
+							$fip = $i['IpPool']['framedipaddress'];
+							$this->set(array(
+								'success'   => false,
+								'message'   => array('message' => "User $username already attached to $fip"),
+								'_serialize' => array('success','message')
+							));
+							return;
+						}					
+					}
+				}
+			}
+
+			if($this->request->data['callingstationid'] != ''){
+				$callingstationid 	= $this->request->data['callingstationid'];
+				$entry_id 			= $this->request->data['id'];
+				
+				$q_r = $this->{$this->modelClass}->find('all', array('conditions' => array('IpPool.callingstationid' => $callingstationid)));
+
+				if($q_r){
+					foreach($q_r as $i){
+						if($i['IpPool']['id'] != $entry_id){
+							$fip = $i['IpPool']['framedipaddress'];
+							$this->set(array(
+								'success'   => false,
+								'message'   => array('message' => "MAC $callingstationid already attached to $fip"),
+								'_serialize' => array('success','message')
+							));
+							return;
+						}					
+					}
+				}
+			}
+			
+
+            if ($this->{$this->modelClass}->save($this->request->data)) {
+				
+				//If there is a user attached, we need to also add this IP back to the user
+				if($permanent_user_id){
+					$d = array();
+					$d['id'] 		= $permanent_user_id;
+					$d['static_ip'] = $this->request->data['framedipaddress'];
+					$this->PermanentUser->save($d);
+				}	
+               	$this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
     }
 
     //----- Menus ------------------------
