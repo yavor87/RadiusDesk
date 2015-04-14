@@ -56,14 +56,32 @@ Ext.define('Rd.view.finPaymentPlans.winIpPoolEdit', {
             ],
             items: [
 				{
-                    xtype       	: 'textfield',
+                    xtype   		: 'textfield',
+                    name    		: "id",
+                    hidden  		: true,
+                    value   		: me.poolId
+                },
+				{
+                    xtype   		: 'textfield',
+                    name    		: "framedipaddress",
+                    hidden  		: true,
+                    value   		: me.record.get('framedipaddress'),
+                },
+				{
+                    xtype       	: 'displayfield',
                     fieldLabel  	: 'IP Address',
-                    name        	: 'ip',
-                    allowBlank  	: false,
+                    value       	: me.record.get('framedipaddress'),
+                    labelClsExtra	: 'lblRdReq'
+                },
+				{
+                    xtype       	: 'textfield',
+                    fieldLabel  	: 'Client MAC',
+                    name        	: 'callingstationid',
+                    allowBlank  	: true,
                     blankText   	: i18n('sSupply_a_value'),
-                    labelClsExtra	: 'lblRdReq',
-					vtype			: 'IPAddress',
-					value			: '192.168.1.255'
+                    labelClsExtra	: 'lblRd',
+					vtype			: 'MacAddress',
+					value			: me.record.get('callingstationid')
                 },
 				{
                     xtype       	: 'cmbPermanentUser',
@@ -79,14 +97,14 @@ Ext.define('Rd.view.finPaymentPlans.winIpPoolEdit', {
 					fieldLabel  	: i18n('sActive'),
 					name        	: 'active',
                     inputValue  	: 'active',
-                    checked     	: true,
+                    checked     	: me.record.get('active'),
                     boxLabelCls 	: 'lblRdCheck'
 				},
 				{
 					xtype       	: 'checkbox',      
 					fieldLabel  	: 'Clean other fields',
-					name        	: 'active',
-                    inputValue  	: 'active',
+					name        	: 'clean_up',
+                    inputValue  	: 'clean_up',
                     checked     	: true,
                     boxLabelCls 	: 'lblRdCheck'
 				}
