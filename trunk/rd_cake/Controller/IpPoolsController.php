@@ -5,7 +5,7 @@ class IpPoolsController extends AppController {
 
     public $name        = 'IpPools';
     public $components  = array('Aa');
-    public $uses        = array('IpPool','PermanentUser');
+    public $uses        = array('IpPool','PermanentUser','Device');
     protected $base     = "Access Providers/Controllers/IpPools/";
 
     protected $fields  = array(
@@ -349,18 +349,39 @@ class IpPoolsController extends AppController {
 
 	public function get_ip_for_user(){
 		if(isset($this->request->query['username'])){
-
 			$username 	= $this->request->query['username'];
-			$q_r		= $this->{$this->modelClass}->find('first', array('conditions' => array('IpPool.username' => $username)));
-			if($q_r){
-				$data 		= array();
-				$data['ip'] = $q_r['IpPool']['framedipaddress'];
-				$this->set(array(
-				    'data' 		=> $data,
-				    'success'   => true,
-				    '_serialize' => array('success','data')
-				));
-				return;
+
+			//Test to see if username is not perhaps a BYOD device
+			$pattern = '/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i';
+			if(preg_match($pattern, $username)){
+				$this->Device->contain();
+				$q_r = $this->Device->find('first', array('conditions' => array('Device.name' => $username)));
+				if($q_r){
+					$permanent_user_id = $q_r['Device']['permanent_user_id'];
+					$q_s = $this->{$this->modelClass}->find('first', array('conditions' => array('IpPool.permanent_user_id' => $permanent_user_id)));
+					if($q_s){
+						$data 		= array();
+						$data['ip'] = $q_s['IpPool']['framedipaddress'];
+						$this->set(array(
+							'data' 		=> $data,
+							'success'   => true,
+							'_serialize' => array('success','data')
+						));
+						return;
+					}
+				}
+			}else{	
+				$q_r		= $this->{$this->modelClass}->find('first', array('conditions' => array('IpPool.username' => $username)));
+				if($q_r){
+					$data 		= array();
+					$data['ip'] = $q_r['IpPool']['framedipaddress'];
+					$this->set(array(
+						'data' 		=> $data,
+						'success'   => true,
+						'_serialize' => array('success','data')
+					));
+					return;
+				}
 			}
 		}
 		$this->set(array(
