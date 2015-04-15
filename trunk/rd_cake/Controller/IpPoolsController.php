@@ -353,8 +353,8 @@ class IpPoolsController extends AppController {
 			$username 	= $this->request->query['username'];
 			$q_r		= $this->{$this->modelClass}->find('first', array('conditions' => array('IpPool.username' => $username)));
 			if($q_r){
-				$data = array();
-				$data = $q_r['IpPool']['framedipaddress'];
+				$data 		= array();
+				$data['ip'] = $q_r['IpPool']['framedipaddress'];
 				$this->set(array(
 				    'data' 		=> $data,
 				    'success'   => true,
