@@ -347,6 +347,28 @@ class IpPoolsController extends AppController {
         }
     }
 
+	public function get_ip_for_user(){
+		if(isset($this->request->query['username'])){
+
+			$username 	= $this->request->query['username'];
+			$q_r		= $this->{$this->modelClass}->find('first', array('conditions' => array('IpPool.username' => $username)));
+			if($q_r){
+				$data = array();
+				$data = $q_r['IpPool']['framedipaddress'];
+				$this->set(array(
+				    'data' 		=> $data,
+				    'success'   => true,
+				    '_serialize' => array('success','data')
+				));
+				return;
+			}
+		}
+		$this->set(array(
+		    'success' => false,
+		    '_serialize' => array('success')
+		));
+	}
+
     //----- Menus ------------------------
     public function menu_for_grid(){
 
