@@ -60,9 +60,24 @@ class User extends AppModel {
 	);
 
     public $hasMany = array(
-        'Na',
-        'Tag',
-        'Realm',
+        'Na' => array(
+            'dependent'     => true   
+        ),
+        'Tag' => array(
+            'dependent'     => true   
+        ),
+        'Realm' => array(
+            'dependent'     => true   
+        ),
+		'Profile' => array(
+            'dependent'     => true   
+        ),
+		'Ssid' => array(
+            'dependent'     => true   
+        ),
+		'Mesh' => array(
+            'dependent'     => true   
+        ),
         'UserNote' => array(
             'dependent'     => true   
         ),
@@ -77,7 +92,10 @@ class User extends AppModel {
         ),
 		'FinPaymentPlan' => array(
             'dependent'     => true   
-        )
+        ),
+		'DynamicDetail' => array(
+            'dependent'     => true   
+        ),
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
