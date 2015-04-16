@@ -43,14 +43,15 @@ Ext.define('Rd.controller.cSsids', {
         'components.pnlBanner',  	'ssids.gridSsids',           
         'ssids.winSsidEdit', 		'ssids.winSsidAddWizard'
     ],
-    stores: ['sProfiles','sSids'],
+    stores: ['sAccessProvidersTree','sSids'],
     models: ['mAccessProviderTree',  'mSsid'],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
         urlExportCsv    : '/cake2/rd_cake/ssids/export_csv',
         urlAdd          : '/cake2/rd_cake/ssids/add.json',
-        urlDelete       : '/cake2/rd_cake/ssids/delete.json'
+        urlDelete       : '/cake2/rd_cake/ssids/delete.json',
+		urlEdit         : '/cake2/rd_cake/ssids/edit.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridSsids'}       
@@ -75,11 +76,20 @@ Ext.define('Rd.controller.cSsids', {
             'gridSsids #edit'   : {
                 click:      me.edit
             },
-            'gridSsids #csv'  	: {
-                //click:      me.csvExport
-            },
             'gridSsids'   		: {
-                //select:      me.select
+                select:      me.select
+            },
+			'winSsidAddWizard #btnTreeNext' : {
+                click:  me.btnTreeNext
+            },
+            'winSsidAddWizard #btnDataPrev' : {
+                click:  me.btnDataPrev
+            },
+            'winSsidAddWizard #btnDataNext' : {
+                click:  me.btnDataNext
+            },
+			'winSsidEdit #save': {
+                click: me.btnEditSave
             }
         });
     },
@@ -241,9 +251,8 @@ Ext.define('Rd.controller.cSsids', {
             });
         }
     },
-
     edit: function(button){
-   /*     var me      = this;
+        var me      = this;
         var grid    = button.up('grid');
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -254,11 +263,32 @@ Ext.define('Rd.controller.cSsids', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winComponentManageId')){
-                var w = Ext.widget('winComponentManage',{id:'winComponentManageId'});
+			var sr      =  me.getGrid().getSelectionModel().getLastSelected();
+            if(!me.application.runAction('cDesktop','AlreadyExist','winSsidEditId')){
+                var w = Ext.widget('winSsidEdit',{id:'winSsidEditId',record: sr});
                 me.application.runAction('cDesktop','Add',w);       
             }    
-        }*/
+        }
+    },
+	btnEditSave:  function(button){
+        var me      = this;
+        var win     = button.up("winSsidEdit");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEdit,
+            success: function(form, action) {
+                win.close();
+                me.reload(); //Reload from server
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     onStoreSsidsLoaded: function() {
         var me      = this;

@@ -132,6 +132,22 @@ Ext.define('Rd.view.ssids.winSsidAddWizard', {
                     blankText   : i18n('sSupply_a_value'),
                     labelClsExtra: 'lblRdReq'
                 },
+				{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Extra name',
+                    name        : "extra_name",
+                    allowBlank  : true,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRd'
+                },
+				{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Extra value',
+                    name        : "extra_value",
+                    allowBlank  : true,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRd'
+                },
                 {
                     xtype       : 'checkbox',      
                     boxLabel    : i18n('sAlso_show_to_sub_providers'),

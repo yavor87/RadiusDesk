@@ -4,16 +4,16 @@ Ext.define('Rd.view.finPaymentPlans.winSsidEdit', {
     closable    : true,
     draggable   : true,
     resizable   : true,
-    title       : 'Edit IP Pool entry',
-    width       : 500,
-    height      : 300,
+    title       : 'Edit SSID',
+    width       : 400,
+    height      : 400,
     plain       : true,
     border      : false,
     layout      : 'fit',
     iconCls     : 'edit',
     glyph       : Rd.config.icnEdit,
     autoShow    : false,
-    poolId      : '',
+    record      : '',
     defaults: {
             border: false
     },
@@ -56,61 +56,49 @@ Ext.define('Rd.view.finPaymentPlans.winSsidEdit', {
             ],
             items: [
 				{
-                    xtype   		: 'textfield',
-                    name    		: "id",
-                    hidden  		: true,
-                    value   		: me.poolId
+                    itemId  : 'id',
+                    xtype   : 'textfield',
+                    name    : "id",
+                    hidden  : true,
+                },
+                {
+                    xtype       : 'textfield',
+                    fieldLabel  : i18n('sName'),
+                    name        : "name",
+                    allowBlank  : false,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRdReq'
                 },
 				{
-                    xtype   		: 'textfield',
-                    name    		: "framedipaddress",
-                    hidden  		: true,
-                    value   		: me.record.get('framedipaddress'),
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Extra name',
+                    name        : "extra_name",
+                    allowBlank  : true,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRd'
                 },
 				{
-                    xtype       	: 'displayfield',
-                    fieldLabel  	: 'IP Address',
-                    value       	: me.record.get('framedipaddress'),
-                    labelClsExtra	: 'lblRdReq'
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Extra value',
+                    name        : "extra_value",
+                    allowBlank  : true,
+                    blankText   : i18n('sSupply_a_value'),
+                    labelClsExtra: 'lblRd'
                 },
-				{
-                    xtype       	: 'textfield',
-                    fieldLabel  	: 'Client MAC',
-                    name        	: 'callingstationid',
-                    allowBlank  	: true,
-                    blankText   	: i18n('sSupply_a_value'),
-                    labelClsExtra	: 'lblRd',
-					vtype			: 'MacAddress',
-					value			: me.record.get('callingstationid')
-                },
-				{
-                    xtype       	: 'cmbPermanentUser',
-                    allowBlank  	: true,
-                    labelClsExtra	: 'lblRd',
-                    itemId      	: 'permanent_user_id',
-                    fieldLabel  	: 'Permanent user',
-                    name        	: 'permanent_user_id'
-                    
-                },
-				{
-					xtype       	: 'checkbox',      
-					fieldLabel  	: i18n('sActive'),
-					name        	: 'active',
-                    inputValue  	: 'active',
-                    checked     	: me.record.get('active'),
-                    boxLabelCls 	: 'lblRdCheck'
-				},
-				{
-					xtype       	: 'checkbox',      
-					fieldLabel  	: 'Clean other fields',
-					name        	: 'clean_up',
-                    inputValue  	: 'clean_up',
-                    checked     	: true,
-                    boxLabelCls 	: 'lblRdCheck'
-				}
+                {
+                    xtype       : 'checkbox',      
+                    boxLabel    : i18n('sAlso_show_to_sub_providers'),
+                    name        : 'available_to_siblings',
+                    inputValue  : 'available_to_siblings',
+                    itemId      : 'a_to_s',
+                    checked     : false,
+                    boxLabelCls : 'lblRdReq'
+                }
             ]
         });
         me.items = frmData;
+
+		frmData.loadRecord(me.record);
         me.callParent(arguments);
     }
 });
