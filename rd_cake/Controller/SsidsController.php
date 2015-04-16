@@ -262,6 +262,37 @@ class SsidsController extends AppController {
         }
 	}
 
+	public function edit(){
+
+		$user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if ($this->request->is('post')) {
+
+            //Unfortunately there are many check items which means they will not be in the POST if unchecked
+            //so we have to check for them
+            $check_items = array(
+				'available_to_siblings'
+			);
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+            }
+
+            if ($this->{$this->modelClass}->save($this->request->data)) {
+                   $this->set(array(
+                    'success' => true,
+                    '_serialize' => array('success')
+                ));
+            }
+        }
+    }
+
     //----- Menus ------------------------
     public function menu_for_grid(){
 
@@ -283,11 +314,6 @@ class SsidsController extends AppController {
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
-                array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100, 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-note',     'glyph'     => Configure::read('icnNote'), 'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
-                  //  array('xtype' => 'button', 'iconCls' => 'b-csv',     'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
-                ))
-                
             );
         }
 
@@ -295,8 +321,6 @@ class SsidsController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
             $id             = $user['id'];
             $action_group   = array();
-            $document_group = array();
-            $specific_group = array();
 
             array_push($action_group,array(  
                 'xtype'     => 'button',
@@ -340,28 +364,8 @@ class SsidsController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
-                array_push($document_group,array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',
-                        'glyph'     => Configure::read('icnNote'),      
-                        'scale'     => 'large', 
-                        'itemId'    => 'note',      
-                        'tooltip'   => __('Add Notes')));
-            }
-/*
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
-                array_push($document_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',     
-                    'scale'     => 'large', 
-                    'itemId'    => 'csv',      
-                    'tooltip'   => __('Export CSV')));
-            }
-*/
             $menu = array(
-                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'), 'width' => 100,   'items' => $document_group)
+                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group)
                    );
         }
         $this->set(array(
