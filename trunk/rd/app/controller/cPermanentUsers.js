@@ -48,12 +48,13 @@ Ext.define('Rd.controller.cPermanentUsers', {
     },
 
     views:  [
-       'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
-       'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
-       'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
-       'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
+       	'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
+       	'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
+       	'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
+       	'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
         'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
-       'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraph'
+       	'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraph',
+		'components.cmbSsid'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: [
@@ -151,6 +152,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'winPermanentUserAddWizard #from_date' : {
                 change:  me.fromDateChange
             },
+			'winPermanentUserAddWizard #ssid_only' : {
+                change:  me.chkSsidOnlyChange
+            },
             '#winCsvColumnSelectPermanentUsers #save': {
                 click:  me.csvExportSubmit
             },
@@ -224,6 +228,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser #from_date' : {
                 change:  me.fromDateChange
+            },
+			'pnlPermanentUser #ssid_only' : {
+                change:  me.chkSsidOnlyChange
             },
             'pnlPermanentUser #tabBasicInfo' : {
                 activate: me.onTabBasicInfoActive
@@ -474,6 +481,19 @@ Ext.define('Rd.controller.cPermanentUsers', {
                         Ext.ux.Constants.clsWarn,
                         Ext.ux.Constants.msgWarn
             );
+        }
+    },
+	chkSsidOnlyChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var list    = form.down('#ssid_list');
+        var value   = chk.getValue();
+        if(value){
+            list.setVisible(true);
+            list.setDisabled(false);
+        }else{
+            list.setVisible(false);
+            list.setDisabled(true);
         }
     },
     select:  function(grid, record, item, index, event){
@@ -1216,6 +1236,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
                     cmbTimeCap.setDisabled(false);
                     cmbTimeCap.setValue(b.result.data.cap_time);
                 }
+
+				//If the SSID must be restricted specify which SSIDs
+				if(b.result.data.ssid_list != undefined){
+					var cmbSsid	= form.down('#ssid_list');
+					var iValues = [];  
+					cmbSsid.getStore().loadData([],false); //Wipe it
+					Ext.Array.forEach(b.result.data.ssid_list,function(item){
+                    	//console.log(item);
+						var id = item.id;
+						iValues.push ( id );
+						cmbSsid.getStore().loadData([item],true); //Append it
+                    });
+					//console.log(iValues);
+					cmbSsid.setValue( iValues );	
+				}
+
             } 
         });
     },

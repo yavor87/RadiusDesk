@@ -299,6 +299,32 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                             ]
                         },
 						{ 
+                            'title' : 'SSIDs',
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items       : [
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : 'Connect only from selected SSIDs',
+                                    name        : 'ssid_only',
+                                    inputValue  : 'ssid_only',
+									itemId  	: 'ssid_only',
+                                    checked     : false,
+                                    boxLabelCls : 'lblRdCheck'
+                                },
+                                {
+                                    xtype       : 'cmbSsid',
+                                    labelClsExtra: 'lblRdReq',
+									itemId		: 'ssid_list',
+									hidden		: true,
+									disabled	: true,
+									extraParam  : me.user_id
+                                }
+                            ]
+                        },
+						{ 
                             'title' : 'Optional fields',
                             'layout'    : 'anchor',
                             defaults    : {
