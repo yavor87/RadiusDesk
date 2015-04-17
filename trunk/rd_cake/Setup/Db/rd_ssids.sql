@@ -20,6 +20,18 @@ if not exists (select * from information_schema.columns
 
 end if;
 
+if not exists (select * from information_schema.columns
+    where table_name = 'user_ssids' and table_schema = 'rd') then
+    CREATE TABLE `user_ssids` (
+     `id` int(11) NOT NULL AUTO_INCREMENT,
+     `username` varchar(64) NOT NULL DEFAULT '',
+     `ssidname` varchar(64) NOT NULL DEFAULT '',
+     `priority` int(11) NOT NULL DEFAULT '1',
+     PRIMARY KEY (`id`),
+      KEY `username` (`username`(32))
+      ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+end if;
+
 end//
 
 delimiter ;
