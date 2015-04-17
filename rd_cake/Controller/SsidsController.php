@@ -69,7 +69,7 @@ class SsidsController extends AppController {
     }
 
     //____ BASIC CRUD Manager ________
-    public function index_for_filter(){
+    public function index_ap(){
     //Display a list of items with their owners
     //This will be dispalyed to the Administrator as well as Access Providers who has righs
 
@@ -91,7 +91,7 @@ class SsidsController extends AppController {
             foreach($q_r as $i){   
                 array_push($items,array(
                     'id'            => $i['Ssid']['id'], 
-                    'text'          => $i['Ssid']['name']
+                    'name'          => $i['Ssid']['name']
                 ));
             }
         }
@@ -142,7 +142,7 @@ class SsidsController extends AppController {
                     //Add to return items
                     array_push($items,array(
                         'id'            => $i['Ssid']['id'], 
-                        'text'          => $i['Ssid']['name']
+                        'name'          => $i['Ssid']['name']
                     ));
                 }
             }
