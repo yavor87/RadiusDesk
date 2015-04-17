@@ -422,16 +422,12 @@ class PermanentUsersController extends AppController {
 			$items['static_ip'] 	= $q_r['PermanentUser']['static_ip'];
 			$items['extra_name'] 	= $q_r['PermanentUser']['extra_name'];
 			$items['extra_value'] 	= $q_r['PermanentUser']['extra_value'];
+			$items['profile_id'] 	= intval($q_r['PermanentUser']['profile_id']); //VERY VERY VERY IMPORTANT not string
+			$items['realm_id'] 		= intval($q_r['PermanentUser']['realm_id']); //VERY VERY VERY IMPORTANT not string
+			
+			$ssid_check = false;
 
             foreach($q_r['Radcheck'] as $rc){
-
-                if($rc['attribute'] == 'Rd-Realm'){
-                  $realm =  $rc['value'];
-                }
-
-                if($rc['attribute'] == 'User-Profile'){
-                  $profile =  $rc['value'];
-                }
 
                 if($rc['attribute'] == 'Rd-Account-Activation-Time'){
                   $from_date =  $rc['value'];
@@ -449,19 +445,12 @@ class PermanentUsersController extends AppController {
                   $cap_time =  $rc['value'];
                 }
 
-            }
-        
-            //Now we do the rest....
-            if($profile){
-				$this->Profile->contain();
-                $q_r = $this->Profile->findByName($profile);
-                $items['profile_id'] = intval($q_r['Profile']['id']);
-            }
+				if($rc['attribute'] == 'Rd-Ssid-Check'){
+                	if($rc['value']=='1'){
+						$ssid_check = true;
+					}
+                }
 
-            if($realm){
-				$this->Realm->contain();
-                $q_r = $this->Realm->findByName($realm);
-                $items['realm_id'] = intval($q_r['Realm']['id']);
             }
 
             if($cap_data){
@@ -479,6 +468,29 @@ class PermanentUsersController extends AppController {
             }else{
                 $items['always_active'] = true;
             }
+
+			//---- SSID checking ---
+			$items['ssid_only'] = false;
+			if($ssid_check){
+				$username = $q_r['PermanentUser']['username'];
+				$u = ClassRegistry::init('UserSsid');
+				$q_us = $u->find('all',array('conditions' => array('UserSsid.username' => $username)));
+				$ssids = array();
+				foreach($q_us as $i){
+					array_push($ssids, array('Ssid.name' => $i['UserSsid']['ssidname']));
+				}
+
+				$s = ClassRegistry::init('Ssid');
+				$s->contain();
+				$q_r = $s->find('all', array('conditions' => array('OR' =>$ssids)));
+				$ssid_list = array();
+				foreach($q_r as $j){
+					array_push($ssid_list , array('id' => $j['Ssid']['id'], 'name' => $j['Ssid']['name']));
+				}
+				$items['ssid_list'] = $ssid_list;
+				$items['ssid_only'] = true;
+			}
+
         }
                // $items = array('realm_id' => 26, 'profile_id' => 2, 'always_active' => false,'cap' => 'soft');
 
@@ -490,6 +502,9 @@ class PermanentUsersController extends AppController {
     }
 
     public function edit_basic_info(){
+
+		//print_r($this->request->data);
+		//return;
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
@@ -590,6 +605,36 @@ class PermanentUsersController extends AppController {
                     array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Auth-Type'), false
                 );
             }
+
+			//_____ New addition where we can supply SSID ids _____
+			$count     = 0;
+			$ssid_list = array();
+			if (
+				(array_key_exists('ssid_only', $this->request->data))&&
+				(array_key_exists('ssid_list', $this->request->data))
+			) {
+				//--We force checking--
+				$this->_replace_radcheck_item($username,'Rd-Ssid-Check','1');
+
+				$ssid_list = array();
+
+		        foreach($this->request->data['ssid_list'] as $s){
+		            if($this->request->data['ssid_list'][$count] == 0){
+		                $empty_flag = true;
+		                break;
+		            }else{
+		                array_push($ssid_list,$this->request->data['ssid_list'][$count]);
+		            }
+		            $count++;
+		        }
+				$this->_replace_user_ssids($username,$ssid_list);
+
+		    }else{
+				//--We remove checking--
+				ClassRegistry::init('Radcheck')->deleteAll(
+                    array('Radcheck.username' => $username,'Radcheck.attribute' => 'Rd-Ssid-Check'), false
+                );
+			}
 		
 			//Finally update the user's table entry of the permanent user
 			$this->PermanentUser->save($this->request->data);
@@ -1921,6 +1966,13 @@ class PermanentUsersController extends AppController {
         $user_s->deleteAll( 
             array('UserStat.username' => $username), false
         );
+
+		$user_ssid = ClassRegistry::init('UserSsid');
+        $user_ssid->deleteAll( 
+            array('UserSsid.username' => $username), false
+        );
+
+
     }
 
     private function _is_sibling_of($parent_id,$user_id){
@@ -2039,7 +2091,35 @@ class PermanentUsersController extends AppController {
         $user_s->deleteAll( 
             array('UserStat.username' => $username), false
         );
-
     }
+
+	private function _replace_user_ssids($username,$ssid_list){
+		$u = ClassRegistry::init('UserSsid');
+
+		//Clean up previous ones
+		$u->deleteAll(
+			array('UserSsid.username' => $username), false
+		);
+
+		//Get all the SSID names from the $ssid_list
+		$s = ClassRegistry::init('Ssid');
+		$s->contain();
+		$id_list = array();
+		foreach($ssid_list as $i){
+			array_push($id_list, array('Ssid.id' => strval($i)));
+		}
+
+		$q_r = $s->find('all', array('conditions' => array('OR' =>$id_list)));
+
+		foreach($q_r as $j){
+			$name = $j['Ssid']['name'];
+			$data = array();
+			$data['username'] = $username;
+			$data['ssidname'] = $name;
+			$u->create();
+			$u->save($data);
+			$u->id = null;			
+		}
+	}
 
 }
