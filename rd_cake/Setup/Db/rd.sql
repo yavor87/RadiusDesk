@@ -2179,7 +2179,7 @@ CREATE TABLE `permanent_users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2485,7 +2485,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9840 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9948 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2813,7 +2813,7 @@ CREATE TABLE `ssids` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2822,6 +2822,7 @@ CREATE TABLE `ssids` (
 
 LOCK TABLES `ssids` WRITE;
 /*!40000 ALTER TABLE `ssids` DISABLE KEYS */;
+INSERT INTO `ssids` VALUES (2,'Test1',1,44,'test extra name1','test extra value1','2015-04-16 21:40:48','2015-04-17 08:57:56'),(3,'Test2',0,182,'','','2015-04-17 08:57:21','2015-04-17 08:58:12'),(4,'Test3',0,182,'','','2015-04-17 08:57:44','2015-04-17 08:57:44');
 /*!40000 ALTER TABLE `ssids` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3050,6 +3051,32 @@ INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_ssids`
+--
+
+DROP TABLE IF EXISTS `user_ssids`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_ssids` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `ssidname` varchar(64) NOT NULL DEFAULT '',
+  `priority` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `username` (`username`(32))
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_ssids`
+--
+
+LOCK TABLES `user_ssids` WRITE;
+/*!40000 ALTER TABLE `user_ssids` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_ssids` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user_stats`
 --
 
@@ -3182,4 +3209,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-16 16:35:38
+-- Dump completed on 2015-04-17 15:34:58
