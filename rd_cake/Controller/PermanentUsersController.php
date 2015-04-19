@@ -1972,7 +1972,6 @@ class PermanentUsersController extends AppController {
             array('UserSsid.username' => $username), false
         );
 
-
     }
 
     private function _is_sibling_of($parent_id,$user_id){

@@ -556,6 +556,44 @@ class VouchersController extends AppController {
                 }else{
                     $items['never_expire'] = true;
                 }
+
+				//SSID list
+				$ssid_check = false;
+				$username 	= $q_r['Voucher']['name'];
+		        $rc 		= ClassRegistry::init('Radcheck');
+				$ssid_count = $rc->find('count',
+					array('conditions' => array(
+						'Radcheck.username' 	=> $username,
+						'Radcheck.attribute' 	=> 'Rd-Ssid-Check',
+						'Radcheck.value' 		=> '1',
+					))
+				);
+
+		        if($ssid_count > 0){
+					$ssid_check = true;
+				}
+
+				//---- SSID checking ---
+				$items['ssid_only'] = false;
+				if($ssid_check){
+					$username = $q_r['Voucher']['name'];
+					$u = ClassRegistry::init('UserSsid');
+					$q_us = $u->find('all',array('conditions' => array('UserSsid.username' => $username)));
+					$ssids = array();
+					foreach($q_us as $i){
+						array_push($ssids, array('Ssid.name' => $i['UserSsid']['ssidname']));
+					}
+
+					$s = ClassRegistry::init('Ssid');
+					$s->contain();
+					$q_r = $s->find('all', array('conditions' => array('OR' =>$ssids)));
+					$ssid_list = array();
+					foreach($q_r as $j){
+						array_push($ssid_list , array('id' => $j['Ssid']['id'], 'name' => $j['Ssid']['name']));
+					}
+					$items['ssid_list'] = $ssid_list;
+					$items['ssid_only'] = true;
+				}
             } 
         }
 
@@ -575,13 +613,17 @@ class VouchersController extends AppController {
         }
         $user_id    = $user['id'];
 
-        //___Two fields should be tested for first___:
+        //___Three fields should be tested for first___:
         if(array_key_exists('activate_on_login',$this->request->data)){
             $this->request->data['activate_on_login'] = 1;
         }
 
         if(array_key_exists('never_expire',$this->request->data)){
             $this->request->data['never_expire'] = 1;
+        }
+
+		if(array_key_exists('ssid_only',$this->request->data)){
+            $this->request->data['ssid_only'] = 1;
         }
         //____ END OF TWO FIELD CHECK ___
     
@@ -1623,6 +1665,10 @@ class VouchersController extends AppController {
             array('UserStat.username' => $username), false
         );
 
+		$user_ssid = ClassRegistry::init('UserSsid');
+        $user_ssid->deleteAll( 
+            array('UserSsid.username' => $username), false
+        );
     }
 
     private function _is_sibling_of($parent_id,$user_id){
