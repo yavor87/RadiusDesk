@@ -106,6 +106,33 @@ class Voucher extends AppModel {
         }else{
             $this->_remove_radcheck_item($username,'Expiration');
         }
+
+		//SSID list
+		$count     = 0;
+		$ssid_list = array();
+		if (
+			(array_key_exists('ssid_only', $this->data['Voucher']))&&
+			(array_key_exists('ssid_list', $this->data['Voucher']))
+		){
+            if($this->data['Voucher']['ssid_only'] == '1'){       
+                $this->_replace_radcheck_item($username,'Rd-Ssid-Check','1');
+				$ssid_list = array();
+			    foreach($this->data['Voucher']['ssid_list'] as $s){
+			        if($this->data['Voucher']['ssid_list'][$count] == 0){
+			            $empty_flag = true;
+			            break;
+			        }else{
+			            array_push($ssid_list,$this->data['Voucher']['ssid_list'][$count]);
+			        }
+			        $count++;
+			    }
+				$this->_replace_user_ssids($username,$ssid_list);
+            }else{
+				$this->_remove_radcheck_item($username,'Rd-Ssid-Check');
+			}
+        }else{
+            $this->_remove_radcheck_item($username,'Rd-Ssid-Check');
+        }
     }
 
     private function _add_radius_user(){
@@ -137,6 +164,38 @@ class Voucher extends AppModel {
                 $this->_add_radcheck_item($username,'Expiration',$expiration);
             }
         }
+
+		//If this is restriction for SSID ....
+		if(array_key_exists('ssid_only',$this->data['Voucher'])){ //It may be missing; you never know...
+            if($this->data['Voucher']['ssid_only'] != ''){       
+                $this->_add_radcheck_item($username,'Rd-Ssid-Check','1');
+            }
+        }
+
+		//_____ New addition where we can supply SSID ids _____
+		$count     = 0;
+		$ssid_list = array();
+		if (
+			(array_key_exists('ssid_only', $this->data['Voucher']))&&
+			(array_key_exists('ssid_list', $this->data['Voucher']))
+		) {
+			//--We force checking--
+			$this->_add_radcheck_item($username,'Rd-Ssid-Check','1');
+
+			$ssid_list = array();
+
+	        foreach($this->data['Voucher']['ssid_list'] as $s){
+	            if($this->data['Voucher']['ssid_list'][$count] == 0){
+	                $empty_flag = true;
+	                break;
+	            }else{
+	                array_push($ssid_list,$this->data['Voucher']['ssid_list'][$count]);
+	            }
+	            $count++;
+	        }
+			$this->_replace_user_ssids($username,$ssid_list);
+	    }
+
     }
 
     private function _radius_format_date($d){
@@ -278,7 +337,34 @@ class Voucher extends AppModel {
             $time_avail = ($pieces[0] * 86400)+($pieces[1] * 3600)+($pieces[2] * 60)+($pieces[3]);
 			$this->data['Voucher']['time_cap'] = $time_avail;
 		}
-
-
     }
+
+	private function _replace_user_ssids($username,$ssid_list){
+		$u = ClassRegistry::init('UserSsid');
+
+		//Clean up previous ones
+		$u->deleteAll(
+			array('UserSsid.username' => $username), false
+		);
+
+		//Get all the SSID names from the $ssid_list
+		$s = ClassRegistry::init('Ssid');
+		$s->contain();
+		$id_list = array();
+		foreach($ssid_list as $i){
+			array_push($id_list, array('Ssid.id' => strval($i)));
+		}
+
+		$q_r = $s->find('all', array('conditions' => array('OR' =>$id_list)));
+
+		foreach($q_r as $j){
+			$name = $j['Ssid']['name'];
+			$data = array();
+			$data['username'] = $username;
+			$data['ssidname'] = $name;
+			$u->create();
+			$u->save($data);
+			$u->id = null;			
+		}
+	}
 }
