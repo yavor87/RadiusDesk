@@ -56,7 +56,8 @@ Ext.define('Rd.controller.cVouchers', {
         'vouchers.winVoucherPassword', 	'components.winPdf',     'vouchers.winVoucherPdf',
         'vouchers.cmbPdfFormats',   	'components.vCmbLanguages', 'components.winCsvColumnSelect', 
         'components.pnlUsageGraph', 	'vouchers.winVoucherEmailDetail',
-		'vouchers.gridVoucherDevices',	'vouchers.winVoucherAddDevice'
+		'vouchers.gridVoucherDevices',	'vouchers.winVoucherAddDevice',
+		'components.cmbSsid'
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
     models: [
@@ -147,6 +148,9 @@ Ext.define('Rd.controller.cVouchers', {
             'winVoucherAddWizard #never_expire' : {
                 change:  me.chkNeverExpireChange
             },
+			'winVoucherAddWizard #ssid_only' : {
+                change:  me.chkSsidOnlyChange
+            },
             'winVoucherAddWizard #btnDataPrev' : {
                 click:  me.btnDataPrev
             },
@@ -167,6 +171,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'pnlVoucher #never_expire' : {
                 change:  me.chkNeverExpireChange
+            },
+			'pnlVoucher #ssid_only' : {
+                change:  me.chkSsidOnlyChange
             },
             'pnlVoucher #tabBasicInfo #save' : {
                 click: me.saveBasicInfo
@@ -521,13 +528,29 @@ Ext.define('Rd.controller.cVouchers', {
             });
         }
     },
-
     onTabBasicInfoActive: function(t){
         var me      = this;
         var form    = t.down('form');
         //get the voucher's id
         var voucher_id = t.up('pnlVoucher').v_id;
-        form.load({url:me.urlViewBasic, method:'GET',params:{voucher_id:voucher_id}});
+        form.load({url:me.urlViewBasic, method:'GET',params:{voucher_id:voucher_id},
+			success : function(a,b){  
+				//If the SSID must be restricted specify which SSIDs
+				if(b.result.data.ssid_list != undefined){
+					var cmbSsid	= form.down('#ssid_list');
+					var iValues = [];  
+					cmbSsid.getStore().loadData([],false); //Wipe it
+					Ext.Array.forEach(b.result.data.ssid_list,function(item){
+                    	//console.log(item);
+						var id = item.id;
+						iValues.push ( id );
+						cmbSsid.getStore().loadData([item],true); //Append it
+                    });
+					//console.log(iValues);
+					cmbSsid.setValue( iValues );	
+				}
+            }
+		});
     },
     saveBasicInfo:function(button){
 
@@ -808,6 +831,19 @@ Ext.define('Rd.controller.cVouchers', {
             e.setDisabled(true);                
         }else{
             e.setDisabled(false);
+        }
+    },
+	chkSsidOnlyChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var list    = form.down('#ssid_list');
+        var value   = chk.getValue();
+        if(value){
+            list.setVisible(true);
+            list.setDisabled(false);
+        }else{
+            list.setVisible(false);
+            list.setDisabled(true);
         }
     },
     selectVoucherPrivate:  function(grid, record, item, index, event){

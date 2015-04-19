@@ -123,7 +123,7 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         allowBlank  : true,
                         labelClsExtra: 'lblRd'
                     },
-					 {
+					{
                         xtype       : 'checkbox',      
                         boxLabel    : 'Connect only from selected SSIDs',
                         name        : 'ssid_only',
