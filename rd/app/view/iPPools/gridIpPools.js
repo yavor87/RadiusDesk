@@ -27,7 +27,7 @@ Ext.define('Rd.view.iPPools.gridIpPools' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.features = [filters];
         me.columns  = [
-            { xtype: 'rownumberer',stateId: 'StateGridIpPools1', width: 30},
+            { xtype: 'rownumberer',stateId: 'StateGridIpPools1', width: Rd.config.buttonMargin },
             { 
 
                 text        :'Name', 

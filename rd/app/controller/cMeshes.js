@@ -26,12 +26,22 @@ Ext.define('Rd.controller.cMeshes', {
                         heading : i18n('sMESHdesk_overview'),
                         image   : 'resources/images/48x48/mesh.png'
                     },
-                    {
+					{
                         region  : 'center',
+                        xtype   : 'panel',
                         layout  : 'fit',
-                        xtype   : 'gridMeshes',
-                        margins : '0 0 0 0',
-                        border  : true
+                        border  : false,
+                        items   : [{
+                            xtype   : 'tabpanel',
+                            layout  : 'fit',
+                            margins : '0 0 0 0',
+                            border  : true,
+                            plain   : true,
+                            items   : [
+								{ 'title' : i18n('sHome'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnHome},
+								{ 'title' : 'Known nodes', 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnThumbUp},
+								{ 'title' : 'Unknown nodes', 	'glyph': Rd.config.icnThumbDown}
+                        ]}]
                     }
                 ]
             });
@@ -41,12 +51,13 @@ Ext.define('Rd.controller.cMeshes', {
     },
 
     views:  [
-        'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard'
+        'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
+		'meshes.gridNodeLists'
     ],
     stores      : [
-		'sMeshes',   'sAccessProvidersTree'
+		'sMeshes',   'sAccessProvidersTree', 'sNodeLists'
 	],
-    models      : ['mMesh',     'mAccessProviderTree'
+    models      : ['mMesh',     'mAccessProviderTree', 'mNodeList'
     ],
     selectedRecord: null,
     config      : {

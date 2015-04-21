@@ -142,6 +142,7 @@ Ext.application({
             fieldMargin     : 15,
             labelWidth      : 150,
             maxWidth        : 400,
+			numWidth		: 30,
             panelGrey       : '#e5e6ef',
             icnLock         : 57495,    //Glyphs
             icnYes          : 57605,
@@ -208,7 +209,9 @@ Ext.application({
 			icnGoogle		: 57614,
 			icnTwitter		: 57574,
 			icnWifi			: 57550,
-			icnIP			: 57479
+			icnIP			: 57479,
+			icnThumbUp		: 57603,
+			icnThumbDown	: 57602
         };
     },
     addUx: function(){

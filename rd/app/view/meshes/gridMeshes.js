@@ -28,14 +28,27 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
         me.features = [filters];
 
         me.columns  = [
-            {xtype: 'rownumberer',stateId: 'StateGridMeshes1'},
+            {xtype: 'rownumberer',stateId: 'StateGridMeshes1', width: Rd.config.buttonMargin},
             { text: i18n('sOwner'),     dataIndex: 'owner',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridMeshes2'},
             { text: i18n('sName'),      dataIndex: 'name',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridMeshes3'},
-            { text: i18n('sSSID'),      dataIndex: 'ssid',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes4'},
-            { text: i18n('sBSSID'),    dataIndex: 'bssid',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes5'},
-            { text: i18n('sNode_count'),dataIndex: 'node_count',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes6'},
-            { text: i18n('sNodes_up'),  dataIndex: 'nodes_up',      tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes7'},
-            { text: i18n('sNodes_down'),dataIndex: 'nodes_down',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes8'},
+			{ 
+                text:   i18n('sAvailable_to_sub_providers'),
+                flex: 1,  
+                xtype:  'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                            "<tpl if='available_to_siblings == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
+                            "<tpl if='available_to_siblings == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                        ),
+                dataIndex: 'available_to_siblings',
+                filter  : {
+                    type: 'boolean'    
+                },stateId: 'StateGridSsids4'
+            },
+            { text: i18n('sSSID'),      dataIndex: 'ssid',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes5'},
+            { text: i18n('sBSSID'),    dataIndex: 'bssid',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes6'},
+            { text: i18n('sNode_count'),dataIndex: 'node_count',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes7'},
+            { text: i18n('sNodes_up'),  dataIndex: 'nodes_up',      tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes8'},
+            { text: i18n('sNodes_down'),dataIndex: 'nodes_down',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes9'},
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
@@ -44,7 +57,7 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><div class=\"note\">"+i18n("sExisting_Notes")+"</div></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridMeshes9'
+                dataIndex: 'notes',stateId: 'StateGridMeshes10'
             }      
         ];
         me.callParent(arguments);
