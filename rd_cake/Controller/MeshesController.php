@@ -84,6 +84,7 @@ class MeshesController extends AppController {
                 'name'                  => $i['Mesh']['name'],
                 'ssid'                  => $i['Mesh']['ssid'],
                 'bssid'                 => $i['Mesh']['bssid'],
+				'available_to_siblings' => $i['Mesh']['available_to_siblings'],
                 'node_count'            => $node_count,
                 'nodes_up'              => $nodes_up,
                 'nodes_down'            => $nodes_down,
@@ -113,8 +114,15 @@ class MeshesController extends AppController {
         $user_id    = $user['id'];
 
         //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
+        }
+
+		//Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
         }
 
         $this->{$this->modelClass}->create();

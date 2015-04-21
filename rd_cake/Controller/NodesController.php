@@ -49,6 +49,12 @@ class NodesController extends AppController {
                         $gw = true;
                     }
                 }
+
+				//Update the last_contact field
+				$data = array();
+				$data['id'] 			= $this->NodeId;
+				$data['last_contact']	= date("Y-m-d H:i:s", time());
+				$this->Mesh->Node->save($data);
                 
                 $json = $this->_build_json($m,$gw);
                 $this->set(array(
