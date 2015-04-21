@@ -1446,8 +1446,9 @@ CREATE TABLE `meshes` (
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1456,7 +1457,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46'),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29'),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42');
+INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46',0),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29',0),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42',0),(42,'test','02_CA_FE_CA_00_04','02:CA:FE:CA:00:04',44,'2015-04-21 08:53:50','2015-04-21 08:53:50',1);
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2007,7 +2008,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2016,6 +2017,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (1,40,'dummy node','dummy node','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.1','2015-04-21 12:42:57',0,NULL,NULL,'logo.jpg','2015-04-21 08:01:03','2015-04-21 12:42:57',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2179,7 +2181,7 @@ CREATE TABLE `permanent_users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2451,6 +2453,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER radacct_after_update
 AFTER update ON radacct FOR EACH ROW BEGIN
+if((OLD.acctsessiontime + 600) < NEW.acctsessiontime) then
 INSERT INTO user_stats 
   SET 
   radacct_id        = OLD.radacctid,
@@ -2462,6 +2465,7 @@ INSERT INTO user_stats
   callingstationid  = OLD.callingstationid,
   acctinputoctets   = (NEW.acctinputoctets - OLD.acctinputoctets), 
   acctoutputoctets  = (NEW.acctoutputoctets - OLD.acctoutputoctets);
+end if;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2485,7 +2489,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9948 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9840 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2494,7 +2498,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0'),(9707,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9708,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9709,'click_to_connect@Struisbaai','Rd-Cap-Type-Data',':=','hard'),(9779,'AA-BB-BB-DD-EE-F1','Rd-User-Type',':=','voucher-device'),(9780,'AA-BB-BB-DD-EE-F1','Rd-Voucher-Device-Owner',':=','cheerypet'),(9781,'AA-BB-BB-DD-EE-F1','User-Profile',':=','Data-Standard-1G'),(9782,'AA-BB-BB-DD-EE-F1','Rd-Realm',':=','Residence Inn'),(9796,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9797,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9798,'dvdwalt','Rd-Cap-Type-Data',':=','hard'),(9799,'priceflavor','Cleartext-Password',':=','priceflavor'),(9800,'priceflavor','Rd-User-Type',':=','voucher'),(9801,'priceflavor','Rd-Realm',':=','Residence Inn'),(9802,'priceflavor','User-Profile',':=','Time-Standard-1Hour'),(9803,'weirdquartz','Cleartext-Password',':=','weirdquartz'),(9804,'weirdquartz','Rd-User-Type',':=','voucher'),(9805,'weirdquartz','Rd-Realm',':=','Residence Inn'),(9806,'weirdquartz','User-Profile',':=','Time-Standard-1Hour'),(9807,'shoddyjellyfish','Cleartext-Password',':=','shoddyjellyfish'),(9808,'shoddyjellyfish','Rd-User-Type',':=','voucher'),(9809,'shoddyjellyfish','Rd-Realm',':=','Residence Inn'),(9810,'shoddyjellyfish','User-Profile',':=','Time-Standard-1Hour'),(9811,'livingvegetable','Cleartext-Password',':=','livingvegetable'),(9812,'livingvegetable','Rd-User-Type',':=','voucher'),(9813,'livingvegetable','Rd-Realm',':=','Residence Inn'),(9814,'livingvegetable','User-Profile',':=','Time-Standard-1Hour'),(9815,'feistyboundary','Cleartext-Password',':=','feistyboundary'),(9816,'feistyboundary','Rd-User-Type',':=','voucher'),(9817,'feistyboundary','Rd-Realm',':=','Residence Inn'),(9818,'feistyboundary','User-Profile',':=','Time-Standard-1Hour'),(9819,'elasticaunt','Cleartext-Password',':=','elasticaunt'),(9820,'elasticaunt','Rd-User-Type',':=','voucher'),(9821,'elasticaunt','Rd-Realm',':=','Residence Inn'),(9822,'elasticaunt','User-Profile',':=','Time-Standard-1Hour'),(9823,'pricebelief','Cleartext-Password',':=','pricebelief'),(9824,'pricebelief','Rd-User-Type',':=','voucher'),(9825,'pricebelief','Rd-Realm',':=','Residence Inn'),(9826,'pricebelief','User-Profile',':=','Time-Standard-1Hour'),(9827,'vastquilt','Cleartext-Password',':=','vastquilt'),(9828,'vastquilt','Rd-User-Type',':=','voucher'),(9829,'vastquilt','Rd-Realm',':=','Residence Inn'),(9830,'vastquilt','User-Profile',':=','Time-Standard-1Hour'),(9831,'handypollution','Cleartext-Password',':=','handypollution'),(9832,'handypollution','Rd-User-Type',':=','voucher'),(9833,'handypollution','Rd-Realm',':=','Residence Inn'),(9834,'handypollution','User-Profile',':=','Time-Standard-1Hour'),(9835,'chubbyticket','Cleartext-Password',':=','chubbyticket'),(9836,'chubbyticket','Rd-User-Type',':=','voucher'),(9837,'chubbyticket','Rd-Realm',':=','Residence Inn'),(9838,'chubbyticket','User-Profile',':=','Time-Standard-1Hour'),(9839,'dvdwalt','Rd-Total-Data',':=','7518289920');
+INSERT INTO `radcheck` VALUES (8353,'dvdwalt','Rd-User-Type',':=','user'),(8376,'dvdwalt','Rd-Not-Track-Auth',':=','1'),(8377,'dvdwalt','Rd-Auto-Mac',':=','1'),(8899,'dvdwalt','Rd-Account-Disabled',':=','0'),(9196,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9208,'click_to_connect@Struisbaai','Cleartext-Password',':=','click_to_connect'),(9209,'click_to_connect@Struisbaai','Rd-User-Type',':=','user'),(9212,'click_to_connect@Struisbaai','Rd-Account-Disabled',':=','0'),(9213,'click_to_connect@Struisbaai','Rd-Not-Track-Auth',':=','1'),(9222,'08-ed-b9-00-bc-55','Rd-User-Type',':=','device'),(9223,'08-ed-b9-00-bc-55','Rd-Realm',':=','Residence Inn'),(9224,'08-ed-b9-00-bc-55','Rd-Device-Owner',':=','dvdwalt'),(9225,'08-ed-b9-00-bc-55','User-Profile',':=','Data-Standard-1G'),(9226,'08-ed-b9-00-bc-55','Rd-Account-Disabled',':=','0'),(9707,'click_to_connect@Struisbaai','User-Profile',':=','5M-every-hour'),(9708,'click_to_connect@Struisbaai','Rd-Realm',':=','Residence Inn'),(9709,'click_to_connect@Struisbaai','Rd-Cap-Type-Data',':=','hard'),(9779,'AA-BB-BB-DD-EE-F1','Rd-User-Type',':=','voucher-device'),(9780,'AA-BB-BB-DD-EE-F1','Rd-Voucher-Device-Owner',':=','cheerypet'),(9781,'AA-BB-BB-DD-EE-F1','User-Profile',':=','Data-Standard-1G'),(9782,'AA-BB-BB-DD-EE-F1','Rd-Realm',':=','Residence Inn'),(9796,'dvdwalt','User-Profile',':=','Data-Standard-1G'),(9797,'dvdwalt','Rd-Realm',':=','Residence Inn'),(9798,'dvdwalt','Rd-Cap-Type-Data',':=','hard'),(9799,'priceflavor','Cleartext-Password',':=','priceflavor'),(9800,'priceflavor','Rd-User-Type',':=','voucher'),(9801,'priceflavor','Rd-Realm',':=','Residence Inn'),(9802,'priceflavor','User-Profile',':=','Time-Standard-1Hour'),(9807,'shoddyjellyfish','Cleartext-Password',':=','shoddyjellyfish'),(9808,'shoddyjellyfish','Rd-User-Type',':=','voucher'),(9809,'shoddyjellyfish','Rd-Realm',':=','Residence Inn'),(9810,'shoddyjellyfish','User-Profile',':=','Time-Standard-1Hour'),(9811,'livingvegetable','Cleartext-Password',':=','livingvegetable'),(9812,'livingvegetable','Rd-User-Type',':=','voucher'),(9813,'livingvegetable','Rd-Realm',':=','Residence Inn'),(9814,'livingvegetable','User-Profile',':=','Time-Standard-1Hour'),(9815,'feistyboundary','Cleartext-Password',':=','feistyboundary'),(9816,'feistyboundary','Rd-User-Type',':=','voucher'),(9817,'feistyboundary','Rd-Realm',':=','Residence Inn'),(9818,'feistyboundary','User-Profile',':=','Time-Standard-1Hour'),(9819,'elasticaunt','Cleartext-Password',':=','elasticaunt'),(9820,'elasticaunt','Rd-User-Type',':=','voucher'),(9821,'elasticaunt','Rd-Realm',':=','Residence Inn'),(9822,'elasticaunt','User-Profile',':=','Time-Standard-1Hour'),(9823,'pricebelief','Cleartext-Password',':=','pricebelief'),(9824,'pricebelief','Rd-User-Type',':=','voucher'),(9825,'pricebelief','Rd-Realm',':=','Residence Inn'),(9826,'pricebelief','User-Profile',':=','Time-Standard-1Hour'),(9827,'vastquilt','Cleartext-Password',':=','vastquilt'),(9828,'vastquilt','Rd-User-Type',':=','voucher'),(9829,'vastquilt','Rd-Realm',':=','Residence Inn'),(9830,'vastquilt','User-Profile',':=','Time-Standard-1Hour'),(9831,'handypollution','Cleartext-Password',':=','handypollution'),(9832,'handypollution','Rd-User-Type',':=','voucher'),(9833,'handypollution','Rd-Realm',':=','Residence Inn'),(9834,'handypollution','User-Profile',':=','Time-Standard-1Hour'),(9835,'chubbyticket','Cleartext-Password',':=','chubbyticket'),(9836,'chubbyticket','Rd-User-Type',':=','voucher'),(9837,'chubbyticket','Rd-Realm',':=','Residence Inn'),(9838,'chubbyticket','User-Profile',':=','Time-Standard-1Hour'),(9839,'dvdwalt','Rd-Total-Data',':=','7518289920');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3064,7 +3068,7 @@ CREATE TABLE `user_ssids` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3196,7 +3200,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (1,'priceflavor','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','priceflavor','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(2,'weirdquartz','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','weirdquartz','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(3,'shoddyjellyfish','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','shoddyjellyfish','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(4,'livingvegetable','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','livingvegetable','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(5,'feistyboundary','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','feistyboundary','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(6,'elasticaunt','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','elasticaunt','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(7,'pricebelief','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','pricebelief','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(8,'vastquilt','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','vastquilt','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(9,'handypollution','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:49','2015-04-06 04:12:49','','','handypollution','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(10,'chubbyticket','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:49','2015-04-06 04:12:49','','','chubbyticket','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL);
+INSERT INTO `vouchers` VALUES (1,'priceflavor','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','priceflavor','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(3,'shoddyjellyfish','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','shoddyjellyfish','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(4,'livingvegetable','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','livingvegetable','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(5,'feistyboundary','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','feistyboundary','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(6,'elasticaunt','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','elasticaunt','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(7,'pricebelief','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','pricebelief','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(8,'vastquilt','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:48','2015-04-06 04:12:48','','','vastquilt','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(9,'handypollution','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:49','2015-04-06 04:12:49','','','handypollution','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL),(10,'chubbyticket','t','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2015-04-06 04:12:49','2015-04-06 04:12:49','','','chubbyticket','Residence Inn',34,'Time-Standard-1Hour',10,'','',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -3209,4 +3213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-17 15:34:58
+-- Dump completed on 2015-04-21 12:47:31
