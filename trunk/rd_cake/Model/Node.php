@@ -60,7 +60,7 @@ class Node extends AppModel {
           	),
 			'NodeMpSetting'   => array(
                 'dependent'     => true   
-            ),
+            )
     );
 
     public $hasOne = array(
