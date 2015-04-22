@@ -1118,9 +1118,19 @@ class MeshesController extends AppController {
 
         if ($this->request->is('post')) {
 
-            $static_entry   = ClassRegistry::init('NodeMeshEntry');
+			$static_entry   = ClassRegistry::init('NodeMeshEntry');
             $static_exit    = ClassRegistry::init('NodeMeshExit');
             $node           = ClassRegistry::init('Node');
+
+			if (array_key_exists('mesh_id', $this->request->data)) {
+				$new_mesh_id 	= $this->request->data['mesh_id'];
+				$node->contain();
+				$q_r 			= $node->findById($this->request->data['id']);
+				$current_id 	= $q_r['Node']['id'];
+				if($current_id != $new_mesh_id){	//Delete it if the mesh changed
+					$node->delete($current_id, true);
+				}
+			}    
      
             if ($node->save($this->request->data)) {
                 $new_id = $node->id;
@@ -1199,11 +1209,8 @@ class MeshesController extends AppController {
 				//___ Do a check if the device is a dual radio device and if so; send it way to be delt with
 
 				if($this->_get_radio_count_for($this->request->data['hardware']) == 2){
-
 					$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
 				}
-
-
 
                 $this->set(array(
                     'success' => true,
@@ -1246,6 +1253,8 @@ class MeshesController extends AppController {
 				$q_r['Node']["$key"] = $value; 
 			}
 		}
+
+		$q_r['Node']['mesh_id'] = intval($q_r['Node']['mesh_id']);
 
         $this->set(array(
             'data'      => $q_r['Node'],
