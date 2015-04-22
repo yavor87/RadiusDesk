@@ -14,6 +14,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
     layout  : 'border',
     stateful: true,
     autoShow:   false,
+	meshName: '',
     initComponent: function() {
         var me      = this; 
         me.items    = [
