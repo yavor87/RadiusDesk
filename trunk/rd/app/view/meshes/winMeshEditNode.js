@@ -14,6 +14,8 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
     glyph       : Rd.config.icnEdit,
     autoShow    : false,
     nodeId      : '',
+	meshName	: '',
+	meshId		: '',
 	hidePower	: false,
     defaults: {
             border: false
@@ -25,10 +27,21 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
         'Rd.view.meshes.cmbHardwareOptions',
 		'Rd.view.meshes.cmbDialoutCode',
 		'Rd.view.meshes.cmbCodec',
-		'Rd.view.meshes.cmbSoftphoneSupport'
+		'Rd.view.meshes.cmbSoftphoneSupport',
+		'Rd.view.components.cmbMesh'
     ],
      initComponent: function() {
         var me 		= this; 
+
+		console.log(me.meshName);
+		console.log(me.meshId);
+
+		var cmb = Ext.create('Rd.view.components.cmbMesh',{'itemId' : 'mesh_id', labelClsExtra: 'lblRdReq'});
+		cmb.getStore().loadData([],false); //Wipe it
+		cmb.getStore().loadData([{'id' : me.meshId, 'name' : me.meshName}],true);//Add it
+		//cmb.setValue(me.meshId);//Show it (We don't need to show it.... the view just need to specify it as an INTEGER and NOT string  in JSON)
+
+
         var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
             layout:     'fit',
@@ -85,7 +98,8 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
 						            name    : "id",
 						            hidden  : true,
 						            value   : me.nodeId
-						        }, 
+						        },
+								cmb,
 						        {
 						            xtype       : 'textfield',
 						            fieldLabel  : i18n('sMAC_address'),
