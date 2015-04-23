@@ -52,7 +52,8 @@ Ext.define('Rd.controller.cMeshes', {
 
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
-		'meshes.gridNodeLists',		'meshes.winMeshEditNode',	'meshes.gridUnknownNodes'
+		'meshes.gridNodeLists',		'meshes.winMeshEditNode',	'meshes.gridUnknownNodes',
+		'meshes.winMeshAttachNode'
     ],
     stores      : [
 		'sMeshes',   'sAccessProvidersTree', 'sNodeLists', 				'sUnknownNodes'
@@ -200,6 +201,18 @@ Ext.define('Rd.controller.cMeshes', {
 			'gridUnknownNodes #reload': {
                 click:      me.gridUnknownNodesReload
             },
+			'gridUnknownNodes #attach': {
+                click:  me.attachNode
+            },
+			'winMeshAttachNode cmbHardwareOptions': {
+                change: me.cmbHardwareOptionsChange
+            },
+			'winMeshAttachNode #save' : {
+				click: me.btnAttachNodeSave
+			},
+			'gridUnknownNodes #delete': {
+                click: me.delUnknownNode
+            }
         });
     },
     winClose:   function(){
@@ -769,9 +782,9 @@ Ext.define('Rd.controller.cMeshes', {
     },
     loadNode: function(win){
         var me      = this; 
-        var form    = win.down('form');
-        var nodeId  = win.nodeId;
-        form.load({url:me.urlViewNode, method:'GET',params:{node_id:nodeId}});
+    	var form    = win.down('form');
+    	var nodeId  = win.nodeId;
+    	form.load({url:me.urlViewNode, method:'GET',params:{node_id:nodeId}});
     },
     btnEditNodeSave:  function(button){
         var me      = this;
@@ -862,5 +875,98 @@ Ext.define('Rd.controller.cMeshes', {
         var me  = this;
         var g = button.up('gridUnknownNodes');
         g.getStore().load();
+    },
+	//_______ Unknown Nodes ______
+	attachNode: function(button){
+        var me      = this;
+        var win     = button.up("#meshWin");
+        var store   = win.down("gridUnknownNodes").getStore();
+        if(win.down("gridUnknownNodes").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr      = win.down("gridUnknownNodes").getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var meshId  = '';
+			var meshName= '';
+			var mac		= sr.get('mac');
+
+			//Determine if we can show a power bar or not.
+			var hide_power = true; //FIXME To be fiexed with real value from mesh
+            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAttachNodeId')){
+                var w = Ext.widget('winMeshAttachNode',
+                {
+                    id          :'winMeshAttachNodeId',
+                    store       : store,
+					hidePower	: hide_power,
+					mac			: mac
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }
+        }
+    },
+	btnAttachNodeSave: function(button){
+        var me      = this;
+        var win     = button.up("winMeshAttachNode");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddNode,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_added'),
+                    i18n('sItem_added_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+	delUnknownNode:   function(btn){
+        var me      = this;
+        var win     = btn.up("window");
+        var grid    = win.down("gridUnknownNodes");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
     }
 });
