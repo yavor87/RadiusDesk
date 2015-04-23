@@ -1019,7 +1019,15 @@ class MeshesController extends AppController {
  
         $node->create();
         if ($node->save($this->request->data)) {
+
             $new_id = $node->id;
+
+			//Check if it was submitted through the attach  node window - then remove the unknown_node with mac = mac
+			if(array_key_exists('rem_unknown', $this->request->data)) {
+				$unknown_node   = ClassRegistry::init('UnknownNode');
+				$mac			= $this->request->data['mac'];
+ 				$unknown_node->deleteAll(array('UnknownNode.mac' => $mac), true);
+			}
 
             //Add the entry points
             $count      = 0;
