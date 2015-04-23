@@ -1122,6 +1122,8 @@ class MeshesController extends AppController {
             $static_exit    = ClassRegistry::init('NodeMeshExit');
             $node           = ClassRegistry::init('Node');
 
+			$move_meshes	= false;
+
 			if (array_key_exists('mesh_id', $this->request->data)) {
 				$new_mesh_id 	= $this->request->data['mesh_id'];
 				$node->contain();
@@ -1129,8 +1131,13 @@ class MeshesController extends AppController {
 				$current_id 	= $q_r['Node']['id'];
 				if($current_id != $new_mesh_id){	//Delete it if the mesh changed
 					$node->delete($current_id, true);
+					$move_meshes = true;
 				}
-			}    
+			}
+
+			//We are moving meshes - we need the ip
+			$ip = $node->get_ip_for_node($this->request->data['mesh_id']);
+			$this->request->data['ip'] = $ip;  
      
             if ($node->save($this->request->data)) {
                 $new_id = $node->id;
