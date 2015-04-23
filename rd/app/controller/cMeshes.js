@@ -40,7 +40,7 @@ Ext.define('Rd.controller.cMeshes', {
                             items   : [
 								{ 'title' : i18n('sHome'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnHome},
 								{ 'title' : 'Known nodes', 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnThumbUp},
-								{ 'title' : 'Unknown nodes', 	'glyph': Rd.config.icnThumbDown}
+								{ 'title' : 'Unknown nodes','xtype':'gridUnknownNodes',	'glyph': Rd.config.icnThumbDown}
                         ]}]
                     }
                 ]
@@ -52,12 +52,12 @@ Ext.define('Rd.controller.cMeshes', {
 
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
-		'meshes.gridNodeLists',		'meshes.winMeshEditNode'
+		'meshes.gridNodeLists',		'meshes.winMeshEditNode',	'meshes.gridUnknownNodes'
     ],
     stores      : [
-		'sMeshes',   'sAccessProvidersTree', 'sNodeLists'
+		'sMeshes',   'sAccessProvidersTree', 'sNodeLists', 				'sUnknownNodes'
 	],
-    models      : ['mMesh',     'mAccessProviderTree', 'mNodeList'
+    models      : ['mMesh',     'mAccessProviderTree', 'mNodeList', 	'mUnknownNode'
     ],
     selectedRecord: null,
     config      : {
@@ -196,7 +196,10 @@ Ext.define('Rd.controller.cMeshes', {
 			},
 			'#chkAsterisk' : {
 				change	: me.chkAsteriskChange
-			}
+			},
+			'gridUnknownNodes #reload': {
+                click:      me.gridUnknownNodesReload
+            },
         });
     },
     winClose:   function(){
@@ -854,5 +857,10 @@ Ext.define('Rd.controller.cMeshes', {
 			}
 		});
 
-	}
+	},
+	gridUnknownNodesReload: function(button){
+        var me  = this;
+        var g = button.up('gridUnknownNodes');
+        g.getStore().load();
+    }
 });
