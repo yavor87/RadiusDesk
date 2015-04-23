@@ -2008,7 +2008,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2017,7 +2017,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (1,40,'dummy node','dummy node','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.1','2015-04-21 12:42:57',0,NULL,NULL,'logo.jpg','2015-04-21 08:01:03','2015-04-21 12:42:57',1,1,1,24,1,44,1,1,1,5,1,44);
+INSERT INTO `nodes` VALUES (3,35,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2015-04-23 11:57:28','2015-04-23 11:57:28',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2015-04-23 12:01:12','2015-04-23 12:01:12',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3000,6 +3000,36 @@ INSERT INTO `top_ups` VALUES (1,44,187,1048576,NULL,NULL,'','2015-04-13 12:52:53
 UNLOCK TABLES;
 
 --
+-- Table structure for table `unknown_nodes`
+--
+
+DROP TABLE IF EXISTS `unknown_nodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `unknown_nodes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mac` varchar(255) NOT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `from_ip` varchar(15) NOT NULL DEFAULT '',
+  `gateway` tinyint(1) NOT NULL DEFAULT '1',
+  `last_contact` datetime DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unknown_nodes`
+--
+
+LOCK TABLES `unknown_nodes` WRITE;
+/*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
+INSERT INTO `unknown_nodes` VALUES (1,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-23 18:14:06','2015-04-23 18:10:55','2015-04-23 18:14:06');
+/*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user_notes`
 --
 
@@ -3213,4 +3243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-21 12:47:31
+-- Dump completed on 2015-04-23 18:42:08
