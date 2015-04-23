@@ -6,7 +6,7 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
     stateId		: 'StateGridNodeLists',
     stateEvents	:['groupclick','columnhide'],
     border		: false,
-	store		: 'sNodeLists',
+	//store		: 'sNodeLists',
     requires	: [
         'Rd.view.components.ajaxToolbar'
     ],
@@ -19,6 +19,49 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
     ],
     initComponent: function(){
         var me      = this;
+
+		me.store    = Ext.create(Rd.store.sNodeLists,{
+            listeners: {
+                load: function(store, records, successful) {
+                    if(!successful){
+                        Ext.ux.Toaster.msg(
+                            i18n('sError_encountered'),
+                            store.getProxy().getReader().rawData.message.message,
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                        //console.log(store.getProxy().getReader().rawData.message.message);
+                    }else{
+                        var count   = me.getStore().getTotalCount();
+                        me.down('#count').update({count: count});
+                    }   
+                },
+                update: function(store, records, success, options) {
+                    store.sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sUpdated_item'),
+                                i18n('sItem_has_been_updated'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );   
+                        },
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_updating_the_item'),
+                                i18n('sItem_could_not_be_updated'),
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                        }
+                    });
+                },
+                scope: this
+            },
+            autoLoad: false 
+        });
+
+
 
 		var filters = {
             ftype   : 'filters',

@@ -14,6 +14,9 @@ Ext.define('Rd.store.sNodeLists', {
                 messageProperty : 'message',
                 totalProperty   : 'totalCount' //Required for dynamic paging
             },
+			api: {
+                destroy  : '/cake2/rd_cake/meshes/mesh_node_delete.json'
+            },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     },
     autoLoad: false
