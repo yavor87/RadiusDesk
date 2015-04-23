@@ -5,10 +5,29 @@ class NodeListsController extends AppController {
 
     public $name        = 'NodeLists';
     public $components  = array('Aa');
-    public $uses        = array('Mesh','Node','User');
+    public $uses        = array('Mesh','Node','User','UnknownNode');
     protected $base     = "Access Providers/Controllers/NodeLists/";
 
 //------------------------------------------------------------------------
+
+
+
+	public function unknown_nodes(){
+		$items 	= array();
+		$q_r  	= $this->UnknownNode->find('all');
+		//print_r($q_r);
+
+		foreach($q_r as $i){
+			array_push($items,$i['UnknownNode']);
+		}
+		
+		$this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+	}
+
 
     //____ BASIC CRUD Manager ________
     public function index(){
@@ -301,6 +320,27 @@ class NodeListsController extends AppController {
     }
 
     //----- Menus ------------------------
+
+
+	public function menu_for_unknown_grid(){
+		$menu = array();
+		$menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAttach'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Attach')),
+                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    
+                )),
+            );
+
+		$this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+	}
+
+
     public function menu_for_grid(){
 
         $user = $this->Aa->user_for_token($this);
