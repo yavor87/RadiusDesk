@@ -52,7 +52,7 @@ Ext.define('Rd.controller.cMeshes', {
 
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
-		'meshes.gridNodeLists'
+		'meshes.gridNodeLists',		'meshes.winMeshEditNode'
     ],
     stores      : [
 		'sMeshes',   'sAccessProvidersTree', 'sNodeLists'
@@ -65,6 +65,9 @@ Ext.define('Rd.controller.cMeshes', {
         urlDelete:          '/cake2/rd_cake/meshes/delete.json',
         urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
         urlNoteAdd:         '/cake2/rd_cake/meshes/note_add.json',
+		urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
+        urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
+        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json'
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'} 
@@ -82,6 +85,18 @@ Ext.define('Rd.controller.cMeshes', {
                 beforeshow:      me.winClose,
                 destroy   :      me.winClose
             },
+			'#meshWin gridMeshes' : {
+				activate	: me.gridActivate
+			},
+			'#meshWin gridNodeLists' : {
+				activate	: me.gridActivate
+			},
+			'#meshWin gridUnknownNodes' : {
+				activate	: me.gridActivate
+			},
+			'#meshWin gridMeshes' : {
+				activate	: me.gridActivate
+			},
             'gridMeshes #reload': {
                 click:      me.reload
             },
@@ -132,7 +147,56 @@ Ext.define('Rd.controller.cMeshes', {
             },
             'winMeshAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
-            }
+            },
+
+			//Known nodes
+			'gridNodeLists #reload': {
+                click:      me.gridNodeListsReload
+            },
+			'gridNodeLists #add': {
+                click:  me.addNode
+            },
+            'winMeshAddNode #save' : {
+                click:  me.btnAddNodeSave
+            },
+			'winMeshAddNode cmbHardwareOptions': {
+                change: me.cmbHardwareOptionsChange
+            },
+            'gridNodeLists #delete': {
+                click: me.delNode
+            },
+            'gridNodeLists #edit': {
+                click:  me.editNode
+            },
+            'winMeshEditNode': {
+                beforeshow:      me.loadNode
+            },
+            'winMeshEditNode #save': {
+                click: me.btnEditNodeSave
+            },
+			'winMeshEditNode cmbHardwareOptions': {
+                change: me.cmbHardwareOptionsChange
+            },
+			//Dual RADIO Choices
+			'#chkRadio0Enable'	: {
+				change	: me.chkRadioEnableChange
+			},
+			'#chkRadio1Enable' : {
+				change	: me.chkRadioEnableChange
+			},
+			'#chkRadio0Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+			'#chkRadio1Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+			//VOIP Choices
+			'#chkSip'	: {
+				change	: me.chkSipChange
+			},
+			'#chkAsterisk' : {
+				change	: me.chkAsteriskChange
+			}
         });
     },
     winClose:   function(){
@@ -140,6 +204,10 @@ Ext.define('Rd.controller.cMeshes', {
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }
+    },
+	gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     reload: function(){
         var me =this;
@@ -544,5 +612,247 @@ Ext.define('Rd.controller.cMeshes', {
                 }
             });
         }
-    }
+    },
+
+	//___Konw nodes___
+	gridNodeListsReload: function(button){
+        var me  = this;
+        var g = button.up('gridNodeLists');
+        g.getStore().load();
+    },
+	cmbHardwareOptionsChange: function(cmb){
+		var me      = this;
+        var form    = cmb.up('form');
+        var key     = form.down('#key');
+        var voip    = form.down('#tabVoip');
+        var adv     = form.down('#tabVoipAdvanced');
+		var radio	= form.down('#tabRadio');
+        var val     = cmb.getValue();
+
+		if((val == 'mp2_basic')||(val == 'mp2_phone')){
+			voip.setDisabled(false);
+			adv.setDisabled(false);
+			adv.tab.show();
+			voip.tab.show();
+		}else{
+			voip.setDisabled(true);
+			adv.setDisabled(true);
+			adv.tab.hide();
+			voip.tab.hide();
+		}
+
+		if(
+			(val == 'tplink_n600')||
+			(val == 'alix3d2')||
+			(val == 'unifiappro')||
+			(val == 'gentworadio')
+		){
+			radio.setDisabled(false);	
+			radio.tab.show();
+		}else{
+			radio.setDisabled(true);
+			radio.tab.hide();
+		}
+	},
+    addNode: function(button){
+        var me      = this;     
+        var win     = button.up("#meshWin"); 
+        var store   = win.down("gridNodeLists").getStore();
+		var hide_power  = true; //FIXME To be fixed with real value from mesh
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
+            var w = Ext.widget('winMeshAddNode',
+            {
+                id          :'winMeshAddNodeId',
+                store       : store,
+                meshId      : '',
+				meshName	: '',
+				hidePower	: hide_power	
+            });
+            me.application.runAction('cDesktop','Add',w);         
+        }
+    },
+    btnAddNodeSave: function(button){
+        var me      = this;
+        var win     = button.up("winMeshAddNode");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlAddNode,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_added'),
+                    i18n('sItem_added_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    delNode:   function(btn){
+        var me      = this;
+        var win     = btn.up("window");
+        var grid    = win.down("gridNodeLists");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+    editNode: function(button){
+        var me      = this;
+        var win     = button.up("#meshWin");
+        var store   = win.down("gridNodeLists").getStore();
+        if(win.down("gridNodeLists").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr      = win.down("gridNodeLists").getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var meshId  = sr.get('mesh_id');
+			var meshName= sr.get('mesh');
+
+			//Determine if we can show a power bar or not.
+			var hide_power = true; //FIXME To be fiexed with real value from mesh
+            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
+                var w = Ext.widget('winMeshEditNode',
+                {
+                    id          :'winMeshEditNodeId',
+                    store       : store,
+                    nodeId      : id,
+                    meshId      : meshId,
+					meshName	: meshName,
+					hidePower	: hide_power
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }
+        }
+    },
+    loadNode: function(win){
+        var me      = this; 
+        var form    = win.down('form');
+        var nodeId  = win.nodeId;
+        form.load({url:me.urlViewNode, method:'GET',params:{node_id:nodeId}});
+    },
+    btnEditNodeSave:  function(button){
+        var me      = this;
+        var win     = button.up("winMeshEditNode");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlEditNode,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+
+	//___ Dual RADIO _____
+	chkRadioEnableChange: function(chk){
+		var me 		= this;
+		var fs    	= chk.up('fieldset');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',fs);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+	},
+	chkRadioMeshChange: function(chk){
+		var me 		= this;
+		var fs    	= chk.up('fieldset');
+		var t_band	= fs.down('#radio24');
+		var n_t		= fs.down('#numRadioTwoChan');
+		var n_v		= fs.down('#numRadioFiveChan');
+
+		if(chk.getValue() == false){
+			if(t_band.getValue()){	//2.4 selected... show it
+				n_t.setVisible(true);
+				n_t.setDisabled(false);
+				n_v.setVisible(false);
+				n_v.setDisabled(true);
+			}else{
+				n_t.setVisible(false);
+				n_t.setDisabled(true);
+				n_v.setVisible(true);
+				n_v.setDisabled(false);
+			}
+		}else{
+			//hide and disable both
+			n_t.setVisible(false);
+			n_t.setDisabled(true);
+			n_v.setVisible(false);
+			n_v.setDisabled(true);
+		}		
+	},
+
+	//____ VOIP _____
+	chkSipChange: function(chk){
+		var me 		= this;
+		var voip    = chk.up('#tabVoip');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',voip);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+	},
+	chkAsteriskChange: function(chk){
+		var me 		= this;
+		var voipA   = chk.up('#tabVoipAdvanced');
+        var value   = chk.getValue();
+		var fields_voip = Ext.ComponentQuery.query('field',voipA);
+		Ext.Array.forEach(fields_voip,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		});
+
+	}
 });
