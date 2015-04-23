@@ -28,6 +28,28 @@ class NodeListsController extends AppController {
         ));
 	}
 
+	public function unknown_node_delete(){
+
+       	if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id']; 
+            $this->UnknownNode->id = $this->data['id'];
+            $this->UnknownNode->delete($this->UnknownNode->id, true);
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+                    $this->UnknownNode->id = $d['id'];
+                    $this->UnknownNode->delete($this->UnknownNode->id, true);
+            }
+        } 
+ 
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
 
     //____ BASIC CRUD Manager ________
     public function index(){
@@ -327,7 +349,7 @@ class NodeListsController extends AppController {
 		$menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAttach'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Attach')),
+                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAttach'), 'scale' => 'large', 'itemId' => 'attach',      'tooltip'=> __('Attach')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     
                 )),
