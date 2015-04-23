@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class NodesController extends AppController {
 
     public $name        = 'Nodes';
-    public $uses        = array('Mesh');
+    public $uses        = array('Mesh','UnknownNode');
     public $components  = array('OpenWrt');
     protected $NodeId   = '';
 	protected $Hardware = 'dragino'; //Some default value
@@ -21,6 +21,13 @@ class NodesController extends AppController {
             $mesh   = ClassRegistry::init('Mesh');
             $node->contain();
             $q_r    = $node->findByMac($mac);
+
+			$gw = false;
+            if(isset($this->request->query['gateway'])){
+                if($this->request->query['gateway'] == 'true'){
+                    $gw = true;
+                }
+            }
 
             if($q_r){
                // print_r($q_r);
@@ -43,12 +50,7 @@ class NodesController extends AppController {
 
                 $m['NodeDetail'] = $q_r['Node'];
                 //print_r($m);
-                $gw = false;
-                if(isset($this->request->query['gateway'])){
-                    if($this->request->query['gateway'] == 'true'){
-                        $gw = true;
-                    }
-                }
+                
 
 				//Update the last_contact field
 				$data = array();
@@ -66,6 +68,24 @@ class NodesController extends AppController {
 
             }else{
                 //Write this to an "unknown nodes" table....
+				$ip 					= $this->request->clientIp();
+				$data 					= array();
+				$data['mac'] 			= $mac;
+				$data['from_ip']		= $ip;
+				$data['gateway']		= $gw;
+				$data['last_contact']	= date("Y-m-d H:i:s", time());
+
+				$q_r 	= $this->UnknownNode->find('first',array('conditions' => array('UnknownNode.mac' => $mac)));
+				if($q_r){
+					$id = $q_r['UnknownNode']['id'];
+					$data['id'] = $id;
+					$this->UnknownNode->save($data);
+				}else{
+					$data['vendor']  = $this->_lookup_vendor($mac);
+					$this->UnknownNode->create();
+					$this->UnknownNode->save($data);
+				}
+
                 $this->set(array(
                     'error' => "MAC Address: ".$mac." not defined on system",
                     'success' => false,
@@ -74,6 +94,11 @@ class NodesController extends AppController {
             }
 
         }else{
+
+			//We record this in the unknown_nodes table to grab and attach....
+
+			
+
              $this->set(array(
                 'error' => "MAC Address of node not specified",
                 'success' => false,
@@ -1063,5 +1088,43 @@ class NodesController extends AppController {
         }
 		return $return_val;
 	}
+
+	private function _lookup_vendor($mac){
+        //Convert the MAC to be in the same format as the file 
+        $mac    = strtoupper($mac);
+        $pieces = explode("-", $mac);
+
+		$vendor_file        = APP.DS."Setup".DS."Scripts".DS."mac_lookup.txt";
+        $this->vendor_list  = file($vendor_file);
+
+        $big_match      = $pieces[0].":".$pieces[1].":".$pieces[2].":".$pieces[3].":".$pieces[4];
+        $small_match    = $pieces[0].":".$pieces[1].":".$pieces[2];
+        $lines          = $this->vendor_list;
+
+        $big_match_found = false;
+        foreach($lines as $i){
+            if(preg_match("/^$big_match/",$i)){
+                $big_match_found = true;
+                //Transform this line
+                $vendor = preg_replace("/$big_match\s?/","",$i);
+                $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                $vendor = rtrim($vendor);
+                return $vendor;   
+            }
+        }
+       
+        if(!$big_match_found){
+            foreach($lines as $i){
+                if(preg_match("/^$small_match/",$i)){
+                    //Transform this line
+                    $vendor = preg_replace("/$small_match\s?/","",$i);
+                    $vendor = preg_replace( "{[ \t]+}", ' ', $vendor );
+                    $vendor = rtrim($vendor);
+                    return $vendor;
+                }
+            }
+        }
+        $vendor = "Unkown";
+    }
 
 }
