@@ -85,31 +85,35 @@ class Node extends AppModel {
             //_______________ NEW ONE _______________
             //This is a new one.... lets see if we can re-use some ip
             $this_mesh_id = $this->data['Node']['mesh_id'];
-            $q_r = $this->find('first', array('order' => array('Node.ip ASC'),'conditions' => array('Node.mesh_id' => $this_mesh_id)));
-            if($q_r){
-                $ip         = $q_r['Node']['ip'];
-                $mesh_id    = $q_r['Node']['mesh_id'];
-                $next_ip    = $this->_get_next_ip($ip);           
-                $not_available = true;
-                while($not_available){
-                    if($this->_check_if_available($next_ip,$mesh_id)){
-                        $this->data['Node']['ip']     = $next_ip;
-                        $not_available = false;
-                        break;
-                    }else{
-                        $next_ip = $this->_get_next_ip($next_ip);
-                    }
-                }              
-            }else{ //The very first entry
-				Configure::load('MESHdesk'); 
-                $ip                         = Configure::read('mesh_node.start_ip');
-                $this->data['Node']['ip']   = $ip;
-            }
+			$this->data['Node']['ip'] = $this->get_ip_for_node($this_mesh_id); 
             return true;
         }
     }
 
+	public function get_ip_for_node($this_mesh_id){
 
+		$q_r = $this->find('first', array('order' => array('Node.ip ASC'),'conditions' => array('Node.mesh_id' => $this_mesh_id)));
+        if($q_r){
+            $ip         = $q_r['Node']['ip'];
+            $mesh_id    = $q_r['Node']['mesh_id'];
+            $next_ip    = $this->_get_next_ip($ip);           
+            $not_available = true;
+            while($not_available){
+                if($this->_check_if_available($next_ip,$mesh_id)){
+                    $this->data['Node']['ip']     = $next_ip;
+                    $not_available = false;
+					$ip = $next_ip;
+                    break;
+                }else{
+                    $next_ip = $this->_get_next_ip($next_ip);
+                }
+            }        
+        }else{ //The very first entry
+			Configure::load('MESHdesk'); 
+            $ip = Configure::read('mesh_node.start_ip');
+        }
+		return $ip;
+	}
 
     private function _check_if_available($ip,$mesh_id){
         $count = $this->find('count',array('conditions' => array('Node.ip' => $ip,'Node.mesh_id' => $mesh_id)));
