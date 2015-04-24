@@ -1,0 +1,60 @@
+Simple Mobile Login Pages 
+
+Version	: 1-0-0
+Author	: Dirk van der Walt 2015
+
+Note: These pages are not part of the SVN source available to the public - Please do not redistribute them
+
+Instructions:
+
+Extract the tar file (containing this README) under the:
+
+/var/www/rd_login_pages folder on Apache based installs
+
+OR
+
+/usr/share/nginx/html/rd_logion_pages on Nginx based installs
+
+
+Then NB
+
+Edit the cake2/rd_cake/Config/DynamicLogin.php to look like this:
+
+<?php
+
+$config['DynamicLogin']['theme']['Default'] = array(
+	'coova_desktop'		=> '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index.html',
+	//'coova_mobile'		=> '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index.html',
+	'coova_mobile'		=> '/rd_login_pages/simple_mobile/CoovaChilli/index.html',
+	'mikrotik_desktop'	=> '/rd_login_pages/desktop/Mikrotik/build/production/Mikrotik/index.html',
+	'mikrotik_mobile'	=> '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index.html',
+);
+
+$config['DynamicLogin']['theme']['Green'] = array(
+	'coova_desktop'		=> '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index_green.html',
+	//'coova_mobile'		=> '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index_green.html',
+	'coova_mobile'		=> '/rd_login_pages/simple_mobile/CoovaChilli/index.html',
+	'mikrotik_desktop'	=> '/rd_login_pages/desktop/Mikrotik/build/production/Mikrotik/index_green.html',
+	'mikrotik_mobile'	=> '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index_green.html',
+);
+
+$config['DynamicLogin']['theme']['Black'] = array(
+	'coova_desktop'		=> '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index_black.html',
+	//'coova_mobile'		=> '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index_black.html',
+	'coova_mobile'		=> '/rd_login_pages/simple_mobile/CoovaChilli/index.html',
+	'mikrotik_desktop'	=> '/rd_login_pages/desktop/Mikrotik/build/production/Mikrotik/index_black.html',
+	'mikrotik_mobile'	=> '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index_black.html',
+);
+
+$config['DynamicLogin']['theme']['Grey'] = array(
+	'coova_desktop'		=> '/rd_login_pages/desktop/CoovaChilli/build/production/CoovaChilli/index_grey.html',
+	//'coova_mobile'		=> '/rd_login_pages/mobile/CoovaChilli/build/production/CoovaChilli/index_grey.html',
+	'coova_mobile'		=> '/rd_login_pages/simple_mobile/CoovaChilli/index.html',
+	'mikrotik_desktop'	=> '/rd_login_pages/desktop/Mikrotik/build/production/Mikrotik/index_grey.html',
+	'mikrotik_mobile'	=> '/rd_login_pages/mobile/Mikrotik/build/production/Mikrotik/index_grey.html',
+);
+
+?>
+
+
+
