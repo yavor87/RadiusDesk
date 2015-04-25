@@ -25,7 +25,7 @@ var rdConnect = (function () {
     var password        = undefined;
     var remember        = false;
 
-	var ajaxTimeout		= 2000;
+	var ajaxTimeout		= 6000;
 
     var sessionData     = undefined;
     var counter         = undefined;
@@ -382,11 +382,18 @@ var rdConnect = (function () {
 		showFeedback("Get encrypted values");
         $.ajax({url: urlUam + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {'challenge': challenge, password: password}})
         .done(function(j){
+			currentRetry = 0;
             login(j.response);
 			hideFeedback();
         })
-        .fail(function(){
-            showLoginError("UAM service is down"); 
+        .fail(function(){ 
+			//We will retry for me.retryCount
+            currentRetry = currentRetry+1;
+            if(currentRetry <= retryCount){
+                encPwd(challenge);
+            }else{
+                showLoginError("UAM service is down");
+            }
         });
     }
 
