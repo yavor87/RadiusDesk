@@ -2,7 +2,7 @@ Ext.define('Rd.store.sUnknownNodes', {
     extend: 'Ext.data.Store',
     model: 'Rd.model.mUnknownNode',
     //To force server side sorting:
-    remoteSort: true,
+    remoteSort: false,
     proxy: {
             type    : 'ajax',
             format  : 'json',
