@@ -5,7 +5,7 @@ class NodeListsController extends AppController {
 
     public $name        = 'NodeLists';
     public $components  = array('Aa');
-    public $uses        = array('Mesh','Node','User','UnknownNode');
+    public $uses        = array('Node','Mesh','User','UnknownNode');
     protected $base     = "Access Providers/Controllers/NodeLists/";
 
 //------------------------------------------------------------------------
@@ -61,11 +61,11 @@ class NodeListsController extends AppController {
         }
         $user_id    = $user['id'];
  
-       // $c = $this->_build_common_query($user); 
-		$c = array();
-		$c['contain']   = array(
-                            'Mesh'
-                        );
+        $c = $this->_build_common_query($user); 
+		//$c = array();
+		//$c['contain']   = array(
+        //                    'Mesh'
+        //               );
 
 
         //===== PAGING (MUST BE LAST) ======
@@ -116,234 +116,7 @@ class NodeListsController extends AppController {
         ));
     }
 
-    //____ BASIC CRUD Manager ________
-    public function index_ap(){
-    //Display a list of items with their owners
-    //This will be dispalyed to the Administrator as well as Access Providers who has righs
-
-       //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-
-        //_____ ADMIN _____
-        $items = array();
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-
-            $this->{$this->modelClass}->contain();
-            $q_r = $this->{$this->modelClass}->find('all');
-
-            foreach($q_r as $i){   
-                array_push($items,array(
-                    'id'            => $i['Ssid']['id'], 
-                    'name'          => $i['Ssid']['name']
-                ));
-            }
-        }
-
-        //_____ AP _____
-        if($user['group_name'] == Configure::read('group.ap')){  
-
-            //If it is an Access Provider that requested this list; we should show:
-            //1.) all those NAS devices that he is allowed to use from parents with the available_to_sibling flag set (no edit or delete)
-            //2.) all those he created himself (if any) (this he can manage, depending on his right)
-            //3.) all his children -> check if they may have created any. (this he can manage, depending on his right)
-
-       		$this->{$this->modelClass}->contain();
-            $q_r = $this->{$this->modelClass}->find('all');
-
-            //Loop through this list. Only if $user_id is a sibling of $creator_id we will add it to the list
-            $ap_child_count = $this->User->childCount($user_id);
-
-            foreach($q_r as $i){
-                $add_flag   = false;
-                $owner_id   = $i['Ssid']['user_id'];
-                $a_t_s      = $i['Ssid']['available_to_siblings'];
-                $add_flag   = false;
-                
-                //Filter for parents and children
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($owner_id,$user_id)){ //Is the user_id an upstream parent of the AP
-                        //Only those available to siblings:
-                        if($a_t_s == 1){
-                            $add_flag = true;
-                        }
-                    }
-                }
-
-                if($ap_child_count != 0){ 
-                    if($this->_is_sibling_of($user_id,$owner_id)){ 
-                        $add_flag = true;
-                    }
-                }
-
-                //Created himself
-                if($owner_id == $user_id){
-                    $add_flag = true;
-                }
-
-                if($add_flag == true ){
-                    $owner_tree = $this->_find_parents($owner_id);                      
-                    //Add to return items
-                    array_push($items,array(
-                        'id'            => $i['Ssid']['id'], 
-                        'name'          => $i['Ssid']['name']
-                    ));
-                }
-            }
-        }
-
-        //___ FINAL PART ___
-        $this->set(array(
-            'items' => $items,
-            'success' => true,
-            '_serialize' => array('items','success')
-        ));
-    }
-
-
-    public function add() {
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-        //Get the creator's id
-         if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
-            $this->request->data['user_id'] = $user_id;
-        }
-
-        //Make available to siblings check
-        if(isset($this->request->data['available_to_siblings'])){
-            $this->request->data['available_to_siblings'] = 1;
-        }else{
-            $this->request->data['available_to_siblings'] = 0;
-        }
-
-        $this->{$this->modelClass}->create();
-        if ($this->{$this->modelClass}->save($this->request->data)) {
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        } else {
-            $message = 'Error';
-            $this->set(array(
-                'errors'    => $this->{$this->modelClass}->validationErrors,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }
-	}
-
-    public function delete($id = null) {
-		if (!$this->request->is('post')) {
-			throw new MethodNotAllowedException();
-		}
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $user_id    = $user['id'];
-        $fail_flag = false;
-
-	    if(isset($this->data['id'])){   //Single item delete
-            $message = "Single item ".$this->data['id'];
-
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
-            $item           = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id       = $item['Ssid']['user_id'];
-            $ssid_name   = $item['Ssid']['name'];
-            if($owner_id != $user_id){
-                if($this->_is_sibling_of($user_id,$owner_id)== true){
-                    $this->{$this->modelClass}->id = $this->data['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                }else{
-                    $fail_flag = true;
-                }
-            }else{
-                $this->{$this->modelClass}->id = $this->data['id'];
-                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-            }
-   
-        }else{                          //Assume multiple item delete
-            foreach($this->data as $d){
-
-                $item           = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id       = $item['Ssid']['user_id'];
-                $ssid_name      = $item['Ssid']['name'];
-                if($owner_id != $user_id){
-                    if($this->_is_sibling_of($user_id,$owner_id) == true){
-                        $this->{$this->modelClass}->id = $d['id'];
-                        $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    }else{
-                        $fail_flag = true;
-                    }
-                }else{
-                    $this->{$this->modelClass}->id = $d['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                }
-            }
-        }
-
-        if($fail_flag == true){
-            $this->set(array(
-                'success'   => false,
-                'message'   => array('message' => __('Could not delete some items')),
-                '_serialize' => array('success','message')
-            ));
-        }else{
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        }
-	}
-
-	public function edit(){
-
-		$user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        if ($this->request->is('post')) {
-
-            //Unfortunately there are many check items which means they will not be in the POST if unchecked
-            //so we have to check for them
-            $check_items = array(
-				'available_to_siblings'
-			);
-            foreach($check_items as $i){
-                if(isset($this->request->data[$i])){
-                    $this->request->data[$i] = 1;
-                }else{
-                    $this->request->data[$i] = 0;
-                }
-            }
-
-            if ($this->{$this->modelClass}->save($this->request->data)) {
-                   $this->set(array(
-                    'success' => true,
-                    '_serialize' => array('success')
-                ));
-            }
-        }
-    }
-
     //----- Menus ------------------------
-
-
 	public function menu_for_unknown_grid(){
 		$menu = array();
 		$menu = array(
@@ -491,17 +264,17 @@ class NodeListsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'User'
+                            'Mesh' => array('User')
                         );
 
         //===== SORT =====
         //Default values for sort and dir
-        $sort   = 'Ssid.name';
+        $sort   = 'Node.name';
         $dir    = 'DESC';
 
         if(isset($this->request->query['sort'])){
-            if($this->request->query['sort'] == 'owner'){
-                $sort = 'User.username';
+            if($this->request->query['sort'] == 'mesh'){
+                $sort = 'Mesh.name';
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
@@ -517,8 +290,8 @@ class NodeListsController extends AppController {
             foreach($filter as $f){
                 //Strings
                 if($f->type == 'string'){
-                    if($f->field == 'owner'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                    if($f->field == 'mesh'){
+                        array_push($c['conditions'],array("Mesh.name LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));

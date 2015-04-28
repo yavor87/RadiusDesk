@@ -1129,6 +1129,7 @@ class MeshesController extends AppController {
 			$static_entry   = ClassRegistry::init('NodeMeshEntry');
             $static_exit    = ClassRegistry::init('NodeMeshExit');
             $node           = ClassRegistry::init('Node');
+            $neighbors      = ClassRegistry::init('NodeNeighbor');
 
 			$move_meshes	= false;
 
@@ -1139,13 +1140,16 @@ class MeshesController extends AppController {
 				$current_id 	= $q_r['Node']['id'];
 				if($current_id != $new_mesh_id){	//Delete it if the mesh changed
 					$node->delete($current_id, true);
+                    $neighbors->deleteAll(array('NodeNeighbor.neighbor_id' => $node->id), true);
 					$move_meshes = true;
 				}
 			}
 
 			//We are moving meshes - we need the ip
-			$ip = $node->get_ip_for_node($this->request->data['mesh_id']);
-			$this->request->data['ip'] = $ip;  
+            if($move_meshes){
+			    $ip = $node->get_ip_for_node($this->request->data['mesh_id']);
+			    $this->request->data['ip'] = $ip;
+            }  
      
             if ($node->save($this->request->data)) {
                 $new_id = $node->id;
@@ -1293,15 +1297,18 @@ class MeshesController extends AppController {
         $user_id    = $user['id'];
         $fail_flag  = false;
         $node       = ClassRegistry::init('Node'); 
+        $neighbors  = ClassRegistry::init('NodeNeighbor');
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id']; 
             $node->id = $this->data['id'];
             $node->delete($node->id, true);
+            $neighbors->deleteAll(array('NodeNeighbor.neighbor_id' => $node->id), true);
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
                     $node->id = $d['id'];
                     $node->delete($node->id, true);
+                    $neighbors->deleteAll(array('NodeNeighbor.neighbor_id' => $node->id), true);
             }
         }  
         $this->set(array(
