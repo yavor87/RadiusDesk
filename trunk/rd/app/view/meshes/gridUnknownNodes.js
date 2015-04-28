@@ -66,7 +66,7 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
 		var filters = {
             ftype   : 'filters',
             encode  : true, 
-            local   : false
+            local   : true
         };
 		me.features = [filters];
 

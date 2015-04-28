@@ -73,7 +73,14 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
 		me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridNodeLists1', width: Rd.config.buttonMargin},
-			{ text: i18n('sOwner'), dataIndex: 'owner', tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridNodeLists2'},
+			{ 
+                text        : i18n('sOwner'), 
+                dataIndex   : 'owner', 
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                stateId     : 'StateGridNodeLists2', 
+                sortable    : false
+            },
 			{ text: 'Mesh',  dataIndex: 'mesh',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridNodeLists3'},
             { text: i18n('sName'),  dataIndex: 'name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridNodeLists4'},
             { 
