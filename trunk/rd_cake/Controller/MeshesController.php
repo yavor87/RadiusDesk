@@ -650,7 +650,8 @@ class MeshesController extends AppController {
 
 				$check_items = array(
 					'swap_octets',
-					'mac_auth'
+					'mac_auth',
+                    'proxy_enable'
 				);
 			    foreach($check_items as $i){
 			        if(isset($this->request->data[$i])){
@@ -844,6 +845,15 @@ class MeshesController extends AppController {
             $q_r['MeshExit']['walled_garden']   = $q_r['MeshExitCaptivePortal']['walled_garden'];
             $q_r['MeshExit']['swap_octets']     = $q_r['MeshExitCaptivePortal']['swap_octets'];
 			$q_r['MeshExit']['mac_auth']        = $q_r['MeshExitCaptivePortal']['mac_auth'];
+
+            //Proxy settings
+            $q_r['MeshExit']['proxy_enable']    = $q_r['MeshExitCaptivePortal']['proxy_enable'];
+            $q_r['MeshExit']['proxy_ip']        = $q_r['MeshExitCaptivePortal']['proxy_ip'];
+            $q_r['MeshExit']['proxy_port']      = intval($q_r['MeshExitCaptivePortal']['proxy_port']);
+            $q_r['MeshExit']['proxy_auth_username']      = $q_r['MeshExitCaptivePortal']['proxy_auth_username'];
+            $q_r['MeshExit']['proxy_auth_password']      = $q_r['MeshExitCaptivePortal']['proxy_auth_password'];
+            $q_r['MeshExit']['coova_optional']  = $q_r['MeshExitCaptivePortal']['coova_optional'];
+
         }
 
         $data = $q_r['MeshExit'];
