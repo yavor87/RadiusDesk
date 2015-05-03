@@ -171,6 +171,10 @@ Ext.define('Rd.controller.cMeshEdits', {
 			'#chkAsterisk' : {
 				change	: me.chkAsteriskChange
 			},
+            '#chkProxyEnable'	: {
+				change	: me.chkProxyEnableChange
+			},
+
 			//---- MAP Starts here..... -----
 			'winMeshEdit #mapTab'		: {
 				activate: function(pnl){
@@ -932,6 +936,20 @@ Ext.define('Rd.controller.cMeshEdits', {
 		});
 
 	},
+
+    //___ ProxyEnable___
+    chkProxyEnableChange: function(chk){
+        var me      = this;
+        var t       = chk.up('#tabProxy');
+        var value   = chk.getValue();
+		var fields  = Ext.ComponentQuery.query('field',t);
+		Ext.Array.forEach(fields,function(item){
+			if(item != chk){
+				item.setDisabled(!value);
+			}
+		}); 
+    },
+
 	//____ MAP ____
 
     mapLoadApi:   function(button){
