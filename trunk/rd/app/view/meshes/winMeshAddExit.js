@@ -2,8 +2,8 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
     extend:     'Ext.window.Window',
     alias :     'widget.winMeshAddExit',
     closable:   true,
-    draggable:  false,
-    resizable:  false,
+    draggable:  true,
+    resizable:  true,
     title:      i18n('sNew_mesh_exit_point'),
     width:      400,
     height:     400,
@@ -23,8 +23,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
-        'Ext.form.field.Radio',
-        'Rd.view.meshes.cmbMeshEntryPoints'
+        'Ext.form.field.Radio'
     ],
     initComponent: function() {
         var me              = this;
@@ -225,86 +224,177 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                 cmbConnectWith
                             ]
                         },
+
+                        //---- Captive Protal ----
                         { 
                             title       : i18n('sCaptive_Portal_settings'),
-                            layout      : 'anchor',
+                            layout      : 'fit',
                             disabled    : true,
                             itemId      : 'tabCaptivePortal',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            autoScroll:true,
-                            items       : [         
+                            items       : [ 
                                 {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sRADIUS_server1'),
-                                    name        : 'radius_1',
-                                    allowBlank  : false,
-                                    blankText   : i18n('sSupply_a_value'),
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sRADIUS_server2'),
-                                    name        : 'radius_2',
-                                    allowBlank  : true,
-                                    labelClsExtra: 'lblRd'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sRADIUS_secret'),
-                                    name        : 'radius_secret',
-                                    allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sRADIUS_NASID'),
-                                    name        : 'radius_nasid',
-                                    allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sUAM_URL'),
-                                    name        : 'uam_url',
-                                    allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sUAM_Secret'),
-                                    name        : 'uam_secret',
-                                    allowBlank  : false,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textareafield',
-                                    grow        : true,
-                                    fieldLabel  : i18n('sWalled_garden'),
-                                    name        : 'walled_garden',
-                                    anchor      : '100%',
-                                    allowBlank  : true,
-                                    labelClsExtra: 'lblRd'
-                                 },
-                                 {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sSwap_octets'),
-                                    name        : 'swap_octet',
-                                    inputValue  : 'swap_octet',
-                                    checked     : true,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sMAC_authentication'),
-                                    name        : 'mac_auth',
-                                    inputValue  : 'mac_auth',
-                                    checked     : true,
-                                    labelClsExtra: 'lblRdReq'
-                                }
+                                    xtype   : 'tabpanel',
+                                    layout  : 'fit',
+                                    xtype   : 'tabpanel',
+                                    margins : '0 0 0 0',
+                                    plain   : true,
+                                    tabPosition: 'top',
+                                    border  : false,
+                                    items   :  [
+                                        {
+                                            title       : 'Basic',
+                                            layout      : 'anchor',
+                                            defaults    : {
+                                                anchor: '100%'
+                                            },
+                                            autoScroll:true,
+                                            items       :[
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sRADIUS_server1'),
+                                                    name        : 'radius_1',
+                                                    allowBlank  : false,
+                                                    blankText   : i18n('sSupply_a_value'),
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sRADIUS_server2'),
+                                                    name        : 'radius_2',
+                                                    allowBlank  : true,
+                                                    labelClsExtra: 'lblRd'
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sRADIUS_secret'),
+                                                    name        : 'radius_secret',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                 {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sRADIUS_NASID'),
+                                                    name        : 'radius_nasid',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sUAM_URL'),
+                                                    name        : 'uam_url',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : i18n('sUAM_Secret'),
+                                                    name        : 'uam_secret',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'textareafield',
+                                                    grow        : true,
+                                                    fieldLabel  : i18n('sWalled_garden'),
+                                                    name        : 'walled_garden',
+                                                    anchor      : '100%',
+                                                    allowBlank  : true,
+                                                    labelClsExtra: 'lblRd'
+                                                 },
+                                                 {
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : i18n('sSwap_octets'),
+                                                    name        : 'swap_octet',
+                                                    inputValue  : 'swap_octet',
+                                                    checked     : true,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : i18n('sMAC_authentication'),
+                                                    name        : 'mac_auth',
+                                                    inputValue  : 'mac_auth',
+                                                    checked     : true,
+                                                    labelClsExtra: 'lblRdReq'
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            title       : 'Proxy',
+                                            itemId      : 'tabProxy',
+                                            layout      : 'anchor',
+                                            defaults    : {
+                                                    anchor: '100%'
+                                            },
+                                            autoScroll:true,
+                                            items       :[
+                                                {
+                                                    itemId      : 'chkProxyEnable',
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : 'Enable',
+                                                    name        : 'proxy_enable',
+                                                    inputValue  : 'proxy_enable',
+                                                    checked     : false,
+                                                    labelClsExtra: 'lblRdReq'
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'Upstream proxy',
+                                                    name        : 'proxy_ip',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq',
+                                                    disabled    : true
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'Upstream port',
+                                                    name        : 'proxy_port',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq',
+                                                    disabled    : true
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'Auth name',
+                                                    name        : 'proxy_auth_username',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRd',
+                                                    disabled    : true
+                                                },
+                                                {
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'Auth password',
+                                                    name        : 'proxy_auth_password',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRd',
+                                                    disabled    : true
+                                                }
+                                            ]
+                                        }, 
+                                        {
+                                            title       : 'Coova Specific',
+                                            layout      : 'anchor',
+                                            defaults    : {
+                                                    anchor: '100%'
+                                            },
+                                            autoScroll:true,
+                                            items       :[
+                                                {
+                                                    xtype       : 'textareafield',
+                                                    grow        : true,
+                                                    fieldLabel  : 'Optional config items',
+                                                    name        : 'coova_optional',
+                                                    anchor      : '100%',
+                                                    allowBlank  : true,
+                                                    labelClsExtra: 'lblRd'
+                                                 }
+                                            ]
+                                        }
+                                    ]
+                                } 
                             ]
-                        } 
+                        }
+                        //--- End Captive Portal --- 
                     ]
                 }
             ]
