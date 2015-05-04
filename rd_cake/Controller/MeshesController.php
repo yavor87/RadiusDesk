@@ -929,6 +929,18 @@ class MeshesController extends AppController {
 
 
     //===== Mesh nodes ======
+
+    public function timezone_index(){
+        Configure::load('MESHdesk');      
+        $timezones   = Configure::read('MESHdesk.timezones');
+        $this->set(array(
+            'items' => $timezones,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+
     public function mesh_nodes_index(){
 
         $user = $this->_ap_right_check();
