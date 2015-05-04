@@ -29,6 +29,11 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                 },
                 items       : [
                     {
+                        xtype       : 'cmbTimezones',
+                        anchor      : '100%',
+                        labelClsExtra: 'lblRdReq'
+                    },
+                    {
                         xtype       : 'textfield',
                         fieldLabel  : i18n('sPassword'),
                         name        : 'password',
