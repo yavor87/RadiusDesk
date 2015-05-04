@@ -1289,7 +1289,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'206.221.176.235','','testing123','cheetah_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2015-05-04 01:35:24',0,0,'',3128,'','',''),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'206.221.176.235','','testing123','cheetah_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2015-05-04 19:56:07',0,1,'69.30.244.107',3128,'admin','admin','dnsparanoia'),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1307,7 +1307,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1316,7 +1316,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(79,33,52,'2015-05-04 01:35:24','2015-05-04 01:35:24');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(80,33,52,'2015-05-04 19:56:07','2015-05-04 19:56:07');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1346,7 +1346,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2015-05-04 01:35:24'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2015-05-04 19:56:07'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2023,7 +2023,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2015-04-23 12:01:12','2015-04-23 12:01:12',1,1,1,24,1,44,1,1,1,5,1,44);
+INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.1','2015-05-04 19:57:57',0,NULL,NULL,'logo.jpg','2015-04-23 12:01:12','2015-05-04 19:57:57',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3031,7 +3031,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (1,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:28','2015-04-27 14:26:28','2015-04-27 14:26:28'),(2,'A8-40-41-13-60-11','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:37','2015-04-27 14:26:39','2015-04-27 14:26:39'),(3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51');
+INSERT INTO `unknown_nodes` VALUES (1,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-05-04 19:57:42','2015-04-27 14:26:28','2015-05-04 19:57:42'),(2,'A8-40-41-13-60-11','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:37','2015-04-27 14:26:39','2015-04-27 14:26:39'),(3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3249,4 +3249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-04  1:52:23
+-- Dump completed on 2015-05-04 22:16:37
