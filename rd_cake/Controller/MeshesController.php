@@ -832,7 +832,7 @@ class MeshesController extends AppController {
         //entry_points
         $q_r['MeshExit']['entry_points'] = array();
         foreach($q_r['MeshExitMeshEntry'] as $i){
-            array_push($q_r['MeshExit']['entry_points'],$i['id']);
+            array_push($q_r['MeshExit']['entry_points'],intval($i['mesh_entry_id']));
         }
 
         if($q_r['MeshExitCaptivePortal']){
@@ -933,6 +933,16 @@ class MeshesController extends AppController {
     public function timezone_index(){
         Configure::load('MESHdesk');      
         $timezones   = Configure::read('MESHdesk.timezones');
+        $this->set(array(
+            'items' => $timezones,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+     public function country_index(){
+        Configure::load('MESHdesk');      
+        $timezones   = Configure::read('MESHdesk.countries');
         $this->set(array(
             'items' => $timezones,
             'success' => true,
@@ -1370,7 +1380,7 @@ class MeshesController extends AppController {
 
             //If this entry point is already associated; we will NOT add it
             if(count($i['MeshExitMeshEntry'])== 0){
-                $id = $i['MeshEntry']['id'];
+                $id = intval($i['MeshEntry']['id']);
                 $n  = $i['MeshEntry']['name'];
                 array_push($items,array('id' => $id, 'name' => $n));
             }
@@ -1379,7 +1389,7 @@ class MeshesController extends AppController {
             if($exit_id){
                 if(count($i['MeshExitMeshEntry'])> 0){
                     if($i['MeshExitMeshEntry'][0]['mesh_exit_id'] == $exit_id){
-                        $id = $i['MeshEntry']['id'];
+                        $id = intval($i['MeshEntry']['id']);
                         $n  = $i['MeshEntry']['name'];
                         array_push($items,array('id' => $id, 'name' => $n));
                     }
@@ -1410,7 +1420,10 @@ class MeshesController extends AppController {
 
         $q_r = $setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $id)));
         if($q_r){  
-            $data = $q_r['NodeSetting'];  
+            $data = $q_r['NodeSetting']; 
+            $data['country']    = 'ZA';
+            $data['timezone']   = 24;
+            $data['eth_br_with']= intval($data['eth_br_with']); 
         }
 
         $this->set(array(
