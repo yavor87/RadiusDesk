@@ -16,7 +16,10 @@ Ext.define('Rd.view.meshes.cmbEthBridgeOptions', {
     initComponent	: function(){
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
-            fields: ['id', 'name'],
+            fields: [
+                {name: 'id',    type: 'int'},
+                {name: 'name',  type: 'string'}
+            ],
             proxy: {
                     type    	: 'ajax',
                     format  	: 'json',

@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap',	'meshes.winMeshMapPreferences',
 		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions',
 		'components.cmbFiveGigChannels',
-        'meshes.cmbTimezones'
+        'meshes.cmbTimezones',      'meshes.cmbCountries'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
@@ -633,6 +633,8 @@ Ext.define('Rd.controller.cMeshEdits', {
                     vlan.setVisible(false);
                     vlan.setDisabled(true);
                 }
+                var ent  = form.down("cmbMeshEntryPoints");
+                ent.setValue(b.result.data.entry_points);
             }
         });
     },
