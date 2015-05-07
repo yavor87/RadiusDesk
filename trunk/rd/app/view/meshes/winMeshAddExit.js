@@ -235,7 +235,6 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                 {
                                     xtype   : 'tabpanel',
                                     layout  : 'fit',
-                                    xtype   : 'tabpanel',
                                     margins : '0 0 0 0',
                                     plain   : true,
                                     tabPosition: 'top',
