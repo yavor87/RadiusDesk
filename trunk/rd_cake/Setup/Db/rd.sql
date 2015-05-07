@@ -1887,6 +1887,9 @@ CREATE TABLE `node_settings` (
   `eth_br_chk` tinyint(1) NOT NULL DEFAULT '0',
   `eth_br_with` int(11) NOT NULL DEFAULT '0',
   `eth_br_for_all` tinyint(1) NOT NULL DEFAULT '1',
+  `tz_name` varchar(128) NOT NULL DEFAULT 'America/New York',
+  `tz_value` varchar(128) NOT NULL DEFAULT 'EST5EDT,M3.2.0,M11.1.0',
+  `country` varchar(5) NOT NULL DEFAULT 'US',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1897,7 +1900,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0),(17,40,'admin',100,1,6,161,60,300,'2014-10-23 05:44:19','2015-01-20 13:27:09','',0,0,0);
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US'),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US'),(17,40,'admin',100,1,6,161,60,300,'2014-10-23 05:44:19','2015-01-20 13:27:09','',0,0,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3249,4 +3252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-04 22:16:37
+-- Dump completed on 2015-05-07  5:37:59
