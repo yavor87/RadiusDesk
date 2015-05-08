@@ -179,8 +179,9 @@ class NodesController extends AppController {
 			$ss['heartbeat_dead_after']	= $data['heartbeat_dead_after'];
 		}
 
+       
         //Timezone
-        if($mesh['NodeSetting']['timezone'] != ''){
+        if($mesh['NodeSetting']['tz_value'] != ''){
             $ss['timezone']             = $mesh['NodeSetting']['tz_value'];
         }else{
             Configure::load('MESHdesk');
