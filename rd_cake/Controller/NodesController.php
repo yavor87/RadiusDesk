@@ -171,6 +171,7 @@ class NodesController extends AppController {
 			$ss['password_hash'] 		= $mesh['NodeSetting']['password_hash'];
 			$ss['heartbeat_interval']	= $mesh['NodeSetting']['heartbeat_interval'];
 			$ss['heartbeat_dead_after']	= $mesh['NodeSetting']['heartbeat_dead_after'];
+            $ss['timezone']             = $mesh['NodeSetting']['tz_value'];
 
 		}else{
 			Configure::load('MESHdesk');
@@ -178,6 +179,7 @@ class NodesController extends AppController {
 			$ss['password_hash'] 		= $data['password_hash'];
 			$ss['heartbeat_interval']	= $data['heartbeat_interval'];
 			$ss['heartbeat_dead_after']	= $data['heartbeat_dead_after'];
+            $ss['timezone']             = $data['tz_value'];
 		}
 
 		foreach($mesh['Node'] as $n){
@@ -569,6 +571,14 @@ class NodesController extends AppController {
 			$db_power   = $this->_db_power_for($this->Hardware,$this->Power);
 		}
 
+        if($mesh['NodeSetting']['password_hash'] != ''){
+            $country  = $mesh['NodeSetting']['country'];
+		}else{
+			Configure::load('MESHdesk');
+			$data       = Configure::read('common_node_settings'); //Read the defaults
+            $country    = $data['country'];
+		}
+
         array_push( $wireless,
                 array(
                     "wifi-device"   => "radio0",
@@ -576,7 +586,8 @@ class NodesController extends AppController {
                         'channel'       => $channel,
                         'disabled'      => 0,
                         'hwmode'        => $hwmode,
-						'txpower'		=> $db_power
+						'txpower'		=> $db_power,
+                        'country'       => $country
                     ),
                     'lists'          => array(
                         //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
@@ -709,6 +720,15 @@ class NodesController extends AppController {
         $mesh_channel_two    = $mesh['NodeSetting']['two_chan'];
 		$mesh_channel_five   = $mesh['NodeSetting']['five_chan'];
 
+        //Get the country setting
+        if($mesh['NodeSetting']['password_hash'] != ''){
+            $country  = $mesh['NodeSetting']['country'];
+		}else{
+			Configure::load('MESHdesk');
+			$data       = Configure::read('common_node_settings'); //Read the defaults
+            $country    = $data['country'];
+		}
+
 		//===== RADIO ZERO====
 		//Check which of the two is active
 		if($mesh['NodeDetail']['radio0_enable'] == 0){
@@ -749,7 +769,8 @@ class NodesController extends AppController {
                     'channel'       => $r0_channel,
                     'disabled'      => $r0_disabled,
                     'hwmode'        => $r0_hwmode,
-					'txpower'		=> $r0_db_power
+					'txpower'		=> $r0_db_power,
+                    'country'       => $country
                 ),
                 'lists'          => array(
                    
@@ -795,14 +816,14 @@ class NodesController extends AppController {
                     'channel'       => $r1_channel,
                     'disabled'      => $r1_disabled,
                     'hwmode'        => $r1_hwmode,
-					'txpower'		=> $r1_db_power
+					'txpower'		=> $r1_db_power,
+                    'country'       => $country
                 ),
                 'lists'          => array(
                    
                 )
       	));
 
-		
 		//_____ MESH _______
         //Get the mesh's BSSID and SSID
         $bssid      = $mesh['Mesh']['bssid'];

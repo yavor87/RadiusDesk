@@ -1418,11 +1418,20 @@ class MeshesController extends AppController {
         $setting    = ClassRegistry::init('NodeSetting');
         $setting->contain();
 
+        //Timezone lists
+        $tz_list    = Configure::read('MESHdesk.timezones'); 
+
         $q_r = $setting->find('first', array('conditions' => array('NodeSetting.mesh_id' => $id)));
         if($q_r){  
+            //print_r($q_r);
             $data = $q_r['NodeSetting']; 
-            $data['country']    = 'ZA';
-            $data['timezone']   = 24;
+            //We need to find if possible the number for the timezone
+            foreach($tz_list as $i){
+                if($q_r['NodeSetting']['tz_name'] == $i['name']){
+                    $data['timezone'] = intval($i['id']);
+                    break;
+                }
+            }
             $data['eth_br_with']= intval($data['eth_br_with']); 
         }
 
@@ -1453,6 +1462,17 @@ class MeshesController extends AppController {
                 }
             }
 
+            //Try to find the timezone and its value
+            Configure::load('MESHdesk');
+            $tz_list    = Configure::read('MESHdesk.timezones'); 
+            foreach($tz_list as $j){
+                if($j['id'] == $this->request->data['timezone']){
+                    $this->request->data['tz_name'] = $j['name'];
+                    $this->request->data['tz_value']= $j['value'];
+                    break;
+                }
+            }
+            
             $mesh_id = $this->request->data['mesh_id'];
             //See if there is not already a setting entry
             $setting    = ClassRegistry::init('NodeSetting');
