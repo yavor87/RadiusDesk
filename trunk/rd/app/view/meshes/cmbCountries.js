@@ -17,7 +17,7 @@ Ext.define('Rd.view.meshes.cmbCountries', {
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
             fields: [
-                {name: 'id',    type: 'int'},
+                {name: 'id',    type: 'string'},
                 {name: 'name',  type: 'string'}
             ],
             proxy: {
