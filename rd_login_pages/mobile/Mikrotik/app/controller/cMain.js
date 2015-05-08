@@ -453,7 +453,9 @@ Ext.define('Mikrotik.controller.cMain', {
                             btnMac.show();
 
                         }else{
-                            btnMac.hide();
+                            if(btnMac != null){
+                                btnMac.hide();
+                            }
                         }
                     }
                     me.showLoginError(msg);
@@ -1149,5 +1151,72 @@ Ext.define('Mikrotik.controller.cMain', {
             scope: me //VERY VERY VERY important
         });
 		//-------
+    },
+
+    //=== Formatting functions =====
+    time:   function ( t , zeroReturn ) {
+
+        if(t == 'NA'){
+		    return t;
+	    }
+
+        if ( typeof(t) == 'undefined' ) {
+            return 'Not available';
+        }
+
+        t = parseInt ( t , 10 ) ;
+        if ( (typeof (zeroReturn) !='undefined') && ( t === 0 ) ) {
+            return zeroReturn;
+        }
+
+        var d = Math.floor( t/86400);
+        //var h = Math.floor( (t/3600 ) ;
+        var h = Math.floor( (t -86400*d)/3600 ) ;
+        var m = Math.floor( (t -(86400*d)-(3600*h))/60 ) ;
+        var s = t % 60  ;
+
+        var s_str = s.toString();
+        if (s < 10 ) { s_str = '0' + s_str;   }
+
+        var m_str = m.toString();
+        if (m < 10 ) { m_str= '0' + m_str;    }
+
+        var h_str = h.toString();
+        if (h < 10 ) { h_str= '0' + h_str;    }
+
+        var d_str = d.toString();
+        if (d < 10 ) { d_str= '0' + d_str;    } 
+
+        if      ( t < 60 )   { return s_str + 's' ; }
+        else if ( t < 3600 ) { return m_str + 'm' + s_str + 's' ; }
+        else if ( t < 86400 ){ return h_str + 'h' + m_str + 'm' + s_str + 's'; }
+        else                 { return d_str + 'd' + h_str + 'h' + m_str + 'm' + s_str + 's'; }
+    },
+    bytes: function ( b , zeroReturn ) {
+
+	    if(b == 'NA'){
+		    return b;
+	    }
+
+        if ( typeof(b) == 'undefined' ) {
+            b = 0;
+        } else {
+            b = parseInt ( b , 10 ) ;
+        }
+
+        if ( (typeof (zeroReturn) !='undefined') && ( b === 0 ) ) {
+            return zeroReturn;
+        }
+        var kb = Math.round(b/1024);
+        if (kb < 1) return b  + ' '+'Bytes';
+
+        var mb = Math.round(kb/1024);
+        if (mb < 1)  return kb + ' '+'Kilobytes';
+
+        var gb = Math.round(mb/1024);
+        if (gb < 1)  return mb + ' '+'Megabytes';
+
+        return gb + ' '+'Gigabytes';
     }
+    
 });
