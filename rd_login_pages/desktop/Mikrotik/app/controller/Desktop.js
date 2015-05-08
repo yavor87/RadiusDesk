@@ -159,7 +159,10 @@ Ext.define('Mikrotik.controller.Desktop', {
 			},
 
             'pnlStatus  #usageTab' : {
-                activate:      me.fetchUsage()
+                activate:      me.fetchUsage
+            },
+            'pnlStatus #settionTab' : {
+                activate:      me.mtRefresh
             }
 
         });    
