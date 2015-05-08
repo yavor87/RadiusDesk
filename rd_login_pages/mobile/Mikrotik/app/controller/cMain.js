@@ -722,11 +722,13 @@ Ext.define('Mikrotik.controller.cMain', {
 		if(itemId == 'sessionTab'){
 			ls.setHidden(true);
 			lu.setHidden(false);
+            me.mtRefresh();
 		}
 
 		if(itemId == 'usageTab'){
 			ls.setHidden(false);
 			lu.setHidden(true);
+            me.fetchUsage();
 		}
 	},
 	//New user registation
