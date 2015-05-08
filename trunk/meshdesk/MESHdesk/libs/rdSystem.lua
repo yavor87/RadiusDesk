@@ -85,6 +85,16 @@ function rdSystem.__configureFromTable(self,tbl)
 		end
 	end
 
+	-- Do the timezone
+	local c_tz	= self:__getCurrentTimezone()
+	if(c_tz)then
+		local new_tz	= tbl.timezone
+		if(new_tz)then
+			if(c_tz ~= new_tz)then
+				self:__setTimezone(new_tz)
+			end
+		end
+	end
 	--Heartbeat interval
 	local c_hb = self.x.get('meshdesk', 'settings', 'heartbeat_interval')
 	if(c_hb)then
@@ -163,6 +173,23 @@ function rdSystem.__setHostname(self,hostname)
 	self.x.commit('system')
 	--Activate it
 	os.execute("echo "..hostname.." > /proc/sys/kernel/hostname")	
+end
+
+function rdSystem.__getCurrentTimezone(self)
+	local timezone = nil
+	self.x.foreach('system','system', 
+		function(a)
+			timezone = self.x.get('system', a['.name'], 'timezone')
+	end)
+	return timezone
+end
+
+function rdSystem.__setTimezone(self,timezone)
+	self.x.foreach('system','system', 
+		function(a)
+			self.x.set('system', a['.name'], 'timezone',timezone)
+	end)
+	self.x.commit('system')
 end
 
 function rdSystem.__readAll(self,file)

@@ -18,6 +18,7 @@ function rdGateway:rdGateway()
 
 	self.conf_zone  = 'one' -- network interface 'one' is the admin interface
 	self.conf_rule	= 'one_rule' -- The name of the firewall rule that allow traffic to conf server.
+	self.ntp_rule   = 'one_ntp'
 end
         
 function rdGateway:getVersion()
@@ -207,6 +208,7 @@ function rdGateway.__fwGwEnable(self,network,forward)
 
 		--Add a rule for conf server 
 		if(no_conf_accept_rule)then
+			--For the conf server
 			local r = self.x.add('firewall','rule')
 			self.x.set('firewall',r,'src', network)
 			self.x.set('firewall',r,'dest', 'lan')
@@ -214,6 +216,16 @@ function rdGateway.__fwGwEnable(self,network,forward)
 			self.x.set('firewall',r,'target', 'ACCEPT')
 			self.x.set('firewall',r,'name', self.conf_rule)
 			self.x.set('firewall',r,'proto', 'all') --required to include ping
+			
+			--For the ntp server
+			local s = self.x.add('firewall','rule')
+			self.x.set('firewall',s,'src', network)
+			self.x.set('firewall',s,'dest', 'lan')
+			self.x.set('firewall',s,'dest_port', '123')
+			self.x.set('firewall',s,'proto', 'udp')
+			self.x.set('firewall',s,'target', 'ACCEPT')
+			self.x.set('firewall',s,'name', self.ntp_rule)
+
 			self.x.commit('firewall')
 		end
 
@@ -255,12 +267,17 @@ function rdGateway.__fwGwDisable(self)
 			end
 		end)
 
-	--Remove the rule allowing traffic to config server
+	--Remove the rule allowing traffic to config servers well as NTP traffic
 	self.x.foreach('firewall', 'rule',
 		function(a)
 			if(a.name == self.conf_rule)then
 				local r	  = a['.name']
 				self.x.delete('firewall',r)
+			end
+
+			if(a.name == self.ntp_rule)then
+				local n = a['.name']
+				self.x.delete('firewall',n)
 			end
 		end)
 	
