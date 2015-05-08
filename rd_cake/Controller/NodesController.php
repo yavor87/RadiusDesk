@@ -171,16 +171,22 @@ class NodesController extends AppController {
 			$ss['password_hash'] 		= $mesh['NodeSetting']['password_hash'];
 			$ss['heartbeat_interval']	= $mesh['NodeSetting']['heartbeat_interval'];
 			$ss['heartbeat_dead_after']	= $mesh['NodeSetting']['heartbeat_dead_after'];
-            $ss['timezone']             = $mesh['NodeSetting']['tz_value'];
-
 		}else{
 			Configure::load('MESHdesk');
 			$data = Configure::read('common_node_settings'); //Read the defaults
 			$ss['password_hash'] 		= $data['password_hash'];
 			$ss['heartbeat_interval']	= $data['heartbeat_interval'];
 			$ss['heartbeat_dead_after']	= $data['heartbeat_dead_after'];
-            $ss['timezone']             = $data['tz_value'];
 		}
+
+        //Timezone
+        if($mesh['NodeSetting']['timezone'] != ''){
+            $ss['timezone']             = $mesh['NodeSetting']['tz_value'];
+        }else{
+            Configure::load('MESHdesk');
+			$data = Configure::read('common_node_settings'); //Read the defaults
+            $ss['timezone']             = $data['tz_value'];
+        }
 
 		foreach($mesh['Node'] as $n){
 			if($n['id'] == $this->NodeId){
@@ -567,7 +573,8 @@ class NodesController extends AppController {
 			$db_power   = $this->_db_power_for($this->Hardware,$this->Power);
 		}
 
-        if($mesh['NodeSetting']['password_hash'] != ''){
+        //Country
+        if($mesh['NodeSetting']['country'] != ''){
             $country  = $mesh['NodeSetting']['country'];
 		}else{
 			Configure::load('MESHdesk');
@@ -717,7 +724,7 @@ class NodesController extends AppController {
 		$mesh_channel_five   = $mesh['NodeSetting']['five_chan'];
 
         //Get the country setting
-        if($mesh['NodeSetting']['password_hash'] != ''){
+        if($mesh['NodeSetting']['country'] != ''){
             $country  = $mesh['NodeSetting']['country'];
 		}else{
 			Configure::load('MESHdesk');
