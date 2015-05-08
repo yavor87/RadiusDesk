@@ -519,15 +519,11 @@ class NodesController extends AppController {
 							    'ap_isolation' 	=> '0'
 						   )
 					));
-
-
                     $start_number++;
                     continue; //We dont care about the other if's
                 }
-
             }
         }
-
         return array($network,$entry_point_data,$nat_data,$captive_portal_data);
     }
 
