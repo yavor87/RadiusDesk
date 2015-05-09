@@ -1,0 +1,206 @@
+diff -rupN a/src/conf.c b/src/conf.c
+--- a/src/conf.c	2011-03-04 10:40:11.000000000 +0200
++++ b/src/conf.c	2015-05-01 13:41:48.758201000 +0200
+@@ -254,7 +254,7 @@ struct {
+                 BEGIN "(no" WS "upstream)" WS STR END, handle_upstream_no, NULL
+         },
+         {
+-                BEGIN "(upstream)" WS "(" IP "|" ALNUM ")" ":" INT "(" WS STR
++                BEGIN "(upstream)" WS ALNUM ":" ALNUM "@" "(" IP "|" ALNUM ")" ":" INT "(" WS STR
+                       ")?" END, handle_upstream, NULL
+         },
+ #endif
+@@ -1045,23 +1045,27 @@ static HANDLE_FUNC (handle_reversepath)
+ #ifdef UPSTREAM_SUPPORT
+ static HANDLE_FUNC (handle_upstream)
+ {
++        char *user;
++        char *pwd;
+         char *ip;
+         int port;
+         char *domain;
+ 
+-        ip = get_string_arg (line, &match[2]);
++        user = get_string_arg (line, &match[2]);
++        pwd = get_string_arg (line, &match[3]);
++        ip = get_string_arg (line, &match[4]);
+         if (!ip)
+                 return -1;
+-        port = (int) get_long_arg (line, &match[7]);
++        port = (int) get_long_arg (line, &match[9]);
+ 
+-        if (match[10].rm_so != -1) {
+-                domain = get_string_arg (line, &match[10]);
++        if (match[12].rm_so != -1) {
++                domain = get_string_arg (line, &match[12]);
+                 if (domain) {
+-                        upstream_add (ip, port, domain, &conf->upstream_list);
++                        upstream_add (user,pwd, ip, port, domain, &conf->upstream_list);
+                         safefree (domain);
+                 }
+         } else {
+-                upstream_add (ip, port, NULL, &conf->upstream_list);
++                upstream_add (user,pwd,ip, port, NULL, &conf->upstream_list);
+         }
+ 
+         safefree (ip);
+@@ -1077,7 +1081,7 @@ static HANDLE_FUNC (handle_upstream_no)
+         if (!domain)
+                 return -1;
+ 
+-        upstream_add (NULL, 0, domain, &conf->upstream_list);
++        upstream_add (NULL,NULL,NULL, 0, domain, &conf->upstream_list);
+         safefree (domain);
+ 
+         return 0;
+diff -rupN a/src/heap.c b/src/heap.c
+--- a/src/heap.c	2010-01-11 00:52:04.000000000 +0200
++++ b/src/heap.c	2015-05-01 13:42:58.434214000 +0200
+@@ -109,7 +109,7 @@ void *malloc_shared_memory (size_t size)
+ {
+         int fd;
+         void *ptr;
+-        char buffer[32];
++        char buffer[62];
+ 
+         static const char *shared_file = "/tmp/tinyproxy.shared.XXXXXX";
+ 
+diff -rupN a/src/reqs.c b/src/reqs.c
+--- a/src/reqs.c	2011-02-07 14:31:03.000000000 +0200
++++ b/src/reqs.c	2015-05-01 13:55:59.974273000 +0200
+@@ -79,6 +79,42 @@
+ #define CHECK_LWS(header, len)                                  \
+   ((len) > 0 && (header[0] == ' ' || header[0] == '\t'))
+ 
++static const char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
++
++static void encode_base_64(char* src, char* dest, int max_len) {
++    int n, l, i;
++    l = strlen(src);
++    max_len = (max_len - 1) / 4;
++    for (i = 0; i < max_len; i++, src += 3, l -= 3) {
++        switch (l) {
++            case 0:
++                break;
++            case 1:
++                n = src[0] << 16;
++                *dest++ = base64[(n >> 18) & 077];
++                *dest++ = base64[(n >> 12) & 077];
++                *dest++ = '=';
++                *dest++ = '=';
++                break;
++            case 2:
++                n = src[0] << 16 | src[1] << 8;
++                *dest++ = base64[(n >> 18) & 077];
++                *dest++ = base64[(n >> 12) & 077];
++                *dest++ = base64[(n >> 6) & 077];
++                *dest++ = '=';
++                break;
++            default:
++                n = src[0] << 16 | src[1] << 8 | src[2];
++                *dest++ = base64[(n >> 18) & 077];
++                *dest++ = base64[(n >> 12) & 077];
++                *dest++ = base64[(n >> 6) & 077];
++                *dest++ = base64[n & 077];
++        }
++        if (l < 3) break;
++    }
++    *dest++ = 0;
++}
++
+ /*
+  * Read in the first line from the client (the request line for HTTP
+  * connections. The request line is allocated from the heap, but it must
+@@ -286,12 +322,25 @@ establish_http_connection (struct conn_s
+                                       request->method, request->path,
+                                       request->host, portbuff);
+         } else {
++		 char proxy_auth[200] = "";
++                if (connptr->upstream_proxy != NULL && connptr->upstream_proxy->user)
++                {
++                        char src[256];
++                        char dst2[512];
++                        strcpy(src, connptr->upstream_proxy->user);
++                        strcat(src, ":");
++                        strcat(src, connptr->upstream_proxy->pwd);
++                        encode_base_64(src, dst2, 512);
++                        strcat(proxy_auth, "Proxy-Authorization: Basic ");
++                        strcat(proxy_auth, dst2);
++                }
+                 return write_message (connptr->server_fd,
+                                       "%s %s HTTP/1.0\r\n"
+                                       "Host: %s%s\r\n"
+-                                      "Connection: close\r\n",
++				      "Connection: close\r\n" \
++                                      "%s\r\n\r\n",
+                                       request->method, request->path,
+-                                      request->host, portbuff);
++                                      request->host, portbuff,proxy_auth);
+         }
+ }
+ 
+diff -rupN a/src/upstream.c b/src/upstream.c
+--- a/src/upstream.c	2011-02-04 15:25:52.000000000 +0200
++++ b/src/upstream.c	2015-05-01 14:01:44.266206000 +0200
+@@ -32,7 +32,7 @@
+ /**
+  * Construct an upstream struct from input data.
+  */
+-static struct upstream *upstream_build (const char *host, int port, const char *domain)
++static struct upstream *upstream_build (const char *user, const char *pwd, const char *host, int port, const char *domain)
+ {
+         char *ptr;
+         struct upstream *up;
+@@ -46,6 +46,9 @@ static struct upstream *upstream_build (
+ 
+         up->host = up->domain = NULL;
+         up->ip = up->mask = 0;
++        up->user = up->pwd = "";
++        if(user != NULL) up->user = safestrdup(user);
++        if(pwd != NULL) up->pwd = safestrdup(pwd);
+ 
+         if (domain == NULL) {
+                 if (!host || host[0] == '\0' || port < 1) {
+@@ -101,8 +104,8 @@ static struct upstream *upstream_build (
+                 up->port = port;
+                 up->domain = safestrdup (domain);
+ 
+-                log_message (LOG_INFO, "Added upstream %s:%d for %s",
+-                             host, port, domain);
++                log_message (LOG_INFO, "Added upstream %s:<pwd>@%s:%d for %s",
++                             user, host, port, domain);
+         }
+ 
+         return up;
+@@ -118,12 +121,12 @@ fail:
+ /*
+  * Add an entry to the upstream list
+  */
+-void upstream_add (const char *host, int port, const char *domain,
++void upstream_add (const char *user, const char *pwd, const char *host, int port, const char *domain,
+                    struct upstream **upstream_list)
+ {
+         struct upstream *up;
+ 
+-        up = upstream_build (host, port, domain);
++	up = upstream_build (user, pwd, host, port, domain);
+         if (up == NULL) {
+                 return;
+         }
+diff -rupN a/src/upstream.h b/src/upstream.h
+--- a/src/upstream.h	2010-01-11 00:52:04.000000000 +0200
++++ b/src/upstream.h	2015-05-01 14:03:17.250205000 +0200
+@@ -37,10 +37,12 @@ struct upstream {
+         char *host;
+         int port;
+         in_addr_t ip, mask;
++	char *user;
++        char *pwd;
+ };
+ 
+ #ifdef UPSTREAM_SUPPORT
+-extern void upstream_add (const char *host, int port, const char *domain,
++extern void upstream_add (const char *user, const char *pwd, const char *host, int port, const char *domain,
+                           struct upstream **upstream_list);
+ extern struct upstream *upstream_get (char *host, struct upstream *up);
+ extern void free_upstream_list (struct upstream *up);
