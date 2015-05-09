@@ -748,7 +748,8 @@ class MeshesController extends AppController {
 
 					$check_items = array(
 						'swap_octets',
-						'mac_auth'
+						'mac_auth',
+                        'proxy_enable'
 					);
 					foreach($check_items as $i){
 					    if(isset($this->request->data[$i])){
