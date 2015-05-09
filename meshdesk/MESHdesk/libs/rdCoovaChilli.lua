@@ -14,6 +14,7 @@ function rdCoovaChilli:rdCoovaChilli()
 	self.cpCount	= 5 -- The amount of captive portals allowed / worked on
 	self.specific   = "/etc/MESHdesk/captive_portals/"
 	self.priv_start = "1"
+	self.proxy_start= 3128
 end
         
 function rdCoovaChilli:getVersion()
@@ -83,6 +84,20 @@ function rdCoovaChilli.__doConfigs(self,p)
 		if(string.len(v['radius_2']) == 0)then
 			r2 = "localhost"
 		end
+
+		--Check if we need to activate the postauth proxy
+		local proxy_string = ''
+		if(v['proxy_enable'] == true)then
+			require("rdNetwork")
+			local n = rdNetwork()
+			local ip = n:getIpForInterface("br-lan")
+			
+			if(ip)then
+				proxy_string = "postauthproxy  '"..ip.."'\n".."postauthproxyport  '"..self.proxy_start.."'\n";
+			end
+		end
+		--Up this one regardless
+		self.proxy_start = self.proxy_start+1
 		
 		-- Make the walled garden --
 		local wg = "10."..self.priv_start..".0.1" 
@@ -113,7 +128,8 @@ function rdCoovaChilli.__doConfigs(self,p)
 			"cmdsocket  '/var/run/chilli." .. v['hslan_if'] .. ".sock'\n"..
 			"unixipc    'chilli." .. v['hslan_if'] .. ".ipc'\n"..
 			"pidfile    '/var/run/chilli." .. v['hslan_if'] .. ".pid'\n"..
-			dns_string
+			dns_string..
+			proxy_string
 
 		if(v['mac_auth'])then
 			s_content = s_content.."macauth\n"

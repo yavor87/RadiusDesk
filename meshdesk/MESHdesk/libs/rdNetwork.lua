@@ -8,7 +8,9 @@ class "rdNetwork"
 --Init function for object
 function rdNetwork:rdNetwork()
 	require('rdLogger');
-	self.version 	= "1.0.0"
+	require('rdExternal');
+
+	self.version 	= "2.0.0"
 	self.logger	    = rdLogger()
 	self.debug	    = true
     self.dhcp_one   = "/etc/MESHdesk/configs/dhcp_network_one_eth"
@@ -16,11 +18,20 @@ function rdNetwork:rdNetwork()
 
     self.frmwr_one  = "/etc/MESHdesk/configs/frmwr_network_one_eth"
     self.frmwr_two  = "/etc/MESHdesk/configs/frmwr_network_two_eth"
+	--Add external command object
+	self.external	= rdExternal()
+
 end
         
 function rdNetwork:getVersion()
 	return self.version
 end
+
+function rdNetwork:getIpForInterface(int)
+	self:log("Get ip address for interface "..int)
+	return self:__getIpForInterface(int) 
+end
+
 
 function rdNetwork:dhcpStart()
     --Determine which file to use based on whether the board has eth1 or not
@@ -125,4 +136,16 @@ function rdNetwork.__configureFromTable(self,table)
         end
         os.execute("uci commit network")
     end
+end
+
+
+function rdNetwork.__getIpForInterface(self,interface)
+	local ip = false
+	local if_out = self.external:getOutput("ifconfig "..interface)
+	if(if_out:match("inet addr:"))then
+		if_out = if_out:gsub(".*inet addr:","")
+		if_out = if_out:gsub("%s.+","")
+		ip =if_out
+	end
+	return ip
 end
