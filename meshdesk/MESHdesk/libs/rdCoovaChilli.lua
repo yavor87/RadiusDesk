@@ -15,6 +15,7 @@ function rdCoovaChilli:rdCoovaChilli()
 	self.specific   = "/etc/MESHdesk/captive_portals/"
 	self.priv_start = "1"
 	self.proxy_start= 3128
+	self.tiny_conf  = "tinyproxy.conf"
 end
         
 function rdCoovaChilli:getVersion()
@@ -94,6 +95,17 @@ function rdCoovaChilli.__doConfigs(self,p)
 			
 			if(ip)then
 				proxy_string = "postauthproxy  '"..ip.."'\n".."postauthproxyport  '"..self.proxy_start.."'\n";
+				--Now we can set the config file for tinyproxy up also
+				local conf_file 	= self.specific..k.."/"..self.tiny_conf
+				local proxy_ip  	= v['proxy_ip'];
+				local proxy_port	= v['proxy_port'];
+				local username 		= v['proxy_auth_username'];
+				local password		= v['proxy_auth_password'];
+				if((username == '')and(password == ''))then -- Some placeholder names to ensure TinyProxy starts up
+					username = 'a'
+					password = 'a' 
+				end		
+				self:__doTinyProxy(conf_file,ip,proxy_ip,proxy_port,username,password)
 			end
 		end
 		--Up this one regardless
@@ -184,6 +196,18 @@ function rdCoovaChilli.__removeConfigs(self)
 		os.remove(s_file)
 		 
 	end
-
 end
 
+function rdCoovaChilli.__doTinyProxy(self,conf_file,ip,proxy_ip,proxy_port,username,password)
+	local fp 	= io.open( conf_file, "r" )
+    	local str 	= fp:read( "*all" )
+    	str 		= string.gsub( str, "Bind%s+.-\n", "Bind "..ip.."\n")
+    	str 		= string.gsub( str, "upstream%s+.-\n", "upstream "..username..":"..password.."@"..proxy_ip..":"..proxy_port.."\n")
+    	fp:close()
+    	fp 		= io.open( conf_file, "w+" )
+   	fp:write( str )
+    	fp:close()
+	--We got out file now we can fire up the proxy
+	local ret_val = os.execute("/usr/sbin/tinyproxy -c "..conf_file)
+	print("Tinyproxy return value "..ret_val)
+end
