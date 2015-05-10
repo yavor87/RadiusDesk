@@ -128,6 +128,12 @@ function rdCoovaChilli.__doConfigs(self,p)
 					"dns2  '"..dns[2].."'\n"
 		end
 
+		-- See if there are additional Coova Settings
+		local coova_optional = '';
+		if(string.len(v['coova_optional']) ~= 0)then
+			coova_optional = v['coova_optional'];
+		end
+
 		
 		local s_content = "radiusserver1  '"..v['radius_1'].."'\n"..
 			"radiusserver2  '".. r2 .."'\n"..
@@ -141,7 +147,8 @@ function rdCoovaChilli.__doConfigs(self,p)
 			"unixipc    'chilli." .. v['hslan_if'] .. ".ipc'\n"..
 			"pidfile    '/var/run/chilli." .. v['hslan_if'] .. ".pid'\n"..
 			dns_string..
-			proxy_string
+			proxy_string..
+			coova_optional
 
 		if(v['mac_auth'])then
 			s_content = s_content.."macauth\n"
