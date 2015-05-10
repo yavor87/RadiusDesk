@@ -348,6 +348,29 @@ $config['hardware'][20]      = array(
   	'hwmode1'     	=> '11a'
 );
 
+$config['hardware'][21]      = array(
+    'name'          => __('TP-Link WA850RE'), 
+    'id'            => 'tl_wa850re',
+    'radios'        => 1, 
+    'active'        => true,
+    'max_power'     => '21',
+    'eth_br'        => 'eth0',
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g'
+);
+
+$config['hardware'][22]      = array(
+    'name'          => __('TP-Link WA901ND'), 
+    'id'            => 'tl_wa901n' ,
+    'radios'        => 1, 
+    'active'        => true,
+    'max_power'     => '21',
+    'eth_br'        => 'eth0',
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g'
+);
 
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
