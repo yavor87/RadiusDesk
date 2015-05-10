@@ -141,3 +141,13 @@ config hardware 'rb433'
     option internet_led '/sys/class/leds/rb4xx:green:led4/brightness'
 	option wifi_led 'rb4xx:green:led2'
 
+config hardware 'tl_wa850re'
+    option morse_led '/sys/class/leds/tp-link:blue:re/brightness'
+    option internet_led '/sys/class/leds/tp-link:blue:signal1/brightness'
+    option wifi_led 'tp-link:blue:wlan'
+
+config hardware 'tl_wa901n'
+    option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
+    option internet_led '/sys/class/leds/tp-link:green:system/brightness'
+    option wifi_led 'tp-link:green:wlan'
+
