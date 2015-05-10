@@ -36,6 +36,8 @@ local choices = {
     "Alix 3D2",
     "TP-Link N600",
     "TP-Link WR841N",
+    "TP-Link WA850RE",
+    "TP-Link WA901N",
     "Generic 1 Radio",
     "Generic 2 Radio"
 }
@@ -59,8 +61,10 @@ hardware[15]        = 'rb433'
 hardware[16]        = 'alix3d2'
 hardware[17]        = 'tplink_n600'
 hardware[18]        = 'tl841n'
-hardware[19]        = 'genoneradio'
-hardware[20]        = 'gentworadio'
+hardware[19]        = 'tl_wa850re'
+hardware[20]        = 'tl_wa901n'
+hardware[21]        = 'genoneradio'
+hardware[22]        = 'gentworadio'
 
 
 function HandleEvents(event)
@@ -122,9 +126,15 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_tl841n)
     end
     if(event:GetSelection() == 19)then
-        sbmHardware:SetBitmap(bm_genoneradio)
+        sbmHardware:SetBitmap(bm_tl_wa850re)
     end
     if(event:GetSelection() == 20)then
+        sbmHardware:SetBitmap(bm_tl_wa901n)
+    end
+    if(event:GetSelection() == 21)then
+        sbmHardware:SetBitmap(bm_genoneradio)
+    end
+    if(event:GetSelection() == 22)then
         sbmHardware:SetBitmap(bm_gentworadio)
     end
 end
@@ -303,6 +313,12 @@ function build_gui()
     
     bm_tl841n      = wx.wxBitmap();
     bm_tl841n:LoadFile("./graphics/tl841n.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_tl_wa850re      = wx.wxBitmap();
+    bm_tl_wa850re:LoadFile("./graphics/tl_wa850re.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_tl_wa901n      = wx.wxBitmap();
+    bm_tl_wa901n:LoadFile("./graphics/tl_wa901n.png",wx.wxBITMAP_TYPE_ANY )
     
     bm_genoneradio      = wx.wxBitmap();
     bm_genoneradio:LoadFile("./graphics/genoneradio.png",wx.wxBITMAP_TYPE_ANY )
