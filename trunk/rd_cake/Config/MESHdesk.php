@@ -582,7 +582,6 @@ array('id'=>194, 'name' => 'Antarctica/South Pole',            'value' => 'NZST-
 array('id'=>195, 'name' => 'Antarctica/Syowa',                 'value' => 'SYOT-3'),
 array('id'=>196, 'name' => 'Antarctica/Vostok',                'value' => 'VOST-6'),
 array('id'=>197, 'name' => 'Arctic/Longyearbyen',              'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
-
 array('id'=>198, 'name' => 'Asia/Aden',                         'value' => 'AST-3'),
 array('id'=>199, 'name' => 'Asia/Almaty',                       'value' => 'ALMT-6'),
 array('id'=>200, 'name' => 'Asia/Anadyr',                       'value' => 'ANAT-11ANAST,M3.5.0,M10.5.0/3'),
@@ -636,154 +635,153 @@ array('id'=>247, 'name' => 'Asia/Phnom Penh',                   'value' => 'ICT-
 array('id'=>248, 'name' => 'Asia/Pontianak',                    'value' => 'WIT-7'),
 array('id'=>249, 'name' => 'Asia/Pyongyang',                    'value' => 'KST-9'),
 array('id'=>250, 'name' => 'Asia/Qatar',                        'value' => 'AST-3'),
-/*
-Asia/Qyzylorda 	QYZT-6
-Asia/Rangoon 	MMT-6:30
-Asia/Riyadh 	AST-3
-Asia/Sakhalin 	SAKT-10SAKST,M3.5.0,M10.5.0/3
-Asia/Samarkand 	UZT-5
-Asia/Seoul 	KST-9
-Asia/Shanghai 	CST-8
-Asia/Singapore 	SGT-8
-Asia/Taipei 	CST-8
-Asia/Tashkent 	UZT-5
-Asia/Tbilisi 	GET-4
-Asia/Tehran 	IRST-3:30IRDT,80/0,264/0
-Asia/Thimphu 	BTT-6
-Asia/Tokyo 	JST-9
-Asia/Ulaanbaatar 	ULAT-8
-Asia/Urumqi 	CST-8
-Asia/Vientiane 	ICT-7
-Asia/Vladivostok 	VLAT-10VLAST,M3.5.0,M10.5.0/3
-Asia/Yakutsk 	YAKT-9YAKST,M3.5.0,M10.5.0/3
-Asia/Yekaterinburg 	YEKT-5YEKST,M3.5.0,M10.5.0/3
-Asia/Yerevan 	AMT-4AMST,M3.5.0,M10.5.0/3
-Atlantic/Azores 	AZOT1AZOST,M3.5.0/0,M10.5.0/1
-Atlantic/Bermuda 	AST4ADT,M3.2.0,M11.1.0
-Atlantic/Canary 	WET0WEST,M3.5.0/1,M10.5.0
-Atlantic/Cape Verde 	CVT1
-Atlantic/Faroe 	WET0WEST,M3.5.0/1,M10.5.0
-Atlantic/Madeira 	WET0WEST,M3.5.0/1,M10.5.0
-Atlantic/Reykjavik 	GMT0
-Atlantic/South Georgia 	GST2
-Atlantic/St Helena 	GMT0
-Atlantic/Stanley 	FKT4FKST,M9.1.0,M4.3.0
-Australia/Adelaide 	CST-9:30CST,M10.1.0,M4.1.0/3
-Australia/Brisbane 	EST-10
-Australia/Broken Hill 	CST-9:30CST,M10.1.0,M4.1.0/3
-Australia/Currie 	EST-10EST,M10.1.0,M4.1.0/3
-Australia/Darwin 	CST-9:30
-Australia/Eucla 	CWST-8:45
-Australia/Hobart 	EST-10EST,M10.1.0,M4.1.0/3
-Australia/Lindeman 	EST-10
-Australia/Lord Howe 	LHST-10:30LHST-11,M10.1.0,M4.1.0
-Australia/Melbourne 	EST-10EST,M10.1.0,M4.1.0/3
-Australia/Perth 	WST-8
-Australia/Sydney 	EST-10EST,M10.1.0,M4.1.0/3
-Europe/Amsterdam 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Andorra 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Athens 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Belgrade 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Berlin 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Bratislava 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Brussels 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Bucharest 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Budapest 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Chisinau 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Copenhagen 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Dublin 	GMT0IST,M3.5.0/1,M10.5.0
-Europe/Gibraltar 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Guernsey 	GMT0BST,M3.5.0/1,M10.5.0
-Europe/Helsinki 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Isle of Man 	GMT0BST,M3.5.0/1,M10.5.0
-Europe/Istanbul 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Jersey 	GMT0BST,M3.5.0/1,M10.5.0
-Europe/Kaliningrad 	EET-2EEST,M3.5.0,M10.5.0/3
-Europe/Kiev 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Lisbon 	WET0WEST,M3.5.0/1,M10.5.0
-Europe/Ljubljana 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/London 	GMT0BST,M3.5.0/1,M10.5.0
-Europe/Luxembourg 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Madrid 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Malta 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Mariehamn 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Minsk 	EET-2EEST,M3.5.0,M10.5.0/3
-Europe/Monaco 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Moscow 	MSK-4
-Europe/Oslo 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Paris 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Podgorica 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Prague 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Riga 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Rome 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Samara 	SAMT-3SAMST,M3.5.0,M10.5.0/3
-Europe/San Marino 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Sarajevo 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Simferopol 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Skopje 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Sofia 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Stockholm 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Tallinn 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Tirane 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Uzhgorod 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Vaduz 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Vatican 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Vienna 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Vilnius 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Volgograd 	VOLT-3VOLST,M3.5.0,M10.5.0/3
-Europe/Warsaw 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Zagreb 	CET-1CEST,M3.5.0,M10.5.0/3
-Europe/Zaporozhye 	EET-2EEST,M3.5.0/3,M10.5.0/4
-Europe/Zurich 	CET-1CEST,M3.5.0,M10.5.0/3
-Indian/Antananarivo 	EAT-3
-Indian/Chagos 	IOT-6
-Indian/Christmas 	CXT-7
-Indian/Cocos 	CCT-6:30
-Indian/Comoro 	EAT-3
-Indian/Kerguelen 	TFT-5
-Indian/Mahe 	SCT-4
-Indian/Maldives 	MVT-5
-Indian/Mauritius 	MUT-4
-Indian/Mayotte 	EAT-3
-Indian/Reunion 	RET-4
-Pacific/Apia 	WST11
-Pacific/Auckland 	NZST-12NZDT,M9.5.0,M4.1.0/3
-Pacific/Chatham 	CHAST-12:45CHADT,M9.5.0/2:45,M4.1.0/3:45
-Pacific/Efate 	VUT-11
-Pacific/Enderbury 	PHOT-13
-Pacific/Fakaofo 	TKT10
-Pacific/Fiji 	FJT-12
-Pacific/Funafuti 	TVT-12
-Pacific/Galapagos 	GALT6
-Pacific/Gambier 	GAMT9
-Pacific/Guadalcanal 	SBT-11
-Pacific/Guam 	ChST-10
-Pacific/Honolulu 	HST10
-Pacific/Johnston 	HST10
-Pacific/Kiritimati 	LINT-14
-Pacific/Kosrae 	KOST-11
-Pacific/Kwajalein 	MHT-12
-Pacific/Majuro 	MHT-12
-Pacific/Marquesas 	MART9:30
-Pacific/Midway 	SST11
-Pacific/Nauru 	NRT-12
-Pacific/Niue 	NUT11
-Pacific/Norfolk 	NFT-11:30
-Pacific/Noumea 	NCT-11
-Pacific/Pago Pago 	SST11
-Pacific/Palau 	PWT-9
-Pacific/Pitcairn 	PST8
-Pacific/Ponape 	PONT-11
-Pacific/Port Moresby 	PGT-10
-Pacific/Rarotonga 	CKT10
-Pacific/Saipan 	ChST-10
-Pacific/Tahiti 	TAHT10
-Pacific/Tarawa 	GILT-12
-Pacific/Tongatapu 	TOT-13
-Pacific/Truk 	TRUT-10
-Pacific/Wake 	WAKT-12
-Pacific/Wallis 	WFT-12 
-*/
+array('id'=>251, 'name' => 'Asia/Qyzylorda',                    'value' => 'QYZT-6'),
+array('id'=>252, 'name' => 'Asia/Rangoon',                      'value' => 'MMT-6:30'),
+array('id'=>253, 'name' => 'Asia/Riyadh',                 	 'value' => 'AST-3'),
+array('id'=>254, 'name' => 'Asia/Sakhalin',                  	 'value' => 'SAKT-10SAKST,M3.5.0,M10.5.0/3'),
+array('id'=>255, 'name' => 'Asia/Samarkand',                    'value' => 'UZT-5'),
+array('id'=>256, 'name' => 'Asia/Seoul',                        'value' => 'KST-9'),
+array('id'=>257, 'name' => 'Asia/Shanghai',                  	 'value' => 'CST-8'),
+array('id'=>258, 'name' => 'Asia/Singapore',                    'value' => 'SGT-8'),
+array('id'=>259, 'name' => 'Asia/Taipei',                   	 'value' => 'CST-8'),
+array('id'=>260, 'name' => 'Asia/Tashkent',                     'value' => 'UZT-5'),
+array('id'=>261, 'name' => 'Asia/Tbilisi', 				 'value' => 'GET-4'),
+array('id'=>262, 'name' => 'Asia/Tehran',  				 'value' => 'IRST-3:30IRDT,80/0,264/0'),
+array('id'=>263, 'name' => 'Asia/Thimphu', 				 'value' => 'BTT-6'),
+array('id'=>264, 'name' => 'Asia/Tokyo',				 'value' => 'JST-9'),
+array('id'=>265, 'name' => 'Asia/Ulaanbaatar ',			 'value' => 'ULAT-8'),
+array('id'=>266, 'name' => 'Asia/Urumqi', 				 'value' => 'CST-8'),
+array('id'=>267, 'name' => 'Asia/Vientiane', 			 'value' => 'ICT-7'),
+array('id'=>268, 'name' => 'Asia/Vladivostok',  			 'value' => 'VLAT-10VLAST,M3.5.0,M10.5.0/3'),
+array('id'=>269, 'name' => 'Asia/Yakutsk', 				 'value' => 'YAKT-9YAKST,M3.5.0,M10.5.0/3'),
+array('id'=>270, 'name' => 'Asia/Yekaterinburg',			 'value' => 'YEKT-5YEKST,M3.5.0,M10.5.0/3'),
+array('id'=>271, 'name' => 'Asia/Yerevan', 				 'value' => 'AMT-4AMST,M3.5.0,M10.5.0/3'),
+array('id'=>272, 'name' => 'Atlantic/Azores',			 'value' => 'AZOT1AZOST,M3.5.0/0,M10.5.0/1'),
+array('id'=>273, 'name' => 'Atlantic/Bermuda', 			 'value' => 'AST4ADT,M3.2.0,M11.1.0'),
+array('id'=>274, 'name' => 'Atlantic/Canary', 			 'value' => 'WET0WEST,M3.5.0/1,M10.5.0'),
+array('id'=>275, 'name' => 'Atlantic/Cape Verde',			 'value' => 'CVT1'),
+array('id'=>276, 'name' => 'Atlantic/Faroe',			 'value' => 'WET0WEST,M3.5.0/1,M10.5.0'),
+array('id'=>277, 'name' => 'Atlantic/Madeira', 			 'value' => 'WET0WEST,M3.5.0/1,M10.5.0'),
+array('id'=>278, 'name' => 'Atlantic/Reykjavik', 			 'value' => 'GMT0'),
+array('id'=>279, 'name' => 'Atlantic/South Georgia', 		 'value' => 'GST2'),
+array('id'=>280, 'name' => 'Atlantic/St Helena', 			 'value' => 'GMT0'),
+array('id'=>281, 'name' => 'Atlantic/Stanley', 			 'value' => 'FKT4FKST,M9.1.0,M4.3.0'),
+array('id'=>282, 'name' => 'Australia/Adelaide', 			 'value' => 'CST-9:30CST,M10.1.0,M4.1.0/3'),
+array('id'=>283, 'name' => 'Australia/Brisbane',			 'value' => 'EST-10'),
+array('id'=>284, 'name' => 'Australia/Broken Hill', 		 'value' => 'CST-9:30CST,M10.1.0,M4.1.0/3'),
+array('id'=>285, 'name' => 'Australia/Currie', 			 'value' => 'EST-10EST,M10.1.0,M4.1.0/3'),
+array('id'=>286, 'name' => 'Australia/Darwin', 			 'value' => 'CST-9:30'),
+array('id'=>287, 'name' => 'Australia/Eucla', 			 'value' => 'CWST-8:45'),
+array('id'=>288, 'name' => 'Australia/Hobart', 			 'value' => 'EST-10EST,M10.1.0,M4.1.0/3'),
+array('id'=>289, 'name' => 'Australia/Lindeman', 			 'value' => 'EST-10'),
+array('id'=>290, 'name' => 'Australia/Lord Howe', 			 'value' => 'LHST-10:30LHST-11,M10.1.0,M4.1.0'),
+array('id'=>291, 'name' => 'Australia/Melbourne', 			 'value' => 'EST-10EST,M10.1.0,M4.1.0/3'),
+array('id'=>292, 'name' => 'Australia/Perth', 			 'value' => 'WST-8'),
+array('id'=>293, 'name' => 'Australia/Sydney', 			 'value' => 'EST-10EST,M10.1.0,M4.1.0/3'),
+array('id'=>294, 'name' => 'Europe/Amsterdam',			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>295, 'name' => 'Europe/Andorra', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>296, 'name' => 'Europe/Athens', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>297, 'name' => 'Europe/Belgrade', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>298, 'name' => 'Europe/Berlin', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>299, 'name' => 'Europe/Bratislava', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>300, 'name' => 'Europe/Brussels', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>301, 'name' => 'Europe/Bucharest', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>302, 'name' => 'Europe/Budapest', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>303, 'name' => 'Europe/Chisinau', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>304, 'name' => 'Europe/Copenhagen', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>305, 'name' => 'Europe/Dublin', 			 'value' => 'GMT0IST,M3.5.0/1,M10.5.0'),
+array('id'=>306, 'name' => 'Europe/Gibraltar', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>307, 'name' => 'Europe/Guernsey', 			 'value' => 'GMT0BST,M3.5.0/1,M10.5.0'),
+array('id'=>308, 'name' => 'Europe/Helsinki', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>309, 'name' => 'Europe/Isle of Man', 			 'value' => 'GMT0BST,M3.5.0/1,M10.5.0'),
+array('id'=>310, 'name' => 'Europe/Istanbul', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>311, 'name' => 'Europe/Jersey', 			 'value' => 'GMT0BST,M3.5.0/1,M10.5.0'),
+array('id'=>312, 'name' => 'Europe/Kaliningrad', 			 'value' => 'EET-2EEST,M3.5.0,M10.5.0/3'),
+array('id'=>313, 'name' => 'Europe/Kiev', 				 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>314, 'name' => 'Europe/Lisbon', 			 'value' => 'WET0WEST,M3.5.0/1,M10.5.0'),
+array('id'=>315, 'name' => 'Europe/Ljubljana', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>316, 'name' => 'Europe/London', 			 'value' => 'GMT0BST,M3.5.0/1,M10.5.0'),
+array('id'=>317, 'name' => 'Europe/Luxembourg', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>318, 'name' => 'Europe/Madrid', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>319, 'name' => 'Europe/Malta', 				 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>320, 'name' => 'Europe/Mariehamn ',			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>321, 'name' => 'Europe/Minsk', 				 'value' => 'EET-2EEST,M3.5.0,M10.5.0/3'),
+array('id'=>322, 'name' => 'Europe/Monaco', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>323, 'name' => 'Europe/Moscow', 			 'value' => 'MSK-4'),
+array('id'=>324, 'name' => 'Europe/Oslo', 				 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>325, 'name' => 'Europe/Paris', 				 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>326, 'name' => 'Europe/Podgorica', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>327, 'name' => 'Europe/Prague', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>328, 'name' => 'Europe/Riga', 				 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>329, 'name' => 'Europe/Rome',				 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>330, 'name' => 'Europe/Samara', 			 'value' => 'SAMT-3SAMST,M3.5.0,M10.5.0/3'),
+array('id'=>331, 'name' => 'Europe/San Marino', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>332, 'name' => 'Europe/Sarajevo', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>333, 'name' => 'Europe/Simferopol', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>334, 'name' => 'Europe/Skopje', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>335, 'name' => 'Europe/Sofia', 				 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>336, 'name' => 'Europe/Stockholm', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>337, 'name' => 'Europe/Tallinn', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>338, 'name' => 'Europe/Tirane', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>339, 'name' => 'Europe/Uzhgorod', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>340, 'name' => 'Europe/Vaduz', 				 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>341, 'name' => 'Europe/Vatican', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>342, 'name' => 'Europe/Vienna', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>343, 'name' => 'Europe/Vilnius', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>344, 'name' => 'Europe/Volgograd', 			 'value' => 'VOLT-3VOLST,M3.5.0,M10.5.0/3'),
+array('id'=>345, 'name' => 'Europe/Warsaw', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>346, 'name' => 'Europe/Zagreb', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>347, 'name' => 'Europe/Zaporozhye', 			 'value' => 'EET-2EEST,M3.5.0/3,M10.5.0/4'),
+array('id'=>348, 'name' => 'Europe/Zurich', 			 'value' => 'CET-1CEST,M3.5.0,M10.5.0/3'),
+array('id'=>349, 'name' => 'Indian/Antananarivo', 			 'value' => 'EAT-3'),
+array('id'=>350, 'name' => 'Indian/Chagos', 			 'value' => 'IOT-6'),
+array('id'=>351, 'name' => 'Indian/Christmas', 			 'value' => 'CXT-7'),
+array('id'=>352, 'name' => 'Indian/Cocos', 				 'value' => 'CCT-6:30'),
+array('id'=>353, 'name' => 'Indian/Comoro', 			 'value' => 'EAT-3'),
+array('id'=>354, 'name' => 'Indian/Kerguelen', 			 'value' => 'TFT-5'),
+array('id'=>355, 'name' => 'Indian/Mahe', 				 'value' => 'SCT-4'),
+array('id'=>356, 'name' => 'Indian/Maldives', 			 'value' => 'MVT-5'),
+array('id'=>357, 'name' => 'Indian/Mauritius', 			 'value' => 'MUT-4'),
+array('id'=>358, 'name' => 'Indian/Mayotte', 			 'value' => 'EAT-3'),
+array('id'=>359, 'name' => 'Indian/Reunion', 			 'value' => 'RET-4'),
+array('id'=>360, 'name' => 'Pacific/Apia', 				 'value' => 'WST11'),
+array('id'=>361, 'name' => 'Pacific/Auckland',			 'value' => 'NZST-12NZDT,M9.5.0,M4.1.0/3'),
+array('id'=>362, 'name' => 'Pacific/Chatham', 			 'value' => 'CHAST-12:45CHADT,M9.5.0/2:45,M4.1.0/3:45'),
+array('id'=>363, 'name' => 'Pacific/Efate', 			 'value' => 'VUT-11'),
+array('id'=>364, 'name' => 'Pacific/Enderbury', 			 'value' => 'PHOT-13'),
+array('id'=>365, 'name' => 'Pacific/Fakaofo', 			 'value' => 'TKT10'),
+array('id'=>366, 'name' => 'Pacific/Fiji', 				 'value' => 'FJT-12'),
+array('id'=>367, 'name' => 'Pacific/Funafuti', 			 'value' => 'TVT-12'),
+array('id'=>368, 'name' => 'Pacific/Galapagos', 			 'value' => 'GALT6'),
+array('id'=>369, 'name' => 'Pacific/Gambier', 			 'value' => 'GAMT9'),
+array('id'=>370, 'name' => 'Pacific/Guadalcanal', 			 'value' => 'SBT-11'),
+array('id'=>371, 'name' => 'Pacific/Guam', 				 'value' => 'ChST-10'),
+array('id'=>372, 'name' => 'Pacific/Honolulu ',			 'value' => 'HST10'),
+array('id'=>373, 'name' => 'Pacific/Johnston', 			 'value' => 'HST10'),
+array('id'=>374, 'name' => 'Pacific/Kiritimati', 			 'value' => 'LINT-14'),
+array('id'=>375, 'name' => 'Pacific/Kosrae', 			 'value' => 'KOST-11'),
+array('id'=>376, 'name' => 'Pacific/Kwajalein', 			 'value' => 'MHT-12'),
+array('id'=>377, 'name' => 'Pacific/Majuro', 			 'value' => 'MHT-12'),
+array('id'=>378, 'name' => 'Pacific/Marquesas',			 'value' => 'MART9:30'),
+array('id'=>379, 'name' => 'Pacific/Midway', 			 'value' => 'SST11'),
+array('id'=>380, 'name' => 'Pacific/Nauru', 			 'value' => 'NRT-12'),
+array('id'=>381, 'name' => 'Pacific/Niue', 				 'value' => 'NUT11'),
+array('id'=>382, 'name' => 'Pacific/Norfolk', 			 'value' => 'NFT-11:30'),
+array('id'=>383, 'name' => 'Pacific/Noumea', 			 'value' => 'NCT-11'),
+array('id'=>384, 'name' => 'Pacific/Pago Pago', 			 'value' => 'SST11'),
+array('id'=>385, 'name' => 'Pacific/Palau', 			 'value' => 'PWT-9'),
+array('id'=>386, 'name' => 'Pacific/Pitcairn', 			 'value' => 'PST8'),
+array('id'=>387, 'name' => 'Pacific/Ponape', 			 'value' => 'PONT-11'),
+array('id'=>388, 'name' => 'Pacific/Port Moresby', 		 'value' => 'PGT-10'),
+array('id'=>389, 'name' => 'Pacific/Rarotonga', 			 'value' => 'CKT10'),
+array('id'=>390, 'name' => 'Pacific/Saipan', 			 'value' => 'ChST-10'),
+array('id'=>391, 'name' => 'Pacific/Tahiti', 			 'value' => 'TAHT10'),
+array('id'=>392, 'name' => 'Pacific/Tarawa', 			 'value' => 'GILT-12'),
+array('id'=>393, 'name' => 'Pacific/Tongatapu', 			 'value' => 'TOT-13'),
+array('id'=>394, 'name' => 'Pacific/Truk', 				 'value' => 'TRUT-10'),
+array('id'=>395, 'name' => 'Pacific/Wake', 				 'value' => 'WAKT-12'),
+array('id'=>396, 'name' => 'Pacific/Wallis', 			 'value' => 'WFT-12'),
+
 
 );
 
