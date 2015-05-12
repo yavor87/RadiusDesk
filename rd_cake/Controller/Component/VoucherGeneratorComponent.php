@@ -4,6 +4,7 @@ class VoucherGeneratorComponent extends Component {
 	//private	$nameType  		= 'word_number_word_number';
 	private $nameType		= 'adjective_noun'; 
 	//private $nameType		= 'random_number'; //For Freddy :-) Just comment out the line above and uncommet this line
+    //private $nameType		= 'random_alpha_numeric'; //For Denis :-) Just comment out the line above and uncommet this line
 
 	private $wordPool 		= array(
 		'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'her',
@@ -125,16 +126,22 @@ class VoucherGeneratorComponent extends Component {
   	public $voucherNames	= array(); //We first have an empty list which we'll populate and add to each time we generate a voucher
 
    	public function generateVoucher(){
+
 		if($this->nameType == 'word_number_word_number'){
 			return $this->_word_number_word_number();
-		}  
+		}
+  
 		if($this->nameType == 'adjective_noun'){
 			return $this->_adjective_noun();
 		}
 
 		if($this->nameType == 'random_number'){
 			return $this->_random_number();
-		}   
+		}
+
+        if($this->nameType == 'random_alpha_numeric'){
+            return $this->_random_alpha_numeric();
+        }  
     }
 
     private function _word_number_word_number(){
@@ -190,5 +197,26 @@ class VoucherGeneratorComponent extends Component {
 		}
 		return $v_value; //We are unique and we added ourselves to the existing list
 	}
+
+    private function _random_alpha_numeric($length = 6){
+        // start with a blank password
+        $v_value = "";
+        // define possible characters
+       // $possible = "!#$%^&*()+=?0123456789bBcCdDfFgGhHjJkmnNpPqQrRstTvwxyz";
+        $possible = "0123456789bBcCdDfFgGhHjJkmnNpPqQrRstTvwxyz";
+        // set up a counter
+        $i = 0; 
+        // add random characters to $password until $length is reached
+        while ($i < $length) { 
+            // pick a random character from the possible ones
+            $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+            // we don't want this character if it's already in the password
+            if (!strstr($v_value, $char)) { 
+                $v_value .= $char;
+                $i++;
+            }
+        }
+        return $v_value;
+    }
 }
 ?>
