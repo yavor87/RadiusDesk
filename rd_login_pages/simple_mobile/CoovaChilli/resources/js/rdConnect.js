@@ -18,14 +18,14 @@ var rdConnect = (function () {
 	var usageInterval	= 20;
 
     //Sometimes the CoovaChilli JSON interface is stubborn; so we have to try again
-    var retryCount      = 10; //Make it high to start with --- sometimes it really takes long!
+    var retryCount      = 5; //Make it high to start with --- sometimes it really takes long!
     var currentRetry    = 0;
 
     var userName        = undefined;
     var password        = undefined;
     var remember        = false;
 
-	var ajaxTimeout		= 6000;
+	var ajaxTimeout		= 4000;
 
     var sessionData     = undefined;
     var counter         = undefined;
