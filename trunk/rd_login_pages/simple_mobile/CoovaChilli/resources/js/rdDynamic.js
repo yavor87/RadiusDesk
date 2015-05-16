@@ -16,6 +16,9 @@ var rdDynamic = (function () {
     //Public -> Add Dynamic info
     var addDynamicInfo = function(){
         var retInfo;
+
+        var urlScaler = '/cake2/rd_cake/webroot/files/image.php';
+
         var url = co.dynUrl+document.location.search;
         $.getJSON(url, null, function(j) { //We send the query string along
 
@@ -39,11 +42,30 @@ var rdDynamic = (function () {
 
 			addConnect();
 
+            //______________________________________
+            //____Add the photo's if there are any
+
+            var small, large, caption, item;
+            var img_scaler  = co.scaler+'?height='+co.thumb_h+'&width='+co.thumb_w+'&image=';
+
+            for(i in j.data.photos){
+              //  console.log(j.data.photos[i]);
+                small   = img_scaler+j.data.photos[i].file_name;
+                large   = j.data.photos[i].file_name;
+                caption = j.data.photos[i].title;
+                item    = "<li><a href='"+large+"' rel='external'><img src='"+small+"' alt='"+caption+"' /></a></li>";
+               // console.log(item)
+                $('#GalUl').append(item);      
+            }
+
             //______________________________________________
             //___ Populate the dynamic info ________________
             $('#dynAbout').text(j.data.detail.name);
-            $('#dynIcon').attr('src',j.data.detail.icon_file_name);
-            $('#dynLogo').attr('src',j.data.detail.icon_file_name);
+            //$('#dynIcon').attr('src',j.data.detail.icon_file_name);
+            //$('#dynLogo').attr('src',j.data.detail.icon_file_name);
+
+            $('#dynIcon').attr('src',urlScaler+'?height=100&width=100&image='+j.data.detail.icon_file_name);
+            $('#dynLogo').attr('src',urlScaler+'?height=100&width=100&image='+j.data.detail.icon_file_name);
             $('#dynPhone').text(j.data.detail.phone);
             $('#dynFax').text(j.data.detail.fax);
             $('#dynCell').text(j.data.detail.cell);
