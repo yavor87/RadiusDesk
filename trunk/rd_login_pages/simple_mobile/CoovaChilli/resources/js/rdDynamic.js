@@ -53,7 +53,7 @@ var rdDynamic = (function () {
                 small   = img_scaler+j.data.photos[i].file_name;
                 large   = j.data.photos[i].file_name;
                 caption = j.data.photos[i].title;
-                item    = "<li><a href='"+large+"' rel='external'><img src='"+small+"' alt='"+caption+"' /></a></li>";
+                item    = "<a class='rdThumb' href='"+large+"' rel='external'><img src='"+small+"' alt='"+caption+"' /></a>";
                // console.log(item)
                 $('#GalUl').append(item);      
             }
