@@ -1454,7 +1454,7 @@ class MeshesController extends AppController {
 
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
             //so we have to check for them
-            $check_items = array('all_power','eth_br_chk','eth_br_for_all');
+            $check_items = array('all_power','eth_br_chk','eth_br_for_all', 'gw_use_previous','gw_auto_reboot');
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
                     $this->request->data[$i] = 1;
