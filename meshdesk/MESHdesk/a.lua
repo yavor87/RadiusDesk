@@ -30,7 +30,7 @@ end
 previous_config_file 	= fetch_config_value('meshdesk.settings.previous_config_file')
 sleep_time		        = 1
 config_file		        = fetch_config_value('meshdesk.settings.config_file')
-lan_timeout		        = tonumber(fetch_config_value('meshdesk.settings.lan_timeout'))
+gw_dhcp_timeout		        = tonumber(fetch_config_value('meshdesk.settings.gw_dhcp_timeout'))
 wifi_timeout		    = tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
 debug			        = true
 l			            = rdLogger()
@@ -199,7 +199,7 @@ function wait_for_lan()
 			break	--no need to continiue
 		end
 		local time_diff = os.difftime(os.time(), start_time)
-		if(time_diff >= lan_timeout)then
+		if(time_diff >= gw_dhcp_timeout)then
 			log("LAN is not coming up. Try the WiFi")
 			print("LAN is not coming up. Try the WiFi")
 			break
