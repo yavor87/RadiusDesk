@@ -163,6 +163,59 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                                     minValue    : 300
                                 }             
                             ]
+                        },
+                        {
+                            title       : 'Gateway',
+                            layout      : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            fieldDefaults: {
+                                labelWidth      : 300
+                            },
+                            autoScroll:true,
+                            items       :[
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'gw_dhcp_timeout',
+                                    itemId      : 'gw_dhcp_timeout',
+                                    fieldLabel  : 'Wait time for DHCP IP',
+                                    value       : 120,
+                                    maxValue    : 600,
+                                    minValue    : 120,
+                                    labelWidth  : 280
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : 'Use previous settings when DHCP fails',
+                                    name        : 'gw_use_previous',
+                                    inputValue  : 'gw_use_previous',
+						            itemId		: 'gw_use_previous',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRd',
+                                    labelWidth  : 280
+                                },  
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : 'Reboot node if gateway is unreachable',
+                                    name        : 'gw_auto_reboot',
+                                    inputValue  : 'gw_auto_reboot',
+						            itemId		: 'gw_auto_reboot',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRd',
+                                    labelWidth  : 280
+                                },     
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'gw_auto_reboot_time',
+                                    itemId      : 'gw_auto_reboot_time',
+                                    fieldLabel  : 'Reboot trigger time',
+                                    value       : 600,
+                                    maxValue    : 3600,
+                                    minValue    : 240,
+                                    labelWidth  : 280
+                                }             
+                            ]
                         }
                     ]
                 }],
