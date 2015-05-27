@@ -50,6 +50,12 @@ $config['common_node_settings']['country']	        = 'ZA'; 	//Take the value fro
 $config['common_node_settings']['tz_name']	        = 'Africa/Johannesburg'; 	//Take the name from $config['MESHdesk']['countries']
 $config['common_node_settings']['tz_value']	        = 'SAST-2'; 	//Take the name from $config['MESHdesk']['countries']
 
+//Gateway specific tweaks
+$config['common_node_settings']['gw_dhcp_timeout']  = 120;	//
+$config['common_node_settings']['gw_use_previous']  = true;	//	
+$config['common_node_settings']['gw_auto_reboot']   = true;	//
+$config['common_node_settings']['gw_auto_reboot_time']   = 600;	//		
+
 
 //== Device types for MESHdesk ==
 
