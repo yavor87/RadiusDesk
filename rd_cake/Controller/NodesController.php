@@ -189,6 +189,21 @@ class NodesController extends AppController {
             $ss['timezone']             = $data['tz_value'];
         }
 
+        //Gateway specifics
+        if($mesh['NodeSetting']['gw_dhcp_timeout'] != ''){
+            $ss['gw_dhcp_timeout']          = $mesh['NodeSetting']['gw_dhcp_timeout'];
+            $ss['gw_use_previous']          = $mesh['NodeSetting']['gw_use_previous'];
+            $ss['gw_auto_reboot']           = $mesh['NodeSetting']['gw_auto_reboot'];
+            $ss['gw_auto_reboot_time']      = $mesh['NodeSetting']['gw_auto_reboot_time']; 
+        }else{
+            Configure::load('MESHdesk');
+			$data = Configure::read('common_node_settings'); //Read the defaults
+            $ss['gw_dhcp_timeout']          = $data['gw_dhcp_timeout'];
+            $ss['gw_use_previous']          = $data['gw_use_previous'];
+            $ss['gw_auto_reboot']           = $data['gw_auto_reboot'];
+            $ss['gw_auto_reboot_time']      = $data['gw_auto_reboot_time'];
+        }
+
 		foreach($mesh['Node'] as $n){
 			if($n['id'] == $this->NodeId){
 				$ss['hostname'] = $n['name'];
