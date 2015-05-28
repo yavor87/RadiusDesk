@@ -32,18 +32,7 @@ function updateGateway()
     if f~=nil then return end
 
     --Get the current GW
-    local current_gw = nil
-    local fd = io.popen("route -n")
-    if fd then
-        for line in fd:lines() do
-            if(string.find(line, "^0.0.0.0.*UG.*"))then
-                found_gw = true
-                current_gw = string.gsub(line, "^0.0.0.0%s*", "")
-                current_gw = string.gsub(current_gw,"%s+.*UG.*","")
-            end  
-        end
-        fd:close()
-    end
+    local current_gw = getCurrentGateway()
     if(current_gw)then
      print("current gateway is "..current_gw)
     end
@@ -103,5 +92,82 @@ function getIPAddress(interface)
     return ip
 end
 
+function getCurrentGateway()
+    --Get the current GW
+    local current_gw = nil
+    local fd = io.popen("route -n")
+    if fd then
+        for line in fd:lines() do
+            if(string.find(line, "^0.0.0.0.*UG.*"))then
+                found_gw = true
+                current_gw = string.gsub(line, "^0.0.0.0%s*", "")
+                current_gw = string.gsub(current_gw,"%s+.*UG.*","")
+            end  
+        end
+        fd:close()
+    end
+    return current_gw	
+end
+
+function checkForAutoReboot()
+	--We don't check for reboot on the gatewat itself
+    	local f=io.open('/tmp/gw',"r")
+    	if f~=nil then return end
+
+	local gw_missing_file 	= "/tmp/gw_missing_stamp";
+
+	local uci 		= require('uci')
+	local x	  		= uci.cursor(nil,'/var/state')
+	local gw_auto_reboot 	= x.get('meshdesk', 'settings', 'gw_auto_reboot')
+	local reboot_time	= x.get('meshdesk', 'settings', 'gw_auto_reboot_time')
+
+	if(gw_auto_reboot == '1')then
+
+		--Find the current gateway--
+		local current_gw = getCurrentGateway()
+
+		local complete_missing_action = true
+
+		--=====CURRENT GW=========
+		if(current_gw ~= nil)then
+			require('rdConfig');
+			local c = rdConfig();
+			--local test_for_ip = "10.5.5.2";
+			local test_for_ip = current_gw;
+			if(c:pingTest(test_for_ip))then
+				os.remove(gw_missing_file)
+				complete_missing_action = false
+			end
+		end
+
+		if(complete_missing_action)then
+
+			--Check if it is the first time the gateway is missing
+			local mf =io.open(gw_missing_file,"r")
+			if mf==nil then
+				print("Create new gw missing file")
+				--Write the current timestamp to the file
+				local ts = os.time()
+				--Write this to the config file
+				local f,err = io.open(gw_missing_file,"w")
+				if not f then return print(err) end
+				f:write(ts)
+				f:close()
+			else
+				print("Existing missing file... check timestamp")
+				local ts_last = mf:read()
+				print("The last failure was at "..ts_last)
+				if(ts_last+reboot_time < os.time())then
+					print("We need to reboot pappie")
+					os.execute("reboot")
+				end
+				mf:close()
+			end
+		end
+	end
+
+end
+
 supplyGateway()
 updateGateway()
+checkForAutoReboot()
