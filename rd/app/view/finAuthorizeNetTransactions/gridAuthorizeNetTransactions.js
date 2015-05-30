@@ -14,9 +14,6 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
         loadMask:true
     },
     urlMenu		: '/cake2/rd_cake/fin_authorize_net_transactions/menu_for_grid.json',
-    bbar		: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
     initComponent: function(){
         var me      = this;
 
@@ -26,7 +23,18 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 store       : me.store,
                 dock        : 'bottom',
                 displayInfo : true
-            }  
+            },
+            '->',
+            {   
+                xtype       : 'component', 
+                itemId      : 'totals',  
+                tpl         : [ "<b>Failed </b><span class=\"fieldRed\">${failed}</span>",
+                                "<b> Passed </b><span class=\"fieldGreen\">${passed}</span>",
+                                "<b> Total </b><span class=\"fieldBlue\">${total}</span>"
+                              ],  
+                style       : 'margin-right:5px', 
+                cls         : 'lblRd' 
+            }
         ];
 
         var filters = {
