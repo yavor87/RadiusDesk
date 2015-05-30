@@ -66,6 +66,9 @@ Ext.define('Rd.controller.cFinAuthorizeNetTransactions', {
             return;
         }
         me.inited = true;
+
+        me.getStore('sFinAuthorizeNetTransactions').addListener('load',        me.onStoreFinAuthorizeNetTransactionsLoaded, me);
+
         me.control({
             '#finAuthorizeNetTransactionsWin'    : {
                 beforeshow  : me.winClose,
@@ -161,6 +164,26 @@ Ext.define('Rd.controller.cFinAuthorizeNetTransactions', {
         var me =this;
         me.getGrid().getSelectionModel().deselectAll(true);
         me.getGrid().getStore().load();
+    },
+    onStoreFinAuthorizeNetTransactionsLoaded: function() {
+        var me          = this;
+        console.log("Store loaded");
+        var failed = me.getStore('sFinAuthorizeNetTransactions').getProxy().getReader().rawData.failed;
+        var passed = me.getStore('sFinAuthorizeNetTransactions').getProxy().getReader().rawData.passed;
+        var total  = me.getStore('sFinAuthorizeNetTransactions').getProxy().getReader().rawData.total;
+
+        if(failed == null){
+            failed = "0.00";
+        }
+        if(passed == null){
+            passed = "0.00";
+        }
+
+         if(total == null){
+            total = "0.00";
+        }
+
+        me.getGrid().down('#totals').update({'failed': failed, 'passed': passed, 'total': total });
     },
     select: function(grid,record){
         var me = this;
