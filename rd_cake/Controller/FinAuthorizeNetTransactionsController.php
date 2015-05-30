@@ -140,7 +140,40 @@ class FinAuthorizeNetTransactionsController extends AppController {
         $c_page['limit']    = $limit;
         $c_page['offset']   = $offset;
 
-        $total  = $this->{$this->modelClass}->find('count',$c);       
+        $total  = $this->{$this->modelClass}->find('count',$c);
+
+
+        //Here we need to determine the successfull transactions as well as the failed transactions
+        //Get some totals to display
+
+        $c_failed               = $c;
+        $c_failed['fields']     = array(
+                                'sum(FinAuthorizeNetTransaction.x_amount)  as amount',
+                            );
+        array_push($c_failed['conditions'],array("not" => array ("FinAuthorizeNetTransaction.x_response_reason_code" => '1')));
+        $this->{$this->modelClass}->contain();
+        $t_failed  = $this->{$this->modelClass}->find('first'  , $c_failed);
+        $failed    = $t_failed[0]['amount'];
+
+        $c_passed               = $c;
+        $c_passed['fields']     = array(
+                                'sum(FinAuthorizeNetTransaction.x_amount)  as amount',
+                            );
+        array_push($c_passed['conditions'],array ("FinAuthorizeNetTransaction.x_response_reason_code" => '1'));
+        $this->{$this->modelClass}->contain();
+        $t_passed  = $this->{$this->modelClass}->find('first'  , $c_passed);
+        $passed    = $t_passed[0]['amount'];
+
+        $c_total               = $c;
+        $c_total['fields']     = array(
+                                'sum(FinAuthorizeNetTransaction.x_amount)  as amount',
+                            );
+        $this->{$this->modelClass}->contain();
+        $t_total  = $this->{$this->modelClass}->find('first'  , $c_total);
+        $r_total  = $t_total[0]['amount'];
+
+
+     
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
         //print_r($q_r);
@@ -190,7 +223,10 @@ class FinAuthorizeNetTransactionsController extends AppController {
             'items' => $items,
             'success' => true,
             'totalCount' => $total,
-            '_serialize' => array('items','success','totalCount')
+            'failed'    => $failed,
+            'passed'    => $passed,
+            'total'     => $r_total,
+            '_serialize' => array('items','success','totalCount','failed','passed','total')
         ));
     }
 
@@ -779,7 +815,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
                         'itemId'    => 'csv',      
                         'tooltip'   => __('Export CSV')
                     ),
-                ))     
+                )),       
             );
         }
 
