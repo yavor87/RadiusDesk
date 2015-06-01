@@ -18,7 +18,7 @@ class FinAuthorizeNetTransactionsController extends AppController {
 		'x_account_number',	'x_first_name',	'x_last_name',			'x_company',				'x_addres',
 		'x_city',		'x_state',			'x_zip',				'x_country',				'x_phone',
 		'x_fax',		'x_email',			'x_amount',				'x_catalog_link_id',		'created',
-		'modified'
+		'modified',     'tag'
     );
 
 	private $singleField	= true;
