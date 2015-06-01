@@ -876,6 +876,21 @@ class FinAuthorizeNetTransactionsController extends AppController {
                          $col = $this->modelClass.'.'.$f->field;
                          array_push($c['conditions'],array("$col" => $f->value));
                     }
+
+                    if($f->type == 'date'){
+                        //date we want it in "2013-03-12"
+                        $col = $this->modelClass.'.'.$f->field;
+                        if($f->comparison == 'eq'){
+                            array_push($c['conditions'],array("DATE($col)" => $f->value));
+                        }
+
+                        if($f->comparison == 'lt'){
+                            array_push($c['conditions'],array("DATE($col) <" => $f->value));
+                        }
+                        if($f->comparison == 'gt'){
+                            array_push($c['conditions'],array("DATE($col) >" => $f->value));
+                        }
+                    }
                 }
             }
         }
