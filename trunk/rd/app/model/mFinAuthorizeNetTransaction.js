@@ -34,6 +34,7 @@ Ext.define('Rd.model.mFinAuthorizeNetTransaction', {
 		{name: 'x_catalog_link_id', 	type: 'string'  },
         {name: 'created',      type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
         {name: 'modified',     type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
+        {name: 'tag',          type: 'string'   },
         {name: 'notes',        type: 'bool'},
         {name: 'update',       type: 'bool'},
         {name: 'delete',       type: 'bool'}

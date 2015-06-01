@@ -88,15 +88,27 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 filter      : {type: 'string'},
                 stateId     : 'SGANTa'
             },
-			{ 
-
-                text        : 'Response code', 
-                dataIndex   : 'x_response_code',          
+            { 
+                text        : 'Response code',
+                dataIndex   : 'x_response_code', 
+                xtype       : 'templatecolumn', 
+                tpl         :    new Ext.XTemplate(
+                            "<tpl if='x_response_code == \"1\"'><div class=\"fieldGreen\">{x_response_code}</div>",
+                            "<tpl else><div class=\"fieldRed\">{x_response_code}</div>",
+                            "</tpl>"
+                        ),
+                stateId	    : 'SGANT5',
+				filter      : {type: 'string'},
+                width       : 60
+            },
+            { 
+                text        : 'Response reason', 
+                dataIndex   : 'x_response_reason_text',          
                 tdCls       : 'gridTree',
                 hidden      : true, 
                 flex        : 1,
                 filter      : {type: 'string'},
-                stateId     : 'SGANT5'
+                stateId     : 'SGANT5a'
             },
 			{ 
 
@@ -229,7 +241,16 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 stateId     : 'SGANT18'
             },
 /*End Transaction Specifics */
+            { 
 
+                text        : 'Tag', 
+                dataIndex   : 'tag',          
+                tdCls       : 'gridTree',
+                hidden      : false, 
+                flex        : 1,
+                filter      : {type: 'string'},
+                stateId     : 'SGANT19a'
+            },
             { 
                 text        : 'Created',
                 dataIndex   : 'created', 
