@@ -259,7 +259,14 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'SGANT19'
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : 'Y-m-d',
+                    beforeText  : 'End',
+                    afterText   : 'Start'
+
+                },
+                stateId: 'SGANT19'
             },
             { 
                 text        : 'Modified',
@@ -269,7 +276,14 @@ Ext.define('Rd.view.finAuthorizeNetTransactions.gridAuthorizeNetTransactions' ,{
                 flex        : 1,
                 xtype       : 'datecolumn',   
                 format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'SGANT20'
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : 'Y-m-d',
+                    beforeText  : 'End',
+                    afterText   : 'Start'
+
+                },
+                stateId: 'SGANT20'
             },
             { 
                 text    : i18n('sNotes'),
