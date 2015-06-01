@@ -716,6 +716,7 @@ CREATE TABLE `fin_authorize_net_transactions` (
   `x_catalog_link_id` char(50) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `tag` varchar(100) NOT NULL DEFAULT 'unknown',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -726,7 +727,7 @@ CREATE TABLE `fin_authorize_net_transactions` (
 
 LOCK TABLES `fin_authorize_net_transactions` WRITE;
 /*!40000 ALTER TABLE `fin_authorize_net_transactions` DISABLE KEYS */;
-INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 13:30:46','2014-10-21 13:09:52'),(2,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:05:44','2014-10-21 13:10:01'),(3,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:07:26','2014-10-21 13:09:56');
+INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 13:30:46','2014-10-21 13:09:52','unknown'),(2,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:05:44','2014-10-21 13:10:01','unknown'),(3,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:07:26','2014-10-21 13:09:56','unknown');
 /*!40000 ALTER TABLE `fin_authorize_net_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1620,7 +1621,7 @@ CREATE TABLE `nas` (
 
 LOCK TABLES `nas` WRITE;
 /*!40000 ALTER TABLE `nas` DISABLE KEYS */;
-INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',NULL,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2014-08-11 12:41:13'),(84,'10.120.0.1','cheetah_cp1','cheetah_cp1','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cheetah_cp1','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:38:47','2014-08-11 12:43:15'),(85,'10.120.0.2','lion_cp1','lion_cp1','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp1','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:39:26','2014-08-11 12:42:38'),(86,'10.120.0.3','lion_cp2','lion_cp','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp2','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:40:07','2014-08-11 12:42:09'),(87,'10.120.0.4','lion_cp3','lion_cp3','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp3','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:40:44','2014-08-11 12:41:45');
+INSERT INTO `nas` VALUES (59,'127.0.0.1','localhost','localhost','CoovaChilli',3799,'testing123','','','RADIUS Client','direct',0,0,0,'','','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2013-08-24 22:02:18','2015-06-01 13:03:39'),(84,'10.120.0.1','cheetah_cp1','cheetah_cp1','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','cheetah_cp1','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:38:47','2014-08-11 12:43:15'),(85,'10.120.0.2','lion_cp1','lion_cp1','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp1','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:39:26','2014-08-11 12:42:38'),(86,'10.120.0.3','lion_cp2','lion_cp','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp2','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:40:07','2014-08-11 12:42:09'),(87,'10.120.0.4','lion_cp3','lion_cp3','CoovaChilli-Heartbeat',3799,'testing123','','','RADIUS Client','dynamic',0,0,0,'NAS-Identifier','lion_cp3','off',600,600,NULL,1,3600,0,NULL,NULL,'logo.jpg',44,'2014-08-11 12:40:44','2014-08-11 12:41:45');
 /*!40000 ALTER TABLE `nas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2466,7 +2467,6 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER radacct_after_update
 AFTER update ON radacct FOR EACH ROW BEGIN
-if((OLD.acctsessiontime + 600) < NEW.acctsessiontime) then
 INSERT INTO user_stats 
   SET 
   radacct_id        = OLD.radacctid,
@@ -2478,7 +2478,6 @@ INSERT INTO user_stats
   callingstationid  = OLD.callingstationid,
   acctinputoctets   = (NEW.acctinputoctets - OLD.acctinputoctets), 
   acctoutputoctets  = (NEW.acctoutputoctets - OLD.acctoutputoctets);
-end if;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3256,4 +3255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-27 19:44:26
+-- Dump completed on 2015-06-01 13:03:58
