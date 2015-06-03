@@ -127,10 +127,10 @@ Ext.define('Rd.controller.cMeshEdits', {
             'gridNodes #add': {
                 click:  me.addNode
             },
-            'winMeshAddNode #save' : {
+            '#winMeshAddNodeEdit #save' : {
                 click:  me.btnAddNodeSave
             },
-			'winMeshAddNode cmbHardwareOptions': {
+			'#winMeshAddNodeEdit cmbHardwareOptions': {
                 change: me.cmbHardwareOptionsChange
             },
             'gridNodes #delete': {
@@ -728,7 +728,8 @@ Ext.define('Rd.controller.cMeshEdits', {
 			(val == 'tplink_n600')||
 			(val == 'alix3d2')||
 			(val == 'unifiappro')||
-			(val == 'gentworadio')
+			(val == 'gentworadio')||
+            (val == 'rb433')
 		){
 			radio.setDisabled(false);	
 			radio.tab.show();
@@ -751,7 +752,8 @@ Ext.define('Rd.controller.cMeshEdits', {
                 store       : store,
                 meshId      : win.getItemId(),
 				meshName	: win.meshName,
-				hidePower	: hide_power	
+				hidePower	: hide_power,
+                itemId      : 'winMeshAddNodeEdit'	
             });
             me.application.runAction('cDesktop','Add',w);         
         }
