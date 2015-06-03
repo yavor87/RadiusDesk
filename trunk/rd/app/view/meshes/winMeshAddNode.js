@@ -27,7 +27,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 		'Rd.view.meshes.cmbDialoutCode',
 		'Rd.view.meshes.cmbCodec',
 		'Rd.view.meshes.cmbSoftphoneSupport',
-		'Rd.view.components.cmbMesh'
+		'Rd.view.components.cmbMesh',
+        'Rd.view.components.cmbFiveGigChannels'
     ],
      initComponent: function() {
         var me 	= this;
@@ -221,19 +222,15 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											disabled	: true,
 											itemId		: 'numRadioTwoChan'
 										},
-										{
-										    xtype       : 'numberfield',
-										    anchor      : '100%',
+                                        {
+                                            xtype       : 'cmbFiveGigChannels',
+                                            anchor      : '100%',
 										    name        : 'radio0_five_chan',
 										    fieldLabel  : i18n('s5G_Channel'),
-										    value       : 44,
-										    maxValue    : 116,
-										    minValue    : 36,
-										    step        : 8,
 											hidden		: true,
 											disabled	: true,
 											itemId		: 'numRadioFiveChan'
-										}	
+                                        }   	
 									]
 								},
 								//Radio1
@@ -303,19 +300,15 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											disabled	: true,
 											itemId		: 'numRadioTwoChan'
 										},
-										{
-										    xtype       : 'numberfield',
-										    anchor      : '100%',
+                                        {
+                                            xtype       : 'cmbFiveGigChannels',
+                                            anchor      : '100%',
 										    name        : 'radio1_five_chan',
 										    fieldLabel  : i18n('s5G_Channel'),
-										    value       : 44,
-										    maxValue    : 116,
-										    minValue    : 36,
-										    step        : 8,
 											hidden		: true,
 											disabled	: true,
 											itemId		: 'numRadioFiveChan'
-										}			
+                                        }   			
 									]
 								}
                             ]

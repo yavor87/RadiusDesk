@@ -157,10 +157,10 @@ Ext.define('Rd.controller.cMeshes', {
 			'gridNodeLists #add': {
                 click:  me.addNode
             },
-            'winMeshAddNode #save' : {
+            '#winMeshAddNodeMain #save' : {
                 click:  me.btnAddNodeSave
             },
-			'winMeshAddNode cmbHardwareOptions': {
+			'#winMeshAddNodeMain cmbHardwareOptions': {
                 change: me.cmbHardwareOptionsChange
             },
             'gridNodeLists #delete': {
@@ -682,7 +682,8 @@ Ext.define('Rd.controller.cMeshes', {
                 store       : store,
                 meshId      : '',
 				meshName	: '',
-				hidePower	: hide_power	
+				hidePower	: hide_power,
+                itemId      : 'winMeshAddNodeMain'	
             });
             me.application.runAction('cDesktop','Add',w);         
         }
