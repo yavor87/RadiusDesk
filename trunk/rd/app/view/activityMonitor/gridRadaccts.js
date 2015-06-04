@@ -14,13 +14,21 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
         loadMask:true
     },
     urlMenu: '/cake2/rd_cake/radaccts/menu_for_grid.json',
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },
-        '->',
-        {   xtype: 'component', itemId: 'totals',  tpl: i18n('tpl_In_{in}_Out_{out}_Total_{total}'),   style: 'margin-right:5px', cls: 'lblRd' }
-    ],
     initComponent: function(){
         var me      = this;
+        me.bbar     = [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            },
+            '->',
+            {   xtype: 'component', itemId: 'totals',  tpl: i18n('tpl_In_{in}_Out_{out}_Total_{total}'),   style: 'margin-right:5px', cls: 'lblRd' }
+        ];
+
+
+
         var filters = {
             ftype   : 'filters',
             encode  : true, 

@@ -185,11 +185,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
     },
     onStoreRadacctsLoaded: function() {
         var me          = this;
-        var count       = me.getStore('sRadaccts').getTotalCount();
         var totalIn     = Ext.ux.bytesToHuman(me.getStore('sRadaccts').getProxy().getReader().rawData.totalIn);
         var totalOut    = Ext.ux.bytesToHuman(me.getStore('sRadaccts').getProxy().getReader().rawData.totalOut);
         var totalInOut  = Ext.ux.bytesToHuman(me.getStore('sRadaccts').getProxy().getReader().rawData.totalInOut);
-        me.getGrid().down('#count').update({count: count});
         me.getGrid().down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
     },
     gridActivate: function(g){
