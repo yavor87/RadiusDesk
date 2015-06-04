@@ -142,40 +142,73 @@ Ext.define('Rd.controller.cMeshEdits', {
 			'gridNodes #map' : {
                 click: 	me.mapLoadApi
             },
-            'winMeshEditNode': {
+            '#winMeshEditNodeEdit': {
                 beforeshow:      me.loadNode
             },
-            'winMeshEditNode #save': {
+            '#winMeshEditNodeEdit #save': {
                 click: me.btnEditNodeSave
             },
-			'winMeshEditNode cmbHardwareOptions': {
+			'#winMeshEditNodeEdit cmbHardwareOptions': {
                 change: me.cmbHardwareOptionsChange
             },
+
 			//Dual RADIO Choices
-			'#chkRadio0Enable'	: {
+            //Add
+            '#winMeshAddNodeEdit #chkRadio0Enable'	: {
 				change	: me.chkRadioEnableChange
 			},
-			'#chkRadio1Enable' : {
+			'#winMeshAddNodeEdit #chkRadio1Enable' : {
 				change	: me.chkRadioEnableChange
 			},
-			'#chkRadio0Mesh' : {
+			'#winMeshAddNodeEdit #chkRadio0Mesh' : {
 				change	: me.chkRadioMeshChange
 			},
-			'#chkRadio1Mesh' : {
+			'#winMeshAddNodeEdit #chkRadio1Mesh' : {
 				change	: me.chkRadioMeshChange
 			},
+            '#winMeshAddNodeEdit radio[name=radio0_band]' : {
+                change  : me.radio_0_BandChange  
+            },
+            '#winMeshAddNodeEdit radio[name=radio1_band]' : {
+                change  : me.radio_1_BandChange  
+            },
+            
+            //Edit
+			'#winMeshEditNodeEdit #chkRadio0Enable'	: {
+				change	: me.chkRadioEnableChange
+			},
+			'#winMeshEditNodeEdit #chkRadio1Enable' : {
+				change	: me.chkRadioEnableChange
+			},
+			'#winMeshEditNodeEdit #chkRadio0Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+			'#winMeshEditNodeEdit #chkRadio1Mesh' : {
+				change	: me.chkRadioMeshChange
+			},
+            '#winMeshEditNodeEdit radio[name=radio0_band]' : {
+                change  : me.radio_0_BandChange  
+            },
+            '#winMeshEditNodeEdit radio[name=radio1_band]' : {
+                change  : me.radio_1_BandChange  
+            },
 
 			//VOIP Choices
-			'#chkSip'	: {
+            //Add
+            '#winMeshAddNodeEdit #chkSip'	: {
 				change	: me.chkSipChange
 			},
-			'#chkAsterisk' : {
+			'#winMeshAddNodeEdit #chkAsterisk' : {
 				change	: me.chkAsteriskChange
 			},
-            '#chkProxyEnable'	: {
-				change	: me.chkProxyEnableChange
+            //Edit
+			'#winMeshEditNodeEdit #chkSip'	: {
+				change	: me.chkSipChange
 			},
-
+			'#winMeshEditNodeEdit #chkAsterisk' : {
+				change	: me.chkAsteriskChange
+			},
+            
 			//---- MAP Starts here..... -----
 			'winMeshEdit #mapTab'		: {
 				activate: function(pnl){
@@ -844,7 +877,8 @@ Ext.define('Rd.controller.cMeshEdits', {
                     nodeId      : id,
                     meshId      : win.getItemId(),
 					meshName	: win.meshName,
-					hidePower	: hide_power
+					hidePower	: hide_power,
+                    itemId      : 'winMeshEditNodeEdit'
                 });
                 me.application.runAction('cDesktop','Add',w);         
             }
@@ -880,7 +914,8 @@ Ext.define('Rd.controller.cMeshEdits', {
 	//___ Dual RADIO _____
 	chkRadioEnableChange: function(chk){
 		var me 		= this;
-		var fs    	= chk.up('fieldset');
+		var fs    	= chk.up('panel');//fs
+        console.log(fs);
         var value   = chk.getValue();
 		var fields_voip = Ext.ComponentQuery.query('field',fs);
 		Ext.Array.forEach(fields_voip,function(item){
@@ -891,7 +926,8 @@ Ext.define('Rd.controller.cMeshEdits', {
 	},
 	chkRadioMeshChange: function(chk){
 		var me 		= this;
-		var fs    	= chk.up('fieldset');
+		var fs    	= chk.up('panel');//fs
+        console.log(fs);
 		var t_band	= fs.down('#radio24');
 		var n_t		= fs.down('#numRadioTwoChan');
 		var n_v		= fs.down('#numRadioFiveChan');
@@ -917,6 +953,52 @@ Ext.define('Rd.controller.cMeshEdits', {
 		}		
 	},
 
+    radio_0_BandChange: function(rb){
+        var me      = this;
+        var band    = rb.getValue();      
+        var fs      = rb.up('panel');//fs   
+        var mesh    = fs.down('#chkRadio0Mesh');
+        var t_band	= fs.down('#radio24');
+        var n_t		= fs.down('#numRadioTwoChan');
+		var n_v		= fs.down('#numRadioFiveChan');
+        if(mesh.getValue() == false){
+            if(t_band.getValue()){	//2.4 selected... show it
+				n_t.setVisible(true);
+				n_t.setDisabled(false);
+				n_v.setVisible(false);
+				n_v.setDisabled(true);
+			}else{
+				n_t.setVisible(false);
+				n_t.setDisabled(true);
+				n_v.setVisible(true);
+				n_v.setDisabled(false);
+			}
+        }
+    },
+    radio_1_BandChange: function(rb){
+        var me      = this;
+        var band    = rb.getValue();      
+        var fs      = rb.up('panel');//fs    
+        var mesh    = fs.down('#chkRadio1Mesh');
+        var t_band	= fs.down('#radio24');
+        var n_t		= fs.down('#numRadioTwoChan');
+		var n_v		= fs.down('#numRadioFiveChan');
+
+        if(mesh.getValue() == false){
+            if(t_band.getValue()){	//2.4 selected... show it
+				n_t.setVisible(true);
+				n_t.setDisabled(false);
+				n_v.setVisible(false);
+				n_v.setDisabled(true);
+			}else{
+				n_t.setVisible(false);
+				n_t.setDisabled(true);
+				n_v.setVisible(true);
+				n_v.setDisabled(false);
+			}
+        }
+    },
+
 	//____ VOIP _____
 	chkSipChange: function(chk){
 		var me 		= this;
@@ -941,20 +1023,6 @@ Ext.define('Rd.controller.cMeshEdits', {
 		});
 
 	},
-
-    //___ ProxyEnable___
-    chkProxyEnableChange: function(chk){
-        var me      = this;
-        var t       = chk.up('#tabProxy');
-        var value   = chk.getValue();
-		var fields  = Ext.ComponentQuery.query('field',t);
-		Ext.Array.forEach(fields,function(item){
-			if(item != chk){
-				item.setDisabled(!value);
-			}
-		}); 
-    },
-
 	//____ MAP ____
 
     mapLoadApi:   function(button){
