@@ -13,6 +13,7 @@ Ext.define('Rd.model.mMesh', {
          {name: 'connected_users',  type: 'int'},
          {name: 'notes',            type: 'bool'},
          {name: 'update',           type: 'bool'},
-         {name: 'delete',           type: 'bool'}
+         {name: 'delete',           type: 'bool'},
+         {name: 'view',             type: 'bool'}
         ]
 });

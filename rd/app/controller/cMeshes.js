@@ -119,6 +119,9 @@ Ext.define('Rd.controller.cMeshes', {
             'gridMeshes #note'   : {
                 click:      me.note
             },
+            'gridMeshes'   		: {
+                select:      me.select
+            },
             'gridNote[noteForGrid=meshes] #reload' : {
                 click:  me.noteReload
             },
@@ -376,6 +379,46 @@ Ext.define('Rd.controller.cMeshes', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    select: function(grid,record){
+        var me = this;
+        //Adjust the Edit and Delete buttons accordingly...
+
+        //Dynamically update the top toolbar
+        tb = me.getGrid().down('toolbar[dock=top]');
+
+        var edit = record.get('update');
+        if(edit == true){
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(true);
+            }
+        }
+
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
+        }
+
+        var view = record.get('view');
+        if(view == true){
+            if(tb.down('#view') != null){
+                tb.down('#view').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#view') != null){
+                tb.down('#view').setDisabled(true);
+            }
+        }
     },
     view: function(button){
         var me      = this;   

@@ -13,7 +13,7 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/node_lists/menu_for_grid.json',
+    urlMenu: '/cake2/rd_cake/meshes/menu_for_nodes_grid.json', //Same restrictions on the nodes will aplly here!
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
