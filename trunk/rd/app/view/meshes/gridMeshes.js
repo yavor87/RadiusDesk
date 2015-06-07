@@ -48,8 +48,29 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
             { text: i18n('sSSID'),      dataIndex: 'ssid',          tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes5'},
             { text: i18n('sBSSID'),    dataIndex: 'bssid',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},hidden: true,stateId: 'StateGridMeshes6'},
             { text: i18n('sNode_count'),dataIndex: 'node_count',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes7'},
-            { text: i18n('sNodes_up'),  dataIndex: 'nodes_up',      tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes8'},
-            { text: i18n('sNodes_down'),dataIndex: 'nodes_down',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshes9'},
+            { 
+                text        : i18n('sNodes_up'),  
+                dataIndex   : 'nodes_up',      
+                xtype       :  'templatecolumn', 
+                flex        : 1,
+                tpl         :    new Ext.XTemplate(
+                            "<tpl if='nodes_up &gt; 0'><div class=\"fieldGreen\">{nodes_up}</div>",
+                            "<tpl else><div class=\"fieldBlue\">{nodes_up}</div></tpl>"
+                        ),
+                stateId     : 'StateGridMeshes8'
+            },
+
+            { 
+                text        : i18n('sNodes_down'),  
+                dataIndex   : 'nodes_down',      
+                xtype       :  'templatecolumn', 
+                flex        : 1,
+                tpl         :    new Ext.XTemplate(
+                            "<tpl if='nodes_down &gt; 0'><div class=\"fieldRed\">{nodes_up}</div>",
+                            "<tpl else><div class=\"fieldBlue\">{nodes_up}</div></tpl>"
+                        ),
+                stateId     : 'StateGridMeshes9'
+            },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,

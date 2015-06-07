@@ -8,10 +8,9 @@ Ext.define('Rd.controller.cAccessProviders', {
         if(!win){
             win = desktop.createWindow({
                 id: 'accessProvidersWin',
-                //title: i18n('sAccess_Providers'),
                 btnText : i18n('sAccess_Providers'),
                 width:800,
-                height:200,
+                height:400,
                 iconCls: 'key',
                 glyph: Rd.config.icnKey,
                 animCollapse:false,
