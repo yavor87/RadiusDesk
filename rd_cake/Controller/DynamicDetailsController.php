@@ -1850,9 +1850,26 @@ class DynamicDetailsController extends AppController {
             }
 
             $menu = array(
-                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group)
-                   );
+                        array('xtype' => 'buttongroup','title' => __('Action'),     'items' => $action_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('Preview'),    'items' => array(
+                            array(
+                                'xtype'     => 'button', 
+                                'iconCls'   => 'b-mobile',   
+                                'glyph'     => Configure::read('icnMobile'),  
+                                'scale'     => 'large', 
+                                'itemId'    => 'mobile',    
+                                'tooltip'   => __('Mobile')
+                            ),
+                            array(
+                                'xtype'     => 'button', 
+                                'iconCls'   => 'b-desktop',  
+                                'glyph'     => Configure::read('icnDesktop'),  
+                                'scale'     => 'large', 
+                                'itemId'    => 'desktop',   
+                                'tooltip'   => __('Desktop')
+                            )))
+                        );
         }
         $this->set(array(
             'items'         => $menu,

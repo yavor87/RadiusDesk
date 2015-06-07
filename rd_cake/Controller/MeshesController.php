@@ -91,7 +91,8 @@ class MeshesController extends AppController {
                 'owner'                 => $owner_tree, 
                 'notes'                 => $notes_flag,
                 'update'                => $action_flags['update'],
-                'delete'                => $action_flags['delete']
+                'delete'                => $action_flags['delete'],
+                'view'                  => $action_flags['view'],
             ));
         }
        
@@ -1919,7 +1920,7 @@ class MeshesController extends AppController {
                     'iconCls'   => 'b-add',
                     'glyph'     => Configure::read('icnAdd'),     
                     'scale'     => 'large', 
-                    'itemId'    => 'add',      
+                    'itemId'    => 'add',     
                     'tooltip'   => __('Add')));
             }
             //Delete
@@ -1930,6 +1931,7 @@ class MeshesController extends AppController {
                     'glyph'     => Configure::read('icnDelete'),  
                     'scale'     => 'large', 
                     'itemId'    => 'delete', 
+                    'disabled'  => true, 
                     'tooltip'   => __('Delete')));
             }
 
@@ -1939,7 +1941,8 @@ class MeshesController extends AppController {
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnEdit'),  
                     'scale'     => 'large', 
-                    'itemId'    => 'edit', 
+                    'itemId'    => 'edit',
+                    'disabled'  => true,  
                     'tooltip'   => __('Edit')));
             }
 
@@ -1950,6 +1953,7 @@ class MeshesController extends AppController {
                     'glyph'     => Configure::read('icnView'),  
                     'scale'     => 'large', 
                     'itemId'    => 'view',
+                    'disabled'  => true, 
                     'tooltip'   => __('View')));
             }
 
@@ -2265,8 +2269,7 @@ class MeshesController extends AppController {
             foreach($this->parents as $i){
                 $i_id = $i['User']['id'];
                 if($i_id != $user_id){ //upstream
-                   // array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
-					//array_push($tree_array,array($this->modelClass.'.user_id' => $i_id));
+                    array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
                 }else{
                     array_push($tree_array,array('Mesh.user_id' => $i_id));
                 }
@@ -2288,27 +2291,41 @@ class MeshesController extends AppController {
 
     private function _get_action_flags($owner_id,$user){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            return array('update' => true, 'delete' => true);
+            return array('update' => true, 'delete' => true, 'view' => true);
         }
+
+        
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $user_id = $user['id'];
 
             //test for self
             if($owner_id == $user_id){
-                return array('update' => true, 'delete' => true );
+                return array('update' => true, 'delete' => true, 'view' => true );
             }
             //Test for Parents
             foreach($this->parents as $i){
                 if($i['User']['id'] == $owner_id){
-                    return array('update' => false, 'delete' => false );
+
+                    $edit = false;
+                    $view = false;
+
+                    //Here we do a special thing to see if the owner of the mesh perhaps allowed the person beneath him to edit and view the mesh
+                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'mesh_entry_edit')){
+                        $edit = true;
+                    }
+
+                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'mesh_entry_view')){
+                        $view = true;
+                    }
+                    return array('update' => $edit, 'delete' => false, 'view' => $view );
                 }
             }
 
             //Test for Children
             foreach($this->children as $i){
                 if($i['User']['id'] == $owner_id){
-                    return array('update' => true, 'delete' => true);
+                    return array('update' => true, 'delete' => true, 'view' => true);
                 }
             }  
         }

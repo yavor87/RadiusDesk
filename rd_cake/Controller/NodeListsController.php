@@ -60,14 +60,8 @@ class NodeListsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
- 
         $c = $this->_build_common_query($user); 
-		//$c = array();
-		//$c['contain']   = array(
-        //                    'Mesh'
-        //               );
-
-
+		
         //===== PAGING (MUST BE LAST) ======
         $limit  = 50;   //Defaults
         $page   = 1;
@@ -134,88 +128,6 @@ class NodeListsController extends AppController {
             '_serialize'    => array('items','success')
         ));
 	}
-
-
-    public function menu_for_grid(){
-
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-
-        //Empty by default
-        $menu = array();
-
-        //Admin => all power
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-
-            $menu = array(
-                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
-                )),
-            );
-        }
-
-        //AP depend on rights
-        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
-            $id             = $user['id'];
-            $action_group   = array();
-
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',
-                'glyph'     => Configure::read('icnReload'),   
-                'scale'     => 'large', 
-                'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
-
-            //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',
-                    'glyph'     => Configure::read('icnAdd'),      
-                    'scale'     => 'large', 
-                    'itemId'    => 'add',      
-                    'tooltip'   => __('Add')));
-            }
-            //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',
-                    'glyph'     => Configure::read('icnDelete'),   
-                    'scale'     => 'large', 
-                    'itemId'    => 'delete',
-                    'disabled'  => true,   
-                    'tooltip'   => __('Delete')));
-            }
-
-            //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_components')){
-                array_push($action_group,array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',
-                    'glyph'     => Configure::read('icnEdit'),     
-                    'scale'     => 'large', 
-                    'itemId'    => 'edit',
-                    'disabled'  => true,     
-                    'tooltip'   => __('Edit')));
-            }
-
-            $menu = array(
-                        array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group)
-                   );
-        }
-        $this->set(array(
-            'items'         => $menu,
-            'success'       => true,
-            '_serialize'    => array('items','success')
-        ));
-    }
 
     private function _find_parents($id){
 
@@ -318,9 +230,9 @@ class NodeListsController extends AppController {
             foreach($this->parents as $i){
                 $i_id = $i['User']['id'];
                 if($i_id != $user_id){ //upstream
-                    array_push($tree_array,array($this->modelClass.'.user_id' => $i_id,$this->modelClass.'.available_to_siblings' => true));
+                    array_push($tree_array,array('Mesh.user_id' => $i_id, 'Mesh.available_to_siblings' => true));
                 }else{
-                    array_push($tree_array,array('Ssid.user_id' => $i_id));
+                    array_push($tree_array,array('Mesh.user_id' => $i_id));
                 }
             }
             //** ALL the AP's children
@@ -328,7 +240,7 @@ class NodeListsController extends AppController {
             if($ap_children){   //Only if the AP has any children...
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($tree_array,array($this->modelClass.'.user_id' => $id));
+                    array_push($tree_array,array('Mesh.user_id' => $id));
                 }       
             }       
             //Add it as an OR clause
