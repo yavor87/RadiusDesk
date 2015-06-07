@@ -6,7 +6,7 @@ class SsidsController extends AppController {
     public $name        = 'Ssids';
     public $components  = array('Aa');
     public $uses        = array('Ssid','User');
-    protected $base     = "Access Providers/Controllers/Ssid/";
+    protected $base     = "Access Providers/Controllers/Ssids/";
 
 //------------------------------------------------------------------------
 
@@ -353,7 +353,7 @@ class SsidsController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_components')){
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',
