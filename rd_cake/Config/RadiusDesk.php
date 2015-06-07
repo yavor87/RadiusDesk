@@ -267,6 +267,9 @@ $config['icnGoogle']	= 57614;
 $config['icnTwitter']	= 57574;
 $config['icnWifi']		= 57550;
 $config['icnIP']		= 57479;
+$config['icnThumbUp']   = 57603;
+$config['icnThumbDown']	= 57602;
+$config['icnCPU']		= 57452;
 
 
 //=== EXPERIMENTAL STUFF =====
