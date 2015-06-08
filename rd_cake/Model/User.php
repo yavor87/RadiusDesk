@@ -95,7 +95,7 @@ class User extends AppModel {
         ),
 		'DynamicDetail' => array(
             'dependent'     => true   
-        ),
+        )
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
