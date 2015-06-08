@@ -1033,7 +1033,8 @@ Ext.define('Rd.controller.cMeshes', {
                     id          :'winMeshAttachNodeId',
                     store       : store,
 					hidePower	: hide_power,
-					mac			: mac
+					mac			: mac,
+                    itemId      : 'winMeshEditNodeMain'
                 });
                 me.application.runAction('cDesktop','Add',w);         
             }
