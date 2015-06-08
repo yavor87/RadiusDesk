@@ -66,8 +66,8 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
                 xtype       :  'templatecolumn', 
                 flex        : 1,
                 tpl         :    new Ext.XTemplate(
-                            "<tpl if='nodes_down &gt; 0'><div class=\"fieldRed\">{nodes_up}</div>",
-                            "<tpl else><div class=\"fieldBlue\">{nodes_up}</div></tpl>"
+                            "<tpl if='nodes_down &gt; 0'><div class=\"fieldRed\">{nodes_down}</div>",
+                            "<tpl else><div class=\"fieldBlue\">{nodes_down}</div></tpl>"
                         ),
                 stateId     : 'StateGridMeshes9'
             },
