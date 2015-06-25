@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<meta 	name="author" 		content="Dirk van der Walt - http://sourceforge.net/projects/radiusdesk/" />
+	<meta 	name="viewport" 	content="width=device-width, initial-scale=1"	/>
+	<link 	rel="stylesheet" 	href="resources/css/jquery.mobile-1.4.5.min.css"	/>
+	<link 	rel="stylesheet" 	href="resources/css/custom.css"	/>
+	<link 	rel="stylesheet" 	href="resources/css/icon-pack-custom.css" />
+    <link   rel="stylesheet"    href="resources/css/photoswipe.css"  />
+
+    <script type="text/javascript" src="resources/js/klass.min.js"></script>
+	<script src="resources/js/jquery-1.11.2.min.js"></script>
+	<script src="resources/js/jquery.mobile-1.4.5.min.js"></script> 
+    <script type="text/javascript" src="resources/js/code.photoswipe.jquery-3.0.5.min.js"></script>
+
+	<script src="resources/js/jqExtend.js"></script>
+	<script src="resources/js/rdDynamic.js"></script>
+    <script src="resources/js/rdConnect.js"></script>
+
+	<script type="text/javascript">
+		(function(window, $, PhotoSwipe){
+
+
+            $(document).ready(function(){
+                $('div.gallery-page')
+				.on('pageshow', function(e){	
+					var 
+						currentPage = $(e.target),
+						options = {},
+						photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
+						
+					return true;	
+				})
+				.on('pagehide', function(e){	
+					var 
+						currentPage = $(e.target),
+						photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+					if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+						PhotoSwipe.detatch(photoSwipeInstance);
+					}
+					return true;
+				});
+            });
+
+			$(document).on("pageinit", "#Connect", function () { 
+			
+			//$(document).ready(function(){
+
+		        //___ Dynamic content ____
+		        var h       = document.location.hostname;
+		        var dynUrl  = "http://"+h+"/cake2/rd_cake/dynamic_details/info_for.json";
+		        var thumb_h = 200;
+		        var thumb_w = 200;
+		        var scaler  = 'http://'+h+'/cake2/rd_cake/webroot/files/image.php';
+		        var d       = rdDynamic({dynUrl: dynUrl, thumb_h: thumb_h, thumb_w: thumb_w, scaler: scaler},window.jQuery);
+                var i 		= d.addDynamicInfo();
+            	//___ END Dynamic Content ____
+
+				
+		        //If it is a preview page....
+		        $('#Help').on('pageshow',function(e){
+		            if($.getUrlVar('dynamic_id') != undefined){
+		                $('#previewHeading').text("Mobile preview");
+		                document.title = "Mobile preview";
+		                $.mobile.changePage('#Help');
+		                return;
+		            }
+		        });
+
+			});
+		
+    	}(window, window.jQuery, window.Code.PhotoSwipe));
+	</script>
+</head>
+<body>
+
+<div data-role="page" id="Connect">
+  <div data-role="header" data-position="fixed" data-theme="b">
+    <h1>Connect</h1>
+  </div>
+
+   <div data-role="main" class="ui-content">
+
+	<p class="center"><img id='dynLogo' src="" /></p>
+
+
+	<!-- LOGIN SCREEN -->
+	<div id='cConnect' data-role="main" class="ui-content">
+		
+        <!-- Form to connect -->
+        
+        <div data-role="fieldcontain" data-rd="login_field">
+		<!-- We will populate the fields based on the feedback from the Dynamic Login Pages query -->
+
+        </div>
+		<!-- We will populate the buttons dynamically here.... -->
+
+
+		<div data-role="popup" id="popFb" class="ui-content" data-dismissible="false" data-transition="slideup" style="max-width:400px;" data-overlay-theme="b">
+      		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+			<div id='connect_fb' class='warn'>
+				Required values missing!
+        	</div>
+    	</div>
+
+    </div>
+    <!-- END LOGIN SCREEN -->
+
+    <!-- NOT HOTSPOT SCREEN -->
+    <div id='cNotHotspot' data-role="main" class="ui-content">
+        <h3 class='center'>Not a hotspot</h3>
+        <p class='center'>This is not a hotspot</p>
+    </div>
+    <!-- END LOGIN SCREEN -->
+
+    <!------ Status Screen -------->
+    <!-- Content Start -->
+    <div id='cStatus' data-role="main" class="ui-content" style="margin: 0px; max-width:400px; text-align:center; display:none;">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" data-theme="d">
+            <li>
+				<a id='a_url_original' href="http://google.com" target="_blank"><img src="resources/img/link.png" alt="URL" class="ui-li-icon"><span id='span_url_original'>http://google.com</span></a>
+			</li>
+            <li>
+				<a href="#" data-role="button" name="btn_disconnect" data-icon="delete">Disconnect</a>
+			</li>
+        </ul>
+        <div data-role="collapsible-set" id='csUsage'>
+	        <div data-role="collapsible" data-theme="a" data-content-theme="c">
+	            <h3>Session Detail</h3>
+	            <ul data-role="listview" data-inset="true" data-divider-theme="a">
+                    <li><b>Idle Time</b><span 		class='col_right' id='acct_it'></span></li>
+                    <li><b>Session Time</b><span 	class='col_right' id='acct_st'></span></li>
+                    <li><b>Data in</b><span 		class='col_right' id='acct_di'></span></li>
+                    <li><b>Data out</b><span 		class='col_right' id='acct_do'></span></li>
+                    <li><b>Data total</b><span 		class='col_right' id='acct_dt'></span></li>
+		        </ul>
+	        </div>
+        </div>
+        <p ><strong>  Refreshing in </strong><span id='status_refresh' class='info'> </span><strong> seconds.</strong></p>
+    </div>
+    <!----- END Status Screen ---->
+  </div>
+
+
+
+  	<div data-role="footer" data-position="fixed">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect" class="ui-btn-active ui-state-persist">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+                <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+<!--- HELP PAGE -->
+<div data-role="page" data-add-back-btn="false" id="Help">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1 id="previewHeading">Help</h1>
+	</div>
+
+	<div data-role="content" id="HelpContent">	
+		
+	</div>
+	
+	<div data-role="footer" data-position="fixed">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help" class="ui-btn-active ui-state-persist">Help</a></li>
+                <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+<!-- END HELP PAGE -->
+
+<div data-role="page" data-add-back-btn="false" id="Gallery" class="gallery-page">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1>Image Gallery</h1>
+	</div>
+
+	<div data-role="content">	
+		
+		<ul class="gallery" id="GalUl">	
+            <!-- We will add items dynamically -->
+			<!--<li><a href="images/full/001.jpg" rel="external"><img src="images/thumb/001.jpg" alt="Image 001" /></a></li>-->	
+		</ul>
+		
+	</div>
+
+    <div data-role="footer" data-id="login" data-position="fixed" data-theme="a">
+	    <div data-iconpos="top" data-role="navbar">
+		    <ul>
+			    <li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+			    <li><a data-icon="grid" href="#Gallery" class="ui-btn-active ui-state-persist">Gallery</a></li>
+                <li><a data-icon="info" href="#About">About</a></li>
+		    </ul>
+	    </div><!-- /navbar -->
+    </div><!-- /footer -->
+
+</div>
+
+
+<!--- ABOUT PAGE -->
+<div data-role="page" data-add-back-btn="false" id="About">
+
+	<div data-role="header" data-position="fixed" data-theme="b">
+		<h1>About</h1>
+	</div>
+
+	<div data-role="content">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" style="max-width:400px; text-align:center;">
+	        <li data-role="list-divider" id='dynAbout'>About</li>
+            <li><p class="center"><img id='dynIcon' src="" /></p></li>
+            <li><strong>Phone</strong><span id='dynPhone' class='col_right'></span></li>
+            <li><strong>Fax</strong><span   id='dynFax'   class='col_right'></span></li>
+            <li><strong>Mobile</strong><span id='dynCell' class='col_right'></span></li>
+            <li style="height: 60px;"><strong>Address</strong><span id='dynAddr' class='col_right'></span></li>
+          <!--  <li><strong>Lat</strong><span id='dynLat' class='col_right'></span></li>
+            <li><strong>Lng</strong><span id='dynLng' class='col_right'></span></li>-->
+            <li><a id='dynUrl'  href=""></a></li>
+            <li><a id='dynMail' href=""></a></li>
+        </ul>
+    </div>
+
+	<div data-role="footer" data-position="fixed">
+    	<div data-role="navbar" data-iconpos="top">
+		  	<ul>
+		    	<li><a data-icon="home" href="#Connect">Connect</a></li>
+			    <li><a data-icon="star" href="#Help">Help</a></li>
+                <li><a data-icon="grid" href="#Gallery">Gallery</a></li>
+                <li><a data-icon="info" href="#About" class="ui-btn-active ui-state-persist">About</a></li>
+		  	</ul>
+    	</div>
+  	</div>
+
+</div>
+
+
+<!--- END ABOUT PAGE -->
+
+</body>
+</html>
+
