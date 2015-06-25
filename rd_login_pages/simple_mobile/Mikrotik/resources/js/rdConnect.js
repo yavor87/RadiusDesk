@@ -203,7 +203,7 @@ var rdConnect = (function () {
 			}else{
                 var mac = statusFb.mac.replace(/:/g, "-");
 			}
-			if(statusFb.session == undefined){
+			if(statusFb.username == undefined){
 				return;
 			}else{
 				var un	= statusFb.username;
