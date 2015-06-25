@@ -83,6 +83,9 @@ var rdConnect = (function () {
 
         $.ajax({url: urlStatus + "?var=?", dataType: "jsonp",timeout: 4000})
             .done(function(j){
+
+                statusFb = j;		//Store the status feedback
+
                 currentRetry = 0 //Reset the current retry if it was perhaps already some value
                 if(j.logged_in == 'no'){
                     clearRefresh();
@@ -141,10 +144,16 @@ var rdConnect = (function () {
         console.log("Refresh status...");
         console.log(j);
 
+        var dat_i   = bytes(j.bytes_in);
+        var dat_o   = bytes(j.bytes_out);
+        var t       = j.bytes_out + j.bytes_in;
+        var dat_t   = bytes(t);
+
         $('#acct_un').text(j.username);
         $('#acct_ut').text(j.uptime);
-        $('#acct_di').text(j.bytes_in_nice);
-        $('#acct_do').text(j.bytes_out_nice);
+        $('#acct_di').text(dat_i);
+        $('#acct_do').text(dat_o);
+        $('#acct_dt').text(dat_t);
     }
 
 
@@ -192,12 +201,12 @@ var rdConnect = (function () {
 			if(statusFb.redir == undefined){
 				return;
 			}else{
-				var mac	= statusFb.redir.macAddress;
+                var mac = statusFb.mac.replace(/:/g, "-");
 			}
 			if(statusFb.session == undefined){
 				return;
 			}else{
-				var un	= statusFb.session.userName;
+				var un	= statusFb.username;
 			}
 		}
 
