@@ -146,7 +146,7 @@ var rdConnect = (function () {
 
         var dat_i   = bytes(j.bytes_in);
         var dat_o   = bytes(j.bytes_out);
-        var t       = j.bytes_out + j.bytes_in;
+        var t       = parseInt(j.bytes_out) + parseInt(j.bytes_in);
         var dat_t   = bytes(t);
 
         $('#acct_un').text(j.username);
@@ -198,7 +198,7 @@ var rdConnect = (function () {
 		}
 
 		if(statusFb != undefined){
-			if(statusFb.redir == undefined){
+			if(statusFb.mac == undefined){
 				return;
 			}else{
                 var mac = statusFb.mac.replace(/:/g, "-");
