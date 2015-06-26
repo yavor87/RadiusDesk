@@ -431,69 +431,41 @@ var rdConnect = (function () {
 	//_________ Social Login _________________
 	var onBtnClickSocialLogin = function(a){
 
-		socialName = a.toLowerCase();
+        var me 				= this;
+		socialName          = a.toLowerCase();
 		showFeedback('Starting social login for '+ socialName)
 
-		var urlStatus = 'http://'+uamIp+':'+uamPort+'/json/status';
-        $.ajax({url: urlStatus + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
-        .done(function(j){
-			hideFeedback();
-            currentRetry = 0;
-            if(j.clientState == 0){
-				userName = $("body").data( "DynamicDetail").data.settings.social_login.temp_username; //Makes this unique
-        		password = $("body").data( "DynamicDetail").data.settings.social_login.temp_password;  
-                socialTempEncPwd(j.challenge);
-            }
-            if(j.clientState == 1){ //FIXME Think we should redirect to Social Login Login...
-                //Show status screen since we don't need the challenge
-                mtRefresh();
-            }
-        })
-        .fail(function(){
-            //We will retry for me.retryCount
-            currentRetry = currentRetry+1;
-            if(currentRetry <= retryCount){
-                onBtnClickSocialLogin(a);
-            }
-        });
+        userName = $("body").data( "DynamicDetail").data.settings.social_login.temp_username; //Makes this unique
+        password = $("body").data( "DynamicDetail").data.settings.social_login.temp_password; 
+        socialTempLogin(); 
 	}
 
-	var socialTempEncPwd = function(challenge){
-		showFeedback("Get encrypted values for temp login");
-        $.ajax({url: urlUam + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {'challenge': challenge, password: password}})
-        .done(function(j){
-            socialTempLogin(j.response);
-			hideFeedback();
-        })
-        .fail(function(){
-            showLoginError("UAM service is down"); 
-        });
-	}
-
-	var socialTempLogin	= function(encPwd){
+	var socialTempLogin	= function(){
 		showFeedback("Log temp user into Captive Portal");
-        var urlLogin = 'http://'+uamIp+':'+uamPort+'/json/logon';
-        $.ajax({url: urlLogin + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: encPwd}})
+
+        var urlLogin = $.getUrlVar('link_login_only');
+        $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: 4000, data: {username: userName, password: password}})
         .done(function(j){
             socialTempLoginResults(j);
         })
         .fail(function(){
-            //We will retry for me.retryCount
+            //We will retry for retryCount
             currentRetry = currentRetry+1;
             if(currentRetry <= retryCount){
-                socialTempLogin(encPwd);
+                socialTempLogin();
             }else{
-                showLoginError("Coova Not responding to login requests");
+                showLoginError("MT Not responding to login requests");
             }
         });
 	}
 
 	var socialTempLoginResults = function(j){
+
         currentRetry = 0;    //Reset if there were retries
-        if(j.clientState == 0){       
+        if(j.logged_in == 'no'){       
             var msg = 'Authentication failure please try again'
-            if(j.message != undefined){
-                msg =j.message;
+            if(j.error_orig != undefined){
+                msg =j.error_orig;
             }
             showLoginError(msg);
         }else{            
@@ -505,7 +477,7 @@ var rdConnect = (function () {
 			var query_object		= parseQueryString(queryString);
 			var required			= query_object;
 
-			$.each(notRequired, function( index, value ) {
+			$.each(notRequired, function( index, value ) { //FIXME adapt the notRequired list for MT
 				//console.log( index + ": " + value );
 				delete required[value];
 			});
@@ -564,101 +536,48 @@ var rdConnect = (function () {
 	var socialTempDisconnect 	=  function(){
 
         showFeedback("Disconnect the social temp user");
-        var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
-
-        $.ajax({url: urlLogoff + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
-        .done(function(j){     
-			socialFinalSatus();
+        var urlLogout = $.getUrlVar('link_logout');
+        $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: 4000,date: {}})
+        .done(function(j){
+            retryCount = 0;
+            socialFinalLogin();
         })
-        .fail(function(){
+        .fail(function(){ 
             //We will retry for me.retryCount
             currentRetry = currentRetry+1;
             if(currentRetry <= retryCount){
                 socialTempDisconnect();
             }else{
-                showLoginError("Coova Not responding to logoff requests");
-            }
+                showLoginError("MT Not responding to logout requests");
+            }     
         });
     }
 
-	var socialFinalSatus = function(){
-		showFeedback('Get final status for social login');
-		var urlStatus = 'http://'+uamIp+':'+uamPort+'/json/status';
-        $.ajax({url: urlStatus + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
-        .done(function(j){
-			hideFeedback();
-            currentRetry = 0;
-            if(j.clientState == 0){
-				socialFinalEncPwd(j.challenge);
-            }
-            if(j.clientState == 1){ //FIXME sort out redirect code
-				var redirect_check 	= false;
-				var redirect_url  	= 'http://google.com';
-				if($("body").data("DynamicDetail") != undefined){ //We had to add this sine it is not always populated by the time this is run
-					redirect_check = $("body").data("DynamicDetail").data.settings.redirect_check;
-					redirect_url = $("body").data("DynamicDetail").data.settings.redirect_url;
-				}
-				if(redirect_check){
-			        window.location= redirect_url;
-				}else{             
-                    mtRefresh(); //Refresh 
-                }
-            }
-        })
-        .fail(function(){
-            //We will retry for me.retryCount
-            currentRetry = currentRetry+1;
-            if(currentRetry <= retryCount){
-                socialFinalSatus();
-            }
-        });
-    }
-
-	var socialFinalEncPwd = function(challenge){
-
-		showFeedback('Encrypting final password');
-        $.ajax({url: urlUam + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {'challenge': challenge, password: password}})
-        .done(function(j){
-            socialFinalLogin(j.response);
-			hideFeedback();
-        })
-        .fail(function(){
-            showLoginError("UAM service is down"); 
-        });
-    }
     
 	var socialFinalLogin = function(encPwd){
 		showFeedback('Doing final login');
 
-		var urlLogin = 'http://'+uamIp+':'+uamPort+'/json/logon';
-        $.ajax({url: urlLogin + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: encPwd}})
+        var urlLogin = $.getUrlVar('link_login_only');
+        $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: 4000, data: {username: userName, password: password}})
         .done(function(j){
             socialFinalLoginResults(j);
         })
         .fail(function(){
-            //We will retry for me.retryCount
+            //We will retry for retryCount
             currentRetry = currentRetry+1;
             if(currentRetry <= retryCount){
-                socialTempLogin(encPwd);
+                socialFinalLogin();
             }else{
-                showLoginError("Coova Not responding to login requests");
+                showLoginError("MT Not responding to login requests");
             }
         });
     }
 
     var socialFinalLoginResults = function(j){
-		hideFeedback();
-		currentRetry = 0;    //Reset if there were retries
-        if(j.clientState == 0){    
-            var msg = 'Social Login user failed authentication'
-            if(j.message != undefined){
-                msg =j.message;
-            }
-			$("#cConnect").show(); 
-            $("#cStatus").hide();
-            showLoginError(msg);
-        }else{
-			var redirect_check 	= false;
+        hideFeedback();
+        currentRetry = 0;    //Reset if there were retries
+        if(j.logged_in == 'yes'){          
+            var redirect_check 	= false;
 			var redirect_url  	= 'http://google.com';
 			if($("body").data("DynamicDetail") != undefined){ //We had to add this sine it is not always populated by the time this is run
 				redirect_check = $("body").data("DynamicDetail").data.settings.redirect_check;
@@ -669,6 +588,26 @@ var rdConnect = (function () {
 			}else{             
                 mtRefresh(true); //Refresh session and usage
             }
+        }else{
+            var msg = 'Authentication failure please try again'
+            if(j.error_orig != undefined){
+                msg =j.error_orig;
+                //Test to see if it moans about the MAC
+                //var res = msg.match(/^User koos not registered/); //dummy
+                var res = msg.match(/^User ([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F]) belongs to realm/);   //Real one
+                if(res != null){
+                    //Get the MAC
+                    var mac = msg.match(/([0-9a-fA-F][0-9a-fA-F]-){5}([0-9a-fA-F][0-9a-fA-F])/);
+                   // var mac = msg.match(/koos/);
+                    mac_username = mac[0];            
+                   // console.log("Here we have a match!!! ");
+                    $('#remove_mac').show();
+                }else{
+                  //  console.log("Here we have NOOOO match!!! ");
+                    $('#remove_mac').hide();
+                }
+            }
+            showLoginError(msg);  
         }
     }
 
