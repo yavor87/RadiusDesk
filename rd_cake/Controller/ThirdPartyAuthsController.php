@@ -327,7 +327,7 @@ class ThirdPartyAuthsController extends AppController {
 			array('conditions' => array('Voucher.extra_name' => $extra_name,'Voucher.extra_value' => $extra_value)));
 		$voucher_data = array('username' => 'notfound','password' => 'notfound');
 		if($q_r){
-			$un = $q_r['Voucher']['username'];
+			$un = $q_r['Voucher']['name'];
 			$voucher_data['username'] = $un;
 			$this->Radcheck = ClassRegistry::init('Radcheck');
 
