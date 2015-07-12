@@ -8,15 +8,14 @@ Ext.define('Rd.model.mAccessProviderTree', {
     //This is a funny - since a model is not traditionally associated with a tree view we have to create a 'dummy proxy'
     //which allows for the fake deleting of a model instance. We then call the store's sync method to do the real thing
     proxy: {
-            type: 'ajax',
-            //the store will get the content from the .json file
-            url: '/cake2/rd_cake/access_providers.json',
-            format  : 'json',
+            type        : 'ajax',
+            url         : '/cake2/rd_cake/access_providers.json',
+            format      : 'json',
             batchActions: true, 
             reader: {
-                type: 'json',
-                root: 'items',
-                messageProperty: 'message'
+                type : 'json',
+                root : 'items',
+                messageProperty : 'message'
             },
             api: {
                 destroy : '/cake2/rd_cake/access_providers/dummy_delete.json'
