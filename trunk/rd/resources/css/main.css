@@ -521,8 +521,6 @@
     background-color: $border-layout-ct-background-color;
 }
 
-
-// fudge factors for pictos buttons because the glyphs are the wrong size:
 .x-btn-default-small,
 .x-btn-default-toolbar-small,
 .x-btn-plain-toolbar-small,
