@@ -212,7 +212,8 @@ Ext.application({
 			icnIP			: 57479,
 			icnThumbUp		: 57603,
 			icnThumbDown	: 57602,
-            icnCPU          : 57452
+            icnCPU          : 57452,
+            icnNotify       : 57624
         };
     },
     addUx: function(){

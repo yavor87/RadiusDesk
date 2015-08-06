@@ -177,10 +177,11 @@
 /* Grid styles */
 .gridTree .x-grid-cell-inner {
     color: #676d76;
-    font-size:12px;
+    font-size:16px;
 /* May have to play around with the bottom items */
     line-height: 16px;
-    padding-bottom: 0;
+    padding: 2px !important;
+    margin: 2px !important;
 }
 
 .gridRealm.availAll {
@@ -353,6 +354,28 @@
     color: #5c5d5e;
     font-size:12px;
 }
+
+.fieldRedWhite {
+    background: #e00404;
+    margin-top: 1px;
+    padding: 2px;
+    color: #ffffff;
+    font-size:14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.fieldGreenWhite {
+    background: #1a9406;
+    margin-top: 1px;
+    padding: 2px;
+    color: #ffffff;
+    font-size:14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+
 
 .txtGrey {
     color: #98989b;
