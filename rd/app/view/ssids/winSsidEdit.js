@@ -18,7 +18,6 @@ Ext.define('Rd.view.finPaymentPlans.winSsidEdit', {
             border: false
     },
     requires: [
-        'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text'
     ],

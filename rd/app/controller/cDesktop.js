@@ -79,7 +79,7 @@ Ext.define('Rd.controller.cDesktop', {
                 title: user,
                 iconCls: cls,
                 glyph: Rd.config.icnBug,
-                height: 300,
+                height: 330,
                 menu: dd.menu,
                 toolConfig: {
                     width: 120,

@@ -111,6 +111,10 @@ Ext.define('Rd.controller.cMeshEdits', {
             'winMeshEditExit #save': {
                 click: me.btnEditExitSave
             },//Common node settings
+            //Enable the CoovaChilli transparent proxy settings
+            '#chkProxyEnable' : {
+                change:  me.chkProxyEnableChange
+            },
             'winMeshEdit #tabNodeCommonSettings' : {
                 activate:      me.frmNodeCommonSettingsLoad
             },
@@ -697,6 +701,24 @@ Ext.define('Rd.controller.cMeshEdits', {
         var meshId  = tab.meshId;
         form.load({url:me.urlViewNodeCommonSettings, method:'GET',params:{mesh_id:meshId}});
     },
+
+    chkProxyEnableChange: function(chk){
+        var me      = this;
+        var panel   = chk.up('panel');
+        var items   = Ext.ComponentQuery.query("textfield", panel);
+        if(chk.getValue()){
+            Ext.Array.each(items, function(item, index, itemsItSelf) {
+                item.setDisabled(false);
+                 item.setVisible(true);
+            });
+        }else{
+            Ext.Array.each(items, function(item, index, itemsItSelf) {
+                item.setDisabled(true);
+                 item.setVisible(false);
+            });
+        }
+    },
+
 	chkEthBrChange: function(chk){
 		var me 		= this;
 		var form	= chk.up('form');
