@@ -711,7 +711,7 @@ class ProfilesController extends AppController {
                 'iconCls'   => 'b-reload',
                 'glyph'     => Configure::read('icnReload'),   
                 'scale'     => 'large', 
-                'itemId'    => 'reload',   
+                'itemId'    => 'reload',
                 'tooltip'   => __('Reload')));
 
             //Add
@@ -721,7 +721,7 @@ class ProfilesController extends AppController {
                     'iconCls'   => 'b-add',
                     'glyph'     => Configure::read('icnAdd'),      
                     'scale'     => 'large', 
-                    'itemId'    => 'add',      
+                    'itemId'    => 'add',    
                     'tooltip'   => __('Add')));
             }
             //Delete
@@ -732,7 +732,7 @@ class ProfilesController extends AppController {
                     'glyph'     => Configure::read('icnDelete'),   
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => true,
                     'tooltip'   => __('Delete')));
             }
 
@@ -744,7 +744,7 @@ class ProfilesController extends AppController {
                     'glyph'     => Configure::read('icnEdit'),     
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'disabled'  => true,   
                     'tooltip'   => __('Edit')));
             }
 
@@ -754,7 +754,7 @@ class ProfilesController extends AppController {
                         'iconCls'   => 'b-note',
                         'glyph'     => Configure::read('icnNote'),      
                         'scale'     => 'large', 
-                        'itemId'    => 'note',      
+                        'itemId'    => 'note',  
                         'tooltip'   => __('Add Notes')));
             }
 /*

@@ -357,7 +357,9 @@ class DesktopController extends AppController {
             array(  'text'  => __('Dynamic login pages'),   'glyph' => Configure::read('icnDynamic'),   'itemId' => 'cDynamicDetails'),
             array(  'text'  => __('Activity monitor'),      'glyph' => Configure::read('icnActivity'),  'itemId' => 'cActivityMonitor'),
             array(  'xtype' => 'menuseparator'),
-            array(  'text'  => __('MESHdesk'),              'glyph' => Configure::read('icnMesh'),      'itemId' => 'cMeshes')
+            array(  'text'  => __('MESHdesk'),              'glyph' => Configure::read('icnMesh'),      'itemId' => 'cMeshes'),
+            array(  'xtype' => 'menuseparator'),
+            array(  'text'  => __('Notifications'),         'glyph' => Configure::read('icnNotify'),    'itemId' => 'cNotifications')
         );
 
         //Optional experimental stuff 
