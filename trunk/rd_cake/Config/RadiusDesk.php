@@ -208,6 +208,9 @@ $config['premium_sms']['50MB'] = array(
 
 //======== END WORK IN PROGRESS ==========
 
+
+    //Original for extjs4.x
+
 //==== Define glyphs -> We'll use glyphs insteadd of icons
 $config['icnLock']      = 57495;
 $config['icnYes']       = 57605;
@@ -270,6 +273,74 @@ $config['icnIP']		= 57479;
 $config['icnThumbUp']   = 57603;
 $config['icnThumbDown']	= 57602;
 $config['icnCPU']		= 57452;
+$config['icnNotify']	= 57624;
+
+
+//Modified for ExtJS 6
+/*
+$config['webFont']      = 'FontAwesome';
+
+$config['icnLock']      = 'xf023@'.$config['webFont'];
+$config['icnYes']       = 'xf00c@'.$config['webFont'];
+$config['icnMenu']      = 'xf0c9@'.$config['webFont'];
+$config['icnInfo']      = 'xf129@'.$config['webFont'];
+$config['icnPower']     = 'xf011@'.$config['webFont'];
+$config['icnSpanner']   = 'xf0ad@'.$config['webFont'];
+$config['icnHome']      = 'xf015@'.$config['webFont'];
+$config['icnDynamic']   = 'xf0d0@'.$config['webFont'];
+$config['incVoucher']   = 'xf145@'.$config['webFont'];
+$config['icnReload']    = 'xf021@'.$config['webFont'];//
+$config['icnAdd']       = 'xf067@'.$config['webFont'];//
+$config['icnEdit']      = 'xf040@'.$config['webFont'];//
+$config['icnDelete']    = 'xf1f8@'.$config['webFont'];//
+$config['icnPdf']       = 'xf1c1@'.$config['webFont'];
+$config['icnCsv']       = 'xf1c3@'.$config['webFont'];
+$config['icnRadius']    = 'xf10c@'.$config['webFont'];
+$config['icnLight']     = 'xf204@'.$config['webFont'];
+$config['icnNote']      = 'xf08d@'.$config['webFont'];//
+$config['icnKey']       = 'xf084@'.$config['webFont'];
+$config['icnRealm']     = 'xf17d@'.$config['webFont'];
+$config['icnNas']       = 'xf1cb@'.$config['webFont'];
+$config['icnTag']       = 'xf02b@'.$config['webFont'];
+$config['icnProfile']   = 'xf1b3@'.$config['webFont'];
+$config['icnComponent'] = 'xf12e@'.$config['webFont'];
+$config['icnActivity']  = 'xf0e7@'.$config['webFont'];
+$config['icnLog']       = 'xf044@'.$config['webFont'];
+$config['icnTranslate'] = 'xf0ac@'.$config['webFont'];
+$config['icnConfigure'] = 'xf0ad@'.$config['webFont'];
+$config['icnUser']      = 'xf007@'.$config['webFont'];
+$config['icnDevice']    = 'xf10a@'.$config['webFont'];
+$config['icnMesh']      = 'xf20e@'.$config['webFont'];
+$config['icnBug']       = 'xf188@'.$config['webFont'];
+$config['icnMobile']    = 'xf10b@'.$config['webFont'];
+$config['icnDesktop']   = 'xf108@'.$config['webFont'];
+$config['icnView']      = 'xf002@'.$config['webFont'];
+$config['icnMeta']      = 'xf0cb@'.$config['webFont'];
+$config['icnMap']       = 'xf041@'.$config['webFont'];
+$config['icnConnect']   = 'xf0c1@'.$config['webFont'];
+$config['icnGraph']     = 'xf080@'.$config['webFont'];
+$config['icnKick']      = 'xf1e6@'.$config['webFont'];
+$config['icnClose']     = 'xf00d@'.$config['webFont'];
+$config['icnFinance']   = 'xf09d@'.$config['webFont'];
+$config['icnOnlineShop']= 'xf07a@'.$config['webFont'];
+$config['icnEmail']     = 'xf0e0@'.$config['webFont'];
+$config['icnAttach']    = 'xf0c6@'.$config['webFont'];
+$config['icnCut']       = 'xf0c4@'.$config['webFont'];
+$config['icnTopUp']     = 'xf0f4@'.$config['webFont'];
+$config['icnSubtract']  = 'xf068@'.$config['webFont'];
+$config['icnWatch']     = 'xf017@'.$config['webFont'];
+$config['icnStar']      = 'xf005@'.$config['webFont'];
+$config['icnGrid']      = 'xf00a@'.$config['webFont'];
+$config['icnFacebook']	= 'xf09a@'.$config['webFont'];
+$config['icnGoogle']	= 'xf1a0@'.$config['webFont'];
+$config['icnTwitter']	= 'xf099@'.$config['webFont'];
+$config['icnWifi']		= 'xf012@'.$config['webFont'];
+$config['icnIP']		= 'xf1c0@'.$config['webFont'];
+$config['icnThumbUp']   = 'xf087@'.$config['webFont'];
+$config['icnThumbDown']	= 'xf088@'.$config['webFont'];
+$config['icnCPU']		= 'xf085@'.$config['webFont'];
+$config['icnCamera']    = 'xf030@'.$config['webFont'];
+*/
 
 
 //=== EXPERIMENTAL STUFF =====
