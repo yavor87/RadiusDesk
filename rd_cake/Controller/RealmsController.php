@@ -1144,6 +1144,10 @@ class RealmsController extends AppController {
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
                     array('xtype' => 'button', 'iconCls' => 'b-note',     'glyph'     => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
                     array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                )),
+                array('xtype' => 'buttongroup','title' => __('More'), 'items' => array(
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph',    'tooltip'=> __('Graphs')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnCamera'),'scale' => 'large', 'itemId' => 'logo',     'tooltip'=> __('Edit logo')),
                 ))
                 
             );
