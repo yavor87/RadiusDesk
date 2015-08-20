@@ -1300,7 +1300,7 @@ class VouchersController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
+                        array( 'xtype' =>  'splitbutton',  'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">Reload every:</b>',
@@ -1325,12 +1325,12 @@ class VouchersController extends AppController {
                                 )
                             )
 					),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',   'glyph' => Configure::read('icnEdit'),   'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnEdit'),   'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-pdf',    'glyph' => Configure::read('icnPdf'),    'scale' => 'large', 'itemId' => 'pdf',     'tooltip'=> __('Export to PDF')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',    'glyph' => Configure::read('icnCsv'),    'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnPdf'),    'scale' => 'large', 'itemId' => 'pdf',     'tooltip'=> __('Export to PDF')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnCsv'),    'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnEmail'),
@@ -1340,8 +1340,15 @@ class VouchersController extends AppController {
                     )
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-password',   'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
-                    array('xtype' => 'button', 'iconCls' => 'b-test',       'glyph' => Configure::read('icnRadius'),    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnLock'), 'scale' => 'large', 'itemId' => 'password', 'tooltip'=> __('Change password')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnRadius'),    'scale' => 'large', 'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnGraph'),   
+                        'scale'     => 'large', 
+                        'itemId'    => 'graph',  
+                        'tooltip'   => __('Graphs')
+                    )
                 )) 
             );
         }
@@ -1357,7 +1364,6 @@ class VouchersController extends AppController {
             //Reload
             array_push($action_group,array( 
                 'xtype'     =>  'splitbutton',  
-                'iconCls'   => 'b-reload',
                 'glyph'     => Configure::read('icnReload'),
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
@@ -1391,7 +1397,6 @@ class VouchersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',
                     'glyph'     => Configure::read('icnDelete'),  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
@@ -1403,7 +1408,6 @@ class VouchersController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit_basic_info')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit', 
                     'glyph'     => Configure::read('icnEdit'),   
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
@@ -1415,7 +1419,6 @@ class VouchersController extends AppController {
 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-pdf',
                     'glyph'     => Configure::read('icnPdf'),    
                     'scale'     => 'large', 
                     'itemId'    => 'pdf',      
@@ -1423,7 +1426,6 @@ class VouchersController extends AppController {
 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',
                     'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
@@ -1443,7 +1445,6 @@ class VouchersController extends AppController {
 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-password',
                     'glyph'     => Configure::read('icnLock'),
                     'scale'     => 'large', 
                     'itemId'    => 'password', 
@@ -1453,13 +1454,19 @@ class VouchersController extends AppController {
 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-test',
                     'glyph'     => Configure::read('icnRadius'),   
                     'scale'     => 'large', 
                     'itemId'    => 'test_radius',  
                     'tooltip'   => __('Test RADIUS')));
 
             }
+            
+                array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnGraph'),   
+                    'scale'     => 'large', 
+                    'itemId'    => 'graph',  
+                    'tooltip'   => __('Graphs')));
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
@@ -1489,8 +1496,8 @@ class VouchersController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete', 'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -1500,13 +1507,13 @@ class VouchersController extends AppController {
             $id   = $user['id'];
             $actions = array();
             array_push($actions,
-                array( 'xtype'=>  'button', 'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload'))
+                array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload'))
             );
 
            
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete_accounting_data')){
                 array_push($actions,
-                    array('xtype' => 'button',  'iconCls' => 'b-delete', 'glyph'  => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete'))
+                    array('xtype' => 'button', 'glyph'  => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete'))
                 );             
             }
 
