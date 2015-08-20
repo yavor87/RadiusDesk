@@ -213,7 +213,8 @@ Ext.application({
 			icnThumbUp		: 57603,
 			icnThumbDown	: 57602,
             icnCPU          : 57452,
-            icnNotify       : 57624
+            icnNotify       : 57624,
+            icnCamera       : 57399
         };
     },
     addUx: function(){
