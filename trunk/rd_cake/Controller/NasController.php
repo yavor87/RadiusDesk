@@ -1157,44 +1157,6 @@ class NasController extends AppController {
         }
 
         $na_id = $this->request->query['nas_id'];
-/*
-        array_push($items,array( 'title'  => __('Usage graphs'), 'layout' => 'fit', 'xtype' => 'tabpanel', 'itemId' => 'pnlUsageGraphs',
-            'margins'   => '0 0 0 0',
-            'plain'     => true,
-            'border'    => true,
-            'tabPosition' => 'bottom',
-            'items'     => array(
-                array(
-                    'title'   => __('Daily'),
-                    'itemId'  => "daily",
-                    'xtype'   => 'pnlUsageGraph',
-                    'span'    => 'daily',
-                    'layout'  => 'fit',
-                    'username'=> $na_id,
-                    'type'    => 'nas'
-                ),
-                array(
-                    'title'   => __("Weekly"),
-                    'itemId'  => "weekly",
-                    'xtype'   => 'pnlUsageGraph',
-                    'span'    => 'weekly',
-                    'layout'  => 'fit',
-                    'username'=> $na_id,
-                    'type'    => 'nas'
-                ),
-                array(
-                    'title'   => __("Monthly"),
-                    'itemId'  => "monthly",
-                    'xtype'   => 'pnlUsageGraph',
-                    'span'    => 'monthly',
-                    'layout'  => 'fit',
-                    'username'=> $na_id,
-                    'type'    => 'nas'
-                ),
-            )
-
-        ));
-*/
 
         $this->set(array(
                 'items'     => $items,
@@ -1203,7 +1165,6 @@ class NasController extends AppController {
         ));
 
     }
-
 
     public function delete($id = null) {
     //FIXME This is seriously wrong! it is going to delete wrong stuff!
@@ -1519,20 +1480,18 @@ class NasController extends AppController {
                                 )
                             )
                     ),
-                   // array('xtype' => 'button',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button',  'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button',  'glyph'     => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
-                    array('xtype' => 'button',  'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
-                array('xtype' => 'buttongroup','title' => __('More'), 'items' => array(
-                      array('xtype' => 'button', 'glyph'     => Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph',  'tooltip'=> __('Graphs')),
-                    array('xtype' => 'button','glyph'     => Configure::read('icnTag'),'scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
-                    array('xtype' => 'button', 'glyph'     => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map')),
-                    
+                array('xtype' => 'buttongroup','title' => __('Nas'), 'items' => array(
+                     array('xtype' => 'button', 'glyph'    => Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph',  'tooltip'=> __('Graphs')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnTag'),'scale' => 'large', 'itemId' => 'tag',     'tooltip'=> __('Manage tags')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',      'tooltip'=> __('Map'))
                 )) 
             );
         }
@@ -1600,19 +1559,20 @@ class NasController extends AppController {
                     'tooltip'   => __('Export CSV')));
             }
 
+            //Graph
+            array_push($specific_group,array(
+                'xtype'     => 'button', 
+                'glyph'     => Configure::read('icnGraph'),
+                'scale'     => 'large', 
+                'itemId'    => 'graph',    
+                'tooltip'   => __('Graphs'))
+            );
+
+
             //Tags
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'manage_tags')){
-
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
-                    'glyph'     => Configure::read('icnGraph'),     
-                    'scale'     => 'large', 
-                    'itemId'    => 'graph',      
-                    'tooltip'   => __('Graphs')));
-
-                array_push($specific_group,array(
-                    'xtype'     => 'button', 
-
                     'glyph'     => Configure::read('icnMeta'),    
                     'scale'     => 'large', 
                     'itemId'    => 'tag',
@@ -1632,7 +1592,7 @@ class NasController extends AppController {
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
                         array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group),
-                        array('xtype' => 'buttongroup','title' => __('More'),        'items' => $specific_group)
+                        array('xtype' => 'buttongroup','title' => __('Nas'),        'items' => $specific_group)
                     );
         }
         $this->set(array(
@@ -1658,11 +1618,10 @@ class NasController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                   // array('xtype' => 'button',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnConfigure'), 'scale' => 'large', 'itemId' => 'preferences', 'tooltip'=> __('Preferences')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button',  'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )) 
             );
         }
@@ -1672,7 +1631,6 @@ class NasController extends AppController {
 
              $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                   // array('xtype' => 'button', 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnConfigure'), 'scale' => 'large', 'itemId' => 'preferences', 'tooltip'=> __('Preferences')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
