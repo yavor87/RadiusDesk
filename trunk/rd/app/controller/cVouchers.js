@@ -39,6 +39,7 @@ Ext.define('Rd.controller.cVouchers', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
+                            itemId  : 'tabVouchers',
                             items   : { 'title' : i18n('sHome'), xtype: 'gridVouchers','glyph': Rd.config.icnHome}}
                         ]
                     }
@@ -57,7 +58,8 @@ Ext.define('Rd.controller.cVouchers', {
         'vouchers.cmbPdfFormats',   	'components.vCmbLanguages', 'components.winCsvColumnSelect', 
         'components.pnlUsageGraph', 	'vouchers.winVoucherEmailDetail',
 		'vouchers.gridVoucherDevices',	'vouchers.winVoucherAddDevice',
-		'components.cmbSsid'
+		'components.cmbSsid',
+        'vouchers.pnlVoucherGraphs'
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
     models: [
@@ -128,6 +130,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'gridVouchers #email': {
                 click:    me.email
+            },
+            'gridVouchers #graph'   : {
+                click:      me.graph
             },
             'gridVouchers'   : {
                 select      :  me.select,
@@ -233,31 +238,31 @@ Ext.define('Rd.controller.cVouchers', {
 			'winVoucherPdf' : {
                 beforeshow:      me.frmPdfExportLoad
             },
-            'pnlVoucher #pnlUsageGraphs #daily' : {
+            '#tabVouchers pnlVoucherGraphs #daily' : {
                 activate:      me.loadGraph
             },
-            'pnlVoucher #pnlUsageGraphs #daily #reload' : {
+            '#tabVouchers pnlVoucherGraphs #daily #reload' : {
                 click:      me.reloadDailyGraph
             },
-            'pnlVoucher #pnlUsageGraphs #daily #day' : {
+            '#tabVouchers pnlVoucherGraphs #daily #day' : {
                 change:      me.changeDailyGraph
             },
-            'pnlVoucher #pnlUsageGraphs #weekly' : {
+            '#tabVouchers pnlVoucherGraphs #weekly' : {
                 activate:      me.loadGraph
             },
-            'pnlVoucher #pnlUsageGraphs #weekly #reload' : {
+            '#tabVouchers pnlVoucherGraphs #weekly #reload' : {
                 click:      me.reloadWeeklyGraph
             },
-            'pnlVoucher #pnlUsageGraphs #weekly #day' : {
+            '#tabVouchers pnlVoucherGraphs #weekly #day' : {
                 change:      me.changeWeeklyGraph
             },
-            'pnlVoucher #pnlUsageGraphs #monthly' : {
+            '#tabVouchers pnlVoucherGraphs #monthly' : {
                 activate:      me.loadGraph
             },
-            'pnlVoucher #pnlUsageGraphs #monthly #reload' : {
+            '#tabVouchers pnlVoucherGraphs #monthly #reload' : {
                 click:      me.reloadMonthlyGraph
             },
-            'pnlVoucher #pnlUsageGraphs #monthly #day' : {
+            '#tabVouchers pnlVoucherGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             }
         });
@@ -1195,6 +1200,41 @@ Ext.define('Rd.controller.cVouchers', {
             var p_id    = pnlPu.record.get('profile_id');
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
             cmb.getStore().loadData([rec],false);
+        }
+    },
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'voucherTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = sr.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnGraph, 
+                xtype   : 'pnlVoucherGraphs',
+                v_name  : tab_name
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
         }
     },
     loadGraph: function(tab){
