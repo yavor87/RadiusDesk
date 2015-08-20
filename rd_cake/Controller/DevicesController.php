@@ -1137,7 +1137,7 @@ class DevicesController extends AppController {
 
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype' =>  'splitbutton',  'iconCls' => 'b-reload', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
+                        array( 'xtype' =>  'splitbutton', 'glyph' => Configure::read('icnReload'),  'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
                             'menu'  => array( 
                                 'items' => array( 
                                     '<b class="menu-title">'.__('Reload every').':</b>',
@@ -1150,18 +1150,24 @@ class DevicesController extends AppController {
                                 )
                             )
                     ),
-                   // array('xtype' => 'button', 'iconCls' => 'b-reload',  'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph' => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph' => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-note',     'glyph' => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph' => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',     'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'glyph' => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('Extra actions'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-disable', 'scale' => 'large', 'glyph' => Configure::read('icnLight'),'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable')),
-                    array('xtype' => 'button', 'iconCls' => 'b-test',    'scale' => 'large', 'glyph' => Configure::read('icnRadius'),'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
+                    array('xtype' => 'button', 'scale' => 'large', 'glyph' => Configure::read('icnLight'),'itemId' => 'enable_disable','tooltip'=> __('Enable / Disable')),
+                    array('xtype' => 'button', 'scale' => 'large', 'glyph' => Configure::read('icnRadius'),'itemId' => 'test_radius',  'tooltip'=> __('Test RADIUS')),
+                     array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnGraph'),   
+                        'scale'     => 'large', 
+                        'itemId'    => 'graph',  
+                        'tooltip'   => __('Graphs')
+                    )
                 )) 
             );
         }
@@ -1176,7 +1182,6 @@ class DevicesController extends AppController {
             //Reload
             array_push($action_group,array( 
                 'xtype'     =>  'splitbutton',  
-                'iconCls'   => 'b-reload', 
                 'glyph'     => Configure::read('icnReload'),  
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
@@ -1194,7 +1199,6 @@ class DevicesController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',
                     'glyph'     => Configure::read('icnAdd'),     
                     'scale'     => 'large', 
                     'itemId'    => 'add',      
@@ -1204,7 +1208,6 @@ class DevicesController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',
                     'glyph'     => Configure::read('icnDelete'),  
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
@@ -1227,7 +1230,6 @@ class DevicesController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',
                         'glyph'     => Configure::read('icnNote'),     
                         'scale'     => 'large', 
                         'itemId'    => 'note',      
@@ -1237,7 +1239,6 @@ class DevicesController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',
                     'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
@@ -1248,7 +1249,6 @@ class DevicesController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'enable_disable')){ 
                   array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-disable',
                     'glyph'     => Configure::read('icnLight'), 
                     'scale'     => 'large', 
                     'itemId'    => 'enable_disable',
@@ -1257,17 +1257,17 @@ class DevicesController extends AppController {
 
             array_push($specific_group, array(
                 'xtype'     => 'button', 
-                'iconCls'   => 'b-test',
                 'glyph'     => Configure::read('icnRadius'),    
                 'scale'     => 'large', 
                 'itemId'    => 'test_radius',  
                 'tooltip'   => __('Test RADIUS')));
 
-
-           
-
-
-           // array_push($menu,array('xtype' => 'tbfill'));
+             array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnGraph'),   
+                    'scale'     => 'large', 
+                    'itemId'    => 'graph',  
+                    'tooltip'   => __('Graphs')));
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),         'items' => $action_group),
@@ -1297,8 +1297,8 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -1306,8 +1306,8 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -1335,8 +1335,8 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -1344,8 +1344,8 @@ class DevicesController extends AppController {
         if($user['group_name'] == Configure::read('group.ap')){  //Ap
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'iconCls' => 'b-reload',  'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'iconCls' => 'b-delete',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph' => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph' => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
