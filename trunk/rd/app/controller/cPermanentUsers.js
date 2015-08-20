@@ -37,6 +37,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
+                            itemId  : 'tabPermanentUsers',
                             items   : { 'title' : i18n('sHome'), xtype: 'gridPermanentUsers','glyph': Rd.config.icnHome}}
                         ]
                     }
@@ -54,7 +55,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
        	'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
         'permanentUsers.winPermanentUserPassword',  'components.winEnableDisable', 'permanentUsers.gridUserPrivate',
        	'components.cmbVendor',   'components.cmbAttribute', 'permanentUsers.gridUserDevices', 'components.pnlUsageGraph',
-		'components.cmbSsid'
+		'components.cmbSsid',
+        'permanentUsers.pnlPermanentUserGraphs'
     ],
     stores: ['sLanguages', 'sAccessProvidersTree',    'sPermanentUsers', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors'],
     models: [
@@ -126,6 +128,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'gridPermanentUsers #test_radius' : {
                 click:      me.testRadius
+            },
+            'gridPermanentUsers #graph'   : {
+                click:      me.graph
             },
             'gridPermanentUsers'   : {
                 select:      me.select,
@@ -250,31 +255,32 @@ Ext.define('Rd.controller.cPermanentUsers', {
             'pnlPermanentUser #tabTracking #save' : {
                 click: me.saveTracking
             },
-            'pnlPermanentUser #pnlUsageGraphs #daily' : {
+            // -- Graphs --
+            '#tabPermanentUsers pnlPermanentUserGraphs #daily' : {
                 activate:      me.loadGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #daily #reload' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #daily #reload' : {
                 click:      me.reloadDailyGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #daily #day' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #daily #day' : {
                 change:      me.changeDailyGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #weekly' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #weekly' : {
                 activate:      me.loadGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #weekly #reload' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #weekly #reload' : {
                 click:      me.reloadWeeklyGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #weekly #day' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #weekly #day' : {
                 change:      me.changeWeeklyGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #monthly' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #monthly' : {
                 activate:      me.loadGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #monthly #reload' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #monthly #reload' : {
                 click:      me.reloadMonthlyGraph
             },
-            'pnlPermanentUser #pnlUsageGraphs #monthly #day' : {
+            '#tabPermanentUsers pnlPermanentUserGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             },
             'winEnableDisable #save': {
@@ -1468,6 +1474,41 @@ Ext.define('Rd.controller.cPermanentUsers', {
             var p_id    = pnlPu.record.get('profile_id');
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
             cmb.getStore().loadData([rec],false);
+        }
+    },
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'permanentUserTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = sr.get('username');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnGraph, 
+                xtype   : 'pnlPermanentUserGraphs',
+                pu_name : tab_name
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
         }
     },
     loadGraph: function(tab){
