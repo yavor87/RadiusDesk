@@ -40,6 +40,7 @@ Ext.define('Rd.controller.cDevices', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
+                            itemId  : 'tabDevices',
                             items   : { 'title' : i18n('sHome'), xtype: 'gridDevices','glyph': Rd.config.icnHome}}
                         ]
                     }
@@ -56,7 +57,8 @@ Ext.define('Rd.controller.cDevices', {
        'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect',
        'components.winEnableDisable',   'devices.pnlDevice',      'devices.gridDeviceRadaccts', 
        'devices.gridDeviceRadpostauths','devices.gridDevicePrivate', 'components.pnlUsageGraph',
-       'components.cmbVendor',          'components.cmbAttribute'
+       'components.cmbVendor',          'components.cmbAttribute',
+       'devices.pnlDeviceGraphs'
     ],
     stores: [ 'sAccessProvidersTree',   'sPermanentUsers', 'sRealms',   'sProfiles',    'sDevices', 'sAttributes', 'sVendors'  ],
     models: ['mAccessProviderTree',     'mPermanentUser',  'mRealm',    'mProfile',     'mDevice',   'mUserStat',
@@ -114,6 +116,9 @@ Ext.define('Rd.controller.cDevices', {
             },
             'gridDevices #test_radius' : {
                 click:      me.testRadius
+            },
+            'gridDevices #graph'   : {
+                click:      me.graph
             },
             'gridDevices'   : {
                 select:        me.select,
@@ -230,31 +235,31 @@ Ext.define('Rd.controller.cDevices', {
             'gridDevicePrivate  #delete': {
                 click:      me.attrDelete
             },
-            'pnlDevice #pnlUsageGraphs #daily' : {
+            '#tabDevices pnlDeviceGraphs #daily' : {
                 activate:      me.loadGraph
             },
-            'pnlDevice #pnlUsageGraphs #daily #reload' : {
+            '#tabDevices pnlDeviceGraphs #daily #reload' : {
                 click:      me.reloadDailyGraph
             },
-            'pnlDevice #pnlUsageGraphs #daily #day' : {
+            '#tabDevices pnlDeviceGraphs #daily #day' : {
                 change:      me.changeDailyGraph
             },
-            'pnlDevice #pnlUsageGraphs #weekly' : {
+            '#tabDevices pnlDeviceGraphs #weekly' : {
                 activate:      me.loadGraph
             },
-            'pnlDevice #pnlUsageGraphs #weekly #reload' : {
+            '#tabDevices pnlDeviceGraphs #weekly #reload' : {
                 click:      me.reloadWeeklyGraph
             },
-            'pnlDevice #pnlUsageGraphs #weekly #day' : {
+            '#tabDevices pnlDeviceGraphs #weekly #day' : {
                 change:      me.changeWeeklyGraph
             },
-            'pnlDevice #pnlUsageGraphs #monthly' : {
+            '#tabDevices pnlDeviceGraphs #monthly' : {
                 activate:      me.loadGraph
             },
-            'pnlDevice #pnlUsageGraphs #monthly #reload' : {
+            '#tabDevices pnlDeviceGraphs #monthly #reload' : {
                 click:      me.reloadMonthlyGraph
             },
-            'pnlDevice #pnlUsageGraphs #monthly #day' : {
+            '#tabDevices pnlDeviceGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             }
         });
@@ -1160,6 +1165,41 @@ Ext.define('Rd.controller.cDevices', {
             var p_id    = pnlDevice.record.get('profile_id');
             var rec     = Ext.create('Rd.model.mProfile', {name: pn, id: p_id});
             cmb.getStore().loadData([rec],false);
+        }
+    },
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'deviceTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = sr.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnGraph, 
+                xtype   : 'pnlDeviceGraphs',
+                d_name  : tab_name
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
         }
     },
     loadGraph: function(tab){
