@@ -40,6 +40,7 @@ Ext.define('Rd.controller.cNas', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
+                            itemId  : 'tabNas',
                             items   : { 'title' : i18n('sHome'), xtype: 'gridNas','glyph': Rd.config.icnHome}}
             
                         ]
@@ -57,7 +58,8 @@ Ext.define('Rd.controller.cNas', {
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
         'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto', 
         'nas.winMapPreferences', 'nas.gridNasAvailability', 'nas.gridNasActions', 'nas.winNasActionAdd',
-        'components.pnlUsageGraph'
+        'components.pnlUsageGraph',
+        'nas.pnlNasGraphs'
     ],
     stores: ['sNas','sTags','sDynamicAttributes','sAccessProvidersTree', 'sTags', 'sNasTypes'],
     models: ['mNas','mRealmForNasOwner','mApRealms','mTag', 'mDynamicAttribute','mGenericList','mAccessProviderTree', 
@@ -140,6 +142,9 @@ Ext.define('Rd.controller.cNas', {
             },
             'gridNas #reload menuitem[group=refresh]'   : {
                 click:      me.reloadOptionClick
+            },
+            'gridNas #graph'   : {
+                click:      me.graph
             },
             'gridNas'       : {
                 select      : me.select,
@@ -334,31 +339,32 @@ Ext.define('Rd.controller.cNas', {
             'winNasActionAdd #save': {
                 click: me.gridNasActionsAddSubmit
             },
-            'pnlNas #pnlUsageGraphs #daily' : {
+            // -- Graphs --
+            '#tabNas pnlNasGraphs #daily' : {
                 activate:      me.loadGraph
             },
-            'pnlNas #pnlUsageGraphs #daily #reload' : {
+            '#tabNas pnlNasGraphs #daily #reload' : {
                 click:      me.reloadDailyGraph
             },
-            'pnlNas #pnlUsageGraphs #daily #day' : {
+            '#tabNas pnlNasGraphs #daily #day' : {
                 change:      me.changeDailyGraph
             },
-            'pnlNas #pnlUsageGraphs #weekly' : {
+            '#tabNas pnlNasGraphs #weekly' : {
                 activate:      me.loadGraph
             },
-            'pnlNas #pnlUsageGraphs #weekly #reload' : {
+            '#tabNas pnlNasGraphs #weekly #reload' : {
                 click:      me.reloadWeeklyGraph
             },
-            'pnlNas #pnlUsageGraphs #weekly #day' : {
+            '#tabNas pnlNasGraphs #weekly #day' : {
                 change:      me.changeWeeklyGraph
             },
-            'pnlNas #pnlUsageGraphs #monthly' : {
+            '#tabNas pnlNasGraphs #monthly' : {
                 activate:      me.loadGraph
             },
-            'pnlNas #pnlUsageGraphs #monthly #reload' : {
+            '#tabNas pnlNasGraphs #monthly #reload' : {
                 click:      me.reloadMonthlyGraph
             },
-            'pnlNas #pnlUsageGraphs #monthly #day' : {
+            '#tabNas pnlNasGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             }  
         });
@@ -1782,6 +1788,41 @@ Ext.define('Rd.controller.cNas', {
                     });
                 }
             });
+        }
+    },
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'nasTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = sr.get('nasname');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnGraph, 
+                xtype   : 'pnlNasGraphs',
+                nas_id  : id
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
         }
     },
     loadGraph: function(tab){

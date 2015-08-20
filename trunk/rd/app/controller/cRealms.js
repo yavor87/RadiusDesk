@@ -819,7 +819,7 @@ edit: function(button){
                 return;
             }
 
-            var tab_name = me.selectedRecord.get('name');
+            var tab_name = sr.get('name');
             //Tab not there - add one
             tp.add({ 
                 title   : tab_name,
