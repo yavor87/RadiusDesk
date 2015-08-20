@@ -1136,14 +1136,14 @@ class RealmsController extends AppController {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnReload'),'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnAdd'),'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'),'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnEdit'),'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
                 array('xtype' => 'buttongroup','title' => __('Document'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-note',     'glyph'     => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
-                    array('xtype' => 'button', 'iconCls' => 'b-csv',     'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note',    'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv',      'tooltip'=> __('Export CSV')),
                 )),
                 array('xtype' => 'buttongroup','title' => __('More'), 'items' => array(
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph',    'tooltip'=> __('Graphs')),
@@ -1162,7 +1162,6 @@ class RealmsController extends AppController {
 
             array_push($action_group,array(  
                 'xtype'     => 'button',
-                'iconCls'   => 'b-reload', 
                 'glyph'     => Configure::read('icnReload'), 
                 'scale'     => 'large', 
                 'itemId'    => 'reload',   
@@ -1172,7 +1171,6 @@ class RealmsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',
                     'glyph'     => Configure::read('icnAdd'),     
                     'scale'     => 'large', 
                     'itemId'    => 'add',      
@@ -1182,7 +1180,6 @@ class RealmsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete', 
                     'glyph'     => Configure::read('icnDelete'), 
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
@@ -1194,7 +1191,6 @@ class RealmsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',
                     'glyph'     => Configure::read('icnEdit'),    
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
@@ -1205,7 +1201,6 @@ class RealmsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',
                         'glyph'     => Configure::read('icnNote'),     
                         'scale'     => 'large', 
                         'itemId'    => 'note',      
@@ -1215,7 +1210,6 @@ class RealmsController extends AppController {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',
                     'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
@@ -1224,7 +1218,23 @@ class RealmsController extends AppController {
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group)
+                        array('xtype' => 'buttongroup','title' => __('Document'),   'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('More'), 'items' => array(
+                            array(
+                                'xtype'     => 'button', 
+                                'glyph'     => Configure::read('icnGraph'),
+                                'scale'     => 'large', 
+                                'itemId'    => 'graph',    
+                                'tooltip'   => __('Graphs')
+                            ),
+                            array(
+                                'xtype'     => 'button', 
+                                'glyph'     => Configure::read('icnCamera'),
+                                'scale'     => 'large', 
+                                'itemId'    => 'logo',     
+                                'tooltip'   => __('Edit logo')
+                            ),
+                        ))        
                    );
         }
         $this->set(array(
