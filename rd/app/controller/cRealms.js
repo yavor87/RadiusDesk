@@ -8,7 +8,6 @@ Ext.define('Rd.controller.cRealms', {
         if(!win){
             win = desktop.createWindow({
                 id: 'realmsWin',
-               // title:i18n('sRealms_manager'),
                 btnText:i18n('sRealms_manager'),
                 width:800,
                 height:400,
@@ -38,6 +37,7 @@ Ext.define('Rd.controller.cRealms', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : true,
+                            itemId  : 'tabRealms',
                             items   : { 'title' : i18n('sHome'), 'xtype':'gridRealms','glyph': Rd.config.icnHome}}
                         ]
                     }
@@ -50,7 +50,8 @@ Ext.define('Rd.controller.cRealms', {
     views:  [
         'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','realms.pnlRealmDetail',
-        'realms.pnlRealmLogo',              'components.pnlUsageGraph'
+        'realms.pnlRealmLogo',              'components.pnlUsageGraph',
+        'realms.pnlRealmGraphs'
     ],
     stores: ['sRealms','sAccessProvidersTree'],
     models: ['mRealm','mAccessProviderTree', 'mUserStat'],
@@ -98,6 +99,12 @@ Ext.define('Rd.controller.cRealms', {
             'gridRealms #csv'  : {
                 click:      me.csvExport
             },
+            'gridRealms #logo'  : {
+                click:      me.logo
+            },
+            'gridRealms #graph'   : {
+                click:      me.graph
+            },
             'gridRealms'   : {
                 itemclick:  me.gridClick
             },
@@ -110,7 +117,7 @@ Ext.define('Rd.controller.cRealms', {
             'winRealmAddWizard #save' : {
                 click:  me.addSubmit
             },
-            'pnlRealm pnlRealmDetail #save' : {
+            '#tabRealms pnlRealmDetail #save' : {
                 click:  me.editSubmit
             },
             '#realmsWin':   {
@@ -140,44 +147,45 @@ Ext.define('Rd.controller.cRealms', {
             'winNoteAdd[noteForGrid=realms] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
-            'pnlRealm #tabDetail': {
-                beforerender:   me.tabDetailActivate,
+            '#tabRealms pnlRealmDetail': {
                 activate:       me.tabDetailActivate
             },
-            'pnlRealm #tabLogo': {
+            '#tabRealms pnlRealmLogo': {
                 activate:       me.tabLogoActivate
             },
-            'pnlRealm #tabLogo #save': {
+            '#tabRealms pnlRealmLogo #save': {
                 click:       me.logoSave
             },
-            'pnlRealm #tabLogo #cancel': {
+            '#tabRealms pnlRealmLogo #cancel': {
                 click:       me.logoCancel
             },
-            'pnlRealm #pnlUsageGraphs #daily' : {
+
+            //-- Graphs --
+            '#tabRealms pnlRealmGraphs #daily' : {
                 activate:      me.loadGraph
             },
-            'pnlRealm #pnlUsageGraphs #daily #reload' : {
+            '#tabRealms pnlRealmGraphs #daily #reload' : {
                 click:      me.reloadDailyGraph
             },
-            'pnlRealm #pnlUsageGraphs #daily #day' : {
+            '#tabRealms pnlRealmGraphs #daily #day' : {
                 change:      me.changeDailyGraph
             },
-            'pnlRealm #pnlUsageGraphs #weekly' : {
+            '#tabRealms pnlRealmGraphs #weekly' : {
                 activate:      me.loadGraph
             },
-            'pnlRealm #pnlUsageGraphs #weekly #reload' : {
+            '#tabRealms pnlRealmGraphs #weekly #reload' : {
                 click:      me.reloadWeeklyGraph
             },
-            'pnlRealm #pnlUsageGraphs #weekly #day' : {
+            '#tabRealms pnlRealmGraphs #weekly #day' : {
                 change:      me.changeWeeklyGraph
             },
-            'pnlRealm #pnlUsageGraphs #monthly' : {
+            '#tabRealms pnlRealmGraphs #monthly' : {
                 activate:      me.loadGraph
             },
-            'pnlRealm #pnlUsageGraphs #monthly #reload' : {
+            '#tabRealms pnlRealmGraphs #monthly #reload' : {
                 click:      me.reloadMonthlyGraph
             },
-            'pnlRealm #pnlUsageGraphs #monthly #day' : {
+            '#tabRealms pnlRealmGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             }  
         });;
@@ -375,22 +383,50 @@ Ext.define('Rd.controller.cRealms', {
             var tab_name = me.selectedRecord.get('name');
             //Tab not there - add one
             tp.add({ 
-                title :     tab_name,
-                itemId:     tab_id,
-                closable:   true,
-                iconCls:    'edit', 
-                layout:     'fit', 
-                items:      {'xtype' : 'pnlRealm',realm_id: id}
+                title       : tab_name,
+                itemId      : tab_id,
+                closable    : true,
+                glyph       : Rd.config.icnEdit, 
+                xtype       : 'pnlRealmDetail',
+                realm_id    : id
             });
             tp.setActiveTab(tab_id); //Set focus on Add Tab
-/*            //Load the record:
-            nt  = tp.down('#'+tab_id);
-            var f   = nt.down('frmRealmDetail');
-            f.loadRecord(sr);    //Load the record
-            f.down('#owner').setValue(sr.get('owner')); 
-*/  
         }
     },
+
+/*
+edit: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+            Wfl.util.Util.showToast(i18n.sFirst_select_an_item,'warn');
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'realmTab_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = me.selectedRecord.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Wfl.util.Glyphs.config.icnEdit, 
+                xtype   : 'pnlRealmDetail',
+                realm_id: id
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
+        }
+    },
+*/
+
     editSubmit: function(button){
         var me      = this;
         var form    = button.up('form');
@@ -674,13 +710,46 @@ Ext.define('Rd.controller.cRealms', {
     tabDetailActivate : function(tab){
         var me      = this;
         var form    = tab.down('form');
-        var realm_id= tab.up('pnlRealm').realm_id;
+        var realm_id= tab.realm_id;
         form.load({url:me.urlViewRealmDetail, method:'GET',params:{realm_id:realm_id}});
+    },
+    logo: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'realmTabLogo_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+            var tab_name = me.selectedRecord.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnCamera, 
+                xtype   : 'pnlRealmLogo',
+                realm_id: id
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
+        }
     },
     tabLogoActivate: function(tab){
         var me      = this;
-        var pnl_n   = tab.up('pnlNas');
-        var realm_id= tab.up('pnlRealm').realm_id;
+        var realm_id= tab.realm_id;
         var p_img   = tab.down('#pnlImg');
         Ext.Ajax.request({
             url: me.urlViewRealmDetail,
@@ -727,6 +796,41 @@ Ext.define('Rd.controller.cRealms', {
         var me      = this;
         var form    = button.up('form');
         form.getForm().reset();
+    },
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'realmTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = me.selectedRecord.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title   : tab_name,
+                itemId  : tab_id,
+                closable: true,
+                glyph   : Rd.config.icnGraph, 
+                xtype   : 'pnlRealmGraphs',
+                realm_id: id
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
+        }
     },
     loadGraph: function(tab){
         var me  = this;
