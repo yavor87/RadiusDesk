@@ -356,6 +356,7 @@ class ThirdPartyAuthsController extends AppController {
 		$data		= array();
 
 		$data['provider']	= $provider;
+		$data['uid']        = $uid;
 
 		$this->SocialLoginUser = ClassRegistry::init('SocialLoginUser');
 		$q_r = $this->SocialLoginUser->find('first',array('conditions' 
