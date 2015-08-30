@@ -125,7 +125,10 @@ function rdWireless.__connectClient(self,radio_number)
 		end
 
 		-- We removed network and device from the meshdesk config file in order to support multiple radios --
-		self.x.set('wireless',	name,'ifname',name..'.'..radio_number)	--give it a unique interface name
+
+		--self.x.set('wireless',	name,'ifname',name..'.'..radio_number)	--give it a unique interface name
+        --(ifname does not belong in the Wireless config file. Prior to Chaos Calmer the releases were more forgiving... now we need to remove it)
+
 		self.x.set('wireless',	name,'device',device)					--device typically radio0 or radio1
 		self.x.set('wireless',	name,'network','client_'..radio_number) --give it a unique network name
 		self.x.commit('wireless')

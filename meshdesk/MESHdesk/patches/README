@@ -1,6 +1,12 @@
 This directory contains patches that might be required to build the MESHdesk firmware
 These patches are typically for other packages used along with MESHdesk
 
-TinyProxy to include Authentication:
+-> TinyProxy to include Authentication:
 
 /barrier_breaker/feeds/packages/net/tinyproxy/patches/015-upstream-auth.patch
+
+-> CoovaChilli Complie Patch on Chaos Calmer (Trunk) - fix compile error with musl
+
+/chaos_calmer/feeds/packages/net/coova-chilli/patches/400-fix-compile-error-with-musl.patch
+
+
