@@ -99,7 +99,9 @@ function rdSystemstats._getStats(self)
     
     --get the release
     local file = assert(io.open("/etc/openwrt_release", "r"))
-    local c = file:read("*all")
+    local c = file:read("*all");
+    --Remove the single quotes from Chaos Calmer (the previous ones had double quotes)
+    c = string.gsub(c,"'","")
     s['sys']['release'] = c	    
       
     return (self.json.encode(s)) 	
