@@ -21,6 +21,7 @@ function rdAlfred:rdAlfred()
 	self.x		    = uci.cursor(nil,'/var/state')
     self.external   = rdExternal()
 	self.bat_hosts  = '/etc/alfred/bat-hosts.lua'
+    self.interface  = 'br-one' --This used to work if specified as 'br-one' (bat0.1) on BB but not on CC
 end
         
 function rdAlfred:getVersion()
@@ -40,8 +41,8 @@ end
 function rdAlfred:masterEnableAndStart()
 
     local interface = self.x.get('alfred','alfred','interface')
-    if(interface ~= 'br-one')then
-        self.x.set('alfred','alfred','interface','br-one')
+    if(interface ~= self.interface)then
+        self.x.set('alfred','alfred','interface',self.interface)
     end
 
     local mode      = self.x.get('alfred','alfred','mode')
@@ -78,8 +79,8 @@ end
 function rdAlfred:slaveEnableAndStart()
 
     local interface = self.x.get('alfred','alfred','interface')
-    if(interface ~= 'br-one')then
-        self.x.set('alfred','alfred','interface','br-one')
+    if(interface ~= self.interface)then
+        self.x.set('alfred','alfred','interface', self.interface)
     end
 
     local mode      = self.x.get('alfred','alfred','mode')

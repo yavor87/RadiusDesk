@@ -150,10 +150,10 @@ function rdGateway.__fwGwEnable(self,network,forward)
 	if(no_config_zone)then
 		local zone_name = self.x.add('firewall','zone')
 		self.x.set('firewall',zone_name,'name',		network)	
-		self.x.set('firewall',zone_name,'network',	network)	
-		self.x.set('firewall',zone_name,'INPUT',	'ACCEPT')	
-		self.x.set('firewall',zone_name,'OUTPUT',	'ACCEPT')	
-		self.x.set('firewall',zone_name,'FORWARD',	'REJECT') -- By default we are not forwarding traffic
+        self.x.set('firewall',zone_name,'network', { network })	
+		self.x.set('firewall',zone_name,'input',	'ACCEPT')	
+		self.x.set('firewall',zone_name,'output',	'ACCEPT')	
+		self.x.set('firewall',zone_name,'forward',	'REJECT') -- By default we are not forwarding traffic
 		self.x.set('firewall',zone_name,'conntrack',	'1')	
 	end
 	
@@ -170,6 +170,9 @@ function rdGateway.__fwGwEnable(self,network,forward)
 		self.x.set('firewall',r, 'src',network)
 		self.x.set('firewall',r, 'dst','lan')
 		self.x.set('firewall',r, 'target','SNAT')
+        self.x.set('firewall',r, 'proto','tcpudp')
+        --According the the documentation we are also suppose to add src_dip (and specify the IP of the LAN)
+        --Problem is that the LAN IP can and will most probably change so it makes it impractical--
 	end
 	
 	-- Add the forwarding entry
