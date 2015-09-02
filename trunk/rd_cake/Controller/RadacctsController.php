@@ -22,6 +22,8 @@ class RadacctsController extends AppController {
 			$time_used	= null;
 			$time_cap	= null;
 
+//			$new_entry = true;
+
 			//We need a civilized way to tell the query if there are NO accountig data yet BUT there is a CAP (time_cap &| data_cap)! 
 
 			//$data_used	= 10000;
@@ -36,13 +38,13 @@ class RadacctsController extends AppController {
 			$q_m_u	= $this->MacUsage->find('first', array(
 				'conditions'	=> array('MacUsage.username' => $username, 'MacUsage.mac'=> $mac)
 			));
-			
 
 			if($q_m_u){
 				$data_used	= $q_m_u['MacUsage']['data_used'];
 				$data_cap	= $q_m_u['MacUsage']['data_cap'];
 				$time_used	= $q_m_u['MacUsage']['time_used'];
 				$time_cap	= $q_m_u['MacUsage']['time_cap'];
+				$new_entry 	= false;
 			}else{
 				//Check what type of user it is since there was no record under MacUsage table....
 
