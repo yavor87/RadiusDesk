@@ -167,8 +167,8 @@ class AccountingShell extends AppShell {
                                 $d['Voucher']['precede']        = '';
                                 $d['Voucher']['perc_data_used'] = $perc_data_used;
                                 $d['Voucher']['status']         = 'used';
-								$d['Voucher']['data_used']		= $used;
-								$d['Voucher']['data_cap']		= $counters['data']['value'];
+				$d['Voucher']['data_used']	= intval($counters['data']['usage']);
+				$d['Voucher']['data_cap']	= $counters['data']['value'];
                                 $this->Voucher->save($d);
                             }
                     }
