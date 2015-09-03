@@ -230,7 +230,6 @@ class NodesController extends AppController {
                 "interface"    => "loopback",
                 "options"   => array(
                     "ifname"        => "lo",
-                    "type"          => "bridge",
                     "proto"         => "static",
                     "ipaddr"        => "127.0.0.1",
                     "netmask"       => "255.0.0.0"
