@@ -88,6 +88,8 @@ class ProfileComponentsController extends AppController {
             $q_r = $this->ProfileComponent->findById($comp_id);
             $this->request->data['groupname'] = $q_r['ProfileComponent']['name'];
 
+             $this->request->data['id'] = ''; //Wipe it since ExtJs 6 add some random stuff here
+
             //CHECK
             if($this->request->data['type'] == 'check'){
                 $this->{$this->modelClass}->Radgroupcheck->create();
