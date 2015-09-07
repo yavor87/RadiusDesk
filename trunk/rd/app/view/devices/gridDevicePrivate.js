@@ -165,7 +165,8 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                                 i18n('sItem_has_been_updated'),
                                 Ext.ux.Constants.clsInfo,
                                 Ext.ux.Constants.msgInfo
-                            );   
+                            );  
+                            store.load(); 
                         },
                         failure: function(batch,options){
                             Ext.ux.Toaster.msg(
@@ -174,6 +175,7 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                                 Ext.ux.Constants.clsWarn,
                                 Ext.ux.Constants.msgWarn
                             );
+                            store.load();
                         }
                     });
                 },
