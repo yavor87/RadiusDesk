@@ -168,7 +168,7 @@ class ProfileComponentsController extends AppController {
                 $type_id            = explode( '_', $this->request->data['id']);
                 $this->request->data['id']   = $type_id[1];
                 if ($this->{$this->modelClass}->Radgroupreply->save($this->request->data)) {
-                    $id = 'chk_'.$this->{$this->modelClass}->Radgroupreply->id;
+                    $id = 'rpl_'.$this->{$this->modelClass}->Radgroupreply->id;
                     $this->request->data['id'] = $id;
                     $this->set(array(
                         'items'     => $this->request->data,
