@@ -28,6 +28,18 @@ if not exists (select * from information_schema.columns
 	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 end if;
 
+if not exists (select * from information_schema.columns
+    where table_name = 'social_login_user_realms' and table_schema = 'rd') then
+	CREATE TABLE `social_login_user_realms` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`social_login_user_id` int(11) DEFAULT NULL,
+		`realm_id` int(11) DEFAULT NULL,
+		`created` datetime NOT NULL,
+		`modified` datetime NOT NULL,
+		PRIMARY KEY (`id`)
+	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+end if;
+
 end//
 
 delimiter ;
