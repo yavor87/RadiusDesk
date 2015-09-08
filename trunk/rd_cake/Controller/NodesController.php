@@ -342,8 +342,7 @@ class NodesController extends AppController {
                 "options"   => array(
                     "ifname"    	=> "bat0.1",
                     "proto"     	=> "batadv_vlan",
-                    'ap_isolation' 	=> '0',
-                    'ipv6'		    => '0' //We add this for Chaos Calmer to prevent IPv6 on this interface from automatically starting up.
+                    'ap_isolation' 	=> '0'
                )
             ));
 
@@ -416,8 +415,7 @@ class NodesController extends AppController {
 							"options"   => array(
 							    "ifname"    	=> "bat0.".$start_number,
 							    "proto"     	=> "batadv_vlan",
-							    'ap_isolation' 	=> '0',
-                                'ipv6'		    => '0' //We add this for Chaos Calmer to prevent IPv6 on this interface from automatically starting up.
+							    'ap_isolation' 	=> '0'
 						   )
 					));
 
@@ -449,8 +447,7 @@ class NodesController extends AppController {
 							"options"   => array(
 							    "ifname"    	=> $interfaces,
 							    "proto"     	=> "batadv_vlan",
-							    'ap_isolation' 	=> '0',
-                                'ipv6'		    => '0' //We add this for Chaos Calmer to prevent IPv6 on this interface from automatically starting up.
+							    'ap_isolation' 	=> '0'
 						   )
 					));
 
@@ -497,8 +494,7 @@ class NodesController extends AppController {
 							"options"   => array(
 							    "ifname"    	=> $interfaces,
 							    "proto"     	=> "batadv_vlan",
-							    'ap_isolation' 	=> '0',
-                                'ipv6'		    => '0' //We add this for Chaos Calmer to prevent IPv6 on this interface from automatically starting up.
+							    'ap_isolation' 	=> '0'
 						   )
 					));
 
@@ -541,8 +537,7 @@ class NodesController extends AppController {
 							"options"   => array(
 							    "ifname"    	=> $interfaces,
 							    "proto"     	=> "batadv_vlan",
-							    'ap_isolation' 	=> '0',
-                                'ipv6'		    => '0' //We add this for Chaos Calmer to prevent IPv6 on this interface from automatically starting up.
+							    'ap_isolation' 	=> '0'
 						   )
 					));
                     $start_number++;
