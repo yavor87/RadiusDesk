@@ -69,6 +69,7 @@ class ThirdPartyAuthsController extends AppController {
 			foreach($q_r['DynamicDetail']['DynamicDetailSocialLogin'] as $i){
 				if($i['name'] == $this->data['auth']['provider']){
 					$social_login_info = $i;
+					$realm_id = $social_login_info['realm_id'];
 					break; //No need to go on
 				}
 			}
@@ -89,6 +90,7 @@ class ThirdPartyAuthsController extends AppController {
 
 				if($type == 'voucher'){
 					$this->Voucher = ClassRegistry::init('Voucher');
+					$this->Voucher->countain();
 					$q_voucher =  $this->Voucher->find('first', 
 						array('conditions' => array('Voucher.extra_name' => $extra_name,'Voucher.extra_value'=> $extra_value)));
 					if(!$q_voucher){
@@ -101,6 +103,7 @@ class ThirdPartyAuthsController extends AppController {
 
 				if($type == 'user'){
 					$this->PermanentUser = ClassRegistry::init('PermanentUser');
+					$this->PermanentUser->contain();
 					$q_user =  $this->PermanentUser->find('first', 
 						array('conditions' => array('PermanentUser.extra_name' => $extra_name,'PermanentUser.extra_value'=> $extra_value)));
 					if(!$q_user){
@@ -108,8 +111,16 @@ class ThirdPartyAuthsController extends AppController {
 						$social_login_info['extra_value'] 	= $extra_value;
 						$social_login_info['user_id'] 		= intval($q_r['DynamicDetail']['user_id']);
 						//Some personal info
-						$social_login_info['name'] 		    = $this->data['auth']['info']['first_name'];
-						$social_login_info['surname'] 		= $this->data['auth']['info']['last_name'];
+											
+						$social_login_info['name']    = '';
+						if(array_key_exists('first_name',$this->data['auth']['info'])){
+							$social_login_info['name'] 	= $this->data['auth']['info']['first_name'];
+						}
+						
+						$social_login_info['surname']	    = '';
+						if(array_key_exists('last_name',$this->data['auth']['info'])){
+							$social_login_info['surname']   = $this->data['auth']['info']['last_name'];
+						}
 
 						$social_login_info['email']			= '';
 						if(array_key_exists('email',$this->data['auth']['info'])){
@@ -122,15 +133,30 @@ class ThirdPartyAuthsController extends AppController {
 
 			//Check if we should record / update this user's detail
 			if($record_info){
-				$this->_record_or_update_info();
+			    //We get the entry's ID and see if there is an entry for the realm for this user
+				$social_login_user_id = $this->_record_or_update_info();
+				//Check if there is a realm entry for this user and if not add it
+				$this->SocialLoginUserRealm = ClassRegistry::init('SocialLoginUserRealm');
+				$this->SocialLoginUserRealm->contain();
+				$count = $this->SocialLoginUserRealm->find('count', 
+				    array('conditions' => array(
+				            'SocialLoginUserRealm.realm_id' => $realm_id,
+				            'SocialLoginUserRealm.social_login_user_id' => $social_login_user_id,
+				        )  
+				    )
+		        );
+		        if($count == 0){    //If not found we need to add it since we want to tie it to a real in order to filter the list for Access Providers
+		            $d = array();
+		            $d['realm_id'] = $realm_id;
+		            $d['social_login_user_id'] = $social_login_user_id;
+		            $this->SocialLoginUserRealm->save($d);
+		        }
 			}
 
 		}
 
 		$new_query_string=$new_query_string."&sl_type=$type&sl_value=$extra_value"."&sl_name=$extra_name";
-
 		//print_r($new_query_string);
-
 		//$redirect_url = urldecode($query['protocol']).urldecode($query['hostname']).urldecode($query['pathname']).urldecode($new_query_string);
 		$redirect_url = 'http://'.urldecode($query['hostname']).urldecode($query['pathname']).urldecode($new_query_string);
 //		print($redirect_url);
@@ -364,7 +390,7 @@ class ThirdPartyAuthsController extends AppController {
 		));
 
 		if($q_r){
-			$data['id'] = $q_r['SocialLoginUser']['id'];	
+			$data['id']     = $q_r['SocialLoginUser']['id'];	
 		}
 
 		//Common info
@@ -394,9 +420,11 @@ class ThirdPartyAuthsController extends AppController {
 
 		//Update the last_connect_time
 		$data['last_connect_time'] =date('Y-m-d H:i:s'); 
-
 		//Save the data
 		$this->SocialLoginUser->save($data);
+		
+		//--Return the ID--
+		return $this->SocialLoginUser->getID();
 	}
 
 }
