@@ -5,7 +5,7 @@ class MeshReportsController extends AppController {
 	public $components  = array('Aa');
     public  $uses    	= array(
 		'Node',					'NodeLoad',		'NodeStation',	'NodeSystem','MeshEntry',
-		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction'
+		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction', 'MeshExit'
 	);
 	private $blue	 	= '#627dde';
 	private $l_red   	= '#fb6002';
@@ -1155,13 +1155,15 @@ class MeshReportsController extends AppController {
         $this->log('Checking for system_info in log', 'debug');
         if(array_key_exists('system_info',$this->request->data)){
             $this->log('Found system_info', 'debug');
+            $mesh_id = false;
             foreach($this->request->data['system_info'] as $si){
                 $id = $this->_format_mac($si['eth0']);
                 $this->log('Locating the node with MAC '.$id, 'debug');
                 $this->Node->contain();
                 $q_r = $this->Node->findByMac($id);
-                if($q_r){
+                if($q_r){ 
                     $node_id    = $q_r['Node']['id'];
+                    $mesh_id    = $q_r['Node']['mesh_id'];
                     $this->log('The node id of '.$id.' is '.$node_id, 'debug');
                     $this->_do_node_system_info($node_id,$si['sys']);
                     $this->_do_node_load($node_id,$si['sys']);
@@ -1171,6 +1173,13 @@ class MeshReportsController extends AppController {
                 }
             }  
         }
+        
+        //See if there are any heartbeats associated with the Mesh these nodes belong to (For the captive portals)
+//	$mesh_id = 46;
+        if($mesh_id){ 
+            $this->_update_any_nas_heartbeats($mesh_id);
+        }
+        
 
 		//----- Check if the 'vis' array is in the data ----
 		$this->log('Checking for vis info in log', 'debug');
@@ -1474,6 +1483,34 @@ class MeshReportsController extends AppController {
                 }
             }
         }           
+    }
+      
+    private function _update_any_nas_heartbeats($mesh_id){
+        $this->MeshExit->contain('MeshExitCaptivePortal');
+        //Only captive portal types
+        $q_r = $this->MeshExit->find('all', array('conditions' => array('MeshExit.mesh_id' => $mesh_id, 'MeshExit.type' => 'captive_portal')));
+        
+        if($q_r){
+            $na = ClassRegistry::init('Na');
+            $na->contain();
+            foreach($q_r as $i){
+                if(array_key_exists('radius_nasid',$i['MeshExitCaptivePortal'] )){
+                    $nas_id = $i['MeshExitCaptivePortal']['radius_nasid'];
+                    $n_q    = $na->find('first', 
+                        array('conditions' => 
+                            array(
+                                'Na.nasidentifier'  => $nas_id,
+                                'Na.type'           => 'CoovaChilli-Heartbeat',
+                                'Na.monitor'        => 'heartbeat'
+                            )
+                        ));
+                    if($n_q){
+                        $na->id = $n_q['Na']['id'];
+                        $na->saveField('last_contact', date('Y-m-d H:i:s'));
+                    }  
+                }    
+            } 
+        }
     }
 
     private function _update_last_contact($node_id){
