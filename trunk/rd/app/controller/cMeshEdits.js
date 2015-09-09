@@ -37,7 +37,8 @@ Ext.define('Rd.controller.cMeshEdits', {
 		urlMapSave			: '/cake2/rd_cake/meshes/map_node_save.json',
 		urlMapDelete		: '/cake2/rd_cake/meshes/map_node_delete.json',
 		urlMeshNodes		: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
-		urlBlueMark 		: 'resources/images/map_markers/blue-dot.png'
+		urlBlueMark 		: 'resources/images/map_markers/blue-dot.png',
+        urlAdvancedSettingsForModel : '/cake2/rd_cake/meshes/advanced_settings_for_model.json'
     },
     refs: [
     	{  ref: 'editEntryWin', 	selector: 'winMeshEditEntry'},
@@ -130,6 +131,9 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             'gridNodes #add': {
                 click:  me.addNode
+            },
+            '#winMeshAddNodeEdit' : {
+                beforeshow:  me.loadAdvancedWifiSettings
             },
             '#winMeshAddNodeEdit #save' : {
                 click:  me.btnAddNodeSave
@@ -758,6 +762,16 @@ Ext.define('Rd.controller.cMeshEdits', {
         var nodes   = win.down("gridNodes");
         nodes.getStore().reload();
     },
+
+    //Initial load of the Advanced settings
+    loadAdvancedWifiSettings: function(win){
+        var me      = this;
+        var form    = win.down('form');
+        var hw      = form.down('cmbHardwareOptions');
+        var val     = hw.getValue();
+        form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val}});
+    },
+
 	cmbHardwareOptionsChange: function(cmb){
 		var me      = this;
         var form    = cmb.up('form');
@@ -766,6 +780,16 @@ Ext.define('Rd.controller.cMeshEdits', {
         var adv     = form.down('#tabVoipAdvanced');
 		var radio	= form.down('#tabRadio');
         var val     = cmb.getValue();
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        var window  = cmb.up('window');
+
+        if(window.getItemId() != 'winMeshEditNodeEdit'){
+            //Load the advanced settings for this hardware...
+            form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val}});
+        }else{
+            //Include the node_id
+            form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val,node_id:window.nodeId}});
+        }
 
 		if((val == 'mp2_basic')||(val == 'mp2_phone')){
 			voip.setDisabled(false);
@@ -788,9 +812,13 @@ Ext.define('Rd.controller.cMeshEdits', {
 		){
 			radio.setDisabled(false);	
 			radio.tab.show();
+            tabAdvRadio1.setDisabled(false);
+            tabAdvRadio1.tab.show();
 		}else{
 			radio.setDisabled(true);
 			radio.tab.hide();
+            tabAdvRadio1.setDisabled(true);
+            tabAdvRadio1.tab.hide();
 		}
 	},
     addNode: function(button){
@@ -937,7 +965,6 @@ Ext.define('Rd.controller.cMeshEdits', {
 	chkRadioEnableChange: function(chk){
 		var me 		= this;
 		var fs    	= chk.up('panel');//fs
-        console.log(fs);
         var value   = chk.getValue();
 		var fields_voip = Ext.ComponentQuery.query('field',fs);
 		Ext.Array.forEach(fields_voip,function(item){
@@ -949,7 +976,6 @@ Ext.define('Rd.controller.cMeshEdits', {
 	chkRadioMeshChange: function(chk){
 		var me 		= this;
 		var fs    	= chk.up('panel');//fs
-        console.log(fs);
 		var t_band	= fs.down('#radio24');
 		var n_t		= fs.down('#numRadioTwoChan');
 		var n_v		= fs.down('#numRadioFiveChan');
