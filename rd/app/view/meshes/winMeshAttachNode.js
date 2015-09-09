@@ -84,9 +84,10 @@ Ext.define('Rd.view.meshes.winMeshAttachNode', {
                     border  : false,
                     items   : [
                         { 
-                            'title'     : i18n('sCommon_settings'),
+                            'title'     : 'Basic',
                             'layout'    : 'anchor',
                             itemId      : 'tabRequired',
+                            glyph       : Rd.config.icnStar,
                             defaults    : {
                                 anchor: '100%'
                             },
@@ -156,10 +157,11 @@ Ext.define('Rd.view.meshes.winMeshAttachNode', {
                             ]
                         },
 						{
-							title       : 'Radio settings',
+							title       : 'Radios',
                             disabled    : true,
 							layout      : 'fit',
                             itemId      : 'tabRadio',
+                            glyph       : Rd.config.icnWifi,
                             autoScroll	:true,
 							hidden		: true,
                             items       : [ {
@@ -326,6 +328,163 @@ Ext.define('Rd.view.meshes.winMeshAttachNode', {
 											        disabled	: true,
 											        itemId		: 'numRadioFiveChan'
                                                 }
+                                        ]
+                                    }
+                                ]}
+                            ]
+                        },
+                        { 
+                            'title'     : 'Advanced',
+                            'layout'    : 'anchor',
+                            glyph       : Rd.config.icnSpanner,
+                            itemId      : 'tabAdvanced',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            autoScroll:true,
+                            items       : [ {
+                                layout  : 'fit',
+                                xtype   : 'tabpanel',
+                                margins : '0 0 0 0',
+                                plain   : true,
+                                tabPosition: 'top',
+                                border  : false,
+                                items   :  [
+                                    {
+                                        title       : 'Radio0',
+                                        xtype       : 'panel',
+                                        baseCls     : 'tabRadio',
+                                        layout      : 'anchor',
+                                        defaults    : {
+                                            anchor: '100%'
+                                        },
+                                        autoScroll:true,
+                                        items       :[
+                                            {
+										        xtype       : 'radio', 
+										        fieldLabel  : 'HT20',
+										        name      	: 'radio0_htmode',
+										        inputValue	: 'HT20',
+										        labelClsExtra: 'lblRd'
+									        }, 
+									        {
+										        xtype       : 'radio',
+										        fieldLabel  : 'HT40',
+										        name      	: 'radio0_htmode',
+										        inputValue	: 'HT40',
+										        checked		: true,
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Diversity',
+										        name        : 'radio0_diversity',
+										        inputValue  : 'radio0_diversity',
+										        labelClsExtra: 'lblRd'
+									        }, 
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Noscan',
+										        name        : 'radio0_noscan',
+										        inputValue  : 'radio0_noscan',
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio0_txpower',
+									            fieldLabel  : 'TX Power(dBm)',
+									            value       : 15,
+									            maxValue    : 35,
+									            minValue    : 0
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio0_distance',
+									            fieldLabel  : 'Distance',
+									            value       : 300,
+									            maxValue    : 3000,
+									            minValue    : 1
+									        },
+                                            {
+                                                xtype       : 'textareafield',
+                                                grow        : true,
+                                                fieldLabel  : 'HT Capabilities',
+                                                name        : 'radio0_ht_capab',
+                                                anchor      : '100%',
+                                                allowBlank  : true,
+                                                labelClsExtra: 'lblRd'
+                                             }      
+                                        ]
+                                    },
+                                    {
+                                        title       : 'Radio1',
+                                        xtype       : 'panel',
+                                        baseCls     : 'tabRadio',
+                                        layout      : 'anchor',
+                                        itemId      : 'tabAdvWifiRadio1',
+                                        defaults    : {
+                                            anchor: '100%'
+                                        },
+                                        autoScroll:true,
+                                        items       :[
+                                             {
+										        xtype       : 'radio', 
+										        fieldLabel  : 'HT20',
+										        name      	: 'radio1_htmode',
+										        inputValue	: 'HT20',
+										        labelClsExtra: 'lblRd'
+									        }, 
+									        {
+										        xtype       : 'radio',
+										        fieldLabel  : 'HT40',
+										        name      	: 'radio1_htmode',
+										        inputValue	: 'HT40',
+										        checked		: true,
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Diversity',
+										        name        : 'radio1_diversity',
+										        inputValue  : 'radio1_diversity',
+										        labelClsExtra: 'lblRd'
+									        }, 
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Noscan',
+										        name        : 'radio1_noscan',
+										        inputValue  : 'radio1_noscan',
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio1_txpower',
+									            fieldLabel  : 'TX Power(dBm)',
+									            value       : 15,
+									            maxValue    : 35,
+									            minValue    : 0
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio1_distance',
+									            fieldLabel  : 'Distance',
+									            value       : 300,
+									            maxValue    : 3000,
+									            minValue    : 1
+									        },
+                                            {
+                                                xtype       : 'textareafield',
+                                                grow        : true,
+                                                fieldLabel  : 'HT Capabilities',
+                                                name        : 'radio1_ht_capab',
+                                                anchor      : '100%',
+                                                allowBlank  : true,
+                                                labelClsExtra: 'lblRd'
+                                             }      
                                         ]
                                     }
                                 ]}
