@@ -726,7 +726,6 @@ class MeshesController extends AppController {
             return;
         }
 
-
         if ($this->request->is('post')) {
 
             $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
@@ -952,6 +951,59 @@ class MeshesController extends AppController {
         ));
     }
 
+    public function advanced_settings_for_model(){
+        $data = array();
+        Configure::load('MESHdesk');
+        $hw   = Configure::read('hardware');
+        $model= $this->request->query['model'];
+
+        $no_overrides = true;
+
+        //Check if there is a node_id in the request and if so check the current hardware type
+        //If the same as the model requested, check if we have overrides
+        if(array_key_exists('node_id', $this->request->query)){
+
+            $node   = ClassRegistry::init('Node');
+            $node->contain('NodeWifiSetting');
+            $q_r    = $node->findById($this->request->query['node_id']);
+            if($q_r){
+                $current_model = $q_r['Node']['hardware'];
+                if($current_model == $model){ //Its the same so lets check if there are any custom settings
+                    if(count($q_r['NodeWifiSetting'])>0){
+                        //TODO create the override data (FIXME)
+                        $no_overrides = false;
+                    }
+                }
+            }
+        }
+
+        if($no_overrides){
+
+            foreach($hw as $h){
+                $id     = $h['id'];
+                if($model == $id){
+                    foreach(array_keys($h) as $key){
+                        if(preg_match('/^radio\d+_/',$key)){
+                            if(preg_match('/^radio\d+_ht_capab/',$key)){
+                                $data["$key"] = implode("\n",$h["$key"]);
+                            }else{
+                                $data["$key"] = $h["$key"];
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+
+        }
+
+        $this->set(array(
+            'data' => $data,
+            'success' => true,
+            '_serialize' => array('data','success')
+        ));
+    }
+
 
     public function mesh_nodes_index(){
 
@@ -1165,6 +1217,8 @@ class MeshesController extends AppController {
             $node           = ClassRegistry::init('Node');
             $neighbors      = ClassRegistry::init('NodeNeighbor');
 
+            $wifi_setting   = ClassRegistry::init('NodeWifiSetting');
+
 			$move_meshes	= false;
 
 			if (array_key_exists('mesh_id', $this->request->data)) {
@@ -1264,6 +1318,41 @@ class MeshesController extends AppController {
 				if($this->_get_radio_count_for($this->request->data['hardware']) == 2){
 					$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
 				}
+
+
+                //---------Add WiFi settings for this node ------
+                //--Clean up--
+                $n_id = $this->request->data['id'];
+                $wifi_setting->deleteAll(array('NodeWifiSetting.node_id' => $n_id), true);
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab)/',$key)){
+                        
+                        if(preg_match('/^radio\d+_ht_capab/',$key)){
+                            $pieces = explode("\n", $this->request->data["$key"]);
+                            foreach($pieces as $p){
+                                $wifi_setting->create();
+                                $d_setting = array();
+                                $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                                $d_setting['NodeWifiSetting']['name']      = $key;
+                                $d_setting['NodeWifiSetting']['value']     = $p;
+                                $wifi_setting->save($d_setting);
+                                $wifi_setting->id = null;
+                            }
+                        }else{
+                            $wifi_setting->create();
+                            $d_setting = array();
+                            $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                            $d_setting['NodeWifiSetting']['name']      = $key;
+                            $d_setting['NodeWifiSetting']['value']     = $this->request->data["$key"];
+                            $wifi_setting->save($d_setting);
+                            $wifi_setting->id = null;
+                        }
+                    }
+                }
+                //------- END Add settings for this node ---
+
+
+
 
                 $this->set(array(
                     'success' => true,
