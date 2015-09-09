@@ -769,6 +769,12 @@ Ext.define('Rd.controller.cMeshEdits', {
         var form    = win.down('form');
         var hw      = form.down('cmbHardwareOptions');
         var val     = hw.getValue();
+
+        //We have to disable this and hide it upon initial loading
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        tabAdvRadio1.setDisabled(true);
+        tabAdvRadio1.tab.hide();
+
         form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val}});
     },
 
@@ -939,6 +945,11 @@ Ext.define('Rd.controller.cMeshEdits', {
         var form    = win.down('form');
         var nodeId  = win.nodeId;
         form.load({url:me.urlViewNode, method:'GET',params:{node_id:nodeId}});
+
+        //We have to disable this and hide it upon initial loading
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        tabAdvRadio1.setDisabled(true);
+        tabAdvRadio1.tab.hide();
     },
     btnEditNodeSave:  function(button){
         var me      = this;

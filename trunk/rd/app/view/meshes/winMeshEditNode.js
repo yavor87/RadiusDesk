@@ -425,7 +425,6 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                                         baseCls     : 'tabRadio',
                                         layout      : 'anchor',
                                         itemId      : 'tabAdvWifiRadio1',
-                                        hidden		: true,
                                         defaults    : {
                                             anchor: '100%'
                                         },
