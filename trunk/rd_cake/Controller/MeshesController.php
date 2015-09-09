@@ -970,8 +970,38 @@ class MeshesController extends AppController {
                 $current_model = $q_r['Node']['hardware'];
                 if($current_model == $model){ //Its the same so lets check if there are any custom settings
                     if(count($q_r['NodeWifiSetting'])>0){
-                        //TODO create the override data (FIXME)
+
+                        $radio1_flag    = false;
+                        $r0_ht_capab    = array();
+                        $r1_ht_capab    = array();
+
+                        foreach($q_r['NodeWifiSetting'] as $s){
+                            $s_name     = $s['name'];
+                            $s_value    = $s['value'];
+                            if($s_name == 'radio1_txpower'){
+                                $radio1_flag = true;
+                            }
+
+                            if(!(preg_match('/^radio\d+_ht_capab/',$s_name))){
+                                $data["$s_name"] = "$s_value";
+                            }else{
+                                if($s_name == 'radio0_ht_capab'){
+                                    array_push($r0_ht_capab,$s_value);
+                                }
+                                if($s_name == 'radio1_ht_capab'){
+                                    array_push($r1_ht_capab,$s_value);
+                                }
+                            }
+                        }
+
+                        $data['radio0_ht_capab'] = implode("\n",$r0_ht_capab);
+                        if($radio1_flag){
+                            $data['radio1_ht_capab'] = implode("\n",$r1_ht_capab);
+                        }
+
                         $no_overrides = false;
+                        //After the loop we
+
                     }
                 }
             }
@@ -1102,6 +1132,8 @@ class MeshesController extends AppController {
         $static_entry   = ClassRegistry::init('NodeMeshEntry');
         $static_exit    = ClassRegistry::init('NodeMeshExit');
         $node           = ClassRegistry::init('Node');
+
+        $wifi_setting   = ClassRegistry::init('NodeWifiSetting');
  
         $node->create();
         if ($node->save($this->request->data)) {
@@ -1187,6 +1219,34 @@ class MeshesController extends AppController {
 				$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new node_id
 			}
 
+            //---------Add WiFi settings for this node ------
+            //--Clean up--
+            $n_id = $new_id;
+            foreach(array_keys($this->request->data) as $key){
+                if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab)/',$key)){            
+                    if(preg_match('/^radio\d+_ht_capab/',$key)){
+                        $pieces = explode("\n", $this->request->data["$key"]);
+                        foreach($pieces as $p){
+                            $wifi_setting->create();
+                            $d_setting = array();
+                            $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                            $d_setting['NodeWifiSetting']['name']      = $key;
+                            $d_setting['NodeWifiSetting']['value']     = $p;
+                            $wifi_setting->save($d_setting);
+                            $wifi_setting->id = null;
+                        }
+                    }else{
+                        $wifi_setting->create();
+                        $d_setting = array();
+                        $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                        $d_setting['NodeWifiSetting']['name']      = $key;
+                        $d_setting['NodeWifiSetting']['value']     = $this->request->data["$key"];
+                        $wifi_setting->save($d_setting);
+                        $wifi_setting->id = null;
+                    }
+                }
+            }
+            //------- END Add settings for this node ---
 
             $this->set(array(
                 'success' => true,
@@ -1378,12 +1438,12 @@ class MeshesController extends AppController {
         }
 
         $node = ClassRegistry::init('Node');
-		$node->contain('NodeMpSetting');
+		$node->contain('NodeMpSetting','NodeWifiSetting');
 
         $id    = $this->request->query['node_id'];
         $q_r   = $node->findById($id);
  
-       // print_r($q_r);
+        //print_r($q_r);
 		if(
 			($q_r['Node']['hardware'] == 'mp2_phone')||
 			($q_r['Node']['hardware'] == 'mp2_basic')
@@ -1395,6 +1455,38 @@ class MeshesController extends AppController {
 				$q_r['Node']["$key"] = $value; 
 			}
 		}
+
+        //Return the Advanced WiFi Settings...
+        if(count($q_r['NodeWifiSetting'])>0){
+
+            $radio1_flag    = false;
+            $r0_ht_capab    = array();
+            $r1_ht_capab    = array();
+
+            foreach($q_r['NodeWifiSetting'] as $s){
+                $s_name     = $s['name'];
+                $s_value    = $s['value'];
+                if($s_name == 'radio1_txpower'){
+                    $radio1_flag = true;
+                }
+
+                if(!(preg_match('/^radio\d+_ht_capab/',$s_name))){
+                    $q_r['Node']["$s_name"] = "$s_value";
+                }else{
+                    if($s_name == 'radio0_ht_capab'){
+                        array_push($r0_ht_capab,$s_value);
+                    }
+                    if($s_name == 'radio1_ht_capab'){
+                        array_push($r1_ht_capab,$s_value);
+                    }
+                }
+            }
+
+            $q_r['Node']['radio0_ht_capab'] = implode("\n",$r0_ht_capab);
+            if($radio1_flag){
+                $q_r['Node']['radio1_ht_capab'] = implode("\n",$r1_ht_capab);
+            }
+        }
 
 		$q_r['Node']['mesh_id'] = intval($q_r['Node']['mesh_id']);
 
