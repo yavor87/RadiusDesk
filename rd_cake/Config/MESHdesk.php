@@ -68,7 +68,21 @@ $config['hardware'][0]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '18',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+	
 );
 
 $config['hardware'][1]      = array(
@@ -80,7 +94,21 @@ $config['hardware'][1]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+       //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '18',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+	
 );
 
 $config['hardware'][2]      = array(
@@ -92,7 +120,20 @@ $config['hardware'][2]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '18',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
 );
 
 
@@ -105,7 +146,21 @@ $config['hardware'][3]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '20',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+	
 );
 
 $config['hardware'][4]      = array(
@@ -117,7 +172,21 @@ $config['hardware'][4]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '28',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+
 );
 
 $config['hardware'][5]      = array(
@@ -129,7 +198,21 @@ $config['hardware'][5]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> false,
 		'five'		=> true,
-		'hwmode'	=> '11a'
+		'hwmode'	=> '11a',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '28',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+
 );
 
 $config['hardware'][6]      = array(
@@ -141,7 +224,20 @@ $config['hardware'][6]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '28',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
 );
 
 
@@ -154,7 +250,20 @@ $config['hardware'][7]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> false,
 		'five'		=> true,
-		'hwmode'	=> '11a'	
+		'hwmode'	=> '11a',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '28',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
 );
 
 $config['hardware'][8]      = array(
@@ -166,7 +275,20 @@ $config['hardware'][8]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '23',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
 );
 
 $config['hardware'][9]      = array(
@@ -178,7 +300,20 @@ $config['hardware'][9]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '27',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
 );
 
 $config['hardware'][10]      = array(
@@ -190,7 +325,20 @@ $config['hardware'][10]      = array(
 		'eth_br'	=> 'eth0 eth1',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '21',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
 );
 
 $config['hardware'][11]      = array(
@@ -210,7 +358,34 @@ $config['hardware'][11]      = array(
 		'max_power1'=> '30',
 		'two1'		=> true,
 		'five1'		=> false,
-		'hwmode1'	=> '11g'
+		'hwmode1'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '17',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '30',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+
 );
 
 
@@ -231,27 +406,81 @@ $config['hardware'][12]      = array(
 		'max_power1'=> '23',
 		'two1'		=> false,
 		'five1'		=> true,
-		'hwmode1'	=> '11a'
+		'hwmode1'	=> '11a',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '20',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '23',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+
 );
 
 $config['hardware'][13]      = array(
-                'name'          => __('Alix 3D2 (Dual Radio)'),
-                'id'            => 'alix3d2',
-                'radios'        => 2,
-                'active'    	=> true,
-                'eth_br'        => 'eth0',
 
-                //First radio 
-                'max_power' => '23',
-                'two'           => true,
-                'five'          => false,
-                'hwmode'        => '11g',
+        'name'          => __('Alix 3D2 (Dual Radio)'),
+        'id'            => 'alix3d2',
+        'radios'        => 2,
+        'active'    	=> true,
+        'eth_br'        => 'eth0',
 
-                //Second radio - This is extra for two radio devices
-                'max_power1'=> '23',
-                'two1'          => false,
-                'five1'         => true,
-                'hwmode1'       => '11a'
+        //First radio 
+        'max_power' => '23',
+        'two'           => true,
+        'five'          => false,
+        'hwmode'        => '11g',
+
+        //Second radio - This is extra for two radio devices
+        'max_power1'=> '23',
+        'two1'          => false,
+        'five1'         => true,
+        'hwmode1'       => '11a',
+
+         //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '23',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '23',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
 );
 
 
@@ -265,27 +494,67 @@ $config['hardware'][14]      = array(
 		'eth_br'	=> 'eth0',
 		'two'		=> true,
 		'five'		=> false,
-		'hwmode'	=> '11g'	
+		'hwmode'	=> '11g',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '18',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+	
 );
 
 $config['hardware'][15]      = array(
-                'name'          => __('Generic 2 Radio'),
-                'id'            => 'gentworadio',
-                'radios'        => 2,
-                'active'    	=> true,
-                'eth_br'        => 'eth0',
+        'name'          => __('Generic 2 Radio'),
+        'id'            => 'gentworadio',
+        'radios'        => 2,
+        'active'    	=> true,
+        'eth_br'        => 'eth0',
 
-                //First radio 
-                'max_power' => '18',
-                'two'           => true,
-                'five'          => false,
-                'hwmode'        => '11g',
+        //First radio 
+        'max_power' => '18',
+        'two'           => true,
+        'five'          => false,
+        'hwmode'        => '11g',
 
-                //Second radio - This is extra for two radio devices
-                'max_power1'=> '18',
-                'two1'          => false,
-                'five1'         => true,
-                'hwmode1'       => '11a'
+        //Second radio - This is extra for two radio devices
+        'max_power1'=> '18',
+        'two1'          => false,
+        'five1'         => true,
+        'hwmode1'       => '11a',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '18',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '18',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
 );
 
 $config['hardware'][16]      = array(
@@ -297,7 +566,21 @@ $config['hardware'][16]      = array(
     'eth_br'      	=> 'eth0 eth1',
     'two'         	=> true,
     'five'        	=> false,
-    'hwmode'      	=> '11g'     
+    'hwmode'      	=> '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '18',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+     
 );
 
 $config['hardware'][17]      = array(
@@ -309,7 +592,20 @@ $config['hardware'][17]      = array(
    	'eth_br'      	=> 'eth0',
    	'two'         	=> true,
    	'five'        	=> false,
-  	'hwmode'      	=> '11g'     
+  	'hwmode'      	=> '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '19',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )     
 );
 
 $config['hardware'][18]      = array(
@@ -321,7 +617,20 @@ $config['hardware'][18]      = array(
 	'eth_br'      	=> 'eth0',
 	'two'         	=> true,
 	'five'        	=> false,
-	'hwmode'      	=> '11g' 
+	'hwmode'      	=> '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '26',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    ) 
 );
 
 $config['hardware'][19]      = array(
@@ -333,7 +642,20 @@ $config['hardware'][19]      = array(
   	'eth_br'      	=> 'eth0',
   	'two'         	=> true,
   	'five'        	=> false,
-  	'hwmode'      	=> '11g'
+  	'hwmode'      	=> '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '28',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
 );
 
 $config['hardware'][20]      = array(
@@ -351,7 +673,20 @@ $config['hardware'][20]      = array(
   	'max_power1'	=> '27',
   	'two1'        	=> false,
   	'five1'        	=> true,
-  	'hwmode1'     	=> '11a'
+  	'hwmode1'     	=> '11a',
+    
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '27',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
 );
 
 $config['hardware'][21]      = array(
@@ -363,7 +698,20 @@ $config['hardware'][21]      = array(
     'eth_br'        => 'eth0',
     'two'           => true,
     'five'          => false,
-    'hwmode'        => '11g'
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '21',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
 );
 
 $config['hardware'][22]      = array(
@@ -375,7 +723,21 @@ $config['hardware'][22]      = array(
     'eth_br'        => 'eth0',
     'two'           => true,
     'five'          => false,
-    'hwmode'        => '11g'
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '21',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+
 );
 
 //== MESHdesk SSID/BSSID
