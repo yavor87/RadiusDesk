@@ -9,6 +9,7 @@ class NodesController extends AppController {
     protected $NodeId   = '';
 	protected $Hardware = 'dragino'; //Some default value
 	protected $Power	= '10'; //Some default
+    protected $RadioSettings = array();
 
 
     public function get_config_for_node(){
@@ -551,17 +552,94 @@ class NodesController extends AppController {
 
 	private function _build_wireless($mesh,$entry_point_data){
 
-        $wireless = array();
+        //$wireless = array();
 
 		Configure::load('MESHdesk');
 		$client_key = Configure::read('MESHdesk.client_key');
 
-		//Check if it is a dual radio node:
+        //First get the WiFi settings wether default or specific
+        $this->_setWiFiSettings();
+
+		//Determine the radio count and configure accordingly
 		$radios   = $this->_get_hardware_setting($this->Hardware,'radios');
 		if($radios == 2){
 			$wireless = $this->_build_dual_radio_wireless($mesh,$entry_point_data);
 			return $wireless;
 		}
+
+        if($radios == 1){
+            $wireless = $this->_build_single_radio_wireless($mesh,$entry_point_data);
+			return $wireless;
+        }
+    }
+
+    private function _setWiFiSettings(){
+        //First we chack if the node had the Wfi Settings
+        $node   = ClassRegistry::init('Node');
+        $node->contain('NodeWifiSetting');
+        $q_r    = $node->findById($this->NodeId);
+
+        //There seems to be specific settings for the node
+        if($q_r){
+            if(count($q_r['NodeWifiSetting']) > 0){
+                $ht_capab_zero  = array();
+                $ht_capab_one   = array();
+
+                foreach($q_r['NodeWifiSetting'] as $i){
+                    $name  = $i['name'];
+                    $value = $i['value'];
+                    if(preg_match('/^radio0_/',$name)){
+                        $radio_number = 0;
+                    }
+                    if(preg_match('/^radio1_/',$name)){
+                        $radio_number = 1;
+                    }
+
+                    if(preg_match('/^radio\d+_ht_capab/',$name)){
+                        if($radio_number == 0){
+                            array_push($ht_capab_zero,$value);
+                        }
+                        if($radio_number == 1){
+                            array_push($ht_capab_one,$value);
+                        }
+                    }else{
+                        $this->RadioSettings[$radio_number][$name] = $value; 
+                    }  
+                }
+                $this->RadioSettings[0]['radio0_ht_capab'] = $ht_capab_zero;
+                $this->RadioSettings[1]['radio1_ht_capab'] = $ht_capab_one;
+            }else{
+                Configure::load('MESHdesk');
+                $hw   = Configure::read('hardware');
+                foreach($hw as $h){
+                    $id     = $h['id'];
+                    if($this->Hardware == $id){
+                        foreach(array_keys($h) as $key){
+                            if(preg_match('/^radio\d+_/',$key)){
+
+                                if(preg_match('/^radio0_/',$key)){
+                                    $radio_number = 0;
+                                }
+                                if(preg_match('/^radio1_/',$key)){
+                                    $radio_number = 1;
+                                }
+                                $this->RadioSettings[$radio_number][$key] = $h["$key"]; 
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        //print_r($this->RadioSettings);
+    }
+
+    private function _build_single_radio_wireless($mesh,$entry_point_data){
+
+        $wireless = array();
+
+        Configure::load('MESHdesk');
+		$client_key = Configure::read('MESHdesk.client_key');
 
         //Get the channel
         $channel    = $mesh['NodeSetting']['two_chan'];
@@ -578,16 +656,6 @@ class NodesController extends AppController {
 			$channel    = $mesh['NodeSetting']['five_chan'];
 		}
 
-        //The radio's channel
-		//Get the power - If the node settings has it to apply to all we do not consider the node's individual power setting
-		//The dbm value also depends on the node's hardware
-		if($mesh['NodeSetting']['all_power'] == 1){
-			$power_perc = $mesh['NodeSetting']['power'];
-			$db_power   = $this->_db_power_for($this->Hardware,$power_perc);
-		}else{
-			$db_power   = $this->_db_power_for($this->Hardware,$this->Power);
-		}
-
         //Country
         if($mesh['NodeSetting']['country'] != ''){
             $country  = $mesh['NodeSetting']['country'];
@@ -597,6 +665,33 @@ class NodesController extends AppController {
             $country    = $data['country'];
 		}
 
+        //Boolean flags
+        $diversity  = 0;
+        $noscan     = 0;
+
+        if(array_key_exists('radio0_noscan', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_noscan'] == true){
+                $noscan = 1;
+            }
+        }
+
+        if(array_key_exists('radio0_diversity', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_diversity'] == true){
+                $diversity = 1;
+            }
+        }
+
+        $radio_zero_capab = array();
+        //Somehow the read thing reads double..
+        $allready_there = array();
+        foreach($this->RadioSettings[0]['radio0_ht_capab'] as $c){
+            if(!in_array($c,$allready_there)){
+                array_push($allready_there,$c);
+                array_push($radio_zero_capab,array('name'    => 'ht_capab', 'value'  => $c));
+            }
+        }
+        
+
         array_push( $wireless,
                 array(
                     "wifi-device"   => "radio0",
@@ -604,15 +699,15 @@ class NodesController extends AppController {
                         'channel'       => $channel,
                         'disabled'      => 0,
                         'hwmode'        => $hwmode,
-						'txpower'		=> $db_power,
-                        'country'       => $country
+                        'country'       => $country,
+
+                        'distance'      => $this->RadioSettings[0]['radio0_distance'],
+                        'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
+                        'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
+                        'noscan'        => $noscan,
+                        'diversity'     => $diversity
                     ),
-                    'lists'          => array(
-                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-20'),
-                        //array('name'    => 'ht_capab', 'value'  => 'SHORT-GI-40'),  
-                        //array('name'    => 'ht_capab', 'value'  => 'RX-STBC1'),
-                        //array('name'    => 'ht_capab', 'value'  => 'DSSS_CCK-40')  
-                    )
+                    'lists'          => $radio_zero_capab
                 ));
 
 
@@ -770,15 +865,34 @@ class NodesController extends AppController {
 			} 
 		}
 
-		//-Determine the hwmode and power-
+		//-Determine the hwmode 
 		$r0_hwmode 		= $this->_get_hardware_setting($this->Hardware,'hwmode');
 
-		if($mesh['NodeSetting']['all_power'] == 1){
-			$power_perc 	= $mesh['NodeSetting']['power'];
-			$r0_db_power   	= $this->_db_power_for($this->Hardware,$power_perc);
-		}else{
-			$r0_db_power   = $this->_db_power_for($this->Hardware,$this->Power);
-		}
+         //Boolean flags
+        $diversity  = 0;
+        $noscan     = 0;
+
+        if(array_key_exists('radio0_noscan', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_noscan'] == true){
+                $noscan = 1;
+            }
+        }
+
+        if(array_key_exists('radio0_diversity', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_diversity'] == true){
+                $diversity = 1;
+            }
+        }
+
+        $radio_zero_capab = array();
+        //Somehow the read thing reads double..
+        $allready_there = array();
+        foreach($this->RadioSettings[0]['radio0_ht_capab'] as $c){
+            if(!in_array($c,$allready_there)){
+                array_push($allready_there,$c);
+                array_push($radio_zero_capab,array('name'    => 'ht_capab', 'value'  => $c));
+            }
+        }
 
 		array_push( $wireless,
             array(
@@ -787,12 +901,16 @@ class NodesController extends AppController {
                     'channel'       => $r0_channel,
                     'disabled'      => $r0_disabled,
                     'hwmode'        => $r0_hwmode,
-					'txpower'		=> $r0_db_power,
-                    'country'       => $country
+                    'country'       => $country,
+
+                    'distance'      => $this->RadioSettings[0]['radio0_distance'],
+                    'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
+                    'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
+                    'noscan'        => $noscan,
+                    'diversity'     => $diversity
+
                 ),
-                'lists'          => array(
-                   
-                )
+                'lists'          => $radio_zero_capab
       	));
 
 		//===== RADIO ONE====
@@ -817,15 +935,34 @@ class NodesController extends AppController {
 			} 
 		}
 
-		//-Determine the hwmode and power-
+		//-Determine the hwmode
 		$r1_hwmode 		= $this->_get_hardware_setting($this->Hardware,'hwmode1');
 
-		if($mesh['NodeSetting']['all_power'] == 1){
-			$power_perc 	= $mesh['NodeSetting']['power'];
-			$r1_db_power   	= $this->_db_power_for($this->Hardware,$power_perc,1);//Add one to fetch second radio power
-		}else{
-			$r1_db_power   = $this->_db_power_for($this->Hardware,$this->Power,1);//Add one to fetch second radio power
-		}
+		 //Boolean flags
+        $diversity1  = 0;
+        $noscan1     = 0;
+
+        if(array_key_exists('radio1_noscan', $this->RadioSettings[0])) {
+            if($this->RadioSettings[1]['radio1_noscan'] == true){
+                $noscan1 = 1;
+            }
+        }
+
+        if(array_key_exists('radio1_diversity', $this->RadioSettings[0])) {
+            if($this->RadioSettings[1]['radio1_diversity'] == true){
+                $diversity1 = 1;
+            }
+        }
+
+        $radio_one_capab = array();
+        //Somehow the read thing reads double..
+        $allready_there = array();
+        foreach($this->RadioSettings[1]['radio1_ht_capab'] as $c){
+            if(!in_array($c,$allready_there)){
+                array_push($allready_there,$c);
+                array_push($radio_one_capab,array('name'    => 'ht_capab', 'value'  => $c));
+            }
+        }
 
 		array_push( $wireless,
             array(
@@ -834,12 +971,15 @@ class NodesController extends AppController {
                     'channel'       => $r1_channel,
                     'disabled'      => $r1_disabled,
                     'hwmode'        => $r1_hwmode,
-					'txpower'		=> $r1_db_power,
-                    'country'       => $country
+                    'country'       => $country,
+
+                    'distance'      => $this->RadioSettings[1]['radio1_distance'],
+                    'htmode'        => $this->RadioSettings[1]['radio1_htmode'],
+                    'txpower'       => $this->RadioSettings[1]['radio1_txpower'],
+                    'noscan'        => $noscan1,
+                    'diversity'     => $diversity1
                 ),
-                'lists'          => array(
-                   
-                )
+                'lists'          => $radio_one_capab
       	));
 
 		//_____ MESH _______
@@ -1085,22 +1225,6 @@ class NodesController extends AppController {
         return($dictionary[$number]);
     }
 
-	private function _db_power_for($hw,$power_perc,$radio1=0){
-		$return_val = 10; //some default
-		Configure::load('MESHdesk');
-		$ct = Configure::read('hardware');
-        foreach($ct as $i){
-            if($i['id'] ==$hw){
-				$item = 'max_power';
-				if($radio1 == 1){
-					$item = 'max_power1';
-				}
-				$return_val = intval($i["$item"] *($power_perc/100));
-				break;
-            }
-        }
-		return $return_val;
-	}
 
 	private function _get_hardware_setting($hw,$setting){
 		$return_val = false; //some default
