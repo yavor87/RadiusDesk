@@ -68,7 +68,8 @@ Ext.define('Rd.controller.cMeshes', {
         urlNoteAdd:         '/cake2/rd_cake/meshes/note_add.json',
 		urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
-        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json'
+        urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
+        urlAdvancedSettingsForModel : '/cake2/rd_cake/meshes/advanced_settings_for_model.json'
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'} 
@@ -160,6 +161,9 @@ Ext.define('Rd.controller.cMeshes', {
 			'gridNodeLists #add': {
                 click:  me.addNode
             },
+            '#winMeshAddNodeMain' : {
+                beforeshow:  me.loadAdvancedWifiSettings
+            },
             '#winMeshAddNodeMain #save' : {
                 click:  me.btnAddNodeSave
             },
@@ -221,6 +225,11 @@ Ext.define('Rd.controller.cMeshes', {
             },
             '#winMeshEditNodeMain radio[name=radio1_band]' : {
                 change  : me.radio_1_BandChange  
+            },
+
+            //Attach
+            'winMeshAttachNode' : {
+                beforeshow:  me.loadAdvancedWifiSettings
             },
 
 			//VOIP Choices
@@ -727,6 +736,18 @@ Ext.define('Rd.controller.cMeshes', {
 		var radio	= form.down('#tabRadio');
         var val     = cmb.getValue();
 
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        var window  = cmb.up('window');
+
+        if(window.getItemId() != 'winMeshEditNodeMain'){
+            //Load the advanced settings for this hardware...
+            form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val}});
+        }else{
+            //Include the node_id
+            form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val,node_id:window.nodeId}});
+        }
+
+
 		if((val == 'mp2_basic')||(val == 'mp2_phone')){
 			voip.setDisabled(false);
 			adv.setDisabled(false);
@@ -743,15 +764,36 @@ Ext.define('Rd.controller.cMeshes', {
 			(val == 'tplink_n600')||
 			(val == 'alix3d2')||
 			(val == 'unifiappro')||
-			(val == 'gentworadio')
+			(val == 'gentworadio')||
+            (val == 'rb433')
 		){
 			radio.setDisabled(false);	
 			radio.tab.show();
+            tabAdvRadio1.setDisabled(false);
+            tabAdvRadio1.tab.show();
 		}else{
 			radio.setDisabled(true);
 			radio.tab.hide();
+            tabAdvRadio1.setDisabled(true);
+            tabAdvRadio1.tab.hide();
 		}
 	},
+
+    //Initial load of the Advanced settings
+    loadAdvancedWifiSettings: function(win){
+        var me      = this;
+        var form    = win.down('form');
+        var hw      = form.down('cmbHardwareOptions');
+        var val     = hw.getValue();
+
+        //We have to disable this and hide it upon initial loading
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        tabAdvRadio1.setDisabled(true);
+        tabAdvRadio1.tab.hide();
+
+        form.load({url:me.urlAdvancedSettingsForModel, method:'GET',params:{model:val}});
+    },
+
     addNode: function(button){
         var me      = this;     
         var win     = button.up("#meshWin"); 
@@ -869,6 +911,12 @@ Ext.define('Rd.controller.cMeshes', {
     	var form    = win.down('form');
     	var nodeId  = win.nodeId;
     	form.load({url:me.urlViewNode, method:'GET',params:{node_id:nodeId}});
+
+        //We have to disable this and hide it upon initial loading
+        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
+        tabAdvRadio1.setDisabled(true);
+        tabAdvRadio1.tab.hide();
+
     },
     btnEditNodeSave:  function(button){
         var me      = this;
@@ -1033,8 +1081,7 @@ Ext.define('Rd.controller.cMeshes', {
                     id          :'winMeshAttachNodeId',
                     store       : store,
 					hidePower	: hide_power,
-					mac			: mac,
-                    itemId      : 'winMeshEditNodeMain'
+					mac			: mac
                 });
                 me.application.runAction('cDesktop','Add',w);         
             }
