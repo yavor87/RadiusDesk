@@ -60,6 +60,9 @@ class Node extends AppModel {
           	),
 			'NodeMpSetting'   => array(
                 'dependent'     => true   
+            ),
+            'NodeWifiSetting'   => array(
+                'dependent'     => true   
             )
     );
 
