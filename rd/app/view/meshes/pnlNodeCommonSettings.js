@@ -70,24 +70,6 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                             autoScroll:true,
                             items       :[
                                 {
-                                    xtype       : 'sliderfield',
-                                    value       : 50,
-                                    increment   : 10,
-                                    minValue    : 1,
-                                    maxValue    : 100,
-                                    name        : 'power',
-                                    fieldLabel  : i18n('sTX_Power_br_percent_br')
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sApply_power_to_all_nodes'),
-                                    name        : 'all_power',
-                                    inputValue  : 'all_power',
-						            itemId		: 'all_power',
-                                    checked     : true,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
                                     xtype       : 'numberfield',
                                     anchor      : '100%',
                                     name        : 'two_chan',

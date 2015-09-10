@@ -15,7 +15,6 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     autoShow:   false,
     meshId 		: '',
 	meshName	: '',
-	hidePower	: false,
     defaults: {
             border: false
     },
@@ -126,17 +125,6 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 						            xtype           : 'cmbHardwareOptions',
 						            labelClsExtra   : 'lblRdReq',
 						            allowBlank      : false 
-						        },
-						        {
-						            xtype       : 'sliderfield',
-						            value       : 50,
-						            increment   : 10,
-						            minValue    : 1,
-						            maxValue    : 100,
-						            name        : 'power',
-						            fieldLabel  : i18n('sTX_Power_br_percent_br'),
-									disabled	: me.hidePower,
-									hidden		: me.hidePower
 						        },
 						        {
 						            xtype       : 'cmbStaticEntries',
@@ -382,6 +370,13 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										        labelClsExtra: 'lblRd'
 									        },
                                             {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'LDPC (Low Density Parity Check)',
+										        name        : 'radio0_ldpc',
+										        inputValue  : 'radio0_ldpc',
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
 									            xtype       : 'numberfield',
 									            anchor      : '100%',
 									            name        : 'radio0_txpower',
@@ -389,6 +384,15 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 									            value       : 15,
 									            maxValue    : 35,
 									            minValue    : 0
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio0_beacon_int',
+									            fieldLabel  : 'Beacon Interval',
+									            value       : 100,
+									            maxValue    : 65535,
+									            minValue    : 15
 									        },
                                             {
 									            xtype       : 'numberfield',
@@ -451,6 +455,13 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 										        labelClsExtra: 'lblRd'
 									        },
                                             {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'LDPC (Low Density Parity Check)',
+										        name        : 'radio1_ldpc',
+										        inputValue  : 'radio1_ldpc',
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
 									            xtype       : 'numberfield',
 									            anchor      : '100%',
 									            name        : 'radio1_txpower',
@@ -458,6 +469,15 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 									            value       : 15,
 									            maxValue    : 35,
 									            minValue    : 0
+									        },
+                                            {
+									            xtype       : 'numberfield',
+									            anchor      : '100%',
+									            name        : 'radio1_beacon_int',
+									            fieldLabel  : 'Beacon Interval',
+									            value       : 100,
+									            maxValue    : 65535,
+									            minValue    : 15
 									        },
                                             {
 									            xtype       : 'numberfield',
