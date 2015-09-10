@@ -1223,7 +1223,7 @@ class MeshesController extends AppController {
             //--Clean up--
             $n_id = $new_id;
             foreach(array_keys($this->request->data) as $key){
-                if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab)/',$key)){            
+                if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int)/',$key)){            
                     if(preg_match('/^radio\d+_ht_capab/',$key)){
                         $pieces = explode("\n", $this->request->data["$key"]);
                         foreach($pieces as $p){
@@ -1385,7 +1385,7 @@ class MeshesController extends AppController {
                 $n_id = $this->request->data['id'];
                 $wifi_setting->deleteAll(array('NodeWifiSetting.node_id' => $n_id), true);
                 foreach(array_keys($this->request->data) as $key){
-                    if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab)/',$key)){
+                    if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int)/',$key)){
                         
                         if(preg_match('/^radio\d+_ht_capab/',$key)){
                             $pieces = explode("\n", $this->request->data["$key"]);

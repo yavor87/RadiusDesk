@@ -668,6 +668,7 @@ class NodesController extends AppController {
         //Boolean flags
         $diversity  = 0;
         $noscan     = 0;
+        $ldpc       = 0;
 
         if(array_key_exists('radio0_noscan', $this->RadioSettings[0])) {
             if($this->RadioSettings[0]['radio0_noscan'] == true){
@@ -678,6 +679,12 @@ class NodesController extends AppController {
         if(array_key_exists('radio0_diversity', $this->RadioSettings[0])) {
             if($this->RadioSettings[0]['radio0_diversity'] == true){
                 $diversity = 1;
+            }
+        }
+
+        if(array_key_exists('radio0_ldpc', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_ldpc'] == true){
+                $ldpc = 1;
             }
         }
 
@@ -704,8 +711,10 @@ class NodesController extends AppController {
                         'distance'      => $this->RadioSettings[0]['radio0_distance'],
                         'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
                         'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
+                        'beacon_int'    => $this->RadioSettings[0]['radio0_beacon_int'],
                         'noscan'        => $noscan,
-                        'diversity'     => $diversity
+                        'diversity'     => $diversity,
+                        'ldpc'          => $ldpc
                     ),
                     'lists'          => $radio_zero_capab
                 ));
@@ -871,6 +880,7 @@ class NodesController extends AppController {
          //Boolean flags
         $diversity  = 0;
         $noscan     = 0;
+        $ldpc       = 0;
 
         if(array_key_exists('radio0_noscan', $this->RadioSettings[0])) {
             if($this->RadioSettings[0]['radio0_noscan'] == true){
@@ -881,6 +891,12 @@ class NodesController extends AppController {
         if(array_key_exists('radio0_diversity', $this->RadioSettings[0])) {
             if($this->RadioSettings[0]['radio0_diversity'] == true){
                 $diversity = 1;
+            }
+        }
+
+       if(array_key_exists('radio0_ldpc', $this->RadioSettings[0])) {
+            if($this->RadioSettings[0]['radio0_ldpc'] == true){
+                $ldpc = 1;
             }
         }
 
@@ -906,8 +922,10 @@ class NodesController extends AppController {
                     'distance'      => $this->RadioSettings[0]['radio0_distance'],
                     'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
                     'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
+                    'beacon_int'    => $this->RadioSettings[0]['radio0_beacon_int'],
                     'noscan'        => $noscan,
-                    'diversity'     => $diversity
+                    'diversity'     => $diversity,
+                    'ldpc'          => $ldpc
 
                 ),
                 'lists'          => $radio_zero_capab
@@ -941,6 +959,7 @@ class NodesController extends AppController {
 		 //Boolean flags
         $diversity1  = 0;
         $noscan1     = 0;
+        $ldpc1       = 0;
 
         if(array_key_exists('radio1_noscan', $this->RadioSettings[0])) {
             if($this->RadioSettings[1]['radio1_noscan'] == true){
@@ -951,6 +970,12 @@ class NodesController extends AppController {
         if(array_key_exists('radio1_diversity', $this->RadioSettings[0])) {
             if($this->RadioSettings[1]['radio1_diversity'] == true){
                 $diversity1 = 1;
+            }
+        }
+
+         if(array_key_exists('radio1_ldpc', $this->RadioSettings[0])) {
+            if($this->RadioSettings[1]['radio1_ldpc'] == true){
+                $ldpc11 = 1;
             }
         }
 
@@ -976,8 +1001,10 @@ class NodesController extends AppController {
                     'distance'      => $this->RadioSettings[1]['radio1_distance'],
                     'htmode'        => $this->RadioSettings[1]['radio1_htmode'],
                     'txpower'       => $this->RadioSettings[1]['radio1_txpower'],
+                    'beacon_int'    => $this->RadioSettings[1]['radio1_beacon_int'],
                     'noscan'        => $noscan1,
-                    'diversity'     => $diversity1
+                    'diversity'     => $diversity1,
+                    'ldpc'          => $ldpc1
                 ),
                 'lists'          => $radio_one_capab
       	));
