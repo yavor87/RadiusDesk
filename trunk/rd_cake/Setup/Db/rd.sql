@@ -1935,7 +1935,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(16,35,'admin',100,1,6,44,60,300,'2014-09-15 12:55:31','2014-09-15 15:00:52','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600);
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600);
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2015,6 +2015,33 @@ LOCK TABLES `node_systems` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `node_wifi_settings`
+--
+
+DROP TABLE IF EXISTS `node_wifi_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `node_wifi_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `node_id` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `node_wifi_settings`
+--
+
+LOCK TABLES `node_wifi_settings` WRITE;
+/*!40000 ALTER TABLE `node_wifi_settings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `node_wifi_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `nodes`
 --
 
@@ -2050,7 +2077,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2059,7 +2086,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.1','2015-05-27 18:10:33',0,NULL,NULL,'logo.jpg','2015-04-23 12:01:12','2015-05-27 18:10:33',1,1,1,24,1,44,1,1,1,5,1,44),(11,35,'d3','','aa-bb-cc-dd-11-22','tplink_n600',100,'10.5.5.1',NULL,0,NULL,NULL,'logo.jpg','2015-06-04 20:55:41','2015-06-04 20:55:41',1,0,1,24,1,44,1,1,1,5,1,44);
+INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.3','2015-09-10 08:50:54',0,NULL,NULL,'logo.jpg','2015-09-10 08:49:56','2015-09-10 08:50:54',1,1,1,24,1,44,1,1,1,5,1,44),(11,35,'d3','','aa-bb-cc-dd-11-22','tplink_n600',100,'10.5.5.1','2015-09-10 08:51:24',0,NULL,NULL,'logo.jpg','2015-09-09 08:08:41','2015-09-10 08:51:24',1,0,1,24,1,44,1,1,1,5,1,44),(19,35,'bb','','11-22-33-33-33-33','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-09-09 09:01:55','2015-09-09 09:01:55',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3126,7 +3153,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51'),(5,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-06-28 15:56:52','2015-06-15 09:25:56','2015-06-28 15:56:52');
+INSERT INTO `unknown_nodes` VALUES (3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51'),(5,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-09-09 13:28:01','2015-06-15 09:25:56','2015-09-09 13:28:01');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3344,4 +3371,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-08 11:56:15
+-- Dump completed on 2015-09-10 10:31:15
