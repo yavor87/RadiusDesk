@@ -806,7 +806,6 @@ Ext.define('Rd.controller.cMeshes', {
                 store       : store,
                 meshId      : '',
 				meshName	: '',
-				hidePower	: hide_power,
                 itemId      : 'winMeshAddNodeMain'	
             });
             me.application.runAction('cDesktop','Add',w);         
@@ -1080,7 +1079,6 @@ Ext.define('Rd.controller.cMeshes', {
                 {
                     id          :'winMeshAttachNodeId',
                     store       : store,
-					hidePower	: hide_power,
 					mac			: mac
                 });
                 me.application.runAction('cDesktop','Add',w);         

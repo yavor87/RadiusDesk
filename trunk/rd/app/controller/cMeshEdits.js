@@ -833,7 +833,6 @@ Ext.define('Rd.controller.cMeshEdits', {
         
         //Entry points present; continue 
         var store   	= win.down("gridNodes").getStore();
-		var hide_power 	= win.down("pnlNodeCommonSettings #all_power").getValue();
         if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
@@ -841,7 +840,6 @@ Ext.define('Rd.controller.cMeshEdits', {
                 store       : store,
                 meshId      : win.getItemId(),
 				meshName	: win.meshName,
-				hidePower	: hide_power,
                 itemId      : 'winMeshAddNodeEdit'	
             });
             me.application.runAction('cDesktop','Add',w);         
@@ -923,8 +921,6 @@ Ext.define('Rd.controller.cMeshEdits', {
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
 
-			//Determine if we can show a power bar or not.
-			var hide_power = win.down("pnlNodeCommonSettings #all_power").getValue();
             if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
                 var w = Ext.widget('winMeshEditNode',
                 {
@@ -933,7 +929,6 @@ Ext.define('Rd.controller.cMeshEdits', {
                     nodeId      : id,
                     meshId      : win.getItemId(),
 					meshName	: win.meshName,
-					hidePower	: hide_power,
                     itemId      : 'winMeshEditNodeEdit'
                 });
                 me.application.runAction('cDesktop','Add',w);         
