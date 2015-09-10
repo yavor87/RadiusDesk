@@ -18,7 +18,7 @@ class OpenvpnClient extends AppModel {
 	public $validate = array(
         'username' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(

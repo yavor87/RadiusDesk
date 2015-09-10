@@ -13,7 +13,7 @@ class MeshExitCaptivePortal extends AppModel {
      public $validate = array(
         'radius_nasid' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -23,25 +23,25 @@ class MeshExitCaptivePortal extends AppModel {
         ),
         'radius1' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         ),
         'secret' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         ),
         'uam_url' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         ),
         'uam_secret' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         )   

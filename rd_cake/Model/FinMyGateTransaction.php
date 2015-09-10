@@ -26,7 +26,7 @@ class FinMyGateTransaction extends AppModel {
 	public $validate 	= array(
 		'client_uid' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -36,7 +36,7 @@ class FinMyGateTransaction extends AppModel {
         ),
 		'client_pin' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -46,7 +46,7 @@ class FinMyGateTransaction extends AppModel {
         ),
 		'client_uci' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(

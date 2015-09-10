@@ -29,14 +29,14 @@ class Country extends AppModel {
                 'required' => true
             ),
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Country name is required',
                 'required' => true
             )
         ),
         'iso_code' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'ISO code is required',
                 'required' => true
             ),
@@ -51,7 +51,7 @@ class Country extends AppModel {
         ),
         'icon_file' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Supply a name for the icon file'
             )
         )

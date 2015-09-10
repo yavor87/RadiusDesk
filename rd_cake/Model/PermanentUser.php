@@ -13,7 +13,7 @@ class PermanentUser extends AppModel {
 	public $validate 	= array(
 		'username' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -22,8 +22,8 @@ class PermanentUser extends AppModel {
             )
         ),
 		'password' => array(
-			'notempty' => array(
-				'rule' => array('notempty')
+			'notBlank' => array(
+				'rule' => array('notBlank')
 			),
 		),
 		'realm_id' => array(

@@ -10,7 +10,7 @@ class User extends AppModel {
 	public $validate = array(
 		'username' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -19,8 +19,8 @@ class User extends AppModel {
             )
         ),
 		'password' => array(
-			'notempty' => array(
-				'rule' => array('notempty')
+			'notBlank' => array(
+				'rule' => array('notBlank')
 			),
 		),
 		'group_id' => array(

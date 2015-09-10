@@ -23,7 +23,7 @@ class PhraseValue extends AppModel {
     public $validate = array(
         'name' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         )
