@@ -14,7 +14,7 @@ class Na extends AppModel {
 	public $validate = array(
         'nasname' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -24,7 +24,7 @@ class Na extends AppModel {
         ),
         'shortname' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(

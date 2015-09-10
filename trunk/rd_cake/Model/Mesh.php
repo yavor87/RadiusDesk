@@ -42,7 +42,7 @@ class Mesh extends AppModel {
     public $validate = array(
         'name' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -52,7 +52,7 @@ class Mesh extends AppModel {
         ),
         'ssid' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -62,7 +62,7 @@ class Mesh extends AppModel {
         ),
         'bssid' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(

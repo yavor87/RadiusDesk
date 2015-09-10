@@ -30,7 +30,7 @@ class AutoMac extends AppModel {
     public $validate = array(
         'name' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -40,7 +40,7 @@ class AutoMac extends AppModel {
         ),
         'dns_name' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(

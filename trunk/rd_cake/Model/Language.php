@@ -24,13 +24,13 @@ class Language extends AppModel {
                 'message' => 'You already have an entry',
             ),
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Language name is required'
             )
         ),
         'iso_code' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'ISO code is required'
             ),
             'maxl' => array(

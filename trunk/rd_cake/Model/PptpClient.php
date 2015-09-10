@@ -13,7 +13,7 @@ class PptpClient extends AppModel {
 	public $validate = array(
         'username' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             ),
             'unique' => array(
@@ -23,7 +23,7 @@ class PptpClient extends AppModel {
         ),
         'password' => array(
             'required' => array(
-                'rule' => array('notEmpty'),
+                'rule' => array('notBlank'),
                 'message' => 'Value is required'
             )
         )
