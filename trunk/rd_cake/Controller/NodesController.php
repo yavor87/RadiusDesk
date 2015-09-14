@@ -961,21 +961,21 @@ class NodesController extends AppController {
         $noscan1     = 0;
         $ldpc1       = 0;
 
-        if(array_key_exists('radio1_noscan', $this->RadioSettings[0])) {
+        if(array_key_exists('radio1_noscan', $this->RadioSettings[1])) {
             if($this->RadioSettings[1]['radio1_noscan'] == true){
                 $noscan1 = 1;
             }
         }
 
-        if(array_key_exists('radio1_diversity', $this->RadioSettings[0])) {
+        if(array_key_exists('radio1_diversity', $this->RadioSettings[1])) {
             if($this->RadioSettings[1]['radio1_diversity'] == true){
                 $diversity1 = 1;
             }
         }
 
-         if(array_key_exists('radio1_ldpc', $this->RadioSettings[0])) {
+         if(array_key_exists('radio1_ldpc', $this->RadioSettings[1])) {
             if($this->RadioSettings[1]['radio1_ldpc'] == true){
-                $ldpc11 = 1;
+                $ldpc1 = 1;
             }
         }
 
