@@ -703,15 +703,15 @@ class NodesController extends AppController {
                 array(
                     "wifi-device"   => "radio0",
                     "options"       => array(
-                        'channel'       => $channel,
+                        'channel'       => intval($channel),
                         'disabled'      => 0,
                         'hwmode'        => $hwmode,
                         'country'       => $country,
 
-                        'distance'      => $this->RadioSettings[0]['radio0_distance'],
+                        'distance'      => intval($this->RadioSettings[0]['radio0_distance']),
                         'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
-                        'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
-                        'beacon_int'    => $this->RadioSettings[0]['radio0_beacon_int'],
+                        'txpower'       => intval($this->RadioSettings[0]['radio0_txpower']),
+                        'beacon_int'    => intval($this->RadioSettings[0]['radio0_beacon_int']),
                         'noscan'        => $noscan,
                         'diversity'     => $diversity,
                         'ldpc'          => $ldpc
@@ -914,15 +914,15 @@ class NodesController extends AppController {
             array(
                 "wifi-device"   => "radio0",
                 "options"       => array(
-                    'channel'       => $r0_channel,
+                    'channel'       => intval($r0_channel),
                     'disabled'      => $r0_disabled,
                     'hwmode'        => $r0_hwmode,
                     'country'       => $country,
 
-                    'distance'      => $this->RadioSettings[0]['radio0_distance'],
+                    'distance'      => intval($this->RadioSettings[0]['radio0_distance']),
                     'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
-                    'txpower'       => $this->RadioSettings[0]['radio0_txpower'],
-                    'beacon_int'    => $this->RadioSettings[0]['radio0_beacon_int'],
+                    'txpower'       => intval($this->RadioSettings[0]['radio0_txpower'],
+                    'beacon_int'    => intval($this->RadioSettings[0]['radio0_beacon_int']),
                     'noscan'        => $noscan,
                     'diversity'     => $diversity,
                     'ldpc'          => $ldpc
@@ -993,15 +993,15 @@ class NodesController extends AppController {
             array(
                 "wifi-device"   => "radio1",
                 "options"       => array(
-                    'channel'       => $r1_channel,
+                    'channel'       => intval($r1_channel),
                     'disabled'      => $r1_disabled,
                     'hwmode'        => $r1_hwmode,
                     'country'       => $country,
 
-                    'distance'      => $this->RadioSettings[1]['radio1_distance'],
+                    'distance'      => intval($this->RadioSettings[1]['radio1_distance']),
                     'htmode'        => $this->RadioSettings[1]['radio1_htmode'],
-                    'txpower'       => $this->RadioSettings[1]['radio1_txpower'],
-                    'beacon_int'    => $this->RadioSettings[1]['radio1_beacon_int'],
+                    'txpower'       => intval($this->RadioSettings[1]['radio1_txpower']),
+                    'beacon_int'    => intval($this->RadioSettings[1]['radio1_beacon_int']),
                     'noscan'        => $noscan1,
                     'diversity'     => $diversity1,
                     'ldpc'          => $ldpc1
