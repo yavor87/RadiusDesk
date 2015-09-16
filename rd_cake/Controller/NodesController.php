@@ -921,7 +921,7 @@ class NodesController extends AppController {
 
                     'distance'      => intval($this->RadioSettings[0]['radio0_distance']),
                     'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
-                    'txpower'       => intval($this->RadioSettings[0]['radio0_txpower'],
+                    'txpower'       => intval($this->RadioSettings[0]['radio0_txpower']),
                     'beacon_int'    => intval($this->RadioSettings[0]['radio0_beacon_int']),
                     'noscan'        => $noscan,
                     'diversity'     => $diversity,
