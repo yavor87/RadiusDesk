@@ -30,7 +30,7 @@ end
 previous_config_file 	= fetch_config_value('meshdesk.settings.previous_config_file')
 sleep_time		        = 1
 config_file		        = fetch_config_value('meshdesk.settings.config_file')
-gw_dhcp_timeout		        = tonumber(fetch_config_value('meshdesk.settings.gw_dhcp_timeout'))
+gw_dhcp_timeout		    = tonumber(fetch_config_value('meshdesk.settings.gw_dhcp_timeout'))
 wifi_timeout		    = tonumber(fetch_config_value('meshdesk.settings.wifi_timeout'))
 debug			        = true
 l			            = rdLogger()
@@ -494,6 +494,217 @@ function configure_device(config)
 --]]--
 end
 
+--=====================
+--AP Specifics Here----
+--=====================
+
+--===============================
+-- AP -> Start-up function for --
+--===============================
+function ap_wait_for_lan()
+
+    os.execute("/etc/init.d/alfred stop")
+	                 
+	-- LAN we flash "1"
+	log("Starting LAN wait")
+	os.execute("/etc/MESHdesk/main_led.lua start one")
+	local start_time	= os.time()
+	local loop			= true
+	local lan_is_up		= false
+	
+	--Do a clean start with the wireless--
+	require("rdWireless")
+	
+	local wireless = rdWireless()
+	wireless:newWireless()
+	
+    require("rdNetwork")
+	
+	local network = rdNetwork()
+	network:dhcpStart()
+	
+	--**********LOOP**********
+	while (loop) do
+		sleep(sleep_time)
+		-- If the lan came up we will try to get the settings
+		if(did_lan_came_up())then
+			lan_is_up 	= true
+			break	--no need to continiue
+		end
+		local time_diff = os.difftime(os.time(), start_time)
+		if(time_diff >= gw_dhcp_timeout)then
+			log("LAN is not coming up. Try again")
+			print("LAN is not coming up. Try again")
+			reboot_on_sos();
+			break
+		else
+			log("Waiting for LAN to come up now for " .. time_diff .. " seconds")
+			print("Waiting for LAN to come up now for " .. time_diff .. " seconds")
+		end
+		
+		--If it happens that the LAN comes up the time may be adjusted by a large amount due to NTP.
+		--Then we can assume the LAN is up as set the flag
+		if((os.time() > 4000) and (start_time < 4000))then
+			log('Detected a very lage value for os time asume the LAN and NTP working')
+			lan_is_up 	= true
+			break	--no need to continiue
+		end
+	end
+	--*********LOOP END*********
+	
+	--See what happended and how we should handle it
+	if(lan_is_up)then
+		os.execute("/etc/MESHdesk/main_led.lua start two")
+		log("sleep at least 10 seconds to make sure it got a DHCP addy")
+		-- sleep at least 10 seconds to make sure it got a DHCP addy
+		sleep(10)
+		ap_try_settings_through_lan()
+	else
+		print("LAN did not come up see if older config exists")
+		log("LAN did not come up see if older config exists")
+		ap_check_for_previous_settings()		
+	end	
+end
+
+
+function ap_try_settings_through_lan() 
+	log("LAN up now try fetch the settings")
+	print("LAN up now try fetch the settings")
+	
+	-- See if we can ping it
+	local server 			= fetch_config_value('meshdesk.internet1.ip')
+	local c 				= rdConfig()
+	local lan_config_fail	=true                                          
+	if(c:pingTest(server))then
+		print("Ping os server was OK try to fetch the settings")
+		log("Ping os server was OK try to fetch the settings")
+--		local id	= "A8-40-41-13-60-E3"
+		local id		= getMac('eth0')
+		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
+		local url   	= fetch_config_value('meshdesk.internet1.url_ap')
+		local query     = proto .. "://" .. server .. "/" .. url 
+		print("Query url is " .. query )
+		if(c:fetchSettings(query,id,true))then
+			print("Funky -> got settings through LAN")
+			lan_config_fail=false
+		end
+	else 
+		log("Ping os server was NOT OK!")
+	end
+
+	if(lan_config_fail)then	
+		print("Settings could not be fetched through LAN see if older ones exists")
+		log("Settings could not be fetched through LAN see if older ones exists")
+		ap_check_for_previous_settings()
+	else
+		--flash D--
+		os.execute("/etc/MESHdesk/main_led.lua start three")
+		ap_configure_device(config_file)
+	end
+end
+
+function ap_check_for_previous_settings()
+	print("Checking for previous settings")
+	if(file_exists(previous_config_file))then
+		print("Using previous settings")
+		os.execute("/etc/MESHdesk/main_led.lua start four")
+		ap_configure_device(previous_config_file)
+	else
+		--Nothing we can do but flash an SOS
+		os.execute("/etc/MESHdesk/main_led.lua start sos")
+		--This will result in a reboot to try again
+		reboot_on_sos();
+	end
+end
+
+function ap_configure_device(config)
+
+	print("Configuring device according to " .. config)
+	
+	local contents        = readAll(config) 
+	local json            = require("json")           
+	local o               = json.decode(contents) 
+	
+	if(o.success == false)then --If the device was not yet assigned we need to give feedback about it
+	    print("The server returned an error");
+	    log("The server returned an error");
+	    if(o.error ~= nil)then
+	        print(o.error);
+	        log(o.error);
+	        reboot_on_sos();
+	        return;
+	    end
+    end
+---[[--	
+
+	-- Is this perhaps a gateway node? --
+	if(o.config_settings.gateways ~= nil)then
+		-- Set up the gateways --	
+		require("rdGateway")
+		local a = rdGateway()
+		a:enable(o.config_settings.gateways)
+		
+	else
+		-- Break down the gateways --
+		require("rdGateway")
+		local a = rdGateway()
+		a:disable()
+	end
+
+	-- Do we have some network settings?       
+	if(o.config_settings.network ~= nil)then   
+		print("Doing network")
+        require("rdNetwork")
+	    local network = rdNetwork()
+	    network:configureFromTable(o.config_settings.network)             
+	end 
+	
+	-- Do we have some wireless settings?      
+	if(o.config_settings.wireless ~= nil)then  
+		print("Doing wireless")
+		require("rdWireless")           
+	    local w = rdWireless()    
+	    w:configureFromTable(o.config_settings.wireless) 
+	end
+	  
+    os.execute("/etc/init.d/network reload")
+
+	-- Do we have some system settings?
+	if(o.config_settings.system ~= nil)then  
+		print("Doing system")
+		require("rdSystem")           
+	    local s = rdSystem()    
+	    s:configureFromTable(o.config_settings.system) 
+	end
+
+    -- Check if there are perhaps some captive portals to set up once everything has been done --
+    sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+    if(o.config_settings.captive_portals ~= nil)then
+    	print("Doing Captive Portals")
+    	require("rdCoovaChilli")
+    	local a = rdCoovaChilli()
+    	a:createConfigs(o.config_settings.captive_portals)                  
+    	a:startPortals()	
+    end
+    
+    --Start Alfred for the collecting of data (No MESH)
+    alfred:masterNoBatmanEnableAndStart()
+    --Start the heartbeat to the server
+    --ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
+        
+	--if(o.config_settings.gateways ~= nil)then
+		-- Set up the gateways --	
+		----require("rdGateway")
+		----local a = rdGateway()
+		----a:restartServices()   
+    --end      
+--]]--
+end
+
+--=====================
+--END AP Specifics ----
+--=====================
+
 
 --=====================
 --Pre-setup: ----------
@@ -501,7 +712,14 @@ end
 --=====================
 do_fw_config()
 
---=====================
--- Kick off by waiting for the LAN
---=====================
-wait_for_lan()
+--=======================================
+-- Check if we are and AP or a MESH node=
+--=======================================
+mode = fetch_config_value('meshdesk.settings.mode')
+if(mode == 'ap')then
+    print("Device in AP Mode");
+    ap_wait_for_lan()
+else
+    print("Device in Mesh node");
+    wait_for_lan()
+end
