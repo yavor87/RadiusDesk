@@ -64,18 +64,20 @@ start()
 		exit 0
 	fi
 
-	mesh_dir="/sys/class/net/$batmanif/mesh/"
-	if ! [ -d "$mesh_dir" ] ; then
-		timeout=30
-		echo "${initscript}: waiting $timeout secs for $batmanif interface..."
-		for i in $(seq $timeout); do
-			sleep 1
-			[ -d "$mesh_dir" ] && break
-			if [ $i == $timeout ] ; then
-				echo "${initscript}: $batmanif not detected, alfred not starting."
-				exit 1
-			fi
-		done
+	if [ $batmanif != "none" ]; then 
+		mesh_dir="/sys/class/net/$batmanif/mesh/"
+		if ! [ -d "$mesh_dir" ] ; then
+			timeout=30
+			echo "${initscript}: waiting $timeout secs for $batmanif interface..."
+			for i in $(seq $timeout); do
+				sleep 1
+				[ -d "$mesh_dir" ] && break
+				if [ $i == $timeout ] ; then
+					echo "${initscript}: $batmanif not detected, alfred not starting."
+					exit 1
+				fi
+			done
+		fi
 	fi
 
 	echo "${initscript}: starting alfred"

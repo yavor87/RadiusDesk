@@ -22,6 +22,7 @@ function rdAlfred:rdAlfred()
     self.external   = rdExternal()
 	self.bat_hosts  = '/etc/alfred/bat-hosts.lua'
     self.interface  = 'br-one' --This used to work if specified as 'br-one' (bat0.1) on BB but not on CC
+    self.no_mesh_interface = 'br-lan'
 end
         
 function rdAlfred:getVersion()
@@ -54,12 +55,11 @@ function rdAlfred:masterEnableAndStart()
     if(disabled ~= '0')then
         self.x.set('alfred','alfred','disabled','0')
     end
-
-    --local start_vis  = self.x.get('alfred','alfred','start_vis')
-    --if(start_vis ~= '1')then
+      
 	--Enable this regardless
    	self.x.set('alfred','alfred','start_vis','1')
-    --end
+   	--Set this regardless
+   	self.x.set('alfred','alfred','batmanif','bat0')
 
     self.x.commit('alfred')
 
@@ -94,11 +94,10 @@ function rdAlfred:slaveEnableAndStart()
     end
 
 	--We also need to start the vis server so all can join in
-    --local start_vis  = self.x.get('alfred','alfred','start_vis')
-    --if(start_vis ~= '0')then
     --Enable this regardless
    	self.x.set('alfred','alfred','start_vis','1')
-    --end
+   	--Set this regardless
+   	self.x.set('alfred','alfred','batmanif','bat0')
 
     self.x.commit('alfred')
 	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
@@ -112,6 +111,43 @@ function rdAlfred:slaveEnableAndStart()
     self:log("**Start up alfred slave**")
     os.execute("/etc/init.d/alfred start")
 	
+end
+
+--Because we are not always running Meshes!
+function rdAlfred:masterNoBatmanEnableAndStart()
+
+    local interface = self.x.get('alfred','alfred','interface')
+    if(interface ~= self.no_mesh_interface)then
+        self.x.set('alfred','alfred','interface',self.no_mesh_interface)
+    end
+
+    local mode      = self.x.get('alfred','alfred','mode')
+    if(mode ~= 'master')then
+        self.x.set('alfred','alfred','mode','master')
+    end
+
+    local disabled  = self.x.get('alfred','alfred','disabled')
+    if(disabled ~= '0')then
+        self.x.set('alfred','alfred','disabled','0')
+    end
+      
+	--Disable this regardless
+   	self.x.set('alfred','alfred','start_vis','0')
+   	--Set this to none since we don't use mesh
+   	self.x.set('alfred','alfred','batmanif','none')
+
+    self.x.commit('alfred')
+
+	--Remove the /etc/alfred/bat-hosts.lua file since installer fails
+	local f=io.open(self.bat_hosts,"r")                                                   
+    if f~=nil then 
+		io.close(f) 
+ 		os.remove(self.bat_hosts)
+		os.execute("/etc/init.d/alfred disable")
+	end
+    --start the service
+    self:log("**Start up alfred master NO MESH**")
+    os.execute("/etc/init.d/alfred start")
 end
 
 function rdAlfred:log(m,p)
