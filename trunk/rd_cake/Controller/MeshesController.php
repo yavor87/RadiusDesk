@@ -1285,7 +1285,7 @@ class MeshesController extends AppController {
 				$new_mesh_id 	= $this->request->data['mesh_id'];
 				$node->contain();
 				$q_r 			= $node->findById($this->request->data['id']);
-				$current_id 	= $q_r['Node']['id'];
+				$current_id 	= $q_r['Node']['mesh_id'];
 				if($current_id != $new_mesh_id){	//Delete it if the mesh changed
 					$node->delete($current_id, true);
                     $neighbors->deleteAll(array('NodeNeighbor.neighbor_id' => $node->id), true);
