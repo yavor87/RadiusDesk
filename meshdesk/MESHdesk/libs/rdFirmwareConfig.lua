@@ -142,6 +142,10 @@ function rdFirmwareConfig.__send_my_info(self)
 	--Insert the current client key
 	local key = self.x.get('meshdesk','wifi_client','key')
 	table.insert(a, 'key='..key)
+	
+	--Insert the current mode of the node
+	local mode = self.x.get('meshdesk','settings','mode')
+	table.insert(a, 'mode='..mode)
 
     for i, v in ipairs(a) do
 	    self:__sData('b')
@@ -183,8 +187,14 @@ function rdFirmwareConfig.__get_my_settings(self)
         end
 
 		if(string.find(s, "key="))then
-            local secret = string.gsub(s, "key=", "")
-			self.x.set('meshdesk','wifi_client','key',secret)
+            local key = string.gsub(s, "key=", "")
+			self.x.set('meshdesk','wifi_client','key',key)
+            self.x.commit('meshdesk')
+        end
+        
+        if(string.find(s, "mode="))then
+            local mode = string.gsub(s, "mode=", "")
+			self.x.set('meshdesk','settings','mode',mode)
             self.x.commit('meshdesk')
         end
 
