@@ -212,7 +212,7 @@ function wait_for_lan()
 		--Then we can assume the LAN is up as set the flag
 		--TODO This will be large on second runs! - fix this
 		if((os.time() > 4000) and (start_time < 4000))then
-			log('Detected a very lage value for os time asume the LAN and NTP working')
+			log('Detected a very large value for os time asume the LAN and NTP working')
 			lan_is_up 	= true
 			break	--no need to continiue
 		end
@@ -239,23 +239,44 @@ function try_settings_through_lan()
 	-- See if we can ping it
 	local server 			= fetch_config_value('meshdesk.internet1.ip')
 	local c 				= rdConfig()
-	local lan_config_fail	=true                                          
-	if(c:pingTest(server))then
-		print("Ping os server was OK try to fetch the settings")
-		log("Ping os server was OK try to fetch the settings")
---		local id	= "A8-40-41-13-60-E3"
-		local id		= getMac('eth0')
-		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
-		local url   	= fetch_config_value('meshdesk.internet1.url')
-		local query     = proto .. "://" .. server .. "/" .. url 
-		print("Query url is " .. query )
-		if(c:fetchSettings(query,id,true))then
-			print("Funky -> got settings through LAN")
-			lan_config_fail=false
-		end
-	else 
-		log("Ping os server was NOT OK!")
-	end
+	local lan_config_fail	=true 
+	local start_time	    = os.time()
+	
+	--**********LOOP**********
+	while (loop) do
+		sleep(sleep_time)
+		
+		if(c:pingTest(server))then
+	        print("Ping os server was OK try to fetch the settings")
+	        log("Ping os server was OK try to fetch the settings")
+    		--local id	= "A8-40-41-13-60-E3"
+	        local id		= getMac('eth0')
+	        local proto 	= fetch_config_value('meshdesk.internet1.protocol')
+	        local url   	= fetch_config_value('meshdesk.internet1.url')
+	        local query     = proto .. "://" .. server .. "/" .. url 
+	        print("Query url is " .. query )
+	        if(c:fetchSettings(query,id,true))then
+		        print("Funky -> got settings through LAN")
+		        lan_config_fail=false
+		        break --We can exit the loop
+	        end
+        else 
+	        log("Ping os server was NOT OK! - Try again")
+        end
+		
+		--Here we have a timer to limit the loops 
+	    local time_diff = os.difftime(os.time(), start_time)
+		if(time_diff >= gw_dhcp_timeout)then
+		    log('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+			print('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+			break
+        end
+        --Here we break since NTP we assume is already up and adjusted.
+        if((os.time() > 4000) and (start_time < 4000))then
+			log('Detected a very large value for os time asume the LAN and NTP working')
+			break	--no need to continiue
+		end           
+    end
 
 	if(lan_config_fail)then	
 		log("Could not fetch settings through LAN")
@@ -574,23 +595,44 @@ function ap_try_settings_through_lan()
 	-- See if we can ping it
 	local server 			= fetch_config_value('meshdesk.internet1.ip')
 	local c 				= rdConfig()
-	local lan_config_fail	=true                                          
-	if(c:pingTest(server))then
-		print("Ping os server was OK try to fetch the settings")
-		log("Ping os server was OK try to fetch the settings")
---		local id	= "A8-40-41-13-60-E3"
-		local id		= getMac('eth0')
-		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
-		local url   	= fetch_config_value('meshdesk.internet1.url_ap')
-		local query     = proto .. "://" .. server .. "/" .. url 
-		print("Query url is " .. query )
-		if(c:fetchSettings(query,id,true))then
-			print("Funky -> got settings through LAN")
-			lan_config_fail=false
-		end
-	else 
-		log("Ping os server was NOT OK!")
-	end
+	local lan_config_fail	=true 	
+	local start_time	    = os.time()
+	
+	--**********LOOP**********
+	while (loop) do
+		sleep(sleep_time)
+		
+		if(c:pingTest(server))then
+	        print("Ping os server was OK try to fetch the settings")
+	        log("Ping os server was OK try to fetch the settings")
+    		--local id	= "A8-40-41-13-60-E3"
+	        local id		= getMac('eth0')
+	        local proto 	= fetch_config_value('meshdesk.internet1.protocol')
+	        local url   	= fetch_config_value('meshdesk.internet1.url_ap')
+	        local query     = proto .. "://" .. server .. "/" .. url 
+	        print("Query url is " .. query )
+	        if(c:fetchSettings(query,id,true))then
+		        print("Funky -> got settings through LAN")
+		        lan_config_fail=false
+		        break --We can exit the loop
+	        end
+        else 
+	        log("Ping os server was NOT OK! - Try again")
+        end
+		
+		--Here we have a timer to limit the loops 
+	    local time_diff = os.difftime(os.time(), start_time)
+		if(time_diff >= gw_dhcp_timeout)then
+		    log('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+			print('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+			break
+        end
+        --Here we break since NTP we assume is already up and adjusted.
+        if((os.time() > 4000) and (start_time < 4000))then
+			log('Detected a very large value for os time asume the LAN and NTP working')
+			break	--no need to continiue
+		end           
+    end
 
 	if(lan_config_fail)then	
 		print("Settings could not be fetched through LAN see if older ones exists")
