@@ -11,7 +11,7 @@ function rdCoovaChilli:rdCoovaChilli()
 	local uci 	= require("uci")
 	self.version 	= "1.0.0"
 	self.x		= uci.cursor(nil,'/var/state')
-	self.cpCount	= 5 -- The amount of captive portals allowed / worked on
+	self.cpCount	= 16 -- The amount of captive portals allowed / worked on
 	self.specific   = "/etc/MESHdesk/captive_portals/"
 	self.priv_start = "1"
 	self.proxy_start= 3128
