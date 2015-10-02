@@ -240,6 +240,7 @@ function try_settings_through_lan()
 	local server 			= fetch_config_value('meshdesk.internet1.ip')
 	local c 				= rdConfig()
 	local lan_config_fail	=true 
+	local loop	= true
 	local start_time	    = os.time()
 	
 	--**********LOOP**********
@@ -596,10 +597,12 @@ function ap_try_settings_through_lan()
 	local server 			= fetch_config_value('meshdesk.internet1.ip')
 	local c 				= rdConfig()
 	local lan_config_fail	=true 	
+	local loop      = true 
 	local start_time	    = os.time()
 	
 	--**********LOOP**********
 	while (loop) do
+		
 		sleep(sleep_time)
 		
 		if(c:pingTest(server))then
