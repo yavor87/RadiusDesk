@@ -3,7 +3,7 @@ package.cpath = package.cpath..";./?.dll;./?.so;../lib/?.so;../lib/vc_dll/?.dll;
 require("wx")
 
 --Some variables
-local version       = '0.0'
+local version       = '15.10.1'
 local port          = 3000
 local SERVER_ID, SOCKET_ID = 100, 101
 local m_busy        = false
@@ -65,6 +65,18 @@ hardware[19]        = 'tl_wa850re'
 hardware[20]        = 'tl_wa901n'
 hardware[21]        = 'genoneradio'
 hardware[22]        = 'gentworadio'
+
+local mode_choices = {
+    "Mesh",
+    "Access Point",
+    "CPE"
+}
+
+local mode = {}
+
+mode[0] = 'mesh'
+mode[1] = 'ap'
+mode[2] = 'cpe'
 
 
 function HandleEvents(event)
@@ -173,6 +185,12 @@ function get_info(sock)
         key = string.gsub(key, "|", "\n")
         tc_c_key:SetValue(key)
     end
+    
+    if(string.find(i, "mode="))then
+        local mode = string.gsub(i, "mode=", "")
+        mode = string.gsub(mode, "|", "\n")
+        tc_c_mode:SetValue(mode)
+    end
 
     sock:Write("ok\n")
     open_sock_input(sock)
@@ -181,6 +199,7 @@ end
 function set_info(sock)
     print("--- NEW SETTINGS ----")
     local a = {}
+    table.insert(a, 'mode='..mode[choice_mode:GetSelection()])
     table.insert(a, 'hardware='..hardware[choice_hw:GetSelection()])
     if(tc_new_srvr:GetValue() ~= '')then
         table.insert(a, 'server='..tc_new_srvr:GetValue())
@@ -329,7 +348,7 @@ function build_gui()
 
 
     frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node config utility',
-        wx.wxDefaultPosition, wx.wxSize(520, 650),
+        wx.wxDefaultPosition, wx.wxSize(520, 670),
                     wx.wxDEFAULT_FRAME_STYLE)
                     
         local statusBar = frame:CreateStatusBar(1)
@@ -418,11 +437,18 @@ function build_gui()
         tc_c_key     = wx.wxTextCtrl(frame, wx.wxID_ANY)
         hbox3a:Add(st3a, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         hbox3a:Add(tc_c_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        
+        local hbox3b = wx.wxBoxSizer(wx.wxHORIZONTAL)
+        local st3b   = wx.wxStaticText(frame, wx.wxID_ANY, 'Current Mode ')
+        tc_c_mode    = wx.wxTextCtrl(frame, wx.wxID_ANY)
+        hbox3b:Add(st3b, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox3b:Add(tc_c_mode, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
     
                 hbox_left:Add(hboxts, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
                 hbox_left:Add(hbox2, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
                 hbox_left:Add(hbox3, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
                 hbox_left:Add(hbox3a, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
+                hbox_left:Add(hbox3b, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
             sbs2:Add(hbox_left, 1,  wx.wxALIGN_LEFT + wx.wxALL, space)
             
         local hbox_right = wx.wxBoxSizer(wx.wxHORIZONTAL)
@@ -446,36 +472,47 @@ function build_gui()
         local hbox5 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st5   = wx.wxStaticText(frame, wx.wxID_ANY, 'Server IP ')
         tc_new_srvr = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox5:Add(st5, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox5:Add(tc_new_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox5:Add(st5, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+        hbox5:Add(tc_new_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+        
+        local hbox6a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+        local st6a   = wx.wxStaticText(frame, wx.wxID_ANY, 'Mode')
+        choice_mode   = wx.wxChoice(frame, wx.wxID_NEW,
+                           wx.wxDefaultPosition, wx.wxDefaultSize,
+                           mode_choices)
+        choice_mode:SetSelection(0)
+        hbox6a:Add(st6a, 1, wx.wxALIGN_LEFT + wx.wxALL , 0)
+        hbox6a:Add(choice_mode, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, 0)
+        
+        --print(wx.wxID_ANY)
         
         local hbox6 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st6   = wx.wxStaticText(frame, wx.wxID_ANY, 'Hardware type ')
-        choice_hw   = wx.wxChoice(frame, wx.wxID_ANY,
+        choice_hw   = wx.wxChoice(frame, wx.wxID_REDO,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            choices)
         choice_hw:SetSelection(0)
-        hbox6:Add(st6, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox6:Add(st6, 1, wx.wxALIGN_LEFT + wx.wxEXPAND,0)
         hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
         
 
         local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st7   = wx.wxStaticText(frame, wx.wxID_ANY, 'Change secret to ')
         tc_new_secret = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox7:Add(st7, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox7:Add(st7, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+        hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
         
         local hbox8 = wx.wxBoxSizer(wx.wxHORIZONTAL)
         local st8   = wx.wxStaticText(frame, wx.wxID_ANY, 'WPA2 Key ')
         tc_new_key  = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox8:Add(st8, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        hbox8:Add(st8, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+        hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
         
-        
-        sbs3:Add(hbox6, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
-        sbs3:Add(hbox5, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
-        sbs3:Add(hbox8, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
-        sbs3:Add(hbox7, 0,  wx.wxALIGN_LEFT + wx.wxALL, 5)
+        sbs3:Add(hbox6a, 0, wx.wxEXPAND+ wx.wxALL, 5)
+        sbs3:Add(hbox6, 0,  wx.wxEXPAND+ wx.wxALL, 5)
+        sbs3:Add(hbox5, 0,  wx.wxEXPAND+ wx.wxALL, 5)
+        sbs3:Add(hbox8, 0,  wx.wxEXPAND+ wx.wxALL, 5)
+        sbs3:Add(hbox7, 0,  wx.wxEXPAND+ wx.wxALL, 5)
         
          --Fit the image in
         local hboxZ = wx.wxBoxSizer(wx.wxHORIZONTAL)
@@ -484,7 +521,7 @@ function build_gui()
         hboxZ:Add(sbmHardware,1,wx.wxALL+wx.wxGROW,10)
         vbox:Add(hboxZ,0,wx.wxALL,5)
     
-    frame:Connect(wx.wxID_ANY, wx.wxEVT_COMMAND_CHOICE_SELECTED, HandleEvents)
+    frame:Connect(wx.wxID_REDO, wx.wxEVT_COMMAND_CHOICE_SELECTED, HandleEvents)
     frame:Centre()
     frame:Show(true)
 end
