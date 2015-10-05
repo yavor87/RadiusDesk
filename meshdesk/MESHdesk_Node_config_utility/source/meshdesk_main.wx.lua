@@ -34,7 +34,8 @@ local choices = {
     "BulletM2",
     "RB433 2 Radio",
     "Alix 3D2",
-    "TP-Link N600",
+    "TP-Link WDR3500",
+    "TP-Link WDR3600",
     "TP-Link WR841N",
     "TP-Link WA850RE",
     "TP-Link WA901N",
@@ -59,12 +60,13 @@ hardware[13]        = 'airrouterhp'
 hardware[14]        = 'bulm2'
 hardware[15]        = 'rb433'
 hardware[16]        = 'alix3d2'
-hardware[17]        = 'tplink_n600'
-hardware[18]        = 'tl841n'
-hardware[19]        = 'tl_wa850re'
-hardware[20]        = 'tl_wa901n'
-hardware[21]        = 'genoneradio'
-hardware[22]        = 'gentworadio'
+hardware[17]        = 'tl_wdr3500'
+hardware[18]        = 'tl_wdr3600'
+hardware[19]        = 'tl841n'
+hardware[20]        = 'tl_wa850re'
+hardware[21]        = 'tl_wa901n'
+hardware[22]        = 'genoneradio'
+hardware[23]        = 'gentworadio'
 
 local mode_choices = {
     "Mesh",
@@ -135,18 +137,21 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_n600)
     end
     if(event:GetSelection() == 18)then
-        sbmHardware:SetBitmap(bm_tl841n)
+        sbmHardware:SetBitmap(bm_n600)
     end
     if(event:GetSelection() == 19)then
-        sbmHardware:SetBitmap(bm_tl_wa850re)
+        sbmHardware:SetBitmap(bm_tl841n)
     end
     if(event:GetSelection() == 20)then
-        sbmHardware:SetBitmap(bm_tl_wa901n)
+        sbmHardware:SetBitmap(bm_tl_wa850re)
     end
     if(event:GetSelection() == 21)then
-        sbmHardware:SetBitmap(bm_genoneradio)
+        sbmHardware:SetBitmap(bm_tl_wa901n)
     end
     if(event:GetSelection() == 22)then
+        sbmHardware:SetBitmap(bm_genoneradio)
+    end
+    if(event:GetSelection() == 23)then
         sbmHardware:SetBitmap(bm_gentworadio)
     end
 end
