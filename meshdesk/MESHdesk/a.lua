@@ -687,12 +687,14 @@ function ap_configure_device(config)
 		-- Set up the gateways --	
 		require("rdGateway")
 		local a = rdGateway()
+		a:setMode('ap')
 		a:enable(o.config_settings.gateways)
 		
 	else
 		-- Break down the gateways --
 		require("rdGateway")
 		local a = rdGateway()
+		a:setMode('ap')
 		a:disable()
 	end
 
@@ -737,12 +739,13 @@ function ap_configure_device(config)
     --Start the heartbeat to the server
     --ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
         
-	--if(o.config_settings.gateways ~= nil)then
+	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
-		----require("rdGateway")
-		----local a = rdGateway()
-		----a:restartServices()   
-    --end      
+		require("rdGateway")
+		local a = rdGateway()
+		a:setMode('ap')
+		a:restartServices()   
+    end      
 --]]--
 end
 

@@ -19,10 +19,19 @@ function rdGateway:rdGateway()
 	self.conf_zone  = 'one' -- network interface 'one' is the admin interface
 	self.conf_rule	= 'one_rule' -- The name of the firewall rule that allow traffic to conf server.
 	self.ntp_rule   = 'one_ntp'
+	self.mode       = 'mesh' -- Mode can be mesh or ap - With ap mode we do not need to set up the conf zone
 end
         
 function rdGateway:getVersion()
 	return self.version
+end
+
+function rdGateway:getMode()
+	return self.mode
+end
+
+function rdGateway:setMode(mode)
+	self.mode = mode
 end
 
 function rdGateway:log(m,p)
@@ -34,8 +43,14 @@ end
 function rdGateway:enable(exPoints)
 	exPoints = exPoints or {}
 	self:disable()	--Clean up any left overs
-	self:__fwGwEnable()
-	self:__dhcpGwEnable()
+	
+	self:__fwMasqEnable()
+	
+	if(self.mode == 'mesh')then --Default is mesh mode
+	    self:__fwGwEnable()
+	    self:__dhcpGwEnable()
+    end
+    
 	self:__addExPoints(exPoints)
     os.execute("touch /tmp/gw")
 
@@ -44,18 +59,24 @@ function rdGateway:enable(exPoints)
 	os.execute("ln -s /tmp/resolv.conf /etc/resolv.conf")
 
 	--Tell batman we are a client
-	self.x.set('batman-adv','bat0','gw_mode', 'server')
-	self.x.commit('batman-adv')
+	if(self.mode == 'mesh')then
+	    self.x.set('batman-adv','bat0','gw_mode', 'server')
+	    self.x.commit('batman-adv')
+    end
 end     
 
 function rdGateway:disable()
+
+    self:__fwMasqDisable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
     os.execute("rm /tmp/gw")
 
 	--Tell batman we are a client
-	self.x.set('batman-adv','bat0','gw_mode', 'client')
-	self.x.commit('batman-adv')
+	if(self.mode == 'mesh')then
+	    self.x.set('batman-adv','bat0','gw_mode', 'client')
+	    self.x.commit('batman-adv')
+    end
 end
 
 function rdGateway:addNat(network)
@@ -94,8 +115,8 @@ function rdGateway.__dhcpGwEnable(self,network,start,limit)
 
 	--Some sane defaults
 	network 	= network or self.conf_zone
-	start 		= start or  10
-	limit		= limit or 150
+	start 		= start or 100
+	limit		= limit or 200
 	
 	self.x.set('dhcp','lan','ignore',1)
 	self.x.set('dhcp',network,'dhcp')
@@ -108,8 +129,10 @@ end
 
 function rdGateway.__dhcpGwDisable(self)
 	self.x.set('dhcp','lan','ignore',1)                  
-    self.x.commit('dhcp')                                        
-	self.x.delete('dhcp',self.conf_zone)
+    self.x.commit('dhcp') 
+    if(self.mode == 'mesh')then                                       
+	    self.x.delete('dhcp',self.conf_zone)
+    end
 	--Remove any previous NAT points (if there were any) the will start with ex_
 	self.x.foreach('dhcp','dhcp', 
 		function(a)
@@ -133,13 +156,7 @@ function rdGateway.__fwGwEnable(self,network,forward)
 	local no_config_zone = true
 	
 	self.x.foreach('firewall', 'zone',
-		function(a)
-			-- Add masq option to LAN --
-			if(a['name'] == 'lan')then
-				self.x.set('firewall',a['.name'],'masq',1)
-				self.x.set('firewall',a['.name'],'mtu_fix',1)
-			end
-			
+		function(a)	
 			-- Check if 'meshdesk_config' zone is present
 			if(a['name'] == network)then
 				no_config_zone = false
@@ -236,16 +253,14 @@ function rdGateway.__fwGwEnable(self,network,forward)
 
 end
 
+
+
 function rdGateway.__fwGwDisable(self)
 	print("Disable gateway on firewall")
 	
 	-- Take care of the Zones --
 	self.x.foreach('firewall', 'zone',
 		function(a)
-			if(a['name'] == 'lan')then
-				self.x.delete('firewall',a['.name'],'masq')
-				self.x.delete('firewall',a['.name'],'mtu_fix')
-			end
 			if((a['name'] == self.conf_zone) or (string.find(a['name'],"ex_")))then
 				local z_name = a['.name']
 				self.x.delete('firewall',z_name)
@@ -286,4 +301,34 @@ function rdGateway.__fwGwDisable(self)
 	
 	self.x.commit('firewall')
 		
+end
+
+function rdGateway.__fwMasqEnable(self,network)
+
+    network     = network or 'lan' --default is to do it on the LAN
+    self.x.foreach('firewall', 'zone',
+	    function(a)
+		    -- Add masq option to LAN --
+		    if(a['name'] == 'lan')then
+			    self.x.set('firewall',a['.name'],'masq',1)
+			    self.x.set('firewall',a['.name'],'mtu_fix',1)
+		    end
+	end)
+    self.x.commit('firewall')
+    
+end
+
+function rdGateway.__fwMasqDisable(self,network)
+
+    network     = network or 'lan' --default is to do it on the LAN
+    self.x.foreach('firewall', 'zone',
+	    function(a)
+		    -- Add masq option to LAN --
+		    if(a['name'] == 'lan')then
+			    self.x.delete('firewall',a['.name'],'masq')
+				self.x.delete('firewall',a['.name'],'mtu_fix')
+		    end
+	end)
+    self.x.commit('firewall')
+    
 end
