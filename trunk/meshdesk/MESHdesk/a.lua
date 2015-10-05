@@ -726,6 +726,9 @@ function ap_configure_device(config)
 
     -- Check if there are perhaps some captive portals to set up once everything has been done --
     sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+
+    os.execute("/etc/init.d/firewall reload") --Activate the new firewall rules especiallt NAT to LAN
+
     if(o.config_settings.captive_portals ~= nil)then
     	print("Doing Captive Portals")
     	require("rdCoovaChilli")
