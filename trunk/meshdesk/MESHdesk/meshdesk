@@ -87,10 +87,6 @@ config hardware 'unifiappro'
 	option morse_led '/sys/class/leds/ubnt:blue:dome/brightness'
 	option internet_led '/sys/class/leds/ubnt:white:dome/brightness'
 
-config hardware 'tplink_n600'
-	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
-	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
-	option wifi_led 'tp-link:green:wlan2g'
 
 config hardware 'alix3d2'
 	option morse_led '/sys/class/leds/alix:1/brightness'
@@ -155,4 +151,14 @@ config hardware 'tl_wa901n'
 	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
 	option internet_led '/sys/class/leds/tp-link:green:system/brightness'
 	option wifi_led 'tp-link:green:wlan'
+
+config hardware 'tl_wdr3500'
+	option morse_led '/sys/class/leds/tp-link:green:qss/brightness'
+	option internet_led '/sys/class/leds/tp-link:green:usb/brightness'
+	option wifi_led 'tp-link:green:wlan2g'
+
+config hardware 'tl_wdr3600'
+    option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
+    option internet_led '/sys/class/leds/tp-link:blue:lan4/brightness'
+    option wifi_led 'tp-link:blue:wlan2g'
 
