@@ -1153,9 +1153,9 @@ class MeshReportsController extends AppController {
        
         //--- Check if the 'system_info' array is in the data ----
         $this->log('Checking for system_info in log', 'debug');
+	$m_id = false;
         if(array_key_exists('system_info',$this->request->data)){
             $this->log('Found system_info', 'debug');
-            $mesh_id = false;
             foreach($this->request->data['system_info'] as $si){
                 $id = $this->_format_mac($si['eth0']);
                 $this->log('Locating the node with MAC '.$id, 'debug');
@@ -1163,7 +1163,7 @@ class MeshReportsController extends AppController {
                 $q_r = $this->Node->findByMac($id);
                 if($q_r){ 
                     $node_id    = $q_r['Node']['id'];
-                    $mesh_id    = $q_r['Node']['mesh_id'];
+                    $m_id    	= $q_r['Node']['mesh_id'];
                     $this->log('The node id of '.$id.' is '.$node_id, 'debug');
                     $this->_do_node_system_info($node_id,$si['sys']);
                     $this->_do_node_load($node_id,$si['sys']);
@@ -1175,9 +1175,8 @@ class MeshReportsController extends AppController {
         }
         
         //See if there are any heartbeats associated with the Mesh these nodes belong to (For the captive portals)
-//	$mesh_id = 46;
-        if($mesh_id){ 
-            $this->_update_any_nas_heartbeats($mesh_id);
+        if($m_id){ 
+            $this->_update_any_nas_heartbeats($m_id);
         }
         
 
@@ -1490,10 +1489,12 @@ class MeshReportsController extends AppController {
         //Only captive portal types
         $q_r = $this->MeshExit->find('all', array('conditions' => array('MeshExit.mesh_id' => $mesh_id, 'MeshExit.type' => 'captive_portal')));
         
+        $this->log("**Updating hearbeats on the NAS for mesh $mesh_id**", 'debug');
         if($q_r){
             $na = ClassRegistry::init('Na');
             $na->contain();
             foreach($q_r as $i){
+        	$this->log('Found a captive portal on the mesh', 'debug');
                 if(array_key_exists('radius_nasid',$i['MeshExitCaptivePortal'] )){
                     $nas_id = $i['MeshExitCaptivePortal']['radius_nasid'];
                     $n_q    = $na->find('first', 
