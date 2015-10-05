@@ -761,7 +761,8 @@ Ext.define('Rd.controller.cMeshes', {
 		}
 
 		if(
-			(val == 'tplink_n600')||
+			(val == 'tl_wdr3500')||
+            (val == 'tl_wdr3600')||
 			(val == 'alix3d2')||
 			(val == 'unifiappro')||
 			(val == 'gentworadio')||
