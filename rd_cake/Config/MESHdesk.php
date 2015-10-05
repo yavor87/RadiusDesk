@@ -416,8 +416,8 @@ $config['hardware'][11]      = array(
 
 
 $config['hardware'][12]      = array(
-		'name' 		=> __('TP-Link N600 (Dual Radio)'),	
-		'id'    	=> 'tplink_n600',
+		'name' 		=> __('TP-Link WDR3500 (Dual Radio)'),	
+		'id'    	=> 'tl_wdr3500',
 		'radios'	=> 2, 
 		'active'    => true,
 		'eth_br'	=> 'eth0 eth1',
@@ -466,7 +466,60 @@ $config['hardware'][12]      = array(
 
 );
 
+
 $config['hardware'][13]      = array(
+		'name' 		=> __('TP-Link WDR3600 (Dual Radio)'),	
+		'id'    	=> 'tl_wdr3600',
+		'radios'	=> 2, 
+		'active'    => true,
+		'eth_br'	=> 'eth0 eth1',
+
+		//First radio 
+		'max_power' => '20',
+		'two'		=> true,
+		'five'		=> false,
+		'hwmode'	=> '11g',
+
+		//Second radio - This is extra for two radio devices
+		'max_power1'=> '23',
+		'two1'		=> false,
+		'five1'		=> true,
+		'hwmode1'	=> '11a',
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '20',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+
+        //Default Advanced WiFi settings (Enchancement made 8/9/15)
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '23',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+
+);
+
+
+$config['hardware'][14]      = array(
 
         'name'          => __('Alix 3D2 (Dual Radio)'),
         'id'            => 'alix3d2',
@@ -519,7 +572,7 @@ $config['hardware'][13]      = array(
 
 
 
-$config['hardware'][14]      = array(
+$config['hardware'][15]      = array(
 		'name' 		=> __('Generic 1 Radio'),	
 		'id'    	=> 'genoneradio',
 		'radios'	=> 1, 
@@ -547,7 +600,7 @@ $config['hardware'][14]      = array(
 	
 );
 
-$config['hardware'][15]      = array(
+$config['hardware'][16]      = array(
         'name'          => __('Generic 2 Radio'),
         'id'            => 'gentworadio',
         'radios'        => 2,
@@ -597,7 +650,7 @@ $config['hardware'][15]      = array(
         )
 );
 
-$config['hardware'][16]      = array(
+$config['hardware'][17]      = array(
 	'name'    		=> __('AirGateway'),       
     'id'          	=> 'airgw',
     'radios'      	=> 1,
@@ -625,7 +678,7 @@ $config['hardware'][16]      = array(
      
 );
 
-$config['hardware'][17]      = array(
+$config['hardware'][18]      = array(
 	'name'     		=> __('AirRouter'),        
     'id'          	=> 'airrouter' ,  
    	'radios'      	=> 1,
@@ -652,7 +705,7 @@ $config['hardware'][17]      = array(
     )     
 );
 
-$config['hardware'][18]      = array(
+$config['hardware'][19]      = array(
 	'name'          => __('AirRouterHP'),      
 	'id'          	=> 'airrouterhp' ,  
 	'radios'      	=> 1,
@@ -679,7 +732,7 @@ $config['hardware'][18]      = array(
     ) 
 );
 
-$config['hardware'][19]      = array(
+$config['hardware'][20]      = array(
   	'name'          => __('BulletM2'),         
   	'id'          	=> 'bulm2',
   	'radios'      	=> 1,
@@ -706,7 +759,7 @@ $config['hardware'][19]      = array(
     )
 );
 
-$config['hardware'][20]      = array(
+$config['hardware'][21]      = array(
   	'name'          => __('RB433 (Dual Radio)'),      
   	'id'          	=> 'rb433',
   	'radios'      	=> 2,
@@ -739,7 +792,7 @@ $config['hardware'][20]      = array(
     )
 );
 
-$config['hardware'][21]      = array(
+$config['hardware'][22]      = array(
     'name'          => __('TP-Link WA850RE'), 
     'id'            => 'tl_wa850re',
     'radios'        => 1, 
@@ -766,7 +819,7 @@ $config['hardware'][21]      = array(
     )
 );
 
-$config['hardware'][22]      = array(
+$config['hardware'][23]      = array(
     'name'          => __('TP-Link WA901ND'), 
     'id'            => 'tl_wa901n' ,
     'radios'        => 1, 
