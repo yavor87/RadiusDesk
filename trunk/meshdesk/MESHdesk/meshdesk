@@ -7,9 +7,11 @@ config fallback
 config internet 'internet1'
 	option dns 'radiusdev.webage.co'
 	option url 'cake2/rd_cake/nodes/get_config_for_node.json'
-	option url_ap 'cake2/rd_cake/aps/get_config_for_ap.json'
 	option status_url 'cake2/rd_cake/mesh_reports/submit_report.json'
 	option actions_url 'cake2/rd_cake/node_actions/get_actions_for.json'
+	option ap_url 'cake2/rd_cake/aps/get_config_for_ap.json'
+	option ap_status_url 'cake2/rd_cake/ap_reports/submit_report.json'
+	option ap_actions_url 'cake2/rd_cake/ap_actions/get_actions_for.json'
 	option protocol 'http'
 	option ip '192.168.99.1'
 

@@ -63,7 +63,13 @@ function submitReport()
     local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..'}'
 
     local proto 	= fetch_config_value('meshdesk.internet1.protocol')
+    local mode      = fetch_config_value('meshdesk.settings.mode')
     local url       = fetch_config_value('meshdesk.internet1.status_url')
+    
+    if(mode == 'ap')then
+        url       = fetch_config_value('meshdesk.internet1.ap_status_url')
+    end
+    
     local server    = fetch_config_value('meshdesk.internet1.ip')
     local query     = proto .. "://" .. server .. "/" .. url
 
