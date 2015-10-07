@@ -525,7 +525,9 @@ end
 --===============================
 function ap_wait_for_lan()
 
-    os.execute("/etc/init.d/alfred stop")
+    ext:stop('heartbeat.lua')
+	ext:stop('actions_checker')	
+	os.execute("/etc/init.d/alfred stop")
 	                 
 	-- LAN we flash "1"
 	log("Starting LAN wait")
@@ -611,7 +613,7 @@ function ap_try_settings_through_lan()
     		--local id	= "A8-40-41-13-60-E3"
 	        local id		= getMac('eth0')
 	        local proto 	= fetch_config_value('meshdesk.internet1.protocol')
-	        local url   	= fetch_config_value('meshdesk.internet1.url_ap')
+	        local url   	= fetch_config_value('meshdesk.internet1.ap_url')
 	        local query     = proto .. "://" .. server .. "/" .. url 
 	        print("Query url is " .. query )
 	        if(c:fetchSettings(query,id,true))then
@@ -740,7 +742,9 @@ function ap_configure_device(config)
     --Start Alfred for the collecting of data (No MESH)
     alfred:masterNoBatmanEnableAndStart()
     --Start the heartbeat to the server
-    --ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
+    ext:startOne('/etc/MESHdesk/heartbeat.lua &','heartbeat.lua')
+    --Start the actions checker
+	ext:startOne('/etc/MESHdesk/actions_checker.lua &','actions_checker.lua')
         
 	if(o.config_settings.gateways ~= nil)then
 		-- Set up the gateways --	
