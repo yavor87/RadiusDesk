@@ -89,16 +89,15 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
 				filter		: {type: 'string'},
 				stateId		: 'StateGridUnknownNodes3'
 			},
-			{ 
-
-                text        : 'Last contact', 
-                dataIndex   : 'last_contact',          
+            { 
+                text        : 'Last contact',   
+                dataIndex   : 'last_contact',  
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : false,
-                xtype       : 'datecolumn',   
-                format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridUnknownNodes4'
+                renderer    : function(v,metaData, record){
+                    var last_contact_human     = record.get('last_contact_human');
+                    return "<div class=\"fieldBlue\">"+last_contact_human+"</div>";     
+                },stateId: 'StateGridUnknownNodes4'
             },
 			{ 
 

@@ -14,6 +14,8 @@ Ext.define('Rd.model.mNodeList', {
 		 {name: 'last_contact',    	type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
 		 {name: 'available_to_siblings',  type: 'bool'},
          {name: 'update',       	type: 'bool'},
-         {name: 'delete',       	type: 'bool'}
+         {name: 'delete',       	type: 'bool'},
+         'last_contact_human',
+         'state',
         ]
 });

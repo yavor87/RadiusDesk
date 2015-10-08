@@ -107,16 +107,26 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
 				filter		: {type: 'string'},
 				stateId		: 'StateGridNodeLists7'
 			},
-			{ 
-
-                text        : 'Last contact', 
-                dataIndex   : 'last_contact',          
+            { 
+                text        : 'Last contact',   
+                dataIndex   : 'last_contact',  
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : false,
-                xtype       : 'datecolumn',   
-                format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridNodeLists8'
+                renderer    : function(v,metaData, record){
+                    var value = record.get('state');
+                    if(value != 'never'){                    
+                        var last_contact_human     = record.get('last_contact_human');
+                        if(value == 'up'){
+                            return "<div class=\"fieldGreenWhite\">"+last_contact_human+"</div>";
+                        }
+                        if(value == 'down'){
+                            return "<div class=\"fieldRedWhite\">"+last_contact_human+"</div>";
+                        }
+
+                    }else{
+                        return "<div class=\"fieldBlue\">Never</div>";
+                    }              
+                },stateId: 'StateGridNodeLists8'
             },
             { text: i18n('sIP_Address'), dataIndex: 'ip', tdCls: 'gridTree', flex: 1,filter : {type: 'string'}, stateId: 'StateGridNodeLists9'}
         ];
