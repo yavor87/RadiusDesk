@@ -7,6 +7,7 @@ Ext.define('Rd.model.mUnknownNode', {
 		 {name: 'from_ip',         	type: 'string'  },
 		 {name: 'vendor',         	type: 'string'  },
 		 {name: 'gateway',  		type: 'bool'    },
-		 {name: 'last_contact',    	type: 'date',       dateFormat: 'Y-m-d H:i:s'   }
+		 {name: 'last_contact',    	type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
+         'last_contact_human'
         ]
 });
