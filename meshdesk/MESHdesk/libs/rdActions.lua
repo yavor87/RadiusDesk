@@ -131,7 +131,7 @@ end
 function rdActions.__fetchActions(self)
 	local curl_data = '{"mac":"'..self.eth0..'"}'
     local proto 	= self.x.get('meshdesk','internet1','protocol')
-    local mode      = fetch_config_value('meshdesk.settings.mode')
+    local mode      = self.x.get('meshdesk','settings','mode')
     
     local url       = self.x.get('meshdesk','internet1','actions_url')
     
