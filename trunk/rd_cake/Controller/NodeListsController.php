@@ -4,8 +4,8 @@ App::uses('AppController', 'Controller');
 class NodeListsController extends AppController {
 
     public $name        = 'NodeLists';
-    public $components  = array('Aa');
-    public $uses        = array('Node','Mesh','User','UnknownNode');
+    public $components  = array('Aa','TimeCalculations');
+    public $uses        = array('Node','Mesh','User','UnknownNode','NodeSetting');
     protected $base     = "Access Providers/Controllers/NodeLists/";
 
 //------------------------------------------------------------------------
@@ -18,6 +18,7 @@ class NodeListsController extends AppController {
 		//print_r($q_r);
 
 		foreach($q_r as $i){
+		    $i['UnknownNode']['last_contact_human']     = $this->TimeCalculations->time_elapsed_string($i['UnknownNode']['last_contact']);
 			array_push($items,$i['UnknownNode']);
 		}
 		
@@ -91,7 +92,25 @@ class NodeListsController extends AppController {
             $owner_id       = $i['Mesh']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
-
+            
+            $mesh_id        = $i['Mesh']['id'];
+            
+            $dead_after     = $this->_get_dead_after($mesh_id);  
+            $l_contact      = $i['Node']['last_contact'];
+            //Find the dead time (only once)
+            if($l_contact == null){
+                $state = 'never';
+            }else{
+                $last_timestamp = strtotime($l_contact);
+                if($last_timestamp+$dead_after <= time()){
+                    $state = 'down';
+                }else{
+                    $state = 'up';
+                }
+            }
+            
+            $i['Node']['last_contact_human']     = $this->TimeCalculations->time_elapsed_string($i['Node']['last_contact']);
+            $i['Node']['state']     = $state;
 			$i['Node']['update']    = $action_flags['update'];
             $i['Node']['delete'] 	= $action_flags['delete'];
 			$i['Node']['owner'] 	= $owner_tree;
@@ -277,5 +296,20 @@ class NodeListsController extends AppController {
             }  
         }
     }
-
+    
+    private function _get_dead_after($mesh_id){
+		Configure::load('MESHdesk');
+		$data 		= Configure::read('common_node_settings'); //Read the defaults
+		$dead_after	= $data['heartbeat_dead_after'];
+		$n_s = $this->NodeSetting->find('first',array(
+            'conditions'    => array(
+                'NodeSetting.mesh_id' => $mesh_id
+            )
+        )); 
+        if($n_s){
+            $dead_after = $n_s['NodeSetting']['heartbeat_dead_after'];
+        }
+		return $dead_after;
+	}
+    
 }
