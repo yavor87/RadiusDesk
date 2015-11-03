@@ -1665,12 +1665,12 @@ class MeshesController extends AppController {
             if($q_r){
                 $this->request->data['id'] = $q_r['NodeSetting']['id']; //Set the ID
 				//Check if the value of 
-				if($this->request->data['password'] != $q_r['NodeSetting']['password']){
+				////if($this->request->data['password'] != $q_r['NodeSetting']['password']){   //!!Create a new has regardless!!
 					//Create a new hash
 					$new_pwd = $this->_make_linux_password($this->request->data['password']);
 					$this->request->data['password_hash'] = $new_pwd;
 
-				}
+				////}
             }
 
             if ($setting->save($this->request->data)) {
