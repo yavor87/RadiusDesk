@@ -548,6 +548,11 @@ CREATE TABLE `dynamic_details` (
   `lost_password` tinyint(1) NOT NULL DEFAULT '0',
   `social_enable` tinyint(1) NOT NULL DEFAULT '0',
   `social_temp_permanent_user_id` int(11) DEFAULT NULL,
+  `coova_desktop_url` varchar(255) NOT NULL DEFAULT '',
+  `coova_mobile_url` varchar(255) NOT NULL DEFAULT '',
+  `mikrotik_desktop_url` varchar(255) NOT NULL DEFAULT '',
+  `mikrotik_mobile_url` varchar(255) NOT NULL DEFAULT '',
+  `default_language` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -558,7 +563,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2015-04-02 15:45:36',1,1,0,'walt',1,120,'Green',1,1,1,187);
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2015-04-02 15:45:36',1,1,0,'walt',1,120,'Green',1,1,1,187,'','','','','');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1925,6 +1930,7 @@ CREATE TABLE `node_settings` (
   `gw_use_previous` tinyint(1) NOT NULL DEFAULT '1',
   `gw_auto_reboot` tinyint(1) NOT NULL DEFAULT '1',
   `gw_auto_reboot_time` int(5) NOT NULL DEFAULT '600',
+  `client_key` varchar(255) NOT NULL DEFAULT 'radiusdesk',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1935,7 +1941,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600);
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600,'radiusdesk');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2029,7 +2035,7 @@ CREATE TABLE `node_wifi_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2086,7 +2092,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
-INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.3','2015-09-10 08:50:54',0,NULL,NULL,'logo.jpg','2015-09-10 08:49:56','2015-09-10 08:50:54',1,1,1,24,1,44,1,1,1,5,1,44),(11,35,'d3','','aa-bb-cc-dd-11-22','tl_wdr3500',100,'10.5.5.1','2015-09-10 08:51:24',0,NULL,NULL,'logo.jpg','2015-09-09 08:08:41','2015-09-10 08:51:24',1,0,1,24,1,44,1,1,1,5,1,44),(19,35,'bb','','11-22-33-33-33-33','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-09-09 09:01:55','2015-09-09 09:01:55',1,1,1,24,1,44,1,1,1,5,1,44);
+INSERT INTO `nodes` VALUES (3,40,'test1','test1','aa-bb-cc-dd-ee-ff','dragino',100,'10.5.5.2',NULL,0,NULL,NULL,'logo.jpg','2015-04-28 17:30:45','2015-04-28 17:30:45',1,1,1,24,1,44,1,1,1,5,1,44),(4,40,'test2','test2','11-22-33-44-55-66','dragino',100,'10.5.5.3','2015-09-10 08:50:54',0,NULL,NULL,'logo.jpg','2015-09-10 08:49:56','2015-09-10 08:50:54',1,1,1,24,1,44,1,1,1,5,1,44),(11,35,'d3','','aa-bb-cc-dd-11-22','tl_wdr3500',100,'10.5.5.1','2015-09-10 08:51:24',0,NULL,NULL,'logo.jpg','2015-09-09 08:08:41','2015-09-10 08:51:24',1,0,1,24,1,44,1,1,1,5,1,44),(19,35,'bb','','11-22-33-33-33-33','dragino',100,'10.5.5.2','2015-09-22 15:00:14',0,NULL,NULL,'logo.jpg','2015-09-09 09:01:55','2015-09-22 15:00:14',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2591,7 +2597,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9892 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9891 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2653,7 +2659,7 @@ CREATE TABLE `radgroupreply` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `groupname` (`groupname`(32))
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2751,7 +2757,7 @@ CREATE TABLE `radreply` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radreply_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2878,7 +2884,7 @@ CREATE TABLE `social_login_user_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3144,7 +3150,7 @@ CREATE TABLE `unknown_nodes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3153,7 +3159,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51'),(5,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-09-09 13:28:01','2015-06-15 09:25:56','2015-09-09 13:28:01');
+INSERT INTO `unknown_nodes` VALUES (3,'A8-40-41-13-60-22','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:44','2015-04-27 14:26:46','2015-04-27 14:26:46'),(4,'A8-40-41-13-60-33','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-04-27 14:26:51','2015-04-27 14:26:51','2015-04-27 14:26:51'),(5,'A8-40-41-13-60-E3','DraginoT # Dragino Technology Co., Limited','127.0.0.1',1,'2015-09-16 21:18:07','2015-06-15 09:25:56','2015-09-16 21:18:07'),(6,'A8-40-41-13-75-47','DraginoT # Dragino Technology Co., Limited','192.168.99.152',1,'2015-09-24 22:03:43','2015-09-24 22:03:43','2015-09-24 22:03:43');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3371,4 +3377,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-10 10:31:15
+-- Dump completed on 2015-11-03 21:24:11
