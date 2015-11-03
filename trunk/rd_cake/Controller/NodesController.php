@@ -638,8 +638,12 @@ class NodesController extends AppController {
 
         $wireless = array();
 
-        Configure::load('MESHdesk');
-		$client_key = Configure::read('MESHdesk.client_key');
+        if($mesh['NodeSetting']['client_key']!='') {        
+            $client_key = $mesh['NodeSetting']['client_key'];
+        }else{
+            Configure::load('MESHdesk');
+		    $client_key = Configure::read('MESHdesk.client_key');
+        }
 
         //Get the channel
         $channel    = $mesh['NodeSetting']['two_chan'];
@@ -835,8 +839,12 @@ class NodesController extends AppController {
 
         $wireless = array();
 
-		Configure::load('MESHdesk');
-		$client_key = Configure::read('MESHdesk.client_key');
+		if($mesh['NodeSetting']['client_key']!='') {        
+            $client_key = $mesh['NodeSetting']['client_key'];
+        }else{
+            Configure::load('MESHdesk');
+		    $client_key = Configure::read('MESHdesk.client_key');
+        }
 
         //Get the channel that the mesh needs to be on
         $mesh_channel_two    = $mesh['NodeSetting']['two_chan'];
