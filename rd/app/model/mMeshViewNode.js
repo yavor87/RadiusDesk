@@ -22,10 +22,12 @@ Ext.define('Rd.model.mMeshViewNode', {
         {name: 'l_tx_failed',   type: 'int'},
         {name: 'l_tx_retries',  type: 'int'},
         {name: 'l_modified'},
+        {name: 'l_modified_human'},
         {name: 'l_authenticated'},
         {name: 'l_authorized'},
         {name: 'l_entry'},
         {name: 'l_contact'},
+        {name: 'l_contact_human'},
         {name: 'state'}
         ]
 });

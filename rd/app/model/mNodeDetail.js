@@ -22,6 +22,7 @@ Ext.define('Rd.model.mNodeDetail', {
 	'release',
 	'cpu',
 	'last_cmd',
-	'last_cmd_status'		
+	'last_cmd_status',
+    'last_contact_human'		
   	]
 });

@@ -175,7 +175,7 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
                             //Fetch some variables:
                             var txbr    = r.get('l_tx_bitrate');
                             var rxbr    = r.get('l_rx_bitrate');
-                            var t       = r.get('l_modified');
+                            var t       = r.get('l_modified_human');
                             var ltx     = Ext.ux.bytesToHuman(r.get('l_tx_bytes'));
                             var lrx     = Ext.ux.bytesToHuman(r.get('l_rx_bytes'));
                             var tx_f    = r.get('l_tx_failed');

@@ -99,7 +99,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 flex        : 1,
                 renderer    : function(value,metaData, record){
                     if(value != 'never'){                    
-                        var last_contact     = record.get('last_contact');
+                        var last_contact     = record.get('last_contact_human');
                         if(value == 'up'){
                             return "<div class=\"fieldGreen\">"+last_contact+"</div>";
                         }
