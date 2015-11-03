@@ -2,7 +2,7 @@
 class MeshReportsController extends AppController {
 
     public  $name    	= 'MeshReports';
-	public $components  = array('Aa');
+	public $components  = array('Aa','TimeCalculations');
     public  $uses    	= array(
 		'Node',					'NodeLoad',		'NodeStation',	'NodeSystem','MeshEntry',
 		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction', 'MeshExit'
@@ -112,7 +112,9 @@ class MeshReportsController extends AppController {
 			//===Determine when last did we saw this node (never / up / down) ====
 			if($l_contact == null){
                 $state = 'never';
+                $i['Node']['last_contact_human'] = null;
             }else{
+                $i['Node']['last_contact_human'] = $this->TimeCalculations->time_elapsed_string($l_contact);
                 $last_timestamp = strtotime($l_contact);
                 if($last_timestamp+$dead_after <= time()){
                     $state = 'down';
@@ -410,9 +412,11 @@ class MeshReportsController extends AppController {
 
             //Find the dead time (only once)
             if($l_contact == null){
+                $l_contact_human = null;
                 $state = 'never';
             }else{
                 $last_timestamp = strtotime($l_contact);
+                $l_contact_human = $this->TimeCalculations->time_elapsed_string($l_contact);
                 if($last_timestamp+$dead_after <= time()){
                     $state = 'down';
                 }else{
@@ -420,6 +424,8 @@ class MeshReportsController extends AppController {
                 }
             }
 
+            $i['Node']['l_contact_human' ] = $l_contact_human;
+            
 			$i['Node']['state'] 	= $state;
 			$i['Node']['hw_human'] 	= $hw_human;
 			$i['Node']['lng']		= $i['Node']['lon'];
@@ -573,6 +579,7 @@ class MeshReportsController extends AppController {
                         'l_tx_failed'       => $lastCreated['NodeStation']['tx_failed'],
                         'l_tx_retries'      => $lastCreated['NodeStation']['tx_retries'],
                         'l_modified'        => $lastCreated['NodeStation']['modified'],
+                        'l_modified_human'  => $this->TimeCalculations->time_elapsed_string($lastCreated['NodeStation']['modified']),
                         'l_authenticated'   => $lastCreated['NodeStation']['authenticated'],
                         'l_authorized'      => $lastCreated['NodeStation']['authorized'],
                         'l_tx_bytes'        => $lastCreated['NodeStation']['tx_bytes'],
@@ -664,8 +671,12 @@ class MeshReportsController extends AppController {
             $l_contact  = $i['Node']['last_contact'];
 
             if($l_contact == null){
+                $l_contact_human = null;
                 $state = 'never';
             }else{
+            
+                $l_contact_human = $this->TimeCalculations->time_elapsed_string($l_contact);
+                
                 $last_timestamp = strtotime($l_contact);
                 if($last_timestamp+$dead_after <= time()){
                     $state = 'down';
@@ -674,6 +685,7 @@ class MeshReportsController extends AppController {
                 }
             }
 
+            $this->NodeStation->contain();
             $q_s = $this->NodeStation->find('all',array(
                 'conditions'    => array(
                     'NodeStation.node_id'       => $node_id,
@@ -764,12 +776,14 @@ class MeshReportsController extends AppController {
                         'l_tx_failed'       => $lastCreated['NodeStation']['tx_failed'],
                         'l_tx_retries'      => $lastCreated['NodeStation']['tx_retries'],
                         'l_modified'        => $lastCreated['NodeStation']['modified'],
+                        'l_modified_human'  => $this->TimeCalculations->time_elapsed_string($lastCreated['NodeStation']['modified']),
                         'l_authenticated'   => $lastCreated['NodeStation']['authenticated'],
                         'l_authorized'      => $lastCreated['NodeStation']['authorized'],
                         'l_tx_bytes'        => $lastCreated['NodeStation']['tx_bytes'],
                         'l_rx_bytes'        => $lastCreated['NodeStation']['rx_bytes'],
                         'l_entry'           => $this->entry_lookup[$last_mesh_entry_id],
                         'l_contact'         => $l_contact,
+                        'l_contact_human'   => $l_contact_human,
                         'state'             => $state
                     ));
                     $id++;
@@ -791,6 +805,7 @@ class MeshReportsController extends AppController {
                         'rx_bitrate'        => 0,
                         'vendor'            => 'N/A',
                         'l_contact'         => $l_contact,
+                        'l_contact_human'   => $l_contact_human,
                         'state'             => $state
                     ));
                     $id++;
@@ -853,8 +868,11 @@ class MeshReportsController extends AppController {
 
             //Find the dead time (only once)
             if($l_contact == null){
+                $l_contact_human = null;
                 $state = 'never';
             }else{
+                $l_contact_human = $this->TimeCalculations->time_elapsed_string($l_contact);
+                
 				$this->NodeSetting->contain();
                 $last_timestamp = strtotime($l_contact);
                 if($last_timestamp+$dead_after <= time()){
@@ -955,11 +973,13 @@ class MeshReportsController extends AppController {
                         'l_tx_failed'       => $lastCreated['NodeIbssConnection']['tx_failed'],
                         'l_tx_retries'      => $lastCreated['NodeIbssConnection']['tx_retries'],
                         'l_modified'        => $lastCreated['NodeIbssConnection']['modified'],
+                        'l_modified_human'  => $this->TimeCalculations->time_elapsed_string($lastCreated['NodeIbssConnection']['modified']),
                         'l_authenticated'   => $lastCreated['NodeIbssConnection']['authenticated'],
                         'l_authorized'      => $lastCreated['NodeIbssConnection']['authorized'],
                         'l_tx_bytes'        => $lastCreated['NodeIbssConnection']['tx_bytes'],
                         'l_rx_bytes'        => $lastCreated['NodeIbssConnection']['rx_bytes'],
                         'l_contact'         => $l_contact,
+                        'l_contact_human'   => $l_contact_human,
                         'state'             => $state
                     ));
                     $id++;
@@ -983,6 +1003,7 @@ class MeshReportsController extends AppController {
                         'rx_bitrate'        => 0,
                         'vendor'            => 'N/A',
                         'l_contact'         => $l_contact,
+                        'l_contact_human'   => $l_contact_human,
                         'state'             => $state
                     ));
                     $id++;
@@ -1037,7 +1058,9 @@ class MeshReportsController extends AppController {
 
 			//===Determine when last did we saw this node (never / up / down) ====
 			if($l_contact == null){
-                $state = 'never';
+                $state = 'never';  
+                $i['Node']['last_contact_human'] = $l_contact;
+                
             }else{
                 $last_timestamp = strtotime($l_contact);
                 if($last_timestamp+$dead_after <= time()){
@@ -1045,6 +1068,10 @@ class MeshReportsController extends AppController {
                 }else{
                     $state = 'up';
                 }
+                
+                //Make it easy for us to understand
+                $i['Node']['last_contact_human'] = $this->TimeCalculations->time_elapsed_string($l_contact);
+                
             }
 
 			//=== add extra info to node data ===
@@ -1156,6 +1183,7 @@ class MeshReportsController extends AppController {
 	$m_id = false;
         if(array_key_exists('system_info',$this->request->data)){
             $this->log('Found system_info', 'debug');
+            $mesh_id = false;
             foreach($this->request->data['system_info'] as $si){
                 $id = $this->_format_mac($si['eth0']);
                 $this->log('Locating the node with MAC '.$id, 'debug');
