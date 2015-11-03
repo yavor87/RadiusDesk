@@ -76,11 +76,22 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
                                     fieldLabel  : i18n('s2_pt_4G_Channel'),
                                     value       : 5,
                                     maxValue    : 14,
-                                    minValue    : 1
+                                    minValue    : 1,
+                                    labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     xtype       : 'cmbFiveGigChannels',
-                                    anchor      : '100%'
+                                    anchor      : '100%',
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : 'Client Key',
+                                    name        : 'client_key',
+                                    allowBlank  : false,
+                                    blankText   : i18n.sSupply_a_value,
+                                    labelClsExtra: 'lblRdReq',
+                                    minLength   : 8
                                 }            
                             ]
                         },
