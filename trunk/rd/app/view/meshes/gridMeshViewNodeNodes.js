@@ -58,7 +58,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeNodes' ,{
             {
                 getLastContact: function(children) {
                     var fc = children[0];
-                    var c = fc.get('l_contact');
+                    var c = fc.get('l_contact_human');
                     if(c == null){
                         return '(never)';
                     }
@@ -203,7 +203,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeNodes' ,{
                             //Fetch some variables:
                             var txbr    = r.get('l_tx_bitrate');
                             var rxbr    = r.get('l_rx_bitrate');
-                            var t       = r.get('l_modified');
+                            var t       = r.get('l_modified_human');
                             var ltx     = Ext.ux.bytesToHuman(r.get('l_tx_bytes'));
                             var lrx     = Ext.ux.bytesToHuman(r.get('l_rx_bytes'));
                             var tx_f    = r.get('l_tx_failed');

@@ -154,7 +154,7 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
                     "<div style='clear:both;'></div>"+
 					"<label class='lblListS'>IP Address</label><label class='lblValueS'>"+node.data.ip+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Last contact</label><label class='lblValueS'>"+node.data.last_contact+"</label>"+
+					"<label class='lblListS'>Last contact</label><label class='lblValueS'>"+node.data.last_contact_human+"</label>"+
                     "<div style='clear:both;'></div>"+
 					"</div>";
 			  }
