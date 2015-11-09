@@ -331,6 +331,39 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                 border  : false,
                                 items   :  [
                                     {
+                                        title       : 'LEDs',
+                                        xtype       : 'panel',
+                                        baseCls     : 'tabRadio',
+                                        layout      : 'anchor',
+                                        defaults    : {
+                                            anchor: '100%'
+                                        },
+                                        autoScroll:true,
+                                        items       :[
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Neighbor Count',
+										        name        : 'led_neighbor',
+										        inputValue  : 'led_neighbor',
+										        labelClsExtra: 'lblRd'
+									        }, 
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Mesh Traffic',
+										        name        : 'led_mesh',
+										        inputValue  : 'led_mesh',
+										        labelClsExtra: 'lblRd'
+									        },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Internet On/Off',
+										        name        : 'led_internet',
+										        inputValue  : 'led_internet',
+										        labelClsExtra: 'lblRd'
+									        }    
+                                        ]
+                                    },
+                                    {
                                         title       : 'Radio0',
                                         xtype       : 'panel',
                                         baseCls     : 'tabRadio',
@@ -341,20 +374,39 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                         autoScroll:true,
                                         items       :[
                                             {
-										        xtype       : 'radio', 
-										        fieldLabel  : 'HT20',
-										        name      	: 'radio0_htmode',
-										        inputValue	: 'HT20',
+                                                xtype      : 'fieldcontainer',
+                                                fieldLabel : 'HT-mode',
+                                                defaultType: 'radiofield',
+                                                labelClsExtra: 'lblRd',
+                                                layout: {
+                                                    type    : 'hbox',
+                                                    align   : 'begin',
+                                                    pack    : 'start'
+                                                },
+                                                items: [
+                                                    {
+                                                        boxLabel  : 'HT20',
+                                                        name      	: 'radio0_htmode',
+                                                        inputValue: 'HT20',
+                                                        checked   : true,
+                                                        margin    : Rd.config.radioMargin
+                                                    }, 
+                                                    {
+                                                        boxLabel  : 'HT40',
+                                                        name      	: 'radio0_htmode',
+                                                        inputValue: 'HT40',
+                                                        margin    : Rd.config.radioMargin
+                                                    }
+                                                ]
+                                            },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Disable 802.11b',
+                                                boxLabel    : '(Recommended)',
+										        name        : 'radio0_disable_b',
+										        inputValue  : 'radio0_disable_b',
 										        labelClsExtra: 'lblRd'
 									        }, 
-									        {
-										        xtype       : 'radio',
-										        fieldLabel  : 'HT40',
-										        name      	: 'radio0_htmode',
-										        inputValue	: 'HT40',
-										        checked		: true,
-										        labelClsExtra: 'lblRd'
-									        },
                                             {
 										        xtype       : 'checkbox',      
 										        fieldLabel  : 'Diversity',
@@ -426,18 +478,37 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                         autoScroll:true,
                                         items       :[
                                              {
-										        xtype       : 'radio', 
-										        fieldLabel  : 'HT20',
-										        name      	: 'radio1_htmode',
-										        inputValue	: 'HT20',
-										        labelClsExtra: 'lblRd'
-									        }, 
-									        {
-										        xtype       : 'radio',
-										        fieldLabel  : 'HT40',
-										        name      	: 'radio1_htmode',
-										        inputValue	: 'HT40',
-										        checked		: true,
+                                                xtype      : 'fieldcontainer',
+                                                fieldLabel : 'HT-mode',
+                                                defaultType: 'radiofield',
+                                                labelClsExtra: 'lblRd',
+                                                layout: {
+                                                    type    : 'hbox',
+                                                    align   : 'begin',
+                                                    pack    : 'start'
+                                                },
+                                                items: [
+                                                    {
+                                                        boxLabel  : 'HT20',
+                                                        name      	: 'radio1_htmode',
+                                                        inputValue: 'HT20',
+                                                        checked   : true,
+                                                        margin    : Rd.config.radioMargin
+                                                    }, 
+                                                    {
+                                                        boxLabel  : 'HT40',
+                                                        name      	: 'radio1_htmode',
+                                                        inputValue: 'HT40',
+                                                        margin    : Rd.config.radioMargin
+                                                    }
+                                                ]
+                                            },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Disable 802.11b',
+                                                boxLabel    : '(Recommended)',
+										        name        : 'radio1_disable_b',
+										        inputValue  : 'radio1_disable_b',
 										        labelClsExtra: 'lblRd'
 									        },
                                             {

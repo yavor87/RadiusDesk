@@ -96,7 +96,7 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                 flex        : 1,
                 renderer    : function(v,metaData, record){
                     var last_contact_human     = record.get('last_contact_human');
-                    return "<div class=\"fieldBlue\">"+last_contact_human+"</div>";     
+                    return "<div class=\"fieldBlueWhite\">"+last_contact_human+"</div>";     
                 },stateId: 'StateGridUnknownNodes4'
             },
 			{ 
@@ -120,7 +120,23 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                 dataIndex: 'gateway',
                 filter  : {
                     type: 'boolean'    
-                },stateId: 'StateGridSsids6'
+                },stateId: 'StateGridUnknownNodes6'
+            },
+            { 
+                text:   'Redirect To',
+                flex: 1,
+				hidden: false,  
+                xtype:  'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                            "<tpl if='new_server'>",
+                                "<tpl if='new_server_status == \"awaiting\"'><div class=\"fieldBlueWhite\">{new_server}</div></tpl>",
+                                "<tpl if='new_server_status == \"fetched\"'><div class=\"fieldGreenWhite\">{new_server}</div></tpl>",
+                            "</tpl>"
+                ),
+                dataIndex: 'new_server',
+                filter  : {
+                    type: 'boolean'    
+                },stateId: 'StateGridUnknownNodes7'
             }
         ];
         me.callParent(arguments);

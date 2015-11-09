@@ -53,7 +53,8 @@ Ext.define('Rd.controller.cMeshes', {
     views:  [
         'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
 		'meshes.gridNodeLists',		'meshes.winMeshEditNode',	'meshes.gridUnknownNodes',
-		'meshes.winMeshAttachNode'
+		'meshes.winMeshAttachNode',
+        'meshes.winMeshUnknownRedirect'
     ],
     stores      : [
 		'sMeshes',   'sAccessProvidersTree', 'sNodeLists', 				'sUnknownNodes'
@@ -69,7 +70,8 @@ Ext.define('Rd.controller.cMeshes', {
 		urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',
         urlEditNode:        '/cake2/rd_cake/meshes/mesh_node_edit.json',
-        urlAdvancedSettingsForModel : '/cake2/rd_cake/meshes/advanced_settings_for_model.json'
+        urlAdvancedSettingsForModel : '/cake2/rd_cake/meshes/advanced_settings_for_model.json',
+        urlRedirectNode :   '/cake2/rd_cake/nodes/redirect_unknown.json'
     },
     refs: [
         {  ref: 'grid',         selector: 'gridMeshes'} 
@@ -263,7 +265,14 @@ Ext.define('Rd.controller.cMeshes', {
 			},
 			'gridUnknownNodes #delete': {
                 click: me.delUnknownNode
-            }
+            },
+
+            'gridUnknownNodes #redirect' : {
+                click: me.redirectNode
+            },
+            'winMeshUnknownRedirect #save' : {
+				click: me.btnRedirectNodeSave
+			}
         });
     },
     winClose:   function(){
@@ -1145,5 +1154,54 @@ Ext.define('Rd.controller.cMeshes', {
                 }
             });
         }
+    },
+    //Redirecting
+    redirectNode: function(button){
+        var me      = this;
+        var win     = button.up("#meshWin");
+        var store   = win.down("gridUnknownNodes").getStore();
+        if(win.down("gridUnknownNodes").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr          = win.down("gridUnknownNodes").getSelectionModel().getLastSelected();
+            var id          = sr.getId();
+            var new_server  = sr.get('new_server');
+            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshUnknownRedirectId')){
+                var w = Ext.widget('winMeshUnknownRedirect',
+                {
+                    id              :'winMeshUnknownRedirectId',
+                    unknownNodeId   : id,
+					new_server	    : new_server,
+                    store           : store
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }
+        }
+    },
+	btnRedirectNodeSave: function(button){
+        var me      = this;
+        var win     = button.up("winMeshUnknownRedirect");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.urlRedirectNode,
+            success: function(form, action) {
+                win.close();
+                win.store.load();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     }
+
 });

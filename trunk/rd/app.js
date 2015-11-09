@@ -139,6 +139,7 @@ Ext.application({
         Ext.namespace('Rd').config = {
             //buttonMargin    : '0 20 40 0',
             buttonMargin    : '10 15 10 15',
+            radioMargin     : '0 10 0 0',
             fieldMargin     : 15,
             labelWidth      : 150,
             maxWidth        : 400,
@@ -214,7 +215,8 @@ Ext.application({
 			icnThumbDown	: 57602,
             icnCPU          : 57452,
             icnNotify       : 57624,
-            icnCamera       : 57399
+            icnCamera       : 57399,
+            icnRedirect     : 57372
         };
     },
     addUx: function(){
