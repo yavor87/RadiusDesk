@@ -445,7 +445,7 @@ function configure_device(config)
         --There might also be an option to point the device to another server for its settings
         if(o.new_server ~= nil)then
             log("Setting new config server to " .. o.new_server);
-            uci_cursor.set('meshdesk','setting','ip',o.new_server);
+            uci_cursor.set('meshdesk','internet1','ip',o.new_server);
             uci_cursor.commit('meshdesk');
             reboot_on_sos();
 	        return;  
@@ -714,7 +714,7 @@ function ap_configure_device(config)
         --There might also be an option to point the device to another server for its settings
         if(o.new_server ~= nil)then
             log("Setting new config server to " .. o.new_server);
-            uci_cursor.set('meshdesk','setting','ip',o.new_server);
+            uci_cursor.set('meshdesk','internet1','ip',o.new_server);
             uci_cursor.commit('meshdesk');
             reboot_on_sos();
 	        return;  
