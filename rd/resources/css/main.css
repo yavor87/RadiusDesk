@@ -375,6 +375,15 @@
     text-align: center;
 }
 
+.fieldBlueWhite {
+    background: #1e66d2;
+    margin-top: 1px;
+    padding: 2px;
+    color: #ffffff;
+    font-size:14px;
+    font-weight: bold;
+    text-align: center;
+}
 
 
 .txtGrey {
