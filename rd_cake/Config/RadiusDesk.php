@@ -275,6 +275,7 @@ $config['icnThumbDown']	= 57602;
 $config['icnCPU']		= 57452;
 $config['icnNotify']	= 57624;
 $config['icnCamera']    = 57399;
+$config['icnRedirect']  = 57372;
 
 
 //Modified for ExtJS 6
