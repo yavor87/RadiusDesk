@@ -17,6 +17,10 @@ require("rdConfig")
 --Alfred object
 require("rdAlfred")
 
+--uci object
+require('uci')
+uci_cursor = uci.cursor(nil,'/var/state')
+
 function fetch_config_value(item)
 	local handle = io.popen('uci get '..item)
 	local result = handle:read("*a")
@@ -425,7 +429,30 @@ function configure_device(config)
 	local contents        = readAll(config) 
 	local json            = require("json")           
 	local o               = json.decode(contents)  
----[[--	
+
+    if(o.success == false)then --If the device was not yet assigned we need to give feedback about it
+	    print("The server returned an error");
+	    log("The server returned an error");
+
+        --There might be an error message
+	    if(o.error ~= nil)then
+	        print(o.error);
+	        log(o.error);
+	        reboot_on_sos();
+	        return;
+	    end
+
+        --There might also be an option to point the device to another server for its settings
+        if(o.new_server ~= nil)then
+            log("Setting new config server to " .. o.new_server);
+            uci_cursor.set('meshdesk','setting','ip',o.new_server);
+            uci_cursor.commit('meshdesk');
+            reboot_on_sos();
+	        return;  
+        end
+
+    end
+
 
 	-- Do we have any batman_adv settings? --
 	if(o.config_settings.batman_adv ~= nil)then   
@@ -675,14 +702,26 @@ function ap_configure_device(config)
 	if(o.success == false)then --If the device was not yet assigned we need to give feedback about it
 	    print("The server returned an error");
 	    log("The server returned an error");
+
+        --There might be an error message
 	    if(o.error ~= nil)then
 	        print(o.error);
 	        log(o.error);
 	        reboot_on_sos();
 	        return;
 	    end
+
+        --There might also be an option to point the device to another server for its settings
+        if(o.new_server ~= nil)then
+            log("Setting new config server to " .. o.new_server);
+            uci_cursor.set('meshdesk','setting','ip',o.new_server);
+            uci_cursor.commit('meshdesk');
+            reboot_on_sos();
+	        return;  
+        end
+
     end
----[[--	
+
 
 	-- Is this perhaps a gateway node? --
 	if(o.config_settings.gateways ~= nil)then
