@@ -77,8 +77,19 @@ class NodesController extends AppController {
 				$data['last_contact']	= date("Y-m-d H:i:s", time());
 
 				$q_r 	= $this->UnknownNode->find('first',array('conditions' => array('UnknownNode.mac' => $mac)));
+
+                $include_new_server     = false;
+
 				if($q_r){
 					$id = $q_r['UnknownNode']['id'];
+
+                    $new_server = $q_r['UnknownNode']['new_server'];
+                    if($new_server != ''){
+                        
+                        $data['new_server_status'] = 'fetched';
+                        $include_new_server = true;
+                    }
+
 					$data['id'] = $id;
 					$this->UnknownNode->save($data);
 				}else{
@@ -87,11 +98,19 @@ class NodesController extends AppController {
 					$this->UnknownNode->save($data);
 				}
 
-                $this->set(array(
-                    'error' => "MAC Address: ".$mac." not defined on system",
-                    'success' => false,
-                    '_serialize' => array('error','success')
-                ));
+                if($include_new_server){
+                    $this->set(array(
+                        'new_server' => $new_server,
+                        'success' => false,
+                        '_serialize' => array('new_server','success')
+                    ));
+                }else{
+                     $this->set(array(
+                        'error' => "MAC Address: ".$mac." not defined on system",
+                        'success' => false,
+                        '_serialize' => array('error','success')
+                    ));
+                }
             }
 
         }else{
@@ -107,6 +126,22 @@ class NodesController extends AppController {
             ));
 
         }
+    }
+
+
+    //This we can just accept... i think
+    public function redirect_unknown(){
+        $this->request->data['new_server_status'] = 'awaiting';
+        if ($this->UnknownNode->save($this->request->data)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
     }
 
 
