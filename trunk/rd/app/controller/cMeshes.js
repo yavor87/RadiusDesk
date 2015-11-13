@@ -160,6 +160,9 @@ Ext.define('Rd.controller.cMeshes', {
 			'gridNodeLists #reload': {
                 click:      me.gridNodeListsReload
             },
+            'gridNodeLists #reload menuitem[group=refresh]'   : {
+                click:      me.reloadNodeListsOptionClick
+            }, 
 			'gridNodeLists #add': {
                 click:  me.addNode
             },
@@ -254,6 +257,10 @@ Ext.define('Rd.controller.cMeshes', {
 			'gridUnknownNodes #reload': {
                 click:      me.gridUnknownNodesReload
             },
+            'gridUnknownNodes #reload menuitem[group=refresh]'   : {
+                click:      me.reloadUnknownNodesOptionClick
+            },
+
 			'gridUnknownNodes #attach': {
                 click:  me.attachNode
             },
@@ -279,6 +286,13 @@ Ext.define('Rd.controller.cMeshes', {
         var me = this;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
+        }
+        if(me.autoReloadNodeLists != undefined){
+            clearInterval(me.autoReloadNodeLists);
+        }
+        
+        if(me.autoReloadUnknownNodes != undefined){
+            clearInterval(me.autoReloadUnknownNodes);
         }
     },
 	gridActivate: function(g){
@@ -736,6 +750,31 @@ Ext.define('Rd.controller.cMeshes', {
         var g = button.up('gridNodeLists');
         g.getStore().load();
     },
+    reloadNodeListsOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReloadNodeLists);   //Always clear
+        b.setGlyph(Rd.config.icnTime);
+
+        if(n == 'mnuRefreshCancel'){
+            b.setGlyph(Rd.config.icnReload);
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReloadNodeLists = setInterval(function(){        
+            me.gridNodeListsReload(b);
+        },  interval);  
+    },
 	cmbHardwareOptionsChange: function(cmb){
 		var me      = this;
         var form    = cmb.up('form');
@@ -1063,6 +1102,32 @@ Ext.define('Rd.controller.cMeshes', {
         var g = button.up('gridUnknownNodes');
         g.getStore().load();
     },
+    reloadUnknownNodesOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReloadUnknownNodes);   //Always clear
+        b.setGlyph(Rd.config.icnTime);
+
+        if(n == 'mnuRefreshCancel'){
+            b.setGlyph(Rd.config.icnReload);
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReloadUnknownNodes = setInterval(function(){        
+            me.gridUnknownNodesReload(b);
+        },  interval);  
+    },
+
 	//_______ Unknown Nodes ______
 	attachNode: function(button){
         var me      = this;
