@@ -134,7 +134,24 @@ class NodeListsController extends AppController {
 		$menu = array();
 		$menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                     array( 
+                        'xtype'     =>  'splitbutton',  
+                        'iconCls'   => 'b-reload',
+                        'glyph'     => Configure::read('icnReload'),   
+                        'scale'     => 'large', 
+                        'itemId'    => 'reload',   
+                        'tooltip'   => __('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                   
+                                )
+                            )
+                    ),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnAttach'), 'scale' => 'large', 'itemId' => 'attach',      'tooltip'=> __('Attach')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnRedirect'), 'scale' => 'large', 'itemId' => 'redirect',   'tooltip'=> __('Redirect')),
