@@ -9,8 +9,6 @@
 }
 
 #msg-div .msg {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #F6F6F6;
     border: 2px solid #ccc;
     margin-top: 2px;
@@ -121,8 +119,6 @@
 /*Wallpaper selection */
 .thumb-wrap {
     text-align: center;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     margin: 5px;
     padding: 5px;
     border: 2px solid #86a5e5;
@@ -185,8 +181,6 @@
 }
 
 .gridRealm.availAll {
-     border-radius: 8px;
-    -moz-border-radius: 8px;
     background: black;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -196,8 +190,6 @@
 }
 
 .gridTag {
-     border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #e7edf6;
     border: 1px solid #616b77;
     margin-top: 1px;
@@ -266,8 +258,6 @@
 
 /* EXP column display yes/no */
 .noRight {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #f6cecf;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -277,8 +267,6 @@
 }
 
 .hasRight {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #d4e0ce;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -290,8 +278,6 @@
 /* Note rather replace the .hasRight and .noRight with a more generic class eg. red or green */
 
 .fieldRed {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #f6cecf;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -301,8 +287,6 @@
 }
 
 .fieldGreen {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #d4e0ce;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -312,8 +296,6 @@
 }
 
 .fieldBlue {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #c5f5fd;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -323,8 +305,6 @@
 }
 
 .fieldOrange {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #f6dbc5;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -334,8 +314,6 @@
 }
 
 .fieldGrey {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #dcddde;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -345,8 +323,6 @@
 }
 
 .fieldYellow {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     background: #fbf2a2;
     border: 1px solid #ccc;
     margin-top: 2px;
@@ -407,8 +383,6 @@
 }
 
 .green_round {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     margin: 5px;
     padding: 5px;
     border: 2px solid #0ca630;
@@ -416,8 +390,6 @@
 }
 
 .blue_round {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     margin: 5px;
     padding: 5px;
     border: 2px solid #4a709b;
@@ -425,8 +397,6 @@
 }
 
 .red_round {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
     margin: 5px;
     padding: 5px;
     border: 2px solid #d92435;
@@ -499,8 +469,6 @@
 .ux-desktop-shortcut.x-view-over {
     background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
     background: rgba(54, 25, 25, .5);
-    border-radius: 4px;
-    -moz-border-radius: 4px;
     border: 1px solid #2F4078;
 }
 
@@ -656,7 +624,6 @@ td.grdEditable div {
     border	: 1px solid #ccc;
     padding	: 1px;
 	margin	: 2px;	
-	border-radius: 5px;
 }
 
 .combo-wrapper img{
@@ -793,8 +760,6 @@ td.grdEditable div {
 
 
 .divTip {
-	border-radius: 4px;
-    -moz-border-radius: 4px;
     background: #cdd0d5;
     border: 1px solid #333435;
     margin-top: 2px;
