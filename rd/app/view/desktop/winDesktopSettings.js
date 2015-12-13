@@ -36,6 +36,7 @@ Ext.define('Rd.view.desktop.winDesktopSettings', {
                 plain   : true,
                 tabPosition: 'top',
                 border  : false,
+                cls     : 'subTab',
                 items   : [
                     { 
                         'title'     : i18n('sWallpaper'),
