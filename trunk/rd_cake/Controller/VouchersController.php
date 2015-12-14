@@ -1321,7 +1321,8 @@ class VouchersController extends AppController {
 						'menu'  => array( 
                                 'items' => array( 
                                     array( 'text'  => _('Single field'),      		'itemId'    => 'addSingle', 'group' => 'add', 'checked' => true ),
-                                    array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false)  
+                                    array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false), 
+                                    array( 'text'  => _('Import CSV List'),         'itemId'    => 'addCsvList','group' => 'add' ,'checked' => false),  
                                 )
                             )
 					),
@@ -1387,8 +1388,9 @@ class VouchersController extends AppController {
                     'tooltip'   => __('Add'),
                     'menu'  => array(
                                  'items' => array(
-                                     array( 'text'  => _('Single field'),   'itemId'    => 'addSingle', 'group' => 'add', 'checked' => true ),
-                                     array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false)
+                                    array( 'text'  => _('Single field'),   'itemId'    => 'addSingle', 'group' => 'add', 'checked' => true ),
+                                    array( 'text'  => _('Username and Password'),   'itemId'    => 'addDouble', 'group' => 'add' ,'checked' => false),
+                                    array( 'text'  => _('Import CSV List'),         'itemId'    => 'addCsvList','group' => 'add' ,'checked' => false), 
                                  )
                              )
            			));
