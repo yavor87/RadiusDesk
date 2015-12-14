@@ -210,7 +210,7 @@ $config['premium_sms']['50MB'] = array(
 
 
     //Original for extjs4.x
-
+/*
 //==== Define glyphs -> We'll use glyphs insteadd of icons
 $config['icnLock']      = 57495;
 $config['icnYes']       = 57605;
@@ -276,10 +276,10 @@ $config['icnCPU']		= 57452;
 $config['icnNotify']	= 57624;
 $config['icnCamera']    = 57399;
 $config['icnRedirect']  = 57372;
-
+*/
 
 //Modified for ExtJS 6
-/*
+
 $config['webFont']      = 'FontAwesome';
 
 $config['icnLock']      = 'xf023@'.$config['webFont'];
@@ -290,7 +290,7 @@ $config['icnPower']     = 'xf011@'.$config['webFont'];
 $config['icnSpanner']   = 'xf0ad@'.$config['webFont'];
 $config['icnHome']      = 'xf015@'.$config['webFont'];
 $config['icnDynamic']   = 'xf0d0@'.$config['webFont'];
-$config['incVoucher']   = 'xf145@'.$config['webFont'];
+$config['icnVoucher']   = 'xf145@'.$config['webFont'];
 $config['icnReload']    = 'xf021@'.$config['webFont'];//
 $config['icnAdd']       = 'xf067@'.$config['webFont'];//
 $config['icnEdit']      = 'xf040@'.$config['webFont'];//
@@ -342,7 +342,7 @@ $config['icnThumbUp']   = 'xf087@'.$config['webFont'];
 $config['icnThumbDown']	= 'xf088@'.$config['webFont'];
 $config['icnCPU']		= 'xf085@'.$config['webFont'];
 $config['icnCamera']    = 'xf030@'.$config['webFont'];
-*/
+$config['icnRedirect']  = 'xf074@'.$config['webFont'];
 
 
 //=== EXPERIMENTAL STUFF =====
