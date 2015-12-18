@@ -568,6 +568,8 @@ class DevicesController extends AppController {
             $username = $this->request->query['username'];
             $this->request->data['username'] = $username;
 
+            $this->request->data['id'] = ''; //Wipe it since ExtJs 6 add some random stuff here
+
             //CHECK
             if($this->request->data['type'] == 'check'){
                 $rc = ClassRegistry::init('Radcheck');
