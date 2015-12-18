@@ -255,7 +255,7 @@ Ext.define('Rd.controller.cAccessProviders', {
         var form    = win.down('form');
         form.submit({
             clientValidation: true,
-            url: me.geturlAdd(),
+            url: me.getUrlAdd(),
             success: function(form, action) {
                 win.close();
                 me.reload();
