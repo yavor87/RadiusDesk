@@ -1,17 +1,44 @@
 Ext.define('Rd.view.components.chrtBasicPie', {
-    extend      : 'Ext.chart.Chart',
+    extend      : 'Ext.chart.PolarChart',
     width       : 250,
     height      : 350,
     animate     : true,
     shadow      : true,
-    legend      : {
-        position    : 'bottom'
+  
+    interactions: ['rotate'],
+    insetPadding: 50,
+    innerPadding: 20,
+    legend: {
+        docked      : 'bottom'
     },
-    insetPadding: 25,
-   // theme       : 'Base:gradients', 
+
     initComponent: function() {
-/*
+
         var me = this;
+  /*      
+        me.series= [{
+                type: 'pie',
+                angleField: 'data',
+                label: {
+                    field: 'name',
+                    calloutLine: {
+                        length: 60,
+                        width: 3
+                        // specifying 'color' is also possible here
+                    }
+                },
+                highlight: true,
+                colors: [ "#f10101","#3cef05", "#0bd1fb"], //0bd1fb = blue; f10101 = red; 3cef05 = green
+                tooltip: {
+                    trackMouse: true,
+                    renderer: function (tooltip, record, item) {
+                        tooltip.setHtml("<h3>"+record.get('name') + ': ' + record.get('data') +"</h3>");
+                    }
+                }
+            }];
+        
+        
+/*
         me.series = [
         {
             type        : 'pie',

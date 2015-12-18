@@ -125,6 +125,9 @@ Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
                     rootProperty        : 'items',
                     messageProperty: 'message'
                 },
+                writer      : { 
+                    writeAllFields: true 
+                },
                 api         : {
                     create      : '/cake2/rd_cake/permanent_users/private_attr_add.json',
                     read        : '/cake2/rd_cake/permanent_users/private_attr_index.json',
@@ -147,31 +150,34 @@ Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
                         me.down('#count').update({count: count});
                     }   
                 },
-                update: function(store, records, success, options) {
-                    store.sync({
-                        success: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sUpdated_item'),
-                                i18n('sItem_has_been_updated'),
-                                Ext.ux.Constants.clsInfo,
-                                Ext.ux.Constants.msgInfo
-                            );
-                            store.load();  
-                        },
-                        failure: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sProblems_updating_the_item'),
-                                i18n('sItem_could_not_be_updated'),
-                                Ext.ux.Constants.clsWarn,
-                                Ext.ux.Constants.msgWarn
-                            );
-                            store.load();
-                        }
-                    });
+                update: function(store, records, action, options,a,b) {
+                    if(action == 'edit'){ //Filter for edit (after commited a second action will fire called commit)
+                        store.sync({
+                            success: function(batch,options){
+                                Ext.ux.Toaster.msg(
+                                    i18n('sUpdated_item'),
+                                    i18n('sItem_has_been_updated'),
+                                    Ext.ux.Constants.clsInfo,
+                                    Ext.ux.Constants.msgInfo
+                                );
+                                store.load();  
+                            },
+                            failure: function(batch,options){
+                                Ext.ux.Toaster.msg(
+                                    i18n('sProblems_updating_the_item'),
+                                    i18n('sItem_could_not_be_updated'),
+                                    Ext.ux.Constants.clsWarn,
+                                    Ext.ux.Constants.msgWarn
+                                );
+                                store.load();   
+                            }
+                        });
+                    }
                 },
                 scope: this
             },
-            autoLoad: false    
+            autoLoad: false,
+            autoSync: false    
         });
 
         me.callParent(arguments);
