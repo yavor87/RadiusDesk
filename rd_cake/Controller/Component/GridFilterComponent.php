@@ -29,6 +29,10 @@ class GridFilterComponent extends Component {
             if($f->operator == '='){
                 $f->type = 'boolean';
             }
+
+            if($f->operator == 'in'){
+                $f->type = 'list';
+            }
             
             if(($f->operator == 'gt')||($f->operator == 'lt')||($f->operator == 'eq')){
                 $f->type = 'date';
