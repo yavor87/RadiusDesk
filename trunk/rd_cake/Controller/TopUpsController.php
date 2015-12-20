@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class TopUpsController extends AppController {
 
     public $name        = 'TopUps';
-    public $components  = array('Aa');
+    public $components  = array('Aa','GridFilter');
     public $uses        = array('TopUp','User');
     protected $base     = "Access Providers/Controllers/TopUps/";
 
@@ -464,6 +464,9 @@ class TopUpsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                 $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

@@ -5,7 +5,7 @@ class NasController extends AppController {
 
 
     public $name       = 'Nas';
-    public $components = array('Aa','RequestHandler');
+    public $components = array('Aa','RequestHandler','GridFilter');
     public $uses       = array('Na','User');
     protected $base    = "Access Providers/Controllers/Nas/";
 
@@ -1763,6 +1763,9 @@ class NasController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Lists
                 if($f->type == 'list'){
 

@@ -14,7 +14,7 @@ class RealmsController extends AppController {
 
 
     public $name       = 'Realms';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('Realm','User');
     protected $base    = "Access Providers/Controllers/Realms/";
 
@@ -1316,6 +1316,9 @@ class RealmsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

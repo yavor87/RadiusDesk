@@ -3,7 +3,7 @@ class ProfileComponentsController extends AppController {
 
    // var $scaffold;
     public $name        = 'ProfileComponents';
-    public $components  = array('Aa','Freeradius');
+    public $components  = array('Aa','Freeradius','GridFilter');
     public $uses        = array('ProfileComponent','User');
     protected $base     = "Access Providers/Controllers/ProfileComponents/";
     protected $itemNote = 'ProfileComponentNote';
@@ -852,6 +852,9 @@ class ProfileComponentsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 if(isset($f->type)){
                     //Strings
                     if($f->type == 'string'){

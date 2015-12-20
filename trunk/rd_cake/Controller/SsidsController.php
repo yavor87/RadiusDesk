@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class SsidsController extends AppController {
 
     public $name        = 'Ssids';
-    public $components  = array('Aa');
+    public $components  = array('Aa','GridFilter');
     public $uses        = array('Ssid','User');
     protected $base     = "Access Providers/Controllers/Ssids/";
 
@@ -446,6 +446,9 @@ class SsidsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                 $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

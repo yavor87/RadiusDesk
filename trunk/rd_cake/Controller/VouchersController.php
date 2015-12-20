@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class VouchersController extends AppController {
 
     public $name       = 'Vouchers';
-    public $components = array('Aa','VoucherGenerator');
+    public $components = array('Aa','VoucherGenerator','GridFilter');
     public $uses       = array('Voucher','User','Profile','Realm');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
@@ -1584,6 +1584,8 @@ class VouchersController extends AppController {
                     $f->type  = $f->data->type;
                     $f->value = $f->data->value;
                 }
+
+                $f = $this->GridFilter->xformFilter($f);
 
                 //Strings
                 if($f->type == 'string'){

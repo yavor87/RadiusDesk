@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class DynamicDetailsController extends AppController {
 
     public $name       = 'DynamicDetails';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('DynamicDetail','User');
     protected $base    = "Access Providers/Controllers/DynamicDetails/";
 
@@ -2201,6 +2201,9 @@ class DynamicDetailsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

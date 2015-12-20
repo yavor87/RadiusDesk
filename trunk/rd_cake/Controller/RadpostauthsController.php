@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class RadpostauthsController extends AppController {
 
     public $name       = 'Radpostauths';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     protected $base    = "Access Providers/Controllers/Radpostauths/";
 
     //--- FROM THE OLD ---
@@ -376,6 +376,9 @@ class RadpostauthsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
 
