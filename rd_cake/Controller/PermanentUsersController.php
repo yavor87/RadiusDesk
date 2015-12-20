@@ -5,7 +5,7 @@ class PermanentUsersController extends AppController {
 
     public $name       = 'PermanentUsers';
     public $uses       = array('PermanentUser','Profile','Realm','User');
-    public $components = array('Aa','Kicker');
+    public $components = array('Aa','Kicker','GridFilter');
     protected $base    = "Access Providers/Controllers/PermanentUsers/";
 
     protected  $read_only_attributes = array(
@@ -1880,6 +1880,9 @@ class PermanentUsersController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

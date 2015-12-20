@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class MeshesController extends AppController {
 
     public $name        = 'Meshes';
-    public $components  = array('Aa');
+    public $components  = array('Aa','GridFilter');
     public $uses        = array('Mesh','User');
     protected $base     = "Access Providers/Controllers/Meshes/";
     protected $itemNote = 'MeshNote';
@@ -2454,6 +2454,9 @@ class MeshesController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class FinMyGateTransactionsController extends AppController {
 
     public $name       = 'FinMyGateTransactions';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('FinMyGateTransaction','User');
 
 	//var $scaffold;
@@ -524,6 +524,9 @@ class FinMyGateTransactionsController extends AppController {
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
                 if(isset($f->type)){
+
+                    $f = $this->GridFilter->xformFilter($f);
+
                     //Strings
                     if($f->type == 'string'){
                         if($f->field == 'owner'){

@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class AccessProvidersController extends AppController {
 
     public $name       = 'AccessProviders';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('User'); //This has primaraly to do with users :-)
 
     public $ap_acl     = 'Access Providers/Controllers/'; 
@@ -895,6 +895,9 @@ class AccessProvidersController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

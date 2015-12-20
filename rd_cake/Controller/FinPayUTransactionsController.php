@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class FinPayUTransactionsController extends AppController {
 
     public $name       = 'FinPayUTransactions';
-    public $components = array('Aa','Payu');
+    public $components = array('Aa','Payu','GridFilter');
     public $uses       = array('FinPayUTransaction','User');
 
     protected $base    = "Access Providers/Controllers/FinPayUTransactions/";
@@ -779,6 +779,9 @@ class FinPayUTransactionsController extends AppController {
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
                 if(isset($f->type)){
+
+                    $f = $this->GridFilter->xformFilter($f);
+
                     //Strings
                     if($f->type == 'string'){
                         if($f->field == 'owner'){

@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class NodeActionsController extends AppController {
 
     public $name       = 'NodeActions';
-    public $components = array('Aa','Formatter');
+    public $components = array('Aa','Formatter','GridFilter');
     public $uses       = array('NodeAction','User');
     protected $base    = "Access Providers/Controllers/NodeActions/";
 
@@ -295,6 +295,9 @@ class NodeActionsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     $col = $this->modelClass.'.'.$f->field;

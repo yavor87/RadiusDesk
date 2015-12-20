@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class AutoMacsController extends AppController {
 
     public $name       = 'AutoMacs';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('AutoMac','User');
     protected $base    = "Access Providers/Controllers/AutoMacs/";
 
@@ -947,6 +947,8 @@ class AutoMacsController extends AppController {
             $filter_array = array();
             $filter = json_decode($this->request->query['filter']);            
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){

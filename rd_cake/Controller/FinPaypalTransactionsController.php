@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class FinPaypalTransactionsController extends AppController {
 
     public $name       = 'FinPaypalTransactions';
-    public $components = array('Aa','VoucherGenerator');
+    public $components = array('Aa','VoucherGenerator','GridFilter');
     public $uses       = array('FinPaypalTransaction','User');
     protected $base    = "Access Providers/Controllers/FinPaypalTransactions/";
 
@@ -610,6 +610,9 @@ class FinPaypalTransactionsController extends AppController {
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
                 if(isset($f->type)){
+
+                    $f = $this->GridFilter->xformFilter($f);
+
                     //Strings
                     if($f->type == 'string'){
                         if($f->field == 'owner'){

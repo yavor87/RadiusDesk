@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class NaStatesController extends AppController {
 
     public $name       = 'NaStates';
-    public $components = array('Aa','Formatter');
+    public $components = array('Aa','Formatter','GridFilter');
     public $uses       = array('NaState','User');
     protected $base    = "Access Providers/Controllers/NaStates/";
 
@@ -241,6 +241,9 @@ class NaStatesController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     $col = $this->modelClass.'.'.$f->field;

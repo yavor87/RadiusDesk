@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class AutoSetupsController extends AppController {
 
     public $name       = 'AutoSetups';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('AutoSetup','User');
     protected $base    = "Access Providers/Controllers/Tags/";
 

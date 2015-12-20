@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
-    public $components = array('Aa','Kicker', 'Counters');
+    public $components = array('Aa','Kicker', 'Counters','GridFilter');
     public $uses       = array('Radacct','User','PermanentUser');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
@@ -610,6 +610,9 @@ class RadacctsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
 

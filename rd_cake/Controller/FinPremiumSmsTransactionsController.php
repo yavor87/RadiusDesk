@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class FinPremiumSmsTransactionsController extends AppController {
 
     public $name       = 'FinPremiumSmsTransactions';
-    public $components = array('Aa','VoucherGenerator');
+    public $components = array('Aa','VoucherGenerator','GridFilter');
     public $uses       = array('FinPremiumSmsTransaction','User');
 
 	//var $scaffold;
@@ -648,6 +648,9 @@ class FinPremiumSmsTransactionsController extends AppController {
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
                 if(isset($f->type)){
+
+                    $f = $this->GridFilter->xformFilter($f);
+
                     //Strings
                     if($f->type == 'string'){
                         if($f->field == 'owner'){

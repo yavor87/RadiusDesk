@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class DevicesController extends AppController {
 
     public $name       = 'Devices';
-    public $components = array('Aa');
+    public $components = array('Aa','GridFilter');
     public $uses       = array('Device','User','PermanentUser');
     protected $base    = "Access Providers/Controllers/Devices/"; //Required for AP Rights
     protected  $read_only_attributes = array(
@@ -1409,6 +1409,9 @@ class DevicesController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
 
@@ -1439,7 +1442,7 @@ class DevicesController extends AppController {
                             "Radcheck_profile.value LIKE" => '%'.$f->value.'%'
                         ));
                     }elseif($f->field == 'user'){
-                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
+                        array_push($c['conditions'],array("PermanentUser.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));
@@ -1450,6 +1453,23 @@ class DevicesController extends AppController {
                      $col = $this->modelClass.'.'.$f->field;
                      array_push($c['conditions'],array("$col" => $f->value));
                 }
+
+                 //Date
+                if($f->type == 'date'){        
+                    //date we want it in "2013-03-12"
+                    $col = $this->modelClass.'.'.$f->field;
+                    if($f->comparison == 'eq'){
+                        array_push($c['conditions'],array("DATE($col)" => $f->value));
+                    }
+
+                    if($f->comparison == 'lt'){
+                        array_push($c['conditions'],array("DATE($col) <" => $f->value));
+                    }
+                    if($f->comparison == 'gt'){
+                        array_push($c['conditions'],array("DATE($col) >" => $f->value));
+                    }
+                }
+
             }
         }
 

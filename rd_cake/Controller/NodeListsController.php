@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class NodeListsController extends AppController {
 
     public $name        = 'NodeLists';
-    public $components  = array('Aa','TimeCalculations');
+    public $components  = array('Aa','TimeCalculations','GridFilter');
     public $uses        = array('Node','Mesh','User','UnknownNode','NodeSetting');
     protected $base     = "Access Providers/Controllers/NodeLists/";
 
@@ -237,6 +237,9 @@ class NodeListsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'mesh'){
