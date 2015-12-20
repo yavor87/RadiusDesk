@@ -861,10 +861,10 @@ class FinAuthorizeNetTransactionsController extends AppController {
         if(isset($this->request->query['filter'])){
             $filter = json_decode($this->request->query['filter']);
             foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
                 if(isset($f->type)){
-
-                    $f = $this->GridFilter->xformFilter($f);
-
                     //Strings
                     if($f->type == 'string'){
                         if($f->field == 'owner'){
