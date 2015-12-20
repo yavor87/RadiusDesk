@@ -44,7 +44,12 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                                 "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'},stateId: 'StateGridDevices7'
+                filter      : {
+                        defaultValue   : false,
+                        value   : 'true',
+                        yesText : 'Yes',
+                        noText  : 'No'
+                },stateId: 'StateGridDevices7'
             },
             {
                 text        : i18n('sLast_accept_time'),

@@ -77,7 +77,12 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                                 "<tpl if='monitor == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'monitor',
-                filter      : {type: 'boolean'}, stateId: 'StateGridAccessProviders8'
+                filter      : {
+                        type    : 'boolean',
+                        value   : 'true',
+                        yesText : 'Yes',
+                        noText  : 'No'
+                }, stateId: 'StateGridAccessProviders8'
             },
             { 
                 text        : i18n('sActive'),  
@@ -87,7 +92,12 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                                 "<tpl if='active == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'}, stateId: 'StateGridAccessProviders9'
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue   : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
+                }, stateId: 'StateGridAccessProviders9'
             },
              { 
                 text    : i18n('sNotes'),

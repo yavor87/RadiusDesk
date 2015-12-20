@@ -3,6 +3,7 @@ Ext.define('Rd.store.sTags', {
     model       : 'Rd.model.mTag',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

@@ -145,7 +145,12 @@ Ext.define('Rd.view.iPPools.gridIpPools' ,{
                                 "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'},stateId: 'StateGridIpPools13'
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue   : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
+                },stateId: 'StateGridIpPools13'
             },
             { 
                 text        : 'Created',

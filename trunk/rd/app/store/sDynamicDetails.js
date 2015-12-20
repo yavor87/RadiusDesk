@@ -3,6 +3,7 @@ Ext.define('Rd.store.sDynamicDetails', {
     model: 'Rd.model.mDynamicDetail',
     pageSize: 100,
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

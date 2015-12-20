@@ -3,6 +3,7 @@ Ext.define('Rd.store.sDevices', {
     model: 'Rd.model.mDevice',
     pageSize: 100,
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

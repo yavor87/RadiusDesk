@@ -3,6 +3,7 @@ Ext.define('Rd.store.sNas', {
     model: 'Rd.model.mNas',
     pageSize: 100,
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

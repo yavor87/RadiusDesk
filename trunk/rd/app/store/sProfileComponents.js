@@ -3,6 +3,7 @@ Ext.define('Rd.store.sProfileComponents', {
     model       : 'Rd.model.mProfileComponent',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',
