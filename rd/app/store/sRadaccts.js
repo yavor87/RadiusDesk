@@ -3,6 +3,7 @@ Ext.define('Rd.store.sRadaccts', {
     model: 'Rd.model.mRadacct',
     pageSize: 150,
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

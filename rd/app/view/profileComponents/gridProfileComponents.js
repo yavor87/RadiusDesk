@@ -44,8 +44,11 @@ Ext.define('Rd.view.profileComponents.gridProfileComponents' ,{
                             "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
-                filter  : {
-                    type: 'boolean'    
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
                 },stateId: 'StateGridProfileComponents6'
             },
             { 

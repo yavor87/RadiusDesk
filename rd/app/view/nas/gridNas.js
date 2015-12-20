@@ -44,6 +44,7 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 batchActions: true, 
                 url     : me.urlTagFilter,
                 reader: {
+                    keepRawData     : true,
                     type: 'json',
                     rootProperty: 'items',
                     messageProperty: 'message'
@@ -62,6 +63,7 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 url     : me.urlRealmFilter,
                 reader: {
                     type: 'json',
+                    keepRawData     : true,
                     rootProperty: 'items',
                     messageProperty: 'message'
                 }
@@ -99,9 +101,12 @@ Ext.define('Rd.view.nas.gridNas' ,{
                             "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">"+i18n('sNo')+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
-                filter  : {
-                            type: 'boolean'    
-                          },stateId: 'StateGridNas7'
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue   : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
+                },stateId: 'StateGridNas7'
             },
             { 
                 text:   i18n('sRealms'),

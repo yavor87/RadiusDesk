@@ -43,8 +43,11 @@ Ext.define('Rd.view.ssids.gridSsids' ,{
                             "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
                         ),
                 dataIndex: 'available_to_siblings',
-                filter  : {
-                    type: 'boolean'    
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue   : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
                 },stateId: 'StateGridSsids4'
             },
 			{ text: 'Extra name',  dataIndex: 'extra_name',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridSsids5'},

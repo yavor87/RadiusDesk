@@ -3,6 +3,7 @@ Ext.define('Rd.store.sTopUps', {
     model       : 'Rd.model.mTopUp',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

@@ -7,6 +7,7 @@ Ext.define('Rd.store.sSids', {
     pageSize: 50,
     //To force server side sorting:
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

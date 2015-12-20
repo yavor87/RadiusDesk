@@ -3,6 +3,7 @@ Ext.define('Rd.store.sAccessProvidersGrid', {
     model       : 'Rd.model.mAccessProviderGrid',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

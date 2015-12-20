@@ -3,6 +3,7 @@ Ext.define('Rd.store.sVouchers', {
     model       : 'Rd.model.mVoucher',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

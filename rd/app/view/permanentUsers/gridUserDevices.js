@@ -40,7 +40,10 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'}
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : "Y-m-d" 
+                }
             },
             {
                 text        : i18n('sLast_accept_nas'),
@@ -56,7 +59,10 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'}, stateId: 'StateGridUserRadaccts9'
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : "Y-m-d" 
+                }, stateId: 'StateGridUserRadaccts9'
             },
             {
                 text        : i18n('sLast_reject_nas'),

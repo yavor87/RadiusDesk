@@ -3,6 +3,7 @@ Ext.define('Rd.store.sIpPools', {
     model       : 'Rd.model.mIpPool',
     pageSize    : 100,
     remoteSort  : true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

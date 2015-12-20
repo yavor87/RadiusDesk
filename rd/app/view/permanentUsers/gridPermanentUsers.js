@@ -83,7 +83,12 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                                 "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
-                filter      : { type: 'boolean'},stateId: 'StateGridPermanentUsers12'
+                filter      : {
+                        type    : 'boolean',
+                        defaultValue   : false,
+                        yesText : 'Yes',
+                        noText  : 'No'
+                },stateId: 'StateGridPermanentUsers12'
             },
             {
                 text        : i18n('sLast_accept_time'),
@@ -91,7 +96,10 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridPermanentUsers13'
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : "Y-m-d" 
+                },stateId: 'StateGridPermanentUsers13'
             },
             {
                 text        : i18n('sLast_accept_nas'),
@@ -107,7 +115,10 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
                 hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridPermanentUsers15'
+                filter      : {
+                    type        : 'date',
+                    dateFormat  : "Y-m-d" 
+                },stateId: 'StateGridPermanentUsers15'
             },
             {
                 text        : i18n('sLast_reject_nas'),

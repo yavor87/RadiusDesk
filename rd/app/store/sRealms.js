@@ -3,6 +3,7 @@ Ext.define('Rd.store.sRealms', {
     model: 'Rd.model.mRealm',
     pageSize: 100,
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

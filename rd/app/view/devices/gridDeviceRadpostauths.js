@@ -51,6 +51,7 @@ Ext.define('Rd.view.devices.gridDeviceRadpostauths' ,{
             pageSize: 150,
             //To force server side sorting:
             remoteSort: true,
+            remoteFilter: true,
             proxy: {
                 type    : 'ajax',
                 format  : 'json',
