@@ -17,6 +17,16 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;
+        
+        var sUserType = Ext.create('Ext.data.Store', {
+            fields: ['id', 'text'],
+            data : [
+                {"id":"user",       "text": "User"},
+                {"id":"voucher", 		"text": "Voucher"},
+				{"id":"device",   "text": "Device"}
+            ]
+        });
+               
         me.bbar     = [
             {
                 xtype       : 'pagingtoolbar',
@@ -95,8 +105,7 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                 sortable: false,
                 filter  : {
                     type    : 'list',
-                    phpMode : false,
-                    options : ['user', 'voucher', 'device']
+                    store: sUserType
                 },stateId: 'StateGridRadaccts28'
             }
         ];
