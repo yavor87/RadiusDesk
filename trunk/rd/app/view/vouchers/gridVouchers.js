@@ -72,7 +72,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 onWidgetAttach: function(column, widget, record) {
                     var v = record.get('perc_data_used');
                     if(v == null){
-                        widget.setSize(0,0);
+                     //   widget.setSize(0,0);
                     }else{
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
@@ -91,7 +91,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 onWidgetAttach: function(column, widget, record) {
                     var v = record.get('perc_time_used');
                     if(v == null){
-                        widget.setSize(0,0);
+                      //  widget.setSize(0,0);
                     }else{
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
