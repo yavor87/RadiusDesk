@@ -84,6 +84,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 header: i18n('sTime_used'),
                 dataIndex: 'perc_time_used',
                 width: 110,
+                xtype: 'widgetcolumn',
                 widget: {
                     xtype: 'progressbarwidget'
                 },
