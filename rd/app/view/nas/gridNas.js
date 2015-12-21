@@ -34,6 +34,18 @@ Ext.define('Rd.view.nas.gridNas' ,{
         //Unfortunately the ListMenu filter is still buggy when loading it from a store, so we have to give it a manual list taken form a store:
         //http://www.sencha.com/forum/showthread.php?132914-ux.grid.filter.ListFilter-doesn-t-fire-load-on-associated-Store
         //http://stackoverflow.com/questions/6004386/extjs-grid-filters-how-can-i-load-list-filter-options-from-external-json
+        
+        var sConnType = Ext.create('Ext.data.Store', {
+            fields: ['id', 'text'],
+            data : [
+                {"id":"direct",     "text": "Direct"},
+                {"id":"openvpn", 	"text": "OpenVPN"},
+				{"id":"pptp",       "text": "PPTP"},
+				{"id":"dynamic",    "text": "Dynamic"}
+            ]
+        });
+        
+        options: ['direct', 'openvpn', 'pptp', 'dynamic']
 
         var sTags = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mGenericList',
@@ -86,11 +98,9 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 flex        : 1,
                 hidden      : true,
                 filter      : {
-                                type: 'list',
-                                phpMode: false,
-                                // options will be used as data to implicitly creates an ArrayStore
-                                options: ['direct', 'openvpn', 'pptp', 'dynamic']
-                                },stateId: 'StateGridNas6'
+                    type    : 'list',
+                    store   : sConnType
+                },stateId: 'StateGridNas6'
             },
             { 
                 text    : i18n('sAvailable_to_sub_providers'),
@@ -123,7 +133,6 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 dataIndex: 'realms',
                 filter: {
                             type: 'list',
-                            phpMode: false,
                             store: sRealms
                         },stateId: 'StateGridNas8'
             },  
@@ -143,7 +152,6 @@ Ext.define('Rd.view.nas.gridNas' ,{
                 dataIndex: 'tags',
                 filter: {
                             type: 'list',
-                            phpMode: false,
                             store: sTags
                         },stateId: 'StateGridNas9'
             },

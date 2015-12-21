@@ -3,6 +3,7 @@ Ext.define('Rd.store.sNodeLists', {
     model: 'Rd.model.mNodeList',
     //To force server side sorting:
     remoteSort: true,
+    remoteFilter: true,
     proxy: {
             type    : 'ajax',
             format  : 'json',

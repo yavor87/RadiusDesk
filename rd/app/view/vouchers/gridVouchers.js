@@ -26,6 +26,18 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             }  
         ];     
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
+        
+        
+        var status = Ext.create('Ext.data.Store', {
+            fields: ['id', 'text'],
+            data : [
+                {"id":"new",       	"text": "New"},
+                {"id":"used", 		"text": "Used"},
+				{"id":"depleted",   "text": "Depleted"},
+				{"id":"expired",    "text": "Expired"}
+            ]
+        });
+
 
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridVouchers1'},
@@ -52,43 +64,39 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 header: i18n('sData_used'),
                 dataIndex: 'perc_data_used',
                 width: 110,
-                renderer: function (v, m, r) {
-                    if(v != null){
-                        var id = Ext.id();
-                        Ext.defer(function () {
-                            Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 100,
-                                text: v +" %"
-                            });
-                        }, 50);
-                        return Ext.String.format('<div id="{0}"></div>', id);
+                // This is our Widget column
+                xtype: 'widgetcolumn',
+                widget: {
+                    xtype: 'progressbarwidget'
+                },
+                onWidgetAttach: function(column, widget, record) {
+                    var v = record.get('perc_data_used');
+                    if(v == null){
+                        widget.setSize(0,0);
                     }else{
-                        return "N/A";
-                    }
-                },stateId: 'StateGridVouchers8'
+                        widget.setValue(v / 100);
+                        widget.setText( v +" %");
+                    }    
+                },
+                stateId: 'StateGridVouchers8'
             },
             {
                 header: i18n('sTime_used'),
                 dataIndex: 'perc_time_used',
                 width: 110,
-                renderer: function (v, m, r) {
-                    if(v != null){
-                        var id = Ext.id();
-                        Ext.defer(function () {
-                            Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 100,
-                                text: v+" %"
-                            });
-                        }, 50);
-                        return Ext.String.format('<div id="{0}"></div>', id);
+                widget: {
+                    xtype: 'progressbarwidget'
+                },
+                onWidgetAttach: function(column, widget, record) {
+                    var v = record.get('perc_time_used');
+                    if(v == null){
+                        widget.setSize(0,0);
                     }else{
-                        return "N/A";
-                    }
-                },stateId: 'StateGridVouchers9'
+                        widget.setValue(v / 100);
+                        widget.setText( v +" %");
+                    }    
+                },
+                stateId: 'StateGridVouchers9'
             },
             { 
                 text        : i18n('sStatus'),
@@ -103,8 +111,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 dataIndex   : 'status',
                 filter      : {
                                 type    : 'list',
-                                phpMode : false,
-                                options : ['new', 'used', 'depleted', 'expired']
+                                store   : status
                               },stateId: 'StateGridVouchers10'
             },
             {
