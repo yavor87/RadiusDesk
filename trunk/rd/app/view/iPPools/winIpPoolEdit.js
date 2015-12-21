@@ -98,7 +98,7 @@ Ext.define('Rd.view.iPPools.winIpPoolEdit', {
 					name        	: 'active',
                     inputValue  	: 'active',
                     checked     	: me.record.get('active'),
-                    boxLabelCls 	: 'lblRdCheck'
+                    cls             : 'lblRd'
 				},
 				{
 					xtype       	: 'checkbox',      
@@ -106,7 +106,7 @@ Ext.define('Rd.view.iPPools.winIpPoolEdit', {
 					name        	: 'clean_up',
                     inputValue  	: 'clean_up',
                     checked     	: true,
-                    boxLabelCls 	: 'lblRdCheck'
+                    cls             : 'lblRd'
 				}
             ]
         });
