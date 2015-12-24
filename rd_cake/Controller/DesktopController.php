@@ -273,6 +273,7 @@ class DesktopController extends AppController {
                 )
             ),
             //Finances
+/*
             array(  'text'  => __('Finances'),  'glyph' => Configure::read('icnFinance') ,'menu'  =>
                  array( 'items' =>
                     array(
@@ -309,7 +310,7 @@ class DesktopController extends AppController {
                     )
                 )
             ),
-
+*/
             //Permanent users
             array(  'text'  => __('Permanent Users'),  'glyph' => Configure::read('icnUser') ,'menu'  =>
                  array( 'items' =>
@@ -358,8 +359,8 @@ class DesktopController extends AppController {
             array(  'text'  => __('Activity monitor'),      'glyph' => Configure::read('icnActivity'),  'itemId' => 'cActivityMonitor'),
             array(  'xtype' => 'menuseparator'),
             array(  'text'  => __('MESHdesk'),              'glyph' => Configure::read('icnMesh'),      'itemId' => 'cMeshes'),
-            array(  'xtype' => 'menuseparator'),
-            array(  'text'  => __('Notifications'),         'glyph' => Configure::read('icnNotify'),    'itemId' => 'cNotifications')
+          //  array(  'xtype' => 'menuseparator'),
+          //  array(  'text'  => __('Notifications'),         'glyph' => Configure::read('icnNotify'),    'itemId' => 'cNotifications')
         );
 
         //Optional experimental stuff 
