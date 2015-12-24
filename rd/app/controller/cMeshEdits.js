@@ -275,7 +275,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         var me      = this; 
 		var id		= 'winMeshEdit'+ mesh_id;
         if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-			var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name, meshId :mesh_id, meshName: name});;
+			var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name, meshId :mesh_id, meshName: name});
             me.application.runAction('cDesktop','Add',w);      
         }
     },
@@ -294,7 +294,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             {
                 id          :'winMeshAddEntryId',
                 store       : store,
-                meshId      : win.getItemId()
+                meshId      : win.meshId
             });
             me.application.runAction('cDesktop','Add',w);         
         }
@@ -506,7 +506,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             {
                 id          :'winMeshAddExitId',
                 store       : store,
-                meshId      : win.getItemId()
+                meshId      : win.meshId
             });
             me.application.runAction('cDesktop','Add',w);         
         }
@@ -839,7 +839,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             {
                 id          :'winMeshAddNodeId',
                 store       : store,
-                meshId      : win.getItemId(),
+                meshId      : win.meshId,
 				meshName	: win.meshName,
                 itemId      : 'winMeshAddNodeEdit'	
             });
@@ -928,7 +928,7 @@ Ext.define('Rd.controller.cMeshEdits', {
                     id          :'winMeshEditNodeId',
                     store       : store,
                     nodeId      : id,
-                    meshId      : win.getItemId(),
+                    meshId      : win.meshId,
 					meshName	: win.meshName,
                     itemId      : 'winMeshEditNodeEdit'
                 });
@@ -1237,7 +1237,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 	mapPreferences: function(button){
        	var me 		= this;
 		var win		= button.up('winMeshEdit');
-		var mesh_id	= win.getItemId();
+		var mesh_id	= win.meshId;
 		var pref_id = 'winMeshMapPreferences_'+mesh_id;
 		var map_p	= win.down('pnlMeshEditGMap');
 
@@ -1257,7 +1257,7 @@ Ext.define('Rd.controller.cMeshEdits', {
    	mapNodeAdd: function(button){
         var me 		= this;
 		var win		= button.up('winMeshEdit');
-		var mesh_id	= win.getItemId();
+		var mesh_id	= win.meshId;
 		var add_id  = 'winMeshMapNodeAdd_'+mesh_id;
 		var map_p	= win.down('pnlMeshEditGMap');
 

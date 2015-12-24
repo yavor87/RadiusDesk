@@ -40,6 +40,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                 extraParams : { 'dynamic_detail_id' : me.dynamic_detail_id},
                 format  : 'json',
                 reader: {
+                    keepRawData     : true,
                     type: 'json',
                     rootProperty: 'items'
                 },
