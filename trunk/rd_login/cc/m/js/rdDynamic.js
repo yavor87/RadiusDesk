@@ -103,6 +103,15 @@ var rdDynamic = (function () {
                         cDynamicData = data.json().data;
                         fDebug(cDynamicData);
                         buildGuiBasedOnData();
+                    }else{
+                        webix.alert({
+                            title: "Huston we have a problem",
+                            text: "Go to RADIUSdesk, open the <b>Dynamic Login Pages</b> applet.<br>"+
+                            "Select an entry and <b>edit</b> it.<br>"+
+                            "Make sure you added an identifier from this URL's query string under <b>Dynamic Keys</b>"+
+                            " to ensure proper working of this login page<br>",
+                            type:"confirm-error"
+                        });
                     }
                 }
             });
