@@ -756,9 +756,9 @@ $$('sliderData').refresh();
 
 		    //console.log("Check for social login returns...");
 
-           	if(	(getParameterByName('sl_type') 	!= undefined)&& //e.g. user or voucher
-			    (getParameterByName('sl_name') 	!= undefined)&& //e.g. Facebook
-			    (getParameterByName('sl_value') != undefined)   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
+           	if(	(getParameterByName('sl_type') 	!= '')&& //e.g. user or voucher
+			    (getParameterByName('sl_name') 	!= '')&& //e.g. Facebook
+			    (getParameterByName('sl_value') != '')   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
 		    ){ 
 			    //console.log("Finding transaction details for "+ me.queryObj.tx);
 			
@@ -1273,10 +1273,10 @@ $$('sliderData').refresh();
             index               		: index,
             clearRefresh        		: clearRefresh,
             onBtnConnectClick   		: onBtnConnectClick,
-		    onBtnClickToConnectClick   	: onBtnClickToConnectClick,/*
+		    onBtnClickToConnectClick   	: onBtnClickToConnectClick,
 		    onBtnClickSocialLogin		: onBtnClickSocialLogin,
 		    onBtnDisconnectClick		: onBtnDisconnectClick,
-		    checkSocialLoginReturn		: checkSocialLoginReturn*/
+		    checkSocialLoginReturn		: checkSocialLoginReturn
         }   
   }
 })();
