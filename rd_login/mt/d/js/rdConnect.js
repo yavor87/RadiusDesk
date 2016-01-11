@@ -771,22 +771,17 @@ var rdConnect = (function () {
                     {
                         view    : "form",
                         scroll  : true,
-                        id      : 'regIntro',
-                        cols    : [ 
+                        id      : 'regForm',
+                        elements: [ 
                             {
                                css      : 'tmplCenter',
                               view      : "template",
                               borderless:true, 
+                              height    : 150,
                               template  : "<h3>Sign-up for free Internet</h3>"+
-			                    "Please register with us.<br>"
-                            }
-                         ]
-                    },
-                    {
-                        view    : "form",
-                        scroll  : true,
-                        id      : 'regForm',
-                        elements: [ 
+			                    "Welcome to free Wi-Fi by <b>"+cDynamicData.detail.name+"</b>.<br>"+
+                                "Sign up once to get Internet access!<br>"
+                            },
                             {
                                 view        : 'text',
                                 name        : 'mac',
@@ -917,7 +912,6 @@ var rdConnect = (function () {
 			        view    : "toolbar", 
 			        cols    : [
 						{},
-						{ view:"button", id: 'regNext', label:"Next", width:70, click:("$$('regMulti').setValue('regForm'); $$('regNext').hide();")},
 						{ view:"icon", icon:"times-circle", click:"$$('winRegister').close();"}
 				    ]
 				},
