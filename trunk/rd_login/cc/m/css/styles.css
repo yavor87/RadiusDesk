@@ -144,3 +144,8 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
  padding: 10px;
  width: 200px;
 }
+
+.tcText {
+    font-size: 14px; 
+    height: 40px;
+}

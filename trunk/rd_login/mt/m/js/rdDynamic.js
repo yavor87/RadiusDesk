@@ -203,8 +203,17 @@ var rdDynamic = (function () {
                     b.push({ 
                         view    : "checkbox",
                         id      : 'checkboxTandC',
-                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>T&C</a>"
+                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>Terms and Conditions</a>"
                     });
+                    
+                     b.push({
+                        view        : 'template',
+                        borderless  : true,
+                        height      : 40,
+                        css         : 'tcText',
+                        template    : "* By continuing, you agree to the terms and conditions."
+                    });
+                    
                 }
                 
                 b.push({view:"template",borderless:true,id:'tplConnectInfo'});
@@ -224,8 +233,17 @@ var rdDynamic = (function () {
                         view    : "checkbox", 
                         id      : 'checkboxTandC',
                         css     : 'checkboxTandC',
-                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>T&C</a>"
+                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>Terms and Conditions</a>"
                     });
+                    
+                     b.push({
+                        view        : 'template',
+                        borderless  : true,
+                        height      : 40,
+                        css         : 'tcText',
+                        template    : "* By continuing, you agree to the terms and conditions."
+                    });
+                    
                 }
                 
                 b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 30});
