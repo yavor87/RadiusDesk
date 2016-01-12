@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.63, for debian-linux-gnu (i486)
+-- MySQL dump 10.13  Distrib 5.5.43, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: rd
 -- ------------------------------------------------------
--- Server version	5.1.63-0ubuntu0.10.04.1
+-- Server version	5.5.43-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -732,7 +732,7 @@ CREATE TABLE `fin_authorize_net_transactions` (
 
 LOCK TABLES `fin_authorize_net_transactions` WRITE;
 /*!40000 ALTER TABLE `fin_authorize_net_transactions` DISABLE KEYS */;
-INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 13:30:46','2014-10-21 13:09:52','unknown'),(2,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:05:44','2014-10-21 13:10:01','unknown'),(3,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','','5.00','1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:07:26','2014-10-21 13:09:56','unknown');
+INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 13:30:46','2014-10-21 13:09:52','unknown'),(2,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:05:44','2014-10-21 13:10:01','unknown'),(3,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:07:26','2014-10-21 13:09:56','unknown');
 /*!40000 ALTER TABLE `fin_authorize_net_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1007,7 +1007,7 @@ CREATE TABLE `fin_payment_plans` (
 
 LOCK TABLES `fin_payment_plans` WRITE;
 /*!40000 ALTER TABLE `fin_payment_plans` DISABLE KEYS */;
-INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR','100.00','0.00',1,'2015-02-01 18:33:38','2015-02-14 21:38:16');
+INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR',100.00,0.00,1,'2015-02-01 18:33:38','2015-02-14 21:38:16');
 /*!40000 ALTER TABLE `fin_payment_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1078,7 +1078,7 @@ CREATE TABLE `fin_paypal_transactions` (
 
 LOCK TABLES `fin_paypal_transactions` WRITE;
 /*!40000 ALTER TABLE `fin_paypal_transactions` DISABLE KEYS */;
-INSERT INTO `fin_paypal_transactions` VALUES (2,44,87,NULL,'radiusdesk_merch@gmail.com','2N879041J5073971B','Vouchers','2Hours','RDVoucher','rd_v1','Renier','Viljoen','radiusdesk_buyer@gmail.com','NWBRWDPU862AY','verified','2.00','2.00','0.36','USD','02:55:52 Apr 25, 2014 PDT','Completed','2014-04-25 09:23:27','2014-04-28 05:44:43');
+INSERT INTO `fin_paypal_transactions` VALUES (2,44,87,NULL,'radiusdesk_merch@gmail.com','2N879041J5073971B','Vouchers','2Hours','RDVoucher','rd_v1','Renier','Viljoen','radiusdesk_buyer@gmail.com','NWBRWDPU862AY','verified',2.00,2.00,0.36,'USD','02:55:52 Apr 25, 2014 PDT','Completed','2014-04-25 09:23:27','2014-04-28 05:44:43');
 /*!40000 ALTER TABLE `fin_paypal_transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1501,7 +1501,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46',0),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29',0),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42',0),(44,'peet','02_CA_FE_CA_00_06','02:CA:FE:CA:00:06',44,'2015-06-07 20:34:59','2015-06-07 20:34:59',1);
+INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46',0),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29',0),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42',0);
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3217,7 +3217,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','6.jpg','2013-04-06 13:51:50','2014-06-04 13:48:03'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','2.jpg','2013-04-06 13:51:50','2016-01-12 17:43:15'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','7.jpg','2013-09-06 17:59:42','2013-09-06 17:59:42');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3380,4 +3380,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-09  2:28:33
+-- Dump completed on 2016-01-12 17:45:09
