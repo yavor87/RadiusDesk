@@ -76,9 +76,9 @@ class DesktopController extends AppController {
     public function list_wallpapers(){
         $items = array();
         //List all the wallpapres in the wallpaper directory:
-        $wp_document_root   = "/var/www";
+        $wp_document_root   = "/usr/share/nginx/html";
         $r_wp_dir           = "/rd/resources/images/wallpapers/";
-        $wp_dir             = "/var/www/rd/resources/images/wallpapers/";
+        $wp_dir             = "/usr/share/nginx/html/rd/resources/images/wallpapers/";
 
         $id = 1;
 

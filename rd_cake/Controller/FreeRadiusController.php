@@ -11,7 +11,7 @@ class FreeRadiusController extends AppController {
 
         //First the auth
         $type = 'auth';
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stats $type",$output_auth);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stats $type",$output_auth);
 
         $items = array();
         $items['auth_basic']  = array();
@@ -66,7 +66,7 @@ class FreeRadiusController extends AppController {
         }
 
         $type = 'acct';
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stats $type",$output_acct);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stats $type",$output_acct);
 
         $items['acct_detail'] = array();
 
@@ -145,7 +145,7 @@ class FreeRadiusController extends AppController {
             return;
         }
 
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
         $items = array();
         
         $this->set(array(
@@ -163,7 +163,7 @@ class FreeRadiusController extends AppController {
             return;
         }
 
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
         $items = array();
         
         $this->set(array(
@@ -183,7 +183,7 @@ class FreeRadiusController extends AppController {
 
         $items = array();
 
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl uptime freeradius",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl uptime freeradius",$output);
         if(count($output)>0){
             $uptime = $output[0];
             $items['uptime'] = $uptime;
@@ -196,14 +196,14 @@ class FreeRadiusController extends AppController {
         }
         
         unset($output);
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl version freeradius",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl version freeradius",$output);
         if(count($output)>0){
             $version = $output[0];
             $items['version'] = $version;
         }
 
         unset($output);
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl clients freeradius",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl clients freeradius",$output);
         if(count($output)>0){
             $clients = array();
             $id = 1;
@@ -216,7 +216,7 @@ class FreeRadiusController extends AppController {
         }
         
         unset($output);
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl modules freeradius",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl modules freeradius",$output);
         if(count($output)>0){
             $modules = array();
             $id = 1;
@@ -244,7 +244,7 @@ class FreeRadiusController extends AppController {
         }
 
         $items = array();
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug level",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug level",$output);
         if(count($output)>0){
             $level = $output[0];
             $items['level'] = intval($level);
@@ -263,7 +263,7 @@ class FreeRadiusController extends AppController {
         }
 
         unset($output);
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition",$output);
         if(count($output)>0){
             $condition = $output[0];
             $items['condition'] = $condition;
@@ -284,18 +284,18 @@ class FreeRadiusController extends AppController {
         }
 
         $items = array();
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug start",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug start",$output);
 
         //Check for filters
         if((isset($this->request->query['nas_id']))&&(!isset($this->request->query['username']))){
             $q = ClassRegistry::init('Na')->findById($this->request->query['nas_id']);
             $ip = $q['Na']['nasname'];
-            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(Packet-Src-IP-Address == $ip)'",$output);
+            exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(Packet-Src-IP-Address == $ip)'",$output);
         }
 
         if((isset($this->request->query['username']))&&(!isset($this->request->query['nas_id']))){
             $username = $this->request->query['username'];
-            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(User-Name == $username)'",$output);
+            exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '(User-Name == $username)'",$output);
         }
 
         if((isset($this->request->query['username']))&&(isset($this->request->query['nas_id']))){
@@ -303,7 +303,7 @@ class FreeRadiusController extends AppController {
             $ip = $q['Na']['nasname'];
             $username = $this->request->query['username'];
             $condition = "((User-Name == $username)&&(Packet-Src-IP-Address == $ip))";
-            exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '$condition'",$output);
+            exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug condition '$condition'",$output);
         }
 
         //Start the timeout
@@ -339,7 +339,7 @@ class FreeRadiusController extends AppController {
         }
 
         $items = array();
-        exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug stop",$output);
+        exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug stop",$output);
 
         //Clear the timeout
         $c = ClassRegistry::init('Check');
@@ -421,7 +421,7 @@ class FreeRadiusController extends AppController {
 
         $items['request']['username']   = $username;
         $items['request']['password']   = $pwd;
-        exec("perl /var/www/cake2/rd_cake/Setup/Scripts/radscenario.pl $username $pwd",$output);
+        exec("perl /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radscenario.pl $username $pwd",$output);
 
         $send_flag      = false;
         $receive_flag   = false;
