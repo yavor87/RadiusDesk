@@ -342,39 +342,6 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                                 cls     : 'subTab',
                                 items   :  [
                                     {
-                                        title       : 'LEDs',
-                                        xtype       : 'panel',
-                                        baseCls     : 'tabRadio',
-                                        layout      : 'anchor',
-                                        defaults    : {
-                                            anchor: '100%'
-                                        },
-                                        autoScroll:true,
-                                        items       :[
-                                            {
-										        xtype       : 'checkbox',      
-										        fieldLabel  : 'Neighbor Count',
-										        name        : 'led_neighbor',
-										        inputValue  : 'led_neighbor',
-										        labelClsExtra: 'lblRd'
-									        }, 
-                                            {
-										        xtype       : 'checkbox',      
-										        fieldLabel  : 'Mesh Traffic',
-										        name        : 'led_mesh',
-										        inputValue  : 'led_mesh',
-										        labelClsExtra: 'lblRd'
-									        },
-                                            {
-										        xtype       : 'checkbox',      
-										        fieldLabel  : 'Internet On/Off',
-										        name        : 'led_internet',
-										        inputValue  : 'led_internet',
-										        labelClsExtra: 'lblRd'
-									        }    
-                                        ]
-                                    },
-                                    {
                                         title       : 'Radio0',
                                         xtype       : 'panel',
                                         baseCls     : 'tabRadio',
@@ -413,7 +380,7 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                                             {
 										        xtype       : 'checkbox',      
 										        fieldLabel  : 'Disable 802.11b',
-                                                boxLabel    : '(Recommended)',
+                                                boxLabel    : '* Recommended on 2.4G',
 										        name        : 'radio0_disable_b',
 										        inputValue  : 'radio0_disable_b',
 										        labelClsExtra: 'lblRd'
@@ -517,7 +484,7 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                                             {
 										        xtype       : 'checkbox',      
 										        fieldLabel  : 'Disable 802.11b',
-                                                boxLabel    : '(Recommended)',
+                                                boxLabel    : '* Recommended on 2.4G',
 										        name        : 'radio1_disable_b',
 										        inputValue  : 'radio1_disable_b',
 										        labelClsExtra: 'lblRd'
@@ -579,6 +546,46 @@ Ext.define('Rd.view.meshes.winMeshEditNode', {
                                                 allowBlank  : true,
                                                 labelClsExtra: 'lblRd'
                                              }      
+                                        ]
+                                    },
+                                    {
+                                        title       : 'LEDs',
+                                        xtype       : 'panel',
+                                        baseCls     : 'tabRadio',
+                                        layout      : 'anchor',
+                                        defaults    : {
+                                            anchor: '100%'
+                                        },
+                                        autoScroll:true,
+                                        items       :[
+                                            {
+                                                xtype       : 'displayfield',
+                                                fieldLabel  : '(Future dev)'
+                                            },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Neighbor Count',
+										        name        : 'led_neighbor',
+										        inputValue  : 'led_neighbor',
+										        labelClsExtra: 'lblRd',
+										        disabled     : true
+									        }, 
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Mesh Traffic',
+										        name        : 'led_mesh',
+										        inputValue  : 'led_mesh',
+										        labelClsExtra: 'lblRd',
+										        disabled     : true
+									        },
+                                            {
+										        xtype       : 'checkbox',      
+										        fieldLabel  : 'Internet On/Off',
+										        name        : 'led_internet',
+										        inputValue  : 'led_internet',
+										        labelClsExtra: 'lblRd',
+										        disabled     : true
+									        }    
                                         ]
                                     }
                                 ]}
