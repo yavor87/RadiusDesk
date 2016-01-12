@@ -30,7 +30,7 @@ class DebugTask extends Shell {
             $now    = time();
             if($value < $now){
                 $this->out("<info>Debug::Debug timed out - disabling it</info>"); 
-                exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug stop",$output);
+                exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl debug stop",$output);
                 $this->out("<info>Debug::Deleting the intry in Checks table</info>");
                 $this->Check->deleteAll(array('Check.name' => 'debug_timeout'));
             }else{

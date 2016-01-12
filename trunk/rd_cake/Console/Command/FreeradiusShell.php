@@ -36,8 +36,8 @@ class FreeradiusShell extends AppShell {
                    // $restart_string = "sudo /etc/init.d/radiusd restart";
                    // system($restart_string);
                     //Change this so that cron can run as www-data
-                    exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
-                    exec("sudo /var/www/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
+                    exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stop freeradius");
+                    exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl start freeradius");
                     //Update the entry to the latest timestamp
                     $this->Check->id = $q_r['Check']['id'];
                     $this->Check->save();
