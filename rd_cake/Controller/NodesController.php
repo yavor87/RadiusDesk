@@ -737,6 +737,10 @@ class NodesController extends AppController {
             }
         }
         
+        if(array_key_exists('radio0_disable_b', $this->RadioSettings[0])) {
+            array_push($radio_zero_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
+        } 
+        
 
         array_push( $wireless,
                 array(
@@ -952,6 +956,10 @@ class NodesController extends AppController {
                 array_push($radio_zero_capab,array('name'    => 'ht_capab', 'value'  => $c));
             }
         }
+        
+        if(array_key_exists('radio0_disable_b', $this->RadioSettings[0])) {
+            array_push($radio_zero_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
+        } 
 
 		array_push( $wireless,
             array(
@@ -1031,6 +1039,10 @@ class NodesController extends AppController {
                 array_push($radio_one_capab,array('name'    => 'ht_capab', 'value'  => $c));
             }
         }
+        
+        if(array_key_exists('radio1_disable_b', $this->RadioSettings[0])) {
+            array_push($radio_one_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
+        } 
 
 		array_push( $wireless,
             array(

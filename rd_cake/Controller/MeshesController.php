@@ -1223,7 +1223,7 @@ class MeshesController extends AppController {
             //--Clean up--
             $n_id = $new_id;
             foreach(array_keys($this->request->data) as $key){
-                if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int)/',$key)){            
+                if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int|disable_b)/',$key)){            
                     if(preg_match('/^radio\d+_ht_capab/',$key)){
                         $pieces = explode("\n", $this->request->data["$key"]);
                         foreach($pieces as $p){
@@ -1385,7 +1385,7 @@ class MeshesController extends AppController {
                 $n_id = $this->request->data['id'];
                 $wifi_setting->deleteAll(array('NodeWifiSetting.node_id' => $n_id), true);
                 foreach(array_keys($this->request->data) as $key){
-                    if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int)/',$key)){
+                    if(preg_match('/^radio\d+_(htmode|txpower|diversity|distance|noscan|ht_capab|ldpc|beacon_int|disable_b)/',$key)){
                         
                         if(preg_match('/^radio\d+_ht_capab/',$key)){
                             $pieces = explode("\n", $this->request->data["$key"]);
@@ -1442,6 +1442,8 @@ class MeshesController extends AppController {
 
         $id    = $this->request->query['node_id'];
         $q_r   = $node->findById($id);
+        
+        $hardware = $q_r['Node']['hardware'];
  
         //print_r($q_r);
 		if(
@@ -1486,6 +1488,24 @@ class MeshesController extends AppController {
             if($radio1_flag){
                 $q_r['Node']['radio1_ht_capab'] = implode("\n",$r1_ht_capab);
             }
+        }else{
+            
+            Configure::load('MESHdesk'); 
+            $hardware_list 	= Configure::read('hardware'); //Read the defaults
+		    foreach($hardware_list as $i){
+			    if($i['id'] == $hardware){
+				    foreach(array_keys($i) as $key){
+                        if(preg_match('/^radio\d+_/',$key)){
+                            if(preg_match('/^radio\d+_ht_capab/',$key)){
+                                $q_r['Node']["$key"] = implode("\n",$i["$key"]);
+                            }else{
+                                $q_r['Node']["$key"] = $i["$key"];
+                            }
+                        }
+                    }
+                    break;
+			    }
+		    }
         }
 
 		$q_r['Node']['mesh_id'] = intval($q_r['Node']['mesh_id']);
