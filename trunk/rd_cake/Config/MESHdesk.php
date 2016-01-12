@@ -78,6 +78,7 @@ $config['hardware'][0]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -106,6 +107,7 @@ $config['hardware'][1]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -134,6 +136,7 @@ $config['hardware'][2]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -162,6 +165,7 @@ $config['hardware'][3]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -190,6 +194,7 @@ $config['hardware'][4]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -246,6 +251,7 @@ $config['hardware'][6]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -301,6 +307,7 @@ $config['hardware'][8]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -328,6 +335,7 @@ $config['hardware'][9]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -355,6 +363,7 @@ $config['hardware'][10]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -405,6 +414,7 @@ $config['hardware'][11]      = array(
         'radio1_noscan'         => false,
         'radio1_ldpc'           => true,
         'radio1_beacon_int'     => 100,
+        'radio1_disable_b'      => true,
         'radio1_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -442,6 +452,7 @@ $config['hardware'][12]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -494,6 +505,7 @@ $config['hardware'][13]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -547,6 +559,7 @@ $config['hardware'][14]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -591,6 +604,7 @@ $config['hardware'][15]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -627,6 +641,7 @@ $config['hardware'][16]      = array(
         'radio0_noscan'         => false,
         'radio0_ldpc'           => true,
         'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
         'radio0_ht_capab'       => array(
             'SHORT-GI-40',
             'RX-STBC1',
@@ -669,6 +684,7 @@ $config['hardware'][17]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -697,6 +713,7 @@ $config['hardware'][18]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -724,6 +741,7 @@ $config['hardware'][19]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -751,6 +769,7 @@ $config['hardware'][20]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -784,6 +803,7 @@ $config['hardware'][21]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -811,6 +831,7 @@ $config['hardware'][22]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
@@ -838,6 +859,7 @@ $config['hardware'][23]      = array(
     'radio0_noscan'         => false,
     'radio0_ldpc'           => true,
     'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
     'radio0_ht_capab'       => array(
         'SHORT-GI-40',
         'RX-STBC1',
