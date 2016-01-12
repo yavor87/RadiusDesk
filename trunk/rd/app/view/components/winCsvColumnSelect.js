@@ -6,7 +6,6 @@ Ext.define('Rd.view.components.winCsvColumnSelect', {
     autoShow: false,
     width:    350,
     height:   400,
-    iconCls: 'list',
     glyph   : Rd.config.icnCsv,
     columns: [],
     initComponent: function() {
