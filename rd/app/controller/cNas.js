@@ -1017,17 +1017,24 @@ Ext.define('Rd.controller.cNas', {
             var f_count     = 0;
             var f_found     = false;
             var filter_json ='';
-            me.getGrid().filters.filters.each(function(item) {
-                if (item.active) {
+            
+            var filter_collection = me.getGrid().getStore().getFilters();     
+            if(filter_collection.count() > 0){
+                var i = 0;
+                while (f_count < filter_collection.count()) { 
+
+                    console.log(filter_collection.getAt(f_count).serialize( ));
                     f_found         = true;
-                    var ser_item    = item.serialize();
-                    ser_item.field  = item.dataIndex;
+                    var ser_item    = filter_collection.getAt(f_count).serialize( );
+                    ser_item.field  = ser_item.property;
                     filters[f_count]= ser_item;
                     f_count         = f_count + 1;
-                }
-            });   
+                    
+                }     
+            }
+            
             var col_json        = "columns="+Ext.JSON.encode(columns);
-            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.extraParams);
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;
             if(f_found){
                 filter_json = "filter="+Ext.JSON.encode(filters);
