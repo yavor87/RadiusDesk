@@ -1040,7 +1040,7 @@ class NodesController extends AppController {
             }
         }
         
-        if(array_key_exists('radio1_disable_b', $this->RadioSettings[0])) {
+        if(array_key_exists('radio1_disable_b', $this->RadioSettings[1])) {
             array_push($radio_one_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
         } 
 
