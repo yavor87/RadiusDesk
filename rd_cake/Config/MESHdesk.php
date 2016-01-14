@@ -2,8 +2,8 @@
 
 //===== MESHdesk ======
 
-//== Client WPA2 Personal passphrase (key)
-$config['MESHdesk']['client_key']	= 'radiusdesk'; 
+//== Client WPA2 Personal passphrase (key) NOTE: We moved this setting to be under common_node_settings instead
+//$config['MESHdesk']['client_key']	= 'radiusdesk'; 
 
 
 //== Encryption types ==
@@ -54,7 +54,10 @@ $config['common_node_settings']['tz_value']	        = 'SAST-2'; 	//Take the name
 $config['common_node_settings']['gw_dhcp_timeout']  = 120;	//
 $config['common_node_settings']['gw_use_previous']  = true;	//	
 $config['common_node_settings']['gw_auto_reboot']   = true;	//
-$config['common_node_settings']['gw_auto_reboot_time']   = 600;	//		
+$config['common_node_settings']['gw_auto_reboot_time']   = 600;	//
+
+//Default key when none is set
+$config['common_node_settings']['client_key']	    = 'radiusdesk'; 		
 
 
 //== Device types for MESHdesk ==
