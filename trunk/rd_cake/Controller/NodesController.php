@@ -589,8 +589,8 @@ class NodesController extends AppController {
 
         //$wireless = array();
 
-		Configure::load('MESHdesk');
-		$client_key = Configure::read('MESHdesk.client_key');
+		//Configure::load('MESHdesk');
+		//$client_key = Configure::read('MESHdesk.client_key');
 
         //First get the WiFi settings wether default or specific
         $this->_setWiFiSettings();
@@ -677,7 +677,7 @@ class NodesController extends AppController {
             $client_key = $mesh['NodeSetting']['client_key'];
         }else{
             Configure::load('MESHdesk');
-		    $client_key = Configure::read('MESHdesk.client_key');
+		    $client_key = Configure::read('common_node_settings.client_key');
         }
 
         //Get the channel
@@ -882,7 +882,7 @@ class NodesController extends AppController {
             $client_key = $mesh['NodeSetting']['client_key'];
         }else{
             Configure::load('MESHdesk');
-		    $client_key = Configure::read('MESHdesk.client_key');
+		    $client_key = Configure::read('common_node_settings.client_key');
         }
 
         //Get the channel that the mesh needs to be on
