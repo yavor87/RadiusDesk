@@ -254,6 +254,16 @@ var rdDynamic = (function () {
                     type    : "form",
                     id      : 'btnLogin'
                 });
+                
+                 b.push({
+                    view    : "button", 
+                    value   : "Remove me from realm" , 
+                    type    : "danger",
+                    hidden  : true,
+                    id      : 'btnRemoveMac'
+                });
+                
+                
                 if(cDynamicData.settings.connect_check == true){
                     b.push({ 
                         view    : "button", 
