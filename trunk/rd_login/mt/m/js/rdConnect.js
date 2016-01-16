@@ -9,8 +9,11 @@ var rdConnect = (function () {
         var urlUam          = 'http://'+h+'/rd_login/services/uam.php';
 	    var urlSocialBase   = 'http://'+h+'/cake2/rd_cake/auth/'; //Be sure this is the same as specified in FB e.g. IP or DNS!!
 	    var urlSocialInfoFor= 'http://'+h+'/cake2/rd_cake/third_party_auths/info_for.json'; //To pull the username and password associated with this ID + typ 
+	    
 	    var urlAdd			= 'http://'+h+'/cake2/rd_cake/register_users/new_permanent_user.json';
 		var urlLostPw		= 'http://'+h+'/cake2/rd_cake/register_users/lost_password.json';
+		
+		var urlRemoveMac    = 'http://'+h+'/cake2/rd_cake/devices/remove_mac.json';
 		
         var counter         = undefined; //refresh counter's id
         var timeUntilStatus = 20; //interval to refresh
@@ -38,6 +41,8 @@ var rdConnect = (function () {
 	    var statusFb		= undefined;
 	    
 	    var cDynamicData    = undefined;
+	    
+	    var mac_username    = '';
 	    
 	    if(co.cDynamicData != undefined){
             cDynamicData = co.cDynamicData;
@@ -70,6 +75,12 @@ var rdConnect = (function () {
             if($$('btnClickToConnect') != undefined){
                 $$('btnClickToConnect').attachEvent("onItemClick", function(){
                     onBtnClickToConnectClick()
+                });
+            }
+            
+            if($$('btnRemoveMac') != undefined){
+                $$('btnRemoveMac').attachEvent("onItemClick", function(){
+                    onBtnRemoveMacClick()
                 });
             }
             
@@ -405,7 +416,7 @@ var rdConnect = (function () {
         }
                
         var onBtnConnectClick = function(){  //Get the latest challenge and continue from there onwards....
-        
+         
             //Auto suffix check
 		    var auto_suffix_check   = cDynamicData.settings.auto_suffix_check;
 		    var auto_suffix			= cDynamicData.settings.auto_suffix;
@@ -553,14 +564,34 @@ var rdConnect = (function () {
                        // var mac = msg.match(/koos/);
                         mac_username = mac[0];            
                        // console.log("Here we have a match!!! ");
+                       $$('btnRemoveMac').show();
                        //// $('#remove_mac').show();
                     }else{
                       //  console.log("Here we have NOOOO match!!! ");
                        /// $('#remove_mac').hide();
+                       $$('btnRemoveMac').hide();
                     }
                 }
                 showLoginError(msg);  
             }
+        }
+        
+        
+        var onBtnRemoveMacClick = function(){
+
+            $.ajax({url: urlRemoveMac , dataType: "json",timeout: ajaxTimeout,date: {},data: {'mac':mac_username}})
+            .done(function(j){
+                console.log("Ajax call fine");
+                if(j.success == true){
+                    showLoginError("Device "+mac_username+" removed from realm, please log in again");
+                    $$('btnRemoveMac').hide();
+                }else{
+                    showLoginError(j.message);
+                }
+            })
+            .fail(function(){     
+                showLoginError('Problems encountered while trying to remove '+mac_username);
+            });
         }
         
         
