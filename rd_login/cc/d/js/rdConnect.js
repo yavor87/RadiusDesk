@@ -21,7 +21,7 @@ var rdConnect = (function () {
 	    var usageInterval	= 20;
 
         //Sometimes the CoovaChilli JSON interface is stubborn; so we have to try again
-        var retryCount      = 1; //Make it high to start with --- sometimes it really takes long! //FIXME (was 5)
+        var retryCount      = 5; //Make it high to start with --- sometimes it really takes long! //FIXME (was 5)
         var currentRetry    = 0;
 
         var userName        = undefined;
