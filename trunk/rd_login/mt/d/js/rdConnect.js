@@ -164,7 +164,7 @@ var rdConnect = (function () {
             if (typeof(do_usage_also) === "undefined") { do_usage_also = false; } //By default we give feedback
             var urlStatus = getParameterByName('link_status');
 
-            $.ajax({url: urlStatus + "?var=?", dataType: "jsonp",timeout: 4000})
+            $.ajax({url: urlStatus + "?var=?", dataType: "jsonp",timeout: ajaxTimeout})
             .done(function(j){
                 statusFb = j;		//Store the status feedback
                 
@@ -271,7 +271,7 @@ var rdConnect = (function () {
 	    var onBtnDisconnectClick = function(){
 		    showFeedback("Disconnect the user");
             var urlLogout = getParameterByName('link_logout');
-            $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: 4000,date: {}})
+            $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout ,date: {}})
             .done(function(j){
                 mtRefresh(); //Refresh
             })
@@ -622,7 +622,7 @@ var rdConnect = (function () {
 		    showFeedback("Log temp user into Captive Portal");
 
             var urlLogin = getParameterByName('link_login_only');
-            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: 4000, data: {username: userName, password: password}})
+            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
             .done(function(j){
                 socialTempLoginResults(j);
             })
@@ -716,7 +716,7 @@ var rdConnect = (function () {
 	    
             showFeedback("Disconnect the social temp user");
             var urlLogout = getParameterByName('link_logout');
-            $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: 4000,date: {}})
+            $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout,date: {}})
             .done(function(j){
                 retryCount = 0;
                 socialFinalLogin();
@@ -736,7 +736,7 @@ var rdConnect = (function () {
 		    showFeedback('Doing final login');
 
             var urlLogin = getParameterByName('link_login_only');
-            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: 4000, data: {username: userName, password: password}})
+            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
             .done(function(j){
                 socialFinalLoginResults(j);
             })
