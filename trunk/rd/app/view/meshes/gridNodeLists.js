@@ -67,7 +67,7 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
 
 		me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
-            {xtype: 'rownumberer',stateId: 'StateGridNodeLists1', width: Rd.config.buttonMargin},
+            {xtype: 'rownumberer',stateId: 'StateGridNodeLists1'},
 			{ 
                 text        : i18n('sOwner'), 
                 dataIndex   : 'owner', 

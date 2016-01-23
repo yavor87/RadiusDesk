@@ -1,8 +1,5 @@
 Ext.define('Rd.controller.cDevices', {
     extend: 'Ext.app.Controller',
-    uses : [
-        'Rd.model.mPrivateAttribute'
-    ],
     actionIndex: function(){
         var me = this;
         var desktop = this.application.getController('cDesktop');

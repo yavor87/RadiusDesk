@@ -67,7 +67,7 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
 
 		me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
- 			{xtype: 'rownumberer',stateId: 'StateGridUnknownNodes1', width: Rd.config.buttonMargin},
+ 			{xtype: 'rownumberer',stateId: 'StateGridUnknownNodes1'},
             { 
 				text		: 'MAC Address',      	
 				dataIndex	: 'mac',          

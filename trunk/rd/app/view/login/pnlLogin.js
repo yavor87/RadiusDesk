@@ -10,43 +10,10 @@ Ext.define('Rd.view.login.pnlLogin', {
         var me = this;
         //Wallpaper background
         me.items = [{'xtype' : 'compWallpaper','url' : me.url}];
-
-        var l = Ext.create('Ext.form.ComboBox', {
-            fieldLabel      : i18n('sChoose_a_language'),
-            labelSeparator  : '',
-            labelClsExtra   : 'lblRd',
-            labelWidth      : 150,
-            store           : 'sLanguages',
-            margin          : '0 0 0 10',
-            queryMode       : 'local',
-            valueField      : 'id',
-            displayField    : 'text',
-            typeAhead       : true,
-            mode            : 'local',
-            itemId          : 'cmbLanguage',
-            matchFieldWidth : true,
-            listConfig : {
-                getInnerTpl: function () {
-                    return ' <div data-qtip="{country} : {language}">'+
-                        '<div class="combo-wrapper">'+
-                        '<div class="combo-country">{country}<img src="{icon_file}" /></div>'+
-                        '<div class="combo-language"> {language}</div>'+
-                        '</div>'+
-                        '</div>';
-                }
-            }
-        });
-
+        
         var a = Ext.create('Rd.view.login.pnlAboutMenu',{'title': i18n('sAbout_RADIUSdesk')});
 
         me.bbar = [
-            {
-                xtype: 'container',
-                width: 400,
-                layout: 'fit',
-                items:  l
-            },
-            '->',
             { 
                 xtype       : 'button',     
                 scale       : 'large', 
@@ -61,7 +28,8 @@ Ext.define('Rd.view.login.pnlLogin', {
                         border  : false
                     }
                 }
-            }
+            },
+            '->'
         ];
         me.add(me.loginWindow());
         me.callParent(arguments);

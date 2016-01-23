@@ -13,42 +13,10 @@ Ext.define('Rd.controller.cStartup', {
     },
    actionIndex: function(){
         //Declare some scoped variables
-        var me          = this;
-
-        //This is to determine the language before we log on
-        var language    = '';
-        if(Ext.state.Manager.get('rdLanguage') != ''){
-            language =  Ext.state.Manager.get('rdLanguage');
-        }
-
-        //Fetch the languages first before trying to check whether we are authenticated or not
-        Ext.Ajax.request({
-            url: me.getUrlLocalizedStrings(),
-            params: {
-                language: language
-            },
-            method: 'GET',
-            success: function(response){
-                var jsonData = Ext.JSON.decode(response.responseText);
-                //Set the phrases
-                if(jsonData.success){
-
-                    me.application.setLanguages(jsonData.data.languages);
-                    me.application.setSelLanguage(jsonData.data.selLanguage);
-
-                    //Set the ajax extra params
-                    Local.localizedStrings      = jsonData.data.phrases;
-
-                    //Set the sel_language for the login screen
-                    //The extraParams should only be set in three places. 
-                    // 1.) Here BEFORE login in order to configue the php phrases for the login screen's POST return values
-                    Ext.Ajax.setExtraParams({'sel_language': me.application.getSelLanguage()});
-
-                    //After we have our language, we can check if we have an existing token to continuie with
-                    me.checkToken();
-                }
-            }
-        });
+        var me          = this;     
+        me.application.setSelLanguage(Rd.config.selLanguage); //We hardcode the language since it is not very efficient to stroe the phrases in DB
+        Ext.Ajax.setExtraParams({'sel_language': me.application.getSelLanguage()});
+        me.checkToken();
     },
     
     checkToken: function(){
