@@ -297,7 +297,7 @@
          //   - other: a string (such as the build.timestamp shown here) to allow
          //     requests to be cached for this build.
          //
-         "cache": false,
+         "cache": true,
 
          // When "cache" is not true, this value is the request parameter used
          // to control caching.
@@ -312,7 +312,7 @@
         "output": {
             
             "appCache": {
-                "enable": true,
+                "enable": false,
                 "path": "cache.appcache"
             }
             
@@ -422,7 +422,7 @@
     "output": {
         "base": "${workspace.build.dir}/${build.environment}/${app.name}",
         "appCache": {
-            "enable": false
+            "enable": true
         }
     },
     
@@ -443,7 +443,7 @@
     *   }
     */
     "cache": {
-        "enable": false,
+        "enable": true,
         "deltas": true
     },
 

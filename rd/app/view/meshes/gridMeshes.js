@@ -31,7 +31,7 @@ Ext.define('Rd.view.meshes.gridMeshes' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
 
         me.columns  = [
-            {xtype: 'rownumberer',stateId: 'StateGridMeshes1', width: Rd.config.buttonMargin},
+            {xtype: 'rownumberer',stateId: 'StateGridMeshes1'},
             { text: i18n('sOwner'),     dataIndex: 'owner',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridMeshes2',
                 hidden: true
             

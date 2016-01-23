@@ -1,7 +1,6 @@
 Ext.define('Rd.controller.cLogin', {
     extend: 'Ext.app.Controller',
     views:  ['login.pnlLogin'],
-    stores: ['sLanguages'],
     config: {
         urlLogin    : '/cake2/rd_cake/desktop/authenticate.json',
         urlWallpaper: 'resources/images/wallpapers/3.jpg'
@@ -36,17 +35,10 @@ Ext.define('Rd.controller.cLogin', {
     },
     actionIndex: function(){
         var me = this;
-        //Populate the Language store with a list of languages
-        me.getStore('sLanguages').loadData(me.application.getLanguages());
-        
         var li = me.getView('login.pnlLogin').create({'url':me.getUrlWallpaper()});
         var vp = me.getViewP();
         vp.removeAll(true);
         vp.add([li]);
-
-        //Get record and value
-        //Get the value of the previous language
-        li.down("#cmbLanguage").setValue(me.application.getSelLanguage());
     },
 
     login: function(button){
@@ -77,34 +69,9 @@ Ext.define('Rd.controller.cLogin', {
     actionExit: function() {
         var me = this;
         me.getViewP().removeAll(true);     //Remove the current panel that fills the viewport
-
         var desktop = this.application.getController('cDesktop');
         desktop.closeAllWindows();
-
         Ext.util.Cookies.clear("Token");
         me.actionIndex();
-    },
-    onLanguageSelect: function(combo, record){
-        var sr = record;
-
-        Ext.MessageBox.show({
-           title: i18n('sNew_language_selected'),
-           msg: i18n('sChanging_language_please_wait')+'...',
-           closable: false,
-           width:300,
-           wait:true,
-           waitConfig: {interval:200},
-           icon:'ext-mb-download', //custom class in msg-box.html
-           animateTarget: combo
-        });
-
-        //We do this to allow the display of the message and then reloading else it leave the user confused
-        setTimeout(function(){
-            Ext.MessageBox.hide();
-            Ext.state.Manager.set('rdLanguage',sr.getId());
-            Ext.state.Manager.set('rdLanguageRtl',sr.get('rtl'));
-            console.log(Ext.state.Manager.get('rdLanguageRtl'));
-            location.reload();
-        }, 1000);  
     }
 });
