@@ -6,7 +6,7 @@ Ext.define('Rd.view.vouchers.winVoucherEmailDetail', {
     resizable   : true,
     title       : 'e-mail voucher detail',
     width       : 400,
-    height      : 300,
+    height      : 350,
     plain       : true,
     border      : false,
     layout      : 'fit',

@@ -1,12 +1,12 @@
-Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
+Ext.define('Rd.view.vouchers.winVoucherCsvImport', {
     extend		: 'Ext.window.Window',
-    alias 		: 'widget.winVoucherAddWizard',
+    alias 		: 'widget.winVoucherCsvImport',
     closable	: true,
     draggable	: true,
     resizable	: false,
-    title		: i18n('sNew_voucher'),
-    width		: 400,
-    height		: 450,
+    title		: 'Add from CSV Import',
+    width		: 450,
+    height		: 500,
     plain		: true,
     border		: false,
     layout		: 'card',
@@ -131,28 +131,12 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     hidden  : true,
                                     value   : me.user_id
                                 },
-								{
-                                    itemId  : 'single_field',
-                                    xtype   : 'textfield',
-                                    name    : "single_field",
-                                    hidden  : true,
-                                    value   : me.singleField
-                                },
                                 {
                                     itemId      : 'owner',
                                     xtype       : 'displayfield',
                                     fieldLabel  : i18n('sOwner'),
                                     value       : me.owner,
                                     labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'textfield',
-                                    name        : 'precede',
-                                    fieldLabel  : i18n('sPrecede_string'),
-                                    allowBlank  : true,
-                                    labelClsExtra: 'lblRd',
-									hidden		: me.singleField,
-									disabled	: me.singleField
                                 },
                                 {
                                     xtype       : 'cmbRealm',
@@ -169,36 +153,28 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     extraParam  : me.apId
                                 },
                                 {
-                                    xtype       : 'numberfield',
-                                    name        : 'quantity',
-                                    fieldLabel  : i18n('sHow_many_qm'),
-                                    value       : 1,
-                                    maxValue    : 500,
-                                    minValue    : 1,
-                                    labelClsExtra: 'lblRdReq',
-                                    itemId      : 'quantity'
-                                },
-                                {
                                     xtype       : 'textfield',
                                     name        : 'batch',
                                     fieldLabel  : i18n('sBatch_name'),
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'batch',
-                                    disabled    : true,
-                                    hidden      : true
+                                    itemId      : 'batch'
                                 },
                                 {
-                                    xtype       : 'slider',
-                                    name        : 'pwd_length',
-                                    fieldLabel  : i18n('sPassword_length'),
-                                    width       : 200,
-                                    value       : 3,
-                                    increment   : 1,
-                                    minValue    : 3,
-                                    maxValue    : 15,
-									hidden		: me.singleField,
-									disabled	: me.singleField
+                                    xtype       : 'filefield',
+                                    itemId      : 'csv_file',
+                                    emptyText   : 'Select CSV File..',
+                                    fieldLabel  : 'CSV List',
+                                    allowBlank  : false,
+                                    name        : 'csv_file',
+                                    buttonText  : '',
+                                    buttonConfig: {
+                                        iconCls     : 'upload-icon',
+                                        glyph       : Rd.config.icnFolder
+                                    },
+                                    regex       : /^.*\.(csv|CSV)$/,
+                                    regexText   : 'Only CSV files allowed',
+                                    labelClsExtra: 'lblRdReq'
                                 }
                             ]
                         },
@@ -217,7 +193,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     inputValue  : 'activate_on_login',
                                     itemId      : 'activate_on_login',
                                     checked     : false,
-                                    cls         : 'lblRd'
+                                    boxLabelCls : 'lblRdCheck'
                                 },
                                 {
                                     xtype       : 'numberfield',
@@ -261,7 +237,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     inputValue  : 'never_expire',
                                     itemId      : 'never_expire',
                                     checked     : true,
-                                    cls         : 'lblRd'
+                                    boxLabelCls : 'lblRdCheck'
                                 },
                                 {
                                     xtype       : 'datefield',
@@ -271,32 +247,6 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     minValue    : new Date(),  // limited to the current date or after
                                     disabled    : true,
                                     value       : dtTo
-                                }
-                            ]
-                        },
-						{ 
-                            'title' : 'SSIDs',
-                            'layout'    : 'anchor',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            items       : [
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : 'Connect only from selected SSIDs',
-                                    name        : 'ssid_only',
-                                    inputValue  : 'ssid_only',
-									itemId  	: 'ssid_only',
-                                    checked     : false,
-                                    cls         : 'lblRd'
-                                },
-                                {
-                                    xtype       : 'cmbSsid',
-                                    labelClsExtra: 'lblRdReq',
-									itemId		: 'ssid_list',
-									hidden		: true,
-									disabled	: true,
-									extraParam  : me.user_id
                                 }
                             ]
                         },
@@ -322,6 +272,28 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     labelClsExtra: 'lblRd'
                                 }
                             ]
+                        },
+                        { 
+                            'title' : 'e-Mail',
+                            'layout'    : 'anchor',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            items: [
+                                {
+                                    xtype       : 'textfield',
+                                    name        : 'email_title',
+                                    fieldLabel  : 'Title',
+                                    allowBlank  : true
+                                },
+                                {
+                                    xtype       : 'textareafield',
+                                    grow        : true,
+                                    name        : 'email_message',
+                                    allowBlank  : true,
+                                    fieldLabel  : 'Message'
+                                }
+                            ]
                         }
                     ]
                 }              
@@ -329,6 +301,5 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
             buttons: buttons
         });
         return frmData;
-
     }   
 });
