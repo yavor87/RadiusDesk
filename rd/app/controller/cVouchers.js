@@ -58,7 +58,8 @@ Ext.define('Rd.controller.cVouchers', {
         'components.pnlUsageGraph', 	'vouchers.winVoucherEmailDetail',
 		'vouchers.gridVoucherDevices',	'vouchers.winVoucherAddDevice',
 		'components.cmbSsid',
-        'vouchers.pnlVoucherGraphs'
+        'vouchers.pnlVoucherGraphs',
+        'vouchers.winVoucherCsvImport'
     ],
     stores: ['sVouchers', 'sAccessProvidersTree', 'sRealms', 'sProfiles', 'sAttributes', 'sVendors',    'sPdfFormats', 'sLanguages'],
     models: [
@@ -78,7 +79,8 @@ Ext.define('Rd.controller.cVouchers', {
         urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',
         urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
 		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json',
-		urlPdfExportLoad:	'/cake2/rd_cake/vouchers/pdf_export_settings.json'
+		urlPdfExportLoad:	'/cake2/rd_cake/vouchers/pdf_export_settings.json',
+		urlAddCsv:          '/cake2/rd_cake/vouchers/add_csv/'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridVouchers'} ,
@@ -91,6 +93,7 @@ Ext.define('Rd.controller.cVouchers', {
         }
         me.inited 		= true;
 		me.singleField	= true;
+		me.addCsvList   = false;
 
         me.control({
             '#vouchersWin'    : {
@@ -161,6 +164,24 @@ Ext.define('Rd.controller.cVouchers', {
             'winVoucherAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
+            
+            //CSV Add Window
+            'winVoucherCsvImport #btnTreeNext' : {
+                click:  me.btnTreeNext
+            },
+            'winVoucherCsvImport #btnDataPrev' : {
+                click:  me.btnDataPrev
+            },
+            'winVoucherCsvImport #activate_on_login' : {
+                change:  me.chkActivateOnLoginChange
+            },
+            'winVoucherCsvImport #never_expire' : {
+                change:  me.chkNeverExpireChange
+            },
+            'winVoucherCsvImport #btnDataNext' : {
+                click:  me.btnDataNextCsv
+            },
+            
             'pnlVoucher #tabBasicInfo' : {
                 activate: me.onTabBasicInfoActive
             },
@@ -306,66 +327,70 @@ Ext.define('Rd.controller.cVouchers', {
 	addOptionClick: function(menu_item){
 		var me = this;
 		var n  = menu_item.getItemId();
+		
 		if(n == 'addSingle'){
-			me.singleField = true;
-		} 
-
-		if(n == 'addDouble'){
-			me.singleField = false;
-		} 
+			me.singleField = true;   
+		}else{
+            me.singleField = false;
+        }
+		
+		if(n == 'addCsvList'){
+            me.addCsvList = true;
+        }else{
+            me.addCsvList = false;
+        }	
 	},
     gridActivate: function(g){
         var me = this;
         g.getStore().load();
     },
-    add: function(button){
-        
-        var me = this;
-        //We need to do a check to determine if this user (be it admin or acess provider has the ability to add to children)
-        //admin/root will always have, an AP must be checked if it is the parent to some sub-providers. If not we will 
-        //simply show the nas connection typer selection 
-        //if it does have, we will show the tree to select an access provider.
-        Ext.Ajax.request({
-            url: me.getUrlApChildCheck(),
-            method: 'GET',
-            success: function(response){
-                var jsonData    = Ext.JSON.decode(response.responseText);
-                if(jsonData.success){
-                        
-                    if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
-                            var w = Ext.widget('winVoucherAddWizard',{id:'winVoucherAddWizardId',singleField: me.singleField});
-                            me.application.runAction('cDesktop','Add',w);         
+    add: function(button){  
+        var me = this;   
+        if(me.addCsvList){
+            me.addCsvImport();    
+        }else{
+            Ext.Ajax.request({
+                url: me.getUrlApChildCheck(),
+                method: 'GET',
+                success: function(response){
+                    var jsonData    = Ext.JSON.decode(response.responseText);
+                    if(jsonData.success){
+                            
+                        if(jsonData.items.tree == true){
+                            if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
+                                var w = Ext.widget('winVoucherAddWizard',{id:'winVoucherAddWizardId',singleField: me.singleField});
+                                me.application.runAction('cDesktop','Add',w);         
+                            }
+                        }else{
+                            if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
+                                var w = Ext.widget('winVoucherAddWizard',
+                                    {
+									    id			: 'winVoucherAddWizardId',
+									    startScreen	: 'scrnData',
+									    user_id		:'0',
+									    owner		: i18n('sLogged_in_user'), 
+									    no_tree		: true,
+									    apId		:'0',
+									    singleField : me.singleField
+								    }
+                                );
+                                me.application.runAction('cDesktop','Add',w);         
+                            }
                         }
-                    }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
-                            var w = Ext.widget('winVoucherAddWizard',
-                                {
-									id			: 'winVoucherAddWizardId',
-									startScreen	: 'scrnData',
-									user_id		:'0',
-									owner		: i18n('sLogged_in_user'), 
-									no_tree		: true,
-									apId		:'0',
-									singleField : me.singleField
-								}
-                            );
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
-                    }
-                }   
-            },
-            scope: me
-        });
-
+                    }   
+                },
+                scope: me
+            });
+        }
     },
+    
     btnTreeNext: function(button){
         var me = this;
         var tree = button.up('treepanel');
         //Get selection:
         var sr = tree.getSelectionModel().getLastSelected();
         if(sr){    
-            var win = button.up('winVoucherAddWizard');
+            var win = button.up('window');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
 
@@ -388,7 +413,7 @@ Ext.define('Rd.controller.cVouchers', {
     },
     btnDataPrev:  function(button){
         var me      = this;
-        var win     = button.up('winVoucherAddWizard');
+        var win     = button.up('window');
         win.getLayout().setActiveItem('scrnApTree');
     },
     btnDataNext:  function(button){
@@ -412,6 +437,65 @@ Ext.define('Rd.controller.cVouchers', {
             failure: Ext.ux.formFail
         });
     },
+    
+    addCsvImport : function(){
+        var me = this;
+        console.log("We need to import from CSV");
+        Ext.Ajax.request({
+            url: me.getUrlApChildCheck(),
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){
+                        
+                    if(jsonData.items.tree == true){
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherCsvImportId')){
+                            var w = Ext.widget('winVoucherCsvImport',{id:'winVoucherCsvImportId'});
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }else{
+                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherCsvImportId')){
+                            var w = Ext.widget('winVoucherCsvImport',
+                                {
+						            id			: 'winVoucherCsvImportId',
+						            startScreen	: 'scrnData',
+						            user_id		:'0',
+						            owner		: i18n('sLogged_in_user'), 
+						            no_tree		: true,
+						            apId		:'0'
+					            }
+                            );
+                            me.application.runAction('cDesktop','Add',w);         
+                        }
+                    }
+                }   
+            },
+            scope: me
+        });
+    },
+    
+    btnDataNextCsv:  function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            waitMsg: 'Uploading your CSV File...',
+            url: me.getUrlAddCsv(),
+            success: function(form, action) {
+             //   win.close();
+                me.getStore('sVouchers').load();
+                Ext.ux.Toaster.msg(
+                    i18n('sNew_item_created'),
+                    i18n('sItem_created_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    
     select:  function(grid, record, item, index, event){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
