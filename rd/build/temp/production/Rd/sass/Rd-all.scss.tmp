@@ -1474,6 +1474,7 @@ $include-rd-view-vouchers-pnlvoucher: dynamic(true);;
 $include-rd-view-vouchers-pnlvouchergraphs: dynamic(true);;
 $include-rd-view-vouchers-winvoucheradddevice: dynamic(true);;
 $include-rd-view-vouchers-winvoucheraddwizard: dynamic(true);;
+$include-rd-view-vouchers-winvouchercsvimport: dynamic(true);;
 $include-rd-view-vouchers-winvoucheremaildetail: dynamic(true);;
 $include-rd-view-vouchers-winvoucherpassword: dynamic(true);;
 $include-rd-view-vouchers-winvoucherpdf: dynamic(true);;
