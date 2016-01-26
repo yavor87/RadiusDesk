@@ -386,7 +386,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var i = 0;
                 while (f_count < filter_collection.count()) { 
 
-                    console.log(filter_collection.getAt(f_count).serialize( ));
+                    //console.log(filter_collection.getAt(f_count).serialize( ));
                     f_found         = true;
                     var ser_item    = filter_collection.getAt(f_count).serialize( );
                     ser_item.field  = ser_item.property;
@@ -396,11 +396,11 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 }     
             }
                
-            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
             var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;
             if(f_found){
-                filter_json = "filter="+Ext.JSON.encode(filters);
+                filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
                 append_url  = append_url+'&'+filter_json;
             }
             window.open(me.getUrlExportCsvAcct()+append_url);
@@ -461,7 +461,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var i = 0;
                 while (f_count < filter_collection.count()) { 
 
-                    console.log(filter_collection.getAt(f_count).serialize( ));
+                    //console.log(filter_collection.getAt(f_count).serialize( ));
                     f_found         = true;
                     var ser_item    = filter_collection.getAt(f_count).serialize( );
                     ser_item.field  = ser_item.property;
@@ -471,11 +471,11 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 }     
             }
            
-            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
             var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;
             if(f_found){
-                filter_json = "filter="+Ext.JSON.encode(filters);
+                filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
                 append_url  = append_url+'&'+filter_json;
             }
             window.open(me.getUrlExportCsvAuth()+append_url);

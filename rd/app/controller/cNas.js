@@ -1033,11 +1033,11 @@ Ext.define('Rd.controller.cNas', {
                 }     
             }
             
-            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
             var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;
             if(f_found){
-                filter_json = "filter="+Ext.JSON.encode(filters);
+                filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
                 append_url  = append_url+'&'+filter_json;
             }
             window.open(me.getUrlExportCsv()+append_url);
