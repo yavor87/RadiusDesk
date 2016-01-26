@@ -550,7 +550,8 @@ Ext.define('Rd.controller.cVouchers', {
                         url: me.getUrlDelete(),
                         method: 'POST',          
                         jsonData: list,
-                        success: function(batch,options){console.log('success');
+                        success: function(batch,options){
+                            //console.log('success');
                             Ext.ux.Toaster.msg(
                                 i18n('sItem_deleted'),
                                 i18n('sItem_deleted_fine'),
@@ -698,17 +699,36 @@ Ext.define('Rd.controller.cVouchers', {
         //Token
         var token 		= Ext.util.Cookies.get("Token"); //No token?
         var url_to_add 	= form_to_string+'&token='+token+'&';
-		console.log(url_to_add);
+		//console.log(url_to_add);
+		
+	    //---- Filter thing -----	
+		var filters     = [];
+        var f_count     = 0;
+        var f_found     = false;
+        var filter_json ='';
+             
+        var filter_collection = me.getGrid().getStore().getFilters();     
+        if(filter_collection.count() > 0){
+            var i = 0;
+            while (f_count < filter_collection.count()) { 
 
-        //Check for filter
-        var filter = me.getGrid().getStore().getFilters();
-        console.log(filter);
-        
-        if(filter.length > 0){
-            var filter = Ext.encode(me.getGrid().getStore().getFilters());
-            //console.log("filter="+encodeURIComponent(filter));
-            url_to_add = url_to_add+"filter="+encodeURIComponent(filter);
+                //console.log(filter_collection.getAt(f_count).serialize( ));
+                f_found         = true;
+                var ser_item    = filter_collection.getAt(f_count).serialize( );
+                ser_item.field  = ser_item.property;
+                filters[f_count]= ser_item;
+                f_count         = f_count + 1;
+                
+            }     
         }
+        
+        
+        if(f_found){
+            filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
+            url_to_add  = url_to_add+filter_json;
+            //console.log(url_to_add);
+        }
+        //--- END Filter thing -----
 
         //Check if the 'selected_only' was chosen
         var form = button.up('form');
@@ -806,7 +826,7 @@ Ext.define('Rd.controller.cVouchers', {
                 var i = 0;
                 while (f_count < filter_collection.count()) { 
 
-                    console.log(filter_collection.getAt(f_count).serialize( ));
+                  //  console.log(filter_collection.getAt(f_count).serialize( ));
                     f_found         = true;
                     var ser_item    = filter_collection.getAt(f_count).serialize( );
                     ser_item.field  = ser_item.property;
@@ -816,11 +836,11 @@ Ext.define('Rd.controller.cVouchers', {
                 }     
             }
            
-            var col_json        = "columns="+Ext.JSON.encode(columns);
+            var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
             var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;
             if(f_found){
-                filter_json = "filter="+Ext.JSON.encode(filters);
+                filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
                 append_url  = append_url+'&'+filter_json;
             }
             window.open(me.getUrlExportCsv()+append_url);
