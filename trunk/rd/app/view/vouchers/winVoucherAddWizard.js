@@ -6,7 +6,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
     resizable	: false,
     title		: i18n('sNew_voucher'),
     width		: 400,
-    height		: 450,
+    height		: 470,
     plain		: true,
     border		: false,
     layout		: 'card',
@@ -123,6 +123,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                             defaults    : {
                                 anchor: '100%'
                             },
+                            autoScroll  :true,
                             items       : [
                                 {
                                     itemId  : 'user_id',
