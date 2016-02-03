@@ -110,6 +110,24 @@ class KickerComponent extends Component {
 
             //==========================================================================================
         }
+        
+        
+        //Telkom
+        //==========================================================================================
+        if(preg_match("/^196/",$nas_ip)){
+            // Uncommnet this for Telkom (South Africa) implementations /
+            //Assume this is a telkom entry where the $nas_ip is not defined inside the NAS table since the 
+            //RADIUS request is proxied for the NAS
+            //Some variables to define
+            $pod_server = "196.43.3.86";
+            $pod_port   = "1700";
+            $xascend    = $radacct_entry['xascendsessionsvrkey'];
+            $secret     = "greatsecret"; //Change me
+            $rc = $this->radclient;
+            exec("echo \"User-Name = $username,X-Ascend-Session-Svr-Key=$xascend,NAS-IP-Address=$nas_ip,Framed-IP-Address=$framedipaddress\" | $rc -r 2 -t 2 $pod_server:$pod_port 40 $secret",$output);
+            
+        }
+            
     }
 
 }

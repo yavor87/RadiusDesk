@@ -434,6 +434,26 @@ class VouchersController extends AppController {
             ));
         }  
     }
+    
+    
+    public function add_csv(){
+    
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        
+        $this->layout = 'ext_file_upload';
+        
+        move_uploaded_file ($_FILES['csv_file']['tmp_name'] , "/tmp/csv_file.csv");
+        
+        $json_return = array();
+        
+        $json_return['success']             = true;
+        $this->set('json_return',$json_return);
+    
+    }
 
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
