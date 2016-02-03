@@ -43,7 +43,8 @@ $config['nas_types'][0]     = array('name' => 'Other',                  'id' => 
 $config['nas_types'][1]     = array('name' => 'CoovaChilli',            'id' => 'CoovaChilli',              'active' => true);
 $config['nas_types'][2]     = array('name' => 'CoovaChilli-Heartbeat',  'id' => 'CoovaChilli-Heartbeat',    'active' => true);
 $config['nas_types'][3]     = array('name' => 'Mikrotik',               'id' => 'Mikrotik',                 'active' => true);
-$config['nas_types'][3]     = array('name' => 'Mikrotik-Heartbeat',     'id' => 'Mikrotik-Heartbeat',       'active' => true);
+$config['nas_types'][4]     = array('name' => 'Mikrotik-Heartbeat',     'id' => 'Mikrotik-Heartbeat',       'active' => true);
+$config['nas_types'][5]     = array('name' => 'Telkom',                 'id' => 'Telkom',                   'active' => true);
 
 //Define Voucher format types
 $config['voucher_formats'][0]     = array('name' => 'Generic A4',               'id' => 'a4',               'active' => true);
