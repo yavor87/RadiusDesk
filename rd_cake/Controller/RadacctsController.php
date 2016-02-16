@@ -187,13 +187,13 @@ class RadacctsController extends AppController {
                     if($column_name == 'user_type'){
                         $user_type = 'unknown'; 
                         //Find device type
-                        if(count($i['Radcheck']) > 0){
+                       /* if(count($i['Radcheck']) > 0){
                             foreach($i['Radcheck'] as $rc){
                                 if($rc['attribute'] == 'Rd-User-Type'){
                                     $user_type = $rc['value'];   
                                 }
                             }
-                        }
+                        }*/
                         array_push($csv_line,$user_type);
                     }else{
                         array_push($csv_line,$i['Radacct']["$column_name"]);
@@ -260,15 +260,18 @@ class RadacctsController extends AppController {
         
         $items  = array();
         foreach($q_r as $i){
+        
+           // print_r($i);
+        
             $user_type = 'unknown'; 
             //Find device type
-            if(count($i['Radcheck']) > 0){
+           /* if(count($i['Radcheck']) > 0){
                 foreach($i['Radcheck'] as $rc){
                     if($rc['attribute'] == 'Rd-User-Type'){
                         $user_type = $rc['value'];   
                     }
                 }
-            }
+            }*/
 
             if($i['Radacct']['acctstoptime'] == null){
                 $online_time    = time()-strtotime($i['Radacct']['acctstarttime']);
@@ -569,7 +572,7 @@ class RadacctsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'Radcheck'   
+        //                    'Radcheck'   //This makes it slow
                         );
 
         //===== SORT =====
