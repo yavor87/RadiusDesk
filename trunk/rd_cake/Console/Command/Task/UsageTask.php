@@ -228,7 +228,7 @@ class UsageTask extends Shell {
             }
             $month++;
         }
-        $exp_in_unix = mktime(0,0, 0, $day, $month, $year);
+        $exp_in_unix = mktime(0,0, 0, $month,$day, $year);
         return $exp_in_unix;
     } 
 }
