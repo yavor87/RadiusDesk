@@ -90,7 +90,7 @@ class ThirdPartyAuthsController extends AppController {
 
 				if($type == 'voucher'){
 					$this->Voucher = ClassRegistry::init('Voucher');
-					$this->Voucher->countain();
+					$this->Voucher->contain();
 					$q_voucher =  $this->Voucher->find('first', 
 						array('conditions' => array('Voucher.extra_name' => $extra_name,'Voucher.extra_value'=> $extra_value)));
 					if(!$q_voucher){
