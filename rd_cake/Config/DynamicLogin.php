@@ -1,11 +1,19 @@
 <?php
 
+//The "Custom" theme will still redirect to the browser detection page but will redirect based on the page settings defined in the DB
+
+$config['DynamicLogin']['theme']['Custom'] = array(
+	
+);
+
+
 $config['DynamicLogin']['theme']['Default'] = array(
 	'coova_desktop'		=> '/rd_login/cc/d/index.html',
 	'coova_mobile'		=> '/rd_login/cc/m/index.html',
 	'mikrotik_desktop'	=> '/rd_login/mt/d/index.html',
 	'mikrotik_mobile'	=> '/rd_login/mt/m/index.html',
 );
+
 
 $config['DynamicLogin']['theme']['Green'] = array(
 	'coova_desktop'		=> '/rd_login/cc/d/index_green.html',
