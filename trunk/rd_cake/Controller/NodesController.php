@@ -681,7 +681,13 @@ class NodesController extends AppController {
         }
 
         //Get the channel
-        $channel    = $mesh['NodeSetting']['two_chan'];
+        if($mesh['NodeSetting']['two_chan']!='') {        
+            $channel    = $mesh['NodeSetting']['two_chan'];
+        }else{
+            Configure::load('MESHdesk');
+		    $channel = Configure::read('common_node_settings.two_chan');
+        }
+
 	
 		//Hardware mode for 5G
 		$hwmode		= '11g';	//Sane default
@@ -691,8 +697,13 @@ class NodesController extends AppController {
 		}
 
 		//Channel (if 5)
-		if($this->_get_hardware_setting($this->Hardware,'five')){
-			$channel    = $mesh['NodeSetting']['five_chan'];
+		if($this->_get_hardware_setting($this->Hardware,'five')){		
+		    if($mesh['NodeSetting']['five_chan']!='') {        
+                $channel    = $mesh['NodeSetting']['five_chan'];
+            }else{
+                Configure::load('MESHdesk');
+		        $channel = Configure::read('common_node_settings.five_chan');
+            }	
 		}
 
         //Country
@@ -886,8 +897,22 @@ class NodesController extends AppController {
         }
 
         //Get the channel that the mesh needs to be on
-        $mesh_channel_two    = $mesh['NodeSetting']['two_chan'];
-		$mesh_channel_five   = $mesh['NodeSetting']['five_chan'];
+        
+        //Get the channel
+        if($mesh['NodeSetting']['two_chan']!='') {        
+            $mesh_channel_two   = $mesh['NodeSetting']['two_chan'];
+        }else{
+            Configure::load('MESHdesk');
+		    $mesh_channel_two   = Configure::read('common_node_settings.two_chan');
+        }
+        
+        if($mesh['NodeSetting']['five_chan']!='') {        
+            $mesh_channel_five   = $mesh['NodeSetting']['five_chan'];
+        }else{
+            Configure::load('MESHdesk');
+		    $mesh_channel_five   = Configure::read('common_node_settings.five_chan');
+        }
+        
 
         //Get the country setting
         if($mesh['NodeSetting']['country'] != ''){

@@ -163,29 +163,27 @@ class DynamicDetailsController extends AppController {
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
+		
+		
+        if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    if($this->request->is('mobile')){
+                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+            }    
+		}else{  //Else we fetch the 'global' theme's value from the file
 
-		Configure::load('DynamicLogin'); 
-        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
-		if(!$pages){
-			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
-		}
+		    Configure::load('DynamicLogin'); 
+            $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		    if(!$pages){
+			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		    }
 
-		$redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
-        if($this->request->is('mobile')){
-            $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
-        }
-
-/*
-        $match_found = $this->_use_jquery_mobile();  
-        if($match_found){
-                $redir_to = Configure::read('CoovaDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
-        }else{  
-            $redir_to = Configure::read('CoovaDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
             if($this->request->is('mobile')){
-                $redir_to = Configure::read('CoovaDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
             }
         }
-*/
+
         $this->response->header('Location', $redir_to);
     }
 
@@ -209,29 +207,24 @@ class DynamicDetailsController extends AppController {
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
 
-		Configure::load('DynamicLogin'); 
-        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
-		if(!$pages){
-			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
-		}
+	    if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
+		    $redir_to = $q_r['DynamicDetail']['mikrotik_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    if($this->request->is('mobile')){
+                $redir_to = $q_r['DynamicDetail']['mikrotik_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+            }
+		}else{  //Else we fetch the 'global' theme's value from the file
+		    Configure::load('DynamicLogin'); 
+            $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		    if(!$pages){
+			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		    }
 
-		$redir_to = $pages['mikrotik_desktop'].'?'.$_SERVER['QUERY_STRING'];
-        if($this->request->is('mobile')){
-            $redir_to = $pages['mikrotik_mobile'].'?'.$_SERVER['QUERY_STRING'];
-        }
-
-
-/*
-        $match_found = $this->_use_jquery_mobile();  
-        if($match_found){
-            $redir_to = Configure::read('MikrotikDynamicLogin.jquery_mobile').'?'.$_SERVER['QUERY_STRING'];
-        }else{
-            $redir_to = Configure::read('MikrotikDynamicLogin.desktop').'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['mikrotik_desktop'].'?'.$_SERVER['QUERY_STRING'];
             if($this->request->is('mobile')){
-                $redir_to = Configure::read('MikrotikDynamicLogin.mobile').'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $pages['mikrotik_mobile'].'?'.$_SERVER['QUERY_STRING'];
             }
         }
-*/
+
         $this->response->header('Location', $redir_to);
     }
 
@@ -248,15 +241,20 @@ class DynamicDetailsController extends AppController {
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
 
-		Configure::load('DynamicLogin'); 
-        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
-		if(!$pages){
-			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
+		
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    
+        }else{   
+		    Configure::load('DynamicLogin'); 
+            $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		    if(!$pages){
+			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		    }
+		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
 		}
 
-		$redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
         $this->response->header('Location', $redir_to);
-
 	}
 
 	public function preview_chilli_mobile(){
@@ -270,13 +268,17 @@ class DynamicDetailsController extends AppController {
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
 
-		Configure::load('DynamicLogin'); 
-        $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
-		if(!$pages){
-			$pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
+		    $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];    
+        }else{  
+		    Configure::load('DynamicLogin'); 
+            $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		    if(!$pages){
+			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		    }
+		    $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
 		}
 
-		$redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
         $this->response->header('Location', $redir_to);
 	}
 
@@ -840,6 +842,12 @@ class DynamicDetailsController extends AppController {
 				$items['lost_password']    			= $q_r['DynamicDetail']['lost_password'];
                 $items['owner']                     = $owner_tree;
                 $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
+                
+                $items['coova_desktop_url']         = $q_r['DynamicDetail']['coova_desktop_url'];
+                $items['coova_mobile_url']          = $q_r['DynamicDetail']['coova_mobile_url'];
+                $items['mikrotik_desktop_url']      = $q_r['DynamicDetail']['mikrotik_desktop_url'];
+                $items['mikrotik_mobile_url']       = $q_r['DynamicDetail']['mikrotik_mobile_url'];
+                
             }
         }
         
