@@ -124,6 +124,7 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                             defaults    : {
                                 anchor: '100%'
                             },
+                            autoScroll  : true,
                             items       : [
                                 {
                                     itemId  : 'user_id',

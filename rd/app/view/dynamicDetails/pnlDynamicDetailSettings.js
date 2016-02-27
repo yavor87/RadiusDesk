@@ -5,6 +5,10 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
     dynamic_detail_id: null,
     layout  : 'hbox',
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
+    requires    : [
+        'Rd.view.dynamicDetails.vcDynamicDetailSettings'
+    ],
+    controller  : 'vcDynamicDetailSettings',
     initComponent: function(){
         var me = this;
 
@@ -51,8 +55,55 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
 									{ 
 										xtype       : 'cmbThemes', 
 										labelClsExtra : 'lblRdReq',
-										allowBlank  : false 
+										allowBlank  : false,
+										listeners   : {
+                                            change : 'onCmbThemesChange'
+                                        } 
 									},
+									{
+								        xtype       : 'textfield',
+								        fieldLabel  : 'Coova Desktop URL',
+								        itemId      : 'txtCoovaDesktopUrl',
+								        name        : 'coova_desktop_url',
+								        value       : '/rd_login/cc/d/index.html',
+								        disabled    : true,
+								        hidden      : true,
+								        allowBlank  : false,
+								        labelClsExtra: 'lblRdReq'
+								    },
+								    {
+								        xtype       : 'textfield',
+								        fieldLabel  : 'Coova Mobile URL',
+								        itemId      : 'txtCoovaMobileUrl',
+								        name        : 'coova_mobile_url',
+								        value       : '/rd_login/cc/m/index.html',
+								        disabled    : true,
+								        hidden      : true,
+								        allowBlank  : false,
+								        labelClsExtra: 'lblRdReq'
+								    },
+								    {
+								        xtype       : 'textfield',
+								        fieldLabel  : 'Mikrotik Desktop URL',
+								        itemId      : 'txtMikrotikDesktopUrl',
+								        name        : 'mikrotik_desktop_url',
+								        value       : '/rd_login/mt/d/index.html',
+								        disabled    : true,
+								        hidden      : true,
+								        allowBlank  : false,
+								        labelClsExtra: 'lblRdReq'
+								    },
+								    {
+								        xtype       : 'textfield',
+								        fieldLabel  : 'Mikrotik Mobile URL',
+								        itemId      : 'txtMikrotikMobileUrl',
+								        name        : 'mikrotik_mobile_url',
+								        value       : '/rd_login/mt/m/index.html',
+								        disabled    : true,
+								        hidden      : true,
+								        allowBlank  : false,
+								        labelClsExtra: 'lblRdReq'
+								    },
 									{
 								        xtype       : 'checkbox',      
 								        fieldLabel  : 'Slideshow',

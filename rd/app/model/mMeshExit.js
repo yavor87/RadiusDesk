@@ -3,7 +3,6 @@ Ext.define('Rd.model.mMeshExit', {
     fields: [
          {name: 'id',               type: 'int'     },
          {name: 'mesh_id',          type: 'int'     },
-         {name: 'name',             type: 'string'  },
          {name: 'type',             type: 'string'  },
          'connects_with',
          {name: 'auto_detect',      type: 'bool'}
