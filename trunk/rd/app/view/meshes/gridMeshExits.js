@@ -65,7 +65,6 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridMeshExitsId1'},
-            { text: i18n('sName'),                 dataIndex: 'name',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId2'},
             { text: i18n('sType'),                 dataIndex: 'type',          tdCls: 'gridMain', flex: 1,stateId: 'StateGridMeshExitsId3'},
             { 
                 text    :   i18n('sConnects_with'),

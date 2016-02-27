@@ -110,14 +110,6 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                     hidden  : true
                                 }, 
                                 {
-                                    xtype       : 'textfield',
-                                    fieldLabel  : i18n('sName'),
-                                    name        : 'name',
-                                    allowBlank  : false,
-                                    blankText   : i18n('sSupply_a_value'),
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
                                     xtype       : 'checkbox',      
                                     fieldLabel  : i18n('sAuto_detect'),
                                     name        : 'auto_detect',
