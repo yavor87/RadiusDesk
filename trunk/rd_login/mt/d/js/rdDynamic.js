@@ -13,7 +13,7 @@ var rdDynamic = (function () {
         //Change the following when using this on the Mobile page
         cMaxWidth       = 600; //300 mobile 600 desktop
         cMinWidth       = 300; //280 mobile 300 desktop
-        hideLogin       = true;//false mobile true desktop
+        hideLogin       = false;//false mobile true desktop
         
         //====Functions======
         fDebug          = function(message){  
@@ -145,7 +145,7 @@ var rdDynamic = (function () {
         var guiConnect  = function(){
     
             //Username and or Voucher
-            var voucher_user = [{ view:"text", label:"Voucher", name: "voucher",id:'voucher'}]; //Default is to have the voucher;
+            var voucher_user = []; 
         
             if(
                 (cDynamicData.settings.voucher_login_check == true)&&
@@ -193,6 +193,14 @@ var rdDynamic = (function () {
                         { view:"text", type:"password", name: "password",label:"Password",id:"Password"}
                     ];
                 }
+                
+                if(
+                    (cDynamicData.settings.voucher_login_check == true)&&
+                    (cDynamicData.settings.user_login_check == false)){
+                
+                        voucher_user = [{ view:"text", label:"Voucher", name: "voucher",id:'voucher'}]; //Default is to have the voucher;
+                }
+                     
             }
             
             //Buttons
@@ -248,13 +256,19 @@ var rdDynamic = (function () {
                 
                 b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 30});
                 
-                b.push({
-                    view    : "button", 
-                    value   : "Login" , 
-                    type    : "form",
-                    id      : 'btnLogin'
-                });
                 
+                 if(
+                    (cDynamicData.settings.voucher_login_check == true)||
+                    (cDynamicData.settings.user_login_check == true)){
+                
+                        b.push({
+                            view    : "button", 
+                            value   : "Login" , 
+                            type    : "form",
+                            id      : 'btnLogin'
+                        });
+                }
+                                
                  b.push({
                     view    : "button", 
                     value   : "Remove me from realm" , 
