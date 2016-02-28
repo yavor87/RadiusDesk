@@ -307,13 +307,14 @@ var rdConnect = (function () {
             var time_s  = time(j.accounting.sessionTime);
             var d_in    = (j.accounting.inputOctets+(j.accounting.inputGigawords*gw));
             var d_out   = (j.accounting.outputOctets+(j.accounting.outputGigawords*gw));
+            var usr     = j.session.userName;
 
             var dat_i   = bytes(d_in);
             var dat_o   = bytes(d_out);
             var t       = d_in + d_out;
             var dat_t   = bytes(t);
             
-            $$('propertySession').setValues({acct_it:time_i,acct_st:time_s,acct_di:dat_i,acct_do:dat_o,acct_dt:dat_t});
+            $$('propertySession').setValues({acct_un:usr,acct_up:time_s,acct_di:dat_i,acct_do:dat_o,acct_dt:dat_t});
         }
         
         var refreshCounter = function(){
