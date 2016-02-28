@@ -65,6 +65,14 @@ var rdConnect = (function () {
                 });
             }
             
+            
+            if($$('btnGoInternet') != undefined){
+                $$('btnGoInternet').attachEvent("onItemClick", function(){
+                    onBtnGoInternetClick()
+                });
+            }
+            
+            
             if($$('btnDisconnect') != undefined){
                 $$('btnDisconnect').attachEvent("onItemClick", function(){
                     onBtnDisconnectClick()
@@ -275,6 +283,18 @@ var rdConnect = (function () {
 		    $$('tplConnectInfo').setHTML("");
 		    $$('tplConnectInfo').define("css", "");
 		    $$('tplConnectInfo').refresh();
+	    }
+	    
+	    //____ Go Onto Internet _____
+	    var onBtnGoInternetClick = function(){
+	     
+		    var redirect_url  	= 'http://google.com';
+		    if(cDynamicData != undefined){ 
+			    if(cDynamicData.settings.redirect_url != ''){
+			        redirect_url = cDynamicData.settings.redirect_url;
+			    }
+		    }
+            window.open(redirect_url, '_blank');   
 	    }
 	    
 	    
@@ -1271,7 +1291,8 @@ $$('sliderData').refresh();
 		    onBtnClickToConnectClick   	: onBtnClickToConnectClick,
 		    onBtnClickSocialLogin		: onBtnClickSocialLogin,
 		    onBtnDisconnectClick		: onBtnDisconnectClick,
-		    checkSocialLoginReturn		: checkSocialLoginReturn
+		    checkSocialLoginReturn		: checkSocialLoginReturn,
+		    onBtnGoInternetClick        : onBtnGoInternetClick
         }   
   }
 })();

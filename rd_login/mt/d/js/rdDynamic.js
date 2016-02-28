@@ -457,8 +457,14 @@ var rdDynamic = (function () {
                                             tabStatusContent,
                                             { 
                                                 view    :"button", 
-                                                value   :"Disconnect" , 
+                                                value   :"Go Onto Internet" , 
                                                 type    :"form",
+                                                id      : 'btnGoInternet'
+                                            },
+                                            { 
+                                                view    :"button", 
+                                                value   :"Disconnect" , 
+                                                type    :"danger",
                                                 id      : 'btnDisconnect'
                                             },
                                             {}

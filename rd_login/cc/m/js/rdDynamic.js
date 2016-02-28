@@ -449,8 +449,14 @@ var rdDynamic = (function () {
                                             tabStatusContent,
                                             { 
                                                 view    :"button", 
-                                                value   :"Disconnect" , 
+                                                value   :"Go Onto Internet" , 
                                                 type    :"form",
+                                                id      : 'btnGoInternet'
+                                            },
+                                            { 
+                                                view    :"button", 
+                                                value   :"Disconnect" , 
+                                                type    :"danger",
                                                 id      : 'btnDisconnect'
                                             },
                                             {}
@@ -470,11 +476,13 @@ var rdDynamic = (function () {
                     
             webix.ui([c_v], $$('scrnHome'));
             
-            if(cDynamicData.photos[0].file_name != undefined){
-                //If there is not enough space we don't want to squeeze it in
-                if(window.innerWidth > 450){
-                    var t= $$('scrnHome').getNode();
-                    $(t).css('background-image', 'url(' + cDynamicData.photos[0].file_name + ')');
+            if(cDynamicData.photos[0] != undefined){
+                if(cDynamicData.photos[0].file_name != undefined){
+                    //If there is not enough space we don't want to squeeze it in
+                    if(window.innerWidth > 450){
+                        var t= $$('scrnHome').getNode();
+                        $(t).css('background-image', 'url(' + cDynamicData.photos[0].file_name + ')');
+                    }
                 }
             }             
         };
