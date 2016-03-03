@@ -245,7 +245,8 @@ class DesktopController extends AppController {
             array(  'text'  => __('NAS Devices'), 'glyph' => Configure::read('icnNas'), 'menu'  =>
                  array( 'items' =>
                     array(
-                        array('text' => __('NAS Devices') ,     'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'),
+                        array('text' => __('Dynamic RADIUS Clients') ,  'glyph' => Configure::read('icnDynamicNas'), 'itemId' => 'cDynamicClients'),
+                        array('text' => __('NAS Devices') ,             'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'),
                         array('text' => __('NAS Device tags') , 'glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'),
                     )
                 )

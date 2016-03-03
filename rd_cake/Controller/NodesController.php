@@ -670,7 +670,7 @@ class NodesController extends AppController {
     }
 
     private function _build_single_radio_wireless($mesh,$entry_point_data){
-
+    
         $wireless = array();
 
         if($mesh['NodeSetting']['client_key']!='') {        
@@ -814,6 +814,7 @@ class NodesController extends AppController {
 
         //Check if we need to add this wireless VAP
         foreach($mesh['MeshEntry'] as $me){
+        
             $to_all     = false;
             $if_name    = $this->_number_to_word($start_number);
             $entry_id   = $me['id'];
@@ -822,6 +823,7 @@ class NodesController extends AppController {
 
                 //Check if it is assigned to an exit point
                 foreach($entry_point_data as $epd){
+                  //  print_r($epd);
                     if($epd['entry_id'] == $entry_id){ //We found our man :-)
                         array_push( $wireless,
                             array(
