@@ -100,6 +100,7 @@ Rd.config = {
     'icnStart'      : 'xf05d@FontAwesome',
     'icnStop'       : 'xf00d@FontAwesome',
     'icnInfo'       : 'xf033@FontAwesome',
-    'icnCopy'       : 'xf0c5@FontAwesome'
+    'icnCopy'       : 'xf0c5@FontAwesome',
+    'icnDynamicNas' : 'xf239@FontAwesome'
 }
 
