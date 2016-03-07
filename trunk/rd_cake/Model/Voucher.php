@@ -28,7 +28,11 @@ class Voucher extends AppModel {
         'User' => array(
             'className'     => 'User',
 			'foreignKey'    => 'user_id'
-        )
+        ),
+        'Realm' => array(
+            'className'     => 'Realm',
+			'foreignKey'    => 'realm_id'
+        ),
 	);
 /*
     public $hasOne = array(
