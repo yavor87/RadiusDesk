@@ -89,9 +89,6 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
 				labelWidth: Rd.config.labelWidth
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[
                 {
                     xtype   : 'tabpanel',

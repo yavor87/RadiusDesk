@@ -68,7 +68,7 @@ Ext.define('Rd.view.password.frmPassword', {
                 inputValue  : 'always_active',
                 itemId      : 'always_active',
                 checked     : true,
-                cls         : 'lblRd',
+                cls         : 'lblRd'
             },
             {
                 xtype: 'datefield',

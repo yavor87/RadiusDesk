@@ -102,9 +102,6 @@ Ext.define('Rd.view.profileComponents.winProfileComponentAddWizard', {
                 margin: 15
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[
                 {
                     itemId  : 'user_id',

@@ -180,9 +180,6 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                 margin          : Rd.config.fieldMargin
             },
             defaultType: 'textfield',
-            tbar: [
-                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-            ],
             items:[
                 {
                     itemId  : 'user_id',
