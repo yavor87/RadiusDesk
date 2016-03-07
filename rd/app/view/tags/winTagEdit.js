@@ -28,9 +28,6 @@ Ext.define('Rd.view.tags.winTagEdit', {
                     margin: 15
                 },
                 defaultType: 'textfield',
-                tbar: [
-                    { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                ],
                 items: [
                     {
                         xtype:  'hiddenfield',

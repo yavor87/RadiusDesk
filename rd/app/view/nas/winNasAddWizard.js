@@ -2,8 +2,8 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
     extend      : 'Ext.window.Window',
     alias       : 'widget.winNasAddWizard',
     closable    : true,
-    draggable   : false,
-    resizable   : false,
+    draggable   : true,
+    resizable   : true,
     title       : i18n('sAdd_NAS_device'),
     width       : 500,
     height      : 500,
@@ -234,9 +234,6 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                             defaults    : {
                                 anchor: '100%'
                             },
-                            tbar: [
-                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                            ],
                             items:[
                                 {
                                     itemId  : 'user_id',
@@ -387,9 +384,6 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                             defaults    : {
                                 anchor: '100%'
                             },
-                            tbar: [
-                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                            ],
                             items:[
                                 {
                                     itemId  : 'user_id',
@@ -526,9 +520,6 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                             defaults    : {
                                 anchor: '100%'
                             },
-                            tbar: [
-                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                            ],
                             items:[
                                 {
                                     itemId  : 'user_id',
@@ -645,9 +636,6 @@ Ext.define('Rd.view.nas.winNasAddWizard', {
                             'title' : i18n('sNAS'),
                             'layout'    : 'anchor',
                             itemId  : 'tabNas',
-                            tbar: [
-                                { xtype: 'tbtext', text: i18n('sSupply_the_following'), cls: 'lblWizard' }
-                            ],
                             defaults    : {
                                 anchor: '100%'
                             },
