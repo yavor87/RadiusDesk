@@ -5,8 +5,8 @@ class DynamicClientsController extends AppController {
 
     public $name        = 'DynamicClients';
     public $components  = array('Aa','GridFilter');
-    public $uses        = array('DynamicClients','PermanentUser');
-    protected $base     = "Access Providers/Controllers/PermanentUserNotifications/";
+    public $uses        = array('DynamicClient','User');
+    protected $base     = "Access Providers/Controllers/DynamicClients/";
 
 //------------------------------------------------------------------------
 
@@ -45,11 +45,11 @@ class DynamicClientsController extends AppController {
 
         foreach($q_r as $i){
          
-
             array_push($items,array(
                 'id'                    => $i['DynamicClient']['id'],
-                'permanent_user_id'     => $i['DynamicClient']['permanent_user_id'],  
-                'username'              => $i['PermanentUser']['username']
+                'name'                  => $i['DynamicClient']['name'],  
+                'user_id'               => $i['DynamicClient']['user_id'],  
+                'username'              => $i['User']['username']
             ));
         }
        
@@ -70,7 +70,6 @@ class DynamicClientsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
-
 
         if(isset($this->request->data['active'])){
             $this->request->data['active'] = 1;
@@ -294,7 +293,7 @@ class DynamicClientsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'PermanentUser'
+                            'User'
                         );
 
         //===== SORT =====
@@ -304,7 +303,7 @@ class DynamicClientsController extends AppController {
 
         if(isset($this->request->query['sort'])){
             if($this->request->query['sort'] == 'username'){
-                $sort = 'PermanentUser.username';
+                $sort = 'User.username';
             }else{
                 $sort = $this->modelClass.'.'.$this->request->query['sort'];
             }
@@ -324,7 +323,7 @@ class DynamicClientsController extends AppController {
                 //Strings
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
-                        array_push($c['conditions'],array("PermanentUser.username LIKE" => '%'.$f->value.'%'));   
+                        array_push($c['conditions'],array("User.username LIKE" => '%'.$f->value.'%'));   
                     }else{
                         $col = $this->modelClass.'.'.$f->field;
                         array_push($c['conditions'],array("$col LIKE" => '%'.$f->value.'%'));

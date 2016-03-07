@@ -12,6 +12,8 @@ class DevicesController extends AppController {
             'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
             'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password'
         );
+        
+    protected $AclCache = array();
 
     //-------- BASIC CRUD -------------------------------
 
@@ -1478,16 +1480,38 @@ class DevicesController extends AppController {
         //====== AP FILTER =====
         //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
         if($user['group_name'] == Configure::read('group.ap')){  //AP 
-            $ap_children    = $this->User->find_access_provider_children($user['id']);
+        
+            $tree_array = array();
+            $user_id    = $user['id'];
+
+            //**AP and upward in the tree**
+            $this->parents = $this->User->getPath($user_id,'User.id');
+            //So we loop this results asking for the parent nodes who have available_to_siblings = true
+            foreach($this->parents as $i){
+                $i_id = $i['User']['id']; 
+                if($i_id != $user_id){ //upstream
+                    if($this->Acl->check(array(
+                        'model'         => 'User', 
+                        'foreign_key'   => $user_id), 
+                        "Access Providers/Other Rights/View users or vouchers not created self")
+                    ){
+                        array_push($tree_array,array('PermanentUser.user_id' => $i_id));
+                    }
+                }else{
+                    array_push($tree_array,array('PermanentUser.user_id' => $i_id));
+                }   
+            }
+  
+            //** ALL the AP's children
+            $ap_children    = $this->User->find_access_provider_children($user_id);
             if($ap_children){   //Only if the AP has any children...
-                $ap_clause      = array();
                 foreach($ap_children as $i){
                     $id = $i['id'];
-                    array_push($ap_clause,array('PermanentUser.user_id' => $id));
-                }      
-                //Add it as an OR clause
-                array_push($c['conditions'],array('OR' => $ap_clause));  
-            }
+                    array_push($tree_array,array('PermanentUser.user_id' => $id));
+                }       
+            }    
+            //Add it as an OR clause
+            array_push($c['conditions'],array('OR' => $tree_array));  
         }      
         //====== END AP FILTER =====
         return $c;
@@ -1557,26 +1581,44 @@ class DevicesController extends AppController {
         return false;
     }
 
-     private function _get_action_flags_for_devices($user,$owner_id,$realm_id){
+    private function _get_action_flags_for_devices($user,$owner_id,$realm_id){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            return array('update' => true, 'delete' => true);
+            return array('update' => true, 'delete' => true, 'read' => true);
         }
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
 
             //If the $user['id'] is the same is the owner; we allow them to update and delete
             if($user['id'] == $owner_id){
-                return array('update' => true, 'delete' => true);
+                return array('update' => true, 'delete' => true, 'read' => true);
             }
-
-
-            $update = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $owner_id), 
+            
+            if(array_key_exists($realm_id,$this->AclCache)){
+                return $this->AclCache[$realm_id];
+            }else{
+            
+                if($this->Acl->check(array(
+                    'model'         => 'User', 
+                    'foreign_key'   => $user['id']), 
+                    "Access Providers/Other Rights/View users or vouchers not created self")
+                ){
+                    $read = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Realm','foreign_key' => $realm_id), 'read');
+                }else{
+                    $read = false; //Since the user is not the owner and they can not view other's vouchers we leave it out
+                }  
+            
+                $update = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realm','foreign_key' => $realm_id), 'update');
-            $delete = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $owner_id), 
+                $delete = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realm','foreign_key' => $realm_id), 'delete');
-            return array('update' => $update, 'delete' => $delete);
+                //Prime it                 
+                $this->AclCache[$realm_id] =  array('update' => $update, 'delete' => $delete,'read' => $read);      
+                return array('update' => $update, 'delete' => $delete,'read' => $read);
+            }
         }
     }
 
