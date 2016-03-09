@@ -44,12 +44,45 @@ class DynamicClientsController extends AppController {
         $items      = array();
 
         foreach($q_r as $i){
+        
+            $realms     = array();
+            //Realms
+            foreach($i['DynamicClientRealm'] as $dcr){ 
+                if(!$this->_test_for_private_parent($dcr['Realm'],$user)){
+		            if(!array_key_exists('id',$dcr['Realm'])){
+			            $r_id = "undefined";
+			            $r_n = "undefined";
+			            $r_s =  false;
+		        }else{
+			            $r_id= $dcr['Realm']['id'];
+			            $r_n = $dcr['Realm']['name'];
+			            $r_s = $dcr['Realm']['available_to_siblings'];
+		       }
+               array_push($realms, 
+                    array(
+                        'id'                    => $r_id,
+                        'name'                  => $r_n,
+                        'available_to_siblings' => $r_s
+                    ));
+                }
+            } 
+
+            $owner_id       = $i['DynamicClient']['user_id'];
+            $owner_tree     = $this->_find_parents($owner_id);
+            $action_flags   = $this->_get_action_flags($owner_id,$user);
          
             array_push($items,array(
                 'id'                    => $i['DynamicClient']['id'],
-                'name'                  => $i['DynamicClient']['name'],  
+                'name'                  => $i['DynamicClient']['name'],
+                'owner'                 => $owner_tree,   
                 'user_id'               => $i['DynamicClient']['user_id'],  
-                'username'              => $i['User']['username']
+                'username'              => $i['User']['username'],
+                'nasidentifier'         => $i['DynamicClient']['nasidentifier'],
+                'active'                => $i['DynamicClient']['active'],
+                'available_to_siblings' => $i['DynamicClient']['available_to_siblings'],
+                'realms'                => $realms,
+                'update'                => $action_flags['update'],
+                'delete'                => $action_flags['delete']
             ));
         }
        
@@ -70,18 +103,36 @@ class DynamicClientsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
-
-        if(isset($this->request->data['active'])){
-            $this->request->data['active'] = 1;
-        }else{
-            $this->request->data['active'] = 0;
+         
+        $check_items = array('active', 'available_to_siblings', 'on_public_maps', 'session_auto_close');
+        foreach($check_items as $ci){
+            if(isset($this->request->data[$ci])){
+                $this->request->data[$ci] = 1;
+            }else{
+                $this->request->data[$ci] = 0;
+            }
         }
 
         $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
+        
+            //Check if we need to add na_realms table
+            if(isset($this->request->data['avail_for_all'])){
+            //Available to all does not add any dynamic_client_realm entries
+            }else{
+                foreach(array_keys($this->request->data) as $key){
+                    if(preg_match('/^\d+/',$key)){
+                        //----------------
+                        $this->_add_dynamic_client_realm($this->{$this->modelClass}->id,$key);
+                        //-------------
+                    }
+                }
+            }   
+            $this->request->data['id'] = $this->{$this->modelClass}->id;
             $this->set(array(
                 'success' => true,
-                '_serialize' => array('success')
+                'data'      => $this->request->data,
+                '_serialize' => array('success','data')
             ));
         } else {
             $message = 'Error';
@@ -106,7 +157,7 @@ class DynamicClientsController extends AppController {
         }
 
         $user_id    = $user['id'];
-        $fail_flag = false;
+        $fail_flag  = false;
 
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
@@ -293,7 +344,8 @@ class DynamicClientsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'User'
+                            'User',
+                            'DynamicClientRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id')
                         );
 
         //===== SORT =====
@@ -396,5 +448,16 @@ class DynamicClientsController extends AppController {
                 }
             }  
         }
+    }
+    
+    private function _add_dynamic_client_realm($dynamic_client_id,$realm_id){
+        $d                                              = array();
+        $d['DynamicClientRealm']['id']                  = '';
+        $d['DynamicClientRealm']['dynamic_client_id']   = $dynamic_client_id;
+        $d['DynamicClientRealm']['realm_id']            = $realm_id;
+
+        $this->DynamicClient->DynamicClientRealm->create();
+        $this->DynamicClient->DynamicClientRealm->save($d);
+        $this->DynamicClient->DynamicClientRealm->id      = false;
     }
 }
