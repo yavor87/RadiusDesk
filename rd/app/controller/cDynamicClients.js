@@ -100,9 +100,21 @@ Ext.define('Rd.controller.cDynamicClients', {
             'winDynamicClientAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
+            'winDynamicClientAddWizard gridRealmsForNasOwner #reload': {
+                click:      me.gridRealmsForNasOwnerReload
+            },
+            'winDynamicClientAddWizard #tabRealms': {
+                activate:      me.gridRealmsForNasOwnerActivate
+            }, 
+            'winDynamicClientAddWizard #tabRealms #chkAvailForAll': {
+                change:     me.chkAvailForAllChange
+            },
+            'winDynamicClientAddWizard gridRealmsForNasOwner #chkAvailSub':     {
+                change:     me.gridRealmsForNasOwnerChkAvailSub
+            },
 			'winDynamicClientEdit #save': {
                 click: me.btnEditSave
-            }
+            } 
         });
     },
     reload: function(){
@@ -161,17 +173,51 @@ Ext.define('Rd.controller.cDynamicClients', {
         var me      = this;
         var win     = button.up('winDynamicClientAddWizard');
         win.getLayout().setActiveItem('scrnApTree');
-    },
-    btnDataNext:  function(button){
-        var me      = this;
+    },  
+    btnDataNext: function(button){
+        var me = this;
         var win     = button.up('window');
-        var form    = win.down('form');
+        var form    = button.up('form');
+        var tp      = form.down('tabpanel');
+        var grid    = form.down('gridRealmsForNasOwner');
+        var extra_params ={};   //Get the extra params to submit with form
+        var select_flag  = false;
+
+        var chk = form.down('#chkAvailForAll');
+        if(chk.getValue() == true){
+            extra_params.avail_for_all = true;
+        }else{
+            grid.getStore().each(function(record){
+                if(record.get('selected') == true){
+                    select_flag = true;
+                    extra_params[record.getId()] = record.get('selected');
+                }
+            }, me);
+        }
+
+        //If they did not select avail_for_all and NOT selected ANY realm, refuse to continue
+        if(extra_params.avail_for_all == undefined){
+            if(select_flag != true){
+                var tp = form.down('tabpanel');
+                tp.setActiveTab('tabRealms');
+                Ext.ux.Toaster.msg(
+                        i18n('sSelect_at_least_one_realm'),
+                        i18n('sSelect_one_or_more_realms'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+                );  
+                return;
+            }
+        }
+
+        //Checks passed fine...      
         form.submit({
             clientValidation: true,
             url: me.getUrlAdd(),
+            params: extra_params,
             success: function(form, action) {
                 win.close();
-                me.getStore('sDynamicClients').load();
+                me.getGrid().getStore().load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
@@ -179,9 +225,66 @@ Ext.define('Rd.controller.cDynamicClients', {
                     Ext.ux.Constants.msgInfo
                 );
             },
-            failure: Ext.ux.formFail
+            //Focus on the first tab as this is the most likely cause of error 
+            failure: function(form,action,b,c){
+                if(action.result.errors.username != undefined){ //This will be for OpenVPN and pptp
+                    tp.setActiveTab(0);
+                }else{
+                    tp.setActiveTab('tabNas');
+                }
+                Ext.ux.formFail(form,action)
+            }
         });
     },
+    
+    
+    chkAvailForAllChange: function(chk){
+        var me      = this;
+        var pnl     = chk.up('panel');
+        var grid    = pnl.down("gridRealmsForNasOwner");
+        if(chk.getValue() == true){
+            grid.hide();
+        }else{
+            grid.show();
+        }
+    },
+    chkAvailForAllChangeTab: function(chk){
+        var me      = this;
+        var pnl     = chk.up('panel');
+        var grid    = pnl.down("gridRealmsForNasOwner");
+        if(chk.getValue() == true){
+            grid.hide();
+            
+        }else{
+            grid.show();
+        }
+        //Clear the grid:
+        grid.getStore().getProxy().setExtraParam('clear_flag',true);
+        grid.getStore().load();
+        grid.getStore().getProxy().setExtraParam('clear_flag',false);
+    },
+    gridRealmsForNasOwnerReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridRealmsForNasOwner');
+        grid.getStore().load();
+    },
+    gridRealmsForNasOwnerActivate: function(tab){
+        var me      = this;
+        var a_to_s  = tab.down('#chkAvailSub').getValue();
+        var grid    = tab.down('gridRealmsForNasOwner');
+        grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
+        grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
+        grid.getStore().load();
+    },
+    gridRealmsForNasOwnerChkAvailSub: function(chk){
+        var me      = this;
+        var a_to_s  = chk.getValue();
+        var grid    = chk.up('gridRealmsForNasOwner');
+        grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
+        grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
+        grid.getStore().load();
+    },
+    
     select: function(grid,record){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
