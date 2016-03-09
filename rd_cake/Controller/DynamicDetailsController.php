@@ -485,8 +485,9 @@ class DynamicDetailsController extends AppController {
 
             foreach($q_r as $i){        
                 $name           = $i['DynamicDetail']['name'];
-                $owner_id     = $i['DynamicDetail']['user_id'];
+                $owner_id       = $i['DynamicDetail']['user_id'];
                 $a_t_s          = $i['DynamicDetail']['available_to_siblings'];
+                
                 //Filter for parents and children
                 //DynamicDetails of parent's can not be edited, where DynamicDetails of childern can be edited
                 if($owner_id != $user_id){
@@ -540,34 +541,16 @@ class DynamicDetailsController extends AppController {
          if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
             $this->request->data['user_id'] = $user_id;
         }
-
-        //Make available to siblings check
-        if(isset($this->request->data['available_to_siblings'])){
-            $this->request->data['available_to_siblings'] = 1;
-        }else{
-            $this->request->data['available_to_siblings'] = 0;
+        
+        $check_items = array('available_to_siblings', 't_c_check', 'register_users', 'lost_password');
+        foreach($check_items as $ci){
+            if(isset($this->request->data[$ci])){
+                $this->request->data[$ci] = 1;
+            }else{
+                $this->request->data[$ci] = 0;
+            }
         }
-
-        //T & C compulsory check
-        if(isset($this->request->data['t_c_check'])){
-            $this->request->data['t_c_check'] = 1;
-        }else{
-            $this->request->data['t_c_check'] = 0;
-        }
-
-		if(isset($this->request->data['register_users'])){
-            $this->request->data['register_users'] = 1;
-        }else{
-            $this->request->data['register_users'] = 0;
-        }
-
-		if(isset($this->request->data['lost_password'])){
-            $this->request->data['lost_password'] = 1;
-        }else{
-            $this->request->data['lost_password'] = 0;
-        }
-
-
+        
         if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
