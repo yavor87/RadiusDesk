@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class VouchersController extends AppController {
 
     public $name       = 'Vouchers';
-    public $components = array('Aa','VoucherGenerator','GridFilter');
+    public $components = array('Aa','VoucherGenerator','GridFilter','VoucherCsv');
     public $uses       = array('Voucher','User','Profile','Realm');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
@@ -445,17 +445,96 @@ class VouchersController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+
+        //Get the owner's id
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+   
+        //___Two fields should be tested for first___:
+        if(array_key_exists('activate_on_login',$this->request->data)){
+            $this->request->data['activate_on_login'] = 1;
+        }
+
+        if(array_key_exists('never_expire',$this->request->data)){
+            $this->request->data['never_expire'] = 1;
+        }
+        //____ END OF TWO FIELD CHECK ___
+    
+        //_____We need the profile name / if and the realm name / id before we can continue___
+        $profile    = false;
+        $profile_id = false;
+        if(array_key_exists('profile',$this->request->data)){
+            $profile    = $this->request->data['profile'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findByName($profile);
+            $profile_id = $q_r['Profile']['id'];
+            $this->request->data['profile_id'] = $profile_id;   
+        }
+
+        if(array_key_exists('profile_id',$this->request->data)){
+            $profile_id = $this->request->data['profile_id'];
+            $this->Profile->contain();
+            $q_r        = $this->Profile->findById($profile_id);
+            $profile    = $q_r['Profile']['name'];
+            $this->request->data['profile'] = $profile;    
+        }
+
+        if(($profile == false)||($profile_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+
+        $realm      = false;
+        $realm_id   = false;
+        if(array_key_exists('realm',$this->request->data)){
+            $realm      = $this->request->data['realm'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findByName($realm);
+            $realm_id   = $q_r['Realm']['id']; 
+            $this->request->data['realm_id'] = $realm_id;  
+        }
+
+        if(array_key_exists('realm_id',$this->request->data)){
+            $realm_id   = $this->request->data['realm_id'];
+            $this->Realm->contain();
+            $q_r        = $this->Realm->findById($realm_id);
+            $realm      = $q_r['Realm']['name'];
+            $this->request->data['realm'] = $realm;    
+        }
+
+        if(($realm == false)||($realm_id == false)){
+            //The loop completed fine
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        //______ END of Realm and Profile check _____
         
-        $this->layout = 'ext_file_upload';
         
-        move_uploaded_file ($_FILES['csv_file']['tmp_name'] , "/tmp/csv_file.csv");
+        $this->layout   = 'ext_file_upload'; 
+        $temp_file      = "/tmp/csv_file.csv";
         
-        $json_return = array();
         
-        $json_return['success']             = true;
+        move_uploaded_file ($_FILES['csv_file']['tmp_name'] , $temp_file);
+        $batch          = $this->request->data['batch'];   
+        $voucher_list   = $this->VoucherCsv->generateVoucherList($temp_file,$batch);
+        
+        $json_return            = array();   
+        $json_return['success'] = true;
+        $json_return['t']       = $voucher_list;
         $this->set('json_return',$json_return);
     
     }
+    
 
     public function delete($id = null) {
 		if (!$this->request->is('post')) {
