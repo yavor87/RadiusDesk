@@ -483,7 +483,7 @@ Ext.define('Rd.controller.cVouchers', {
             waitMsg: 'Uploading your CSV File...',
             url: me.getUrlAddCsv(),
             success: function(form, action) {
-             //   win.close();
+                win.close();
                 me.getStore('sVouchers').load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),

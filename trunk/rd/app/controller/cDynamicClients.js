@@ -39,9 +39,11 @@ Ext.define('Rd.controller.cDynamicClients', {
                             border  : true,
                             plain   : false,
                             itemId  : 'tabDynamicClients',
-                            items   : { 'title' : i18n('sHome'), xtype : 'gridDynamicClients','glyph': Rd.config.icnHome}}
-            
-                        ]
+                            items   : [
+                                { 'title' : i18n('sHome'),      xtype : 'gridDynamicClients',       'glyph': Rd.config.icnHome},
+                                { 'title' : 'Unknown clients',  xtype:'gridUnknownDynamicClients',	'glyph': Rd.config.icnThumbDown}
+                            ]
+                        }]
                     }
                 ]
             });
@@ -54,10 +56,11 @@ Ext.define('Rd.controller.cDynamicClients', {
         'components.pnlBanner', 
         'dynamicClients.gridDynamicClients',
         'dynamicClients.winDynamicClientAddWizard',
-        'nas.gridRealmsForNasOwner'
+        'nas.gridRealmsForNasOwner',
+        'dynamicClients.gridUnknownDynamicClients',
     ],
-    stores: ['sAccessProvidersTree','sDynamicClients'],
-    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForNasOwner' ],
+    stores: ['sAccessProvidersTree','sDynamicClients', 'sUnknownDynamicClients'],
+    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForNasOwner', 'mUnknownDynamicClient' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
