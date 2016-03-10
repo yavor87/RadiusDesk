@@ -528,6 +528,19 @@ class VouchersController extends AppController {
         $batch          = $this->request->data['batch'];   
         $voucher_list   = $this->VoucherCsv->generateVoucherList($temp_file,$batch);
         
+        $success_flag = true;
+        foreach($voucher_list as $v){
+        
+            $this->request->data['name']        = $v['name']; 
+		    $this->request->data['password']    = $v['password'];
+		    $this->request->data['extra_name']  = $v['extra_name'];
+		    $this->request->data['extra_value'] = $v['extra_value'];
+            if (!$this->{$this->modelClass}->save($this->request->data)) {
+               $success_flag = false; 
+            }
+            $this->{$this->modelClass}->id = null;
+        }
+        
         $json_return            = array();   
         $json_return['success'] = true;
         $json_return['t']       = $voucher_list;
