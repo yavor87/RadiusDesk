@@ -39,8 +39,8 @@ Ext.define('Rd.controller.cMeshes', {
                             plain   : false,
                             items   : [
 								{ 'title' : i18n('sHome'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnHome},
-								{ 'title' : 'Known nodes', 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnThumbUp},
-								{ 'title' : 'Unknown nodes','xtype':'gridUnknownNodes',	'glyph': Rd.config.icnThumbDown}
+								{ 'title' : 'Known nodes', 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnCheck},
+								{ 'title' : 'Unknown nodes','xtype':'gridUnknownNodes',	'glyph': Rd.config.icnQuestion}
                         ]}]
                     }
                 ]
@@ -97,9 +97,6 @@ Ext.define('Rd.controller.cMeshes', {
 				activate	: me.gridActivate
 			},
 			'#meshWin gridUnknownNodes' : {
-				activate	: me.gridActivate
-			},
-			'#meshWin gridMeshes' : {
 				activate	: me.gridActivate
 			},
             'gridMeshes #reload': {

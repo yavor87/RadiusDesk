@@ -41,7 +41,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                             itemId  : 'tabDynamicClients',
                             items   : [
                                 { 'title' : i18n('sHome'),      xtype : 'gridDynamicClients',       'glyph': Rd.config.icnHome},
-                                { 'title' : 'Unknown clients',  xtype:'gridUnknownDynamicClients',	'glyph': Rd.config.icnThumbDown}
+                                { 'title' : 'Unknown clients',  xtype:'gridUnknownDynamicClients',	'glyph': Rd.config.icnQuestion}
                             ]
                         }]
                     }
@@ -58,6 +58,7 @@ Ext.define('Rd.controller.cDynamicClients', {
         'dynamicClients.winDynamicClientAddWizard',
         'nas.gridRealmsForNasOwner',
         'dynamicClients.gridUnknownDynamicClients',
+        'dynamicClients.winAttachUnknownDynamicClient'
     ],
     stores: ['sAccessProvidersTree','sDynamicClients', 'sUnknownDynamicClients'],
     models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForNasOwner', 'mUnknownDynamicClient' ],
@@ -72,6 +73,8 @@ Ext.define('Rd.controller.cDynamicClients', {
     refs: [
         {  ref: 'grid',  selector: 'gridDynamicClients'}       
     ],
+    autoReloadUnknownDynamicClients: undefined,
+    autoReload: undefined,
     init: function() {
         var me = this;
         if (me.inited) {
@@ -79,9 +82,22 @@ Ext.define('Rd.controller.cDynamicClients', {
         }
         me.inited = true;
         me.control({
+             '#dcWin'    : {
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
+            },
+            '#dcWin gridDynamicClients' : {
+				activate	: me.gridActivate
+			},
+			'#dcWin gridUnknownDynamicClients' : {
+				activate	: me.gridActivate
+			},
             'gridDynamicClients #reload': {
                 click:      me.reload
-            }, 
+            },
+            'gridDynamicClients #reload menuitem[group=refresh]'   : {
+                click:      me.reloadOptionClick
+            },   
             'gridDynamicClients #add'   : {
                 click:      me.add
             },
@@ -117,16 +133,93 @@ Ext.define('Rd.controller.cDynamicClients', {
             },
 			'winDynamicClientEdit #save': {
                 click: me.btnEditSave
+            },
+            
+            'gridUnknownDynamicClients #reload': {
+                click:      me.gridUnknownDynamicClientsReload
+            },
+            'gridUnknownDynamicClients #reload menuitem[group=refresh]'   : {
+                click:      me.reloadUnknownDynamicClientsOptionClick
+            },
+			'gridUnknownDynamicClients #attach': {
+                click:  me.attachAttachUnknownDynamicClient
+            },
+            'winAttachUnknownDynamicClient #btnTreeNext' : {
+                click:  me.btnTreeNext
+            },
+            'winAttachUnknownDynamicClient #btnDataPrev' : {
+                click:  me.btnDataPrev
+            },
+            'winAttachUnknownDynamicClient #btnDataNext' : {
+                click:  me.btnDataNext
+            },
+            'winAttachUnknownDynamicClient gridRealmsForNasOwner #reload': {
+                click:      me.gridRealmsForNasOwnerReload
+            },
+            'winAttachUnknownDynamicClient #tabRealms': {
+                activate:      me.gridRealmsForNasOwnerActivate
+            }, 
+            'winAttachUnknownDynamicClient #tabRealms #chkAvailForAll': {
+                change:     me.chkAvailForAllChange
+            },
+            'winAttachUnknownDynamicClient gridRealmsForNasOwner #chkAvailSub':     {
+                change:     me.gridRealmsForNasOwnerChkAvailSub
+            },
+			'gridUnknownDynamicClients #delete': {
+                click: me.delUnknownDynamicClient
             } 
+            
         });
+    },
+    winClose:   function(){
+        var me = this;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+       
+        if(me.autoReloadUnknownDynamicClients != undefined){
+            clearInterval(me.autoReloadUnknownDynamicClients);
+        }
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     reload: function(){
         var me =this;
         me.getGrid().getSelectionModel().deselectAll(true);
         me.getGrid().getStore().load();
     },
+    reloadOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReload);   //Always clear
+        b.setIconCls('b-reload_time');
+        b.setGlyph(Rd.config.icnTime);
+
+        if(n == 'mnuRefreshCancel'){
+            b.setGlyph(Rd.config.icnReload);
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReload = setInterval(function(){     
+            me.reload();
+        },  interval);  
+    },
     add: function(button){    
-        var me = this;
+        var me      = this;
+        var win     = button.up("#dcWin");
+        var store   = win.down("gridDynamicClients").getStore();
         Ext.Ajax.request({
             url: me.getUrlApChildCheck(),
             method: 'GET',
@@ -136,13 +229,20 @@ Ext.define('Rd.controller.cDynamicClients', {
                         
                     if(jsonData.items.tree == true){
                         if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicClientAddWizardId')){
-                            var w = Ext.widget('winDynamicClientAddWizard',{id:'winDynamicClientAddWizardId'});
+                            var w = Ext.widget('winDynamicClientAddWizard',{id:'winDynamicClientAddWizardId',store: store});
                             me.application.runAction('cDesktop','Add',w);         
                         }
                     }else{
                         if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicClientAddWizardId')){
                             var w = Ext.widget('winDynamicClientAddWizard',
-                                {id:'winDynamicClientAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
+                                {
+                                    id          :'winDynamicClientAddWizardId',
+                                    startScreen : 'scrnData',
+                                    user_id     :'0',
+                                    owner       : i18n('sLogged_in_user'), 
+                                    no_tree     : true,
+                                    store       : store
+                                }
                             );
                             me.application.runAction('cDesktop','Add',w);         
                         }
@@ -159,7 +259,7 @@ Ext.define('Rd.controller.cDynamicClients', {
         //Get selection:
         var sr = tree.getSelectionModel().getLastSelected();
         if(sr){    
-            var win = button.up('winDynamicClientAddWizard');
+            var win = button.up('window');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
             win.getLayout().setActiveItem('scrnData');
@@ -174,7 +274,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     btnDataPrev:  function(button){
         var me      = this;
-        var win     = button.up('winDynamicClientAddWizard');
+        var win     = button.up('window');
         win.getLayout().setActiveItem('scrnApTree');
     },  
     btnDataNext: function(button){
@@ -219,8 +319,9 @@ Ext.define('Rd.controller.cDynamicClients', {
             url: me.getUrlAdd(),
             params: extra_params,
             success: function(form, action) {
+                win.store.load();
                 win.close();
-                me.getGrid().getStore().load();
+               // me.getGrid().getStore().load();
                 Ext.ux.Toaster.msg(
                     i18n('sNew_item_created'),
                     i18n('sItem_created_fine'),
@@ -239,8 +340,6 @@ Ext.define('Rd.controller.cDynamicClients', {
             }
         });
     },
-    
-    
     chkAvailForAllChange: function(chk){
         var me      = this;
         var pnl     = chk.up('panel');
@@ -402,5 +501,108 @@ Ext.define('Rd.controller.cDynamicClients', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    
+    //____ Unknown Dynamic Clients ____
+    gridUnknownDynamicClientsReload: function(button){
+        var me  = this;
+        var g = button.up('gridUnknownDynamicClients');
+        g.getStore().load();
+    },
+    reloadUnknownDynamicClientsOptionClick: function(menu_item){
+        var me      = this;
+        var n       = menu_item.getItemId();
+        var b       = menu_item.up('button'); 
+        var interval= 30000; //default
+        clearInterval(me.autoReloadUnknownDynamicClients);   //Always clear
+        b.setGlyph(Rd.config.icnTime);
+        if(n == 'mnuRefreshCancel'){
+            b.setGlyph(Rd.config.icnReload);
+            b.setIconCls('b-reload');
+            return;
+        }
+        
+        if(n == 'mnuRefresh1m'){
+           interval = 60000
+        }
+
+        if(n == 'mnuRefresh5m'){
+           interval = 360000
+        }
+        me.autoReloadUnknownDynamicClients = setInterval(function(){       
+            me.gridUnknownDynamicClientsReload(b);
+        }, interval);  
+    },
+    attachAttachUnknownDynamicClient: function(button){
+        var me      = this;
+        var win     = button.up("#dcWin");
+        var store   = win.down("gridUnknownDynamicClients").getStore();
+        if(win.down("gridUnknownDynamicClients").getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            var sr              = win.down("gridUnknownDynamicClients").getSelectionModel().getLastSelected();
+            var id              = sr.getId();
+			var nasidentifier   = sr.get('nasidentifier');
+            var calledstationid = sr.get('calledstationid');
+  
+			//Determine if we can show a power bar or not.
+			var hide_power = true; //FIXME To be fiexed with real value from mesh
+            if(!me.application.runAction('cDesktop','AlreadyExist','winAttachUnknownDynamicClientId')){
+                var w = Ext.widget('winAttachUnknownDynamicClient',
+                {
+                    id              :'winAttachUnknownDynamicClientId',
+                    store           : store,
+					nasidentifier   : nasidentifier,
+					calledstationid : calledstationid,
+					unknown_dynamic_client_id : id	
+                });
+                me.application.runAction('cDesktop','Add',w);         
+            }
+        }
+    },
+	delUnknownDynamicClient:   function(btn){
+        var me      = this;
+        var win     = btn.up("window");
+        var grid    = win.down("gridUnknownDynamicClients");
+    
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
     }
 });
