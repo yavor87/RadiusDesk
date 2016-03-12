@@ -5,7 +5,7 @@ class DynamicClientsController extends AppController {
 
     public $name        = 'DynamicClients';
     public $components  = array('Aa','GridFilter');
-    public $uses        = array('DynamicClient','User');
+    public $uses        = array('DynamicClient','UnknownDynamicClient','User');
     protected $base     = "Access Providers/Controllers/DynamicClients/";
 
 //------------------------------------------------------------------------
@@ -112,6 +112,22 @@ class DynamicClientsController extends AppController {
                 $this->request->data[$ci] = 0;
             }
         }
+        
+        $unknown_flag = false;
+        //Check if it was an attach!
+        if(array_key_exists('unknown_dynamic_client_id',$this->request->data)){
+            //Now we need to do a lookup
+            $u = $this->UnknownDynamicClient->findById($this->request->data['unknown_dynamic_client_id']);
+            if($u){
+                $unknown_flag   = true;
+                $nas_id         = $u['UnknownDynamicClient']['nasidentifier'];
+                $called         = $u['UnknownDynamicClient']['calledstationid'];
+                
+                $this->request->data['nasidentifier']   = $nas_id;
+                $this->request->data['calledstationid'] = $called;
+            }
+        }
+        
 
         $this->{$this->modelClass}->create();
         if ($this->{$this->modelClass}->save($this->request->data)) {
@@ -129,6 +145,14 @@ class DynamicClientsController extends AppController {
                 }
             }   
             $this->request->data['id'] = $this->{$this->modelClass}->id;
+            
+            //If it was an unknown attach - remove the unknown
+            if($unknown_flag){
+                $this->UnknownDynamicClient->id = $this->request->data['unknown_dynamic_client_id'];
+                $this->UnknownDynamicClient->delete($this->request->data['unknown_dynamic_client_id'], true);
+            }
+            
+            
             $this->set(array(
                 'success' => true,
                 'data'      => $this->request->data,
@@ -231,7 +255,18 @@ class DynamicClientsController extends AppController {
 
             $menu = array(
                 array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                    array('xtype' => 'button', 'iconCls' => 'b-reload',  'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'=> __('Reload')),
+                   array( 'xtype' =>  'splitbutton',  'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                   
+                                )
+                            )
+                    ),
                     array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
                     array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
@@ -244,13 +279,18 @@ class DynamicClientsController extends AppController {
             $id             = $user['id'];
             $action_group   = array();
 
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',
-                'glyph'     => Configure::read('icnReload'),   
-                'scale'     => 'large', 
-                'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+            array_push($action_group,array( 'xtype' =>  'splitbutton',  'glyph'     => Configure::read('icnReload'),'scale'   => 'large', 'itemId'    => 'reload',   'tooltip'    => __('Reload'),
+                            'menu'  => array( 
+                                'items' => array( 
+                                    '<b class="menu-title">'.__('Reload every').':</b>',
+                                    array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                                    array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                                    array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                                    array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true )
+                                   
+                                )
+                            )
+                    ));
 
             //Add
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
