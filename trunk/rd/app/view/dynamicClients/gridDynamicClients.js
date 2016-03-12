@@ -55,7 +55,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 },stateId: 'StateGridDc6'
             },
             { 
-                text:   i18n('sAvailable_to_sub_providers'),
+                text:   'To Sub-Providers',
                 width:  130,
                 xtype:  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
