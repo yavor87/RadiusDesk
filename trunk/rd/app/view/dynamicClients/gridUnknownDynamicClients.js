@@ -52,7 +52,7 @@ Ext.define('Rd.view.dynamicClients.gridUnknownDynamicClients' ,{
                 flex        : 1,
                 renderer    : function(v,metaData, record){
                     var last_contact_human     = record.get('last_contact_human');
-                    return "<div class=\"fieldBlue\">"+last_contact_human+"</div>";     
+                    return "<div class=\"fieldBlueWhite\">"+last_contact_human+"</div>";     
                 },stateId: 'StateGridUdc4'
             },
 			{ 
@@ -61,7 +61,17 @@ Ext.define('Rd.view.dynamicClients.gridUnknownDynamicClients' ,{
                 dataIndex   : 'last_contact_ip',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : false,  
+                hidden      : false, 
+                xtype       :  'templatecolumn', 
+                tpl         :  new Ext.XTemplate(
+                    '<div class=\"fieldGreyWhite\">{last_contact_ip}</div>',
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{city}</b>  ({postal_code})</div>',
+                    "</tpl>",
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{country_name}</b> ({country_code})</div>',
+                    "</tpl>"   
+                ), 
                 filter		: {type: 'string'},stateId: 'StateGridUdc5'
             }
         ];

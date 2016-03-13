@@ -24050,8 +24050,8 @@ tr.x-grid-subtable-row {
 /* http://localhost:1841/sass/src/Application.scss:342 */
 .fieldRedWhite {
     background: #e00404;
-    margin-top: 1px;
-    padding: 2px;
+    margin: 1px 0px 1px 0px;
+    padding: 2px 0px 2px 0px;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
@@ -24060,8 +24060,8 @@ tr.x-grid-subtable-row {
 /* http://localhost:1841/sass/src/Application.scss:352 */
 .fieldGreenWhite {
     background: #1a9406;
-    margin-top: 1px;
-    padding: 2px;
+    margin: 1px 0px 1px 0px;
+    padding: 2px 0px 2px 0px;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
@@ -24080,8 +24080,8 @@ tr.x-grid-subtable-row {
 /* http://localhost:1841/sass/src/Application.scss:373 */
 .fieldBlueWhite {
     background: #1e66d2;
-    margin-top: 1px;
-    padding: 2px;
+    margin: 1px 0px 1px 0px;
+    padding: 2px 0px 2px 0px;
     color: #fff;
     font-size: 14px;
     font-weight: bold;

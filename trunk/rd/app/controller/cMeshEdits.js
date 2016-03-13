@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         'meshes.winMeshEditNode',	'meshes.pnlMeshEditGMap',	'meshes.winMeshMapPreferences',
 		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions',
 		'components.cmbFiveGigChannels',
-        'meshes.cmbTimezones',      'meshes.cmbCountries'
+        'components.cmbTimezones',      'meshes.cmbCountries'
     ],
     stores      : [	
 		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'

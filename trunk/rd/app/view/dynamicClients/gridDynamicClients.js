@@ -38,6 +38,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
             { text: i18n('sCalled-Station-Id'),dataIndex: 'calledstationid',tdCls: 'gridTree', flex: 1, filter: {type: 'string'},stateId: 'StateGridDc5',
                 hidden: true
             },
+            
             { 
                 text        : i18n('sActive'), 
                 width       : 130,
