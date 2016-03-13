@@ -187,3 +187,7 @@ Configure::load('RadiusDesk');
 CakePlugin::load('Opauth', array('routes' => true, 'bootstrap' => true));
 Configure::write('Opauth.path', '/cake2/rd_cake/auth/');
 
+//GoeIp
+CakePlugin::load('GeoIp');
+
+
