@@ -94,23 +94,34 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                     return "<div class=\"fieldBlueWhite\">"+last_contact_human+"</div>";     
                 },stateId: 'StateGridUnknownNodes4'
             },
-			{ 
+            { 
 
                 text        : 'From IP', 
                 dataIndex   : 'from_ip',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : false,  
+                hidden      : false, 
+                xtype       :  'templatecolumn', 
+                tpl         :  new Ext.XTemplate(
+                    '<div class=\"fieldGreyWhite\">{from_ip}</div>',
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{city}</b>  ({postal_code})</div>',
+                    "</tpl>",
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{country_name}</b> ({country_code})</div>',
+                    "</tpl>"   
+                ), 
                 filter		: {type: 'string'},stateId: 'StateGridUnknownNodes5'
             },
 			{ 
                 text:   'Gateway',
                 flex: 1,
-				hidden: false,  
-                xtype:  'templatecolumn', 
+				hidden: false, 
+				tdCls   : 'gridTree',  
+                xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            "<tpl if='gateway == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
-                            "<tpl if='gateway == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
+                            "<tpl if='gateway == true'><div class=\"fieldGreenWhite\">"+i18n("sYes")+"</div></tpl>",
+                            "<tpl if='gateway == false'><div class=\"fieldRedWhite\">"+i18n("sNo")+"</div></tpl>"
                         ),
                 dataIndex: 'gateway',
                 filter  : {

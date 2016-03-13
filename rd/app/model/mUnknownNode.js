@@ -10,6 +10,10 @@ Ext.define('Rd.model.mUnknownNode', {
 		 {name: 'last_contact',    	type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
          'last_contact_human',
          'new_server',
-         'new_server_status'
+         'new_server_status',
+         'country_code',
+         'country_name',
+         'city',
+         'postal_code'
         ]
 });

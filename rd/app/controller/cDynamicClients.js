@@ -58,7 +58,8 @@ Ext.define('Rd.controller.cDynamicClients', {
         'dynamicClients.winDynamicClientAddWizard',
         'nas.gridRealmsForNasOwner',
         'dynamicClients.gridUnknownDynamicClients',
-        'dynamicClients.winAttachUnknownDynamicClient'
+        'dynamicClients.winAttachUnknownDynamicClient',
+        'components.cmbTimezones'
     ],
     stores: ['sAccessProvidersTree','sDynamicClients', 'sUnknownDynamicClients'],
     models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForNasOwner', 'mUnknownDynamicClient' ],

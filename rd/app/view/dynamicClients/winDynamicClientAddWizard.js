@@ -269,6 +269,9 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
                             },
                             items: [
                                 {
+                                    xtype       : 'cmbTimezones'
+                                },   
+                                {
                                     xtype       : 'checkbox',      
                                     boxLabel    : i18n('sAuto_close_stale_sessions'),
                                     name        : 'session_auto_close',
