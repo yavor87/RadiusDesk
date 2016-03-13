@@ -65,7 +65,7 @@ Ext.define('Rd.view.dynamicClients.gridUnknownDynamicClients' ,{
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
                     '<div class=\"fieldGreyWhite\">{last_contact_ip}</div>',
-                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                    "<tpl if='Ext.isEmpty(city)'><tpl else>",
                         '<div><b>{city}</b>  ({postal_code})</div>',
                     "</tpl>",
                     "<tpl if='Ext.isEmpty(country_name)'><tpl else>",

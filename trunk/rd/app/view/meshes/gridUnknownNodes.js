@@ -104,7 +104,7 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
                     '<div class=\"fieldGreyWhite\">{from_ip}</div>',
-                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                    "<tpl if='Ext.isEmpty(city)'><tpl else>",
                         '<div><b>{city}</b>  ({postal_code})</div>',
                     "</tpl>",
                     "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
