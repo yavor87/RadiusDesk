@@ -41,8 +41,35 @@ class UnknownDynamicClientsController extends AppController {
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
         $items      = array();
+        
+        App::uses('GeoIpLocation', 'GeoIp.Model');
+        $GeoIpLocation = new GeoIpLocation();
 
         foreach($q_r as $i){
+            $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
+            $location = $GeoIpLocation->find('10.0.0.1');
+            
+            //Some defaults:
+            $country_code = '';
+            $country_name = '';
+            $city         = '';
+            $postal_code  = '';
+            
+            if(array_key_exists('GeoIpLocation',$location)){
+                if($location['GeoIpLocation']['country_code'] != ''){
+                    $country_code = $location['GeoIpLocation']['country_code'];
+                }
+                if($location['GeoIpLocation']['country_name'] != ''){
+                    $country_name = $location['GeoIpLocation']['country_name'];
+                }
+                if($location['GeoIpLocation']['city'] != ''){
+                    $city = $location['GeoIpLocation']['city'];
+                }
+                if($location['GeoIpLocation']['postal_code'] != ''){
+                    $postal_code = $location['GeoIpLocation']['postal_code'];
+                }
+            }
+
             array_push($items,array(
                 'id'                    => $i['UnknownDynamicClient']['id'],
                 'nasidentifier'         => $i['UnknownDynamicClient']['nasidentifier'],
@@ -50,6 +77,10 @@ class UnknownDynamicClientsController extends AppController {
                 'last_contact'          => $i['UnknownDynamicClient']['last_contact'], 
                 'last_contact_ip'       => $i['UnknownDynamicClient']['last_contact_ip'],
                 'last_contact_human'    => $this->TimeCalculations->time_elapsed_string($i['UnknownDynamicClient']['last_contact']), 
+                'country_code'          => $country_code,
+                'country_name'          => $country_name,
+                'city'                  => $city,
+                'postal_code'           => $postal_code
             ));
         }
        
