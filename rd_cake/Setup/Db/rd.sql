@@ -32,7 +32,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=363 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=364 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `acos` (
 
 LOCK TABLES `acos` WRITE;
 /*!40000 ALTER TABLE `acos` DISABLE KEYS */;
-INSERT INTO `acos` VALUES (29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,498),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',499,504),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,487),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',488,497),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',500,501),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',502,503),(35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',505,526),(42,32,NULL,NULL,'View users or vouchers not created self','',489,490),(43,31,NULL,NULL,'Vouchers','',3,30),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',31,76),(46,45,NULL,NULL,'index','',32,33),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',77,100),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',78,79),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',80,81),(61,58,NULL,NULL,'edit','',82,83),(62,58,NULL,NULL,'delete','',84,85),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',491,492),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',493,494),(65,58,NULL,NULL,'change_password','',86,87),(67,31,NULL,NULL,'Realms','',101,126),(68,67,NULL,NULL,'index','',102,103),(69,67,NULL,NULL,'add','',104,105),(70,67,NULL,NULL,'edit','',106,107),(71,67,NULL,NULL,'delete','',108,109),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',127,182),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',128,129),(104,102,NULL,NULL,'add','',130,131),(105,102,NULL,NULL,'edit','',132,133),(106,102,NULL,NULL,'delete','',134,135),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',183,202),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',184,185),(109,107,NULL,NULL,'add','',186,187),(110,107,NULL,NULL,'edit','',188,189),(111,107,NULL,NULL,'delete','',190,191),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',136,137),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',192,193),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',194,195),(115,107,NULL,NULL,'note_index','List notes',196,197),(116,107,NULL,NULL,'note_add','',198,199),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',200,201),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',138,139),(119,102,NULL,NULL,'note_index','List notes',140,141),(120,102,NULL,NULL,'note_add','',142,143),(121,102,NULL,NULL,'note_del','',144,145),(122,67,NULL,NULL,'export_csv','',110,111),(123,67,NULL,NULL,'index_for_filter','',112,113),(124,67,NULL,NULL,'note_index','',114,115),(125,67,NULL,NULL,'note_add','',116,117),(126,67,NULL,NULL,'note_del','',118,119),(127,58,NULL,NULL,'export_csv','',88,89),(128,58,NULL,NULL,'note_index','',90,91),(129,58,NULL,NULL,'note_add','',92,93),(130,58,NULL,NULL,'note_del','',94,95),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',203,208),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',204,205),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',206,207),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',209,246),(138,137,NULL,NULL,'index','',210,211),(142,35,'DynamicDetail',3,'SA Coast - Struisbaai',NULL,510,511),(146,35,'Realm',30,'Residence Inn',NULL,512,513),(148,35,'Realm',31,'Holiday Inn',NULL,514,515),(149,43,NULL,NULL,'add','',6,7),(150,43,NULL,NULL,'delete','',8,9),(151,31,NULL,NULL,'Desktop','',247,254),(152,151,NULL,NULL,'desktop_shortcuts','',248,249),(153,151,NULL,NULL,'change_password','',250,251),(154,151,NULL,NULL,'save_wallpaper_selection','',252,253),(155,35,'Realm',32,'Simpsons Home',NULL,516,517),(156,43,NULL,NULL,'view_basic_info','',10,11),(157,43,NULL,NULL,'edit_basic_info','',12,13),(158,43,NULL,NULL,'private_attr_index','',14,15),(159,43,NULL,NULL,'private_attr_add','',16,17),(160,43,NULL,NULL,'private_attr_edit','',18,19),(161,43,NULL,NULL,'private_attr_delete','',20,21),(162,43,NULL,NULL,'change_password','',22,23),(163,43,NULL,NULL,'export_csv','',24,25),(164,43,NULL,NULL,'export_pdf','',26,27),(165,67,NULL,NULL,'index_ap','',120,121),(166,31,NULL,NULL,'Profiles','',255,276),(167,166,NULL,NULL,'index','',256,257),(168,166,NULL,NULL,'index_ap','Dropdown list based on selected Access Provider owner',258,259),(169,166,NULL,NULL,'add','',260,261),(170,166,NULL,NULL,'manage_components','',262,263),(171,166,NULL,NULL,'delete','',264,265),(172,166,NULL,NULL,'index_for_filter','',266,267),(173,166,NULL,NULL,'note_index','',268,269),(174,166,NULL,NULL,'note_add','',270,271),(175,166,NULL,NULL,'note_del','',272,273),(176,31,NULL,NULL,'Radaccts','',277,288),(177,176,NULL,NULL,'export_csv','',278,279),(178,176,NULL,NULL,'index','',280,281),(179,176,NULL,NULL,'delete','',282,283),(180,176,NULL,NULL,'kick_active','',284,285),(181,176,NULL,NULL,'close_open','',286,287),(182,43,NULL,NULL,'delete_accounting_data','',28,29),(184,45,NULL,NULL,'add','',34,35),(185,45,NULL,NULL,'delete','',36,37),(186,45,NULL,NULL,'view_basic_info','',38,39),(187,45,NULL,NULL,'edit_basic_info','',40,41),(188,45,NULL,NULL,'view_personal_info','',42,43),(189,45,NULL,NULL,'edit_personal_info','',44,45),(190,45,NULL,NULL,'private_attr_index','',46,47),(191,45,NULL,NULL,'private_attr_add','',48,49),(192,45,NULL,NULL,'private_attr_edit','',50,51),(193,45,NULL,NULL,'private_attr_delete','',52,53),(194,45,NULL,NULL,'change_password','',54,55),(195,45,NULL,NULL,'enable_disable','',56,57),(196,45,NULL,NULL,'export_csv','',58,59),(197,45,NULL,NULL,'note_index','',60,61),(198,137,NULL,NULL,'add','',212,213),(199,137,NULL,NULL,'delete','',214,215),(200,137,NULL,NULL,'view_basic_info','',216,217),(201,137,NULL,NULL,'edit_basic_info','',218,219),(202,137,NULL,NULL,'private_attr_index','',220,221),(203,137,NULL,NULL,'private_attr_add','',222,223),(204,137,NULL,NULL,'private_attr_edit','',224,225),(205,137,NULL,NULL,'private_attr_delete','',226,227),(206,137,NULL,NULL,'enable_disable','',228,229),(207,137,NULL,NULL,'export_csv','',230,231),(208,137,NULL,NULL,'note_index','',232,233),(209,31,NULL,NULL,'FreeRadius','',289,294),(210,209,NULL,NULL,'test_radius','',290,291),(211,209,NULL,NULL,'index','Displays the stats of the FreeRADIUS server',292,293),(212,31,NULL,NULL,'Radpostauths','',295,304),(213,212,NULL,NULL,'index','',296,297),(214,212,NULL,NULL,'add','',298,299),(215,212,NULL,NULL,'delete','',300,301),(221,212,NULL,NULL,'export_csv','',302,303),(223,67,NULL,NULL,'update_na_realm','',122,123),(224,102,NULL,NULL,'add_direct','',146,147),(225,102,NULL,NULL,'add_open_vpn','',148,149),(226,102,NULL,NULL,'add_dynamic','',150,151),(227,102,NULL,NULL,'add_pptp','',152,153),(228,102,NULL,NULL,'view_openvpn','',154,155),(229,102,NULL,NULL,'edit_openvpn','',156,157),(230,102,NULL,NULL,'view_pptp','',158,159),(231,102,NULL,NULL,'edit_pptp','',160,161),(232,102,NULL,NULL,'view_dynamic','',162,163),(233,102,NULL,NULL,'edit_dynamic','',164,165),(234,102,NULL,NULL,'view_nas','',166,167),(235,102,NULL,NULL,'edit_nas','',168,169),(236,102,NULL,NULL,'view_photo','',170,171),(237,102,NULL,NULL,'upload_photo','',172,173),(238,102,NULL,NULL,'view_map_pref','',174,175),(239,102,NULL,NULL,'edit_map_pref','',176,177),(240,102,NULL,NULL,'delete_map','',178,179),(241,102,NULL,NULL,'edit_map','',180,181),(243,67,NULL,NULL,'view','',124,125),(244,35,'Realm',34,'Residence Inn',NULL,518,519),(245,35,'Realm',35,'College',NULL,520,521),(246,45,NULL,NULL,'restrict_list_of_devices','',62,63),(247,45,NULL,NULL,'edit_tracking','',64,65),(248,45,NULL,NULL,'view_tracking','',66,67),(249,45,NULL,NULL,'note_add','',68,69),(250,45,NULL,NULL,'note_del','',70,71),(251,137,NULL,NULL,'note_add','',234,235),(252,137,NULL,NULL,'note_del','',236,237),(253,137,NULL,NULL,'view_tracking','',238,239),(254,137,NULL,NULL,'edit_tracking','',240,241),(255,137,NULL,NULL,'note_add','',242,243),(256,137,NULL,NULL,'note_del','',244,245),(258,31,NULL,NULL,'ProfileComponents','',305,320),(259,258,NULL,NULL,'index','',306,307),(260,258,NULL,NULL,'add','',308,309),(261,258,NULL,NULL,'edit','',310,311),(262,258,NULL,NULL,'delete','',312,313),(263,258,NULL,NULL,'note_index','',314,315),(264,258,NULL,NULL,'note_add','',316,317),(265,258,NULL,NULL,'note_del','',318,319),(266,166,NULL,NULL,'export_csv','',274,275),(267,31,NULL,NULL,'NaStates','',321,326),(268,267,NULL,NULL,'index','',322,323),(269,267,NULL,NULL,'delete','',324,325),(271,58,NULL,NULL,'view','',96,97),(272,58,NULL,NULL,'enable_disable','',98,99),(275,31,NULL,NULL,'DynamicDetails','',327,376),(276,275,NULL,NULL,'export_csv','',328,329),(277,275,NULL,NULL,'index','',330,331),(278,275,NULL,NULL,'add','',332,333),(279,275,NULL,NULL,'edit','',334,335),(280,275,NULL,NULL,'delete','',336,337),(281,275,NULL,NULL,'view','',338,339),(282,275,NULL,NULL,'upload_logo','',340,341),(283,275,NULL,NULL,'index_photo','',342,343),(284,275,NULL,NULL,'upload_photo','',344,345),(285,275,NULL,NULL,'delete_photo','',346,347),(286,275,NULL,NULL,'edit_photo','',348,349),(287,275,NULL,NULL,'index_page','',350,351),(288,275,NULL,NULL,'add_page','',352,353),(289,275,NULL,NULL,'edit_page','',354,355),(290,275,NULL,NULL,'delete_page','',356,357),(291,275,NULL,NULL,'index_pair','',358,359),(292,275,NULL,NULL,'add_pair','',360,361),(293,275,NULL,NULL,'edit_pair','',362,363),(294,275,NULL,NULL,'delete_pair','',364,365),(295,275,NULL,NULL,'note_index','',366,367),(296,275,NULL,NULL,'note_add','',368,369),(297,275,NULL,NULL,'note_del','',370,371),(299,45,NULL,NULL,'auto_mac_on_off','',72,73),(300,32,NULL,NULL,'Password Manager Only','Enabling this option will allow the Access Provider ONLY access to the Password Manager applet',495,496),(301,45,NULL,NULL,'view_password','',74,75),(302,31,NULL,NULL,'Actions','',377,384),(303,302,NULL,NULL,'index','',378,379),(304,302,NULL,NULL,'add','',380,381),(305,302,NULL,NULL,'delete','',382,383),(306,35,'Realm',36,'realm_freddy',NULL,522,523),(307,35,'DynamicDetail',4,'test',NULL,524,525),(309,275,NULL,NULL,'edit_settings','',372,373),(310,275,NULL,NULL,'edit_click_to_connect','',374,375),(311,31,NULL,NULL,'Meshes','MESHdesk main controller',385,452),(312,311,NULL,NULL,'index','',386,387),(313,311,NULL,NULL,'add','',388,389),(314,311,NULL,NULL,'delete','',390,391),(315,311,NULL,NULL,'note_index','',392,393),(316,311,NULL,NULL,'note_add','',394,395),(317,311,NULL,NULL,'note_del','',396,397),(318,311,NULL,NULL,'mesh_entries_index','',398,399),(319,311,NULL,NULL,'mesh_entry_add','',400,401),(320,311,NULL,NULL,'mesh_entry_edit','',402,403),(321,311,NULL,NULL,'mesh_entry_view','',404,405),(322,311,NULL,NULL,'mesh_entry_delete','',406,407),(323,311,NULL,NULL,'mesh_settings_view','',408,409),(324,311,NULL,NULL,'mesh_settings_edit','',410,411),(325,311,NULL,NULL,'mesh_exits_index','',412,413),(326,311,NULL,NULL,'mesh_exit_add','',414,415),(327,311,NULL,NULL,'mesh_exit_edit','',416,417),(328,311,NULL,NULL,'mesh_exit_view','',418,419),(329,311,NULL,NULL,'mesh_exit_delete','',420,421),(330,311,NULL,NULL,'mesh_nodes_index','',422,423),(332,311,NULL,NULL,'mesh_node_add','',424,425),(333,311,NULL,NULL,'mesh_node_edit','',426,427),(334,311,NULL,NULL,'mesh_node_view','',428,429),(335,311,NULL,NULL,'mesh_node_delete','',430,431),(336,311,NULL,NULL,'mesh_entry_points','',432,433),(337,311,NULL,NULL,'node_common_settings_view','',434,435),(338,311,NULL,NULL,'mesh_common_settings_edit','',436,437),(339,311,NULL,NULL,'static_entry_options','',438,439),(340,311,NULL,NULL,'static_exit_options','',440,441),(341,311,NULL,NULL,'map_pref_view','',442,443),(342,311,NULL,NULL,'map_pref_edit','',444,445),(343,311,NULL,NULL,'map_node_save','',446,447),(344,311,NULL,NULL,'map_node_delete','',448,449),(345,311,NULL,NULL,'nodes_avail_for_map','',450,451),(346,31,NULL,NULL,'NodeActions','',453,460),(347,346,NULL,NULL,'index','',454,455),(348,346,NULL,NULL,'add','',456,457),(349,346,NULL,NULL,'delete','',458,459),(350,31,NULL,NULL,'Ssids','Optional option for Permanent Users to limit their connections',461,472),(351,350,NULL,NULL,'index','',462,463),(352,350,NULL,NULL,'index_ap','List might changed based on the Access Provider specified',464,465),(353,350,NULL,NULL,'add','',466,467),(354,350,NULL,NULL,'delete','',468,469),(355,350,NULL,NULL,'edit','',470,471),(356,31,NULL,NULL,'LicensedDevices','Add-on - non standard',473,482),(357,356,NULL,NULL,'index','',474,475),(358,356,NULL,NULL,'add','',476,477),(359,356,NULL,NULL,'delete','',478,479),(360,356,NULL,NULL,'edit','',480,481),(361,31,NULL,NULL,'NodeLists','Additional convenient add-on to MESHdesk',483,486),(362,361,NULL,NULL,'index','',484,485);
+INSERT INTO `acos` VALUES (29,NULL,NULL,NULL,'Access Providers','A container with rights available to Access Providers - DO NOT DELETE!!',1,498),(30,NULL,NULL,NULL,'Permanent Users','A container with rights for Permanent Users - DO NOT DELETE!!',499,504),(31,29,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Access Providers',2,487),(32,29,NULL,NULL,'Other Rights','A list of other rights which can be configured for an Access Provider',488,497),(33,30,NULL,NULL,'Controllers','A container with the various controllers and their actions which can be used by the Permanent Users',500,501),(34,30,NULL,NULL,'Other Rights','A list of other rights which can be configured for a Permanent User',502,503),(35,NULL,NULL,NULL,'Realms','A list of realms to which an access provider can belong - DO NOT DELETE!!',505,528),(42,32,NULL,NULL,'View users or vouchers not created self','',489,490),(43,31,NULL,NULL,'Vouchers','',3,30),(44,43,NULL,NULL,'index','',4,5),(45,31,NULL,NULL,'PermanentUsers','',31,76),(46,45,NULL,NULL,'index','',32,33),(58,31,NULL,NULL,'AccessProviders','Access Providers can only do these actions on any access provider that is a child of the Access Provider',77,100),(59,58,NULL,NULL,'index','Without this right, the Access Providers option will not be shown in the Access Provider\'s menu',78,79),(60,58,NULL,NULL,'add','Without this right an Access Provider will not be able to create Access Provider children',80,81),(61,58,NULL,NULL,'edit','',82,83),(62,58,NULL,NULL,'delete','',84,85),(63,32,NULL,NULL,'Can Change Rights','This is a key option to allow an Access Provider the ability to change the rights of any of his Access Provider children',491,492),(64,32,NULL,NULL,'Can disable activity recording','Can disable Activity Recording on Access Provider children',493,494),(65,58,NULL,NULL,'change_password','',86,87),(67,31,NULL,NULL,'Realms','',101,126),(68,67,NULL,NULL,'index','',102,103),(69,67,NULL,NULL,'add','',104,105),(70,67,NULL,NULL,'edit','',106,107),(71,67,NULL,NULL,'delete','',108,109),(102,31,NULL,NULL,'Nas','Nas Devices - These rights are also considering the hierarchy of the Access Provider',127,182),(103,102,NULL,NULL,'index','Without this right there will be no NAS Devices in the AP\'s menu',128,129),(104,102,NULL,NULL,'add','',130,131),(105,102,NULL,NULL,'edit','',132,133),(106,102,NULL,NULL,'delete','',134,135),(107,31,NULL,NULL,'Tags','Tags for NAS Devices',183,202),(108,107,NULL,NULL,'index','Without this right, there will be no NAS Device tags in the AP\'s menu',184,185),(109,107,NULL,NULL,'add','',186,187),(110,107,NULL,NULL,'edit','',188,189),(111,107,NULL,NULL,'delete','',190,191),(112,102,NULL,NULL,'manage_tags','Attach or remove tags to NAS devices',136,137),(113,107,NULL,NULL,'export_csv','Exporting the display from the grid to CSV',192,193),(114,107,NULL,NULL,'index_for_filter','A list for of tags to display on the filter field on the Access Provider grid',194,195),(115,107,NULL,NULL,'note_index','List notes',196,197),(116,107,NULL,NULL,'note_add','',198,199),(117,107,NULL,NULL,'note_del','Remove a note of a NAS Tag',200,201),(118,102,NULL,NULL,'export_csv','Exporting the display of the grid to CSV',138,139),(119,102,NULL,NULL,'note_index','List notes',140,141),(120,102,NULL,NULL,'note_add','',142,143),(121,102,NULL,NULL,'note_del','',144,145),(122,67,NULL,NULL,'export_csv','',110,111),(123,67,NULL,NULL,'index_for_filter','',112,113),(124,67,NULL,NULL,'note_index','',114,115),(125,67,NULL,NULL,'note_add','',116,117),(126,67,NULL,NULL,'note_del','',118,119),(127,58,NULL,NULL,'export_csv','',88,89),(128,58,NULL,NULL,'note_index','',90,91),(129,58,NULL,NULL,'note_add','',92,93),(130,58,NULL,NULL,'note_del','',94,95),(132,31,NULL,NULL,'AcosRights','Controller to manage the Rights Tree',203,208),(133,132,NULL,NULL,'index_ap','List the rights of a specific AP',204,205),(134,132,NULL,NULL,'edit_ap','Modify the rights of a specific AP by another AP',206,207),(137,31,NULL,NULL,'Devices','Devices belonging to PermanentUsers',209,246),(138,137,NULL,NULL,'index','',210,211),(142,35,'DynamicDetail',3,'SA Coast - Struisbaai',NULL,510,511),(146,35,'Realm',30,'Residence Inn',NULL,512,513),(148,35,'Realm',31,'Holiday Inn',NULL,514,515),(149,43,NULL,NULL,'add','',6,7),(150,43,NULL,NULL,'delete','',8,9),(151,31,NULL,NULL,'Desktop','',247,254),(152,151,NULL,NULL,'desktop_shortcuts','',248,249),(153,151,NULL,NULL,'change_password','',250,251),(154,151,NULL,NULL,'save_wallpaper_selection','',252,253),(155,35,'Realm',32,'Simpsons Home',NULL,516,517),(156,43,NULL,NULL,'view_basic_info','',10,11),(157,43,NULL,NULL,'edit_basic_info','',12,13),(158,43,NULL,NULL,'private_attr_index','',14,15),(159,43,NULL,NULL,'private_attr_add','',16,17),(160,43,NULL,NULL,'private_attr_edit','',18,19),(161,43,NULL,NULL,'private_attr_delete','',20,21),(162,43,NULL,NULL,'change_password','',22,23),(163,43,NULL,NULL,'export_csv','',24,25),(164,43,NULL,NULL,'export_pdf','',26,27),(165,67,NULL,NULL,'index_ap','',120,121),(166,31,NULL,NULL,'Profiles','',255,276),(167,166,NULL,NULL,'index','',256,257),(168,166,NULL,NULL,'index_ap','Dropdown list based on selected Access Provider owner',258,259),(169,166,NULL,NULL,'add','',260,261),(170,166,NULL,NULL,'manage_components','',262,263),(171,166,NULL,NULL,'delete','',264,265),(172,166,NULL,NULL,'index_for_filter','',266,267),(173,166,NULL,NULL,'note_index','',268,269),(174,166,NULL,NULL,'note_add','',270,271),(175,166,NULL,NULL,'note_del','',272,273),(176,31,NULL,NULL,'Radaccts','',277,288),(177,176,NULL,NULL,'export_csv','',278,279),(178,176,NULL,NULL,'index','',280,281),(179,176,NULL,NULL,'delete','',282,283),(180,176,NULL,NULL,'kick_active','',284,285),(181,176,NULL,NULL,'close_open','',286,287),(182,43,NULL,NULL,'delete_accounting_data','',28,29),(184,45,NULL,NULL,'add','',34,35),(185,45,NULL,NULL,'delete','',36,37),(186,45,NULL,NULL,'view_basic_info','',38,39),(187,45,NULL,NULL,'edit_basic_info','',40,41),(188,45,NULL,NULL,'view_personal_info','',42,43),(189,45,NULL,NULL,'edit_personal_info','',44,45),(190,45,NULL,NULL,'private_attr_index','',46,47),(191,45,NULL,NULL,'private_attr_add','',48,49),(192,45,NULL,NULL,'private_attr_edit','',50,51),(193,45,NULL,NULL,'private_attr_delete','',52,53),(194,45,NULL,NULL,'change_password','',54,55),(195,45,NULL,NULL,'enable_disable','',56,57),(196,45,NULL,NULL,'export_csv','',58,59),(197,45,NULL,NULL,'note_index','',60,61),(198,137,NULL,NULL,'add','',212,213),(199,137,NULL,NULL,'delete','',214,215),(200,137,NULL,NULL,'view_basic_info','',216,217),(201,137,NULL,NULL,'edit_basic_info','',218,219),(202,137,NULL,NULL,'private_attr_index','',220,221),(203,137,NULL,NULL,'private_attr_add','',222,223),(204,137,NULL,NULL,'private_attr_edit','',224,225),(205,137,NULL,NULL,'private_attr_delete','',226,227),(206,137,NULL,NULL,'enable_disable','',228,229),(207,137,NULL,NULL,'export_csv','',230,231),(208,137,NULL,NULL,'note_index','',232,233),(209,31,NULL,NULL,'FreeRadius','',289,294),(210,209,NULL,NULL,'test_radius','',290,291),(211,209,NULL,NULL,'index','Displays the stats of the FreeRADIUS server',292,293),(212,31,NULL,NULL,'Radpostauths','',295,304),(213,212,NULL,NULL,'index','',296,297),(214,212,NULL,NULL,'add','',298,299),(215,212,NULL,NULL,'delete','',300,301),(221,212,NULL,NULL,'export_csv','',302,303),(223,67,NULL,NULL,'update_na_realm','',122,123),(224,102,NULL,NULL,'add_direct','',146,147),(225,102,NULL,NULL,'add_open_vpn','',148,149),(226,102,NULL,NULL,'add_dynamic','',150,151),(227,102,NULL,NULL,'add_pptp','',152,153),(228,102,NULL,NULL,'view_openvpn','',154,155),(229,102,NULL,NULL,'edit_openvpn','',156,157),(230,102,NULL,NULL,'view_pptp','',158,159),(231,102,NULL,NULL,'edit_pptp','',160,161),(232,102,NULL,NULL,'view_dynamic','',162,163),(233,102,NULL,NULL,'edit_dynamic','',164,165),(234,102,NULL,NULL,'view_nas','',166,167),(235,102,NULL,NULL,'edit_nas','',168,169),(236,102,NULL,NULL,'view_photo','',170,171),(237,102,NULL,NULL,'upload_photo','',172,173),(238,102,NULL,NULL,'view_map_pref','',174,175),(239,102,NULL,NULL,'edit_map_pref','',176,177),(240,102,NULL,NULL,'delete_map','',178,179),(241,102,NULL,NULL,'edit_map','',180,181),(243,67,NULL,NULL,'view','',124,125),(244,35,'Realm',34,'Residence Inn',NULL,518,519),(245,35,'Realm',35,'College',NULL,520,521),(246,45,NULL,NULL,'restrict_list_of_devices','',62,63),(247,45,NULL,NULL,'edit_tracking','',64,65),(248,45,NULL,NULL,'view_tracking','',66,67),(249,45,NULL,NULL,'note_add','',68,69),(250,45,NULL,NULL,'note_del','',70,71),(251,137,NULL,NULL,'note_add','',234,235),(252,137,NULL,NULL,'note_del','',236,237),(253,137,NULL,NULL,'view_tracking','',238,239),(254,137,NULL,NULL,'edit_tracking','',240,241),(255,137,NULL,NULL,'note_add','',242,243),(256,137,NULL,NULL,'note_del','',244,245),(258,31,NULL,NULL,'ProfileComponents','',305,320),(259,258,NULL,NULL,'index','',306,307),(260,258,NULL,NULL,'add','',308,309),(261,258,NULL,NULL,'edit','',310,311),(262,258,NULL,NULL,'delete','',312,313),(263,258,NULL,NULL,'note_index','',314,315),(264,258,NULL,NULL,'note_add','',316,317),(265,258,NULL,NULL,'note_del','',318,319),(266,166,NULL,NULL,'export_csv','',274,275),(267,31,NULL,NULL,'NaStates','',321,326),(268,267,NULL,NULL,'index','',322,323),(269,267,NULL,NULL,'delete','',324,325),(271,58,NULL,NULL,'view','',96,97),(272,58,NULL,NULL,'enable_disable','',98,99),(275,31,NULL,NULL,'DynamicDetails','',327,376),(276,275,NULL,NULL,'export_csv','',328,329),(277,275,NULL,NULL,'index','',330,331),(278,275,NULL,NULL,'add','',332,333),(279,275,NULL,NULL,'edit','',334,335),(280,275,NULL,NULL,'delete','',336,337),(281,275,NULL,NULL,'view','',338,339),(282,275,NULL,NULL,'upload_logo','',340,341),(283,275,NULL,NULL,'index_photo','',342,343),(284,275,NULL,NULL,'upload_photo','',344,345),(285,275,NULL,NULL,'delete_photo','',346,347),(286,275,NULL,NULL,'edit_photo','',348,349),(287,275,NULL,NULL,'index_page','',350,351),(288,275,NULL,NULL,'add_page','',352,353),(289,275,NULL,NULL,'edit_page','',354,355),(290,275,NULL,NULL,'delete_page','',356,357),(291,275,NULL,NULL,'index_pair','',358,359),(292,275,NULL,NULL,'add_pair','',360,361),(293,275,NULL,NULL,'edit_pair','',362,363),(294,275,NULL,NULL,'delete_pair','',364,365),(295,275,NULL,NULL,'note_index','',366,367),(296,275,NULL,NULL,'note_add','',368,369),(297,275,NULL,NULL,'note_del','',370,371),(299,45,NULL,NULL,'auto_mac_on_off','',72,73),(300,32,NULL,NULL,'Password Manager Only','Enabling this option will allow the Access Provider ONLY access to the Password Manager applet',495,496),(301,45,NULL,NULL,'view_password','',74,75),(302,31,NULL,NULL,'Actions','',377,384),(303,302,NULL,NULL,'index','',378,379),(304,302,NULL,NULL,'add','',380,381),(305,302,NULL,NULL,'delete','',382,383),(306,35,'Realm',36,'realm_freddy',NULL,522,523),(307,35,'DynamicDetail',4,'test',NULL,524,525),(309,275,NULL,NULL,'edit_settings','',372,373),(310,275,NULL,NULL,'edit_click_to_connect','',374,375),(311,31,NULL,NULL,'Meshes','MESHdesk main controller',385,452),(312,311,NULL,NULL,'index','',386,387),(313,311,NULL,NULL,'add','',388,389),(314,311,NULL,NULL,'delete','',390,391),(315,311,NULL,NULL,'note_index','',392,393),(316,311,NULL,NULL,'note_add','',394,395),(317,311,NULL,NULL,'note_del','',396,397),(318,311,NULL,NULL,'mesh_entries_index','',398,399),(319,311,NULL,NULL,'mesh_entry_add','',400,401),(320,311,NULL,NULL,'mesh_entry_edit','',402,403),(321,311,NULL,NULL,'mesh_entry_view','',404,405),(322,311,NULL,NULL,'mesh_entry_delete','',406,407),(323,311,NULL,NULL,'mesh_settings_view','',408,409),(324,311,NULL,NULL,'mesh_settings_edit','',410,411),(325,311,NULL,NULL,'mesh_exits_index','',412,413),(326,311,NULL,NULL,'mesh_exit_add','',414,415),(327,311,NULL,NULL,'mesh_exit_edit','',416,417),(328,311,NULL,NULL,'mesh_exit_view','',418,419),(329,311,NULL,NULL,'mesh_exit_delete','',420,421),(330,311,NULL,NULL,'mesh_nodes_index','',422,423),(332,311,NULL,NULL,'mesh_node_add','',424,425),(333,311,NULL,NULL,'mesh_node_edit','',426,427),(334,311,NULL,NULL,'mesh_node_view','',428,429),(335,311,NULL,NULL,'mesh_node_delete','',430,431),(336,311,NULL,NULL,'mesh_entry_points','',432,433),(337,311,NULL,NULL,'node_common_settings_view','',434,435),(338,311,NULL,NULL,'mesh_common_settings_edit','',436,437),(339,311,NULL,NULL,'static_entry_options','',438,439),(340,311,NULL,NULL,'static_exit_options','',440,441),(341,311,NULL,NULL,'map_pref_view','',442,443),(342,311,NULL,NULL,'map_pref_edit','',444,445),(343,311,NULL,NULL,'map_node_save','',446,447),(344,311,NULL,NULL,'map_node_delete','',448,449),(345,311,NULL,NULL,'nodes_avail_for_map','',450,451),(346,31,NULL,NULL,'NodeActions','',453,460),(347,346,NULL,NULL,'index','',454,455),(348,346,NULL,NULL,'add','',456,457),(349,346,NULL,NULL,'delete','',458,459),(350,31,NULL,NULL,'Ssids','Optional option for Permanent Users to limit their connections',461,472),(351,350,NULL,NULL,'index','',462,463),(352,350,NULL,NULL,'index_ap','List might changed based on the Access Provider specified',464,465),(353,350,NULL,NULL,'add','',466,467),(354,350,NULL,NULL,'delete','',468,469),(355,350,NULL,NULL,'edit','',470,471),(356,31,NULL,NULL,'LicensedDevices','Add-on - non standard',473,482),(357,356,NULL,NULL,'index','',474,475),(358,356,NULL,NULL,'add','',476,477),(359,356,NULL,NULL,'delete','',478,479),(360,356,NULL,NULL,'edit','',480,481),(361,31,NULL,NULL,'NodeLists','Additional convenient add-on to MESHdesk',483,486),(362,361,NULL,NULL,'index','',484,485),(363,35,'DynamicDetail',4,'EmptyTest',NULL,526,527);
 /*!40000 ALTER TABLE `acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -339,7 +339,7 @@ CREATE TABLE `checks` (
 
 LOCK TABLES `checks` WRITE;
 /*!40000 ALTER TABLE `checks` DISABLE KEYS */;
-INSERT INTO `checks` VALUES (2,'radius_restart','1','2013-09-01 20:41:20','2016-01-12 17:50:05');
+INSERT INTO `checks` VALUES (2,'radius_restart','1','2013-09-01 20:41:20','2016-03-09 10:00:06');
 /*!40000 ALTER TABLE `checks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,6 +435,124 @@ LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
 INSERT INTO `devices` VALUES (3,'08-ed-b9-00-bc-55','Auto add ( HonHaiPr # Hon Hai Precision Ind. Co.,Ltd. )',1,NULL,NULL,NULL,NULL,NULL,187,'2014-08-11 19:20:01','2014-08-11 19:20:01',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dynamic_client_notes`
+--
+
+DROP TABLE IF EXISTS `dynamic_client_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dynamic_client_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dynamic_client_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dynamic_client_notes`
+--
+
+LOCK TABLES `dynamic_client_notes` WRITE;
+/*!40000 ALTER TABLE `dynamic_client_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dynamic_client_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dynamic_client_realms`
+--
+
+DROP TABLE IF EXISTS `dynamic_client_realms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dynamic_client_realms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dynamic_client_id` int(11) NOT NULL,
+  `realm_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dynamic_client_realms`
+--
+
+LOCK TABLES `dynamic_client_realms` WRITE;
+/*!40000 ALTER TABLE `dynamic_client_realms` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dynamic_client_realms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dynamic_client_states`
+--
+
+DROP TABLE IF EXISTS `dynamic_client_states`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dynamic_client_states` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dynamic_client_id` char(36) NOT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dynamic_client_states`
+--
+
+LOCK TABLES `dynamic_client_states` WRITE;
+/*!40000 ALTER TABLE `dynamic_client_states` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dynamic_client_states` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dynamic_clients`
+--
+
+DROP TABLE IF EXISTS `dynamic_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dynamic_clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `nasidentifier` varchar(128) NOT NULL DEFAULT '',
+  `calledstationid` varchar(128) NOT NULL DEFAULT '',
+  `last_contact` datetime DEFAULT NULL,
+  `last_contact_ip` varchar(128) NOT NULL DEFAULT '',
+  `timezone` varchar(255) NOT NULL DEFAULT '',
+  `monitor` enum('off','heartbeat','socket') DEFAULT 'off',
+  `session_auto_close` tinyint(1) NOT NULL DEFAULT '0',
+  `session_dead_time` int(5) NOT NULL DEFAULT '3600',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `on_public_maps` tinyint(1) NOT NULL DEFAULT '0',
+  `lat` double DEFAULT NULL,
+  `lon` double DEFAULT NULL,
+  `photo_file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dynamic_clients`
+--
+
+LOCK TABLES `dynamic_clients` WRITE;
+/*!40000 ALTER TABLE `dynamic_clients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dynamic_clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -554,7 +672,7 @@ CREATE TABLE `dynamic_details` (
   `mikrotik_mobile_url` varchar(255) NOT NULL DEFAULT '',
   `default_language` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -563,7 +681,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-02-27 23:43:31',0,0,0,'walt',1,120,'Custom',0,0,1,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-02-27 23:43:31',0,0,0,'walt',1,120,'Custom',0,0,1,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html',''),(4,'EmptyTest',0,'logo.jpg','','','','','','','','','','',0,0,44,0,'',0,'',0,30,0,'','nasid',0,0,'2016-02-28 18:04:06','2016-02-28 18:04:06',1,0,0,'',1,120,'Default',0,0,0,NULL,'','','','','');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -612,7 +730,7 @@ CREATE TABLE `dynamic_pairs` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -621,7 +739,7 @@ CREATE TABLE `dynamic_pairs` (
 
 LOCK TABLES `dynamic_pairs` WRITE;
 /*!40000 ALTER TABLE `dynamic_pairs` DISABLE KEYS */;
-INSERT INTO `dynamic_pairs` VALUES (5,'ssid','Struisbaai',1,3,NULL,'2013-05-23 10:32:48','2013-05-28 22:02:38'),(6,'nasid','RADIUSdesk-1',1,3,NULL,'2013-08-21 19:49:38','2013-08-21 19:49:38'),(9,'nasid','lion_cp1',1,3,NULL,'2014-08-11 12:36:28','2014-08-11 12:36:28'),(10,'nasid','lion_cp2',1,3,NULL,'2014-08-11 12:36:40','2014-08-11 12:36:40'),(11,'nasid','lion_cp3',1,3,NULL,'2014-08-11 12:36:54','2014-08-11 12:36:54'),(12,'nasid','cheetah_cp1',1,3,NULL,'2014-08-11 12:37:15','2014-08-11 12:37:15');
+INSERT INTO `dynamic_pairs` VALUES (5,'ssid','Struisbaai',1,3,NULL,'2013-05-23 10:32:48','2013-05-28 22:02:38'),(6,'nasid','RADIUSdesk-1',1,3,NULL,'2013-08-21 19:49:38','2013-08-21 19:49:38'),(9,'nasid','lion_cp1',1,3,NULL,'2014-08-11 12:36:28','2014-08-11 12:36:28'),(10,'nasid','lion_cp2',1,3,NULL,'2014-08-11 12:36:40','2014-08-11 12:36:40'),(11,'nasid','lion_cp3',1,3,NULL,'2014-08-11 12:36:54','2014-08-11 12:36:54'),(12,'nasid','cheetah_cp1',1,3,NULL,'2014-08-11 12:37:15','2014-08-11 12:37:15'),(14,'nasid','bugfix',1,4,NULL,'2016-02-28 18:04:42','2016-02-28 18:04:42');
 /*!40000 ALTER TABLE `dynamic_pairs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1276,7 +1394,7 @@ CREATE TABLE `mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1285,7 +1403,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2014-08-11 12:14:59'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2014-08-11 12:17:26'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21');
+INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2014-08-11 12:14:59'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2014-08-11 12:17:26'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21'),(61,45,'BugFix',0,0,0,'none','','','',0,'2016-02-28 15:38:57','2016-02-28 15:38:57');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1317,7 +1435,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
   `proxy_auth_password` varchar(128) NOT NULL DEFAULT '',
   `coova_optional` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1326,7 +1444,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'206.221.176.235','','testing123','cheetah_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2015-05-04 19:56:07',0,1,'69.30.244.107',3128,'admin','admin','dnsparanoia'),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'206.221.176.235','','testing123','cheetah_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2015-05-04 19:56:07',0,1,'69.30.244.107',3128,'admin','admin','dnsparanoia'),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','',''),(5,41,'198.27.111.78','','testing123','bugfix','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','',0,'2016-02-28 15:40:38','2016-02-28 15:54:40',1,0,'',3128,'','','');
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1344,7 +1462,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1353,7 +1471,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(80,33,52,'2015-05-04 19:56:07','2015-05-04 19:56:07');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(80,33,52,'2015-05-04 19:56:07','2015-05-04 19:56:07'),(87,41,61,'2016-02-28 15:54:40','2016-02-28 15:54:40');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1374,7 +1492,7 @@ CREATE TABLE `mesh_exits` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1383,7 +1501,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2015-05-04 19:56:07'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2015-05-04 19:56:07'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17'),(41,45,'','captive_portal',1,NULL,'2016-02-28 15:40:38','2016-02-28 15:54:40');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1491,7 +1609,7 @@ CREATE TABLE `meshes` (
   `modified` datetime NOT NULL,
   `available_to_siblings` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1500,7 +1618,7 @@ CREATE TABLE `meshes` (
 
 LOCK TABLES `meshes` WRITE;
 /*!40000 ALTER TABLE `meshes` DISABLE KEYS */;
-INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46',0),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29',0),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42',0);
+INSERT INTO `meshes` VALUES (35,'Meerkat','02_CA_FE_CA_00_01','02:CA:FE:CA:00:01',44,'2014-07-26 04:20:46','2014-07-26 04:20:46',0),(40,'Cheetah','02_CA_FE_CA_00_02','02:CA:FE:CA:00:02',44,'2014-08-11 12:09:29','2014-08-11 12:09:29',0),(41,'Lion','02_CA_FE_CA_00_03','02:CA:FE:CA:00:03',44,'2014-08-11 12:09:42','2014-08-11 12:09:42',0),(45,'BugFix','02_CA_FE_CA_00_04','02:CA:FE:CA:00:04',44,'2016-02-28 15:38:26','2016-02-28 15:38:26',1);
 /*!40000 ALTER TABLE `meshes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1544,7 +1662,7 @@ CREATE TABLE `na_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1648,7 +1766,7 @@ CREATE TABLE `nas` (
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `nasname` (`nasname`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1779,7 +1897,7 @@ CREATE TABLE `node_loads` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1788,6 +1906,7 @@ CREATE TABLE `node_loads` (
 
 LOCK TABLES `node_loads` WRITE;
 /*!40000 ALTER TABLE `node_loads` DISABLE KEYS */;
+INSERT INTO `node_loads` VALUES (1,24,29396992,2637824,'2 min','15:45:00',0.37,0.25,0.10,'2016-02-28 15:44:48','2016-02-28 15:46:04');
 /*!40000 ALTER TABLE `node_loads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1931,7 +2050,7 @@ CREATE TABLE `node_settings` (
   `gw_auto_reboot_time` int(5) NOT NULL DEFAULT '600',
   `client_key` varchar(255) NOT NULL DEFAULT 'radiusdesk',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1940,7 +2059,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600,'radiusdesk');
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600,'radiusdesk'),(19,45,'admin',100,0,1,44,60,300,'2016-02-28 15:59:48','2016-02-28 15:59:48','',0,0,0,'Africa/Johannesburg','SAST-2','ZA',120,1,1,600,'radiusdesk');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2007,7 +2126,7 @@ CREATE TABLE `node_systems` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2016,6 +2135,7 @@ CREATE TABLE `node_systems` (
 
 LOCK TABLES `node_systems` WRITE;
 /*!40000 ALTER TABLE `node_systems` DISABLE KEYS */;
+INSERT INTO `node_systems` VALUES (1,24,'system_type','Qualcomm Atheros QCA9533 ver 1 rev 1','cpu','2016-02-28 15:44:48','2016-02-28 15:44:48'),(2,24,'machine','TP-LINK TL-WR841N/ND v9','cpu','2016-02-28 15:44:48','2016-02-28 15:44:48'),(3,24,'cpu_model','MIPS 24Kc V7.4','cpu','2016-02-28 15:44:48','2016-02-28 15:44:48'),(4,24,'BogoMIPS','366.18','cpu','2016-02-28 15:44:48','2016-02-28 15:44:48'),(5,24,'DISTRIB_ID','OpenWrt','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(6,24,'DISTRIB_RELEASE','Chaos Calmer','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(7,24,'DISTRIB_REVISION','r47400','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(8,24,'DISTRIB_CODENAME','chaos_calmer','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(9,24,'DISTRIB_TARGET','ar71xx/generic','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(10,24,'DISTRIB_DESCRIPTION','OpenWrt Chaos Calmer 15.05','release','2016-02-28 15:44:48','2016-02-28 15:44:48'),(11,24,'DISTRIB_TAINTS','no-all','release','2016-02-28 15:44:48','2016-02-28 15:44:48');
 /*!40000 ALTER TABLE `node_systems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2034,7 +2154,7 @@ CREATE TABLE `node_wifi_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2043,6 +2163,7 @@ CREATE TABLE `node_wifi_settings` (
 
 LOCK TABLES `node_wifi_settings` WRITE;
 /*!40000 ALTER TABLE `node_wifi_settings` DISABLE KEYS */;
+INSERT INTO `node_wifi_settings` VALUES (70,24,'radio0_htmode','HT20','2016-02-28 15:43:12','2016-02-28 15:43:12'),(71,24,'radio0_disable_b','radio0_disable_b','2016-02-28 15:43:12','2016-02-28 15:43:12'),(72,24,'radio0_diversity','radio0_diversity','2016-02-28 15:43:12','2016-02-28 15:43:12'),(73,24,'radio0_ldpc','radio0_ldpc','2016-02-28 15:43:12','2016-02-28 15:43:12'),(74,24,'radio0_txpower','21','2016-02-28 15:43:12','2016-02-28 15:43:12'),(75,24,'radio0_beacon_int','100','2016-02-28 15:43:12','2016-02-28 15:43:12'),(76,24,'radio0_distance','300','2016-02-28 15:43:12','2016-02-28 15:43:12'),(77,24,'radio0_ht_capab','SHORT-GI-40','2016-02-28 15:43:12','2016-02-28 15:43:12'),(78,24,'radio0_ht_capab','RX-STBC1','2016-02-28 15:43:12','2016-02-28 15:43:12'),(79,24,'radio0_ht_capab','TX-STBC','2016-02-28 15:43:12','2016-02-28 15:43:12'),(80,24,'radio0_ht_capab','DSSS_CCK-40','2016-02-28 15:43:12','2016-02-28 15:43:12');
 /*!40000 ALTER TABLE `node_wifi_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2082,7 +2203,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2091,6 +2212,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (24,45,'bf1','','30-B5-C2-B3-80-B0','tl841n',100,'10.5.5.1','2016-02-28 16:02:44',0,NULL,NULL,'logo.jpg','2016-02-28 15:43:12','2016-02-28 16:02:44',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2595,7 +2717,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9949 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11241 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2727,7 +2849,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2736,6 +2858,7 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
+INSERT INTO `radpostauth` VALUES (1,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 03:16:46'),(2,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 03:16:50'),(3,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 03:16:51'),(4,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 03:17:57'),(5,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 03:17:58'),(6,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2016-03-08 06:50:08');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3132,6 +3255,36 @@ LOCK TABLES `top_ups` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `unknown_dynamic_clients`
+--
+
+DROP TABLE IF EXISTS `unknown_dynamic_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `unknown_dynamic_clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nasidentifier` varchar(128) NOT NULL DEFAULT '',
+  `calledstationid` varchar(128) NOT NULL DEFAULT '',
+  `last_contact` datetime DEFAULT NULL,
+  `last_contact_ip` varchar(128) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nasidentifier` (`nasidentifier`),
+  UNIQUE KEY `calledstationid` (`calledstationid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unknown_dynamic_clients`
+--
+
+LOCK TABLES `unknown_dynamic_clients` WRITE;
+/*!40000 ALTER TABLE `unknown_dynamic_clients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `unknown_dynamic_clients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `unknown_nodes`
 --
 
@@ -3150,7 +3303,7 @@ CREATE TABLE `unknown_nodes` (
   `new_server` varchar(255) NOT NULL DEFAULT '',
   `new_server_status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3159,7 +3312,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (8,'4c-5e-0c-7c-1f-70','Routerbo # Routerboard.com','127.0.0.1',0,'2016-02-27 22:37:29','2016-02-27 22:37:29','2016-02-27 22:37:29','','awaiting');
+INSERT INTO `unknown_nodes` VALUES (1,'4c-5e-0c-7c-1f-70','Routerbo # Routerboard.com','197.82.220.135',0,'2016-03-12 22:23:53','2016-03-12 22:23:53','2016-03-12 22:23:53','','awaiting');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3355,7 +3508,7 @@ CREATE TABLE `vouchers` (
   `time_cap` int(12) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ak_vouchers` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3364,7 +3517,7 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
-INSERT INTO `vouchers` VALUES (32,'lazytoe','','new',100,NULL,NULL,NULL,NULL,NULL,NULL,44,'2016-02-16 12:23:24','2016-02-28 15:30:03','','','lazytoe','Residence Inn',34,'Time-Standard-1Hour',10,'03/01/2016','31-00-00-0',NULL,NULL,0,2678400);
+INSERT INTO `vouchers` VALUES (32,'lazytoe','','expired',100,NULL,NULL,NULL,NULL,NULL,NULL,44,'2016-02-16 12:23:24','2016-03-01 00:00:06','','','lazytoe','Residence Inn',34,'Time-Standard-1Hour',10,'03/01/2016','31-00-00-0',NULL,NULL,0,2678400);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -3377,4 +3530,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-28 15:32:08
+-- Dump completed on 2016-03-13  5:46:26
