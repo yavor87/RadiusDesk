@@ -66,7 +66,7 @@
 		print('<td>');
 	    print('<span style="color:#0066cc;"><strong><span style="font-family:arial,helvetica,sans-serif;"></span>'.$extra_name.'</strong></span></td>');
 		print('<td>');
-		print('<span style="color:#696969;"><span style="font-family:arial,helvetica,sans-serif;">'.$password.'></span>'.$extra_value.'</span></td>');
+		print('<span style="color:#696969;"><span style="font-family:arial,helvetica,sans-serif;"></span>'.$extra_value.'</span></td>');
 		print('</tr>');
         $stripe = !($stripe);
     }
