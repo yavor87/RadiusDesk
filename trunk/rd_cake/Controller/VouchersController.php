@@ -5,7 +5,7 @@ class VouchersController extends AppController {
 
     public $name       = 'Vouchers';
     public $components = array('Aa','VoucherGenerator','GridFilter','VoucherCsv');
-    public $uses       = array('Voucher','User','Profile','Realm');
+    public $uses       = array('Voucher','User','Profile','Realm','EmailMessage');
     protected $base    = "Access Providers/Controllers/Vouchers/"; //Required for AP Rights
 
     protected  $read_only_attributes = array(
@@ -520,13 +520,34 @@ class VouchersController extends AppController {
         //______ END of Realm and Profile check _____
         
         
+        //___ Email message ____
+        $message_id = false;
+        //If the email_title and email_message is not empty we will create an entry into the email_messages table
+        if(
+        (array_key_exists('email_title',$this->request->data))&&
+        (array_key_exists('email_message',$this->request->data))
+        ){
+            if(
+                ($this->request->data['email_title'] != '')&&
+                ($this->request->data['email_message'] != '')
+            ){
+                $e_d            = array();
+                $e_d['name']    = $this->request->data['batch'];
+                $e_d['title']   = $this->request->data['email_title'];
+                $e_d['message'] = $this->request->data['email_message'];
+                $this->EmailMessage->save($e_d);
+                $message_id = $this->EmailMessage->id;
+            }
+        }
+          
+        
         $this->layout   = 'ext_file_upload'; 
         $temp_file      = "/tmp/csv_file.csv";
         
         
         move_uploaded_file ($_FILES['csv_file']['tmp_name'] , $temp_file);
         $batch          = $this->request->data['batch'];   
-        $voucher_list   = $this->VoucherCsv->generateVoucherList($temp_file,$batch);
+        $voucher_list   = $this->VoucherCsv->generateVoucherList($temp_file,$batch,$message_id);
         
         $success_flag = true;
         foreach($voucher_list as $v){
@@ -540,7 +561,7 @@ class VouchersController extends AppController {
             }
             $this->{$this->modelClass}->id = null;
         }
-        
+          
         $json_return            = array();   
         $json_return['success'] = true;
         $json_return['t']       = $voucher_list;

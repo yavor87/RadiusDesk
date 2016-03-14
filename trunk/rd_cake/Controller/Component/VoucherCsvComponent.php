@@ -4,7 +4,7 @@ class VoucherCsvComponent extends Component {
     private $default_email  = "dirk@gmail.com";
     private $pwd_length     = 3;
 	
-   	public function generateVoucherList($temp_file,$batch){
+   	public function generateVoucherList($temp_file,$batch,$message_id){
         $voucher_list   = array();
         $file           = fopen("$temp_file","r");
         while(! feof($file)){
@@ -24,10 +24,16 @@ class VoucherCsvComponent extends Component {
                     }else{
                         $email = $this->default_email;
                     }
+                    //See if there is a email_message id
+                    $extra_name = 'mail_not_sent';
+                    if($message_id){
+                        $extra_name = 'mail_not_sent'.'_'.$message_id;
+                    }
+                    
                     $batch  = $batch;
                     $name   = "$batch"."-".$unit_name;
                     $pwd    = $this->_random_alpha_numeric($this->pwd_length);
-                    array_push($voucher_list,array('name' => $name, 'password' => $pwd, 'extra_name' => 'mail_not_sent','extra_value' => $email));
+                    array_push($voucher_list,array('name' => $name, 'password' => $pwd, 'extra_name' => $extra_name ,'extra_value' => $email));
                 }
             }
         }
