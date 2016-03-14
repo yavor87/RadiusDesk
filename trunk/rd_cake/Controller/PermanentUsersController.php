@@ -1855,7 +1855,8 @@ class PermanentUsersController extends AppController {
         //What should we include....
         $c['contain']   = array(
                             'PermanentUserNote' => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
-                            'User'
+                            'User',
+                            'Realm'
                         );
 
         //===== SORT =====
