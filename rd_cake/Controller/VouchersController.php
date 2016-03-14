@@ -1681,7 +1681,8 @@ class VouchersController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'User'                         
+                            'User',
+                            'Realm'                         
                         );
 
         //===== SORT =====
