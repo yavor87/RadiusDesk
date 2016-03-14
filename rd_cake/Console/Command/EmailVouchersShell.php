@@ -12,7 +12,7 @@ class EmailVouchersShell extends AppShell {
         $this->out("<comment>The email addy will be in the extra_value field</comment>");
         
         $this->Voucher->contain();
-        $q_r = $this->Voucher->find('all',array('conditions' => array('Voucher.extra_name LIKE' => 'mail_not_sent_%')));
+        $q_r = $this->Voucher->find('all',array('conditions' => array('Voucher.extra_name LIKE' => 'mail_not_sent%')));
         foreach($q_r as $v){
             print_r($v);
             $email = $v['Voucher']['extra_value'];
@@ -31,11 +31,30 @@ class EmailVouchersShell extends AppShell {
                 if($message_id){
                     $message = $this->EmailMessage->findById($message_id);
                     print_r($message);
-                    $this->Title    = $message['EmailMessage']['title'];
-                    $this->Message  = $message['EmailMessage']['message'];
+                    $this->title    = $message['EmailMessage']['title'];
+                    $this->message  = $message['EmailMessage']['message'];
                 }
                 
-                //DUMMY NOW we need to send out the email.....
+                //NOW we need to send out the email.....
+                $username       = $v['Voucher']['name'];
+                $password       = $v['Voucher']['password'];
+                $valid_for      = $v['Voucher']['time_valid'];
+                $profile        = $v['Voucher']['profile'];
+                $extra_name     = $v['Voucher']['extra_name'];
+                $extra_value    = $v['Voucher']['extra_value'];
+                $message        = $this->message;
+
+                //  print_r("The username is $username and password is $password");
+			    $email_server = Configure::read('EmailServer');
+                App::uses('CakeEmail', 'Network/Email');
+                $Email = new CakeEmail();
+                $Email->config($email_server);
+                $Email->subject($this->title);
+                $Email->to($email);
+                $Email->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'));
+                $Email->template('voucher_detail', 'voucher_notify');
+                $Email->emailFormat('html');
+                $Email->send();
                 
                 
                 //Then we mark it as sent
