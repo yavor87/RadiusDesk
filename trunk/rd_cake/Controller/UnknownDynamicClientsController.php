@@ -47,8 +47,7 @@ class UnknownDynamicClientsController extends AppController {
 
         foreach($q_r as $i){
             $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
-            $location = $GeoIpLocation->find('10.0.0.1');
-            
+                   
             //Some defaults:
             $country_code = '';
             $country_name = '';
