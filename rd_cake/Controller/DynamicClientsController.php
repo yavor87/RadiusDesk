@@ -48,7 +48,10 @@ class DynamicClientsController extends AppController {
 
         foreach($q_r as $i){
         
-            $location = $GeoIpLocation->find($i['DynamicClient']['last_contact_ip']);
+            $location = array();
+            if($i['DynamicClient']['last_contact_ip'] != ''){
+                $location = $GeoIpLocation->find($i['DynamicClient']['last_contact_ip']);
+            }
                    
             //Some defaults:
             $country_code = '';
@@ -103,7 +106,9 @@ class DynamicClientsController extends AppController {
             $i['DynamicClient']['country_name'] = $country_name;
             $i['DynamicClient']['city']         = $city;
             $i['DynamicClient']['postal_code']  = $postal_code;   
-            $i['DynamicClient']['last_contact_human']    = $this->TimeCalculations->time_elapsed_string($i['DynamicClient']['last_contact']);    
+            if($i['DynamicClient']['last_contact'] != null){
+                $i['DynamicClient']['last_contact_human']    = $this->TimeCalculations->time_elapsed_string($i['DynamicClient']['last_contact']);
+            }   
             $i['DynamicClient']['owner']        = $owner_tree;
             $i['DynamicClient']['realms']       = $realms;
             $i['DynamicClient']['update']       = $action_flags['update'];
