@@ -42,6 +42,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
             { 
                 text        : i18n('sActive'), 
                 width       : 130,
+                hidden      : true,
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
                                 "<tpl if='active == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
@@ -58,6 +59,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
             { 
                 text:   'To Sub-Providers',
                 width:  130,
+                hidden  : true,
                 xtype:  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
                             "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
@@ -75,7 +77,8 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 text    :   i18n('sRealms'),
                 sortable: false,
                 width   :  150,
-                xtype:  'templatecolumn', 
+                tdCls   : 'gridTree',
+                xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
                             '<tpl if="Ext.isEmpty(realms)"><div class=\"fieldBlueWhite\">Available to all!</div></tpl>', //Warn them when available     to all
                             '<tpl for="realms">',     // interrogate the realms property within the data
@@ -86,31 +89,39 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 dataIndex: 'realms'
             },
             { 
-                text        : "Most Recent Request",   
-                dataIndex   : 'last_contact',  
+                text        : 'Last Contact',   
+                dataIndex   : 'last_contact',
+                width       : 150, 
                 tdCls       : 'gridTree', 
-                flex        : 1,
-                hidden      : true,
-                renderer    : function(value,metaData, record){
-                    if(value != 'unknown'){                    
-                        var online      = record.get('status_time');
-                        if(value == 'up'){
-                            return "<div class=\"fieldGreen\">"+i18n("sUp")+" "+Ext.ux.secondsToHuman(online)+"</div>";
-                        }
-                        if(value == 'down'){
-                            return "<div class=\"fieldRed\">"+i18n("sDown")+" "+Ext.ux.secondsToHuman(online)+"</div>";
-                        }
+                renderer    : function(v,metaData, record){
+                    var last_contact_human     = record.get('last_contact_human');
+                    return "<div class=\"fieldBlueWhite\">"+last_contact_human+"</div>";     
+                },stateId: 'StateGridUdc4'
+            },
+			{ 
 
-                    }else{
-                        return "<div class=\"fieldBlue\">"+i18n("sUnknown")+"</div>";
-                    }              
-                },stateId: 'StateGridDc9'
+                text        : 'From IP', 
+                dataIndex   : 'last_contact_ip',          
+                tdCls       : 'gridTree', 
+                width       : 150,
+                xtype       :  'templatecolumn', 
+                tpl         :  new Ext.XTemplate(
+                    '<div class=\"fieldGreyWhite\">{last_contact_ip}</div>',
+                    "<tpl if='Ext.isEmpty(city)'><tpl else>",
+                        '<div><b>{city}</b>  ({postal_code})</div>',
+                    "</tpl>",
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{country_name}</b> ({country_code})</div>',
+                    "</tpl>"   
+                ), 
+                filter		: {type: 'string'},stateId: 'StateGridUdc5'
             },
             { 
                 text        : i18n("sStatus"),   
                 dataIndex   : 'status',  
                 tdCls       : 'gridTree', 
                 width       :  130,
+                hidden      : true,
                 renderer    : function(value,metaData, record){
                     if(value != 'unknown'){                    
                         var online      = record.get('status_time');
