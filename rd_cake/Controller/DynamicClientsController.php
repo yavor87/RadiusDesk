@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class DynamicClientsController extends AppController {
 
     public $name        = 'DynamicClients';
-    public $components  = array('Aa','GridFilter');
+    public $components  = array('Aa','GridFilter','TimeCalculations');
     public $uses        = array('DynamicClient','UnknownDynamicClient','User');
     protected $base     = "Access Providers/Controllers/DynamicClients/";
 
@@ -42,8 +42,35 @@ class DynamicClientsController extends AppController {
         $q_r    = $this->{$this->modelClass}->find('all',$c_page);
 
         $items      = array();
+        
+        App::uses('GeoIpLocation', 'GeoIp.Model');
+        $GeoIpLocation = new GeoIpLocation();
 
         foreach($q_r as $i){
+        
+            $location = $GeoIpLocation->find($i['DynamicClient']['last_contact_ip']);
+                   
+            //Some defaults:
+            $country_code = '';
+            $country_name = '';
+            $city         = '';
+            $postal_code  = '';
+            
+            if(array_key_exists('GeoIpLocation',$location)){
+                if($location['GeoIpLocation']['country_code'] != ''){
+                    $country_code = $location['GeoIpLocation']['country_code'];
+                }
+                if($location['GeoIpLocation']['country_name'] != ''){
+                    $country_name = $location['GeoIpLocation']['country_name'];
+                }
+                if($location['GeoIpLocation']['city'] != ''){
+                    $city = $location['GeoIpLocation']['city'];
+                }
+                if($location['GeoIpLocation']['postal_code'] != ''){
+                    $postal_code = $location['GeoIpLocation']['postal_code'];
+                }
+            }
+        
         
             $realms     = array();
             //Realms
@@ -70,20 +97,19 @@ class DynamicClientsController extends AppController {
             $owner_id       = $i['DynamicClient']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
+            
+            
+            $i['DynamicClient']['country_code'] = $country_code;
+            $i['DynamicClient']['country_name'] = $country_name;
+            $i['DynamicClient']['city']         = $city;
+            $i['DynamicClient']['postal_code']  = $postal_code;   
+            $i['DynamicClient']['last_contact_human']    = $this->TimeCalculations->time_elapsed_string($i['DynamicClient']['last_contact']);    
+            $i['DynamicClient']['owner']        = $owner_tree;
+            $i['DynamicClient']['realms']       = $realms;
+            $i['DynamicClient']['update']       = $action_flags['update'];
+            $i['DynamicClient']['delete']       = $action_flags['delete'];
          
-            array_push($items,array(
-                'id'                    => $i['DynamicClient']['id'],
-                'name'                  => $i['DynamicClient']['name'],
-                'owner'                 => $owner_tree,   
-                'user_id'               => $i['DynamicClient']['user_id'],  
-                'username'              => $i['User']['username'],
-                'nasidentifier'         => $i['DynamicClient']['nasidentifier'],
-                'active'                => $i['DynamicClient']['active'],
-                'available_to_siblings' => $i['DynamicClient']['available_to_siblings'],
-                'realms'                => $realms,
-                'update'                => $action_flags['update'],
-                'delete'                => $action_flags['delete']
-            ));
+            array_push($items,$i['DynamicClient']);
         }
        
         //___ FINAL PART ___
@@ -103,6 +129,11 @@ class DynamicClientsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+        
+        //Get the creator's id
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
          
         $check_items = array('active', 'available_to_siblings', 'on_public_maps', 'session_auto_close');
         foreach($check_items as $ci){
