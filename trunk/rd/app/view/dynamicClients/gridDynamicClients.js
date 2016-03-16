@@ -43,6 +43,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 text        : i18n('sActive'), 
                 width       : 130,
                 hidden      : true,
+                tdCls       : 'gridTree',
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
                                 "<tpl if='active == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
@@ -60,6 +61,7 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 text:   'To Sub-Providers',
                 width:  130,
                 hidden  : true,
+                tdCls   : 'gridTree',
                 xtype:  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
                             "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
@@ -94,6 +96,9 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 width       : 150, 
                 tdCls       : 'gridTree', 
                 renderer    : function(v,metaData, record){
+                    if(record.get('last_contact') == null){
+                        return "<div class=\"fieldBlueWhite\">Never</div>";
+                    }
                     var last_contact_human     = record.get('last_contact_human');
                     return "<div class=\"fieldBlueWhite\">"+last_contact_human+"</div>";     
                 },stateId: 'StateGridUdc4'
@@ -106,12 +111,15 @@ Ext.define('Rd.view.dynamicClients.gridDynamicClients' ,{
                 width       : 150,
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
+                    '<tpl if="Ext.isEmpty(last_contact_ip)"><div class=\"fieldGreyWhite\">Not Available</div>',
+                    '<tpl else>',
                     '<div class=\"fieldGreyWhite\">{last_contact_ip}</div>',
                     "<tpl if='Ext.isEmpty(city)'><tpl else>",
                         '<div><b>{city}</b>  ({postal_code})</div>',
                     "</tpl>",
                     "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
                         '<div><b>{country_name}</b> ({country_code})</div>',
+                    "</tpl>",
                     "</tpl>"   
                 ), 
                 filter		: {type: 'string'},stateId: 'StateGridUdc5'
