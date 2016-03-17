@@ -42,5 +42,6 @@ class Note extends AppModel {
 		'FinPremiumSmsTransactionNote'  	=> array('dependent'    => true),
 		'FinAuthorizeNetTransactionNote'	=> array('dependent'    => true),
 		'PermanentUserNote'					=> array('dependent'    => true),
+		'DynamicClientNote'					=> array('dependent'    => true),
     );
 }
