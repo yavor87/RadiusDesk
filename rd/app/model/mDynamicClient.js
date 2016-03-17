@@ -23,6 +23,7 @@ Ext.define('Rd.model.mDynamicClient', {
          'country_name',
          'city',
          'postal_code',
+         {name: 'notes',        type: 'bool'  },
          {name: 'update',       type: 'bool'},
          {name: 'delete',       type: 'bool'}
         ]
