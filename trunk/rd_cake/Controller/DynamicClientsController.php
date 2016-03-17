@@ -108,7 +108,20 @@ class DynamicClientsController extends AppController {
             $i['DynamicClient']['postal_code']  = $postal_code;   
             if($i['DynamicClient']['last_contact'] != null){
                 $i['DynamicClient']['last_contact_human']    = $this->TimeCalculations->time_elapsed_string($i['DynamicClient']['last_contact']);
-            }   
+            }
+            
+            //Create notes flag
+            $notes_flag  = false;
+            foreach($i['DynamicClientNote'] as $dcn){
+                if(!$this->_test_for_private_parent($dcn['Note'],$user)){
+                    $notes_flag = true;
+                    break;
+                }
+            }
+            
+             
+            $i['DynamicClient']['notes']        = $notes_flag;
+             
             $i['DynamicClient']['owner']        = $owner_tree;
             $i['DynamicClient']['realms']       = $realms;
             $i['DynamicClient']['update']       = $action_flags['update'];
@@ -274,6 +287,167 @@ class DynamicClientsController extends AppController {
             }
         }
     }
+    
+    //____ Notes ______
+     public function note_index(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['for_id'])){
+            $na_id  = $this->request->query['for_id'];
+            $q_r    = $this->DynamicClient->DynamicClientNote->find('all', 
+                array(
+                    'contain'       => array('Note'),
+                    'conditions'    => array('DynamicClientNote.dynamic_client_id' => $na_id)
+                )
+            );
+            foreach($q_r as $i){
+                if(!$this->_test_for_private_parent($i['Note'],$user)){
+                    $owner_id   = $i['Note']['user_id'];
+                    $owner      = $this->_find_parents($owner_id);
+                    $afs        = $this->_get_action_flags($owner_id,$user);
+                    array_push($items,
+                        array(
+                            'id'        => $i['Note']['id'], 
+                            'note'      => $i['Note']['note'], 
+                            'available_to_siblings' => $i['Note']['available_to_siblings'],
+                            'owner'     => $owner,
+                            'delete'    => $afs['delete']
+                        )
+                    );
+                }
+            }
+        } 
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+
+    public function note_add(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        //Get the creator's id
+        if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+            $this->request->data['user_id'] = $user_id;
+        }
+
+        //Make available to siblings check
+        if(isset($this->request->data['available_to_siblings'])){
+            $this->request->data['available_to_siblings'] = 1;
+        }else{
+            $this->request->data['available_to_siblings'] = 0;
+        }
+
+        $success    = false;
+        $msg        = array('message' => __('Could not create note'));
+        $this->DynamicClient->DynamicClientNote->Note->create(); 
+        //print_r($this->request->data);
+        if ($this->DynamicClient->DynamicClientNote->Note->save($this->request->data)) {
+            $d                      = array();
+            $d['DynamicClientNote']['dynamic_client_id']   = $this->request->data['for_id'];
+            $d['DynamicClientNote']['note_id'] = $this->DynamicClient->DynamicClientNote->Note->id;
+            $this->DynamicClient->DynamicClientNote->create();
+            if ($this->DynamicClient->DynamicClientNote->save($d)) {
+                $success = true;
+            }
+        }
+
+        if($success){
+            $this->set(array(
+                'success' => $success,
+                '_serialize' => array('success')
+            ));
+        }else{
+             $this->set(array(
+                'success' => $success,
+                'message' => $message,
+                '_serialize' => array('success','message')
+            ));
+        }
+    }
+
+    public function note_del(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $fail_flag  = false;
+
+	    if(isset($this->data['id'])){   //Single item delete
+            $message = "Single item ".$this->data['id'];
+
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            $item       = $this->DynamicClient->DynamicClientNote->Note->findById($this->data['id']);
+            $owner_id   = $item['Note']['user_id'];
+            if($owner_id != $user_id){
+                if($this->_is_sibling_of($user_id,$owner_id)== true){
+                    $this->DynamicClient->DynamicClientNote->Note->id = $this->data['id'];
+                    $this->DynamicClient->DynamicClientNote->Note->delete($this->data['id'],true);
+                }else{
+                    $fail_flag = true;
+                }
+            }else{
+                $this->DynamicClient->DynamicClientNote->Note->id = $this->data['id'];
+                $this->DynamicClient->DynamicClientNote->Note->delete($this->data['id'],true);
+            }
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->data as $d){
+
+                $item       = $this->DynamicClient->DynamicClientNote->Note->findById($d['id']);
+                $owner_id   = $item['Note']['user_id'];
+                if($owner_id != $user_id){
+                    if($this->_is_sibling_of($user_id,$owner_id) == true){
+                        $this->DynamicClient->DynamicClientNote->Note->id = $d['id'];
+                        $this->DynamicClient->DynamicClientNote->Note->delete($d['id'],true);
+                    }else{
+                        $fail_flag = true;
+                    }
+                }else{
+                    $this->DynamicClient->DynamicClientNote->Note->id = $d['id'];
+                    $this->DynamicClient->DynamicClientNote->Note->delete($d['id'],true);
+                }
+   
+            }
+        }
+
+        if($fail_flag == true){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
+    
+    
 
     //----- Menus ------------------------
     public function menu_for_grid(){
@@ -303,9 +477,15 @@ class DynamicClientsController extends AppController {
                                 )
                             )
                     ),
-                    array('xtype' => 'button', 'iconCls' => 'b-add',     'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
-                    array('xtype' => 'button', 'iconCls' => 'b-delete',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
-                    array('xtype' => 'button', 'iconCls' => 'b-edit',    'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnAdd'), 'scale' => 'large', 'itemId' => 'add',      'tooltip'=> __('Add')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
+                    array('xtype' => 'button', 'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
+                )),
+                 array('xtype' => 'buttongroup','title' => __('Other'), 'items' => array(
+                    array('xtype' => 'button','glyph'=> Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note', 'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv', 'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph','tooltip'=> __('Graphs')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',   'tooltip'=> __('Map'))
                 )),
             );
         }
@@ -421,7 +601,8 @@ class DynamicClientsController extends AppController {
         //What should we include....
         $c['contain']   = array(
                             'User',
-                            'DynamicClientRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id')
+                            'DynamicClientRealm'   => array('Realm.name','Realm.id','Realm.available_to_siblings','Realm.user_id'),
+                            'DynamicClientNote'    => array('Note.note','Note.id','Note.available_to_siblings','Note.user_id'),
                         );
 
         //===== SORT =====
