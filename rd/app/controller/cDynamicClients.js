@@ -56,15 +56,20 @@ Ext.define('Rd.controller.cDynamicClients', {
         'components.pnlBanner', 
         'dynamicClients.gridDynamicClients',
         'dynamicClients.winDynamicClientAddWizard',
-        'nas.gridRealmsForNasOwner',
         'dynamicClients.gridUnknownDynamicClients',
         'dynamicClients.winAttachUnknownDynamicClient',
         'components.cmbTimezones',
         'components.winNote', 
-        'components.winNoteAdd'
+        'components.winNoteAdd',
+        'dynamicClients.pnlDynamicClient',
+        'dynamicClients.pnlDynamicClientDynamicClient',
+        'dynamicClients.pnlRealmsForDynamicClientOwner',
+        'dynamicClients.gridRealmsForDynamicClientOwner',
+        'dynamicClients.pnlDynamicClientPhoto',
+        'dynamicClients.gridDynamicClientsAvailability'
     ],
     stores: ['sAccessProvidersTree','sDynamicClients', 'sUnknownDynamicClients'],
-    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForNasOwner', 'mUnknownDynamicClient' ],
+    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForDynamicClientOwner', 'mUnknownDynamicClient','mDynamicClientState' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
@@ -73,6 +78,10 @@ Ext.define('Rd.controller.cDynamicClients', {
         urlDelete       : '/cake2/rd_cake/dynamic_clients/delete.json',
 		urlEdit         : '/cake2/rd_cake/dynamic_clients/edit.json',
 		urlNoteAdd      : '/cake2/rd_cake/dynamic_clients/note_add.json',
+		urlView         : '/cake2/rd_cake/dynamic_clients/view.json',
+		urlViewPhoto    : '/cake2/rd_cake/dynamic_clients/view_photo.json',
+        urlPhotoBase    : '/cake2/rd_cake/webroot/img/nas/',
+        urlUploadPhoto  : '/cake2/rd_cake/dynamic_clients/upload_photo/'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridDynamicClients'}       
@@ -111,6 +120,51 @@ Ext.define('Rd.controller.cDynamicClients', {
             'gridDynamicClients #edit'   : {
                 click:      me.edit
             },
+            'pnlDynamicClient #tabDynamicClient' : {
+                activate: me.onTabDynamicClientActive
+            },
+            'pnlDynamicClient #tabDynamicClient #monitorType': {
+                change: me.monitorTypeChange
+            },
+            'pnlDynamicClient #tabDynamicClient #chkSessionAutoClose': {
+                change:     me.chkSessionAutoCloseChange
+            },
+            'pnlDynamicClient #tabDynamicClient #save' : {
+                click: me.saveDynamicClient
+            },
+            
+            'pnlRealmsForDynamicClientOwner #chkAvailForAll' :{
+                change:     me.chkAvailForAllChangeTab
+            },
+            'pnlRealmsForDynamicClientOwner gridRealmsForDynamicClientOwner #reload' :{
+                click:      me.gridRealmsForDynamicClientOwnerReload
+            },
+            'pnlRealmsForDynamicClientOwner #chkAvailSub':{
+                change:     me.gridRealmsForDynamicClientOwnerChkAvailSub
+            }, 
+            'pnlDynamicClient #tabRealms': {
+                activate:   me.tabRealmsActivate
+            },
+            'pnlDynamicClient #tabPhoto': {
+                activate:       me.tabPhotoActivate
+            },
+            'pnlDynamicClient #tabPhoto #save': {
+                click:       me.photoSave
+            },
+            'pnlDynamicClient #tabPhoto #cancel': {
+                click:       me.photoCancel
+            },//Availability
+            'pnlDynamicClient #tabAvailability': {
+                activate:   me.tabAvailabilityActivate
+            },
+            'gridDynamicClientsAvailability #reload' :{
+                click:      me.gridDynamicClientsAvailabilityReload
+            },
+            'gridDynamicClientsAvailability #delete' :{
+                click:      me.gridDynamicClientsAvailabilityDelete
+            },
+            
+            
             'gridDynamicClients #note' : {
                 click:      me.note
             },
@@ -126,22 +180,24 @@ Ext.define('Rd.controller.cDynamicClients', {
             'winDynamicClientAddWizard #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            'winDynamicClientAddWizard gridRealmsForNasOwner #reload': {
-                click:      me.gridRealmsForNasOwnerReload
+            'winDynamicClientAddWizard #monitorType': {
+                change: me.monitorTypeChange
+            },
+            'winDynamicClientAddWizard #chkSessionAutoClose': {
+                change:     me.chkSessionAutoCloseChange
+            },
+            'winDynamicClientAddWizard gridRealmsForDynamicClientOwner #reload': {
+                click:      me.gridRealmsForDynamicClientOwnerReload
             },
             'winDynamicClientAddWizard #tabRealms': {
-                activate:      me.gridRealmsForNasOwnerActivate
+                activate:      me.gridRealmsForDynamicClientOwnerActivate
             }, 
             'winDynamicClientAddWizard #tabRealms #chkAvailForAll': {
                 change:     me.chkAvailForAllChange
             },
-            'winDynamicClientAddWizard gridRealmsForNasOwner #chkAvailSub':     {
-                change:     me.gridRealmsForNasOwnerChkAvailSub
+            'winDynamicClientAddWizard gridRealmsForDynamicClientOwner #chkAvailSub':     {
+                change:     me.gridRealmsForDynamicClientOwnerChkAvailSub
             },
-			'winDynamicClientEdit #save': {
-                click: me.btnEditSave
-            },
-            
             'gridUnknownDynamicClients #reload': {
                 click:      me.gridUnknownDynamicClientsReload
             },
@@ -160,17 +216,23 @@ Ext.define('Rd.controller.cDynamicClients', {
             'winAttachUnknownDynamicClient #btnDataNext' : {
                 click:  me.btnDataNext
             },
-            'winAttachUnknownDynamicClient gridRealmsForNasOwner #reload': {
-                click:      me.gridRealmsForNasOwnerReload
+            'winAttachUnknownDynamicClient #monitorType': {
+                change: me.monitorTypeChange
+            },
+            'winAttachUnknownDynamicClient #chkSessionAutoClose': {
+                change:     me.chkSessionAutoCloseChange
+            },
+            'winAttachUnknownDynamicClient gridRealmsForDynamicClientOwner #reload': {
+                click:      me.gridRealmsForDynamicClientOwnerReload
             },
             'winAttachUnknownDynamicClient #tabRealms': {
-                activate:      me.gridRealmsForNasOwnerActivate
+                activate:      me.gridRealmsForDynamicClientOwnerActivate
             }, 
             'winAttachUnknownDynamicClient #tabRealms #chkAvailForAll': {
                 change:     me.chkAvailForAllChange
             },
-            'winAttachUnknownDynamicClient gridRealmsForNasOwner #chkAvailSub':     {
-                change:     me.gridRealmsForNasOwnerChkAvailSub
+            'winAttachUnknownDynamicClient gridRealmsForDynamicClientOwner #chkAvailSub':     {
+                change:     me.gridRealmsForDynamicClientOwnerChkAvailSub
             },
 			'gridUnknownDynamicClients #delete': {
                 click: me.delUnknownDynamicClient
@@ -310,7 +372,7 @@ Ext.define('Rd.controller.cDynamicClients', {
         var win     = button.up('window');
         var form    = button.up('form');
         var tp      = form.down('tabpanel');
-        var grid    = form.down('gridRealmsForNasOwner');
+        var grid    = form.down('gridRealmsForDynamicClientOwner');
         var extra_params ={};   //Get the extra params to submit with form
         var select_flag  = false;
 
@@ -368,10 +430,34 @@ Ext.define('Rd.controller.cDynamicClients', {
             }
         });
     },
+    monitorTypeChange : function(cmb){
+        var me      = this;
+        var form    = cmb.up('form');
+        var da      = form.down('#heartbeat_dead_after');
+        var val     = cmb.getValue();
+        
+        if(val == 'heartbeat'){
+            da.setVisible(true);
+        }else{
+            da.setVisible(false);
+        }   
+    },
+    chkSessionAutoCloseChange : function(chk){
+        var me      = this;
+        
+        var pnl     = chk.up('panel');
+        var nr      = pnl.down('#nrSessionDeadTime');
+        
+        if(chk.getValue() == true){
+            nr.setVisible(true);
+        }else{
+            nr.setVisible(false);
+        }
+    },
     chkAvailForAllChange: function(chk){
         var me      = this;
         var pnl     = chk.up('panel');
-        var grid    = pnl.down("gridRealmsForNasOwner");
+        var grid    = pnl.down("gridRealmsForDynamicClientOwner");
         if(chk.getValue() == true){
             grid.hide();
         }else{
@@ -381,7 +467,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     chkAvailForAllChangeTab: function(chk){
         var me      = this;
         var pnl     = chk.up('panel');
-        var grid    = pnl.down("gridRealmsForNasOwner");
+        var grid    = pnl.down("gridRealmsForDynamicClientOwner");
         if(chk.getValue() == true){
             grid.hide();
             
@@ -393,28 +479,27 @@ Ext.define('Rd.controller.cDynamicClients', {
         grid.getStore().load();
         grid.getStore().getProxy().setExtraParam('clear_flag',false);
     },
-    gridRealmsForNasOwnerReload: function(button){
+    gridRealmsForDynamicClientOwnerReload: function(button){
         var me      = this;
-        var grid    = button.up('gridRealmsForNasOwner');
+        var grid    = button.up('gridRealmsForDynamicClientOwner');
         grid.getStore().load();
     },
-    gridRealmsForNasOwnerActivate: function(tab){
+    gridRealmsForDynamicClientOwnerActivate: function(tab){
         var me      = this;
         var a_to_s  = tab.down('#chkAvailSub').getValue();
-        var grid    = tab.down('gridRealmsForNasOwner');
+        var grid    = tab.down('gridRealmsForDynamicClientOwner');
         grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
         grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
         grid.getStore().load();
     },
-    gridRealmsForNasOwnerChkAvailSub: function(chk){
+    gridRealmsForDynamicClientOwnerChkAvailSub: function(chk){
         var me      = this;
         var a_to_s  = chk.getValue();
-        var grid    = chk.up('gridRealmsForNasOwner');
+        var grid    = chk.up('gridRealmsForDynamicClientOwner');
         grid.getStore().getProxy().setExtraParam('owner_id',me.owner_id);
         grid.getStore().getProxy().setExtraParam('available_to_siblings',a_to_s);
         grid.getStore().load();
-    },
-    
+    }, 
     select: function(grid,record){
         var me = this;
         //Adjust the Edit and Delete buttons accordingly...
@@ -444,6 +529,185 @@ Ext.define('Rd.controller.cDynamicClients', {
             }
         }
     },
+    
+    edit: function(button){
+        var me      = this;
+        var grid    = button.up('gridDynamicClients');
+
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+
+            var selected    =  grid.getSelectionModel().getSelection();
+            var count       = selected.length;         
+            Ext.each(grid.getSelectionModel().getSelection(), function(sr,index){
+
+                //Check if the node is not already open; else open the node:
+                var tp                      = grid.up('tabpanel');
+                var dynamic_client_id       = sr.getId();
+                var dynamic_client_tab_id   = 'dynamic_clientTab_'+dynamic_client_id;
+                var nt                      = tp.down('#'+dynamic_client_tab_id);
+                if(nt){
+                    tp.setActiveTab(dynamic_client_tab_id); //Set focus on  Tab
+                    return;
+                }
+
+                var dynamic_client_tab_name = sr.get('name');
+                //Tab not there - add one
+                tp.add({ 
+                    title       : dynamic_client_tab_name,
+                    itemId      : dynamic_client_tab_id,
+                    closable    : true,
+                    glyph       : Rd.config.icnEdit, 
+                    layout      : 'fit', 
+                    items       : {'xtype' : 'pnlDynamicClient',dynamic_client_id: dynamic_client_id, record: sr}
+                });
+                tp.setActiveTab(dynamic_client_tab_id); //Set focus on Add Tab
+            });
+        }
+    },   
+    onTabDynamicClientActive: function(t){
+        var me      = this;
+        var form    = t.down('form');
+        //get the dynamic_client_id's id
+        var dynamic_client_id = t.up('pnlDynamicClient').dynamic_client_id;
+        form.load({url:me.getUrlView(), method:'GET',params:{dynamic_client_id:dynamic_client_id}});
+    },
+    saveDynamicClient : function(button){
+
+        var me              = this;
+        var form            = button.up('form');
+        var dynamic_client  = button.up('pnlDynamicClient').dynamic_client_id;
+        //Checks passed fine...      
+        form.submit({
+            clientValidation    : true,
+            url                 : me.getUrlEdit(),
+            params              : {id: dynamic_client},
+            success             : function(form, action) {
+                me.reload();
+                Ext.ux.Toaster.msg(
+                    i18n('sItems_modified'),
+                    i18n('sItems_modified_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure             : Ext.ux.formFail
+        });
+    },
+    
+    tabRealmsActivate : function(tab){
+        var me      = this;
+        var gridR   = tab.down('gridRealmsForDynamicClientOwner');
+        gridR.getStore().load();
+    },
+    
+    tabPhotoActivate: function(tab){
+        var me      = this;
+        var pnl_n   = tab.up('pnlDynamicClient');
+        Ext.Ajax.request({
+            url: me.getUrlViewPhoto(),
+            method: 'GET',
+            params: {'id' : pnl_n.dynamic_client_id },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    var img = tab.down("cmpImg");
+                    var img_url = me.getUrlPhotoBase()+jsonData.data.photo_file_name;
+                    img.setImage(img_url);
+                }   
+            },
+            scope: me
+        });
+    },
+    photoSave: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var pnl_n   = form.up('pnlDynamicClient');
+        var pnlNphoto = pnl_n.down('pnlDynamicClientPhoto');
+        form.submit({
+            clientValidation: true,
+            waitMsg: 'Uploading your photo...',
+            url: me.getUrlUploadPhoto(),
+            params: {'id' : pnl_n.dynamic_client_id },
+            success: function(form, action) {              
+                if(action.result.success){ 
+                    var new_img = action.result.photo_file_name;    
+                    var img = pnlNphoto.down("cmpImg");
+                    var img_url = me.getUrlPhotoBase()+new_img;
+                    img.setImage(img_url);
+                } 
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    },
+    photoCancel: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        form.getForm().reset();
+    },
+    
+    tabAvailabilityActivate : function(tab){
+        var me      = this;
+        tab.getStore().load();
+    },
+    gridDynamicClientsAvailabilityReload: function(button){
+        var me      = this;
+        var grid    = button.up('gridDynamicClientsAvailability');
+        grid.getStore().load();
+    },
+    gridDynamicClientsAvailabilityDelete:   function(button){
+        var me      = this;  
+        var grid    = button.up('gridDynamicClientsAvailability');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    grid.getStore().remove(grid.getSelectionModel().getSelection());
+                    grid.getStore().sync({
+                        success: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good  
+                        },
+                        failure: function(batch,options,c,d){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getStore().load(); //Reload from server since the sync was not good
+                        }
+                    });
+                }
+            });
+        }
+    },
+       
     del:   function(){
         var me      = this;     
         //Find out if there was something selected
@@ -490,45 +754,6 @@ Ext.define('Rd.controller.cDynamicClients', {
                 }
             });
         }
-    },
-    edit: function(button){
-        var me      = this;
-        var grid    = button.up('grid');
-        //Find out if there was something selected
-        if(grid.getSelectionModel().getCount() == 0){
-             Ext.ux.Toaster.msg(
-                        i18n('sSelect_an_item'),
-                        i18n('sFirst_select_an_item_to_edit'),
-                        Ext.ux.Constants.clsWarn,
-                        Ext.ux.Constants.msgWarn
-            );
-        }else{
-			var sr      =  me.getGrid().getSelectionModel().getLastSelected();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicClientEditId')){
-                var w = Ext.widget('winDynamicClientEdit',{id:'winDynamicClientEditId',record: sr});
-                me.application.runAction('cDesktop','Add',w);       
-            }    
-        }
-    },
-	btnEditSave:  function(button){
-        var me      = this;
-        var win     = button.up("winDynamicClientEdit");
-        var form    = win.down('form');
-        form.submit({
-            clientValidation: true,
-            url: me.getUrlEdit(),
-            success: function(form, action) {
-                win.close();
-                me.reload(); //Reload from server
-                Ext.ux.Toaster.msg(
-                    i18n('sItem_updated'),
-                    i18n('sItem_updated_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure: Ext.ux.formFail
-        });
     },
     
     //____ Unknown Dynamic Clients ____

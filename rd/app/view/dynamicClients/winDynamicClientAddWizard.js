@@ -102,7 +102,8 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
             name            : 'monitor',
             queryMode       : 'local',
             displayField    : 'text',
-            valueField      : 'id'
+            valueField      : 'id',
+            value           : 'off'
         });
 
         var frmData = Ext.create('Ext.form.Panel',{
@@ -178,30 +179,13 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
                                     name        : "calledstationid",
                                     allowBlank  : true,
                                     labelClsExtra: 'lblRd'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sActive'),
-                                    name        : 'active',
-                                    inputValue  : 'active',
-                                    itemId      : 'active',
-                                    checked     : true,
-                                    cls         : 'lblRd'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    fieldLabel  : i18n('sAlso_show_to_sub_providers'),
-                                    name        : 'available_to_siblings',
-                                    inputValue  : 'available_to_siblings',
-                                    itemId      : 'a_to_s',
-                                    checked     : false,
-                                    cls         : 'lblRd'
-                                }
+                                }  
                             ]
                         },
                         { 
                             title   : 'Monitor',
                             itemId  : 'tabMonitor',
+                            autoScroll: true,
                             layout    : 'anchor',
                             defaults    : {
                                 anchor  : '100%'
@@ -224,6 +208,7 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
                         { 
                             title   : 'Maps',
                             itemId  : 'tabMaps',
+                            autoScroll: true,
                             layout    : 'anchor',
                             defaults    : {
                                 anchor  : '100%'
@@ -263,33 +248,57 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
                         { 
                             title   : 'Enhancements',
                             itemId  : 'tabEnhancements',
+                            autoScroll: true,
                             layout    : 'anchor',
                             defaults    : {
                                 anchor  : '100%'
                             },
                             items: [
                                 {
-                                    xtype       : 'cmbTimezones'
-                                },   
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sActive'),
+                                    name        : 'active',
+                                    inputValue  : 'active',
+                                    itemId      : 'active',
+                                    checked     : true,
+                                    cls         : 'lblRd'
+                                },
+                                {
+                                    xtype       : 'checkbox',      
+                                    boxLabel    : i18n('sAlso_show_to_sub_providers'),
+                                    name        : 'available_to_siblings',
+                                    inputValue  : 'available_to_siblings',
+                                    itemId      : 'a_to_s',
+                                    checked     : false,
+                                    cls         : 'lblRd'
+                                },  
                                 {
                                     xtype       : 'checkbox',      
                                     boxLabel    : i18n('sAuto_close_stale_sessions'),
                                     name        : 'session_auto_close',
+                                    itemId      : 'chkSessionAutoClose',
                                     inputValue  : 'session_auto_close',
-                                    checked     : false,
+                                    checked     : true,
                                     cls         : 'lblRd',
                                     margin: Rd.config.fieldMargin
                                 },
                                 {
-                                    xtype: 'numberfield',
-                                    anchor: '100%',
-                                    name: 'session_dead_time',
-                                    fieldLabel: i18n('sAuto_close_activation_time'),
-                                    value: 300,
-                                    maxValue: 21600,
-                                    minValue: 300,
-                                    hidden: false
-                                }  
+                                    xtype       : 'numberfield',
+                                    itemId      : 'nrSessionDeadTime',
+                                    anchor      : '100%',
+                                    name        : 'session_dead_time',
+                                    fieldLabel  : i18n('sAuto_close_activation_time'),
+                                    value       : 300,
+                                    maxValue    : 21600,
+                                    minValue    : 300,
+                                    hidden      : false
+                                },
+                                {
+                                    xtype       : 'cmbTimezones',
+                                    required    : false,
+                                    value       : 24,
+                                    allowBlank  : true
+                                } 
                             ]
                         },
                         { 
@@ -304,7 +313,7 @@ Ext.define('Rd.view.dynamicClients.winDynamicClientAddWizard', {
                                 inputValue  : true
                             }],
                             layout: 'fit',
-                            items: { xtype: 'gridRealmsForNasOwner', realFlag: true}
+                            items: { xtype: 'gridRealmsForDynamicClientOwner', realFlag: true}
                         }
                     ]
                 }    
