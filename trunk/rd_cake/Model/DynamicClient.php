@@ -41,14 +41,16 @@ class DynamicClient extends AppModel {
         ),
         'nasidentifier' => array(
             'unique' => array(
-                'rule'    => 'isUnique',
-                'message' => 'This name is already taken'
+                'rule'          => 'isUnique',
+                'allowEmpty'    => true,
+                'message'       => 'This name is already taken'
             )
         ),
         'calledstationid' => array(
             'unique' => array(
-                'rule'    => 'isUnique',
-                'message' => 'This name is already taken'
+                'rule'          => 'isUnique',
+                'allowEmpty'    => true,
+                'message'       => 'This name is already taken'
             )
         )
 	);

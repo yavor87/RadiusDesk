@@ -26,6 +26,9 @@ class RealmsController extends AppController {
         list_realms_for_nas_owner
         dummy_edit
         update_na_realm
+        
+        list_realms_for_dynamic_client_owner
+        update_dynamic_client_realm
 
     //---- END ACL ------- */
     
@@ -476,7 +479,206 @@ class RealmsController extends AppController {
             '_serialize' => array('success')
         ));
     }
+    
+    public function list_realms_for_dynamic_client_owner(){
 
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }
+
+        if(isset($this->request->query['owner_id'])){
+
+            //Check if it was 0 -> which means it is the current user
+            if($this->request->query['owner_id'] == 0){
+                $owner_id = $user_id;
+            }else{
+                $owner_id = $this->request->query['owner_id'];
+            }
+        }
+
+        if(isset($this->request->query['available_to_siblings'])){
+            $a_to_s      = $this->request->query['available_to_siblings'];  
+        }
+
+        //By default nas_id not included
+        $dynamic_client_id = false;
+        if(isset($this->request->query['dynamic_client_id'])){
+            $dynamic_client_id      = $this->request->query['dynamic_client_id'];  
+        }
+
+        //========== CLEAR FIRST CHECK =======
+        //By default clear_flag is not included
+        $clear_flag = false;
+        if(isset($this->request->query['clear_flag'])){
+            if($this->request->query['clear_flag'] == 'true'){
+                $clear_flag = true;
+            }
+        }
+
+        if($clear_flag){    //If we first need to remove previous associations!   
+            $this->Realm->DynamicClientRealm->deleteAll(array('DynamicClientRealm.dynamic_client_id' => $dynamic_client_id),false);
+        }
+        //========== END CLEAR FIRST CHECK =======
+
+        $items = array();
+
+        //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
+        if($a_to_s == 'false'){
+            $this->User->contain();
+            $q_r        = $this->User->getPath($owner_id, array('id'));
+            foreach($q_r as $i){
+                $user_id = $i['User']['id'];
+                $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
+                $q = $this->Realm->find('all',
+                    array(  'conditions'    => array('Realm.available_to_siblings' => true,'Realm.user_id' => $user_id),
+                            'fields'        => array('Realm.id','Realm.name')
+                    ));
+                foreach($q as $j){
+                    $selected = false;
+                    foreach($j['DynamicClientRealm'] as $nr){
+                        if($nr['na_id'] == $dynamic_client_id){
+                            $selected = true;
+                        }
+                    }
+                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                }
+
+                //When it got down to the owner; also get the private realms
+                if($user_id == $owner_id){
+                    $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
+                    $q = $this->Realm->find('all',
+                    array(  'conditions'    => array('Realm.available_to_siblings' => false,'Realm.user_id' => $user_id),
+                            'fields'        => array('Realm.id','Realm.name')
+                    ));
+                    foreach($q as $j){
+                        $selected = false;
+                        foreach($j['DynamicClientRealm'] as $nr){
+                            if($nr['dynamic_client_id'] == $dynamic_client_id){
+                                $selected = true;
+                            }
+                        }
+                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                    }
+                }
+            }
+        }
+
+        //If $a_to_s is true, we neet to find the chain downwards to list ALL the realms of belonging to children of the owner
+        if($a_to_s == 'true'){
+
+            //First find all the realms beloning to the owner:
+            $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
+            $q = $this->Realm->find('all',
+                array(  'conditions'    => array('Realm.user_id' => $owner_id),
+                        'fields'        => array('Realm.id','Realm.name')
+                ));
+            foreach($q as $j){
+                $selected = false;
+                //Check if the nas is not already assigned to this realm
+                if($dynamic_client_id){
+                    foreach($j['DynamicClientRealm'] as $nr){
+                        if($nr['dynamic_client_id'] == $dynamic_client_id){
+                            $selected = true;
+                        }
+                    }
+                }
+                array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+            }
+            
+            //Now get all the realms of the siblings of the owner
+            $ap_children    = $this->User->find_access_provider_children($owner_id);
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $user_id = $i['id'];
+                    $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
+                    $q = $this->Realm->find('all',
+                        array(  'conditions'    => array('Realm.user_id' => $user_id),
+                                'fields'        => array('Realm.id','Realm.name')
+                        ));
+                    foreach($q as $j){
+                        $selected = false;
+                        //Check if the nas is not already assigned to this realm
+                        if($dynamic_client_id){
+                            foreach($j['DynamicClientRealm'] as $nr){
+                                if($nr['dynamic_client_id'] == $dynamic_client_id){
+                                    $selected = true;
+                                }
+                            }
+                        }   
+                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                    }
+                }       
+            }    
+        }
+       
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+    
+    
+    public function update_dynamic_client_realm(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if(isset($this->request->query['dynamic_client_id'])){
+            $dynamic_client_id     = $this->request->query['dynamic_client_id'];
+	        if(isset($this->data['id'])){   //Single item select
+                $realm_id   = $this->data['id'];
+                if($this->data['selected']){
+                    $this->Realm->DynamicClientRealm->create();
+                    $d['DynamicClientRealm']['dynamic_client_id']   = $dynamic_client_id;
+                    $d['DynamicClientRealm']['realm_id']            = $realm_id;
+                    $this->Realm->DynamicClientRealm->save($d);
+                }else{
+                    $this->Realm->DynamicClientRealm->deleteAll(
+                        array('DynamicClientRealm.dynamic_client_id' => $dynamic_client_id,'DynamicClientRealm.realm_id' => $realm_id),
+                    false);        
+                }
+            }else{                          //Assume multiple item select
+                foreach($this->data as $d){
+                    if(isset($d['id'])){   //Single item select
+                        $dynamic_client_id   = $d['id'];
+                        if($d['selected']){
+                            $this->Realm->DynamicClientRealm->create();
+                            $d['DynamicClientRealm']['dynamic_client_id']   = $dynamic_client_id;
+                            $d['DynamicClientRealm']['realm_id']            = $realm_id;
+                            $this->Realm->DynamicClientRealm->save($d);
+                        }else{
+                            $this->Realm->DynamicClientRealm->deleteAll(
+                                array('DynamicClientRealm.dynamic_client_id' => $dynamic_client_id,'DynamicClientRealm.realm_id' => $realm_id), 
+                            false);        
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+    
     public function edit_ap(){
 
         //The ap_id who's realm rights HAS to be a sibling of the user who initiated the request

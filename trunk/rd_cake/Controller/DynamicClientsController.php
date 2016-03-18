@@ -269,8 +269,9 @@ class DynamicClientsController extends AppController {
             //Unfortunately there are many check items which means they will not be in the POST if unchecked
             //so we have to check for them
             $check_items = array(
-				'active'
+				'active', 'available_to_siblings', 'on_public_maps', 'session_auto_close'
 			);
+			
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
                     $this->request->data[$i] = 1;
@@ -287,6 +288,91 @@ class DynamicClientsController extends AppController {
             }
         }
     }
+    
+    
+     public function view(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+        
+        if(isset($this->request->query['dynamic_client_id'])){
+
+            $this->{$this->modelClass}->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_client_id']);
+           // print_r($q_r);
+            if($q_r){
+                $items = $q_r['DynamicClient'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+
+    }
+    
+    
+    public function view_photo(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+
+        if(isset($this->request->query['id'])){
+            $this->DynamicClient->contain();
+            $q_r = $this->{$this->modelClass}->findById($this->request->query['id']);
+            if($q_r){
+                $items['photo_file_name'] = $q_r['DynamicClient']['photo_file_name'];
+            }
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function upload_photo($id = null){
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->layout = 'ext_file_upload';
+
+        $path_parts     = pathinfo($_FILES['photo']['name']);
+        $unique         = time();
+        $dest           = IMAGES."nas/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake2/rd_cake/webroot/img/nas/".$unique.'.'.$path_parts['extension'];
+
+        //Now add....
+        $data['photo_file_name']  = $unique.'.'.$path_parts['extension'];
+       
+        $this->{$this->modelClass}->id = $this->request->data['id'];
+       // $this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension']);
+        if($this->{$this->modelClass}->saveField('photo_file_name', $unique.'.'.$path_parts['extension'])){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $this->{$this->modelClass}->id;
+            $json_return['success']             = true;
+            $json_return['photo_file_name']     = $unique.'.'.$path_parts['extension'];
+        }else{
+            $json_return['errors']      = $this->{$this->modelClass}->validationErrors;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+        }
+        $this->set('json_return',$json_return);
+    }
+
+    
     
     //____ Notes ______
      public function note_index(){
