@@ -47,6 +47,9 @@ class Realm extends AppModel {
         ),
         'RealmNote' => array(
             'dependent' => true
+        ),
+        'DynamicClientRealm' => array(
+            'dependent' => false
         )
 	);
 
