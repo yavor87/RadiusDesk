@@ -1262,7 +1262,7 @@ Ext.define('Rd.controller.cNas', {
 
     //______ EDIT _______
 
-     edit: function(button){
+    edit: function(button){
         var me      = this;
         var grid    = button.up('gridNas');
 

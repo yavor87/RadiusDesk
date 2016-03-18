@@ -1,90 +1,13 @@
-Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
-    extend      : 'Ext.window.Window',
-    alias       : 'widget.winAttachUnknownDynamicClient',
-    closable    : true,
-    draggable   : true,
-    resizable   : true,
-    title       : 'Attach Unknown Client To Owner',
-    width       : 500,
-    height      : 520,
-    plain       : true,
-    border      : false,
-    layout      : 'card',
-    iconCls     : 'add',
-    glyph       : Rd.config.icnAttach,
-    autoShow    : false,
-    defaults    : {
-            border  : false
-    },
-    no_tree     : false, //If the user has no children we don't bother giving them a branchless tree
-    user_id     : '',
-    owner       : '',
-    startScreen : 'scrnApTree', //Default start screen
-    requires: [
-        'Ext.layout.container.Card',
-        'Ext.form.Panel',
-        'Ext.form.field.Text',
-        'Ext.form.FieldContainer'
-    ],
-    initComponent: function() {
-        var me = this;
-        var scrnApTree      = me.mkScrnApTree();
-        var scrnData        = me.mkScrnData();
-        me.items = [
-            scrnApTree,
-            scrnData
-        ];  
-        this.callParent(arguments);
-        me.getLayout().setActiveItem(me.startScreen);
-    },
-
-    //____ AccessProviders tree SCREEN ____
-    mkScrnApTree: function(){
-        var pnlTree = Ext.create('Rd.view.components.pnlAccessProvidersTree',{
-            itemId: 'scrnApTree'
-        });
-        return pnlTree;
-    },
-
-    //_______ Data for ssids  _______
-    mkScrnData: function(){
+Ext.define('Rd.view.dynamicClients.pnlDynamicClientDynamicClient', {
+    extend              : 'Ext.panel.Panel',
+    xtype               : 'pnlDynamicClientDynamicClient',
+    border              : false,
+    dynamic_client_id   : null,
+    layout              : 'hbox',
+    bodyStyle           : {backgroundColor : Rd.config.panelGrey },
+    initComponent       : function(){
     
-        var me      = this;
-        var buttons = [
-                {
-                    itemId: 'btnDataPrev',
-                    text: i18n('sPrev'),
-                    scale: 'large',
-                    iconCls: 'b-prev',
-                    glyph: Rd.config.icnBack,
-                    margin: '0 20 40 0'
-                },
-                {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
-                    formBind: true,
-                    margin: '0 20 40 0'
-                }
-            ];
-
-        if(me.no_tree == true){
-            var buttons = [
-                {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
-                    formBind: true,
-                    margin: '0 20 40 0'
-                }
-            ];
-        }
-        
-        
+        var me = this;
         var monitor_types = Ext.create('Ext.data.Store', {
             fields: ['id', 'text'],
             data : [
@@ -103,38 +26,35 @@ Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
             queryMode       : 'local',
             displayField    : 'text',
             valueField      : 'id',
-            value          : 'off'
+            value           : 'off'
         });
 
-        var frmData = Ext.create('Ext.form.Panel',{
-            border:     false,
-            layout:     'fit',
-            itemId:     'scrnData',
-            autoScroll: true,
-            defaults: {
-                anchor: '100%'
-            },
-            fieldDefaults: {
-                msgTarget: 'under',
-                labelClsExtra: 'lblRd',
-                labelAlign: 'left',
-                labelSeparator: '',
-                margin      : Rd.config.fieldMargin,
-                labelWidth  : Rd.config.labelWidth,
-                maxWidth    : Rd.config.maxWidth  
-            },
-            defaultType: 'textfield',
-            items:[
-                {
-                    xtype   : 'tabpanel',
-                    layout  : 'fit',
-                    xtype   : 'tabpanel',
-                    margins : '0 0 0 0',
-                    plain   : true,
-                    tabPosition: 'bottom',
-                    border  : false,
-                    cls     : 'subTab',
-                    items   : [
+        me.items =  { 
+                xtype   :  'form',
+                height  : '100%', 
+                width   :  500,
+                layout  : 'fit',
+                autoScroll:true,
+                frame   : false,
+                fieldDefaults: {
+                    msgTarget: 'under',
+                    labelClsExtra: 'lblRd',
+                    labelAlign: 'left',
+                    labelSeparator: '',
+                    margin: Rd.config.fieldMargin,
+                    labelWidth: Rd.config.labelWidth,
+                    maxWidth: Rd.config.maxWidth  
+                },
+                items       : [
+                    {
+                        xtype   : 'tabpanel',
+                        layout  : 'fit',
+                        xtype   : 'tabpanel',
+                        margins : '0 0 0 0',
+                        plain   : false,
+                        tabPosition: 'bottom',
+                        border  : false,
+                        items   : [
                         { 
                             title   : 'Basic',
                             layout  : 'anchor',
@@ -147,34 +67,9 @@ Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
                                 {
                                     itemId  : 'user_id',
                                     xtype   : 'textfield',
-                                    name    : "user_id",
+                                    name    : 'dynamic_client_id',
                                     hidden  : true,
-                                    value   : me.user_id
-                                },
-                                {
-                                    xtype   : 'textfield',
-                                    name    : 'unknown_dynamic_client_id',
-                                    hidden  : true,
-                                    value   : me.unknown_dynamic_client_id
-                                },
-                                {
-                                    itemId      : 'owner',
-                                    xtype       : 'displayfield',
-                                    fieldLabel  : i18n('sOwner'),
-                                    value       : me.owner,
-                                    labelClsExtra: 'lblRdReq'
-                                },      
-                                {
-                                    xtype       : 'displayfield',
-                                    fieldLabel  : 'NAS-Identifier',
-                                    value       : me.nasidentifier,
-                                    labelClsExtra: 'lblRdReq'
-                                },
-                                {
-                                    xtype       : 'displayfield',
-                                    fieldLabel  : 'Called-Station-Id',
-                                    value       : me.calledstationid,
-                                    labelClsExtra: 'lblRdReq'
+                                    value   : me.dynamic_client_id
                                 },
                                 {
                                     xtype       : 'textfield',
@@ -183,14 +78,28 @@ Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value"),
                                     labelClsExtra: 'lblRdReq'
-                                }
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : 'NAS-Identifier',
+                                    name        : "nasidentifier",
+                                    allowBlank  : true,
+                                    labelClsExtra: 'lblRd'
+                                },
+                                {
+                                    xtype       : 'textfield',
+                                    fieldLabel  : 'Called-Station-Id',
+                                    name        : "calledstationid",
+                                    allowBlank  : true,
+                                    labelClsExtra: 'lblRd'
+                                }  
                             ]
                         },
                         { 
                             title   : 'Monitor',
                             itemId  : 'tabMonitor',
-                            layout    : 'anchor',
                             autoScroll: true,
+                            layout    : 'anchor',
                             defaults    : {
                                 anchor  : '100%'
                             },
@@ -212,8 +121,8 @@ Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
                         { 
                             title   : 'Maps',
                             itemId  : 'tabMaps',
-                            layout    : 'anchor',
                             autoScroll: true,
+                            layout    : 'anchor',
                             defaults    : {
                                 anchor  : '100%'
                             },
@@ -304,26 +213,23 @@ Ext.define('Rd.view.dynamicClients.winAttachUnknownDynamicClient', {
                                     allowBlank  : true
                                 } 
                             ]
-                        },
-                        { 
-                            'title' : i18n('sRealms'),
-                            itemId  : 'tabRealms',
-                            tbar: [{
-                                xtype       : 'checkboxfield',
-                                boxLabel    : i18n('sMake_available_to_any_realm'), 
-                                cls         : 'lblRd',
-                                itemId      : 'chkAvailForAll',
-                                name        : 'available_to_all',
-                                inputValue  : true
-                            }],
-                            layout: 'fit',
-                            items: { xtype: 'gridRealmsForDynamicClientOwner', realFlag: true}
                         }
                     ]
-                }    
-            ],
-            buttons: buttons
-        });
-        return frmData;
-    }   
+                  }             
+                ],
+                buttons: [
+                    {
+                        itemId: 'save',
+                        formBind: true,
+                        text: i18n('sSave'),
+                        scale: 'large',
+                        iconCls: 'b-save',
+                        glyph: Rd.config.icnYes,
+                        margin: Rd.config.buttonMargin
+                    }
+                ]
+            };
+
+        me.callParent(arguments);
+    }
 });
