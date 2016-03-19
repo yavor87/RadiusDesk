@@ -85,7 +85,22 @@ if not exists (select * from information_schema.columns
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 end if;
 
+
+if not exists (select * from information_schema.columns
+    where column_name = 'acctupdatetime' and table_name = 'radacct' and table_schema = 'rd') then
+    alter table radacct add column `acctupdatetime` datetime NULL default NULL;
+end if;
+
+if not exists (select * from information_schema.columns
+    where column_name = 'acctinterval' and table_name = 'radacct' and table_schema = 'rd') then
+    alter table radacct add column `acctinterval` int(12) default NULL;
+end if;
+
+
 end//
+
+
+
 
 delimiter ;
 call add_dynamic_clients;
