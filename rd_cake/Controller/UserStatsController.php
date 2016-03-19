@@ -238,6 +238,17 @@ class UserStatsController extends AppController {
                     array_push($base_search,array('UserStat.nasidentifier' => $nas_identifier));
                 }
             }
+            
+            //Dynamic clients
+            if($type == 'dynamic_client'){
+                $dc = ClassRegistry::init('DynamicClient');
+                $dc->contain();
+                $q_r = $dc->findById($username);
+                if($q_r){ 
+                    $nas_identifier = $q_r['DynamicClient']['nasidentifier'];
+                    array_push($base_search,array('UserStat.nasidentifier' => $nas_identifier));
+                }
+            }     
         }
         return $base_search;
     }

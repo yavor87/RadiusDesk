@@ -138,6 +138,55 @@ class DynamicClientsController extends AppController {
             '_serialize' => array('items','success','totalCount')
         ));
     }
+    
+    public function clients_avail_for_map() {
+    
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+ 
+        $c = $this->_build_common_query($user); 
+
+        //===== PAGING (MUST BE LAST) ======
+        $limit  = 50;   //Defaults
+        $page   = 1;
+        $offset = 0;
+        if(isset($this->request->query['limit'])){
+            $limit  = $this->request->query['limit'];
+            $page   = $this->request->query['page'];
+            $offset = $this->request->query['start'];
+        }
+
+        $c_page             = $c;
+        $c_page['page']     = $page;
+        $c_page['limit']    = $limit;
+        $c_page['offset']   = $offset;
+
+        $total  = $this->{$this->modelClass}->find('count',$c);       
+        $q_r    = $this->{$this->modelClass}->find('all',$c_page);
+        $items  = array();
+        foreach($q_r as $i){
+            $id     = $i['DynamicClient']['id'];
+            $name   = $i['DynamicClient']['name'];  
+            $item = array('id' => $id,'name' => $name);
+            array_push($items,$item);
+        }
+       
+        //___ FINAL PART ___
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            'totalCount' => $total,
+            '_serialize' => array('items','success','totalCount')
+        ));
+    
+    
+    
+    
+    }
 
     public function add() {
 
@@ -532,7 +581,179 @@ class DynamicClientsController extends AppController {
         }
     }
 
-    
+     public function view_map_pref(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items = array();
+
+        $this->UserSetting = ClassRegistry::init('UserSetting');
+
+        $zoom = Configure::read('user_settings.dynamic_client_map.zoom');
+        //Check for personal overrides
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_zoom')));
+        if($q_r){
+            $zoom = intval($q_r['UserSetting']['value']);
+        }
+
+        $type = Configure::read('user_settings.dynamic_client_map.type');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_type')));
+        if($q_r){
+            $type = $q_r['UserSetting']['value'];
+        }
+
+        $lat = Configure::read('user_settings.dynamic_client_map.lat');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_lat')));
+        if($q_r){
+            $lat = $q_r['UserSetting']['value']+0;
+        }
+
+        $lng = Configure::read('user_settings.dynamic_client_map.lng');
+        //Check for personal overrides
+
+        $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_lng')));
+        if($q_r){
+            $lng = $q_r['UserSetting']['value']+0;
+        }
+
+
+        $items['zoom'] = $zoom;
+        $items['type'] = $type;
+        $items['lat']  = $lat;
+        $items['lng']  = $lng;
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+     public function edit_map_pref(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $this->UserSetting = ClassRegistry::init('UserSetting');
+
+        if(array_key_exists('zoom',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_zoom')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['zoom']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'dynamic_client_map_zoom';
+                $d['UserSetting']['value']  = $this->request->data['zoom'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('type',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_type')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['type']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'dynamic_client_map_type';
+                $d['UserSetting']['value']  = $this->request->data['type'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('lat',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_lat')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['lat']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'dynamic_client_map_lat';
+                $d['UserSetting']['value']  = $this->request->data['lat'];
+
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        if(array_key_exists('lng',$this->request->data)){        
+            $q_r = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'dynamic_client_map_lng')));
+            if(!empty($q_r)){
+                $this->UserSetting->id = $q_r['UserSetting']['id'];    
+                $this->UserSetting->saveField('value', $this->request->data['lng']);
+            }else{
+                $d['UserSetting']['user_id']= $user_id;
+                $d['UserSetting']['name']   = 'dynamic_client_map_lng';
+                $d['UserSetting']['value']  = $this->request->data['lng'];
+                $this->UserSetting->create();
+                $this->UserSetting->save($d);
+                $this->UserSetting->id = null;
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+    public function delete_map(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['id'])){
+            $this->DynamicClient->id = $this->request->query['id'];
+            $this->DynamicClient->saveField('lat', null);
+            $this->DynamicClient->saveField('lon', null);
+        }
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
+
+   public function edit_map(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if(isset($this->request->query['id'])){
+            $this->DynamicClient->id = $this->request->query['id'];
+            $this->DynamicClient->saveField('lat', $this->request->query['lat']);
+            $this->DynamicClient->saveField('lon', $this->request->query['lon']);
+        }
+
+        $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+        ));
+    }
     
 
     //----- Menus ------------------------
