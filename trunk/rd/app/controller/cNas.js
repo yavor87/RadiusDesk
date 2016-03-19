@@ -1834,6 +1834,7 @@ Ext.define('Rd.controller.cNas', {
 
             var tab_name = sr.get('nasname');
             //Tab not there - add one
+            console.log(tab_id);
             tp.add({ 
                 title   : tab_name,
                 itemId  : tab_id,
@@ -1855,11 +1856,13 @@ Ext.define('Rd.controller.cNas', {
     },
     reloadDailyGraph: function(btn){
         var me  = this;
+        console.log("Reload hom");
         tab     = btn.up("#daily");
         me.reloadChart(tab);
     },
     changeDailyGraph: function(d,new_val, old_val){
         var me      = this;
+        console.log("Gooi hom");
         var tab     = d.up("#daily");
         tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
         me.reloadChart(tab);
