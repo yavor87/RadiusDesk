@@ -73,6 +73,11 @@ $config['user_settings']['map']['zoom']     = 18;
 $config['user_settings']['map']['lng']      = -71.0955740216735;
 $config['user_settings']['map']['lat']      = 42.3379770178396;
 
+//Define default settings for users's Dynamic Clients map
+$config['user_settings']['dynamic_client_map']['type']     = "ROADMAP";
+$config['user_settings']['dynamic_client_map']['zoom']     = 18;
+$config['user_settings']['dynamic_client_map']['lng']      = -71.0955740216735;
+$config['user_settings']['dynamic_client_map']['lat']      = 42.3379770178396;
 
 
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
