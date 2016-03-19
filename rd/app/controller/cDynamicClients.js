@@ -66,10 +66,16 @@ Ext.define('Rd.controller.cDynamicClients', {
         'dynamicClients.pnlRealmsForDynamicClientOwner',
         'dynamicClients.gridRealmsForDynamicClientOwner',
         'dynamicClients.pnlDynamicClientPhoto',
-        'dynamicClients.gridDynamicClientsAvailability'
+        'dynamicClients.gridDynamicClientsAvailability',
+        'components.pnlUsageGraph',
+        'dynamicClients.pnlDynamicClientGraphs',
+        'components.pnlGMap',
+        'dynamicClients.winMapDynamicClientAdd',
+        'nas.winMapPreferences',
+        'dynamicClients.cmbDynamicClientsAddMap'
     ],
     stores: ['sAccessProvidersTree','sDynamicClients', 'sUnknownDynamicClients'],
-    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForDynamicClientOwner', 'mUnknownDynamicClient','mDynamicClientState' ],
+    models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForDynamicClientOwner', 'mUnknownDynamicClient','mDynamicClientState','mUserStat' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
@@ -81,10 +87,20 @@ Ext.define('Rd.controller.cDynamicClients', {
 		urlView         : '/cake2/rd_cake/dynamic_clients/view.json',
 		urlViewPhoto    : '/cake2/rd_cake/dynamic_clients/view_photo.json',
         urlPhotoBase    : '/cake2/rd_cake/webroot/img/nas/',
-        urlUploadPhoto  : '/cake2/rd_cake/dynamic_clients/upload_photo/'
+        urlUploadPhoto  : '/cake2/rd_cake/dynamic_clients/upload_photo/',
+        
+        urlMapDelete    : '/cake2/rd_cake/dynamic_clients/delete_map.json',
+        urlMapSave      : '/cake2/rd_cake/dynamic_clients/edit_map.json',
+        urlGreenMark    : 'resources/images/map_markers/green-dot.png',
+        urlRedMark      : 'resources/images/map_markers/red-dot.png', 
+        urlBlueMark     : 'resources/images/map_markers/blue-dot.png', 
+        urlYellowMark   : 'resources/images/map_markers/yellow-dot.png',
+        urlViewMapPref  : '/cake2/rd_cake/dynamic_clients/view_map_pref.json', 
+        urlEditMapPref  : '/cake2/rd_cake/dynamic_clients/edit_map_pref.json'
     },
     refs: [
-        {  ref: 'grid',  selector: 'gridDynamicClients'}       
+        {  ref: 'grid',     selector: 'gridDynamicClients'  },
+        {  ref: 'pnlGMap',  selector: 'pnlGMap'             },      
     ],
     autoReloadUnknownDynamicClients: undefined,
     autoReload: undefined,
@@ -168,6 +184,13 @@ Ext.define('Rd.controller.cDynamicClients', {
             'gridDynamicClients #note' : {
                 click:      me.note
             },
+            'gridDynamicClients #graph'   : {
+                click:      me.graph
+            },
+            'gridDynamicClients #map'   : {
+                click:      me.mapLoadApi
+            },
+            
             'gridDynamicClients'   		: {
                 select:      me.select
             },
@@ -259,6 +282,75 @@ Ext.define('Rd.controller.cDynamicClients', {
                 click: me.btnNoteAddNext
             },
             
+            // -- Graphs --
+            '#tabDynamicClients pnlDynamicClientGraphs #daily' : {
+                activate:      me.loadGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #daily #reload' : {
+                click:      me.reloadDailyGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #daily #day' : {
+                change:      me.changeDailyGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #weekly' : {
+                activate:      me.loadGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #weekly #reload' : {
+                click:      me.reloadWeeklyGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #weekly #day' : {
+                change:      me.changeWeeklyGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #monthly' : {
+                activate:      me.loadGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #monthly #reload' : {
+                click:      me.reloadMonthlyGraph
+            },
+            '#tabDynamicClients pnlDynamicClientGraphs #monthly #day' : {
+                change:      me.changeMonthlyGraph
+            },
+            //---- MAPS ----
+            'pnlGMap #preferences': {
+                click: me.mapPreferences
+            },
+            'winMapPreferences #snapshot': {
+                click:      me.mapPreferencesSnapshot
+            },
+            'winMapPreferences #save': {
+                click:      me.mapPreferencesSave
+            },//Availability
+            'pnlGMap #add': {
+                click: me.mapDynamicClientAdd
+            },
+            'winMapDynamicClientAdd #save': {
+                click: me.mapDynamicClientAddSubmit
+            },
+            'pnlGMap #edit': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sEdit_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_save_button_in_the_info_window')
+                    );
+                }
+            },
+            'pnlGMap #delete': {
+                click:  function(){
+                    Ext.Msg.alert(
+                        i18n('sDelete_a_marker'), 
+                        i18n('sSimply_drag_a_marker_to_a_different_postition_and_click_the_delete_button_in_the_info_window')
+                    );
+                }
+            },
+            '#pnlMapsEdit #cancel': {
+                click: me.btnMapCancel
+            },
+            '#pnlMapsEdit #delete': {
+                click: me.btnMapDelete
+            },
+            '#pnlMapsEdit #save': {
+                click: me.btnMapSave
+            },
         });
     },
     winClose:   function(){
@@ -1047,5 +1139,388 @@ Ext.define('Rd.controller.cDynamicClients', {
                 }
             });
         }
+    },
+    
+    graph: function(button){
+        var me = this;  
+        //Find out if there was something selected
+        if(me.getGrid().getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            //Check if the node is not already open; else open the node:
+            var tp      = me.getGrid().up('tabpanel');
+            var sr      = me.getGrid().getSelectionModel().getLastSelected();
+            var id      = sr.getId();
+            var tab_id  = 'dynamicClientTabGraph_'+id;
+            var nt      = tp.down('#'+tab_id);
+            if(nt){
+                tp.setActiveTab(tab_id); //Set focus on  Tab
+                return;
+            }
+
+            var tab_name = sr.get('name');
+            //Tab not there - add one
+            tp.add({ 
+                title               : tab_name,
+                itemId              : tab_id,
+                closable            : true,
+                glyph               : Rd.config.icnGraph, 
+                xtype               : 'pnlDynamicClientGraphs',
+                dynamic_client_id   : id
+            });
+            tp.setActiveTab(tab_id); //Set focus on Add Tab 
+        }
+    },
+    loadGraph: function(tab){
+        var me  = this;
+        tab.down("chart").setLoading(true);
+        //Get the value of the Day:
+        var day = tab.down('#day');
+        tab.down("chart").getStore().getProxy().setExtraParam('day',day.getValue());
+        me.reloadChart(tab);
+    },
+    reloadDailyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#daily");
+        me.reloadChart(tab);
+    },
+    changeDailyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#daily");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadWeeklyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#weekly");
+        me.reloadChart(tab);
+    },
+    changeWeeklyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#weekly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadMonthlyGraph: function(btn){
+        var me  = this;
+        tab     = btn.up("#monthly");
+        me.reloadChart(tab);
+    },
+    changeMonthlyGraph: function(d,new_val, old_val){
+        var me      = this;
+        var tab     = d.up("#monthly");
+        tab.down("chart").getStore().getProxy().setExtraParam('day',new_val);
+        me.reloadChart(tab);
+    },
+    reloadChart: function(tab){
+        var me      = this;
+        var chart   = tab.down("chart");
+        chart.setLoading(true); //Mask it
+        chart.getStore().load({
+            scope: me,
+            callback: function(records, operation, success) {
+                chart.setLoading(false);
+                if(success){
+                    Ext.ux.Toaster.msg(
+                            "Graph fetched",
+                            "Graph detail fetched OK",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                    //-- Show totals
+                    var rawData     = chart.getStore().getProxy().getReader().rawData;
+                    var totalIn     = Ext.ux.bytesToHuman(rawData.totalIn);
+                    var totalOut    = Ext.ux.bytesToHuman(rawData.totalOut);
+                    var totalInOut  = Ext.ux.bytesToHuman(rawData.totalInOut);
+                    tab.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
+
+                }else{
+                    Ext.ux.Toaster.msg(
+                            "Problem fetching graph",
+                            "Problem fetching graph detail",
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                } 
+            }
+        });   
+    },
+    //____ MAP ____
+    mapLoadApi:   function(button){
+        var me          = this;
+        Ext.ux.Toaster.msg(
+	        'Loading Google Maps API',
+	        'Please be patient....',
+	        Ext.ux.Constants.clsInfo,
+	        Ext.ux.Constants.msgInfo
+	    );
+        
+        Ext.Loader.loadScript({
+            url: 'https://www.google.com/jsapi',                    // URL of script
+            scope: this,                   // scope of callbacks
+            onLoad: function() {           // callback fn when script is loaded
+                google.load("maps", "3", {
+                    other_params:"sensor=false",
+                    callback : function(){
+                    // Google Maps are loaded. Place your code here
+                        me.mapCreatePanel(button);
+                }
+            });
+            },
+            onError: function() {          // callback fn if load fails 
+                console.log("Error loading Google script");
+            } 
+        });
+        
+    },
+
+    mapCreatePanel : function(button){
+
+        var me = this
+        var grid        = button.up('gridDynamicClients');
+        //Check if the node is not already open; else open the node:
+        var tp          = grid.up('tabpanel');
+        var map_tab_id  = 'mapTab';
+        var nt          = tp.down('#'+map_tab_id);
+        if(nt){
+            tp.setActiveTab(map_tab_id); //Set focus on  Tab
+            return;
+        }
+
+        var map_tab_name = i18n("sGoogle_Maps");
+
+        //We need to fetch the Preferences for this user's Google Maps map
+        Ext.Ajax.request({
+            url: me.getUrlViewMapPref(),
+            method: 'GET',
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                  // console.log(jsonData);
+                    //___Build this tab based on the preferences returned___
+                    tp.add({ 
+                        title   : map_tab_name,
+                        itemId  : map_tab_id,
+                        closable: true,
+                        iconCls : 'map',
+                        glyph   : Rd.config.icnMap, 
+                        layout  : 'fit', 
+                        items   : {
+                                xtype: 'pnlGMap',
+                                store:  me.getStore('sDynamicClients'),
+                                mapOptions: {zoom: jsonData.data.zoom, mapTypeId: google.maps.MapTypeId[jsonData.data.type] },
+                                centerLatLng: {lat:jsonData.data.lat,lng:jsonData.data.lng},
+                                markers: []
+                            }
+                    });
+                    tp.setActiveTab(map_tab_id); //Set focus on Add Tab
+                    //____________________________________________________
+                }   
+            },
+            scope: me
+        });
+    },
+    mapPreferences: function(button){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMapPreferencesId')){
+            var w = Ext.widget('winMapPreferences',{id:'winMapPreferencesId'});
+            me.application.runAction('cDesktop','Add',w);
+            //We need to load this widget's form with the latest data:
+            w.down('form').load({url:me.getUrlViewMapPref(), method:'GET'});
+       }   
+    },
+    mapPreferencesSnapshot: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var pnl     = me.getPnlGMap();
+        var zoom    = pnl.gmap.getZoom();
+        var type    = pnl.gmap.getMapTypeId();
+        var ll      = pnl.gmap.getCenter();
+        var lat     = ll.lat();
+        var lng     = ll.lng();
+
+        form.down('#lat').setValue(lat);
+        form.down('#lng').setValue(lng);
+        form.down('#zoom').setValue(zoom);
+        form.down('#type').setValue(type.toUpperCase());
+        
+        //console.log(" zoom "+zoom+" type "+type+ " lat "+lat+" lng "+lng);
+    },
+    mapPreferencesSave: function(button){
+
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+       
+        form.submit({
+            clientValidation: true,
+            url: me.getUrlEditMapPref(),
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
+    }, 
+    mapDynamicClientAdd: function(button){
+        var me = this;
+        if(!me.application.runAction('cDesktop','AlreadyExist','winMapDynamicClientAddId')){
+            var w = Ext.widget('winMapDynamicClientAdd',{id:'winMapDynamicClientAddId'});
+            me.application.runAction('cDesktop','Add',w);       
+       }   
+    },
+    mapDynamicClientAddSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var dc      = win.down('cmbDynamicClientsAddMap');
+        var id      = dc.getValue();
+        var record  = dc.getStore().getById(id);
+        win.close();
+
+        var tab_panel = me.getGrid().up('tabpanel');
+        var map_tab   = tab_panel.down('#mapTab');
+        if(map_tab != null){
+            var map_panel = map_tab.down('gmappanel');
+            //We need to get the center of the map:
+            var m_center = map_panel.gmap.getCenter();
+            var sel_marker = map_panel.addMarker({
+                lat         : m_center.lat(), 
+                lng         : m_center.lng(),
+                icon        : "resources/images/map_markers/yellow-dot.png",
+                draggable   : true, 
+                title       : "New Marker",
+                listeners   : {
+                    dragend: function(){
+                        me.dragEnd(record,map_panel,sel_marker);
+                    },
+                    dragstart: function(){
+                        map_panel.addwindow.close();
+                        me.dragStart(record,map_panel,sel_marker);
+                    }
+                }
+            });
+            map_panel.addwindow.open(map_panel.gmap, sel_marker);
+        }
+    },
+    
+    markerClick: function(record,map_panel,sel_marker){
+        var me = this;
+        var ip = record.get('nasname');
+        var n  = record.get('shortname');
+        map_panel.marker_record = record;
+
+        //See if the pnlMapsInfo exists
+        //We have to do it here in order to prevent the domready event to fire twice
+        var qr =Ext.ComponentQuery.query('#pnlMapsInfo');
+        if(qr[0]){
+           // qr[0].down('#tabMapInfo').update(record.data);
+
+            //Status
+            var t_i_s = "N/A";
+            if(record.get('status') != 'unknown'){
+                if(record.get('status') == 'up'){
+                    var s = i18n("sUp");
+                }
+                if(record.get('status') == 'down'){
+                    var s = i18n("sDown");
+                }
+
+                t_i_s           = s+" "+Ext.ux.secondsToHuman(record.get('status_time'));;
+            }
+
+            var d  = Ext.apply({
+                time_in_state   : t_i_s
+            }, record.data);
+
+            qr[0].down('#tabMapInfo').update(d);
+
+            var url_path = me.getUrlPhotoBase()+record.get('photo_file_name');
+            qr[0].down('#tabMapPhoto').update({image:url_path});
+           // qr[0].doLayout();
+        }
+        map_panel.infowindow.open(map_panel.gmap,sel_marker); 
+    },
+    dragStart: function(record,map_panel,sel_marker){
+        var me = this;
+        me.lastMovedMarker  = sel_marker;
+        me.lastOrigPosition = sel_marker.getPosition();
+        me.editWindow 		= map_panel.editwindow;
+    },
+    dragEnd: function(record,map_panel,sel_marker){
+        var me = this;
+        var l_l = sel_marker.getPosition();
+        map_panel.new_lng = l_l.lng();
+        map_panel.new_lat = l_l.lat();
+        map_panel.editwindow.open(map_panel.gmap, sel_marker);
+        me.lastLng    = l_l.lng();
+        me.lastLat    = l_l.lat();
+        me.lastDragId = record.getId();
+    },
+    btnMapCancel: function(button){
+        var me = this;
+        me.editWindow.close();
+        me.lastMovedMarker.setPosition(me.lastOrigPosition);
+    },
+    btnMapDelete: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.getUrlMapDelete(),
+            method: 'GET',
+            params: {
+                id: me.lastDragId
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    me.reload();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_deleted'),
+                        i18n('sItem_deleted_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
+    },
+    btnMapSave: function(button){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.getUrlMapSave(),
+            method: 'GET',
+            params: {
+                id: me.lastDragId,
+                lat: me.lastLat,
+                lon: me.lastLng
+            },
+            success: function(response){
+                var jsonData    = Ext.JSON.decode(response.responseText);
+                if(jsonData.success){     
+                    me.editWindow.close();
+                    me.reload();
+                    Ext.ux.Toaster.msg(
+                        i18n('sItem_updated'),
+                        i18n('sItem_updated_fine'),
+                        Ext.ux.Constants.clsInfo,
+                        Ext.ux.Constants.msgInfo
+                    );
+                }   
+            },
+            scope: me
+        });
     }
+    
 });
