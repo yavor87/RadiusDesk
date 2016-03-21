@@ -12,7 +12,7 @@ $config['commands']['msgcat'] = '/usr/bin/msgcat';
 $config['conn_type'][0]     = array('name' => __('Direct (Fixed IP)'),  'id' => 'direct',   'active' => true);
 $config['conn_type'][1]     = array('name' => __('OpenVPN'),            'id' => 'openvpn',  'active' => false);
 $config['conn_type'][2]     = array('name' => __('PPTP'),               'id' => 'pptp',     'active' => false);
-$config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 'dynamic',  'active' => true);
+$config['conn_type'][3]     = array('name' => __('Dynamic Client'),     'id' => 'dynamic',  'active' => false);
 
 //Define the location of ccd (client config directory)
 //FIXME This value does not get read by the OpenvpnClients Model - investigate
