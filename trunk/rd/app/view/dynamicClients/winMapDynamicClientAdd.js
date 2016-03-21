@@ -23,7 +23,7 @@ Ext.define('Rd.view.dynamicClients.winMapDynamicClientAdd', {
                     labelClsExtra: 'lblRd',
                     labelAlign: 'left',
                     labelSeparator: '',
-                    margin      : Rd.config.fieldMargin,
+                    margin      : Rd.config.fieldMargin
                 },
                 defaultType: 'textfield',
                 tbar: [

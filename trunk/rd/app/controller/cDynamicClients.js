@@ -100,7 +100,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     refs: [
         {  ref: 'grid',     selector: 'gridDynamicClients'  },
-        {  ref: 'pnlGMap',  selector: 'pnlGMap'             },      
+        {  ref: 'pnlGMap',  selector: 'pnlGMap'             }      
     ],
     autoReloadUnknownDynamicClients: undefined,
     autoReload: undefined,
@@ -350,7 +350,7 @@ Ext.define('Rd.controller.cDynamicClients', {
             },
             '#pnlMapsEdit #save': {
                 click: me.btnMapSave
-            },
+            }
         });
     },
     winClose:   function(){
