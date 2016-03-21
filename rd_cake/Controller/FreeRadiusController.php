@@ -121,7 +121,7 @@ class FreeRadiusController extends AppController {
             return;
         }
 
-        $pid = exec('pidof radiusd');
+        $pid = exec('pidof freeradius');
         $items = array();
         $items['pid'] = intval($pid);
         if($pid == ''){
@@ -434,7 +434,7 @@ class FreeRadiusController extends AppController {
 
         foreach($output as $i){
             $i = trim($i);
-            if (preg_match("/Sending Access-Request/", $i)) {
+            if (preg_match("/Sent Access-Request/", $i)) {
                 $send_flag  = true;
                 $send_line  = $line;
             }
@@ -445,7 +445,7 @@ class FreeRadiusController extends AppController {
                 $receive_line   = $line;
             }
 
-            if (preg_match("/^Received Access-Accept packet/", $i)) { //Failure
+            if (preg_match("/^Received Access-Accept/", $i)) { //Failure
                 $fail_flag      = false;
             }
 
@@ -473,10 +473,6 @@ class FreeRadiusController extends AppController {
             'success'       => true,
             '_serialize'    => array('success', 'data')
         ));
-
     }
-
-
-
 }
 ?>
