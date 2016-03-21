@@ -8,7 +8,8 @@ var spawn   = require('child_process').spawn;
 var mysql   = require('mysql');
 
 //___ Variable decleration ____
-var filename= "/usr/local/var/log/radius/radius.log";
+var filename= "/var/log/freeradius/radius.log";
+//var filename= "/usr/local/var/log/radius/radius.log";
 var port    = 8000;
 
  
