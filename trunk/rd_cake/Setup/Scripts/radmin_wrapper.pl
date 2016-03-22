@@ -36,15 +36,15 @@ if($arg1 eq 'stats'){
 #___ Start ____
 if($arg1 eq 'start'){
     #system("/etc/init.d/radiusd start");
-    #system("service freeradius start");
-    system("/etc/init.d/freeradius start");
+    system("service freeradius start");
+    #system("/etc/init.d/freeradius start");
 }
 
 #___ Stop ____
 if($arg1 eq 'stop'){
     #system("/etc/init.d/radiusd stop");
-    #system("service freeradius stop");
-    system("/etc/init.d/freeradius stop");
+    system("service freeradius stop");
+    #system("/etc/init.d/freeradius stop");
 }
 
 
