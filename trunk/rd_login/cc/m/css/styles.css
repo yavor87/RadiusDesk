@@ -21,8 +21,8 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 }
 
 .fbError {
-    color: red;
-    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #cc0000;
 }
 
 .fbInfo {
@@ -138,11 +138,6 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 .aboutHead {
  text-align: center;
  background-color: #b3e1ff;
-}
-
-.aboutHead img{
- padding: 10px;
- width: 200px;
 }
 
 .tcText {

@@ -21,8 +21,8 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 }
 
 .fbError {
-    color: red;
-    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #cc0000;
 }
 
 .fbInfo {
