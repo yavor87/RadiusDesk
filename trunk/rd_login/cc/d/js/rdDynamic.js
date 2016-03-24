@@ -13,7 +13,7 @@ var rdDynamic = (function () {
         //Change the following when using this on the Mobile page
         cMaxWidth       = 600; //300 mobile 600 desktop
         cMinWidth       = 300; //280 mobile 300 desktop
-        hideLogin       = false;//false mobile true desktop
+        hideLogin       = true;//false mobile true desktop
         
         //====Functions======
         fDebug          = function(message){  
