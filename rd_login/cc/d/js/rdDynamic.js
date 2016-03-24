@@ -225,7 +225,7 @@ var rdDynamic = (function () {
                     
                 }
                 
-                b.push({view:"template",borderless:true,id:'tplConnectInfo'});
+                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 50});
                 
                 b.push({ 
                     view    : "button", 
@@ -255,7 +255,7 @@ var rdDynamic = (function () {
                     
                 }
                 
-                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 30});
+                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 50});
                 
                 if(
                     (cDynamicData.settings.voucher_login_check == true)||
@@ -637,6 +637,9 @@ var rdDynamic = (function () {
                 abt_country : country,
                 abt_lat_lon : lat + ' ' + lon
             });
+            
+            //Set the title
+            document.title = name;
         
         }
         
