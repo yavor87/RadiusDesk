@@ -850,8 +850,14 @@ class DynamicClientsController extends AppController {
             }
 
             $menu = array(
-                        array('xtype' => 'buttongroup',/*'title' => __('Action'),  */      'items' => $action_group)
-                   );
+                array('xtype' => 'buttongroup','title' => __('Action'),        'items' => $action_group),
+                array('xtype' => 'buttongroup','title' => __('Other'), 'items' => array(
+                    array('xtype' => 'button','glyph'=> Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note', 'tooltip'=> __('Add notes')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv', 'tooltip'=> __('Export CSV')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph','tooltip'=> __('Graphs')),
+                    array('xtype' => 'button','glyph'=> Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',   'tooltip'=> __('Map'))
+                )),
+            );
         }
         $this->set(array(
             'items'         => $menu,

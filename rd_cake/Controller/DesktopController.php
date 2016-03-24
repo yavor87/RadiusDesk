@@ -409,6 +409,12 @@ class DesktopController extends AppController {
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){    //Required to show the NAS Devices menu item
 
             $sm_nas_devices = array();
+            
+            //__ DynamicClients __
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicClients/index")){
+                array_push($sm_nas_devices, array('text' => __('Dynamic RADIUS Clients') ,  'glyph' => Configure::read('icnDynamicNas'), 'itemId' => 'cDynamicClients'));
+            }
+            
             array_push($sm_nas_devices, array(  'text'  => __('NAS Devices'),  'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'));
 
             //___Check the sub-menu rights___:
