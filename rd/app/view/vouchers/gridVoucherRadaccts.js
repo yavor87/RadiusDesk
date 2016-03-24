@@ -25,7 +25,7 @@ Ext.define('Rd.view.vouchers.gridVoucherRadaccts' ,{
         { text: i18n('sAcct_unique_id'),dataIndex: 'acctuniqueid',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true, stateId: 'StateGridVoucherRadaccts3'},
         { text: i18n('sGroupname'),     dataIndex: 'groupname',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true, stateId: 'StateGridVoucherRadaccts4'},
         { text: i18n('sRealm'),         dataIndex: 'realm',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridVoucherRadaccts5'},
-        { text: i18n('sNAS_IP_Address'),dataIndex: 'nasipaddress',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, stateId: 'StateGridVoucherRadaccts6'},
+        { text: i18n('sNAS_IP_Address'),dataIndex: 'nasipaddress',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, hidden: true, stateId: 'StateGridVoucherRadaccts6'},
         { text: i18n('sNAS_Identifier'),dataIndex: 'nasidentifier', tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridVoucherRadaccts7'},
         { text: i18n('sNAS_port_id'),   dataIndex: 'nasportid',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true, stateId: 'StateGridVoucherRadaccts8'},
         { text: i18n('sNAS_port_type'), dataIndex: 'nasporttype',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true, stateId: 'StateGridVoucherRadaccts9'},
