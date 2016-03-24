@@ -28,9 +28,15 @@ $config['pptp']['chap_secrets']                    = '/etc/ppp/chap-secrets';
 $config['dynamic']['start_ip']                     = '10.120.0.1'; //Make this a Class B subnet (64000) which will never include a value also specified for a FIXED client
 
 //Dictionary files to include for profiles...
-$config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
-$config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
-$config['freeradius']['radclient']                  = '/usr/local/bin/radclient';
+//FR2
+//$config['freeradius']['path_to_dictionary_files']   = '/usr/local/share/freeradius/';
+//$config['freeradius']['main_dictionary_file']       = '/usr/local/etc/raddb/dictionary';
+//$config['freeradius']['radclient']                  = '/usr/local/bin/radclient';
+
+//FR3
+$config['freeradius']['path_to_dictionary_files']   = '/usr/share/freeradius/';
+$config['freeradius']['main_dictionary_file']       = '/etc/freeradius/dictionary';
+$config['freeradius']['radclient']                  = '/usr/bin/radclient';
 
 
 //Define the configured dynamic attributes
