@@ -93,6 +93,13 @@ $config['UserCanRemoveDevice']              = true;
 $config['EmailServer']						= 'default';
 
 
+//== 30/3/16 -> Some server wide configurations ==
+$config['server_settings']['user_stats_cut_off_days']   = 90; //3 months (make zero to have no cut off)
+$config['server_settings']['radacct_cut_off_days']      = 90; //3 months (make zero to have no cut off)
+ 
+//== End server wide configurations ==
+
+
 //========== WORK IN PROGRES =============
 //----- PayU settings ----- Change to live and your details once working
 $config['payu']['soapWdslUrl']      = 'https://staging.payu.co.za/service/PayUAPI?wsdl';
