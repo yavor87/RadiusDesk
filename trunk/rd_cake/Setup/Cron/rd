@@ -22,3 +22,4 @@
 #Clean up and optimise radacct and user_stats tables once a day 
 30 2 * * * www-data /usr/share/nginx/html/cake2/rd_cake/Console/cake -app /usr/share/nginx/html/cake2/rd_cake OptimiseUserStats >> /dev/null 2>&1
 
+
