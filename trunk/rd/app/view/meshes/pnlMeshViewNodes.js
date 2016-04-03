@@ -4,6 +4,9 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
     border  	: false,
 	urlOverview	:   '/cake2/rd_cake/mesh_reports/overview.json',
 	meshId		: '',
+    config: {
+       displayBugFix: false
+   },
 	viewConfig	: {
         loadMask:true
     },
