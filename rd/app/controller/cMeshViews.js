@@ -88,6 +88,13 @@ Ext.define('Rd.controller.cMeshViews', {
             },
 			'winMeshView pnlMeshViewNodes':	{
 				activate:		function(pnl){
+				    var tab = pnl.up('tabpanel');
+				    //console.log(pnl.getConfig('displayBugFix'));
+				    if(pnl.getConfig('displayBugFix') == false){
+				       // console.log("Do display bug fix");
+			            tab.setActiveTab(1);
+			            pnl.setConfig('displayBugFix', true);
+			        }
 					pnl.getData()
 				}
 			},
