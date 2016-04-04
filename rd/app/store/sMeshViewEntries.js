@@ -15,5 +15,6 @@ Ext.define('Rd.store.sMeshViewEntries', {
                 totalProperty   : 'totalCount' //Required for dynamic paging
             }
     },
-    autoLoad: false
+    autoLoad: false,
+    groupField: 'name'
 });

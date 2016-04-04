@@ -31,9 +31,6 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
             { xtype: 'button', text: 'Past week',    toggleGroup: 'time_e', enableToggle : true, scale: 'large', itemId: 'week'}
         ]}    
     ],
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
     features: [{
         //ftype: 'grouping',
         ftype               : 'groupingsummary',
@@ -44,58 +41,25 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
     }],
     initComponent: function(){
         var me      = this;
-        me.store    = Ext.create(Rd.store.sMeshViewEntries,{
-            groupField: 'name',
-            listeners: {
-                load: function(store, records, successful) {
-                    if(!successful){
-                        Ext.ux.Toaster.msg(
-                            'Error encountered',
-                            store.getProxy().getReader().rawData.message.message,
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
-                    }else{
-                        var count   = me.getStore().getTotalCount();
-                        me.down('#count').update({count: count});
-                    }   
-                },
-                update: function(store, records, success, options) {
-                    store.sync({
-                        success: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sUpdated_item'),
-                                i18n('sItem_has_been_updated'),
-                                Ext.ux.Constants.clsInfo,
-                                Ext.ux.Constants.msgInfo
-                            );   
-                        },
-                        failure: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sProblems_updating_the_item'),
-                                i18n('sItem_could_not_be_updated'),
-                                Ext.ux.Constants.clsWarn,
-                                Ext.ux.Constants.msgWarn
-                            );
-                        }
-                    });
-                },
-                scope: this
-            },
-            autoLoad: false 
-        });
+        me.store    = Ext.create(Rd.store.sMeshViewEntries,{});
         me.store.getProxy().setExtraParam('mesh_id',me.meshId);
-       // me.store.load();
+              
+        me.bbar     =  [
+            {
+                 xtype       : 'pagingtoolbar',
+                 store       : me.store,
+                 dock        : 'bottom',
+                 displayInfo : true
+            }  
+        ];
 
         me.columns  = [
             { xtype: 'rownumberer',                                                         stateId: 'StateGridMeshViewEntries1'},
             { text: i18n("sSSID"),      dataIndex: 'name',      tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries2'},     
             { text: 'MAC Address',      dataIndex: 'mac',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries3',
                 summaryType     : 'count',
-                summaryRenderer : function(value, summaryData, dataIndex) {
-                    
-                    var tx_bytes =summaryData.record.get('tx_bytes'); //Assume that if the tx_bytes are zero - we have no devices
+                summaryRenderer : function(value, summaryData) {
+                    var tx_bytes =summaryData.txBytes; 
                     if(tx_bytes == 0){
                         return 'No devices';
                     }else{
@@ -104,7 +68,7 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
                 }
             },
             { text: 'Vendor',           dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries4'},
-            {   text: 'Data Tx',        dataIndex: 'tx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries5',
+            {   text: 'Data Tx',        dataIndex: 'tx_bytes',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshViewEntries5', itemId: 'txBytes',
                 renderer    : function(value){
                     return Ext.ux.bytesToHuman(value)              
                 },
@@ -188,28 +152,28 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
                                 target  : id,
                                 border  : true,
                                 anchor  : 'left',
-                                title   : 'Latest connection detail',
                                 html    : [
-                                    "<div class='divMapAction'>",
-                                        "<label class='lblMap'>Time</label><label class='lblValue'>"+t+"</label>",
+                                    "<div>",
+                                        "<h2>Latest connection detail</h2>",
+                                        "<label class='lblTipItem'>Time</label><label class='lblTipValue'>"+t+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Node</label><label class='lblValue'>"+n+"</label>",
+                                        "<label class='lblTipItem'>Node</label><label class='lblTipValue'>"+n+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Tx Speed</label><label class='lblValue'>"+txbr+"Mb/s</label>",
+                                        "<label class='lblTipItem'>Tx Speed</label><label class='lblTipValue'>"+txbr+"Mb/s</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Rx Speed</label><label class='lblValue'>"+rxbr+"Mb/s</label>",
+                                        "<label class='lblTipItem'>Rx Speed</label><label class='lblTipValue'>"+rxbr+"Mb/s</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Tx bytes</label><label class='lblValue'>"+ltx+"</label>",
+                                        "<label class='lblTipItem'>Tx bytes</label><label class='lblTipValue'>"+ltx+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Rx bytes</label><label class='lblValue'>"+lrx+"</label>",
+                                        "<label class='lblTipItem'>Rx bytes</label><label class='lblTipValue'>"+lrx+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Tx failed</label><label class='lblValue'>"+tx_f+"</label>",
+                                        "<label class='lblTipItem'>Tx failed</label><label class='lblTipValue'>"+tx_f+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Tx retries</label><label class='lblValue'>"+tx_r+"</label>",
+                                        "<label class='lblTipItem'>Tx retries</label><label class='lblTipValue'>"+tx_r+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Authenticated</label><label class='lblValue'>"+auth+"</label>",
+                                        "<label class='lblTipItem'>Authenticated</label><label class='lblTipValue'>"+auth+"</label>",
                                         "<div style='clear:both;'></div>",
-                                        "<label class='lblMap'>Authorized</label><label class='lblValue'>"+authz+"</label>",
+                                        "<label class='lblTipItem'>Authorized</label><label class='lblTipValue'>"+authz+"</label>",
                                         "<div style='clear:both;'></div>",
                                     "</div>" 
                                 ]
