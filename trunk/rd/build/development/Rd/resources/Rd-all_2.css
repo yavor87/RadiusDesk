@@ -8404,101 +8404,46 @@ td.grdEditable div {
     color: #0652c3;
 }
 /* http://localhost:1841/sass/src/Application.scss:648 */
-.x-progress.wifired {
-    border: 1px solid #686868;
-    height: 19px;
-    padding: 0 2 0 2;
+.x-progress.wifired .x-progress-bar {
+    background-color: #e00404;
 }
-/* http://localhost:1841/sass/src/Application.scss:654 */
-.wifired .x-progress-bar {
-    background: url("images/progress/red.png") repeat-x scroll 0 0 transparent !important;
-    border-color: #fff -moz-use-text-color -moz-use-text-color;
+/* http://localhost:1841/sass/src/Application.scss:655 */
+.x-progress.wifiyellow .x-progress-bar {
+    background-color: #f90;
 }
-/* http://localhost:1841/sass/src/Application.scss:662 */
-.x-progress.wifiyellow {
-    border: 1px solid #686868;
-    height: 19px;
-    padding: 0 2 0 2;
+/* http://localhost:1841/sass/src/Application.scss:660 */
+.x-progress.wifigreen .x-progress-bar {
+    background-color: #1a9406;
 }
-/* http://localhost:1841/sass/src/Application.scss:668 */
-.ext-strict .x-progress.wifiyellow {
-    height: 17px;
-}
-/* http://localhost:1841/sass/src/Application.scss:672 */
-.wifiyellow .x-progress-bar {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background: url("images/progress/yellow.png") repeat-x scroll 0 0 transparent !important;
-    border-color: #fff -moz-use-text-color -moz-use-text-color;
-    border-image: none;
-    border-right: medium none;
-    border-style: solid none none;
-    border-width: 1px medium medium;
-    height: 17px;
-}
-/* http://localhost:1841/sass/src/Application.scss:685 */
-.ext-strict .wifiyellow .x-progress-bar {
-    height: 15px;
-}
-/* http://localhost:1841/sass/src/Application.scss:690 */
-.x-progress.wifigreen {
-    border: 1px solid #686868;
-    height: 19px;
-    padding: 0 2 0 2;
-}
-/* http://localhost:1841/sass/src/Application.scss:696 */
-.ext-strict .x-progress.wifigreen {
-    height: 17px;
-}
-/* http://localhost:1841/sass/src/Application.scss:700 */
-.wifigreen .x-progress-bar {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background: url("images/progress/green.png") repeat-x scroll 0 0 transparent !important;
-    border-color: #fff -moz-use-text-color -moz-use-text-color;
-    border-image: none;
-    border-right: medium none;
-    border-style: solid none none;
-    border-width: 1px medium medium;
-    height: 17px;
-}
-/* http://localhost:1841/sass/src/Application.scss:713 */
-.ext-strict .wifigreen .x-progress-bar {
-    height: 15px;
-}
-/* http://localhost:1841/sass/src/Application.scss:717 */
+/* http://localhost:1841/sass/src/Application.scss:665 */
 .conn {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* http://localhost:1841/sass/src/Application.scss:723 */
+/* http://localhost:1841/sass/src/Application.scss:671 */
 .grpInfo {
     color: grey;
     font-size: 10px;
     font-style: italic;
     font-weight: lighter;
 }
-/* http://localhost:1841/sass/src/Application.scss:730 */
+/* http://localhost:1841/sass/src/Application.scss:678 */
 .grpNever {
     color: #1383bd;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:735 */
+/* http://localhost:1841/sass/src/Application.scss:683 */
 .grpUp {
     color: green;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:740 */
+/* http://localhost:1841/sass/src/Application.scss:688 */
 .grpDown {
     color: red;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:746 */
+/* http://localhost:1841/sass/src/Application.scss:694 */
 .divTip {
     background: #cdd0d5;
     border: 1px solid #333435;
@@ -8506,7 +8451,7 @@ td.grdEditable div {
     padding: 10px 15px;
     color: #555;
 }
-/* http://localhost:1841/sass/src/Application.scss:754 */
+/* http://localhost:1841/sass/src/Application.scss:702 */
 .tip-title {
     color: #333435;
     text-decoration: underline;
@@ -8514,7 +8459,7 @@ td.grdEditable div {
     padding: 2px;
     text-align: center;
 }
-/* http://localhost:1841/sass/src/Application.scss:762 */
+/* http://localhost:1841/sass/src/Application.scss:710 */
 .lblListS {
     width: 125px;
     float: left;
@@ -8523,14 +8468,14 @@ td.grdEditable div {
     font-size: 12px;
     margin: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:771 */
+/* http://localhost:1841/sass/src/Application.scss:719 */
 .lblValueS {
     text-align: left;
     font-size: 12px;
     margin: 1px;
     color: #2651a9;
 }
-/* http://localhost:1841/sass/src/Application.scss:778 */
+/* http://localhost:1841/sass/src/Application.scss:726 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -8540,48 +8485,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* http://localhost:1841/sass/src/Application.scss:788 */
+/* http://localhost:1841/sass/src/Application.scss:736 */
 .node:hover {
     color: #393434;
 }
-/* http://localhost:1841/sass/src/Application.scss:792 */
+/* http://localhost:1841/sass/src/Application.scss:740 */
 .hidden {
     display: none;
 }
-/* http://localhost:1841/sass/src/Application.scss:796 */
+/* http://localhost:1841/sass/src/Application.scss:744 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* http://localhost:1841/sass/src/Application.scss:800 */
+/* http://localhost:1841/sass/src/Application.scss:748 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* http://localhost:1841/sass/src/Application.scss:804 */
+/* http://localhost:1841/sass/src/Application.scss:752 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* http://localhost:1841/sass/src/Application.scss:808 */
+/* http://localhost:1841/sass/src/Application.scss:756 */
 .lightRed {
     background-color: #ffecec;
 }
-/* http://localhost:1841/sass/src/Application.scss:812 */
+/* http://localhost:1841/sass/src/Application.scss:760 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:818 */
+/* http://localhost:1841/sass/src/Application.scss:766 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* http://localhost:1841/sass/src/Application.scss:823 */
+/* http://localhost:1841/sass/src/Application.scss:771 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* http://localhost:1841/sass/src/Application.scss:829 */
+/* http://localhost:1841/sass/src/Application.scss:777 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -8590,4 +8535,21 @@ td.grdEditable div {
     margin-left: 4%;
     margin-top: 10px;
     background-color: #d7d7d4;
+}
+/* http://localhost:1841/sass/src/Application.scss:787 */
+.lblTipItem {
+    width: 120px;
+    float: left;
+    text-align: left;
+    color: #3cf;
+    font-size: 14px;
+    margin: 1px;
+    font-weight: bold;
+}
+/* http://localhost:1841/sass/src/Application.scss:797 */
+.lblTipValue {
+    text-align: left;
+    font-size: 14px;
+    margin: 1px;
+    color: #fff;
 }

@@ -37,8 +37,8 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                     "<label class='lblMap'>On public maps </label><label class='lblValue'> {on_public_maps}</label>",
 					"<div style='clear:both;'></div>",
 					"<label class='lblMap'>Status </label>",
-                    "<tpl if='state == \"down\"'><label class='lblValue fieldRedWhite'>{state}</label></tpl>",
-                    "<tpl if='state == \"up\"'><label class='lblValue fieldGreenWhite'> {state}</label></tpl>",
+                    "<tpl if='state == \"down\"'><label class='lblValue txtRed'><i class='fa fa-exclamation-circle'></i> Last contact {last_contact_human}</label></tpl>",
+                    "<tpl if='state == \"up\"'><label class='lblValue txtGreen'><i class='fa fa-check-circle'></i> Last contact {last_contact_human}</label></tpl>",
 					"<div style='clear:both;'></div>",
                     "<label class='lblMap'>Uptime </label><label class='lblValue'> {uptime}</label><br>",
                 "</div>"
