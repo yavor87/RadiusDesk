@@ -82,9 +82,9 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(static_entries)"><div class=\"gridRealm noRight\">'+i18n('sNone')+'</div></tpl>', 
+                            '<tpl if="Ext.isEmpty(static_entries)"><div class=\"fieldBlue\">'+i18n('sNone')+'</div></tpl>', 
                             '<tpl for="static_entries">',     
-                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                                "<tpl><div class=\"fieldGreyWhite\">{name}</div></tpl>",
                             '</tpl>'
                         ),
                 dataIndex: 'static_entries',stateId: 'StateGridNodes8'
@@ -95,9 +95,9 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(static_exits)"><div class=\"gridRealm noRight\">'+i18n('sNone')+'</div></tpl>', 
+                            '<tpl if="Ext.isEmpty(static_exits)"><div class=\"fieldBlue\">'+i18n('sNone')+'</div></tpl>', 
                             '<tpl for="static_exits">',     
-                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                                "<tpl><div class=\"fieldGreyWhite\">{name}</div></tpl>",
                             '</tpl>'
                         ),
                 dataIndex: 'static_exits',stateId: 'StateGridNodes9'
