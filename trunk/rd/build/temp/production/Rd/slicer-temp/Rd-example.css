@@ -24376,37 +24376,12 @@ td.grdEditable div {
 }
 /* http://localhost:1841/sass/src/Application.scss:694 */
 .divTip {
-    background: #cdd0d5;
-    border: 1px solid #333435;
+    background: #595959;
     margin-top: 2px;
-    padding: 10px 15px;
-    color: #555;
+    padding: 5px 10px;
+    color: #fff;
 }
 /* http://localhost:1841/sass/src/Application.scss:702 */
-.tip-title {
-    color: #333435;
-    text-decoration: underline;
-    font-size: 14px;
-    padding: 2px;
-    text-align: center;
-}
-/* http://localhost:1841/sass/src/Application.scss:710 */
-.lblListS {
-    width: 125px;
-    float: left;
-    text-align: left;
-    color: #676d76;
-    font-size: 12px;
-    margin: 1px;
-}
-/* http://localhost:1841/sass/src/Application.scss:719 */
-.lblValueS {
-    text-align: left;
-    font-size: 12px;
-    margin: 1px;
-    color: #2651a9;
-}
-/* http://localhost:1841/sass/src/Application.scss:726 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -24416,48 +24391,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* http://localhost:1841/sass/src/Application.scss:736 */
+/* http://localhost:1841/sass/src/Application.scss:712 */
 .node:hover {
     color: #393434;
 }
-/* http://localhost:1841/sass/src/Application.scss:740 */
+/* http://localhost:1841/sass/src/Application.scss:716 */
 .hidden {
     display: none;
 }
-/* http://localhost:1841/sass/src/Application.scss:744 */
+/* http://localhost:1841/sass/src/Application.scss:720 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* http://localhost:1841/sass/src/Application.scss:748 */
+/* http://localhost:1841/sass/src/Application.scss:724 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* http://localhost:1841/sass/src/Application.scss:752 */
+/* http://localhost:1841/sass/src/Application.scss:728 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* http://localhost:1841/sass/src/Application.scss:756 */
+/* http://localhost:1841/sass/src/Application.scss:732 */
 .lightRed {
     background-color: #ffecec;
 }
-/* http://localhost:1841/sass/src/Application.scss:760 */
+/* http://localhost:1841/sass/src/Application.scss:736 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:766 */
+/* http://localhost:1841/sass/src/Application.scss:742 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* http://localhost:1841/sass/src/Application.scss:771 */
+/* http://localhost:1841/sass/src/Application.scss:747 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* http://localhost:1841/sass/src/Application.scss:777 */
+/* http://localhost:1841/sass/src/Application.scss:753 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -24467,7 +24442,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* http://localhost:1841/sass/src/Application.scss:787 */
+/* http://localhost:1841/sass/src/Application.scss:763 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -24477,7 +24452,7 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* http://localhost:1841/sass/src/Application.scss:797 */
+/* http://localhost:1841/sass/src/Application.scss:773 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;
