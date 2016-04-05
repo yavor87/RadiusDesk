@@ -148,16 +148,16 @@ Ext.define('Rd.view.meshes.pnlMeshViewNodes', {
 				});
 				//display node info in tooltip
 				tip.innerHTML = "<div class='divTip'>"+
-					"<div class='tip-title'>"+ node.name + "</div>"+
-					"<label class='lblListS'>MAC</label><label class='lblValueS'>"+node.data.mac+"</label>"+
+					"<h2>"+ node.name + "</h2>"+
+					"<label class='lblTipItem'>MAC</label><label class='lblTipValue'>"+node.data.mac+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Description</label><label class='lblValueS'>"+node.data.description+"</label>"+
+					"<label class='lblTipItem'>Description</label><label class='lblTipValue'>"+node.data.description+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Hardware</label><label class='lblValueS'>"+node.data.hw_human+"</label>"+
+					"<label class='lblTipItem'>Hardware</label><label class='lblTipValue'>"+node.data.hw_human+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>IP Address</label><label class='lblValueS'>"+node.data.ip+"</label>"+
+					"<label class='lblTipItem'>IP Address</label><label class='lblTipValue'>"+node.data.ip+"</label>"+
                     "<div style='clear:both;'></div>"+
-					"<label class='lblListS'>Last contact</label><label class='lblValueS'>"+node.data.last_contact_human+"</label>"+
+					"<label class='lblTipItem'>Last contact</label><label class='lblTipValue'>"+node.data.last_contact_human+"</label>"+
                     "<div style='clear:both;'></div>"+
 					"</div>";
 			  }
