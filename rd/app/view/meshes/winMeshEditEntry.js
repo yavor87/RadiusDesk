@@ -58,7 +58,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                     layout  : 'fit',
                     xtype   : 'tabpanel',
                     margins : '0 0 0 0',
-                    plain   : true,
+                    plain   : false,
                     tabPosition: 'bottom',
                     border  : false,
                     items   : [

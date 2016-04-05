@@ -70,16 +70,26 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
                 text    :   i18n('sConnects_with'),
                 sortable: false,
                 flex    : 1,  
+                tdCls   : 'gridTree',
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"gridRealm noRight\">'+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
+                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"fieldRedWhite\">'+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
                             '<tpl for="connects_with">',     // interrogate the realms property within the data
-                                "<tpl><div class=\"gridRealm hasRight\">{name}</div></tpl>",
+                                "<tpl><div class=\"fieldGreyWhite\">{name}</div></tpl>",
                             '</tpl>'
                         ),
                 dataIndex: 'connects_with',stateId: 'StateGridMeshExitsId4'
             },  
-            { text: i18n('sAuto_detect'),          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId5'}
+            { text: i18n('sAuto_detect'),          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId5',
+                xtype       :  'templatecolumn', 
+                tpl         :  new Ext.XTemplate(
+                    '<tpl if="auto_detect"><div class=\"fieldGreenWhite\"><i class="fa fa-check-circle"></i> Yes</div>',
+                    '<tpl else>',
+                    '<div class=\"fieldRedWhite\"><i class="fa fa-times-circle"></i> No</div>',
+                    "</tpl>"   
+                )    
+            
+            }
         ];
         me.callParent(arguments);
     }
