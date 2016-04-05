@@ -65,7 +65,21 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridMeshExitsId1'},
-            { text: i18n('sType'),                 dataIndex: 'type',          tdCls: 'gridMain', flex: 1,stateId: 'StateGridMeshExitsId3'},
+            { 
+                text    : i18n('sType'),                 
+                dataIndex: 'type',          
+                tdCls   : 'gridTree', 
+                flex    : 1,
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                     '<tpl if="type==\'bridge\'"><div class="fieldGreyWhite"><i class="fa fa-bars"></i> '+' '+'Bridge'+'</div></tpl>',
+                     '<tpl if="type==\'captive_portal\'"><div class="fieldPurpleWhite"><i class="fa fa-key"></i> '+' '+'Captive Portal'+'</div></tpl>',
+                     '<tpl if="type==\'nat\'"><div class="fieldGreenWhite"><i class="fa fa-arrows-alt"></i> '+' '+'NAT+DHCP'+'</div></tpl>',
+                     '<tpl if="type==\'tagged_bridge\'"><div class="fieldBlueWhite"><i class="fa fa-tag"></i> '+' '+'Tagged Ethernet Bridge'+'</div></tpl>'
+                ),
+            
+                stateId: 'StateGridMeshExitsId3'
+            },
             { 
                 text    :   i18n('sConnects_with'),
                 sortable: false,
