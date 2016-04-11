@@ -11,7 +11,8 @@ class ThirdPartyAuthsController extends AppController {
 	public function opauth_complete() {
 
 		//During initial authentication we set a session variable which we can then use again here to redirect the user back to their login page
-		$qs = CakeSession::read('rd.qs');	
+		$qs = CakeSession::read('rd.qs');
+		
 
 		//Build the URL	
 		$query = $this->_queryToArray($qs);
