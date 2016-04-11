@@ -245,6 +245,7 @@ class DynamicDetailsController extends AppController {
 
 		//See which Theme are selected
 		$theme = 'Default';
+		$theme_selected = 'Default';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
