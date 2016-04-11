@@ -186,7 +186,7 @@ class DynamicDetailsController extends AppController {
 
         $this->response->header('Location', $redir_to);
     }
-
+    
     public function mikrotik_browser_detect(){
 
 		$conditions = array("OR" =>array());
@@ -229,6 +229,51 @@ class DynamicDetailsController extends AppController {
     }
 
 
+    public function ruckus_browser_detect(){
+
+		$conditions = array("OR" =>array());
+
+		foreach(array_keys($this->request->query) as $key){
+                array_push($conditions["OR"],
+                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+                ); //OR query all the keys
+       	}
+
+       	$this->{$this->modelClass}->DynamicPair->contain('DynamicDetail');
+      	$q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
+                array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
+
+		//See which Theme are selected
+		$theme = 'Default';
+		if($q_r){
+            $theme_selected =  $q_r['DynamicDetail']['theme'];
+		}
+
+        //------------------------
+        //FIXME For now we'll use the Coova URL on custom as a hack
+        //-----------------------
+        
+	    if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    if($this->request->is('mobile')){
+                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+            }
+		}else{  //Else we fetch the 'global' theme's value from the file
+		    Configure::load('DynamicLogin'); 
+            $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
+		    if(!$pages){
+			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
+		    }
+
+		    $redir_to = $pages['ruckus_desktop'].'?'.$_SERVER['QUERY_STRING'];
+            if($this->request->is('mobile')){
+                $redir_to = $pages['ruckus_mobile'].'?'.$_SERVER['QUERY_STRING'];
+            }
+        }
+
+        $this->response->header('Location', $redir_to);
+    }
+    
 	//----- Give better preview pages -----
 	public function preview_chilli_desktop(){
 
