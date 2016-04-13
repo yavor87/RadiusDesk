@@ -27,9 +27,9 @@ Ext.define('Rd.view.components.winEnableDisable', {
                     margin: 15
                 },
                 defaultType: 'textfield',
-                tbar: [
+                /*tbar: [
                     { xtype: 'tbtext', text: i18n('sSelect_an_action'), cls: 'lblWizard' }
-                ],
+                ],*/
                 items: [
                     {
                         xtype       : 'radiogroup',

@@ -49,7 +49,8 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             { 
                 text        : i18n('sBatch'),
                 sortable    : true,
-                flex        : 1,  
+                flex        : 1,
+                tdCls       : 'gridTree', 
                 xtype       : 'templatecolumn', 
                 tpl:        new Ext.XTemplate(
                                 '<tpl if="Ext.isEmpty(batch)"><div class=\"fieldBlue\">'+i18n('s_br_Single_voucher_br')+'</div>',
@@ -66,16 +67,26 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 width: 110,
                 // This is our Widget column
                 xtype: 'widgetcolumn',
+                tdCls: 'gridTree',
                 widget: {
                     xtype: 'progressbarwidget'
                 },
                 onWidgetAttach: function(column, widget, record) {
                     var v = record.get('perc_data_used');
+                    widget.toggleCls("wifigreen",true);
                     if(v == null){
                      widget.setText('');
                     }else{
+                        var cls = "wifigreen";
+                        if(v > 70){
+                            cls = "wifiyellow";
+                        }
+                        if(v > 90){
+                            cls = "wifired"
+                        }  
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
+                        widget.toggleCls(cls,true);
                     }    
                 },
                 stateId: 'StateGridVouchers8'
@@ -85,16 +96,26 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 dataIndex: 'perc_time_used',
                 width: 110,
                 xtype: 'widgetcolumn',
+                tdCls: 'gridTree',
                 widget: {
                     xtype: 'progressbarwidget'
                 },
                 onWidgetAttach: function(column, widget, record) {
-                    var v = record.get('perc_time_used');
+                    var v = record.get('perc_time_used');            
+                    widget.toggleCls("wifired",true);
                     if(v == null){
                       widget.setText('');
                     }else{
+                        var cls = "wifigreen";
+                        if(v > 70){
+                            cls = "wifiyellow";
+                        }
+                        if(v > 90){
+                            cls = "wifired"
+                        }  
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
+                        widget.toggleCls(cls,true);
                     }    
                 },
                 stateId: 'StateGridVouchers9'
@@ -102,6 +123,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             { 
                 text        : i18n('sStatus'),
                 flex        : 1,  
+                tdCls       : 'gridTree',
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
                                 "<tpl if='status == \"new\"'><div class=\"fieldGreen\">"+i18n('sNew')+"</div></tpl>",

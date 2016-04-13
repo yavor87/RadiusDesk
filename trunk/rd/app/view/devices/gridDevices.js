@@ -37,11 +37,12 @@ Ext.define('Rd.view.devices.gridDevices' ,{
             { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridDevices5'},
             { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridDevices6'},
             { 
-                text        : i18n('sActive'),  
+                text        : i18n('sActive'),
+                tdCls       : 'gridTree',   
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
+                                 "<tpl if='active == true'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"fieldRedWhite\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
                 filter      : {
@@ -93,53 +94,70 @@ Ext.define('Rd.view.devices.gridDevices' ,{
             },
             {
                 header      : i18n('sData_used'),
+                hidden      : true,
                 dataIndex   : 'perc_data_used',
                 width       : 110,
-                hidden      : true,
-                renderer: function (v, m, r) {
-                    if(v != null){
-                        var id = Ext.id();
-                        Ext.defer(function () {
-                            Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 100,
-                                text: v +" %"
-                            });
-                        }, 50);
-                        return Ext.String.format('<div id="{0}"></div>', id);
+                xtype       : 'widgetcolumn',
+                tdCls       : 'gridTree',
+                widget: {
+                    xtype   : 'progressbarwidget'
+                },
+                onWidgetAttach: function(column, widget, record) {
+                    var v = record.get('perc_data_used');
+                    widget.toggleCls("wifigreen",true);
+                    if(v == null){
+                     widget.setText('');
                     }else{
-                        return "N/A";
-                    }
-                },stateId: 'StateGridDevices13'
-            },
+                        var cls = "wifigreen";
+                        if(v > 70){
+                            cls = "wifiyellow";
+                        }
+                        if(v > 90){
+                            cls = "wifired"
+                        }  
+                        widget.setValue(v / 100);
+                        widget.setText( v +" %");
+                        widget.toggleCls(cls,true);
+                    }    
+                },
+                stateId: 'StateGridDevices13'
+            },          
             {
                 header      : i18n('sTime_used'),
+                hidden      : true,
                 dataIndex   : 'perc_time_used',
                 width       : 110,
-                hidden      : true,
-                renderer: function (v, m, r) {
-                    if(v != null){
-                        var id = Ext.id();
-                        Ext.defer(function () {
-                            Ext.widget('progressbar', {
-                                renderTo: id,
-                                value: v / 100,
-                                width: 100,
-                                text: v+" %"
-                            });
-                        }, 50);
-                        return Ext.String.format('<div id="{0}"></div>', id);
+                xtype       : 'widgetcolumn',
+                tdCls       : 'gridTree',
+                widget      : {
+                    xtype   : 'progressbarwidget'
+                },
+                onWidgetAttach: function(column, widget, record) {
+                    var v = record.get('perc_time_used');            
+                    widget.toggleCls("wifired",true);
+                    if(v == null){
+                      widget.setText('');
                     }else{
-                        return "N/A";
-                    }
-                },stateId: 'StateGridDevices14'
+                        var cls = "wifigreen";
+                        if(v > 70){
+                            cls = "wifiyellow";
+                        }
+                        if(v > 90){
+                            cls = "wifired"
+                        }  
+                        widget.setValue(v / 100);
+                        widget.setText( v +" %");
+                        widget.toggleCls(cls,true);
+                    }    
+                },
+                stateId: 'StateGridDevices14'
             },
             { 
                 text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
                 xtype   : 'templatecolumn', 
+                tdCls   : 'gridTree',
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><span class=\"fa fa-thumb-tack fa-lg txtGreen\"></tpl>"
                 ),
