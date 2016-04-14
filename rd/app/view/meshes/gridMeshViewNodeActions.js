@@ -22,19 +22,17 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeActions' ,{
         { text: i18n('sCommand'),    dataIndex: 'command',       tdCls: 'gridTree', flex: 1, sortable: true,stateId: 'StateGMVNA3'},
         { 
             text        : i18n('sStatus'),
-            flex        : 1,  
+            flex        : 1,
+            tdCls       : 'gridTree',  
             xtype       : 'templatecolumn', 
             tpl         : new Ext.XTemplate(
-                            "<tpl if='status == \"awaiting\"'><div class=\"fieldBlue\">"+i18n('sAwaiting')+"</div></tpl>",
-                            "<tpl if='status == \"fetched\"'><div class=\"fieldGreen\">"+i18n('sFetched')+"</div></tpl>"
+                            "<tpl if='status == \"awaiting\"'><div class=\"fieldBlue\"><i class=\"fa fa-clock-o\"></i> "+i18n('sAwaiting')+"</div></tpl>",
+                            "<tpl if='status == \"fetched\"'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> "+i18n('sFetched')+"</div></tpl>"
             ),
             dataIndex   : 'status',stateId: 'StateGMVNA4'
         },
         { text: i18n('sCreated'),    dataIndex: 'created',       tdCls: 'gridTree', flex: 1, sortable: true,stateId: 'StateGMVNA5'},
         { text: i18n('sModified'),   dataIndex: 'modified',      tdCls: 'gridTree', flex: 1, sortable: true,stateId: 'StateGMVNA6'}
-    ],
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
     initComponent: function(){
 
@@ -59,36 +57,19 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeActions' ,{
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },
-            listeners: {
-                load: function(store, records, successful) {      
-                    if(!successful){
-                        Ext.ux.Toaster.msg(
-                            i18n('sError_encountered'),
-                            store.getProxy().getReader().rawData.message.message,
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
-                    }else{
-                        var count   = me.getStore().getTotalCount();
-                        me.down('#count').update({count: count});
-                    }  
-                },
-                update: function(store, records, success, options) {
-                    store.sync({
-                        success: function(batch,options){
-                           
-                        },
-                        failure: function(batch,options){
-                          
-                        }
-                    });
-                },
-                scope: this
-            },
             autoLoad: false    
         });
 		me.store.getProxy().setExtraParam('node_id',me.nodeId);
+		
+		me.bbar     =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
+		
         me.callParent(arguments);
     }
 });

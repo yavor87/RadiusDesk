@@ -125,12 +125,13 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
 			{ 
                 text    : 'Last command',
                 sortable: false,
+                tdCls   : 'gridTree', 
                 flex    : 1,  
                 xtype   : 'templatecolumn', 
                 tpl:    new Ext.XTemplate(
                             "<tpl if='last_cmd_status == \"\"'><div class=\"fieldBlue\">(nothing)</div></tpl>", 
-                            "<tpl if='last_cmd_status == \"awaiting\"'><div class=\"fieldBlue\">{last_cmd}</div></tpl>",
-                            "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreen\">{last_cmd}</div></tpl>"
+                            "<tpl if='last_cmd_status == \"awaiting\"'><div class=\"fieldBlue\"><i class=\"fa fa-clock-o\"></i> {last_cmd}</div></tpl>",
+                            "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> {last_cmd}</div></tpl>"
                         ),
                 stateId	: 'StateGMVND14',
 				hidden	: false
