@@ -4,6 +4,8 @@ delimiter //
 create procedure add_social_logins()
 begin
 
+set names utf8;
+
 if not exists (select * from information_schema.columns
     where table_name = 'social_login_users' and table_schema = 'rd') then
 	CREATE TABLE `social_login_users` (
@@ -25,7 +27,7 @@ if not exists (select * from information_schema.columns
 		`created` datetime NOT NULL,
 		`modified` datetime NOT NULL,
 		PRIMARY KEY (`id`)
-	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 end if;
 
 if not exists (select * from information_schema.columns
@@ -37,7 +39,7 @@ if not exists (select * from information_schema.columns
 		`created` datetime NOT NULL,
 		`modified` datetime NOT NULL,
 		PRIMARY KEY (`id`)
-	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+	) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 end if;
 
 end//
