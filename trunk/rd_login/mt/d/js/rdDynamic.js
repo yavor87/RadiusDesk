@@ -13,7 +13,7 @@ var rdDynamic = (function () {
         //Change the following when using this on the Mobile page
         cMaxWidth       = 600; //300 mobile 600 desktop
         cMinWidth       = 300; //280 mobile 300 desktop
-        hideLogin       = false;//false mobile true desktop
+        hideLogin       = true;//false mobile true desktop
         
         //====Functions======
         fDebug          = function(message){  
@@ -483,6 +483,9 @@ var rdDynamic = (function () {
             };
                     
             webix.ui([c_v], $$('scrnHome'));
+            
+            //We need this to show an overlay when connecting
+            webix.extend($$("layoutConnect"), webix.OverlayBox);
             
             if(cDynamicData.photos[0].file_name != undefined){
                 //If there is not enough space we don't want to squeeze it in
