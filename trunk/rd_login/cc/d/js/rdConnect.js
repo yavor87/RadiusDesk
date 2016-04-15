@@ -198,6 +198,7 @@ var rdConnect = (function () {
                     }
 
                     if(j.clientState == 1){
+                        hideOverlay();
 					    var redirect_check 	= false;
 					    var redirect_url  	= 'http://google.com';
 					    if(cDynamicData != undefined){ //We had to add this sine it is not always populated by the time this is run
@@ -254,11 +255,23 @@ var rdConnect = (function () {
 		    $(t).removeClass("fbInfo");
 		    $(t).addClass("fbError");
 		    $$('tplConnectInfo').setHTML(msg);
-            $$('tplConnectInfo').show();	
+            $$('tplConnectInfo').show();
+            
+            hideOverlay();
+            	
         }
 
 	    var clearLoginError	= function(){
 		    hideFeedback();
+	    }
+	    
+	    var showOverlay = function(){
+	        $$("layoutConnect").showOverlay('<div style="background-color: grey; opacity: 0.5; height:100%; width: 100%; margin:0px;padding:0px;"></div>');
+	    }
+	    
+	    var hideOverlay = function(){
+	        //Hide the overlay
+            $$("layoutConnect").hideOverlay();
 	    }
         
         var showFeedback	= function(msg){
@@ -300,11 +313,13 @@ var rdConnect = (function () {
 	    
 	    //_______Disconnect_______
 	    var onBtnDisconnectClick = function(){
+	        showOverlay();
 		    showFeedback("Disconnect the user");
             var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
 
             $.ajax({url: urlLogoff + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
             .done(function(j){
+                hideOverlay();
                 coovaRefresh();
             })
             .fail(function(){
@@ -437,6 +452,7 @@ $$('sliderData').refresh();
         
          
         var onBtnClickToConnectClick = function(){
+            
 			var c_t_c_element	= cDynamicData.settings.connect_suffix;
 			var element_val     = getParameterByName(c_t_c_element);
 
@@ -452,15 +468,15 @@ $$('sliderData').refresh();
 		                return;
 		            }
 		        }
-		    }
-                 
+		    } 
+		    showOverlay();       
             getLatestChallenge();   
         }
         
         
         
         var onBtnConnectClick = function(){  //Get the latest challenge and continue from there onwards....
-        
+                   
             //Auto suffix check
 		    var auto_suffix_check   = cDynamicData.settings.auto_suffix_check;
 		    var auto_suffix			= cDynamicData.settings.auto_suffix;
@@ -563,6 +579,7 @@ $$('sliderData').refresh();
 				}
 			}
 			
+			showOverlay();
          	getLatestChallenge();   
         }
         
@@ -672,6 +689,7 @@ $$('sliderData').refresh();
 		        }
 		    }
 
+            showOverlay();
 		    socialName = a.toLowerCase();
 		    showFeedback('Starting social login for '+ socialName)
 

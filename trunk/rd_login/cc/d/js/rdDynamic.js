@@ -476,6 +476,9 @@ var rdDynamic = (function () {
                     
             webix.ui([c_v], $$('scrnHome'));
             
+            //We need this to show an overlay when connecting
+            webix.extend($$("layoutConnect"), webix.OverlayBox);
+            
             if(cDynamicData.photos[0] != undefined){
                 if(cDynamicData.photos[0].file_name != undefined){
                     //If there is not enough space we don't want to squeeze it in
