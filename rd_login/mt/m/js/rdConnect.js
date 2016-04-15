@@ -186,7 +186,7 @@ var rdConnect = (function () {
                 }
 
                 if(j.logged_in == 'yes'){
-
+                    hideOverlay();
                     var redirect_check 	= false;
 				    var redirect_url  	= 'http://google.com';
 				    if(cDynamicData != undefined){ //We had to add this sine it is not always populated by the time this is run
@@ -242,11 +242,22 @@ var rdConnect = (function () {
 		    $(t).removeClass("fbInfo");
 		    $(t).addClass("fbError");
 		    $$('tplConnectInfo').setHTML(msg);
-            $$('tplConnectInfo').show();	
+            $$('tplConnectInfo').show();
+            
+            hideOverlay();	
         }
 
 	    var clearLoginError	= function(){
 		    hideFeedback();
+	    }
+	    
+	    var showOverlay = function(){
+	        $$("layoutConnect").showOverlay('<div style="background-color: grey; opacity: 0.5; height:100%; width: 100%; margin:0px;padding:0px;"></div>');
+	    }
+	    
+	    var hideOverlay = function(){
+	        //Hide the overlay
+            $$("layoutConnect").hideOverlay();
 	    }
         
         var showFeedback	= function(msg){
@@ -288,9 +299,11 @@ var rdConnect = (function () {
 	    //_______Disconnect_______
 	    var onBtnDisconnectClick = function(){
 		    showFeedback("Disconnect the user");
+		    showOverlay();
             var urlLogout = getParameterByName('link_logout');
             $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout ,date: {}})
             .done(function(j){
+                hideOverlay();
                 mtRefresh(); //Refresh
             })
             .fail(function(){ 
@@ -429,7 +442,8 @@ var rdConnect = (function () {
 		                return;
 		            }
 		        }
-		    }           
+		    }
+		    showOverlay();           
             login();   
         }
                
@@ -536,7 +550,7 @@ var rdConnect = (function () {
 				    userName = userName+auto_suffix;
 				}
 			}
-			
+			showOverlay(); 
          	login();   
         }
         
@@ -626,7 +640,8 @@ var rdConnect = (function () {
 		            }
 		        }
 		    }
-            
+		    
+            showOverlay();
             
 		    socialName          = a.toLowerCase();
 		    showFeedback('Starting social login for '+ socialName)
