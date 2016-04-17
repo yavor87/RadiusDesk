@@ -118,22 +118,41 @@ function rdCoovaChilli.__doConfigs(self,p)
 		end
 		self.priv_start = self.priv_start + 1
 		
+
+		-- See if there are additional Coova Settings and specifiaclly if they include DNS overrides
+		local coova_optional = '';
+		local dns_override1 = false;
+		local dns_override2 = false;
+		if(string.len(v['coova_optional']) ~= 0)then
+			coova_optional = v['coova_optional'];
+			if(string.find(coova_optional, "dns1"))then
+			    dns_override1 = true
+			end
+			if(string.find(coova_optional, "dns2"))then
+			    dns_override2 = true
+			end
+		end
+		
 		-- Get the DNS --
 		local dns = self:__getDns()
 		local dns_string = ''
 		if(dns[2] == nil)then
-			dns_string = "dns1  '" ..dns[1].."'\n"
+		    if(dns_override1 ~= true)then
+			    dns_string = "dns1  '" ..dns[1].."'\n"
+		    end
 		else
-			dns_string = 	"dns1  '"..dns[1].."'\n"..
-					"dns2  '"..dns[2].."'\n"
+		    if((dns_override1 ~= true)and(dns_override2 ~= true))then --Think we covered all the probabilities              
+                            dns_string = "dns1  '"..dns[1].."'\n"..                                                                
+                            "dns2  '"..dns[2].."'\n"                                                                               
+            else                                                                                                           
+                if((dns_override1 == true)and(dns_override2 == false))then                                                 
+                    dns_string =        "dns2  '"..dns[2].."'\n"  --Keep 2 override 1                                      
+                end                                                                                                        
+                if((dns_override1 == false)and(dns_override2 == true))then                                                 
+                    dns_string = "dns1  '"..dns[1].."'\n"   --Keep 1 override 2                                            
+                end                                                                                                        
+            end      
 		end
-
-		-- See if there are additional Coova Settings
-		local coova_optional = '';
-		if(string.len(v['coova_optional']) ~= 0)then
-			coova_optional = v['coova_optional'];
-		end
-
 		
 		local s_content = "radiusserver1  '"..v['radius_1'].."'\n"..
 			"radiusserver2  '".. r2 .."'\n"..
@@ -169,8 +188,12 @@ function rdCoovaChilli.__doConfigs(self,p)
 end
 
 function rdCoovaChilli.__getDns(self)
-	local file = io.open("/etc/resolv.conf", "r");
-	local arr = {}
+
+    --First check for the 'auto' file which is our first choice
+    local file = io.open("/tmp/resolv.conf.auto", "r");
+    if(file == nil) then
+	    file = io.open("/etc/resolv.conf", "r");
+    end
 	local dns_start = 1
 	local dns_list  = {}
 	for line in file:lines() do
@@ -180,7 +203,7 @@ function rdCoovaChilli.__getDns(self)
 			s = s:find'^%s*$' and '' or s:match'^%s*(.*%S)' -- Remove leading and trailing spaces
 			if(s == '127.0.0.1')then -- We assume this is not normal
 				local one = self.x.get('meshdesk','captive_portal','default_dns_1')
-				local two = self.x.get('meshdesk','captive_portal','default_dns_1')
+				local two = self.x.get('meshdesk','captive_portal','default_dns_2')
 				dns_list[1] = one
 				dns_list[2] = two
 				return dns_list
