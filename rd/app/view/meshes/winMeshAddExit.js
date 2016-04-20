@@ -349,7 +349,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : 'Auth name',
                                                     name        : 'proxy_auth_username',
-                                                    allowBlank  : false,
+                                                    allowBlank  : true,
                                                     labelClsExtra: 'lblRd',
                                                     disabled    : true
                                                 },
@@ -357,7 +357,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : 'Auth password',
                                                     name        : 'proxy_auth_password',
-                                                    allowBlank  : false,
+                                                    allowBlank  : true,
                                                     labelClsExtra: 'lblRd',
                                                     disabled    : true
                                                 }
