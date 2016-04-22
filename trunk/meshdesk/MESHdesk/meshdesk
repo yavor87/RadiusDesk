@@ -48,7 +48,7 @@ config captive_portal 'captive_portal'
 
 config hardware 'dragino'
 	option morse_led '/sys/class/leds/dragino2:red:sensor/brightness'
-	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:system/brightness'
 	option wifi_led 'dragino2:red:wlan'
 	option swap_on_off '1'
 
@@ -96,14 +96,14 @@ config hardware 'alix3d2'
 	option wifi_led 'ath9k-phy0'
 
 config hardware 'mp2_basic'
-	option morse_led '/sys/class/leds/dragino2:red:usb/brightness'
-	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option morse_led '/sys/class/leds/dragino2:red:system/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:system/brightness'
 	option wifi_led 'dragino2:red:wlan'
 	option swap_on_off '0'
 
 config hardware 'mp2_phone'
-	option morse_led '/sys/class/leds/dragino2:red:usb/brightness'
-	option internet_led '/sys/class/leds/dragino2:red:usb/brightness'
+	option morse_led '/sys/class/leds/dragino2:red:system/brightness'
+	option internet_led '/sys/class/leds/dragino2:red:system/brightness'
 	option wifi_led 'dragino2:red:wlan'
 	option swap_on_off '0'
 
