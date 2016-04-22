@@ -270,7 +270,7 @@ function rdCoovaChilli.__doPrivoxy(self,conf_file,ip,proxy_ip,proxy_port,enc_str
         print("NEED TO DO AUTH THING")
         fp  = io.open("/etc/MESHdesk/captive_portals/"..number.."/auth.action","r");
         str = fp:read("*all");
-        str = string.gsub( str, "%+add%-header{Proxy%-Authorization:.-\n", "+add-header{Proxy-Authorization: Basic "..enc_string.."} \/\n")
+        str = string.gsub( str, "%+add%-header{Proxy%-Authorization:.-\n", "+add-header{Proxy-Authorization: Basic "..enc_string.."} \\\n")
         
         fp:close()
         fp  = io.open( "/etc/MESHdesk/captive_portals/"..number.."/auth.action", "w+" )

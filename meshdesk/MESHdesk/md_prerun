@@ -29,6 +29,13 @@ start() {
 		    /etc/init.d/odhcpd disable
 		    /etc/init.d/odhcpd stop
 		fi
+		
+		if [ -e /etc/init.d/privoxy ]; then
+		    echo "Disable rc.d symlink for Privoxy"
+		    /etc/init.d/privoxy disable
+		    /etc/init.d/privoxy stop
+		fi
+		
 		uci set meshdesk.settings.first_run=0
 		uci commit
 	else
