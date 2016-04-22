@@ -14,8 +14,12 @@ function rdCoovaChilli:rdCoovaChilli()
 	self.cpCount	= 16 -- The amount of captive portals allowed / worked on
 	self.specific   = "/etc/MESHdesk/captive_portals/"
 	self.priv_start = "1"
-	self.proxy_start= 3128
-	self.tiny_conf  = "tinyproxy.conf"
+	--self.proxy_start= 3128
+	self.proxy_start= 8118
+	self.privoxy_conf = "privoxy.conf"
+	
+	-- character table string
+    self.enc_str ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 end
         
 function rdCoovaChilli:getVersion()
@@ -89,23 +93,30 @@ function rdCoovaChilli.__doConfigs(self,p)
 		--Check if we need to activate the postauth proxy
 		local proxy_string = ''
 		if(v['proxy_enable'] == true)then
+		
+		    --Only if the privoxy binary is present
+		    local t=io.open('/usr/sbin/privoxy',"r");
+		    if(t == nil)then
+		        return --We silently fail
+		    end
 			require("rdNetwork")
 			local n = rdNetwork()
 			local ip = n:getIpForInterface("br-lan")
 			
 			if(ip)then
 				proxy_string = "postauthproxy  '"..ip.."'\n".."postauthproxyport  '"..self.proxy_start.."'\n";
-				--Now we can set the config file for tinyproxy up also
-				local conf_file 	= self.specific..k.."/"..self.tiny_conf
+				--Now we can set the config file for privoxy up also
+				local conf_file 	= self.specific..k.."/"..self.privoxy_conf
 				local proxy_ip  	= v['proxy_ip'];
 				local proxy_port	= v['proxy_port'];
 				local username 		= v['proxy_auth_username'];
 				local password		= v['proxy_auth_password'];
-				if((username == '')and(password == ''))then -- Some placeholder names to ensure TinyProxy starts up
-					username = 'a'
-					password = 'a' 
-				end		
-				self:__doTinyProxy(conf_file,ip,proxy_ip,proxy_port,username,password)
+				local enc_string    = nil;
+				if((username ~= '')and(password ~= ''))then
+				    enc_string    = self:__enc(username..':'..password);
+		        end
+		
+				self:__doPrivoxy(conf_file,ip,proxy_ip,proxy_port,enc_string,k);
 			end
 		end
 		--Up this one regardless
@@ -228,16 +239,61 @@ function rdCoovaChilli.__removeConfigs(self)
 	end
 end
 
-function rdCoovaChilli.__doTinyProxy(self,conf_file,ip,proxy_ip,proxy_port,username,password)
-	local fp 	= io.open( conf_file, "r" )
-    	local str 	= fp:read( "*all" )
-    	str 		= string.gsub( str, "Bind%s+.-\n", "Bind "..ip.."\n")
-    	str 		= string.gsub( str, "upstream%s+.-\n", "upstream "..username..":"..password.."@"..proxy_ip..":"..proxy_port.."\n")
-    	fp:close()
-    	fp 		= io.open( conf_file, "w+" )
+function rdCoovaChilli.__doPrivoxy(self,conf_file,ip,proxy_ip,proxy_port,enc_string,number)
+    --=============================
+    --First we do the config file==
+    --=============================
+    local fp 	= io.open( conf_file, "r" )
+    local str 	= fp:read( "*all" )
+    --Find the listen address and override it (NOTE in Lua we escape a modiefier with %)
+    str 		= string.gsub( str, "listen%-address%s+.-:.-\n", "listen-address "..ip..':'..self.proxy_start.."\n")
+    str 		= string.gsub( str, "forward%s+/%s+.-\n", "forward / "..proxy_ip..":"..proxy_port.."\n")
+    
+    --Take care of Auth inclusion or removal
+    local a_string = "#*actionsfile%s+/etc/MESHdesk/captive_portals/"..number.."/auth.action\n"
+    local b_string = "actionsfile /etc/MESHdesk/captive_portals/"..number.."/auth.action\n"
+    if(enc_string == nil)then   
+        str = string.gsub(str,a_string,"#"..b_string); --Comment it out if not needed
+    else
+        str = string.gsub(str,a_string,b_string); --Add if if needed
+    end
+    fp:close()
+    fp 		    = io.open( conf_file, "w+" )
    	fp:write( str )
-    	fp:close()
-	--We got out file now we can fire up the proxy
-	local ret_val = os.execute("/usr/sbin/tinyproxy -c "..conf_file)
-	print("Tinyproxy return value "..ret_val)
+    fp:close()
+    
+    --===============================
+    --Now we do the auth.action file=
+    --===============================
+    if(enc_string ~= nil)then
+        print("=== HEADSUP ====");
+        print("NEED TO DO AUTH THING")
+        fp  = io.open("/etc/MESHdesk/captive_portals/"..number.."/auth.action","r");
+        str = fp:read("*all");
+        str = string.gsub( str, "%+add%-header{Proxy%-Authorization:.-\n", "+add-header{Proxy-Authorization: Basic "..enc_string.."} \/\n")
+        
+        fp:close()
+        fp  = io.open( "/etc/MESHdesk/captive_portals/"..number.."/auth.action", "w+" )
+   	    fp:write( str )
+        fp:close()
+    end
+	--We got out file now we can fire up the privoxy
+	local pid_file= ' --pidfile /var/run/privoxy'..number..'.pid '
+	local ret_val = os.execute('/usr/sbin/privoxy'..pid_file..conf_file)
+	--print("Privoxy return value "..ret_val)
+end
+
+
+-- encoding
+function rdCoovaChilli.__enc(self,data)
+    return ((data:gsub('.', function(x) 
+        local r,b='',x:byte()
+        for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
+        return r;
+    end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
+        if (#x < 6) then return '' end
+        local c=0
+        for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
+        return self.enc_str:sub(c+1,c+1)
+    end)..({ '', '==', '=' })[#data%3+1])
 end
