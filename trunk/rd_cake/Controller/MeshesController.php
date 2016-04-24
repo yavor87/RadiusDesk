@@ -381,11 +381,15 @@ class MeshesController extends AppController {
         $items      = array();
         $total      = 0;
         $entry      = ClassRegistry::init('MeshEntry');
-        $entry->contain();
+        $entry->contain('MeshExitMeshEntry');
         $mesh_id    = $this->request->query['mesh_id'];
         $q_r        = $entry->find('all',array('conditions' => array('MeshEntry.mesh_id' => $mesh_id)));
-
+        
         foreach($q_r as $m){
+            $connected_to_exit = true;   
+            if(count($m['MeshExitMeshEntry']) == 0){
+                $connected_to_exit = false;
+            }
             array_push($items,array( 
                 'id'            => $m['MeshEntry']['id'],
                 'mesh_id'       => $m['MeshEntry']['mesh_id'],
@@ -397,8 +401,8 @@ class MeshesController extends AppController {
                 'key'           => $m['MeshEntry']['key'],
                 'auth_server'   => $m['MeshEntry']['auth_server'],
                 'auth_secret'   => $m['MeshEntry']['auth_secret'],
-                'dynamic_vlan'  => $m['MeshEntry']['dynamic_vlan']
-
+                'dynamic_vlan'  => $m['MeshEntry']['dynamic_vlan'],
+                'connected_to_exit' => $connected_to_exit
             ));
         }
         //___ FINAL PART ___
