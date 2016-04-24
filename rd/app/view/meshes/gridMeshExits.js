@@ -97,12 +97,11 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
             { text: i18n('sAuto_detect'),          dataIndex: 'auto_detect',   tdCls: 'gridTree', flex: 1,stateId: 'StateGridMeshExitsId5',
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
-                    '<tpl if="auto_detect"><div class=\"fieldGreenWhite\"><i class="fa fa-check-circle"></i> Yes</div>',
+                    '<tpl if="auto_detect"><div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>',
                     '<tpl else>',
-                    '<div class=\"fieldRedWhite\"><i class="fa fa-times-circle"></i> No</div>',
+                    '<div class=\"fieldRed\"><i class="fa fa-times-circle"></i> No</div>',
                     "</tpl>"   
-                )    
-            
+                )   
             }
         ];
         me.callParent(arguments);
