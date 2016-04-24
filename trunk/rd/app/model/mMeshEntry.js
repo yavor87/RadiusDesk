@@ -6,6 +6,7 @@ Ext.define('Rd.model.mMeshEntry', {
          {name: 'encryption',       type: 'string'  },
          {name: 'hidden',           type: 'bool'},
          {name: 'isolate',          type: 'bool'},
-         {name: 'apply_to_all',     type: 'bool'}
+         {name: 'apply_to_all',     type: 'bool'},
+         {name: 'connected_to_exit',type: 'bool'}
         ]
 });

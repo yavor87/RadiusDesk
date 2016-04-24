@@ -85,29 +85,46 @@ Ext.define('Rd.view.meshes.gridMeshEntries' ,{
             { text: i18n("sHidden"),               dataIndex: 'hidden',        tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries4',
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
-                    '<tpl if="hidden"><div class=\"fieldGreenWhite\"><i class="fa fa-check-circle"></i> Yes</div>',
+                    '<tpl if="hidden"><div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>',
                     '<tpl else>',
-                    '<div class=\"fieldRedWhite\"><i class="fa fa-times-circle"></i> No</div>',
+                    '<div class=\"fieldRed\"><i class="fa fa-times-circle"></i> No</div>',
                     "</tpl>"   
                 )     
             },
             { text: i18n("sClient_isolation"),     dataIndex: 'isolate',       tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries5',
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
-                    '<tpl if="isolate"><div class=\"fieldGreenWhite\"><i class="fa fa-check-circle"></i> Yes</div>',
+                    '<tpl if="isolate"><div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>',
                     '<tpl else>',
-                    '<div class=\"fieldRedWhite\"><i class="fa fa-times-circle"></i> No</div>',
+                    '<div class=\"fieldRed\"><i class="fa fa-times-circle"></i> No</div>',
                     "</tpl>"   
                 )   
             },
             { text: i18n("sApply_to_all_nodes"),   dataIndex: 'apply_to_all',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridMeshEntries6',
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
-                    '<tpl if="apply_to_all"><div class=\"fieldGreenWhite\"><i class="fa fa-check-circle"></i> Yes</div>',
+                    '<tpl if="apply_to_all"><div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>',
                     '<tpl else>',
-                    '<div class=\"fieldRedWhite\"><i class="fa fa-times-circle"></i> No</div>',
+                    '<div class=\"fieldRed\"><i class="fa fa-times-circle"></i> No</div>',
                     "</tpl>"   
                 )   
+            },
+            { 
+                text        : 'Connected to Exit' ,   
+                dataIndex   : 'connected_to_exit',  
+                tdCls       : 'gridTree', 
+                flex        : 1, 
+                stateId     : 'StateGridMeshEntries6',
+                renderer    : function (v, m, r) {
+                    if(v == true){
+                        return '<div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>';
+                    }
+                    if(v == false){
+                        m.tdAttr = 'data-qtip="<div><label class=\'lblTipItem\'>Go to Exit Points and connect this SSID to an Exit Point</label></div>"';
+                        return '<div class=\"fieldRedWhite\"><i class="fa  fa-exclamation-circle"></i> No</div>';
+                    }
+                 
+                }
             }
         ];
         me.callParent(arguments);
