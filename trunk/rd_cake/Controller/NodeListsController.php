@@ -23,7 +23,7 @@ class NodeListsController extends AppController {
 		foreach($q_r as $i){
 		
 		    $location = $GeoIpLocation->find($i['UnknownNode']['from_ip']);
-            $location = $GeoIpLocation->find('10.0.0.1');
+            //$location = $GeoIpLocation->find('10.0.0.1');
             
             //Some defaults:
             $country_code = '';
@@ -33,16 +33,16 @@ class NodeListsController extends AppController {
             
             if(array_key_exists('GeoIpLocation',$location)){
                 if($location['GeoIpLocation']['country_code'] != ''){
-                    $country_code = $location['GeoIpLocation']['country_code'];
+                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
                 }
                 if($location['GeoIpLocation']['country_name'] != ''){
-                    $country_name = $location['GeoIpLocation']['country_name'];
+                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
                 }
                 if($location['GeoIpLocation']['city'] != ''){
-                    $city = $location['GeoIpLocation']['city'];
+                    $city = utf8_encode($location['GeoIpLocation']['city']);
                 }
                 if($location['GeoIpLocation']['postal_code'] != ''){
-                    $postal_code = $location['GeoIpLocation']['postal_code'];
+                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
                 }
             }
             $i['UnknownNode']['country_code']   = $country_code;
