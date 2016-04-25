@@ -56,16 +56,16 @@ class UnknownDynamicClientsController extends AppController {
             
             if(array_key_exists('GeoIpLocation',$location)){
                 if($location['GeoIpLocation']['country_code'] != ''){
-                    $country_code = $location['GeoIpLocation']['country_code'];
+                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
                 }
                 if($location['GeoIpLocation']['country_name'] != ''){
-                    $country_name = $location['GeoIpLocation']['country_name'];
+                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
                 }
                 if($location['GeoIpLocation']['city'] != ''){
-                    $city = $location['GeoIpLocation']['city'];
+                    $city = utf8_encode($location['GeoIpLocation']['city']);
                 }
                 if($location['GeoIpLocation']['postal_code'] != ''){
-                    $postal_code = $location['GeoIpLocation']['postal_code'];
+                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
                 }
             }
 
