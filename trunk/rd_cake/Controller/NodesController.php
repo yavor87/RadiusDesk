@@ -116,9 +116,6 @@ class NodesController extends AppController {
         }else{
 
 			//We record this in the unknown_nodes table to grab and attach....
-
-			
-
              $this->set(array(
                 'error' => "MAC Address of node not specified",
                 'success' => false,
@@ -672,7 +669,7 @@ class NodesController extends AppController {
     private function _build_single_radio_wireless($mesh,$entry_point_data){
     
         $wireless = array();
-
+        
         if($mesh['NodeSetting']['client_key']!='') {        
             $client_key = $mesh['NodeSetting']['client_key'];
         }else{
@@ -774,25 +771,77 @@ class NodesController extends AppController {
                 ));
 
 
+
+
         //Get the mesh's BSSID and SSID
         $bssid      = $mesh['Mesh']['bssid'];
         $ssid       = $mesh['Mesh']['ssid'];
+        
+        //Get the connection type (IBSS or mesh_point);
+        if($mesh['MeshSetting']['id']!=null){  
+            $connectivity   = $mesh['MeshSetting']['connectivity'];
+            $encryption     = $mesh['MeshSetting']['encryption'];
+            $encryption_key = $mesh['MeshSetting']['encryption_key'];
+        }else{
+            Configure::load('MESHdesk');
+		    $connectivity   = Configure::read('mesh_settings.connectivity');
+		    $encryption     = Configure::read('mesh_settings.encryption');
+            $encryption_key = Configure::read('mesh_settings.encryption_key');
+        }
 
         //Add the ad-hoc if for mesh
         $zero = $this->_number_to_word(0);
-        array_push( $wireless,
-                array(
-                    "wifi-iface"   => "$zero",
-                    "options"       => array(
-                        "device"        => "radio0",
-                        "ifname"        => "mesh0",
-                        "network"       => "mesh",
-                        "mode"          => "adhoc",
-                        "ssid"          => $ssid,
-                        "bssid"         => $bssid
-                    )
-                ));
-
+        
+        if($connectivity == 'IBSS'){
+            array_push( $wireless,
+                    array(
+                        "wifi-iface"   => "$zero",
+                        "options"       => array(
+                            "device"        => "radio0",
+                            "ifname"        => "mesh0",
+                            "network"       => "mesh",
+                            "mode"          => "adhoc",
+                            "ssid"          => $ssid,
+                            "bssid"         => $bssid
+                        )
+                    ));
+        }
+         
+        if(($connectivity == 'mesh_point')&&(!$encryption)){
+            array_push( $wireless,
+                    array(
+                        "wifi-iface"   => "$zero",
+                        "options"       => array(
+                            "device"        => "radio0",
+                            "ifname"        => "mesh0",
+                            "network"       => "mesh",
+                            "mode"          => "mesh",
+                            "mesh_id"       => $mesh['NodeDetail']['name'],
+                            "mesh_ttl"      => 1,
+                            "mesh_fwding"   => 0,
+                            "encryption"    => 'none'
+                        )
+                    ));
+        }
+        
+        if(($connectivity == 'mesh_point')&&($encryption)){
+            array_push( $wireless,
+                    array(
+                        "wifi-iface"   => "$zero",
+                        "options"       => array(
+                            "device"        => "radio0",
+                            "ifname"        => "mesh0",
+                            "network"       => "mesh",
+                            "mode"          => "mesh",
+                            "mesh_id"       => $mesh['NodeDetail']['name'],
+                            "mesh_ttl"      => 1,
+                            "mesh_fwding"   => 0,
+                            "encryption"    => 'psk2/aes',
+                            "key"           => $encryption_key
+                        )
+                    ));
+        }
+        
         //Add the hidden config VAP
         $one = $this->_number_to_word(1);
         array_push( $wireless,
@@ -1095,38 +1144,124 @@ class NodesController extends AppController {
         //Get the mesh's BSSID and SSID
         $bssid      = $mesh['Mesh']['bssid'];
         $ssid       = $mesh['Mesh']['ssid'];
+        
+        //Get the connection type (IBSS or mesh_point);
+        if($mesh['MeshSetting']['id']!=null){  
+            $connectivity   = $mesh['MeshSetting']['connectivity'];
+            $encryption     = $mesh['MeshSetting']['encryption'];
+            $encryption_key = $mesh['MeshSetting']['encryption_key'];
+        }else{
+            Configure::load('MESHdesk');
+		    $connectivity   = Configure::read('mesh_settings.connectivity');
+		    $encryption     = Configure::read('mesh_settings.encryption');
+            $encryption_key = Configure::read('mesh_settings.encryption_key');
+        }
 
 		if(($mesh['NodeDetail']['radio0_enable'] == 1)&&($mesh['NodeDetail']['radio0_mesh'] == 1)){
-		    $zero = $this->_number_to_word(0);
-		    array_push( $wireless,
-		            array(
-		                "wifi-iface"   => "$zero",
-		                "options"       => array(
-		                    "device"        => "radio0",
-		                    "ifname"        => "mesh0",
-		                    "network"       => "mesh",
-		                    "mode"          => "adhoc",
-		                    "ssid"          => $ssid,
-		                    "bssid"         => $bssid
-		                )
-		            ));
+		    $zero = $this->_number_to_word(0);	    
+		    if($connectivity == 'IBSS'){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio0",
+                                "ifname"        => "mesh0",
+                                "network"       => "mesh",
+                                "mode"          => "adhoc",
+                                "ssid"          => $ssid,
+                                "bssid"         => $bssid
+                            )
+                        ));
+            }
+         
+            if(($connectivity == 'mesh_point')&&(!$encryption)){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio0",
+                                "ifname"        => "mesh0",
+                                "network"       => "mesh",
+                                "mode"          => "mesh",
+                                "mesh_id"       => $mesh['NodeDetail']['name'],
+                                "mesh_ttl"      => 1,
+                                "mesh_fwding"   => 0,
+                                "encryption"    => 'none'
+                            )
+                        ));
+            }
+            
+            if(($connectivity == 'mesh_point')&&($encryption)){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio0",
+                                "ifname"        => "mesh0",
+                                "network"       => "mesh",
+                                "mode"          => "mesh",
+                                "mesh_id"       => $mesh['NodeDetail']['name'],
+                                "mesh_ttl"      => 1,
+                                "mesh_fwding"   => 0,
+                                "encryption"    => 'psk2/aes',
+                                "key"           => $encryption_key
+                            )
+                        ));
+            }
 		}
 
 		if(($mesh['NodeDetail']['radio1_enable'] == 1)&&($mesh['NodeDetail']['radio1_mesh'] == 1)){
 		    $zero = $this->_number_to_word(0);
 			$zero = $zero."_1";
-		    array_push( $wireless,
-		            array(
-		                "wifi-iface"   => "$zero",
-		                "options"       => array(
-		                    "device"        => "radio1",
-		                    "ifname"        => "mesh1",
-		                    "network"       => "mesh",
-		                    "mode"          => "adhoc",
-		                    "ssid"          => $ssid,
-		                    "bssid"         => $bssid
-		                )
-		            ));
+			if($connectivity == 'IBSS'){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio1",
+                                "ifname"        => "mesh1",
+                                "network"       => "mesh",
+                                "mode"          => "adhoc",
+                                "ssid"          => $ssid,
+                                "bssid"         => $bssid
+                            )
+                        ));
+            }
+         
+            if(($connectivity == 'mesh_point')&&(!$encryption)){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio1",
+                                "ifname"        => "mesh1",
+                                "network"       => "mesh",
+                                "mode"          => "mesh",
+                                "mesh_id"       => $mesh['NodeDetail']['name'],
+                                "mesh_ttl"      => 1,
+                                "mesh_fwding"   => 0,
+                                "encryption"    => 'none'
+                            )
+                        ));
+            }
+            
+            if(($connectivity == 'mesh_point')&&($encryption)){
+                array_push( $wireless,
+                        array(
+                            "wifi-iface"   => "$zero",
+                            "options"       => array(
+                                "device"        => "radio1",
+                                "ifname"        => "mesh1",
+                                "network"       => "mesh",
+                                "mode"          => "mesh",
+                                "mesh_id"       => $mesh['NodeDetail']['name'],
+                                "mesh_ttl"      => 1,
+                                "mesh_fwding"   => 0,
+                                "encryption"    => 'psk2/aes',
+                                "key"           => $encryption_key
+                            )
+                        ));
+            }
 		}
 
 		//____ HIDDEN VAP ______

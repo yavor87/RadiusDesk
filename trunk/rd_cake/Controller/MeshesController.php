@@ -561,7 +561,8 @@ class MeshesController extends AppController {
 				'bonding',
 				'fragmentation',
 				'bridge_loop_avoidance',
-				'distributed_arp_table'
+				'distributed_arp_table',
+				'encryption'
 			);
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
