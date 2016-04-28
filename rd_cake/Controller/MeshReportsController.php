@@ -1353,7 +1353,7 @@ class MeshReportsController extends AppController {
                 }
 
                 //If the type is IBSS we will try to determine which nodes are connected
-                if($i['type'] == 'IBSS'){
+                if(($i['type'] == 'IBSS')||($i['type'] == 'mesh point')){
                      foreach($i['stations'] as $s){
                             $data = $this->_prep_station_data($s);
                             $data['node_id']    = $node_id;
