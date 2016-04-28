@@ -26,6 +26,11 @@ $config['mesh_settings']['orig_interval']  			= 1000; //OGM Interval*
 $config['mesh_settings']['bridge_loop_avoidance']  	= false; //Bridge loop avoidence*
 $config['mesh_settings']['distributed_arp_table'] 	= true; //Distributed ARP table
 
+//April 2016 ->Support for 802.11s or Ad-hoc
+$config['mesh_settings']['connectivity'] 	        = 'mesh_point'; //One of IBSS or mesh_point
+$config['mesh_settings']['encryption']              = false; // true or false  does now work on nodes with 4M flash (eg TP-Link841)
+$config['mesh_settings']['encryption_key']          = ''; //Need to be at least 8 characters long
+
 //== Node start ip for defined mesh ==
 $config['mesh_node']['start_ip']    = '10.5.5.1';
 
