@@ -52,6 +52,9 @@ Ext.define('Rd.controller.cMeshEdits', {
         me.inited = true;
 
         me.control({
+            'gridMeshEntries' : {
+                activate: me.gridActivate
+            },
 			'gridMeshEntries #reload': {
                 click:  me.reloadEntry
             },
@@ -82,8 +85,17 @@ Ext.define('Rd.controller.cMeshEdits', {
             'winMeshEdit #tabMeshSettings' : {
                 activate:      me.frmMeshSettingsLoad
             },
+            'pnlMeshSettings  #con_mesh_point' : {
+                change :    me.radioMeshPointChange    
+            }, 
+            'pnlMeshSettings  #encryption':{
+                change  : me.chkMeshEncryptionChange
+            },
             'pnlMeshSettings #save': {
                 click:  me.btnMeshSettingsSave
+            },
+            'gridMeshExits' : {
+                activate: me.gridActivate
             },
             'gridMeshExits #reload': {
                 click:  me.reloadExit
@@ -279,6 +291,10 @@ Ext.define('Rd.controller.cMeshEdits', {
             me.application.runAction('cDesktop','Add',w);      
         }
     },
+    gridActivate: function(grid){
+        var me = this;
+        grid.getStore().reload();
+    },
 	reloadEntry: function(button){
         var me      = this;
         var win     = button.up("winMeshEdit");
@@ -456,6 +472,42 @@ Ext.define('Rd.controller.cMeshEdits', {
         var meshId  = tab.meshId;
         form.load({url:me.getUrlViewMeshSettings(), method:'GET',params:{mesh_id:meshId}});
     },
+    radioMeshPointChange : function(rbtn){
+        var me      = this;
+        
+        var form    = rbtn.up('form');
+        var enc     = form.down('#encryption');
+        var enc_key = form.down('#encryption_key');
+        
+        if(rbtn.getValue()){
+            enc.setVisible(true);
+            enc.setDisabled(false); 
+            if(enc.getValue()){
+                enc_key.setVisible(true);
+                enc_key.setDisabled(false);
+            }else{
+                enc_key.setVisible(false);
+                enc_key.setDisabled(true);
+            } 
+        }else{
+            enc.setVisible(false);
+            enc.setDisabled(true);
+            enc_key.setVisible(false);
+            enc_key.setDisabled(true);
+        }
+    }, 
+    chkMeshEncryptionChange : function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var enc_key = form.down('#encryption_key');
+        if(chk.getValue()){
+            enc_key.setVisible(true);
+            enc_key.setDisabled(false);
+        }else{
+            enc_key.setVisible(false);
+            enc_key.setDisabled(true);
+        }    
+    },  
     btnMeshSettingsSave: function(button){
         var me      = this;
         var form    = button.up('form');

@@ -87,7 +87,7 @@ Ext.define('Rd.view.meshes.gridMeshExits' ,{
                 tdCls   : 'gridTree',
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"fieldRedWhite\">'+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
+                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"fieldRedWhite\"><i class="fa fa-exclamation-circle"></i> '+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
                             '<tpl for="connects_with">',     // interrogate the realms property within the data
                                 "<tpl><div class=\"fieldGreyWhite\">{name}</div></tpl>",
                             '</tpl>'
