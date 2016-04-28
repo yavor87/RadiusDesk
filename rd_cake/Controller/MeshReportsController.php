@@ -1353,6 +1353,7 @@ class MeshReportsController extends AppController {
                 }
 
                 //If the type is IBSS we will try to determine which nodes are connected
+                //April 2016 - We now also include support for mesh node (802.11s)
                 if(($i['type'] == 'IBSS')||($i['type'] == 'mesh point')){
                      foreach($i['stations'] as $s){
                             $data = $this->_prep_station_data($s);
