@@ -477,7 +477,7 @@ CREATE TABLE `dynamic_client_realms` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -543,7 +543,7 @@ CREATE TABLE `dynamic_clients` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -604,7 +604,7 @@ CREATE TABLE `dynamic_detail_social_logins` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -613,7 +613,6 @@ CREATE TABLE `dynamic_detail_social_logins` (
 
 LOCK TABLES `dynamic_detail_social_logins` WRITE;
 /*!40000 ALTER TABLE `dynamic_detail_social_logins` DISABLE KEYS */;
-INSERT INTO `dynamic_detail_social_logins` VALUES (2,3,9,34,'Facebook',1,1,'koos','koos','voucher','','','2016-03-16 10:17:05','2016-03-16 10:17:05');
 /*!40000 ALTER TABLE `dynamic_detail_social_logins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -681,7 +680,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-03-24 12:59:21',1,1,0,'walt',1,120,'Custom',0,0,1,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-04-14 14:34:50',1,1,0,'walt',1,120,'Custom',0,0,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','');
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1431,7 +1430,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guestz',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2016-03-13 06:36:26'),(53,40,'Cheetah wirelessz',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2016-03-13 06:36:32'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21');
+INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2016-04-14 14:32:21'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2016-04-14 14:32:27'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21');
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1472,7 +1471,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2016-03-13 06:30:15',0,1,'69.30.244.107',3128,'admin','admin','dnsparanoia'),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2016-04-24 15:58:44',0,0,'192.168.10.10',3128,'admin','admin',''),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1490,7 +1489,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1499,7 +1498,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (60,30,50,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(62,32,53,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(88,33,52,'2016-03-13 06:30:15','2016-03-13 06:30:15');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(101,30,50,'2016-04-28 05:48:11','2016-04-28 05:48:11');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1529,7 +1528,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2014-07-26 04:21:57'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2014-08-11 12:16:52'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-03-13 06:30:15'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-28 05:48:11'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1577,10 +1576,13 @@ CREATE TABLE `mesh_settings` (
   `distributed_arp_table` tinyint(1) NOT NULL DEFAULT '1',
   `orig_interval` int(10) NOT NULL DEFAULT '1000',
   `gw_sel_class` int(10) NOT NULL DEFAULT '20',
+  `connectivity` enum('IBSS','mesh_point') DEFAULT 'mesh_point',
+  `encryption` tinyint(1) NOT NULL DEFAULT '0',
+  `encryption_key` varchar(63) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1589,7 +1591,7 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-INSERT INTO `mesh_settings` VALUES (2,NULL,0,0,0,0,0,0,1000,20,'2015-01-31 16:01:29','2015-01-31 16:01:29');
+
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2086,7 +2088,7 @@ CREATE TABLE `node_settings` (
 
 LOCK TABLES `node_settings` WRITE;
 /*!40000 ALTER TABLE `node_settings` DISABLE KEYS */;
-INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(18,40,'admin',100,1,11,161,60,300,'2015-05-08 09:53:23','2015-05-27 11:28:45','$1$8TjLTNdN$UowMnEAwy5BxFtfaXspJi0',0,0,0,'Africa/Dakar','GMT0','AO',120,1,1,600,'radiusdesk');
+INSERT INTO `node_settings` VALUES (15,41,'admin',100,1,1,44,60,300,'2014-08-11 12:33:19','2014-08-11 13:44:43','',0,0,1,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(16,35,'admin',100,0,6,44,60,300,'2014-09-15 12:55:31','2015-09-10 07:58:33','',0,30,0,'America/New York','EST5EDT,M3.2.0,M11.1.0','US',120,1,1,600,'radiusdesk'),(18,40,'admin',100,0,11,161,60,300,'2015-05-08 09:53:23','2016-04-14 14:34:18','$1$480Su0cr$NZDXGrVydken24oH2t9jr.',0,0,0,'Africa/Johannesburg','SAST-2','ZA',120,1,1,600,'radiusdesk');
 /*!40000 ALTER TABLE `node_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2744,7 +2746,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9939 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9935 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3330,7 +3332,7 @@ CREATE TABLE `unknown_nodes` (
   `new_server` varchar(255) NOT NULL DEFAULT '',
   `new_server_status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3339,6 +3341,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
+INSERT INTO `unknown_nodes` VALUES (1,'4c-5e-0c-7c-1f-70','Routerbo # Routerboard.com','127.0.0.1',0,'2016-04-26 15:18:35','2016-04-26 15:18:35','2016-04-26 15:18:35','','awaiting');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3535,7 +3538,7 @@ CREATE TABLE `vouchers` (
   `time_cap` int(12) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ak_vouchers` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3556,4 +3559,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-24 15:43:39
+-- Dump completed on 2016-04-28  9:57:54
