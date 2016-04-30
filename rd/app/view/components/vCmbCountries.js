@@ -1,6 +1,6 @@
 Ext.define('Rd.view.components.vCmbCountries', {
     extend: 'Ext.form.ComboBox',
-    alias : 'widget.cmbCountries',
+    alias : 'widget.vCmbCountries',
     fieldLabel: i18n('sChoose_a_country'),
     labelSeparator: '',
     store: 'sCountries',

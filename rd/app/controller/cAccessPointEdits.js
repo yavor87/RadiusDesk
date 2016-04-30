@@ -17,11 +17,11 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         
         'aps.cmbApHardwareModels',
         'aps.winAccessPointAddAp',
-        'aps.winAccessPointEditAp'
-        /* 	
-        'meshes.pnlMeshEditGMap',	
-        'meshes.winMeshMapPreferences',
-		'meshes.winMeshMapNodeAdd'*/
+        'aps.winAccessPointEditAp',
+        
+        'components.cmbTimezones',      
+        'components.cmbCountries',
+        'components.cmbFiveGigChannels'
     ],
     stores      : [	
 		'sAccessPointEntries', 'sAccessPointExits', 	'sAps', 'sAccessPointEntryPoints'
@@ -65,10 +65,14 @@ Ext.define('Rd.controller.cAccessPointEdits', {
     ],
     init: function() {
         var me = this;
+        
+        if (me.inited) {
+            return;
+        }
+        me.inited = true;
+        
+        
         me.control({
-            'gridAccessPointEntries' : {
-                activate: me.gridActivate
-            },
 			'gridAccessPointEntries #reload': {
                 click:  me.reloadEntry
             },
@@ -95,11 +99,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             },
             'winAccessPointEditEntry #save': {
                 click: me.btnEditEntrySave
-            },
-            
-            'gridAccessPointExits' : {
-                activate: me.gridActivate
-            },   
+            },  
             'gridAccessPointExits #reload': {
                 click:  me.reloadExit
             },
@@ -139,9 +139,6 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             },
 			
             //Here nodes start
-            'gridAccessPointAps' : {
-                activate: me.gridActivate
-            },
             'gridAccessPointAps #reload': {
                 click:  me.reloadAps
             },
@@ -163,19 +160,6 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             '#winAccessPointEditApEdit #save': {
                 click: me.btnEditApSave
             },
-            
-            /*
-           
-			'gridNodes #map' : {
-                click: 	me.mapLoadApi
-            },
-            '#winMeshEditNodeEdit': {
-                beforeshow:      me.loadNode
-            },
-            '#winMeshEditNodeEdit #save': {
-                click: me.btnEditNodeSave
-            },
-*/
 			//RADIOs Choices
             //Add
             '#winAccessPointAddApEdit #chkRadio0Enable'	: {
@@ -220,68 +204,6 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 			'winAccessPointEditExit #chkLoginPage' : {
 				change	: me.chkLoginPageChange
 			}
-            
-          //  '#winAccessPointEditApEdit' : {
-          //      beforeshow:  me.loadAdvancedWifiSettings
-          //  },
-/*
-            
-			//---- MAP Starts here..... -----
-			'pnlMeshEdit #mapTab'		: {
-				activate: function(pnl){				
-					me.reloadMap(pnl);
-				}
-			},
-			'pnlMeshEditGMap #reload'	: {
-				click:	function(b){
-					var me = this;
-					me.reloadMap(b.up('pnlMeshEditGMap'));
-				}
-			},
-			'pnlMeshEditGMap #preferences': {
-                click: me.mapPreferences
-            },
-			'winMeshMapPreferences #snapshot': {
-                click:      me.mapPreferencesSnapshot
-            },
-            'winMeshMapPreferences #save': {
-                click:      me.mapPreferencesSave
-            },
-            'pnlMeshEditGMap #add': {
-                click: me.mapNodeAdd
-            },
-           'winMeshMapNodeAdd #save': {
-                click: me.meshMapNodeAddSubmit
-            },
-            'pnlMeshEditGMap #edit': {
-                click:  function(){
-                    Ext.Msg.show({
-                         title      : i18n("sEdit_a_marker"),
-                         msg        : i18n("sSimply_drag_a_marker_to_a_different_postition_and_click_the_save_button_in_the_info_window"),
-                         buttons    : Ext.Msg.OK,
-                         icon       : Ext.Msg.INFO
-                    });
-                }
-            },
-            'pnlMeshEditGMap #delete': {
-                click:  function(){
-                     Ext.Msg.show({
-                         title      : i18n("sDelete_a_marker"),
-                         msg        : i18n("sSimply_drag_a_marker_to_a_different_postition_and_click_the_delete_button_in_the_info_window"),
-                         buttons    : Ext.Msg.OK,
-                         icon       : Ext.Msg.INFO
-                    });
-                }
-            },
-            '#pnlMapsEdit #cancel': {
-                click: me.btnMapCancel
-            },
-            '#pnlMapsEdit #delete': {
-                click: me.btnMapDelete
-            },
-            '#pnlMapsEdit #save': {
-                click: me.btnMapSave
-            }*/
         });
     },
     actionIndex: function(ap_profile_id,name){
@@ -311,10 +233,6 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         var pnl     = button.up("pnlAccessPointEdit");//
         var entGrid = pnl.down("gridAccessPointEntries");
         entGrid.getStore().reload();
-    },
-    gridActivate: function(grid){
-        var me = this;
-        grid.getStore().reload();
     },
     addEntry: function(button){
         var me      = this;

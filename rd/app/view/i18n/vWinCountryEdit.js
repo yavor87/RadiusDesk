@@ -56,7 +56,7 @@ Ext.define('Rd.view.i18n.vWinCountryEdit', {
             defaultType: 'textfield',
             items: [
                 {
-                   xtype: 'cmbCountries'
+                   xtype: 'vCmbCountries'
                 }
             ],
             buttons: [

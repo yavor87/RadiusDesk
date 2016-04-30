@@ -39,10 +39,7 @@ Ext.define('Rd.view.i18n.vWinCountryDel', {
                     labelSeparator: '',
                     margin: 15
             },
-            items: [
-                {   xtype: 'cmbCountries', name: 'id'
-                }
-            ],
+            items: [{xtype: 'vCmbCountries', name: 'id'}],
             buttons: [
                     {
                         itemId: 'btnCountryDelNext',

@@ -105,7 +105,7 @@ Ext.define('Rd.controller.cAccessPoints', {
     init: function() {
         var me = this;
         
-         if (me.inited) {
+        if (me.inited) {
             return;
         }
         me.inited = true;
@@ -746,8 +746,9 @@ Ext.define('Rd.controller.cAccessPoints', {
                 var sr      = me.getGridApLists().getSelectionModel().getLastSelected();
                 var id      = sr.getId();
                 var name    = sr.get('name'); 
-                var cont    = Rd.app.createController('cAccessPointViews');
-                cont.actionIndex(id,name);
+                //var cont    = Rd.app.createController('cAccessPointViews');
+                //cont.actionIndex(id,name);
+                me.application.runAction('cAccessPointViews','Index',id,name);
             }
         }
     },
@@ -1111,9 +1112,9 @@ Ext.define('Rd.controller.cAccessPoints', {
                 var sr      = me.getGrid().getSelectionModel().getLastSelected();
                 var id      = sr.getId();
                 var name    = sr.get('name');
-                var cont    = Rd.app.createController('cAccessPointEdits');
-                cont.actionIndex(id,name);
-				////me.application.runAction('cMeshEdits','Index',id,name); 
+                //var cont    = Rd.app.createController('cAccessPointEdits');
+                //cont.actionIndex(id,name); 
+                me.application.runAction('cAccessPointEdits','Index',id,name); 
             }
         }
     },

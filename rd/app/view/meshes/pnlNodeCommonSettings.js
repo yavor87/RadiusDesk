@@ -5,6 +5,13 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
     layout  : 'hbox',
     align   : 'stretch',
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
+    requires: [
+        'Ext.tab.Panel',
+        'Ext.form.Panel',
+        'Ext.form.field.Text',
+        'Rd.view.meshes.cmbCountries',      
+        'Rd.view.components.cmbTimezones'
+    ],
     initComponent: function(){
         var me = this;
         me.items =  { 

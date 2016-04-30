@@ -114,7 +114,7 @@ Ext.define('Rd.controller.cI18n', {
             'addLanguageW #btnNewLanguageNext' : { 
                 click: me.btnNewLanguageNext
             },
-            'addLanguageW cmbCountries' : {
+            'addLanguageW vCmbCountries' : {
                 change: me.onCmbCountriesChange
             },
             'addKeyW #btnNewKeyNext' : { 
@@ -278,7 +278,7 @@ Ext.define('Rd.controller.cI18n', {
             w.getLayout().setActiveItem('scrnNewCountry');
         }else{
             //See if they did select an existing country
-            me.selCountry = form.down("cmbCountries").getValue();
+            me.selCountry = form.down("vCmbCountries").getValue();
             if(me.selCountry == null){
                  Ext.ux.Toaster.msg(
                         i18n('sSelect_a_country'),
@@ -570,7 +570,7 @@ Ext.define('Rd.controller.cI18n', {
     btnCountryEditNext: function(b){
         var me = this;
         var form    = b.up('form');
-        var cmb     = form.down('cmbCountries')
+        var cmb     = form.down('vCmbCountries')
         var c_id    = cmb.getValue();
         var r       = cmb.findRecord('id',c_id);     
         var w       = b.up('vWinCountryEdit');
@@ -589,7 +589,7 @@ Ext.define('Rd.controller.cI18n', {
         var me      = this;
         var w       = b.up('vWinCountryEdit');
         var form    = b.up('form');
-        var cmb     = w.down('cmbCountries')
+        var cmb     = w.down('vCmbCountries')
         var c_id    = cmb.getValue();
         form.submit({
             url: me.getUrlCountryAdd()+'/'+c_id,

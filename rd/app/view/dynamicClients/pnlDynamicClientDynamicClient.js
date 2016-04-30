@@ -5,6 +5,12 @@ Ext.define('Rd.view.dynamicClients.pnlDynamicClientDynamicClient', {
     dynamic_client_id   : null,
     layout              : 'hbox',
     bodyStyle           : {backgroundColor : Rd.config.panelGrey },
+    requires: [
+        'Ext.tab.Panel',
+        'Ext.form.Panel',
+        'Ext.form.field.Text',    
+        'Rd.view.components.cmbTimezones'
+    ],
     initComponent       : function(){
     
         var me = this;

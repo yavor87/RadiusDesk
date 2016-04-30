@@ -71,7 +71,7 @@ Ext.define('Rd.view.i18n.vWinLanguageAdd', {
             },
             defaultType: 'textfield',
             items: [
-                {   xtype: 'cmbCountries'
+                {   xtype: 'vCmbCountries'
                 },
                 {
                     xtype      : 'fieldcontainer',

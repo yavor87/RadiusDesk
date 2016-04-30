@@ -21,6 +21,11 @@ Ext.define('Rd.controller.cAccessPointViews', {
     ],
     init: function() {
         var me = this;
+        
+        if (me.inited) {
+            return;
+        }
+        me.inited = true;
             
         me.control({
 			//==== MESHdesk View related ====
