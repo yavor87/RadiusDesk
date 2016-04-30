@@ -103,6 +103,7 @@ Rd.config = {
     'icnCopy'       : 'xf0c5@FontAwesome',
     'icnDynamicNas' : 'xf239@FontAwesome',
     'icnQuestion'   : 'xf059@FontAwesome',
-    'icnCheck'      : 'xf058@FontAwesome'
+    'icnCheck'      : 'xf058@FontAwesome',
+    'icnCloud'      : 'xf0c2@FontAwesome'
 }
 
