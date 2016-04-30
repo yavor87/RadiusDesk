@@ -2,7 +2,7 @@ Ext.define('Rd.controller.cAccessPoints', {
     extend: 'Ext.app.Controller',
     actionIndex: function(record){
         var me      = this;       
-        var desktop = me.application.getController('cDesktop');
+        var desktop = this.application.getController('cDesktop');
         var win     = desktop.getWindow('apWin');
         if(!win){
             win = desktop.createWindow({
@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                 btnText : i18n('sAccess_Point_Overview'),
                 width   : Rd.config.winWidth,
                 height  : Rd.config.winHeight,
-                glyph   : Rd.config.icnSsid,
+                glyph   : Rd.config.icnCloud,
                 animCollapse:false,
                 border  :false,
                 constrainHeader:true,
@@ -21,8 +21,8 @@ Ext.define('Rd.controller.cAccessPoints', {
                     {
                         region  : 'north',
                         xtype   : 'pnlBanner',
-                        heading : i18n('sAccess_Point_Overview'),
-                        image   : 'resources/images/48x48/ssids.png'
+                        heading : 'Cloud Controller for APs',
+                        image   : 'resources/images/48x48/cloud.png'
                     },
 					{
                         region  : 'center',
@@ -35,23 +35,24 @@ Ext.define('Rd.controller.cAccessPoints', {
                             margins : '0 0 0 0',
                             border  : true,
                             plain   : false,
+                            itemId  : 'tabAccessPoints',
                             items   : [
 								{   
-                                   //xtype       : 'gridApProfiles',
+                                   xtype       : 'gridApProfiles',
                                     tabConfig   : {
-                                        title       : i18n('sOverview'), 
-                                        glyph       : Rd.config.config.icnSsid   
+                                        title       : i18n('sAccess_Point_Profiles'), 
+                                        glyph       : Rd.config.icnProfile   
                                     } 
                                 },
                                 { 
-                                    //xtype       : 'gridApLists',  
+                                    xtype       : 'gridApLists',  
                                     tabConfig   : {
                                         title       : i18n('sAttached_Devices'),
                                         glyph       : Rd.config.icnChain
                                     }
                                 },
                                 {  
-                                    //xtype       : 'gridUnknownAps', 
+                                    xtype       : 'gridUnknownAps', 
                                     tabConfig   : {
                                         title       : i18n('sDetached_Devices'),
                                         glyph       : Rd.config.icnChainBroken
@@ -67,17 +68,18 @@ Ext.define('Rd.controller.cAccessPoints', {
     },
 
     views:  [
-        'aps.gridApProfiles', //+
-        'aps.gridApLists', //+
-        'aps.gridUnknownAps', //+
-        'aps.winAccessPointAttachAp',//+
-        'aps.cmbApHardwareModels',//+
-        'aps.winApProfileAddWizard', //+
-        'aps.winAccessPointEditAp', //+
-        'aps.winAccessPointAddAp', //+
+        'aps.gridApProfiles', 
+        'aps.gridApLists', 
+        'aps.gridUnknownAps', 
+        'aps.winAccessPointAttachAp',
+        'aps.cmbApHardwareModels',
+        'aps.winApProfileAddWizard',
+        'aps.winAccessPointEditAp', 
+        'aps.winAccessPointAddAp', 
         'components.cmbDynamicDetail',
         'components.winHardwareAddAction',
-        'aps.winApUnknownRedirect'//+
+        'aps.winApUnknownRedirect',
+        'components.pnlBanner'
     ],
     stores: ['sAccessProvidersTree', 'sUnknownAps', 'sApProfiles', 'sApLists'  ],
     models: ['mAccessProviderTree',  'mUnknownAp',  'mApProfile',  'mApList', 'mDynamicDetail' ],
@@ -98,26 +100,28 @@ Ext.define('Rd.controller.cAccessPoints', {
     },
     refs: [
         {  ref: 'grid',         selector: 'gridApProfiles'},
-        {  ref: 'gridApLists',  selector: 'gridApLists'},
-        {
-            ref     : 'tabMain',
-            selector: 'tabMain'
-        }        
+        {  ref: 'gridApLists',  selector: 'gridApLists'}      
     ],
     init: function() {
         var me = this;
+        
+         if (me.inited) {
+            return;
+        }
+        me.inited = true;
+        
         me.control({
-            '#tabAccessPoints'    : {
-                beforeshow:      me.tabClose,
-                destroy   :      me.tabClose
+            '#apWin'    : {
+                beforeshow:      me.winClose,
+                destroy   :      me.winClose
             },
-			'#tabAccessPoints gridApProfiles' : {
+			'#apWin gridApProfiles' : {
 				activate	: me.gridActivate
 			},
-			'#tabAccessPoints gridApLists' : {
+			'#apWin gridApLists' : {
 				activate	: me.gridActivate
 			},
-            '#tabAccessPoints gridUnknownAps' : {
+            '#apWin gridUnknownAps' : {
 				activate	: me.gridActivate
 			},
             'gridApProfiles #reload': {
@@ -138,7 +142,6 @@ Ext.define('Rd.controller.cAccessPoints', {
             'gridApProfiles'  : {
                 select:      me.select
             },
-            
             
             'winApProfileAddWizard #btnTreeNext' : {
                 click:  me.btnTreeNext
@@ -297,10 +300,9 @@ Ext.define('Rd.controller.cAccessPoints', {
             'winNoteAdd[noteForGrid=ap_profiles] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             }
-                
         });
     },
-    tabClose:   function(){
+    winClose:   function(){
         var me = this;
         
         if(me.autoReload != undefined){
@@ -313,7 +315,7 @@ Ext.define('Rd.controller.cAccessPoints', {
         
         if(me.autoReloadUnknownAps != undefined){
             clearInterval(me.autoReloadUnknownAps);
-        }
+        }      
     },
 	reload: function(){
         var me =this;
@@ -455,8 +457,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     //_______ Known APs ________
     addAp: function(button){
         var me      = this;
-        var tab     = button.up("#tabAccessPoints"); 
-        var store   = tab.down("gridApLists").getStore();
+        var win     = button.up("#apWin"); 
+        var store   = win.down("gridApLists").getStore();
         
         if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAddApId')){
             var w = Ext.widget('winAccessPointAddAp',
@@ -538,9 +540,9 @@ Ext.define('Rd.controller.cAccessPoints', {
     editAp: function(button){
         var me      = this;
         
-        var tab     = button.up("#tabAccessPoints"); 
-        var store   = tab.down("gridApLists").getStore();
-        if(tab.down("gridApLists").getSelectionModel().getCount() == 0){
+        var win     = button.up("#apWin"); 
+        var store   = win.down("gridApLists").getStore();
+        if(win.down("gridApLists").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -549,7 +551,7 @@ Ext.define('Rd.controller.cAccessPoints', {
             );
             
         }else{
-            var sr          = tab.down("gridApLists").getSelectionModel().getLastSelected();
+            var sr          = win.down("gridApLists").getSelectionModel().getLastSelected();
             var id          = sr.getId();
             var apProfileId = sr.get('ap_profile_id');
             var apProfile   = sr.get('ap_profile');
@@ -610,8 +612,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     execute:   function(button){
         var me      = this;
         
-        var tab     = button.up("#tabAccessPoints"); 
-        var grid    = tab.down("gridApLists");
+        var win     = button.up("#apWin"); 
+        var grid    = win.down("gridApLists");
          
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -663,8 +665,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     restart:   function(button){
         var me      = this; 
         
-        var tab     = button.up("#tabAccessPoints"); 
-        var grid    = tab.down("gridApLists");
+        var win     = button.up("#apWin"); 
+        var grid    = win.down("gridApLists");
 		
     
         //Find out if there was something selected
@@ -752,7 +754,7 @@ Ext.define('Rd.controller.cAccessPoints', {
     //_______ Unknown Aps ______
 	attachAp: function(button){
         var me      = this;
-        var win     = button.up("#tabAccessPoints");
+        var win     = button.up("#apWin");
         var store   = win.down("gridUnknownAps").getStore();
         if(win.down("gridUnknownAps").getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
@@ -1318,7 +1320,7 @@ Ext.define('Rd.controller.cAccessPoints', {
     //Redirecting
     redirectAp: function(button){
         var me      = this;
-        var win     = button.up("#tabAccessPoints");
+        var win     = button.up("#apWin");
         var store   = win.down("gridUnknownAps").getStore();
         if(win.down("gridUnknownAps").getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(

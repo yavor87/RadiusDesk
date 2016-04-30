@@ -54,7 +54,7 @@ Ext.define('Rd.view.aps.winAccessPointAttachAp', {
                     text    : i18n("sOK"),
                     scale   : 'large',
                     formBind: true,
-                    glyph   : Rd.config.icnYes,,
+                    glyph   : Rd.config.icnYes,
                     margin  : Rd.config.buttonMargin
                 }
             ],

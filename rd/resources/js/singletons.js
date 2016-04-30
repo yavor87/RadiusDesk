@@ -635,6 +635,7 @@ Local = {
         'sCommand_queued_for_execution' : 'Command queued for execution',
         'sFirst_select_an_Access_Provider_who_will_be_the_owner' : 'First select an Access Provider who will be the owner',
         'sSelect' : 'Select',
+        'sAccess_Point_Profiles' : 'Access Point Profiles'
     }
 }
 
