@@ -96,11 +96,7 @@ if not exists (select * from information_schema.columns
     alter table radacct add column `acctinterval` int(12) default NULL;
 end if;
 
-
 end//
-
-
-
 
 delimiter ;
 call add_dynamic_clients;
