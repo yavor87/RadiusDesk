@@ -11,6 +11,7 @@ Rd.config = {
     winWidth        : 900,  //We use this for the initial Width and height
     winHeight       : 500,
     gridNumberCol   : 150,
+    radioMargin     : 10,
 
     panelGrey       : '#e5e6ef',
     'icnSignIn'     : 'xf090@FontAwesome',
@@ -103,6 +104,7 @@ Rd.config = {
     'icnCopy'       : 'xf0c5@FontAwesome',
     'icnDynamicNas' : 'xf239@FontAwesome',
     'icnQuestion'   : 'xf059@FontAwesome',
-    'icnCheck'      : 'xf058@FontAwesome'
+    'icnCheck'      : 'xf058@FontAwesome',
+    'icnCloud'      : 'xf0c2@FontAwesome'
 }
 

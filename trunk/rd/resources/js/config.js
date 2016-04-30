@@ -11,6 +11,7 @@ Rd.config = {
     winWidth        : 900,  //We use this for the initial Width and height
     winHeight       : 500,
     gridNumberCol   : 150,
+    radioMargin     : 10,
 
     panelGrey       : '#e5e6ef',
     'icnSignIn'     : 'xf090@FontAwesome',

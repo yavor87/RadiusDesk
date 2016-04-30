@@ -73,7 +73,7 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 sortable    : false,
                 hidden      : true
             },
-			{ text: 'Profile',  dataIndex: 'ap_profile',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridApLists3'},
+			{ text: i18n("sProfile"),  dataIndex: 'ap_profile',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridApLists3'},
             { text: i18n("sName"),  dataIndex: 'name',  tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridApLists4'},
             { 
 				text		: i18n("sDescription"), 
@@ -105,7 +105,7 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 text        : i18n("sLast_contact"),   
                 dataIndex   : 'last_contact',  
                 tdCls       : 'gridTree', 
-                flex        : 1,
+                width       : 150,
                 renderer    : function(v,metaData, record){
                     var value = record.get('state');
                     if(value != 'never'){                    
@@ -127,10 +127,21 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 text        : i18n("sFrom_IP"), 
                 dataIndex   : 'last_contact_from_ip',          
                 tdCls       : 'gridTree', 
-                flex        : 1,
-                hidden      : false,  
-                filter		: {type: 'string'},stateId: 'StateGridApLists9',
-                hidden      : true
+                width       : 150,
+                xtype       :  'templatecolumn', 
+                tpl         :  new Ext.XTemplate(
+                    '<tpl if="Ext.isEmpty(last_contact_from_ip)"><div class=\"fieldGreyWhite\">Not Available</div>',
+                    '<tpl else>',
+                    '<div class=\"fieldGreyWhite\">{last_contact_from_ip}</div>',
+                    "<tpl if='Ext.isEmpty(city)'><tpl else>",
+                        '<div><b>{city}</b>  ({postal_code})</div>',
+                    "</tpl>",
+                    "<tpl if='Ext.isEmpty(country_name)'><tpl else>",
+                        '<div><b>{country_name}</b> ({country_code})</div>',
+                    "</tpl>",
+                    "</tpl>"   
+                ), 
+                filter		: {type: 'string'},stateId: 'StateGridApLists9'
             },
             { 
                 text    : 'Last command',

@@ -9,6 +9,7 @@ Ext.define('Rd.model.mAccessPointEntry', {
          {name: 'isolate',          type: 'bool'    },
          {name: 'key',              type: 'string'  },
          {name: 'auth_server',      type: 'string'  },
-         {name: 'auth_secret',      type: 'string'  }
+         {name: 'auth_secret',      type: 'string'  },
+         {name: 'connected_to_exit',type: 'bool'    }
         ]
 });

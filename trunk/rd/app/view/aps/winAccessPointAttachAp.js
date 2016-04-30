@@ -65,7 +65,7 @@ Ext.define('Rd.view.aps.winAccessPointAttachAp', {
                     layout  : 'fit',
                     xtype   : 'tabpanel',
                     margins : '0 0 0 0',
-                    plain   : true,
+                    plain   : false,
                     tabPosition: 'bottom',
                     border  : false,
                     items   : [
@@ -132,6 +132,7 @@ Ext.define('Rd.view.aps.winAccessPointAttachAp', {
                                 xtype   : 'tabpanel',
                                 margins : '0 0 0 0',
                                 plain   : true,
+                                cls     : 'subTab',
                                 tabPosition: 'top',
                                 border  : false,
                                 items   :  [
@@ -290,11 +291,12 @@ Ext.define('Rd.view.aps.winAccessPointAttachAp', {
                                 xtype   : 'tabpanel',
                                 margins : '0 0 0 0',
                                 plain   : true,
+                                cls     : 'subTab',
                                 tabPosition: 'top',
                                 border  : false,
                                 items   :  [
                                     {
-                                        title       : 'Radio0',
+                                        title       : i18n("sRadio_zero"),
                                         xtype       : 'panel',
                                         baseCls     : 'tabRadio',
                                         layout      : 'anchor',
@@ -397,7 +399,7 @@ Ext.define('Rd.view.aps.winAccessPointAttachAp', {
                                         ]
                                     },
                                     {
-                                        title       : 'Radio1',
+                                        title       : i18n("sRadio_one"),
                                         xtype       : 'panel',
                                         baseCls     : 'tabRadio',
                                         layout      : 'anchor',
