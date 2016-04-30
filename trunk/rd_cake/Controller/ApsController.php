@@ -66,7 +66,7 @@ class ApsController extends AppController {
 				$ip 					        = $this->request->clientIp();
 				$data 					        = array();
 				$data['mac'] 			        = $mac;
-				$data['last_contact_from_ip']   = $ip;
+				$data['from_ip']                = $ip;
 				$data['last_contact']	        = date("Y-m-d H:i:s", time());
 
 				$q_r 	= $this->UnknownAp->find('first',array('conditions' => array('UnknownAp.mac' => $mac)));
@@ -161,12 +161,41 @@ class ApsController extends AppController {
         //Create a hardware lookup for proper names of hardware
 	    $hardware = $this->_make_hardware_lookup();  
         
+        App::uses('GeoIpLocation', 'GeoIp.Model');
+        $GeoIpLocation = new GeoIpLocation();
 
         foreach($q_r as $i){
 			//print_r($i);
             $owner_id       = $i['ApProfile']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
-            $action_flags   = $this->_get_action_flags($owner_id,$user);   
+            $action_flags   = $this->_get_action_flags($owner_id,$user); 
+            
+            
+            //----
+            $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
+                   
+            //Some defaults:
+            $country_code = '';
+            $country_name = '';
+            $city         = '';
+            $postal_code  = '';
+            
+            if(array_key_exists('GeoIpLocation',$location)){
+                if($location['GeoIpLocation']['country_code'] != ''){
+                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
+                }
+                if($location['GeoIpLocation']['country_name'] != ''){
+                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
+                }
+                if($location['GeoIpLocation']['city'] != ''){
+                    $city = utf8_encode($location['GeoIpLocation']['city']);
+                }
+                if($location['GeoIpLocation']['postal_code'] != ''){
+                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
+                }
+            }
+             
+            //----  
             
             			
 			$hw_id 		    = $i['Ap']['hardware'];
@@ -295,6 +324,11 @@ class ApsController extends AppController {
 
 			$i['Ap']['hw_human']            = $hw_human;
 			$i['Ap']['ssids']               = $array_ssids;
+			
+			$i['Ap']['country_code']        = $country_code;
+            $i['Ap']['country_name']        = $country_name;
+            $i['Ap']['city']                = $city;
+            $i['Ap']['postal_code']         = $postal_code;
 			
             array_push($items,$i['Ap']);
         }
