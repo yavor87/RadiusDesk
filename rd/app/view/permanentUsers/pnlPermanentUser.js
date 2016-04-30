@@ -1,11 +1,11 @@
 Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
-    extend: 'Ext.tab.Panel',
-    alias: 'widget.pnlPermanentUser',
-    border: false,
-    pu_id: null,
-    pu_name: null,
-    record: null, //We will supply each instance with a reference to the selected record.
-    plain: true,
+    extend  : 'Ext.tab.Panel',
+    alias   : 'widget.pnlPermanentUser',
+    border  : false,
+    pu_id   : null,
+    pu_name : null,
+    record  : null, //We will supply each instance with a reference to the selected record.
+    plain   : true,
     cls     : 'subTab',
     initComponent: function(){
         var me      = this;

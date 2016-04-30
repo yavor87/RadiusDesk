@@ -23,18 +23,33 @@ Ext.define('Rd.view.aps.gridAccessPointExits' ,{
         
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridAccessPointExitsId1'},
-            { text: i18n("sType"),                 dataIndex: 'type',          tdCls: 'gridMain', flex: 1,stateId: 'StateGridAccessPointExitsId2'},
+            { 
+                text    : i18n('sType'),                 
+                dataIndex: 'type',          
+                tdCls   : 'gridTree', 
+                flex    : 1,
+                xtype   : 'templatecolumn', 
+                tpl     : new Ext.XTemplate(
+                     '<tpl if="type==\'bridge\'"><div class="fieldGreyWhite"><i class="fa fa-bars"></i> '+' '+'Bridge'+'</div></tpl>',
+                     '<tpl if="type==\'captive_portal\'"><div class="fieldPurpleWhite"><i class="fa fa-key"></i> '+' '+'Captive Portal'+'</div></tpl>',
+                     '<tpl if="type==\'nat\'"><div class="fieldGreenWhite"><i class="fa fa-arrows-alt"></i> '+' '+'NAT+DHCP'+'</div></tpl>',
+                     '<tpl if="type==\'tagged_bridge\'"><div class="fieldBlueWhite"><i class="fa fa-tag"></i> '+' '+'Tagged Ethernet Bridge'+'</div></tpl>'
+                ),
+            
+                stateId: 'StateGridAccessPointExitsId2'
+            },
             { 
                 text    :   i18n("sConnects_with"),
                 sortable: false,
-                flex    : 1,  
+                flex    : 1, 
+                tdCls   : 'gridTree', 
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(connects_with)"><div class=\"gridRealm fieldRed\">'+i18n("sNo_one")+'</div></tpl>', //Warn them when available     to all
-                            '<tpl for="connects_with">',     // interrogate the realms property within the data
-                                "<tpl><div class=\"gridRealm fieldGreen\">{name}</div></tpl>",
-                            '</tpl>'
-                        ),
+                    '<tpl if="Ext.isEmpty(connects_with)"><div class=\"fieldRedWhite\"><i class="fa fa-exclamation-circle"></i> '+i18n('sNo_one')+'</div></tpl>', //Warn them when available     to all
+                    '<tpl for="connects_with">',     // interrogate the realms property within the data
+                        "<tpl><div class=\"fieldGreyWhite\">{name}</div></tpl>",
+                    '</tpl>'
+                ),
                 dataIndex: 'connects_with',stateId: 'StateGridAccessPointExitsId3'
             }
         ];

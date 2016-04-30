@@ -1,13 +1,11 @@
 Ext.define('Rd.view.aps.pnlAccessPointEdit', {
-   extend      : 'Ext.tab.Panel',
-    alias       : 'widget.pnlAccessPointEdit',
-    border      : false,
-    plain       : true,
-    position    : 'bottom',
-    cls         : 'topTabOne',
-    tabPosition     : 'bottom',
+    extend          : 'Ext.tab.Panel',
+    alias           : 'widget.pnlAccessPointEdit',
+    border          : false,
+    plain           : true,
+    cls             : 'subTab',
+    tabPosition     : 'top',
     ap_profile_id   : undefined,
-    apProfileName   : undefined,
     initComponent: function() {
         var me      = this;     
         me.items    = [

@@ -34,7 +34,7 @@ Ext.define('Rd.view.aps.pnlAccessPointCommonSettings', {
                     layout  : 'fit',
                     xtype   : 'tabpanel',
                     margins : '0 0 0 0',
-                    plain   : true,
+                    plain   : false,
                     tabPosition: 'bottom',
                     border  : false,
                     items   :  [

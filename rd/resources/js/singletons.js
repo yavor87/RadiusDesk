@@ -635,7 +635,24 @@ Local = {
         'sCommand_queued_for_execution' : 'Command queued for execution',
         'sFirst_select_an_Access_Provider_who_will_be_the_owner' : 'First select an Access Provider who will be the owner',
         'sSelect' : 'Select',
-        'sAccess_Point_Profiles' : 'Access Point Profiles'
+        'sAccess_Point_Profiles' : 'Access Point Profiles',
+        'sRadio_one' : 'Radio One',
+        'sRadio_zero': 'Radio Zero',
+        'sTwo_point_four_gig': '2.4G',
+        'sFive_gig': '5G',
+        'sGateway' : 'Gateway',
+        'sWait_time_for_DHCP_IP' : 'Wait time for DHCP IP',
+        'sUse_previous_settings_when_DHCP_fails' : 'Use previous settings when DHCP fails',
+        'sBasic' : 'Basic',
+        'sProxy' : 'Proxy',
+        'sCoova_specific' : 'Coova specific',
+        'sUpstream_proxy' : 'Upstream proxy',
+        'sUpstream_port' : 'Upstream port',
+        'sAuth_name' : 'Auth name',
+        'sAuth_password' : 'Auth password',
+        'sOptional_config_items' : 'Optional config items',  
+        'sLast_contact' : 'Last contact',
+        'sFrom_IP' : 'From IP'
     }
 }
 

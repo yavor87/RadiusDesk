@@ -37,7 +37,6 @@ Ext.define('Rd.view.meshes.winMeshAddEntry', {
                 labelClsExtra: 'lblRd',
                 labelAlign  : 'left',
                 labelSeparator: '',
-                labelClsExtra: 'lblRd',
                 labelWidth  : Rd.config.labelWidth,
                 maxWidth    : Rd.config.maxWidth, 
                 margin      : Rd.config.fieldMargin

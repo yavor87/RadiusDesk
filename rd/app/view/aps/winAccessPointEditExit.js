@@ -6,7 +6,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
     resizable:  true,
     title:      'Access Point Exit',
     width:      530,
-    height:     400,
+    height:     450,
     plain:      true,
     border:     false,
     layout:     'fit',
@@ -73,7 +73,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                     layout  : 'fit',
                     xtype   : 'tabpanel',
                     margins : '0 0 0 0',
-                    plain   : true,
+                    plain   : false,
                     tabPosition: 'bottom',
                     border  : false,
                     items   : [
@@ -157,6 +157,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                                     xtype   : 'tabpanel',
                                     margins : '0 0 0 0',
                                     plain   : true,
+                                    cls     : 'subTab',
                                     tabPosition: 'top',
                                     border  : false,
                                     items   :  [
@@ -279,7 +280,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : i18n("sAuth_name"),
                                                     name        : 'proxy_auth_username',
-                                                    allowBlank  : false,
+                                                    allowBlank  : true,
                                                     labelClsExtra: 'lblRd',
                                                     disabled    : true
                                                 },
@@ -287,7 +288,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : i18n("sAuth_password"),
                                                     name        : 'proxy_auth_password',
-                                                    allowBlank  : false,
+                                                    allowBlank  : true,
                                                     labelClsExtra: 'lblRd',
                                                     disabled    : true
                                                 }
