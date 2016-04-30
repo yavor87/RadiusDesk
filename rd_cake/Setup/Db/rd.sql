@@ -74,6 +74,454 @@ LOCK TABLES `actions` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ap_actions`
+--
+
+DROP TABLE IF EXISTS `ap_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_actions` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `ap_id` int(10) NOT NULL,
+  `action` enum('execute') DEFAULT 'execute',
+  `command` varchar(500) DEFAULT '',
+  `status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_actions`
+--
+
+LOCK TABLES `ap_actions` WRITE;
+/*!40000 ALTER TABLE `ap_actions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_actions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_loads`
+--
+
+DROP TABLE IF EXISTS `ap_loads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_loads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_id` int(11) DEFAULT NULL,
+  `mem_total` int(11) DEFAULT NULL,
+  `mem_free` int(11) DEFAULT NULL,
+  `uptime` varchar(255) DEFAULT NULL,
+  `system_time` varchar(255) NOT NULL,
+  `load_1` float(2,2) NOT NULL,
+  `load_2` float(2,2) NOT NULL,
+  `load_3` float(2,2) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_loads`
+--
+
+LOCK TABLES `ap_loads` WRITE;
+/*!40000 ALTER TABLE `ap_loads` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_loads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_entries`
+--
+
+DROP TABLE IF EXISTS `ap_profile_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) DEFAULT NULL,
+  `name` varchar(128) NOT NULL,
+  `hidden` tinyint(1) NOT NULL DEFAULT '0',
+  `isolate` tinyint(1) NOT NULL DEFAULT '0',
+  `encryption` enum('none','wep','psk','psk2','wpa','wpa2') DEFAULT 'none',
+  `key` varchar(255) NOT NULL DEFAULT '',
+  `auth_server` varchar(255) NOT NULL DEFAULT '',
+  `auth_secret` varchar(255) NOT NULL DEFAULT '',
+  `dynamic_vlan` tinyint(1) NOT NULL DEFAULT '0',
+  `frequency_band` enum('both','two','five') DEFAULT 'both',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_entries`
+--
+
+LOCK TABLES `ap_profile_entries` WRITE;
+/*!40000 ALTER TABLE `ap_profile_entries` DISABLE KEYS */;
+INSERT INTO `ap_profile_entries` VALUES (17,14,'Hotel California',0,0,'none','','','',0,'both','2016-04-30 11:01:14','2016-04-30 11:35:11');
+/*!40000 ALTER TABLE `ap_profile_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_exit_ap_profile_entries`
+--
+
+DROP TABLE IF EXISTS `ap_profile_exit_ap_profile_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_exit_ap_profile_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_exit_id` int(11) NOT NULL,
+  `ap_profile_entry_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_exit_ap_profile_entries`
+--
+
+LOCK TABLES `ap_profile_exit_ap_profile_entries` WRITE;
+/*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` DISABLE KEYS */;
+INSERT INTO `ap_profile_exit_ap_profile_entries` VALUES (40,19,17,'2016-04-30 12:10:36','2016-04-30 12:10:36');
+/*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_exit_captive_portals`
+--
+
+DROP TABLE IF EXISTS `ap_profile_exit_captive_portals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_exit_captive_portals` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_exit_id` int(11) NOT NULL,
+  `radius_1` varchar(128) NOT NULL,
+  `radius_2` varchar(128) NOT NULL DEFAULT '',
+  `radius_secret` varchar(128) NOT NULL,
+  `radius_nasid` varchar(128) NOT NULL,
+  `uam_url` varchar(255) NOT NULL,
+  `uam_secret` varchar(255) NOT NULL,
+  `walled_garden` varchar(255) NOT NULL,
+  `swap_octets` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `mac_auth` tinyint(1) NOT NULL DEFAULT '0',
+  `proxy_enable` tinyint(1) NOT NULL DEFAULT '0',
+  `proxy_ip` varchar(128) NOT NULL DEFAULT '',
+  `proxy_port` int(11) NOT NULL DEFAULT '3128',
+  `proxy_auth_username` varchar(128) NOT NULL DEFAULT '',
+  `proxy_auth_password` varchar(128) NOT NULL DEFAULT '',
+  `coova_optional` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_exit_captive_portals`
+--
+
+LOCK TABLES `ap_profile_exit_captive_portals` WRITE;
+/*!40000 ALTER TABLE `ap_profile_exit_captive_portals` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_profile_exit_captive_portals` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_exits`
+--
+
+DROP TABLE IF EXISTS `ap_profile_exits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_exits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) DEFAULT NULL,
+  `type` enum('bridge','tagged_bridge','nat','captive_portal') DEFAULT 'bridge',
+  `vlan` int(4) DEFAULT NULL,
+  `auto_nas` tinyint(1) NOT NULL DEFAULT '0',
+  `auto_login_page` tinyint(1) NOT NULL DEFAULT '0',
+  `dynamic_detail_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_exits`
+--
+
+LOCK TABLES `ap_profile_exits` WRITE;
+/*!40000 ALTER TABLE `ap_profile_exits` DISABLE KEYS */;
+INSERT INTO `ap_profile_exits` VALUES (19,14,'bridge',NULL,0,0,NULL,'2016-04-30 11:01:48','2016-04-30 12:10:36');
+/*!40000 ALTER TABLE `ap_profile_exits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_notes`
+--
+
+DROP TABLE IF EXISTS `ap_profile_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_notes`
+--
+
+LOCK TABLES `ap_profile_notes` WRITE;
+/*!40000 ALTER TABLE `ap_profile_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_profile_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_settings`
+--
+
+DROP TABLE IF EXISTS `ap_profile_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) DEFAULT NULL,
+  `password` varchar(128) NOT NULL,
+  `heartbeat_interval` int(5) NOT NULL DEFAULT '60',
+  `heartbeat_dead_after` int(5) NOT NULL DEFAULT '600',
+  `password_hash` varchar(100) NOT NULL DEFAULT '',
+  `tz_name` varchar(128) NOT NULL DEFAULT 'America/New York',
+  `tz_value` varchar(128) NOT NULL DEFAULT 'EST5EDT,M3.2.0,M11.1.0',
+  `country` varchar(5) NOT NULL DEFAULT 'US',
+  `gw_dhcp_timeout` int(5) NOT NULL DEFAULT '120',
+  `gw_use_previous` tinyint(1) NOT NULL DEFAULT '1',
+  `gw_auto_reboot` tinyint(1) NOT NULL DEFAULT '1',
+  `gw_auto_reboot_time` int(5) NOT NULL DEFAULT '600',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_settings`
+--
+
+LOCK TABLES `ap_profile_settings` WRITE;
+/*!40000 ALTER TABLE `ap_profile_settings` DISABLE KEYS */;
+INSERT INTO `ap_profile_settings` VALUES (5,14,'admin',60,300,'','Africa/Johannesburg','SAST-2','ZA',120,1,0,600,'2016-04-30 11:02:17','2016-04-30 11:02:17');
+/*!40000 ALTER TABLE `ap_profile_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profile_specifics`
+--
+
+DROP TABLE IF EXISTS `ap_profile_specifics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profile_specifics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profile_specifics`
+--
+
+LOCK TABLES `ap_profile_specifics` WRITE;
+/*!40000 ALTER TABLE `ap_profile_specifics` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_profile_specifics` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_profiles`
+--
+
+DROP TABLE IF EXISTS `ap_profiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_profiles`
+--
+
+LOCK TABLES `ap_profiles` WRITE;
+/*!40000 ALTER TABLE `ap_profiles` DISABLE KEYS */;
+INSERT INTO `ap_profiles` VALUES (14,'Hotel California',44,'2016-04-30 11:00:51','2016-04-30 11:00:51',1);
+/*!40000 ALTER TABLE `ap_profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_stations`
+--
+
+DROP TABLE IF EXISTS `ap_stations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_stations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_id` int(11) DEFAULT NULL,
+  `ap_profile_entry_id` int(11) DEFAULT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `mac` varchar(17) NOT NULL,
+  `tx_bytes` bigint(20) NOT NULL,
+  `rx_bytes` bigint(20) NOT NULL,
+  `tx_packets` int(11) NOT NULL,
+  `rx_packets` int(11) NOT NULL,
+  `tx_bitrate` int(11) NOT NULL,
+  `rx_bitrate` int(11) NOT NULL,
+  `tx_extra_info` varchar(255) NOT NULL,
+  `rx_extra_info` varchar(255) NOT NULL,
+  `authenticated` enum('yes','no') DEFAULT 'no',
+  `authorized` enum('yes','no') DEFAULT 'no',
+  `tdls_peer` varchar(255) NOT NULL,
+  `preamble` enum('long','short') DEFAULT 'long',
+  `tx_failed` int(11) NOT NULL,
+  `inactive_time` int(11) NOT NULL,
+  `WMM_WME` enum('yes','no') DEFAULT 'no',
+  `tx_retries` int(11) NOT NULL,
+  `MFP` enum('yes','no') DEFAULT 'no',
+  `signal` int(11) NOT NULL,
+  `signal_avg` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_stations`
+--
+
+LOCK TABLES `ap_stations` WRITE;
+/*!40000 ALTER TABLE `ap_stations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_stations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_systems`
+--
+
+DROP TABLE IF EXISTS `ap_systems`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_systems` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `group` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_systems`
+--
+
+LOCK TABLES `ap_systems` WRITE;
+/*!40000 ALTER TABLE `ap_systems` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_systems` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ap_wifi_settings`
+--
+
+DROP TABLE IF EXISTS `ap_wifi_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ap_wifi_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_id` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=856 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ap_wifi_settings`
+--
+
+LOCK TABLES `ap_wifi_settings` WRITE;
+/*!40000 ALTER TABLE `ap_wifi_settings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ap_wifi_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aps`
+--
+
+DROP TABLE IF EXISTS `aps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aps` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ap_profile_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `mac` varchar(255) NOT NULL,
+  `hardware` varchar(255) DEFAULT NULL,
+  `last_contact_from_ip` varchar(255) DEFAULT NULL,
+  `last_contact` datetime DEFAULT NULL,
+  `on_public_maps` tinyint(1) NOT NULL DEFAULT '0',
+  `lat` double DEFAULT NULL,
+  `lon` double DEFAULT NULL,
+  `photo_file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aps`
+--
+
+LOCK TABLES `aps` WRITE;
+/*!40000 ALTER TABLE `aps` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aps` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `aros`
 --
 
@@ -1489,7 +1937,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1498,7 +1946,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(101,30,50,'2016-04-28 05:48:11','2016-04-28 05:48:11');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(102,30,50,'2016-04-30 11:56:06','2016-04-30 11:56:06');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1528,7 +1976,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-28 05:48:11'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-30 11:56:06'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1582,7 +2030,7 @@ CREATE TABLE `mesh_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1591,7 +2039,7 @@ CREATE TABLE `mesh_settings` (
 
 LOCK TABLES `mesh_settings` WRITE;
 /*!40000 ALTER TABLE `mesh_settings` DISABLE KEYS */;
-
+INSERT INTO `mesh_settings` VALUES (6,35,1,0,0,0,1,1,1000,20,'mesh_point',0,'','2016-04-28 14:50:20','2016-04-28 14:50:20');
 /*!40000 ALTER TABLE `mesh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2182,7 +2630,7 @@ CREATE TABLE `node_wifi_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2191,6 +2639,7 @@ CREATE TABLE `node_wifi_settings` (
 
 LOCK TABLES `node_wifi_settings` WRITE;
 /*!40000 ALTER TABLE `node_wifi_settings` DISABLE KEYS */;
+INSERT INTO `node_wifi_settings` VALUES (1,1,'radio0_htmode','HT20','2016-04-28 14:18:50','2016-04-28 14:18:50'),(2,1,'radio0_disable_b','radio0_disable_b','2016-04-28 14:18:50','2016-04-28 14:18:50'),(3,1,'radio0_diversity','radio0_diversity','2016-04-28 14:18:50','2016-04-28 14:18:50'),(4,1,'radio0_ldpc','radio0_ldpc','2016-04-28 14:18:50','2016-04-28 14:18:50'),(5,1,'radio0_txpower','18','2016-04-28 14:18:50','2016-04-28 14:18:50'),(6,1,'radio0_beacon_int','100','2016-04-28 14:18:50','2016-04-28 14:18:50'),(7,1,'radio0_distance','300','2016-04-28 14:18:50','2016-04-28 14:18:50'),(8,1,'radio0_ht_capab','SHORT-GI-40','2016-04-28 14:18:50','2016-04-28 14:18:50'),(9,1,'radio0_ht_capab','RX-STBC1','2016-04-28 14:18:50','2016-04-28 14:18:50'),(10,1,'radio0_ht_capab','TX-STBC','2016-04-28 14:18:50','2016-04-28 14:18:50'),(11,1,'radio0_ht_capab','DSSS_CCK-40','2016-04-28 14:18:50','2016-04-28 14:18:50');
 /*!40000 ALTER TABLE `node_wifi_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2230,7 +2679,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2239,6 +2688,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (1,35,'node1','','aa-bb-cc-dd-dd-dd','dragino',100,'10.5.5.1','2016-04-28 15:05:01',0,NULL,NULL,'logo.jpg','2016-04-28 14:18:49','2016-04-28 15:05:01',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3284,6 +3734,36 @@ LOCK TABLES `top_ups` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `unknown_aps`
+--
+
+DROP TABLE IF EXISTS `unknown_aps`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `unknown_aps` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mac` varchar(255) NOT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `last_contact_from_ip` varchar(255) DEFAULT NULL,
+  `last_contact` datetime DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `new_server` varchar(255) NOT NULL DEFAULT '',
+  `new_server_status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unknown_aps`
+--
+
+LOCK TABLES `unknown_aps` WRITE;
+/*!40000 ALTER TABLE `unknown_aps` DISABLE KEYS */;
+/*!40000 ALTER TABLE `unknown_aps` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `unknown_dynamic_clients`
 --
 
@@ -3341,7 +3821,7 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (1,'4c-5e-0c-7c-1f-70','Routerbo # Routerboard.com','127.0.0.1',0,'2016-04-26 15:18:35','2016-04-26 15:18:35','2016-04-26 15:18:35','','awaiting');
+INSERT INTO `unknown_nodes` VALUES (1,'4c-5e-0c-7c-1f-70','Routerbo # Routerboard.com','127.0.0.1',0,'2016-04-28 14:19:03','2016-04-26 15:18:35','2016-04-28 14:19:03','','awaiting');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3559,4 +4039,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-28  9:57:54
+-- Dump completed on 2016-04-30 13:05:10
