@@ -336,6 +336,7 @@ $config['icnCPU']		= 'xf085@'.$config['webFont'];
 $config['icnCamera']    = 'xf030@'.$config['webFont'];
 $config['icnRedirect']  = 'xf074@'.$config['webFont'];
 $config['icnDynamicNas']= 'xf239@'.$config['webFont'];
+$config['icnCloud']     = 'xf0c2@'.$config['webFont'];
 
 
 //=== EXPERIMENTAL STUFF =====
