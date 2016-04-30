@@ -13,8 +13,41 @@ class UnknownApsController extends AppController {
 	public function index(){
 		$items 	= array();
 		$q_r  	= $this->UnknownAp->find('all');
+		
+		App::uses('GeoIpLocation', 'GeoIp.Model');
+        $GeoIpLocation = new GeoIpLocation();
+		
 
 		foreach($q_r as $i){
+		
+		    $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
+                   
+            //Some defaults:
+            $country_code = '';
+            $country_name = '';
+            $city         = '';
+            $postal_code  = '';
+            
+            if(array_key_exists('GeoIpLocation',$location)){
+                if($location['GeoIpLocation']['country_code'] != ''){
+                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
+                }
+                if($location['GeoIpLocation']['country_name'] != ''){
+                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
+                }
+                if($location['GeoIpLocation']['city'] != ''){
+                    $city = utf8_encode($location['GeoIpLocation']['city']);
+                }
+                if($location['GeoIpLocation']['postal_code'] != ''){
+                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
+                }
+            }
+		    
+		    $i['UnknownAp']['country_code']          = $country_code;
+            $i['UnknownAp']['country_name']          = $country_name;
+            $i['UnknownAp']['city']                  = $city;
+            $i['UnknownAp']['postal_code']           = $postal_code;
+
 		    $i['UnknownAp']['last_contact_human']     = $this->TimeCalculations->time_elapsed_string($i['UnknownAp']['last_contact']);
 			array_push($items,$i['UnknownAp']);
 		}

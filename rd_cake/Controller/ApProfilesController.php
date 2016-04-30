@@ -376,11 +376,16 @@ class ApProfilesController extends AppController {
         $items          = array();
         $total          = 0;
         $entry          = ClassRegistry::init('ApProfileEntry');
-        $entry->contain();
+        $entry->contain('ApProfileExitApProfileEntry');
         $ap_profile_id  = $this->request->query['ap_profile_id'];
         $q_r            = $entry->find('all',array('conditions' => array('ApProfileEntry.ap_profile_id' => $ap_profile_id)));
 
         foreach($q_r as $m){
+            $connected_to_exit = true;   
+            if(count($m['ApProfileExitApProfileEntry']) == 0){
+                $connected_to_exit = false;
+            }
+   
             array_push($items,array( 
                 'id'            => $m['ApProfileEntry']['id'],
                 'ap_profile_id' => $m['ApProfileEntry']['ap_profile_id'],
@@ -393,6 +398,7 @@ class ApProfilesController extends AppController {
                 'auth_secret'   => $m['ApProfileEntry']['auth_secret'],
                 'dynamic_vlan'  => $m['ApProfileEntry']['dynamic_vlan'],
                 'frequency_band'  => $m['ApProfileEntry']['frequency_band'],
+                'connected_to_exit' => $connected_to_exit
             ));
         }
         //___ FINAL PART ___
