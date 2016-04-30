@@ -8,7 +8,6 @@ Ext.define('Rd.view.components.cmbTimezones', {
     displayField    : 'name',
     editable        : false,
     mode            : 'local',
-    itemId          : 'timezone',
     name            : 'timezone',
     multiSelect     : false,
     labelClsExtra   : 'lblRd',

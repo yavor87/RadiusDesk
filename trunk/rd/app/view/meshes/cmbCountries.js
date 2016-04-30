@@ -8,7 +8,7 @@ Ext.define('Rd.view.meshes.cmbCountries', {
     displayField    : 'name',
     editable        : false,
     mode            : 'local',
-    itemId          : 'country',
+    //itemId          : 'country',
     name            : 'country',
     multiSelect     : false,
     labelClsExtra   : 'lblRdReq',

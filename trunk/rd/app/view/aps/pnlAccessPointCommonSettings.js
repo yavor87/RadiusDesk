@@ -9,8 +9,8 @@ Ext.define('Rd.view.aps.pnlAccessPointCommonSettings', {
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Rd.view.meshes.cmbTimezones',      
-        'Rd.view.meshes.cmbCountries'
+        'Rd.view.meshes.cmbCountries',      
+        'Rd.view.components.cmbTimezones'
     ],
     initComponent: function(){
         var me = this;
@@ -63,7 +63,7 @@ Ext.define('Rd.view.aps.pnlAccessPointCommonSettings', {
                                     xtype       : 'cmbTimezones',
                                     anchor      : '100%',
                                     labelClsExtra: 'lblRdReq'
-                                }             
+                                }            
                             ]
 
                         },
