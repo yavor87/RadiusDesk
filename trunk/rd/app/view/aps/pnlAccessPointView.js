@@ -1,10 +1,10 @@
 Ext.define('Rd.view.aps.pnlAccessPointView', {
-   extend      : 'Ext.tab.Panel',
+    extend      : 'Ext.tab.Panel',
     alias       : 'widget.pnlAccessPointView',
     border      : false,
     plain       : true,
-    position    : 'bottom',
-    tabPosition : 'bottom',
+    cls         : 'subTab',
+    tabPosition : 'top',
     ap_id       : undefined,
     apName      : undefined,
     initComponent: function() {

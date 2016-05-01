@@ -155,6 +155,7 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                     fieldLabel  : i18n("sKey"),
                                     name        : 'key',
                                     itemId      : 'key',
+                                    minLength   : 8,
                                     allowBlank  : false,  
                                     blankText   : i18n("sSupply_a_value"),
                                     labelClsExtra: 'lblRdReq',
