@@ -652,7 +652,10 @@ Local = {
         'sAuth_password' : 'Auth password',
         'sOptional_config_items' : 'Optional config items',  
         'sLast_contact' : 'Last contact',
-        'sFrom_IP' : 'From IP'
+        'sFrom_IP' : 'From IP',
+        'sSSID_to_Device' : 'SSID to Device',
+        'sUsers_Connected' : 'Users Connected',
+        'sData_Usage' : 'Data Usage'
     }
 }
 

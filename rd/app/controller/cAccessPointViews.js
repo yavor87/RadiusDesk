@@ -66,12 +66,7 @@ Ext.define('Rd.controller.cAccessPointViews', {
                 closable: true,
                 layout  : 'fit',
                 xtype   : 'pnlAccessPointView',
-                cls     : 'bottomTab',
                 itemId  : id,
-                margin  : 0,
-                padding : 0,
-                border  : false,
-                plain   : true,
                 ap_id   : ap_id
             });
         }    
