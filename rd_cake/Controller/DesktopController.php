@@ -513,10 +513,18 @@ class DesktopController extends AppController {
 
         //Seperator
         array_push($menu,array(  'xtype' => 'menuseparator'));
+        
+        //Cloud Controller for APs
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
+		    array_push($menu,
+			    array(  'text'  => __('Cloud Controller for APs'),         'glyph' => Configure::read('icnCloud'),      'itemId' => 'cAccessPoints')
+			);
+		}
+
 
         //Meshdesk
 		if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
-			  array_push($menu,
+			array_push($menu,
 				array(  'text'  => __('MESHdesk'),  'glyph' => Configure::read('icnMesh'), 'itemId' => 'cMeshes')
 			);
 		}
