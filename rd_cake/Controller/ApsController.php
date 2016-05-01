@@ -66,7 +66,7 @@ class ApsController extends AppController {
 				$ip 					        = $this->request->clientIp();
 				$data 					        = array();
 				$data['mac'] 			        = $mac;
-				$data['from_ip']                = $ip;
+				$data['last_contact_from_ip']   = $ip;
 				$data['last_contact']	        = date("Y-m-d H:i:s", time());
 
 				$q_r 	= $this->UnknownAp->find('first',array('conditions' => array('UnknownAp.mac' => $mac)));
@@ -172,7 +172,7 @@ class ApsController extends AppController {
             
             
             //----
-            $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
+            $location = $GeoIpLocation->find($i['Ap']['last_contact_from_ip']);
                    
             //Some defaults:
             $country_code = '';
@@ -329,7 +329,7 @@ class ApsController extends AppController {
             $i['Ap']['country_name']        = $country_name;
             $i['Ap']['city']                = $city;
             $i['Ap']['postal_code']         = $postal_code;
-			
+            	
             array_push($items,$i['Ap']);
         }
        

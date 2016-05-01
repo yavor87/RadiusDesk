@@ -20,7 +20,7 @@ class UnknownApsController extends AppController {
 
 		foreach($q_r as $i){
 		
-		    $location = $GeoIpLocation->find($i['UnknownDynamicClient']['last_contact_ip']);
+		    $location = $GeoIpLocation->find($i['UnknownAp']['last_contact_from_ip']);
                    
             //Some defaults:
             $country_code = '';
