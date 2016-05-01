@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ApProfilesController extends AppController {
 
     public $name        = 'ApProfiles';
-    public $components  = array('Aa','GridFilter');
+    public $components  = array('Aa','GridFilter','TimeCalculations');
     public $uses        = array('ApProfile','User','Na','DynamicPair');
     protected $base     = "Access Providers/Controllers/ApProfiles/";
     protected $itemNote = 'ApProfileNote';
@@ -1151,8 +1151,43 @@ class ApProfilesController extends AppController {
 		//Check if we need to show the override on the power
 		$ap_setting	= ClassRegistry::init('ApProfileSetting');
 		$ap_setting->contain();
+		
+		App::uses('GeoIpLocation', 'GeoIp.Model');
+        $GeoIpLocation = new GeoIpLocation();
 
         foreach($q_r as $m){
+        
+            $m['Ap']['last_contact_human']  = $this->TimeCalculations->time_elapsed_string($m['Ap']["last_contact"]);
+            
+            //----
+            $location = $GeoIpLocation->find($m['Ap']['last_contact_from_ip']);
+                   
+            //Some defaults:
+            $country_code = '';
+            $country_name = '';
+            $city         = '';
+            $postal_code  = '';
+            
+            if(array_key_exists('GeoIpLocation',$location)){
+                if($location['GeoIpLocation']['country_code'] != ''){
+                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
+                }
+                if($location['GeoIpLocation']['country_name'] != ''){
+                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
+                }
+                if($location['GeoIpLocation']['city'] != ''){
+                    $city = utf8_encode($location['GeoIpLocation']['city']);
+                }
+                if($location['GeoIpLocation']['postal_code'] != ''){
+                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
+                }
+            }
+            
+            
+             
+            //----  
+            
+            
 
             array_push($items,array( 
                 'id'                    => $m['Ap']['id'],
@@ -1162,12 +1197,16 @@ class ApProfilesController extends AppController {
                 'mac'                   => $m['Ap']['mac'],      
                 'hardware'	            => $m['Ap']['hardware'],
                 'last_contact_from_ip'	=> $m['Ap']['last_contact_from_ip'],
-                'last_contact_geo_location'	=> $m['Ap']['last_contact_geo_location'],
                 'on_public_maps'	    => $m['Ap']['on_public_maps'],
 				'last_contact'	        => $m['Ap']['last_contact'],
+				"last_contact_human"    => $m['Ap']['last_contact_human'],
 				'lat'			        => $m['Ap']['lat'],
 				'lng'			        => $m['Ap']['lon'],
-				'photo_file_name'	    => $m['Ap']['photo_file_name']
+				'photo_file_name'	    => $m['Ap']['photo_file_name'],
+				'country_code'          => $country_code,
+                'country_name'          => $country_name,
+                'city'                  => $city,
+                'postal_code'           => $postal_code,
             ));
         }
         //___ FINAL PART ___
