@@ -96,30 +96,30 @@ class ApReportsController extends AppController {
                 
                 if($state == 'up'){
                     $lc = $this->TimeCalculations->time_elapsed_string($q_r['Ap']["last_contact"]);
-                    array_push($mem_and_system, array('description' => 'Last contact','value' => $lc,'style' => 'wflOk'));
+                    array_push($mem_and_system, array('description' => 'Last contact','value' => $lc,'style' => 'rdOk'));
                 } 
                 
                 if($state == 'down'){
                     $lc = $this->TimeCalculations->time_elapsed_string($q_r['Ap']["last_contact"]);
-                    array_push($mem_and_system, array('description' => 'Last contact','value' => $lc,'style' => 'wflWarn'));
+                    array_push($mem_and_system, array('description' => 'Last contact','value' => $lc,'style' => 'rdWarn'));
                 } 
                 
                 if($state == 'never'){
-                    array_push($mem_and_system, array('description' => 'Last contact','value' => "Never before",'style' => 'wflInfo'));
+                    array_push($mem_and_system, array('description' => 'Last contact','value' => "Never before",'style' => 'rdInfo'));
                 } 
                 
                 //Get the load Memory etc
                 $cpu_load   = $q_r['ApLoad']['load_2'];
-                array_push($mem_and_system, array('description' => 'Load','value' => $cpu_load,'style' => 'wflInfo' ));
+                array_push($mem_and_system, array('description' => 'Load','value' => $cpu_load,'style' => 'rdInfo' ));
                 $mem_total  = $this->Formatter->formatted_bytes($q_r['ApLoad']['mem_total']);
                 
                 $mem_free   = $this->Formatter->formatted_bytes($q_r['ApLoad']['mem_free']);
-                array_push($mem_and_system, array('description' => 'Memory','value' => "Total $mem_total/Free $mem_free",'style' => 'wflInfo' ));
+                array_push($mem_and_system, array('description' => 'Memory','value' => "Total $mem_total/Free $mem_free",'style' => 'rdInfo' ));
                 $uptime     = $q_r['ApLoad']['uptime'];
-                array_push($mem_and_system, array('description' => 'Uptime','value' => $uptime,'style' => 'wflInfo' ));
+                array_push($mem_and_system, array('description' => 'Uptime','value' => $uptime,'style' => 'rdInfo' ));
                 $system_time= $q_r['ApLoad']['system_time'];
-                array_push($mem_and_system, array('description' => 'System time','value' => $system_time,'style' => 'wflInfo' )); 
-                array_push($mem_and_system, array('description' => 'IP','value' => $q_r['Ap']['last_contact_from_ip'],'style' => 'wflInfo' ));
+                array_push($mem_and_system, array('description' => 'System time','value' => $system_time,'style' => 'rdInfo' )); 
+                array_push($mem_and_system, array('description' => 'IP','value' => $q_r['Ap']['last_contact_from_ip'],'style' => 'rdInfo' ));
                 
                 $data['components'][1]['name'] = "System";
                 $data['components'][1]['items'] = $mem_and_system;               
@@ -1036,19 +1036,19 @@ class ApReportsController extends AppController {
             if (in_array($name, $find_these)) {
                 $value = $i['value'];
                 if($name ==  'cpu_model'){
-                    array_push($return_array, array('description' => 'CPU Model','value' => $value,'style' => 'wflInfo' ));
+                    array_push($return_array, array('description' => 'CPU Model','value' => $value,'style' => 'rdInfo' ));
                 }
                 if($name ==  'system_type'){
-                    array_push($return_array, array('description' => 'System','value' => $value,'style' => 'wflInfo' ));
+                    array_push($return_array, array('description' => 'System','value' => $value,'style' => 'rdInfo' ));
                 }
                 if($name ==  'machine'){
-                    array_push($return_array, array('description' => 'Hardware','value' => $value,'style' => 'wflInfo' ));
+                    array_push($return_array, array('description' => 'Hardware','value' => $value,'style' => 'rdInfo' ));
                 }
                 if($name ==  'DISTRIB_RELEASE'){
-                    array_push($return_array, array('description' => 'Firmware','value' => $value,'style' => 'wflInfo' ));
+                    array_push($return_array, array('description' => 'Firmware','value' => $value,'style' => 'rdInfo' ));
                 }
                 if($name ==  'DISTRIB_REVISION'){
-                    array_push($return_array, array('description' => 'Revision','value' => $value,'style' => 'wflInfo' ));
+                    array_push($return_array, array('description' => 'Revision','value' => $value,'style' => 'rdInfo' ));
                 }
             }
         }
@@ -1075,36 +1075,36 @@ class ApReportsController extends AppController {
                 //Band
                 if($name ==  'radio'.$nr.'_band'){
                     if($value == '24'){
-                        array_push($return_array, array('description' => 'Band','value' => '2.4G','style' => 'wflInfo' ));
+                        array_push($return_array, array('description' => 'Band','value' => '2.4G','style' => 'rdInfo' ));
                     }
                      if($value == '5'){
-                        array_push($return_array, array('description' => 'Band','value' => '5G','style' => 'wflInfo' ));
+                        array_push($return_array, array('description' => 'Band','value' => '5G','style' => 'rdInfo' ));
                     }
                 }
                 //Enabled
                 if($name ==  'radio'.$nr.'_disabled'){
                     if($value == '0'){
-                        array_push($return_array, array('description' => 'Enabled','value' => 'Yes','style' => 'wflOk'));
+                        array_push($return_array, array('description' => 'Enabled','value' => 'Yes','style' => 'rdOk'));
                     }
                      if($value == '1'){
-                        array_push($return_array, array('description' => 'Enabled','value' => 'No','style' => 'wflWarn'));
+                        array_push($return_array, array('description' => 'Enabled','value' => 'No','style' => 'rdWarn'));
                     }
                 }
                 //HT-Mode
                 if($name ==  'radio'.$nr.'_htmode'){
-                    array_push($return_array, array('description' => 'HT-Mode','value' => $value,'style' => 'wflInfo'));
+                    array_push($return_array, array('description' => 'HT-Mode','value' => $value,'style' => 'rdInfo'));
                 }                
                 //HT-Mode
                 if($name ==  'radio'.$nr.'_txpower'){
-                    array_push($return_array, array('description' => 'Power','value' => $value.'dBm','style' => 'wflInfo'));
+                    array_push($return_array, array('description' => 'Power','value' => $value.'dBm','style' => 'rdInfo'));
                 }               
                 //Channel(2.4)
                 if($name ==  'radio'.$nr.'_channel_two'){
-                    array_push($return_array, array('description' => 'Channel','value' => $value,'style' => 'wflInfo'));
+                    array_push($return_array, array('description' => 'Channel','value' => $value,'style' => 'rdInfo'));
                 }              
                 //Channel(5)
                 if($name ==  'radio'.$nr.'_channel_five'){
-                    array_push($return_array, array('description' => 'Channel','value' => $value,'style' => 'wflInfo'));
+                    array_push($return_array, array('description' => 'Channel','value' => $value,'style' => 'rdInfo'));
                 }   
             }
         }     
