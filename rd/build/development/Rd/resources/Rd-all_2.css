@@ -8447,10 +8447,10 @@ td.grdEditable div {
 .divTip {
     background: #595959;
     margin-top: 2px;
-    padding: 10px 15px;
+    padding: 5px 10px;
     color: #fff;
 }
-/* http://localhost:1841/sass/src/Application.scss:701 */
+/* http://localhost:1841/sass/src/Application.scss:702 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -8460,48 +8460,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* http://localhost:1841/sass/src/Application.scss:711 */
+/* http://localhost:1841/sass/src/Application.scss:712 */
 .node:hover {
     color: #393434;
 }
-/* http://localhost:1841/sass/src/Application.scss:715 */
+/* http://localhost:1841/sass/src/Application.scss:716 */
 .hidden {
     display: none;
 }
-/* http://localhost:1841/sass/src/Application.scss:719 */
+/* http://localhost:1841/sass/src/Application.scss:720 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* http://localhost:1841/sass/src/Application.scss:723 */
+/* http://localhost:1841/sass/src/Application.scss:724 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* http://localhost:1841/sass/src/Application.scss:727 */
+/* http://localhost:1841/sass/src/Application.scss:728 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* http://localhost:1841/sass/src/Application.scss:731 */
+/* http://localhost:1841/sass/src/Application.scss:732 */
 .lightRed {
     background-color: #ffecec;
 }
-/* http://localhost:1841/sass/src/Application.scss:735 */
+/* http://localhost:1841/sass/src/Application.scss:736 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:741 */
+/* http://localhost:1841/sass/src/Application.scss:742 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* http://localhost:1841/sass/src/Application.scss:746 */
+/* http://localhost:1841/sass/src/Application.scss:747 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* http://localhost:1841/sass/src/Application.scss:752 */
+/* http://localhost:1841/sass/src/Application.scss:753 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -8511,7 +8511,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* http://localhost:1841/sass/src/Application.scss:762 */
+/* http://localhost:1841/sass/src/Application.scss:763 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -8521,7 +8521,7 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* http://localhost:1841/sass/src/Application.scss:772 */
+/* http://localhost:1841/sass/src/Application.scss:773 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;

@@ -105,7 +105,7 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 text        : i18n("sLast_contact"),   
                 dataIndex   : 'last_contact',  
                 tdCls       : 'gridTree', 
-                width       : 150,
+                width       : 170,
                 renderer    : function(v,metaData, record){
                     var value = record.get('state');
                     if(value != 'never'){                    
@@ -127,7 +127,7 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 text        : i18n("sFrom_IP"), 
                 dataIndex   : 'last_contact_from_ip',          
                 tdCls       : 'gridTree', 
-                width       : 150,
+                width       : 170,
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
                     '<tpl if="Ext.isEmpty(last_contact_from_ip)"><div class=\"fieldGreyWhite\">Not Available</div>',
@@ -146,18 +146,15 @@ Ext.define('Rd.view.aps.gridApLists' ,{
             { 
                 text    : 'Last command',
                 sortable: false,
-                flex    : 1,  
+                width   : 170,
+                tdCls   : 'gridTree', 
                 xtype   : 'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                            "<tpl if='last_cmd_status == \"\"'><div class=\"fieldBlue\">(nothing)</div></tpl>", 
-                            "<tpl if='last_cmd_status == \"awaiting\"'>",
-                            "<div class=\"fieldBlue\"><span class=\"fa fa-clock-o fa-lg txtBlue\"><span>   {last_cmd}</div>",
-                            "</tpl>",
-                            "<tpl if='last_cmd_status == \"fetched\"'>",
-                            "<div class=\"fieldGreen\"><span class=\"fa fa-check-circle fa-lg txtGreen\"><span>   {last_cmd}</div>",
-                            "</tpl>"
-                        ),
-                stateId	: 'StateGridApLists9',
+                "<tpl if='last_cmd_status == \"\"'><div class=\"fieldBlue\">(nothing)</div></tpl>", 
+                "<tpl if='last_cmd_status == \"awaiting\"'><div class=\"fieldBlue\"><i class=\"fa fa-clock-o\"></i> {last_cmd}</div></tpl>",
+                "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> {last_cmd}</div></tpl>"
+                ),
+                stateId	: 'StateGridApLists10',
 				hidden	: false
             }
         ];
