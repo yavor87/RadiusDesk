@@ -71,7 +71,7 @@ Ext.define('Rd.view.aps.winAccessPointEditAp', {
                     items   : [
                         { 
                             title     : 'Basic',
-                            glyph     : Rd.util.Glyphs.config.icnStar,
+                            glyph     : Rd.config.icnStar,
                             layout    : 'anchor',
                             itemId    : 'tabRequired',
                             defaults    : {

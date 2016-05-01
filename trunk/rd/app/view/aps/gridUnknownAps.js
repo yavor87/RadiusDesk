@@ -74,13 +74,13 @@ Ext.define('Rd.view.aps.gridUnknownAps' ,{
             { 
 
                 text        : i18n("sFrom_IP"),  
-                dataIndex   : 'from_ip',          
+                dataIndex   : 'last_contact_from_ip',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 hidden      : false, 
                 xtype       :  'templatecolumn', 
                 tpl         :  new Ext.XTemplate(
-                    '<div class=\"fieldGreyWhite\">{from_ip}</div>',
+                    '<div class=\"fieldGreyWhite\">{last_contact_from_ip}</div>',
                     "<tpl if='Ext.isEmpty(city)'><tpl else>",
                         '<div><b>{city}</b>  ({postal_code})</div>',
                     "</tpl>",

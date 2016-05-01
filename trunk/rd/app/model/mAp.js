@@ -9,6 +9,7 @@ Ext.define('Rd.model.mAp', {
          {name: 'hardware',         type: 'string'  },
          {name: 'last_contact',    	type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
 		 {name: 'last_contact_from_ip', type: 'string' },
+		 'last_contact_human',
 		 'country_code',
          'country_name',
          'city',
