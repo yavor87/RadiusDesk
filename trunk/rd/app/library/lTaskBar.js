@@ -30,7 +30,8 @@ Ext.define('Rd.library.lTaskBar', {
                 xtype: 'button',
                 cls: 'ux-start-button',
                 menu: me.startMenu,
-                menuAlign: 'bl-tl',
+                //menuAlign: 'bl-tl',
+                menuAlign: 'bl',
                 text: me.startBtnText,
                 itemId: 'startButton',
                 glyph:  Rd.config.icnMenu,
@@ -87,7 +88,7 @@ Ext.define('Rd.library.lTaskBar', {
         var ret = {
             width: 80,
             items: [
-                { xtype: 'trayclock', flex: 1 }
+              //  { xtype: 'trayclock', flex: 1 }
             ]
         };
         delete this.trayItems;

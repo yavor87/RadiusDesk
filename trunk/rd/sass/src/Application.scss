@@ -478,14 +478,17 @@
     text-align: center;
     padding: 8px;
     margin: 8px;
-    width: 70px;
 }
 
 .ux-desktop-shortcut-icon {
-    width: 48px;
-    height: 48px;
-    background-color: transparent;
-    background-repeat: no-repeat;
+    width: 52px;
+    height: 52px;
+    float:left;
+    background: #aaf6be;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;    
 }
 
 .ux-desktop-shortcut-text {
@@ -509,22 +512,37 @@
 /* Fin Desktop shortcuts */
 .vouchers-shortcut {
     background-image: url(images/48x48/vouchers.png);
+    background-repeat: no-repeat;
 }
 
 .byod-shortcut {
     background-image: url(images/48x48/devices.png);
+    background-repeat: no-repeat;
 }
 
 .users-shortcut {
     background-image: url(images/48x48/users.png);
+    background-repeat: no-repeat;
 }
 
 .activity-shortcut {
     background-image: url(images/48x48/activity.png);
+    background-repeat: no-repeat;
 }
 
 .password-shortcut {
     background-image: url(images/48x48/key.png);
+    background-repeat: no-repeat;
+}
+
+.apdesk-shortcut {
+    background-image: url(images/48x48/cloud.png);
+    background-repeat: no-repeat;
+}
+
+.meshdesk-shortcut {
+    background-image: url(images/48x48/mesh.png);
+    background-repeat: no-repeat;
 }
 
 
