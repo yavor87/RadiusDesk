@@ -72,7 +72,7 @@ Ext.define('Rd.controller.cDesktop', {
                // { xtype: 'trayclock', flex: 1 } we are leaving the clock out - 2 much desktop
             ],
             application: me.application,        //Feed the taskbar with the application
-            dock: 'bottom',
+            dock: 'top',
             startConfig: {
                 title: user,
                 iconCls: cls,

@@ -13,7 +13,7 @@ Ext.define('Rd.view.login.pnlLogin', {
         
         var a = Ext.create('Rd.view.login.pnlAboutMenu',{'title': i18n('sAbout_RADIUSdesk')});
 
-        me.bbar = [
+        me.tbar = [
             { 
                 xtype       : 'button',     
                 scale       : 'large', 
