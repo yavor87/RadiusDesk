@@ -17,12 +17,6 @@ Ext.define('Rd.view.desktop.pnlDesktop', {
                 '</div>',
                 '<div class="ux-desktop-shortcut-text" style="margin-left:60px; height:70px;color: #00359a; font-size:14px; text-align: left; padding-top: 20px;">{name}</div>',
             '</div>',
-           // '<div class="ux-desktop-shortcut" id="{name}-shortcut">',
-          //      '<div class="ux-desktop-shortcut-icon {iconCls}">',
-           //         '<img src="',Ext.BLANK_IMAGE_URL,'" title="{name}">',
-           //     '</div>',
-               // '<span class="ux-desktop-shortcut-text">{name}</span>',
-          //  '</div>',
         '</tpl>',
         '<div class="x-clear"></div>'
     ],
