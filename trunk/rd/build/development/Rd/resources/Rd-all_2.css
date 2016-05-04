@@ -8249,7 +8249,7 @@ tr.x-grid-subtable-row {
     text-align: center;
     padding: 8px;
     margin: 8px;
-    width: 210px;
+    width: 220px;
     height: 70px;
 }
 /* http://localhost:1841/sass/src/Application.scss:485 */
@@ -8265,11 +8265,11 @@ tr.x-grid-subtable-row {
 }
 /* http://localhost:1841/sass/src/Application.scss:496 */
 .ux-desktop-shortcut-text {
+    font: bold 14px tahoma, arial, verdana, sans-serif;
     text-decoration: none;
-    margin-left: 60px;
+    margin-left: 58px;
     height: 70px;
     color: #00359a;
-    font-size: 14px;
     text-align: left;
     padding-top: 20px;
 }
