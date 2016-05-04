@@ -11,11 +11,11 @@ Ext.define('Rd.view.desktop.pnlDesktop', {
     shortcuts: null,
     shortcutTpl: [
         '<tpl for=".">',
-            '<div class="ux-desktop-shortcut" style="width: 210px; height: 70px;" id="{name}-shortcut">',
+            '<div class="ux-desktop-shortcut" id="{name}-shortcut">',
                 '<div class="ux-desktop-shortcut-icon {iconCls}">',
                     '<img src="',Ext.BLANK_IMAGE_URL,'" title="{name}">',
                 '</div>',
-                '<div class="ux-desktop-shortcut-text" style="margin-left:60px; height:70px;color: #00359a; font-size:14px; text-align: left; padding-top: 20px;">{name}</div>',
+                '<div class="ux-desktop-shortcut-text">{name}</div>',
             '</div>',
         '</tpl>',
         '<div class="x-clear"></div>'
