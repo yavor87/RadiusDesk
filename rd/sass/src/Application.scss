@@ -478,6 +478,8 @@
     text-align: center;
     padding: 8px;
     margin: 8px;
+    width: 210px; 
+    height: 70px;
 }
 
 .ux-desktop-shortcut-icon {
@@ -492,10 +494,13 @@
 }
 
 .ux-desktop-shortcut-text {
-    font: normal 10px tahoma,arial,verdana,sans-serif;
     text-decoration: none;
-    padding-top: 5px;
-    color: white;
+    margin-left:60px; 
+    height:70px;
+    color: #00359a; 
+    font-size:14px; 
+    text-align: left; 
+    padding-top: 20px;
 }
 
 .x-view-over .ux-desktop-shortcut-text {

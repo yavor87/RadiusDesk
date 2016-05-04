@@ -24180,8 +24180,10 @@ tr.x-grid-subtable-row {
     text-align: center;
     padding: 8px;
     margin: 8px;
+    width: 210px;
+    height: 70px;
 }
-/* http://localhost:1841/sass/src/Application.scss:483 */
+/* http://localhost:1841/sass/src/Application.scss:485 */
 .ux-desktop-shortcut-icon {
     width: 52px;
     height: 52px;
@@ -24192,80 +24194,83 @@ tr.x-grid-subtable-row {
     border-radius: 50%;
     text-align: center;
 }
-/* http://localhost:1841/sass/src/Application.scss:494 */
+/* http://localhost:1841/sass/src/Application.scss:496 */
 .ux-desktop-shortcut-text {
-    font: normal 10px tahoma, arial, verdana, sans-serif;
     text-decoration: none;
-    padding-top: 5px;
-    color: white;
+    margin-left: 60px;
+    height: 70px;
+    color: #00359a;
+    font-size: 14px;
+    text-align: left;
+    padding-top: 20px;
 }
-/* http://localhost:1841/sass/src/Application.scss:501 */
+/* http://localhost:1841/sass/src/Application.scss:506 */
 .x-view-over .ux-desktop-shortcut-text {
     text-decoration: underline;
 }
-/* http://localhost:1841/sass/src/Application.scss:505 */
+/* http://localhost:1841/sass/src/Application.scss:510 */
 .ux-desktop-shortcut.x-view-over {
     background: #361919;
     background: rgba(54, 25, 25, 0.5);
     border: 1px solid #2f4078;
 }
-/* http://localhost:1841/sass/src/Application.scss:513 */
+/* http://localhost:1841/sass/src/Application.scss:518 */
 .vouchers-shortcut {
     background-image: url(images/48x48/vouchers.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:518 */
+/* http://localhost:1841/sass/src/Application.scss:523 */
 .byod-shortcut {
     background-image: url(images/48x48/devices.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:523 */
+/* http://localhost:1841/sass/src/Application.scss:528 */
 .users-shortcut {
     background-image: url(images/48x48/users.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:528 */
+/* http://localhost:1841/sass/src/Application.scss:533 */
 .activity-shortcut {
     background-image: url(images/48x48/activity.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:533 */
+/* http://localhost:1841/sass/src/Application.scss:538 */
 .password-shortcut {
     background-image: url(images/48x48/key.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:538 */
+/* http://localhost:1841/sass/src/Application.scss:543 */
 .apdesk-shortcut {
     background-image: url(images/48x48/cloud.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:543 */
+/* http://localhost:1841/sass/src/Application.scss:548 */
 .meshdesk-shortcut {
     background-image: url(images/48x48/mesh.png);
     background-repeat: no-repeat;
 }
-/* http://localhost:1841/sass/src/Application.scss:549 */
+/* http://localhost:1841/sass/src/Application.scss:554 */
 #east-region-body {
     background-color: #ececec;
 }
-/* http://localhost:1841/sass/src/Application.scss:554 */
+/* http://localhost:1841/sass/src/Application.scss:559 */
 .mapInfoDiv {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* http://localhost:1841/sass/src/Application.scss:560 */
+/* http://localhost:1841/sass/src/Application.scss:565 */
 .mapEditDiv {
     height: 190px;
     width: 350px;
     margin: 0px;
 }
-/* http://localhost:1841/sass/src/Application.scss:566 */
+/* http://localhost:1841/sass/src/Application.scss:571 */
 .divMapAction {
     margin: 5px;
     padding: 5px;
 }
-/* http://localhost:1841/sass/src/Application.scss:571 */
+/* http://localhost:1841/sass/src/Application.scss:576 */
 .lblMap {
     width: 120px;
     float: left;
@@ -24274,132 +24279,132 @@ tr.x-grid-subtable-row {
     font-size: 14px;
     margin: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:580 */
+/* http://localhost:1841/sass/src/Application.scss:585 */
 .lblValue {
     text-align: left;
     font-size: 14px;
     margin: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:586 */
+/* http://localhost:1841/sass/src/Application.scss:591 */
 .subTab {
     background: #cce5ff;
 }
-/* http://localhost:1841/sass/src/Application.scss:592 */
+/* http://localhost:1841/sass/src/Application.scss:597 */
 td.grdBold div {
     font-weight: bold;
 }
-/* http://localhost:1841/sass/src/Application.scss:596 */
+/* http://localhost:1841/sass/src/Application.scss:601 */
 td.grdGrey div {
     color: #4b4b4b;
 }
-/* http://localhost:1841/sass/src/Application.scss:600 */
+/* http://localhost:1841/sass/src/Application.scss:605 */
 td.grdItalic div {
     font-style: italic;
 }
-/* http://localhost:1841/sass/src/Application.scss:604 */
+/* http://localhost:1841/sass/src/Application.scss:609 */
 td.grdEditable div {
     border: 1px solid #a9bfd3;
 }
-/* http://localhost:1841/sass/src/Application.scss:608 */
+/* http://localhost:1841/sass/src/Application.scss:613 */
 .regMsg {
     margin: 15px;
     font-size: 16px;
     color: #6b6a72;
 }
-/* http://localhost:1841/sass/src/Application.scss:614 */
+/* http://localhost:1841/sass/src/Application.scss:619 */
 .bodyCls {
     background-color: white;
 }
-/* http://localhost:1841/sass/src/Application.scss:618 */
+/* http://localhost:1841/sass/src/Application.scss:623 */
 .new {
     background-color: #12f6f9;
     font-style: italic;
     font-size: 12px;
 }
-/* http://localhost:1841/sass/src/Application.scss:625 */
+/* http://localhost:1841/sass/src/Application.scss:630 */
 .combo-wrapper {
     border: 1px solid #ccc;
     padding: 1px;
     margin: 2px;
 }
-/* http://localhost:1841/sass/src/Application.scss:631 */
+/* http://localhost:1841/sass/src/Application.scss:636 */
 .combo-wrapper img {
     float: right;
 }
-/* http://localhost:1841/sass/src/Application.scss:636 */
+/* http://localhost:1841/sass/src/Application.scss:641 */
 .combo-country {
     font-weight: bold;
     font-size: 16px;
 }
-/* http://localhost:1841/sass/src/Application.scss:641 */
+/* http://localhost:1841/sass/src/Application.scss:646 */
 .combo-language {
     font-size: 12px;
     color: #666;
 }
-/* http://localhost:1841/sass/src/Application.scss:648 */
+/* http://localhost:1841/sass/src/Application.scss:653 */
 .combo-main {
     font-weight: bold;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:653 */
+/* http://localhost:1841/sass/src/Application.scss:658 */
 .combo-detail {
     color: #392bef;
     font-size: 12px;
 }
-/* http://localhost:1841/sass/src/Application.scss:659 */
+/* http://localhost:1841/sass/src/Application.scss:664 */
 .x-grid-row-summary .x-grid-cell-inner {
     font-weight: bold;
     font-size: 12px;
     color: #0652c3;
 }
-/* http://localhost:1841/sass/src/Application.scss:666 */
+/* http://localhost:1841/sass/src/Application.scss:671 */
 .x-progress.wifired .x-progress-bar {
     background-color: #e00404;
 }
-/* http://localhost:1841/sass/src/Application.scss:673 */
+/* http://localhost:1841/sass/src/Application.scss:678 */
 .x-progress.wifiyellow .x-progress-bar {
     background-color: #f90;
 }
-/* http://localhost:1841/sass/src/Application.scss:678 */
+/* http://localhost:1841/sass/src/Application.scss:683 */
 .x-progress.wifigreen .x-progress-bar {
     background-color: #1a9406;
 }
-/* http://localhost:1841/sass/src/Application.scss:683 */
+/* http://localhost:1841/sass/src/Application.scss:688 */
 .conn {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* http://localhost:1841/sass/src/Application.scss:689 */
+/* http://localhost:1841/sass/src/Application.scss:694 */
 .grpInfo {
     color: grey;
     font-size: 10px;
     font-style: italic;
     font-weight: lighter;
 }
-/* http://localhost:1841/sass/src/Application.scss:696 */
+/* http://localhost:1841/sass/src/Application.scss:701 */
 .grpNever {
     color: #1383bd;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:701 */
+/* http://localhost:1841/sass/src/Application.scss:706 */
 .grpUp {
     color: green;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:706 */
+/* http://localhost:1841/sass/src/Application.scss:711 */
 .grpDown {
     color: red;
     font-size: 14px;
 }
-/* http://localhost:1841/sass/src/Application.scss:712 */
+/* http://localhost:1841/sass/src/Application.scss:717 */
 .divTip {
     background: #595959;
     margin-top: 2px;
     padding: 5px 10px;
     color: #fff;
 }
-/* http://localhost:1841/sass/src/Application.scss:720 */
+/* http://localhost:1841/sass/src/Application.scss:725 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -24409,48 +24414,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* http://localhost:1841/sass/src/Application.scss:730 */
+/* http://localhost:1841/sass/src/Application.scss:735 */
 .node:hover {
     color: #393434;
 }
-/* http://localhost:1841/sass/src/Application.scss:734 */
+/* http://localhost:1841/sass/src/Application.scss:739 */
 .hidden {
     display: none;
 }
-/* http://localhost:1841/sass/src/Application.scss:738 */
+/* http://localhost:1841/sass/src/Application.scss:743 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* http://localhost:1841/sass/src/Application.scss:742 */
+/* http://localhost:1841/sass/src/Application.scss:747 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* http://localhost:1841/sass/src/Application.scss:746 */
+/* http://localhost:1841/sass/src/Application.scss:751 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* http://localhost:1841/sass/src/Application.scss:750 */
+/* http://localhost:1841/sass/src/Application.scss:755 */
 .lightRed {
     background-color: #ffecec;
 }
-/* http://localhost:1841/sass/src/Application.scss:754 */
+/* http://localhost:1841/sass/src/Application.scss:759 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* http://localhost:1841/sass/src/Application.scss:760 */
+/* http://localhost:1841/sass/src/Application.scss:765 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* http://localhost:1841/sass/src/Application.scss:765 */
+/* http://localhost:1841/sass/src/Application.scss:770 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* http://localhost:1841/sass/src/Application.scss:771 */
+/* http://localhost:1841/sass/src/Application.scss:776 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -24460,7 +24465,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* http://localhost:1841/sass/src/Application.scss:781 */
+/* http://localhost:1841/sass/src/Application.scss:786 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -24470,7 +24475,7 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* http://localhost:1841/sass/src/Application.scss:791 */
+/* http://localhost:1841/sass/src/Application.scss:796 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;
