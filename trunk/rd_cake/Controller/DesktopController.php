@@ -359,7 +359,7 @@ class DesktopController extends AppController {
             array(  'text'  => __('Dynamic login pages'),   'glyph' => Configure::read('icnDynamic'),   'itemId' => 'cDynamicDetails'),
             array(  'text'  => __('Activity monitor'),      'glyph' => Configure::read('icnActivity'),  'itemId' => 'cActivityMonitor'),
             array(  'xtype' => 'menuseparator'),
-            array(  'text'  => __('Cloud Controller for APs'),         'glyph' => Configure::read('icnCloud'),      'itemId' => 'cAccessPoints'),
+            array(  'text'  => __('APdesk'),                'glyph' => Configure::read('icnCloud'),      'itemId' => 'cAccessPoints'),
             array(  'text'  => __('MESHdesk'),              'glyph' => Configure::read('icnMesh'),      'itemId' => 'cMeshes'),
             
           //  array(  'xtype' => 'menuseparator'),
@@ -517,7 +517,7 @@ class DesktopController extends AppController {
         //Cloud Controller for APs
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
 		    array_push($menu,
-			    array(  'text'  => __('Cloud Controller for APs'),         'glyph' => Configure::read('icnCloud'),      'itemId' => 'cAccessPoints')
+			    array(  'text'  => __('APdesk'), 'glyph' => Configure::read('icnCloud'),      'itemId' => 'cAccessPoints')
 			);
 		}
 
@@ -567,15 +567,24 @@ class DesktopController extends AppController {
             array_push($items, array( 'name'    => 'Permanent Users', 'iconCls' => 'users-shortcut', 'controller' => 'cPermanentUsers'));
         }
 
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
-            array_push($items, array( 'name'    => 'BYOD Manager', 'iconCls' => 'byod-shortcut', 'controller' => 'cDevices'));
-        }
-
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
             array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         }
 
         array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+        
+        
+        //Meshdesk
+		if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
+			array_push($items, array( 'name' => 'MESHdesk', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cMeshes'));
+		}
+        
+        
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
+            array_push($items, array( 'name' => 'APdesk', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cAccessPoints'));
+        }
+        
+        
         return $items;
 
     }
