@@ -625,7 +625,7 @@ Local = {
         "sApply_power_to_all_nodes": "Apply power to all nodes",
         
         //Access Points
-        'sAccess_Point_Overview' : 'Access Point Overview',
+        'sAccess_Point_Management' : 'Access Point Management',
         'sOverview' : 'Overview',
         'sAttached_Devices' : 'Attached Devices',
         'sDetached_Devices' : 'Detached Devices',

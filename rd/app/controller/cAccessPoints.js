@@ -7,7 +7,7 @@ Ext.define('Rd.controller.cAccessPoints', {
         if(!win){
             win = desktop.createWindow({
                 id      : 'apWin',
-                btnText : i18n('sAccess_Point_Overview'),
+                btnText : i18n('sAccess_Point_Management'),
                 width   : Rd.config.winWidth,
                 height  : Rd.config.winHeight,
                 glyph   : Rd.config.icnCloud,
@@ -21,7 +21,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                     {
                         region  : 'north',
                         xtype   : 'pnlBanner',
-                        heading : 'Cloud Controller for APs',
+                        heading : i18n('sAccess_Point_Management'),
                         image   : 'resources/images/48x48/cloud.png'
                     },
 					{
