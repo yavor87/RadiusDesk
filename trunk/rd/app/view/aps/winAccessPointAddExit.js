@@ -24,7 +24,8 @@ Ext.define('Rd.view.aps.winAccessPointAddExit', {
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
         'Ext.form.field.Radio',
-        'Rd.view.components.cmbDynamicDetail'
+        'Rd.view.components.cmbDynamicDetail',
+        'Rd.view.components.cmbRealm'
     ],
     initComponent: function() {
         var me              = this;
@@ -204,11 +205,21 @@ Ext.define('Rd.view.aps.winAccessPointAddExit', {
                                 {
                                     itemId      : 'chkNasClient',
                                     xtype       : 'checkbox',      
-                                    fieldLabel  : 'Auto-add NAS',
-                                    name        : 'auto_nas',
-                                    inputValue  : 'auto_nas',
+                                    fieldLabel  : 'Auto-add Dynamic RADIUS Client',
+                                    name        : 'auto_dynamic_client',
+                                    inputValue  : 'auto_dynamic_client',
                                     checked     : true,
-                                    labelClsExtra: 'lblRd'
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'cmbRealm',
+                                    xtype       : 'cmbRealm',
+                                    multiSelect : true,
+                                    typeAhead   : false,
+                                    allowBlank  : true,
+                                    name        : 'realm_ids[]',
+                                    emptyText   : 'Empty = Any Realm',
+                                    blankText   : 'Empty = Any Realm'
                                 },
                                 {
                                     itemId      : 'chkLoginPage',
@@ -217,11 +228,12 @@ Ext.define('Rd.view.aps.winAccessPointAddExit', {
                                     name        : 'auto_login_page',
                                     inputValue  : 'auto_login_page',
                                     checked     : true,
-                                    labelClsExtra: 'lblRd'
+                                    labelClsExtra: 'lblRdReq'
                                 },
                                 {
                                     itemId      : 'cmbDynamicDetail',
-                                    xtype       : 'cmbDynamicDetail'
+                                    xtype       : 'cmbDynamicDetail',
+                                    labelClsExtra: 'lblRdReq'
                                 }
                             ]
                         },
@@ -272,20 +284,14 @@ Ext.define('Rd.view.aps.winAccessPointAddExit', {
                                                     allowBlank  : false,
                                                     labelClsExtra: 'lblRdReq'
                                                 },
-                                                 {
-                                                    xtype       : 'textfield',
-                                                    fieldLabel  : i18n("sRADIUS_NASID"),
-                                                    name        : 'radius_nasid',
-                                                    allowBlank  : false,
-                                                    labelClsExtra: 'lblRdReq'
-                                                },
+                                                
                                                 {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : i18n("sUAM_URL"),
                                                     name        : 'uam_url',
                                                     allowBlank  : false,
                                                     labelClsExtra: 'lblRdReq',
-                                                    value       : 'http://your_ip_here/cake2/rd_cake/dynamic_details/chilli_browser_detect/',
+                                                    //value       : 'http://your_ip_here/cake2/rd_cake/dynamic_details/chilli_browser_detect/',
                                                     emptyText   : 'http://your_ip_here/cake2/rd_cake/dynamic_details/chilli_browser_detect/',
                                                     blankText   : 'Try http://your_ip_here/cake2/rd_cake/dynamic_details/chilli_browser_detect/'
                                                 },
