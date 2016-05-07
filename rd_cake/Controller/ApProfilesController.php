@@ -5,7 +5,7 @@ class ApProfilesController extends AppController {
 
     public $name        = 'ApProfiles';
     public $components  = array('Aa','GridFilter','TimeCalculations');
-    public $uses        = array('ApProfile','User','Na','DynamicPair');
+    public $uses        = array('ApProfile','User','DynamicClient','DynamicPair','DynamicClientRealm');
     protected $base     = "Access Providers/Controllers/ApProfiles/";
     protected $itemNote = 'ApProfileNote';
     
@@ -567,10 +567,25 @@ class ApProfilesController extends AppController {
         $exit->create();
         
         if($this->request->data['type'] == 'captive_portal'){ 
-            if(isset($this->request->data['auto_nas'])){
-                $this->request->data['auto_nas'] = 1;
+            if(isset($this->request->data['auto_dynamic_client'])){
+                $this->request->data['auto_dynamic_client'] = 1;
+                
+                //Get a list of realms if the person selected a list - If it is empty that's fine
+                $count      = 0;
+                $this->request->data['realm_list'] = ""; //Prime it
+                if (array_key_exists('realm_ids', $this->request->data)) {
+                    foreach($this->request->data['realm_ids'] as $r){
+                        if($count == 0){
+                            $this->request->data['realm_list'] = $this->request->data['realm_ids'][$count]; 
+                        }else{
+                            $this->request->data['realm_list'] = $this->request->data['realm_list'].",".$this->request->data['realm_ids'][$count];
+                        }  
+                        $count++;
+                    }
+                }
+                
             }else{
-                $this->request->data['auto_nas'] = 0;
+                $this->request->data['auto_dynamic_client'] = 0;
             }
             
             if(isset($this->request->data['auto_login_page'])){
@@ -579,6 +594,10 @@ class ApProfilesController extends AppController {
                 $this->request->data['auto_login_page'] = 0;
             }
         }
+        
+        
+        
+        
 
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
@@ -717,11 +736,27 @@ class ApProfilesController extends AppController {
             }
             //==== End of Captive Portal ====
             
+            $this->request->data['realm_list'] = ""; //Prime it
+            
             if($this->request->data['type'] == 'captive_portal'){ 
-                if(isset($this->request->data['auto_nas'])){
-                    $this->request->data['auto_nas'] = 1;
+                if(isset($this->request->data['auto_dynamic_client'])){
+                    $this->request->data['auto_dynamic_client'] = 1;
+                    
+                    //Get a list of realms if the person selected a list - If it is empty that's fine
+                    $count      = 0;
+                    if (array_key_exists('realm_ids', $this->request->data)) {
+                        foreach($this->request->data['realm_ids'] as $r){
+                            if($count == 0){
+                                $this->request->data['realm_list'] = $this->request->data['realm_ids'][$count]; 
+                            }else{
+                                $this->request->data['realm_list'] = $this->request->data['realm_list'].",".$this->request->data['realm_ids'][$count];
+                            }  
+                            $count++;
+                        }
+                    }   
+                    
                 }else{
-                    $this->request->data['auto_nas'] = 0;
+                    $this->request->data['auto_dynamic_client'] = 0;
                 }
                 
                 if(isset($this->request->data['auto_login_page'])){
@@ -775,6 +810,21 @@ class ApProfilesController extends AppController {
             }
         } 
     }
+    
+    public function ap_profile_exit_add_defaults(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        
+        Configure::load('ApProfiles'); 
+        $data = Configure::read('ApProfiles.captive_portal'); //Read the defaults
+        $this->set(array(
+            'data'     => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
 
     public function ap_profile_exit_view(){
 
@@ -800,7 +850,6 @@ class ApProfilesController extends AppController {
             $q_r['ApProfileExit']['radius_1']        = $q_r['ApProfileExitCaptivePortal']['radius_1'];
             $q_r['ApProfileExit']['radius_2']        = $q_r['ApProfileExitCaptivePortal']['radius_2'];
             $q_r['ApProfileExit']['radius_secret']   = $q_r['ApProfileExitCaptivePortal']['radius_secret'];
-            $q_r['ApProfileExit']['radius_nasid']    = $q_r['ApProfileExitCaptivePortal']['radius_nasid'];
             $q_r['ApProfileExit']['uam_url']         = $q_r['ApProfileExitCaptivePortal']['uam_url'];
             $q_r['ApProfileExit']['uam_secret']      = $q_r['ApProfileExitCaptivePortal']['uam_secret'];
             $q_r['ApProfileExit']['walled_garden']   = $q_r['ApProfileExitCaptivePortal']['walled_garden'];
@@ -1260,23 +1309,21 @@ class ApProfilesController extends AppController {
 	        foreach($q_exits as $qe){
 	            	        
 	            $exit_id = $qe['ApProfileExit']['id'];
-	            $secret  = $qe['ApProfileExitCaptivePortal']['radius_secret'];
 	            
-	            $nas_data = array();
-	            	            
-	            $nas_data['user_id']    = $user_id;
-	            $nas_data['secret']     = $secret;
 	            
-	            $nas_data['available_to_siblings'] = $a_to_s;
-	            $nas_data['shortname'] = $ap_profile_name.'_'.$this->request->data['name'].'_cp_'.$exit_id;
+	            $dc_data                            = array();       	            
+	            $dc_data['user_id']                 = $user_id;
+	            $dc_data['available_to_siblings']   = $a_to_s;
+	            $dc_data['nasidentifier']           = $ap_profile_name.'_'.$this->request->data['name'].'_cp_'.$exit_id;
+	            $dc_data['realm_list']              = $qe['ApProfileExit']['realm_list'];
 	            
-	            if($qe['ApProfileExit']['auto_nas'] == 1){  //It has to be enabled
-	                $this->_add_dynamic($nas_data);
+	            if($qe['ApProfileExit']['auto_dynamic_client'] == 1){  //It has to be enabled
+	                $this->_add_dynamic($dc_data);
 	            }
 	            
 	            if($qe['ApProfileExit']['auto_login_page'] == 1){  //It has to be enabled
-	                $nas_data['dynamic_detail_id'] = $qe['ApProfileExit']['dynamic_detail_id'];
-	                $this->_add_dynamic_pair($nas_data);
+	                $dc_data['dynamic_detail_id'] = $qe['ApProfileExit']['dynamic_detail_id'];
+	                $this->_add_dynamic_pair($dc_data);
 	            }
 	        }
 	        //_______________________________________________________________________
@@ -1371,7 +1418,7 @@ class ApProfilesController extends AppController {
                 $ap_profile_name    = preg_replace('/\s+/', '_', $ap_profile_name);
                 $ap_name            = $q_r['Ap']['name'];
                 $ap_name            = preg_replace('/\s+/', '_', $ap_name);
-                $this->Na->deleteAll(array('Na.shortname LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%"), true);
+                $this->DynamicClient->deleteAll(array('DynamicClient.nasidentifier LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%"), true);
                 $this->DynamicPair->deleteAll(
                             array(
                                 'DynamicPair.value LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%",
@@ -1389,7 +1436,7 @@ class ApProfilesController extends AppController {
                         $ap_profile_name    = preg_replace('/\s+/', '_', $ap_profile_name);
                         $ap_name            = $q_r['Ap']['name'];
                         $ap_name            = preg_replace('/\s+/', '_', $ap_name);
-                        $this->Na->deleteAll(array('Na.shortname LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%"), true);
+                        $this->DynamicClient->deleteAll(array('DynamicClient.nasidentifier LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%"), true);
                         $this->DynamicPair->deleteAll(
                             array(
                                 'DynamicPair.value LIKE' => "$ap_profile_name".'_'.$ap_name."_cp_%",
@@ -2138,43 +2185,25 @@ class ApProfilesController extends AppController {
         ));
     }
     
-    private function _add_dynamic($nas_data){
-         
-        //Always this
-        $nas_data['dynamic_attribute']  = 'NAS-Identifier';
-        $nas_data['connection_type']    = 'dynamic';
-        $nas_data['dynamic_value']      = $nas_data['shortname'];
-        $nas_data['nasidentifier']      = $nas_data['shortname'];
-      
-        //Get the class B subnet of the start_ip
-        $start_ip   = Configure::read('dynamic.start_ip');
-        $pieces     = explode('.',$start_ip);
-        $octet_1    = $pieces[0];
-        $octet_2    = $pieces[1];
-        $class_b    = $octet_1.'.'.$octet_2;
-        $q_r        = $this->Na->find('first',array('conditions' => array('Na.nasname LIKE' => "$class_b%"), 'order' => 'Na.nasname DESC'));
-
-        if($q_r){
-            $ip         = $q_r['Na']['nasname'];
-            $next_ip    = $this->_get_next_ip($ip);           
-            $not_available = true;
-            while($not_available){
-                if($this->_check_if_available($next_ip)){
-                    $nas_data['nasname']     = $next_ip;
-                    $not_available = false;
-                    break;
-                }else{
-                    $next_ip = $this->_get_next_ip($next_ip);
+    private function _add_dynamic($dc_data){
+    
+        //--Formulate a name
+        $dc_data['name'] = 'APDesk_'.$dc_data['nasidentifier'];
+        $this->DynamicClient->create();
+        if ($this->DynamicClient->save($dc_data)) {
+            //After this we can add the Realms if there are any
+            $new_id = $this->DynamicClient->id;
+            $pieces = explode(",", $dc_data['realm_list']);
+            foreach($pieces as $p){
+                if(is_numeric($p)){
+                    $this->DynamicClientRealm->create();
+                    $dcr = array();
+                    $dcr['dynamic_client_id'] = $new_id;
+                    $dcr['realm_id'] = $p;
+                    $this->DynamicClientRealm->save($dcr);
+                    $this->DynamicClientRealm->id = null;
                 }
-            }              
-        }else{ //The very first entry
-            $nas_data['nasname'] = $start_ip;
-        }
-
-        $this->Na->create();
-        if ($this->Na->save($nas_data)) {
-
-        
+            }   
         }
     }
     
@@ -2182,60 +2211,24 @@ class ApProfilesController extends AppController {
         $this->DynamicPair->create();
         $data = array();
         $data['name']               = 'nasid';
-        $data['value']              = $nas_data['shortname'];
+        $data['value']              = $nas_data['nasidentifier'];
         $data['dynamic_detail_id']  = $nas_data['dynamic_detail_id'];
         $data['priority']           = 1;  
         $this->DynamicPair->save($data);
     }
     
-    private function _change_dynamic_shortname($ap_profile_name,$old_name,$new_name){
-    
+    private function _change_dynamic_shortname($ap_profile_name,$old_name,$new_name){ 
         $search_for = $ap_profile_name.'_'.$old_name.'_cp_';
-        $this->Na->contain();
-        $q_r = $this->Na->find('all',array('conditions' => array('Na.shortname LIKE' => "$search_for%")));
-        foreach($q_r as $n){
-            
-            $current_name   = $n['Na']['shortname'];
-            $id             = $n['Na']['id'];
+        $this->DynamicClient->contain();
+        $q_r = $this->DynamicClient->find('all',array('conditions' => array('DynamicClient.nasidentifier LIKE' => "$search_for%")));
+        foreach($q_r as $n){  
+            $current_name   = $n['DynamicClient']['nasidentifier'];
+            $id             = $n['DynamicClient']['id'];
             $newname        = str_replace("$old_name","$new_name","$current_name");
-            $d                  = array();
-            $d['id']            = $id;
-            $d['shortname']     = $newname;
-            $d['dynamic_value'] = $newname;
+            $d              = array();
+            $d['id']        = $id;
             $d['nasidentifier'] = $newname;
-            $this->Na->save($d);            
+            $this->DynamicClient->save($d);            
         }    
     }
-    
-    private function _check_if_available($ip){
-
-        $this->Na->contain();
-        $count = $this->Na->find('count',array('conditions' => array('Na.nasname' => $ip)));
-        if($count == 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    private function _get_next_ip($ip){
-
-        $pieces     = explode('.',$ip);
-        $octet_1    = $pieces[0];
-        $octet_2    = $pieces[1];
-        $octet_3    = $pieces[2];
-        $octet_4    = $pieces[3];
-
-        if($octet_4 >= 254){
-            $octet_4 = 1;
-            $octet_3 = $octet_3 +1;
-        }else{
-
-            $octet_4 = $octet_4 +1;
-        }
-        $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
-        return $next_ip;
-    }
-
-    
 }
