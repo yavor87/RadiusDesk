@@ -21,13 +21,14 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         
         'components.cmbTimezones',      
         'components.cmbCountries',
-        'components.cmbFiveGigChannels'
+        'components.cmbFiveGigChannels',
+        'components.cmbRealm'
     ],
     stores      : [	
-		'sAccessPointEntries', 'sAccessPointExits', 	'sAps', 'sAccessPointEntryPoints'
+		'sAccessPointEntries', 'sAccessPointExits', 	'sAps', 'sAccessPointEntryPoints', 'sRealms'
     ],
     models      : [ 
-		'mAccessPointEntry',  	'mAccessPointExit', 	'mAp',  'mAccessPointEntryPoint'
+		'mAccessPointEntry',  	'mAccessPointExit', 	'mAp',  'mAccessPointEntryPoint', 'mRealm'
     ],
     config      : {  
         urlAddEntry:        '/cake2/rd_cake/ap_profiles/ap_profile_entry_add.json',
@@ -35,6 +36,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         urlEditEntry:       '/cake2/rd_cake/ap_profiles/ap_profile_entry_edit.json',
         
        
+        urlExitAddDefaults: '/cake2/rd_cake/ap_profiles/ap_profile_exit_add_defaults.json',
         urlAddExit:         '/cake2/rd_cake/ap_profiles/ap_profile_exit_add.json',
         urlViewExit:        '/cake2/rd_cake/ap_profiles/ap_profile_exit_view.json',
         urlEditExit:        '/cake2/rd_cake/ap_profiles/ap_profile_exit_edit.json',
@@ -54,6 +56,8 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 		urlMapDelete		: '/cake2/rd_cake/meshes/map_node_delete.json',
 		urlMeshNodes		: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
 		urlBlueMark 		: 'resources/images/map_markers/blue-dot.png',
+		
+		
 		
 		
 		urlAdvancedSettingsForModel : '/cake2/rd_cake/ap_profiles/advanced_settings_for_model.json'
@@ -105,6 +109,9 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             },
             'gridAccessPointExits #add': {
                 click:  me.addExit
+            },
+            'winAccessPointAddExit': {
+                beforeshow:      me.loadAddExit
             },
             'winAccessPointAddExit #btnTypeNext' : {
                 click:  me.btnExitTypeNext
@@ -198,6 +205,12 @@ Ext.define('Rd.controller.cAccessPointEdits', {
                 change: me.cmbApHardwareModelsChange
             },
             
+            'winAccessPointAddExit #chkNasClient' : {
+				change	: me.chkNasClientChange
+			},
+			'winAccessPointEditExit #chkNasClient' : {
+				change	: me.chkNasClientChange
+			},  
             'winAccessPointAddExit #chkLoginPage' : {
 				change	: me.chkLoginPageChange
 			},
@@ -408,6 +421,18 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         }
     },
     
+    chkNasClientChange: function(chk){
+        var me          = this;
+        form            = chk.up('form');
+        var cmb_realm    = form.down('#cmbRealm');
+        if(chk.getValue()){	//2.4 selected... show it
+			cmb_realm.setVisible(true);
+			cmb_realm.setDisabled(false);
+		}else{
+			cmb_realm.setVisible(false);
+			cmb_realm.setDisabled(true);		
+		}
+    },
     chkLoginPageChange: function(chk){
         var me          = this;
         form            = chk.up('form');
@@ -426,6 +451,11 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         var pnl     = button.up("pnlAccessPointEdit");
         var exit    = pnl.down("gridAccessPointExits");
         exit.getStore().reload();
+    },
+    loadAddExit: function(win){
+        var me      = this; 
+        var form    = win.down('#scrnData');
+        form.load({url:me.getUrlExitAddDefaults(), method:'GET'});
     },
     addExit: function(button){
         var me      = this;
@@ -463,6 +493,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         var sel_type= win.down('#type');
         
         var a_nas   = win.down('#chkNasClient');
+        var cmb_realm = win.down('#cmbRealm');
         var a_page  = win.down('#chkLoginPage');
         var cmb_page= win.down('cmbDynamicDetail');
         
@@ -486,6 +517,8 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 			a_page.setDisabled(false);
 			cmb_page.setVisible(true);
 			cmb_page.setDisabled(false);
+			cmb_realm.setVisible(true);
+			cmb_realm.setDisabled(false);
 			
         }else{
             tab_capt.setDisabled(true);
@@ -497,6 +530,8 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 			a_page.setDisabled(true);
 			cmb_page.setVisible(false);
 			cmb_page.setDisabled(true);
+			cmb_realm.setVisible(false);
+			cmb_realm.setDisabled(true);
 			
         }
         win.getLayout().setActiveItem('scrnData');
