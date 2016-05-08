@@ -5,6 +5,21 @@
 //== Client WPA2 Personal passphrase (key) NOTE: We moved this setting to be under common_node_settings instead
 //$config['MESHdesk']['client_key']	= 'radiusdesk'; 
 
+//_______________________________________________
+//== Pre-set values for the Captive Portals
+$config['Meshes']['captive_portal']['radius_1']         = '198.27.111.78'; // This will be the public IP Address of the FreeRADIUS / RADIUSdesk
+//$config['ApProfiles']['captive_portal']['radius_2']         = '198.27.111.78'; //Optional second fallback RADIUS
+$config['Meshes']['captive_portal']['radius_secret']    = 'testing123'; //Change this to the common site wide secret used by Dynamic RADIUS Clients
+//Use DNS name in ual_url to look more professional / or IP Address 
+$config['Meshes']['captive_portal']['uam_url']          = 'http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/'; 
+$config['Meshes']['captive_portal']['uam_secret']       = 'greatsecret'; //Usually you will not change this value
+
+//$config['ApProfiles']['captive_portal']['walled_garden'] = "www.radiusdesk.com,www.google.com"; //Optional
+$config['Meshes']['captive_portal']['swap_octet']       = true;
+$config['Meshes']['captive_portal']['mac_auth']         = true;
+$config['Meshes']['captive_portal']['coova_optional']   = "ssid=radiusdesk";
+//__________________________________________________
+
 
 //== Encryption types ==
 //Define the encryption types and if they are active or not
