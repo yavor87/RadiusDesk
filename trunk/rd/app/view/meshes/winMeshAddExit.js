@@ -5,8 +5,8 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
     draggable:  true,
     resizable:  true,
     title:      i18n('sNew_mesh_exit_point'),
-    width:      400,
-    height:     400,
+    width:      530,
+    height:     500,
     plain:      true,
     border:     false,
     layout:     'card',
@@ -23,7 +23,9 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Ext.form.FieldContainer',
-        'Ext.form.field.Radio'
+        'Ext.form.field.Radio',
+        'Rd.view.components.cmbDynamicDetail',
+        'Rd.view.components.cmbRealm'
     ],
     initComponent: function() {
         var me              = this;
@@ -93,7 +95,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                 labelAlign      : 'top',
                 labelSeparator  : '',
                 labelWidth      : Rd.config.labelWidth,
-                maxWidth        : Rd.config.maxWidth, 
+                //maxWidth        : Rd.config.maxWidth, 
                 margin          : Rd.config.fieldMargin
             },
             defaultType: 'textfield',
@@ -137,7 +139,7 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                 labelSeparator  : '',
                 labelClsExtra   : 'lblRd',
                 labelWidth      : Rd.config.labelWidth,
-                maxWidth        : Rd.config.maxWidth, 
+                //maxWidth        : Rd.config.maxWidth, 
                 margin          : Rd.config.fieldMargin
             },
             defaultType         : 'textfield',
@@ -213,7 +215,40 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value")
                                 },
-                                cmbConnectWith
+                                cmbConnectWith,
+                                {
+                                    itemId      : 'chkNasClient',
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : 'Add Dynamic RADIUS Client',
+                                    name        : 'auto_dynamic_client',
+                                    inputValue  : 'auto_dynamic_client',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'cmbRealm',
+                                    xtype       : 'cmbRealm',
+                                    multiSelect : true,
+                                    typeAhead   : false,
+                                    allowBlank  : true,
+                                    name        : 'realm_ids[]',
+                                    emptyText   : 'Empty = Any Realm',
+                                    blankText   : 'Empty = Any Realm'
+                                },
+                                {
+                                    itemId      : 'chkLoginPage',
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : 'Add Login Page',
+                                    name        : 'auto_login_page',
+                                    inputValue  : 'auto_login_page',
+                                    checked     : true,
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'cmbDynamicDetail',
+                                    xtype       : 'cmbDynamicDetail',
+                                    labelClsExtra: 'lblRdReq'
+                                }
                             ]
                         },
 
@@ -267,8 +302,11 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                                     xtype       : 'textfield',
                                                     fieldLabel  : i18n('sRADIUS_NASID'),
                                                     name        : 'radius_nasid',
+                                                    itemId      : 'radius_nasid',
                                                     allowBlank  : false,
-                                                    labelClsExtra: 'lblRdReq'
+                                                    labelClsExtra: 'lblRdReq',
+                                                    hidden      : true, //Hide it initially
+                                                    disabled    : true //Disable it intitially 
                                                 },
                                                 {
                                                     xtype       : 'textfield',

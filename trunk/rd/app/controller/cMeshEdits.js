@@ -11,13 +11,14 @@ Ext.define('Rd.controller.cMeshEdits', {
 		'meshes.winMeshMapNodeAdd',	'meshes.cmbEthBridgeOptions',
 		'components.cmbFiveGigChannels',
         'components.cmbTimezones',      
-        'components.cmbCountries'
+        'components.cmbCountries',
+        'components.cmbRealm'
     ],
     stores      : [	
-		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes'
+		'sMeshEntries', 'sMeshExits', 	'sMeshEntryPoints',	'sNodes','sRealms'
     ],
     models      : [ 
-		'mMeshEntry',  	'mMeshExit', 	'mMeshEntryPoint',  'mNode'
+		'mMeshEntry',  	'mMeshExit', 	'mMeshEntryPoint',  'mNode', 'mRealm','mDynamicDetail'
     ],
     config      : {  
         urlAddEntry:        '/cake2/rd_cake/meshes/mesh_entry_add.json',
@@ -25,6 +26,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         urlEditEntry:       '/cake2/rd_cake/meshes/mesh_entry_edit.json',
         urlViewMeshSettings:'/cake2/rd_cake/meshes/mesh_settings_view.json',
         urlEditMeshSettings:'/cake2/rd_cake/meshes/mesh_settings_edit.json',
+        urlExitAddDefaults :'/cake2/rd_cake/meshes/mesh_exit_add_defaults.json',
         urlAddExit:         '/cake2/rd_cake/meshes/mesh_exit_add.json',
         urlViewExit:        '/cake2/rd_cake/meshes/mesh_exit_view.json',
         urlEditExit:        '/cake2/rd_cake/meshes/mesh_exit_edit.json',
@@ -103,6 +105,9 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             'gridMeshExits #add': {
                 click:  me.addExit
+            },
+            'winMeshAddExit': {
+                beforeshow:      me.loadAddExit
             },
             'winMeshAddExit #btnTypeNext' : {
                 click:  me.btnExitTypeNext
@@ -281,7 +286,14 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             '#pnlMapsEdit #save': {
                 click: me.btnMapSave
-            }
+            },
+            'winMeshAddExit #chkNasClient' : {
+				change	: me.chkNasClientChange
+			}, 
+            'winMeshAddExit #chkLoginPage' : {
+				change	: me.chkLoginPageChange
+			}
+            
         });
     },
     actionIndex: function(mesh_id,name){
@@ -529,11 +541,49 @@ Ext.define('Rd.controller.cMeshEdits', {
             failure: Ext.ux.formFail
         });
     },
+    
+    chkNasClientChange: function(chk){
+        var me          = this;
+        var form        = chk.up('form');
+        var win         = chk.up('window');
+        var nas_id      = win.down('#radius_nasid');
+                  
+        var cmb_realm    = form.down('#cmbRealm');
+        if(chk.getValue()){	
+            nas_id.setVisible(false);
+            nas_id.setDisabled(true);
+			cmb_realm.setVisible(true);
+			cmb_realm.setDisabled(false);
+		}else{
+		    nas_id.setVisible(true);
+            nas_id.setDisabled(false);
+			cmb_realm.setVisible(false);
+			cmb_realm.setDisabled(true);		
+		}
+    },
+    chkLoginPageChange: function(chk){
+        var me          = this;
+        var form        = chk.up('form');
+        var cmb_page    = form.down('#cmbDynamicDetail');
+        if(chk.getValue()){	
+			cmb_page.setVisible(true);
+			cmb_page.setDisabled(false);
+		}else{
+			cmb_page.setVisible(false);
+			cmb_page.setDisabled(true);		
+		}
+    },
+    
     reloadExit: function(button){
         var me      = this;
         var win     = button.up("winMeshEdit");
         var exit    = win.down("gridMeshExits");
         exit.getStore().reload();
+    },
+    loadAddExit: function(win){
+        var me      = this; 
+        var form    = win.down('#scrnData');
+        form.load({url:me.getUrlExitAddDefaults(), method:'GET'});
     },
     addExit: function(button){
         var me      = this;
@@ -571,6 +621,12 @@ Ext.define('Rd.controller.cMeshEdits', {
         var vlan    = win.down('#vlan');
         var tab_capt= win.down('#tabCaptivePortal');
         var sel_type= win.down('#type');
+        
+        var a_nas   = win.down('#chkNasClient');
+        var cmb_realm = win.down('#cmbRealm');
+        var a_page  = win.down('#chkLoginPage');
+        var cmb_page= win.down('cmbDynamicDetail');
+        
         sel_type.setValue(type);
  
         if(type == 'tagged_bridge'){
@@ -581,12 +637,31 @@ Ext.define('Rd.controller.cMeshEdits', {
             vlan.setDisabled(true);
         }
 
-        if(type == 'captive_portal'){
+       if(type == 'captive_portal'){
             tab_capt.setDisabled(false);
 			tab_capt.tab.show();
+						
+			a_nas.setVisible(true);
+			a_nas.setDisabled(false);
+			a_page.setVisible(true);
+			a_page.setDisabled(false);
+			cmb_page.setVisible(true);
+			cmb_page.setDisabled(false);
+			cmb_realm.setVisible(true);
+			cmb_realm.setDisabled(false);
+			
         }else{
             tab_capt.setDisabled(true);
 			tab_capt.tab.hide();
+			
+			a_nas.setVisible(false);
+			a_nas.setDisabled(true);
+			a_page.setVisible(false);
+			a_page.setDisabled(true);
+			cmb_page.setVisible(false);
+			cmb_page.setDisabled(true);
+			cmb_realm.setVisible(false);
+			cmb_realm.setDisabled(true);			
         }
         win.getLayout().setActiveItem('scrnData');
     },
@@ -729,6 +804,18 @@ Ext.define('Rd.controller.cMeshEdits', {
                 }
                 var ent  = form.down("cmbMeshEntryPoints");
                 ent.setValue(b.result.data.entry_points);
+                if(b.result.data.type == 'captive_portal'){
+                    if((b.result.data.auto_login_page == true)&&
+                    (b.result.data.dynamic_detail != null)){
+                        var cmb     = form.down("cmbDynamicDetail");
+                        var rec     = Ext.create('Rd.model.mDynamicDetail', {name: b.result.data.dynamic_detail, id: b.result.data.dynamic_detail_id});
+                        cmb.getStore().loadData([rec],false);
+                        cmb.setValue( b.result.data.dynamic_detail_id );
+                    }else{
+                        form.down("cmbDynamicDetail").setVisible(false);
+                        form.down("cmbDynamicDetail").setDisabled(true);
+                    }
+                }  
             }
         });
     },
