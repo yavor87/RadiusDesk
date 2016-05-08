@@ -57,9 +57,6 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 		urlMeshNodes		: '/cake2/rd_cake/meshes/mesh_nodes_index.json',
 		urlBlueMark 		: 'resources/images/map_markers/blue-dot.png',
 		
-		
-		
-		
 		urlAdvancedSettingsForModel : '/cake2/rd_cake/ap_profiles/advanced_settings_for_model.json'
     },
     refs: [
@@ -423,9 +420,9 @@ Ext.define('Rd.controller.cAccessPointEdits', {
     
     chkNasClientChange: function(chk){
         var me          = this;
-        form            = chk.up('form');
-        var cmb_realm    = form.down('#cmbRealm');
-        if(chk.getValue()){	//2.4 selected... show it
+        var form        = chk.up('form');
+        var cmb_realm   = form.down('#cmbRealm');
+        if(chk.getValue()){	
 			cmb_realm.setVisible(true);
 			cmb_realm.setDisabled(false);
 		}else{
@@ -435,9 +432,9 @@ Ext.define('Rd.controller.cAccessPointEdits', {
     },
     chkLoginPageChange: function(chk){
         var me          = this;
-        form            = chk.up('form');
+        var form        = chk.up('form');
         var cmb_page    = form.down('#cmbDynamicDetail');
-        if(chk.getValue()){	//2.4 selected... show it
+        if(chk.getValue()){	
 			cmb_page.setVisible(true);
 			cmb_page.setDisabled(false);
 		}else{
