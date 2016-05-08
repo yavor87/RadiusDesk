@@ -5,7 +5,7 @@ class MeshesController extends AppController {
 
     public $name        = 'Meshes';
     public $components  = array('Aa','GridFilter');
-    public $uses        = array('Mesh','User');
+    public $uses        = array('Mesh','User','DynamicClient','DynamicPair','DynamicClientRealm');
     protected $base     = "Access Providers/Controllers/Meshes/";
     protected $itemNote = 'MeshNote';
 
@@ -636,12 +636,26 @@ class MeshesController extends AppController {
             return;
         }
 
-       // print_r($this->request->data);
-       // exit;
-
         $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
         $exit           = ClassRegistry::init('MeshExit'); 
         $exit->create();
+        
+        
+        if($this->request->data['type'] == 'captive_portal'){ 
+            if(isset($this->request->data['auto_dynamic_client'])){
+                $this->request->data['auto_dynamic_client'] = 1; 
+            }else{
+                $this->request->data['auto_dynamic_client'] = 0;
+            }
+            
+            if(isset($this->request->data['auto_login_page'])){
+                $this->request->data['auto_login_page'] = 1;
+            }else{
+                $this->request->data['auto_login_page'] = 0;
+            }
+        }
+        
+        
 
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
@@ -650,7 +664,57 @@ class MeshesController extends AppController {
             if($this->request->data['type'] == 'captive_portal'){
 
                 $this->request->data['mesh_exit_id'] = $new_id;
-
+                
+                //----------- Easy to use enhancement --------------------
+                //See if we have to formulate the value of the 'radius_nasid' if the user chose to auto add it 
+                if(
+                    ($this->request->data['auto_dynamic_client'] == 1)||
+                    ($this->request->data['auto_login_page'] == 1)
+                ){
+                
+                    //Get the Mesh so we can get the user_id and available_to_siblings for the said mesh
+                    $mesh_id  = $this->request->data['mesh_id'];
+                    $this->Mesh->contain();   
+                    $mesh       = $this->Mesh->findById($mesh_id);
+                    $user_id    = $mesh['Mesh']['user_id'];
+                    $a_to_s     = $mesh['Mesh']['available_to_siblings'];
+                    $mesh_name  = $mesh['Mesh']['name'];
+                    $mesh_name  = preg_replace('/\s+/', '_', $mesh_name);
+                    
+                                       
+                    $dc_data                            = array();       	            
+	                $dc_data['user_id']                 = $user_id;
+	                $dc_data['available_to_siblings']   = $a_to_s;
+	                $dc_data['nasidentifier']           = $mesh_name.'_mcp_'.$new_id;
+	                
+	                //Get a list of realms if the person selected a list - If it is empty that's fine
+                    $count      = 0;
+                    $dc_data['realm_list'] = ""; //Prime it
+                    if (array_key_exists('realm_ids', $this->request->data)) {
+                        foreach($this->request->data['realm_ids'] as $r){
+                            if($count == 0){
+                                $dc_data['realm_list'] = $this->request->data['realm_ids'][$count]; 
+                            }else{
+                                $dc_data['realm_list'] = $dc_data['realm_list'].",".$this->request->data['realm_ids'][$count];
+                            }  
+                            $count++;
+                        }
+                    }
+                    
+	                if($this->request->data['auto_dynamic_client'] == 1){    	                
+                        $this->_add_dynamic($dc_data);
+                    }
+                    
+                    if($this->request->data['auto_login_page'] == 1){ 
+	                    $dc_data['dynamic_detail_id'] = $this->request->data['dynamic_detail_id'];
+	                    $this->_add_dynamic_pair($dc_data);
+	                }
+                                      
+                    //Set the radius_nasid
+                    $this->request->data['radius_nasid'] = $dc_data['nasidentifier'];  
+                }
+                //----------- END Easy to use enhancement --------------------
+                
                 $captive_portal = ClassRegistry::init('MeshExitCaptivePortal');
                 $captive_portal->create();
 
@@ -820,6 +884,21 @@ class MeshesController extends AppController {
                 ));
             }
         } 
+    }
+    
+    public function mesh_exit_add_defaults(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        
+        Configure::load('MESHdesk'); 
+        $data = Configure::read('Meshes.captive_portal'); //Read the defaults
+        $this->set(array(
+            'data'     => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
     }
 
     public function mesh_exit_view(){
@@ -2779,5 +2858,37 @@ config secn 'asterisk'
 		$n->create();
 		$n->save($dual_radio);
 	}
+	
+	private function _add_dynamic($dc_data){
+    
+        //--Formulate a name
+        $dc_data['name'] = 'MESHdesk_'.$dc_data['nasidentifier'];
+        $this->DynamicClient->create();
+        if ($this->DynamicClient->save($dc_data)) {
+            //After this we can add the Realms if there are any
+            $new_id = $this->DynamicClient->id;
+            $pieces = explode(",", $dc_data['realm_list']);
+            foreach($pieces as $p){
+                if(is_numeric($p)){
+                    $this->DynamicClientRealm->create();
+                    $dcr = array();
+                    $dcr['dynamic_client_id'] = $new_id;
+                    $dcr['realm_id'] = $p;
+                    $this->DynamicClientRealm->save($dcr);
+                    $this->DynamicClientRealm->id = null;
+                }
+            }   
+        }
+    }
+    
+    private function _add_dynamic_pair($nas_data){
+        $this->DynamicPair->create();
+        $data = array();
+        $data['name']               = 'nasid';
+        $data['value']              = $nas_data['nasidentifier'];
+        $data['dynamic_detail_id']  = $nas_data['dynamic_detail_id'];
+        $data['priority']           = 1;  
+        $this->DynamicPair->save($data);
+    }
 
 }

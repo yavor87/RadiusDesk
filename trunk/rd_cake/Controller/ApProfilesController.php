@@ -1275,7 +1275,7 @@ class ApProfilesController extends AppController {
         $ap             = ClassRegistry::init('Ap');
         $wifi_setting   = ClassRegistry::init('ApWifiSetting');
         
-        //Get the ApProfile so we can get the user_id nd available_to_siblings for the said mesh
+        //Get the ApProfile so we can get the user_id nd available_to_siblings for the said ap_profile
         $ap_profile_id  = $this->request->data['ap_profile_id'];
         $this->ApProfile->contain();   
         $ap_profile     = $this->ApProfile->findById($ap_profile_id);
@@ -1310,11 +1310,14 @@ class ApProfilesController extends AppController {
 	            	        
 	            $exit_id = $qe['ApProfileExit']['id'];
 	            
+	            $name_no_spaces = $this->request->data['name'];
+	            $name_no_spaces = preg_replace('/\s+/', '_', $name_no_spaces);
+	            
 	            
 	            $dc_data                            = array();       	            
 	            $dc_data['user_id']                 = $user_id;
 	            $dc_data['available_to_siblings']   = $a_to_s;
-	            $dc_data['nasidentifier']           = $ap_profile_name.'_'.$this->request->data['name'].'_cp_'.$exit_id;
+	            $dc_data['nasidentifier']           = $ap_profile_name.'_'.$name_no_spaces.'_cp_'.$exit_id;
 	            $dc_data['realm_list']              = $qe['ApProfileExit']['realm_list'];
 	            
 	            if($qe['ApProfileExit']['auto_dynamic_client'] == 1){  //It has to be enabled
@@ -2188,7 +2191,7 @@ class ApProfilesController extends AppController {
     private function _add_dynamic($dc_data){
     
         //--Formulate a name
-        $dc_data['name'] = 'APDesk_'.$dc_data['nasidentifier'];
+        $dc_data['name'] = 'APdesk_'.$dc_data['nasidentifier'];
         $this->DynamicClient->create();
         if ($this->DynamicClient->save($dc_data)) {
             //After this we can add the Realms if there are any
