@@ -5,7 +5,7 @@ class ApProfilesController extends AppController {
 
     public $name        = 'ApProfiles';
     public $components  = array('Aa','GridFilter','TimeCalculations');
-    public $uses        = array('ApProfile','User','DynamicClient','DynamicPair','DynamicClientRealm');
+    public $uses        = array('ApProfile','User','DynamicClient','DynamicPair','DynamicClientRealm','Realm');
     protected $base     = "Access Providers/Controllers/ApProfiles/";
     protected $itemNote = 'ApProfileNote';
     
@@ -595,10 +595,6 @@ class ApProfilesController extends AppController {
             }
         }
         
-        
-        
-        
-
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
 
@@ -838,7 +834,26 @@ class ApProfilesController extends AppController {
 
         $id    = $this->request->query['exit_id'];
         $q_r   = $exit->findById($id);
-        ///print_r($q_r);
+
+       
+        //Get the realm list
+        if($q_r['ApProfileExit']['realm_list'] != ''){
+            $pieces = explode(",", $q_r['ApProfileExit']['realm_list']);
+            $q_r['ApProfileExit']['realm_records'] = array();
+            $q_r['ApProfileExit']['realm_ids'] = array();
+            foreach($pieces as $p){
+                if(is_numeric($p)){
+                    //Get the name and id of this realm
+                    $this->Realm->contain();
+                    $q_realm = $this->Realm->findById($p);
+                    if($q_realm){
+                        $r_name = $q_realm['Realm']['name'];
+                        array_push($q_r['ApProfileExit']['realm_records'],array('id' => $p, 'name' => $r_name));
+                        array_push($q_r['ApProfileExit']['realm_ids'],$p);
+                    }
+                }
+            }
+        }
 
         //entry_points
         $q_r['ApProfileExit']['entry_points'] = array();
@@ -908,7 +923,7 @@ class ApProfilesController extends AppController {
                 if($q_r['ApProfileExit']['type'] == 'captive_portal'){
                     $ap_profile_name    = $q_r['ApProfile']['name'];
                     $ap_profile_name    = preg_replace('/\s+/', '_', $ap_profile_name);
-                    $this->Na->deleteAll(array('Na.shortname LIKE' => "$ap_profile_name"."_%_cp_".$id), true);
+                    $this->DynamicClient->deleteAll(array('DynamicClient.nasidentifier LIKE' => "$ap_profile_name"."_%_cp_".$id), true);
                     $this->DynamicPair->deleteAll(
                         array(
                             'DynamicPair.value LIKE' => "$ap_profile_name"."_%_cp_".$id,
@@ -928,7 +943,7 @@ class ApProfilesController extends AppController {
                     if($q_r['ApProfileExit']['type'] == 'captive_portal'){
                         $ap_profile_name    = $q_r['ApProfile']['name'];
                         $ap_profile_name    = preg_replace('/\s+/', '_', $ap_profile_name);
-                        $this->Na->deleteAll(array('Na.shortname LIKE' => "$ap_profile_name"."_%_cp_".$id), true);
+                        $this->DynamicClient->deleteAll(array('DynamicClient.nasidentifier LIKE' => "$ap_profile_name"."_%_cp_".$id), true);
                         $this->DynamicPair->deleteAll(
                             array(
                                 'DynamicPair.value LIKE' => "$ap_profile_name"."_%_cp_".$id,
