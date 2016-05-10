@@ -704,6 +704,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
                 var ent  = form.down("cmbAccessPointEntryPoints");
                 ent.setValue(b.result.data.entry_points);
                 if(b.result.data.type == 'captive_portal'){
+                    //Login Page (Dynamic Detail)
                     if((b.result.data.auto_login_page == true)&&
                     (b.result.data.dynamic_detail != null)){
                         var cmb     = form.down("cmbDynamicDetail");
@@ -714,6 +715,21 @@ Ext.define('Rd.controller.cAccessPointEdits', {
                         form.down("cmbDynamicDetail").setVisible(false);
                         form.down("cmbDynamicDetail").setDisabled(true);
                     }
+                    //Realms for Dynamic Client (auto_dynamic_client)
+                    if((b.result.data.auto_dynamic_client == true)&&
+                    (b.result.data.realm_records != null)){    
+                        var cmb_r     = form.down("cmbRealm");
+                        var record_list = [];
+                        Ext.Array.forEach(b.result.data.realm_records,function(r){
+                            var rec = Ext.create('Rd.model.mRealm', {name: r.name, id: r.id});
+			                Ext.Array.push(record_list,rec);
+		                });
+                        cmb_r.getStore().loadData(record_list,false);
+                        cmb_r.setValue(b.result.data.realm_ids);
+                    }else{
+                        form.down("cmbRealm").setVisible(false);
+                        form.down("cmbRealm").setDisabled(true);
+                    }    
                 }
             }
         });
