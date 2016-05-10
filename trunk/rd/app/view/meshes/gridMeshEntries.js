@@ -110,11 +110,11 @@ Ext.define('Rd.view.meshes.gridMeshEntries' ,{
                 )   
             },
             { 
-                text        : 'Connected to Exit' ,   
+                text        : i18n("sConnected_to_Exit"),   
                 dataIndex   : 'connected_to_exit',  
                 tdCls       : 'gridTree', 
                 flex        : 1, 
-                stateId     : 'StateGridMeshEntries6',
+                stateId     : 'StateGridMeshEntries7',
                 renderer    : function (v, m, r) {
                     if(v == true){
                         return '<div class=\"fieldGreen\"><i class="fa fa-check-circle"></i> Yes</div>';

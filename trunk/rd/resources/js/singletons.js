@@ -655,7 +655,8 @@ Local = {
         'sFrom_IP' : 'From IP',
         'sSSID_to_Device' : 'SSID to Device',
         'sUsers_Connected' : 'Users Connected',
-        'sData_Usage' : 'Data Usage'
+        'sData_Usage' : 'Data Usage',
+        'sConnected_to_Exit' : 'Connected to Exit'
     }
 }
 
