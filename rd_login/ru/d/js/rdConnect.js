@@ -187,6 +187,7 @@ var rdConnect = (function () {
             $.ajax({ 
                 type    : "GET",
                 dataType: "json",
+                cache   : false,
                 timeout : ajaxTimeout,
                 url     : url,
                 success : function(j){        
@@ -325,7 +326,7 @@ var rdConnect = (function () {
 	    
 	        showOverlay();
 		    showFeedback("Disconnect the user"); 
-            $.ajax({url: urlLogout, dataType: "json",timeout: ajaxTimeout, data: {
+            $.ajax({url: urlLogout, dataType: "json",cache: false,timeout: ajaxTimeout, data: {
                 nbiIP       : nbiIP,
                 client_mac  : client_mac
             }})
@@ -576,7 +577,7 @@ $$('sliderData').refresh();
         var login =  function(){
             
 		    showFeedback("Log "+userName+" into Captive Portal");		    
-            $.ajax({url: urlLogin, dataType: "json",timeout: ajaxTimeout, data: {
+            $.ajax({url: urlLogin, dataType: "json",cache: false,timeout: ajaxTimeout, data: {
                 username    : userName, 
                 pwd         : password,
                 nbiIP       : nbiIP,
@@ -652,7 +653,7 @@ $$('sliderData').refresh();
         var socialTempLogin	= function(){
 		    showFeedback("Log temp user into Captive Portal");
 		    
-		    $.ajax({url: urlLogin, dataType: "json",timeout: ajaxTimeout, data: {
+		    $.ajax({url: urlLogin, dataType: "json",cache: false,timeout: ajaxTimeout, data: {
                 username    : userName, 
                 pwd         : password,
                 nbiIP       : nbiIP,
@@ -770,7 +771,7 @@ $$('sliderData').refresh();
 	    var socialTempDisconnect 	=  function(){
 	    
             showFeedback("Disconnect the social temp user");       
-            $.ajax({url: urlLogout, dataType: "json",timeout: ajaxTimeout, data: {
+            $.ajax({url: urlLogout, dataType: "json",cache: false,timeout: ajaxTimeout, data: {
                 nbiIP       : nbiIP,
                 client_mac  : client_mac
             }})
@@ -792,7 +793,7 @@ $$('sliderData').refresh();
         var socialFinalLogin = function(encPwd){
 		    showFeedback('Doing final login');
 		    
-		    $.ajax({url: urlLogin, dataType: "json",timeout: ajaxTimeout, data: {
+		    $.ajax({url: urlLogin, dataType: "json",cache: false,timeout: ajaxTimeout, data: {
                 username    : userName, 
                 pwd         : password,
                 nbiIP       : nbiIP,
