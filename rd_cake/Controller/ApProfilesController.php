@@ -128,7 +128,7 @@ class ApProfilesController extends AppController {
                 'success' => true,
                 '_serialize' => array('success')
             ));
-        } else {
+        }else {
             $message = 'Error';
             $this->set(array(
                 'errors'    => $this->{$this->modelClass}->validationErrors,
