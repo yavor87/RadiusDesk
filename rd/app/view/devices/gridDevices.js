@@ -41,15 +41,15 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                 tdCls       : 'gridTree',   
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                 "<tpl if='active == true'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='active == false'><div class=\"fieldRedWhite\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
+                                 "<tpl if='active == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
                 filter      : {
-                        defaultValue   : false,
-                        value   : 'true',
-                        yesText : 'Yes',
-                        noText  : 'No'
+                        type            : 'boolean',
+                        defaultValue    : false,
+                        yesText         : 'Yes',
+                        noText          : 'No'
                 },stateId: 'StateGridDevices7'
             },
             {

@@ -73,30 +73,30 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 text        : i18n('sMonitor'),  
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='monitor == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='monitor == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
+                                "<tpl if='monitor == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='monitor == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'monitor',
                 filter      : {
-                        type    : 'boolean',
-                        value   : 'true',
-                        yesText : 'Yes',
-                        noText  : 'No'
+                        type            : 'boolean',
+                        defaultValue    : false,
+                        yesText         : 'Yes',
+                        noText          : 'No'
                 }, stateId: 'StateGridAccessProviders8'
             },
             { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='active == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='active == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
+                                "<tpl if='active == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                                "<tpl if='active == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
                             ),
                 dataIndex   : 'active',
                 filter      : {
-                        type    : 'boolean',
-                        defaultValue   : false,
-                        yesText : 'Yes',
-                        noText  : 'No'
+                        type            : 'boolean',
+                        defaultValue    : false,
+                        yesText         : 'Yes',
+                        noText          : 'No'
                 }, stateId: 'StateGridAccessProviders9'
             },
              { 

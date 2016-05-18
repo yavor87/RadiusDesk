@@ -656,7 +656,8 @@ Local = {
         'sSSID_to_Device' : 'SSID to Device',
         'sUsers_Connected' : 'Users Connected',
         'sData_Usage' : 'Data Usage',
-        'sConnected_to_Exit' : 'Connected to Exit'
+        'sConnected_to_Exit' : 'Connected to Exit',
+        'sLimits' : 'Limits'
     }
 }
 

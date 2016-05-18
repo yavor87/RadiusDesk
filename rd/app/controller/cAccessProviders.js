@@ -52,7 +52,8 @@ Ext.define('Rd.controller.cAccessProviders', {
         'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
         'components.pnlBanner',                 'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
         'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd',
-        'permanentUsers.winPermanentUserPassword','components.winEnableDisable',        'components.vCmbLanguages'
+        'permanentUsers.winPermanentUserPassword','components.winEnableDisable',        'components.vCmbLanguages',
+        'accessProviders.gridAccessProviderLimits'
     ],
     stores: ['sLanguages',  'sApRights',    'sAccessProvidersGrid',     'sAccessProvidersTree'],
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
@@ -66,7 +67,8 @@ Ext.define('Rd.controller.cAccessProviders', {
         urlNoteAdd      : '/cake2/rd_cake/access_providers/note_add.json',
         urlViewAPDetail : '/cake2/rd_cake/access_providers/view.json',
         urlEnableDisable: '/cake2/rd_cake/access_providers/enable_disable.json',
-        urlChangePassword:'/cake2/rd_cake/access_providers/change_password.json'
+        urlChangePassword:'/cake2/rd_cake/access_providers/change_password.json',
+        urlLimitCheck   : '/cake2/rd_cake/limits/limit_check.json'
     },
     refs: [
         { ref:  'treeAccessProviders',  selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
@@ -135,6 +137,9 @@ Ext.define('Rd.controller.cAccessProviders', {
             'pnlAccessProvider gridApRealms #reload': {
                 click:      me.apRealmsReload
             },
+            'pnlAccessProvider gridAccessProviderLimits #reload': {
+                click:      me.limitsReload
+            },
             '#winCsvColumnSelectAp #save': {
                 click:  me.csvExportSubmit
             },
@@ -168,6 +173,9 @@ Ext.define('Rd.controller.cAccessProviders', {
             },
             'pnlAccessProvider #tabRights': {
                 activate:       me.tabRightsActivate
+            },
+             'pnlAccessProvider #tabLimits': {
+                activate:       me.tabLimitsActivate
             },
             'winPermanentUserPassword #save': {
                 click: me.changePasswordSubmit
@@ -302,17 +310,30 @@ Ext.define('Rd.controller.cAccessProviders', {
                 }
 
                 var ap_tab_name = sr.get('username');
-                //Tab not there - add one
-                tp.add({ 
-                    title :     ap_tab_name,
-                    itemId:     ap_tab_id,
-                    closable:   true,
-                    iconCls:    'edit', 
-                    glyph:      Rd.config.icnEdit,
-                    layout:     'fit', 
-                    items:      {'xtype' : 'pnlAccessProvider',ap_id: ap_id}
-                });
-                tp.setActiveTab(ap_tab_id); //Set focus on Add Tab
+                
+                 Ext.Ajax.request({
+                    url: me.getUrlLimitCheck(),
+                    method: 'GET',
+                    success: function(response){
+                        var jsonData    = Ext.JSON.decode(response.responseText);
+                        console.log(jsonData);
+                        if(jsonData.success){
+                            var enabled = jsonData.data.enabled;
+                            //Tab not there - add one
+                            tp.add({ 
+                                title :     ap_tab_name,
+                                itemId:     ap_tab_id,
+                                closable:   true,
+                                iconCls:    'edit', 
+                                glyph:      Rd.config.icnEdit,
+                                layout:     'fit', 
+                                items:      {'xtype' : 'pnlAccessProvider',ap_id: ap_id, limits:enabled}
+                            });
+                            tp.setActiveTab(ap_tab_id); //Set focus on Add Tab
+                        }
+                    },
+                    scope: me
+                });                     
             });
         }
     },
@@ -436,6 +457,11 @@ Ext.define('Rd.controller.cAccessProviders', {
     apRealmsReload: function(button){
         var me = this;
         var grid = button.up('gridApRealms');
+        grid.getStore().load();
+    },
+    limitsReload: function(button){
+        var me = this;
+        var grid = button.up('grid');
         grid.getStore().load();
     },
     onStoreApLoaded: function() {
@@ -830,6 +856,10 @@ Ext.define('Rd.controller.cAccessProviders', {
         t.getStore().load();
     },
     tabRightsActivate:  function(t){
+        var me = this;
+        t.getStore().load();
+    },
+    tabLimitsActivate: function(t){
         var me = this;
         t.getStore().load();
     } 
