@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
 class Ap extends AppModel {
 
     public $name   = 'Ap';
-    public $actsAs = array('Containable');
+    public $actsAs = array('Containable','Limit');
     
     public $validate = array(
         'name' => array(

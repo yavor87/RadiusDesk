@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
 class ApProfile extends AppModel {
 
     public $name        = 'ApProfile';
-    public $actsAs      = array('Containable');
+    public $actsAs      = array('Containable','Limit');
 
     public $belongsTo = array(
         'User' => array(
