@@ -9,26 +9,55 @@ Ext.define('Rd.view.accessProviders.pnlAccessProvider', {
     initComponent: function(){
 
         var me = this;
-        me.items = [
-        {   
-            title   : i18n('sDetail'),
-            itemId  : 'tabDetail',
-            xtype   : 'pnlAccessProviderDetail',
-            ap_id   : me.ap_id
-        },
-        { 
-            title   : i18n('sRealms'),
-            itemId  : 'tabRealms',
-            xtype   : 'gridApRealms', 
-            ap_id   : me.ap_id
-        },
-        {
-            title   : i18n('sRights'),
-            itemId  : 'tabRights',
-            xtype   : 'treeApUserRights', 
-            ap_id   : me.ap_id
+        if(me.limits){
+            me.items = [
+                {   
+                    title   : i18n('sDetail'),
+                    itemId  : 'tabDetail',
+                    xtype   : 'pnlAccessProviderDetail',
+                    ap_id   : me.ap_id
+                },
+                { 
+                    title   : i18n('sRealms'),
+                    itemId  : 'tabRealms',
+                    xtype   : 'gridApRealms', 
+                    ap_id   : me.ap_id
+                },
+                {
+                    title   : i18n('sRights'),
+                    itemId  : 'tabRights',
+                    xtype   : 'treeApUserRights', 
+                    ap_id   : me.ap_id
+                },
+                {
+                    title   : i18n('sLimits'),
+                    itemId  : 'tabLimits',
+                    xtype   : 'gridAccessProviderLimits',
+                    ap_id   : me.ap_id
+                }
+            ];
+        }else{
+            me.items = [
+                {   
+                    title   : i18n('sDetail'),
+                    itemId  : 'tabDetail',
+                    xtype   : 'pnlAccessProviderDetail',
+                    ap_id   : me.ap_id
+                },
+                { 
+                    title   : i18n('sRealms'),
+                    itemId  : 'tabRealms',
+                    xtype   : 'gridApRealms', 
+                    ap_id   : me.ap_id
+                },
+                {
+                    title   : i18n('sRights'),
+                    itemId  : 'tabRights',
+                    xtype   : 'treeApUserRights', 
+                    ap_id   : me.ap_id
+                }
+            ];
         }
-    ]; 
-    me.callParent(arguments);
+        me.callParent(arguments);
     }
 });
