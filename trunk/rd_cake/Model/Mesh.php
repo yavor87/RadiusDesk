@@ -3,7 +3,7 @@
 class Mesh extends AppModel {
 
     public $name        = 'Mesh';
-    public $actsAs      = array('Containable');
+    public $actsAs      = array('Containable','Limit');
 
     public $belongsTo = array(
         'User' => array(

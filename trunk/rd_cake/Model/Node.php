@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 
 class Node extends AppModel {
 
-    public $actsAs = array('Containable');
+    public $actsAs = array('Containable','Limit');
     public $validate = array(
         'name' => array(
             'required' => array(
