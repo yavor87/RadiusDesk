@@ -8,7 +8,7 @@ App::uses('AuthComponent', 'Controller/Component');
  */
 class PermanentUser extends AppModel {
 
-	public $actsAs 		= array('Containable');
+	public $actsAs 		= array('Containable','Limit');
 
 	public $validate 	= array(
 		'username' => array(

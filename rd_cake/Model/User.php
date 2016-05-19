@@ -98,7 +98,7 @@ class User extends AppModel {
         )
     );
 
-    public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree');
+    public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree','Limit');
 
 
     public function beforeSave($options = array()) {

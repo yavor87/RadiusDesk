@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 
 class Voucher extends AppModel {
 
-    public $actsAs          = array('Containable');
+    public $actsAs          = array('Containable','Limit');
 	public $displayField    = 'name';
     
     public $Radcheck;  

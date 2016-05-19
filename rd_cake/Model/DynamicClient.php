@@ -3,7 +3,7 @@
 class DynamicClient extends AppModel {
 
     public $name        = 'DynamicClient';
-    public $actsAs      = array('Containable');
+    public $actsAs      = array('Containable','Limit');
 
     public $belongsTo = array(
         'User' => array(

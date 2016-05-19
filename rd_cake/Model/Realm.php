@@ -7,7 +7,7 @@ App::uses('AppModel', 'Model');
  */
 class Realm extends AppModel {
 
-    public $actsAs = array('Acl' => array('className' => 'MyAcl','type' => 'controlled'),'Containable');
+    public $actsAs = array('Acl' => array('className' => 'MyAcl','type' => 'controlled'),'Containable','Limit');
 
 
 /**
