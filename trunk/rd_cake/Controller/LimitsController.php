@@ -181,7 +181,7 @@ class LimitsController extends AppController {
         Configure::load('Limits');
         $is_active      = Configure::read('Limits.Global.Active');
         $limits_data    = Configure::read('Limits');
-        $count          = 1;
+        $id             = 1;
         
         foreach(array_keys($limits_data) as $key){
             if($key != 'Global'){
@@ -195,8 +195,8 @@ class LimitsController extends AppController {
                     $count  = $limits_data["$key"]['Count'];
                 }
                 $desc   = $limits_data["$key"]['Description'];
-                array_push($limits_return, array('id' =>$count, 'alias' => $alias, 'active' => $active, 'count' => $count, 'description' => $desc ));
-                $count ++;
+                array_push($limits_return, array('id' =>$id, 'alias' => $alias, 'active' => $active, 'count' => $count, 'description' => $desc ));
+                $id ++;
             }
         }
         return $limits_return;
