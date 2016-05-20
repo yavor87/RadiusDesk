@@ -43,6 +43,8 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 
 .webix_view .scrnHelp{
     background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 .webix_view .scrnPhoto{
@@ -51,6 +53,8 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 
 .webix_view .scrnAbout {
     background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 .btnConnect .webix_el_htmlbutton { 
