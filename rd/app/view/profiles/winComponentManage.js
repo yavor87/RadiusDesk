@@ -5,7 +5,7 @@ Ext.define('Rd.view.profiles.winComponentManage', {
     layout: 'fit',
     autoShow: false,
     width:    450,
-    height:   400,
+    height:   410,
     iconCls: 'edit',
     glyph: Rd.config.icnEdit,
     initComponent: function() {
@@ -20,27 +20,27 @@ Ext.define('Rd.view.profiles.winComponentManage', {
                     anchor: '100%'
                 },
                 fieldDefaults: {
-                    msgTarget: 'under',
+                    msgTarget   : 'under',
                     labelClsExtra: 'lblRd',
-                    labelAlign: 'left',
+                    labelAlign  : 'left',
                     labelSeparator: '',
-                    margin: 15
+                    labelWidth  : Rd.config.labelWidth,
+                    maxWidth    : Rd.config.maxWidth, 
+                    margin      : Rd.config.fieldMargin   
                 },
                 defaultType: 'textfield',
-                tbar: [
-                    { xtype: 'tbtext', text: i18n('sSelect_an_action'), cls: 'lblWizard' }
-                ],
                 items: [
                     {
                         xtype       : 'radiogroup',
-                        fieldLabel  : i18n('sAction'),
-                        columns: 1,
-                        vertical: true,
+                      //  fieldLabel  : i18n('sAction'),
+                     //   labelWidth  : 50,
+                        columns: 2,
+                        vertical: false,
                         items: [
                             { boxLabel: i18n('sAdd_component'),                     name: 'rb',     inputValue: 'add', checked: true },
                             { boxLabel: i18n('sRemove_component'),                  name: 'rb',     inputValue: 'remove'},
-                            { boxLabel: i18n('sMake_available_to_sub_providers'),   name: 'rb',     inputValue: 'sub'},
-                            { boxLabel: i18n('sMake_private'),                      name: 'rb',     inputValue: 'no_sub'}
+                            { boxLabel: i18n('sAvailable_to_sub_providers'),   name: 'rb',     inputValue: 'sub'},
+                            { boxLabel: i18n('sPrivate'),                      name: 'rb',     inputValue: 'no_sub'}
                         ]
                     },
                     {
