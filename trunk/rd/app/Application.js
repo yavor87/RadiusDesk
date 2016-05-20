@@ -14,8 +14,8 @@ Ext.define('Rd.Application', {
     ],
 
     controllers: [
-        'cStartup',
-        'cLogin'
+        //'cStartup',
+        //'cLogin'
     ],
     
     desktopData : null,  //Data on how the desktop will look like which will be returned after login
