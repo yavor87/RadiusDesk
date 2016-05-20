@@ -34,12 +34,13 @@ Ext.define('Rd.view.profiles.gridProfiles' ,{
             { text: i18n('sName'),         dataIndex: 'name',  tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridProfiles3'},
             { 
                 text:   i18n('sAvailable_to_sub_providers'),
-                flex: 1,  
+                flex    : 1,  
                 xtype:  'templatecolumn', 
+                tdCls       : 'gridTree',
                 tpl:    new Ext.XTemplate(
-                            "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\">"+i18n("sYes")+"</div></tpl>",
-                            "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">"+i18n("sNo")+"</div></tpl>"
-                        ),
+                    "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                    "<tpl if='available_to_siblings == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
+                ),
                 dataIndex: 'available_to_siblings',
                 filter      : {
                         type    : 'boolean',
@@ -49,17 +50,19 @@ Ext.define('Rd.view.profiles.gridProfiles' ,{
                 },stateId: 'StateGridProfiles4'
             },
             { 
-                text:   i18n('sProfile_components'),
-                sortable: false,
-                flex: 1,  
-                xtype:  'templatecolumn', 
-                tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(profile_components)"><div"></div></tpl>', //Warn them when available to all
-                            '<tpl for="profile_components">',     // interrogate the profile_components property within the data
-                                "<div class=\"gridTag\">{groupname}({priority})</div>",
-                            '</tpl>'
-                        ),
-                dataIndex: 'profile_components',stateId: 'StateGridProfiles5'
+                text        :  i18n('sProfile_components'),
+                sortable    : false,
+                flex        : 1,  
+                xtype       : 'templatecolumn',
+                tdCls       : 'gridTree',  
+                tpl         :    new Ext.XTemplate(
+                    '<tpl if="Ext.isEmpty(profile_components)"><div"></div></tpl>', //Warn them when available to all
+                    '<tpl for="profile_components">',     // interrogate the profile_components property within the data
+                        "<div class=\"fieldGreyWhite\">{groupname} <small><i>(priority => {priority})</i></small></div>",
+                    '</tpl>'
+                ),
+                dataIndex   : 'profile_components',
+                stateId     : 'StateGridProfiles5'
             },
             { 
                 text    : i18n('sNotes'),
