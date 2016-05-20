@@ -485,6 +485,10 @@ var rdDynamic = (function () {
                     if(window.innerWidth > 450){
                         var t= $$('scrnHome').getNode();
                         $(t).css('background-image', 'url(' + cDynamicData.photos[0].file_name + ')');
+                        var shlp = $$('scrnHelp').getNode();
+                        $(shlp).css('background-image', 'url(' + cDynamicData.photos[0].file_name + ')');
+                        var sabt = $$('scrnAbout').getNode();
+                        $(sabt).css('background-image', 'url(' + cDynamicData.photos[0].file_name + ')');
                     }
                 }
             }             
