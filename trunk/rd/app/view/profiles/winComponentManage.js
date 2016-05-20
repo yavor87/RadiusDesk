@@ -59,20 +59,11 @@ Ext.define('Rd.view.profiles.winComponentManage', {
                         xtype: 'numberfield',
                         anchor: '100%',
                         name: 'priority',
-                        fieldLabel: i18n('sPriority'),
+                        fieldLabel: 'Priority <br><small><i>(Higher takes priority)</i></small>',
                         value: 5,
                         maxValue: 5,
                         minValue: 1,
-                        itemId: 'priority',
-                        afterRender: function (ct, position) {
-                            new Ext.ToolTip({
-                                target : this.id,
-                                trackMouse : false,
-                                maxWidth : 250,
-                                minWidth : 100,
-                                html : "<label class=\'lblTipItem\'>Higher values takes priority</label>"
-                            });
-                        }
+                        itemId: 'priority'
                     }
                 ],
                 buttons: [
