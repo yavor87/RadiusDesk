@@ -19,8 +19,7 @@ class OptimiseUserStatsShell extends AppShell {
         
         }else{
             //Find the earliest entry
-            $this->out("<info>Could not find an entry - use the first one if there is one</info>");
-            
+            $this->out("<info>Could not find an entry - use the first one if there is one</info>");         
             $q_r = $this->UserStat->find('first',array('order' => 'timestamp ASC'));
             if($q_r){
                 $start_time = $q_r['UserStat']['timestamp'];  
