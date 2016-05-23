@@ -58,6 +58,11 @@ $config['Limits']['Node']['Active']                 = true;
 $config['Limits']['Node']['Count']                  = 3;
 $config['Limits']['Node']['Description']            = 'The number of nodes a mesh network can contain';
 
+//Total Devices (Special Limit)
+$config['Limits']['TotalDevices']['Active']         = true;
+$config['Limits']['TotalDevices']['Count']          = 3;
+$config['Limits']['TotalDevices']['Description']    = 'Total number of Devices which can <b>EITHER</b> be attached to a Mesh network or an Access Point Probile';
+
 
 
 
