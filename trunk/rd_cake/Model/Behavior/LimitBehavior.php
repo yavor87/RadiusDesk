@@ -38,16 +38,25 @@ class LimitBehavior extends ModelBehavior {
         return true;
     }
     
-    private function _find_limit_for($user_id,$alias){
+    private function _find_limit_for($user_id,$alias){ 
+        $l   = ClassRegistry::init('Limit');  
+        $q_r = $l->find('first',array('conditions' => array('Limit.user_id' => $user_id,'Limit.alias' =>$alias)));
         
-        //Check if active
-        if(Configure::read('Limits.'.$alias.'.Active')){
-            $count = Configure::read('Limits.'.$alias.'.Count');
-            return $count;
+        if($q_r){
+            $active = $q_r['Limit']['active'];
+            $count  = $q_r['Limit']['count'];
+            if($active){
+                return $count;
+            }
+            return false; //No Limit        
         }else{
-            return false;
+            //Check if active
+            if(Configure::read('Limits.'.$alias.'.Active')){ 
+                $count = Configure::read('Limits.'.$alias.'.Count');
+                return $count;
+            }
+            return false; //No Limit
         }
-        return 2;
     }
     
     private function _find_add_flag($model){
@@ -102,7 +111,7 @@ class LimitBehavior extends ModelBehavior {
             $q_r = $user->findById($user_id);
             if($q_r){
                 $group = $q_r['Group']['name'];
-                if($group == Configure::read('group.ap')){ //Limits are only applied to Access Providers
+                if($group == Configure::read('group.ap')){ //Limits are only applied to Access Providers   
                     $l = $this->_find_limit_for($user_id,$alias);
                     if($l){
                         $current_count = $model->find('count',array('conditions' => array("$alias.user_id" => $user_id)));
@@ -114,6 +123,7 @@ class LimitBehavior extends ModelBehavior {
                 }
             }
         }
+        return true; //No Limits found
     }
     
     private function _find_limit_for_aps($model){
@@ -144,13 +154,22 @@ class LimitBehavior extends ModelBehavior {
         
         if($ap_profile_id){
             $q_r = $ap_profile->findById($ap_profile_id);
-            if($q_r['User']['Group']['name'] == Configure::read('group.ap')){
-                $l = $this->_find_limit_for($q_r['User']['id'],'Ap');
-                if($l){
-                    $current_count = $model->find('count',array('conditions' => array("Ap.ap_profile_id" => $ap_profile_id)));
-                    if($current_count >= $l){
-                        $model->validationErrors = array('name' => "Limit for Devices set to $l");
+            if($q_r['User']['Group']['name'] == Configure::read('group.ap')){  
+                $spcl_limit = $this->_find_limit_for($q_r['User']['id'],'TotalDevices');
+                if($spcl_limit){
+                    $td_limit = $this->_test_total_devices_limit($q_r['User']['id'],$spcl_limit);
+                    if($td_limit){
+                        $model->validationErrors = array('name' => "Limit for Devices and Nodes combined set to $spcl_limit");
                         return false;
+                    }
+                }else{
+                    $l = $this->_find_limit_for($q_r['User']['id'],'Ap');
+                    if($l){
+                        $current_count = $model->find('count',array('conditions' => array("Ap.ap_profile_id" => $ap_profile_id)));
+                        if($current_count >= $l){
+                            $model->validationErrors = array('name' => "Limit for Devices set to $l");
+                            return false;
+                        }
                     }
                 }
             }
@@ -160,9 +179,7 @@ class LimitBehavior extends ModelBehavior {
     
     private function _find_limit_for_nodes($model){ 
         $mesh     = ClassRegistry::init('Mesh');
-        $mesh->contain(array('User'=> 'Group')); 
-        $mesh_id  = false;
-        
+        $mesh_id  = false;  
         $add_flag = $this->_find_add_flag($model);
         if(!$add_flag){
             return;
@@ -172,7 +189,7 @@ class LimitBehavior extends ModelBehavior {
         if(isset($model->data['Node'])){
             if(isset($model->data['Node']['mesh_id'])){
                 if($model->data['Node']['mesh_id']!=''){
-                    $mesh_id =  $model->data['Mesh']['mesh_id'];
+                    $mesh_id =  $model->data['Node']['mesh_id'];
                 }   
             }
         }else{
@@ -184,14 +201,27 @@ class LimitBehavior extends ModelBehavior {
         }
         
         if($mesh_id){
+        
+            $mesh->contain(array('User'=> 'Group')); 
             $q_r = $mesh->findById($mesh_id);
             if($q_r['User']['Group']['name'] == Configure::read('group.ap')){
-                $l = $this->_find_limit_for($q_r['User']['id'],'Node');
-                if($l){
-                    $current_count = $model->find('count',array('conditions' => array("Node.mesh_id" => $mesh_id)));
-                    if($current_count >= $l){
-                        $model->validationErrors = array('name' => "Limit for Nodes set to $l");
+                   
+                //Here we add a special limit which have overrriding powers
+                $spcl_limit = $this->_find_limit_for($q_r['User']['id'],'TotalDevices');
+                if($spcl_limit){
+                    $td_limit = $this->_test_total_devices_limit($q_r['User']['id'],$spcl_limit);
+                    if($td_limit){
+                        $model->validationErrors = array('name' => "Limit for Devices and Nodes combined set to $spcl_limit");
                         return false;
+                    }
+                }else{
+                    $l = $this->_find_limit_for($q_r['User']['id'],'Node');
+                    if($l){
+                        $current_count = $model->find('count',array('conditions' => array("Node.mesh_id" => $mesh_id)));
+                        if($current_count >= $l){
+                            $model->validationErrors = array('name' => "Limit for Nodes set to $l");
+                            return false;
+                        }
                     }
                 }
             }
@@ -199,11 +229,47 @@ class LimitBehavior extends ModelBehavior {
         return true; //No Limits found
     }
     
+    private function _test_total_devices_limit($ap_id,$set_limit){
+    
+        //We need to find all the Meshes belonging to the Access Provider
+        $mesh = ClassRegistry::init('Mesh');
+        $node = ClassRegistry::init('Node');
+        $node_total = 0;
+        
+        $mesh->contain();
+        $m_list = $mesh->find('all',array('conditions' =>array('Mesh.user_id' => $ap_id)));
+        foreach($m_list as $m){
+            $mesh_id = $m['Mesh']['id'];
+            $node->contain();
+            $nc = $node->find('count',array('conditions' =>array('Node.mesh_id' =>$mesh_id)));
+            $node_total = $node_total + $nc;
+        }
+        
+        //We need to find all the Access Point Profiles belonging to the Access Provices
+        $ap_profile = ClassRegistry::init('ApProfile');
+        $ap         = ClassRegistry::init('Ap');
+        $ap_total   = 0;
+        
+        $ap_profile->contain();
+        $app_list = $ap_profile->find('all',array('conditions' =>array('ApProfile.user_id' => $ap_id)));
+        foreach($app_list as $a){
+            $ap_profile_id = $a['ApProfile']['id'];
+            $ap->contain();
+            $apc = $ap->find('count',array('conditions' =>array('Ap.ap_profile_id' =>$ap_profile_id)));
+            $ap_total = $ap_total + $apc;
+        }
+        
+        //Total and compare
+        if(($ap_total+$node_total) >= $set_limit){
+            return true; //More than allowed limit
+        }
+        return false;
+    }
+    
     private function _find_limit_for_devices($model){ 
         $pu     = ClassRegistry::init('PermanentUser');
         $pu->contain(array('User'=> 'Group')); 
-        $pu_id  = false;
-        
+        $pu_id  = false;   
         $add_flag = $this->_find_add_flag($model);
         if(!$add_flag){
             return;
