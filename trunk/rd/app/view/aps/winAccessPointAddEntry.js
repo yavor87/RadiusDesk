@@ -5,7 +5,7 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
     draggable:  true,
     resizable:  true,
     title:      'New Access Point SSID',
-    width:      400,
+    width:      500,
     height:     400,
     plain:      true,
     border:     false,
@@ -38,7 +38,7 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                 labelAlign      : 'left',
                 labelSeparator  : '',
                 labelWidth      : Rd.config.labelWidth,
-                maxWidth        : Rd.config.maxWidth, 
+              //  maxWidth        : Rd.config.maxWidth, 
                 margin          : Rd.config.fieldMargin
             },
             defaultType: 'textfield',
@@ -139,7 +139,7 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                         { 
                             'title'     : i18n("sEncryption"),
                             'layout'    : 'anchor',
-                            itemId      : 'tabContact',
+                            itemId      : 'tabEncryption',
                             defaults    : {
                                 anchor: '100%'
                             },
@@ -184,6 +184,44 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                     hidden      : true,
                                     disabled    : true
                                 }
+                            ]
+                        },
+                         { 
+                            'title'     : i18n("sAdvanced"),
+                            'layout'    : 'anchor',
+                            itemId      : 'tabAdvanced',
+                            defaults    : {
+                                anchor: '100%'
+                            },
+                            autoScroll:true,
+                            items       : [ 
+                                {
+                                    xtype       : 'checkbox',      
+                                    fieldLabel  : i18n("sLimitClients"),
+                                    name        : 'chk_maxassoc',
+                                    inputValue  : 'chk_maxassoc',
+                                    checked     : false,
+                                    labelClsExtra: 'lblRdReq'
+                                },          
+                                {
+                                    xtype       : 'numberfield',
+                                    name        : 'maxassoc',
+                                    fieldLabel  : i18n("sMaxClients"),
+                                    value       : 100,
+                                    maxValue    : 1000,
+                                    minValue    : 1,
+                                    labelClsExtra: 'lblRdReq'
+                                }, 
+                                { 
+                                    xtype       : 'cmbMacFilter',
+                                    labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    xtype       : 'cmbPermanentUser',
+                                    fieldLabel  : i18n("sBYOD_Belonging_To"),
+                                    labelClsExtra: 'lblRdReq',
+                                    name        : 'permanent_user_id'
+                                }     
                             ]
                         }
                     ]
