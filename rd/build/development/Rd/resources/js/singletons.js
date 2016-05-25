@@ -657,7 +657,14 @@ Local = {
         'sUsers_Connected' : 'Users Connected',
         'sData_Usage' : 'Data Usage',
         'sConnected_to_Exit' : 'Connected to Exit',
-        'sLimits' : 'Limits'
+        'sLimits' : 'Limits',
+        'sAdvanced' : 'Advanced',
+        'sLimitClients' : 'Limit Clients',
+        'sMaxClients' : 'Max Clients',
+        'sMacFilter' : 'MAC Filter',
+        'sDisabled' : 'Disabled',
+        'sDeny' : 'Deny',
+        'sBYOD_Belonging_To' : 'BYOD Owner'     
     }
 }
 

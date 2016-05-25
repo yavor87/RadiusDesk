@@ -22,13 +22,15 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         'components.cmbTimezones',      
         'components.cmbCountries',
         'components.cmbFiveGigChannels',
-        'components.cmbRealm'
+        'components.cmbRealm',
+        'components.cmbMacFilter',
+        'components.cmbPermanentUser'
     ],
     stores      : [	
 		'sAccessPointEntries', 'sAccessPointExits', 	'sAps', 'sAccessPointEntryPoints', 'sRealms'
     ],
     models      : [ 
-		'mAccessPointEntry',  	'mAccessPointExit', 	'mAp',  'mAccessPointEntryPoint', 'mRealm'
+		'mAccessPointEntry',  	'mAccessPointExit', 	'mAp',  'mAccessPointEntryPoint', 'mRealm', 'mPermanentUser'
     ],
     config      : {  
         urlAddEntry:        '/cake2/rd_cake/ap_profiles/ap_profile_entry_add.json',
