@@ -250,7 +250,7 @@ Local = {
         "sAuto_close_activation_time": "Auto close activation time",
         "sAvailable_to_sub_providers": "Available to sub-providers",
         "sConnection_type": "Connection type",
-        "sMake_available_to_sub_providers": "Make available to sub-providers",
+        "sAvailable_to_sub_providers": "Available to sub-providers",
         "sMake_available_to_any_realm": "Make available to any realm",
         "sAdd_NAS_device": "Add NAS device",
         "sSelect_the_device_owner": "Select the device owner",
@@ -324,7 +324,7 @@ Local = {
         "sProfile_components": "Profile components",
         "sAdd_component": "Add component",
         "sRemove_component": "Remove component",
-        "sMake_private": "Make private",
+        "sPrivate": "Private",
         "sSelect_a_component_to_add_or_remove": "Select a component to add or remove",
         "sPermanent_Users": "Permanent Users",
         "sNew_permanent_user": "New permanent user",
@@ -625,7 +625,7 @@ Local = {
         "sApply_power_to_all_nodes": "Apply power to all nodes",
         
         //Access Points
-        'sAccess_Point_Overview' : 'Access Point Overview',
+        'sAccess_Point_Management' : 'Access Point Management',
         'sOverview' : 'Overview',
         'sAttached_Devices' : 'Attached Devices',
         'sDetached_Devices' : 'Detached Devices',
@@ -655,7 +655,9 @@ Local = {
         'sFrom_IP' : 'From IP',
         'sSSID_to_Device' : 'SSID to Device',
         'sUsers_Connected' : 'Users Connected',
-        'sData_Usage' : 'Data Usage'
+        'sData_Usage' : 'Data Usage',
+        'sConnected_to_Exit' : 'Connected to Exit',
+        'sLimits' : 'Limits'
     }
 }
 
