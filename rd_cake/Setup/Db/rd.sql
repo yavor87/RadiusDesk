@@ -154,6 +154,10 @@ CREATE TABLE `ap_profile_entries` (
   `frequency_band` enum('both','two','five') DEFAULT 'both',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `chk_maxassoc` tinyint(1) NOT NULL DEFAULT '0',
+  `maxassoc` int(6) DEFAULT '100',
+  `macfilter` enum('disable','allow','deny') DEFAULT 'disable',
+  `permanent_user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -164,7 +168,7 @@ CREATE TABLE `ap_profile_entries` (
 
 LOCK TABLES `ap_profile_entries` WRITE;
 /*!40000 ALTER TABLE `ap_profile_entries` DISABLE KEYS */;
-INSERT INTO `ap_profile_entries` VALUES (17,14,'Hotel California',0,0,'none','','','',0,'both','2016-04-30 11:01:14','2016-04-30 11:35:11'),(18,14,'Test',0,0,'none','','','',0,'both','2016-05-10 05:16:57','2016-05-10 05:16:57');
+INSERT INTO `ap_profile_entries` VALUES (17,14,'Hotel California',0,0,'none','','','',0,'both','2016-04-30 11:01:14','2016-04-30 11:35:11',0,100,'disable',0),(18,14,'Test',0,0,'none','','','',0,'both','2016-05-10 05:16:57','2016-05-10 05:16:57',0,100,'disable',0);
 /*!40000 ALTER TABLE `ap_profile_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1900,6 +1904,10 @@ CREATE TABLE `mesh_entries` (
   `dynamic_vlan` tinyint(1) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `chk_maxassoc` tinyint(1) NOT NULL DEFAULT '0',
+  `maxassoc` int(6) DEFAULT '100',
+  `macfilter` enum('disable','allow','deny') DEFAULT 'disable',
+  `permanent_user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1910,7 +1918,7 @@ CREATE TABLE `mesh_entries` (
 
 LOCK TABLES `mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24'),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2016-04-14 14:32:21'),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2016-04-14 14:32:27'),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43'),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53'),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03'),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21'),(58,42,'RemoveMe1',0,0,1,'none','','','',0,'2016-05-10 09:19:14','2016-05-10 09:19:45'),(59,42,'RemoveMe2',0,0,1,'none','','','',0,'2016-05-10 09:19:25','2016-05-10 09:24:56');
+INSERT INTO `mesh_entries` VALUES (50,35,'Meerkat Wifi',0,0,1,'none','','','',0,'2014-07-26 04:21:24','2014-07-26 04:21:24',0,100,'disable',0),(52,40,'Cheetah guest',0,1,1,'none','','','',0,'2014-08-11 12:14:59','2016-04-14 14:32:21',0,100,'disable',0),(53,40,'Cheetah wireless',0,0,1,'psk2','cheetahwireless','','',0,'2014-08-11 12:16:14','2016-04-14 14:32:27',0,100,'disable',0),(54,41,'Lion Coffee',0,1,1,'none','','','',0,'2014-08-11 12:23:03','2014-09-08 05:48:43',0,100,'disable',0),(55,41,'Lion Lager Pub',0,1,1,'none','','','',0,'2014-08-11 12:23:53','2014-08-11 12:23:53',0,100,'disable',0),(56,41,'Lion Sushi',0,1,1,'none','','','',0,'2014-08-11 12:25:03','2014-08-11 12:25:03',0,100,'disable',0),(57,41,'Lion wireless',0,0,1,'wpa2','','206.221.176.235','testing123',0,'2014-08-11 12:26:21','2014-08-11 12:26:21',0,100,'disable',0),(58,42,'RemoveMe1',0,0,1,'none','','','',0,'2016-05-10 09:19:14','2016-05-10 09:19:45',0,100,'disable',0),(59,42,'RemoveMe2',0,0,1,'none','','','',0,'2016-05-10 09:19:25','2016-05-10 09:24:56',0,100,'disable',0);
 /*!40000 ALTER TABLE `mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4071,4 +4079,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-15  4:29:40
+-- Dump completed on 2016-05-25 15:24:22
