@@ -671,13 +671,12 @@ class ApsController extends AppController {
             //This is used to fetch info eventually about the entry points
             if(count($ap_profile_e['ApProfileExitApProfileEntry']) > 0){
                 $has_entries_attached = true;
-                foreach($ap_profile_e['ApProfileExitApProfileEntry'] as $entry){
+                foreach($ap_profile_e['ApProfileExitApProfileEntry'] as $entry){    
                     if($type == 'bridge'){ //The gateway needs the entry points to be bridged to the LAN
                         array_push($entry_point_data,array('network' => 'lan','entry_id' => $entry['ap_profile_entry_id']));
                     }else{
                         array_push($entry_point_data,array('network' => $if_name,'entry_id' => $entry['ap_profile_entry_id']));
-                    }
-                    
+                    }        
                 }
             }
           
@@ -905,10 +904,10 @@ class ApsController extends AppController {
                     if(
                         ($ap_profile_e['frequency_band'] == 'both')||
                         ($ap_profile_e['frequency_band'] == $band)){
-                            array_push( $wireless,
-                                array(
-                                    "wifi-iface"    => "$if_name",
-                                    "options"   => array(
+                        
+                            //print_r($ap_profile_e);
+                            
+                            $base_array = array(
                                         "device"        => "radio0",
                                         "ifname"        => "$if_name"."0",
                                         "mode"          => "ap",
@@ -920,7 +919,22 @@ class ApsController extends AppController {
                                         "isolate"       => $ap_profile_e['isolate'],
                                         "auth_server"   => $ap_profile_e['auth_server'],
                                         "auth_secret"   => $ap_profile_e['auth_secret']
-                                   )
+                                   );
+                        
+                            if($ap_profile_e['chk_maxassoc']){
+                                $base_array['maxassoc'] = $ap_profile_e['maxassoc'];
+                            }
+                            
+                            if($ap_profile_e['macfilter'] != 'disable'){
+                                $base_array['macfilter']    = $ap_profile_e['macfilter'];
+                                //Replace later
+                                $base_array['maclist']      = '08:ed:b9:00:bc:55 08:ed:b9:00:bc:56 08:ed:b9:00:bc:57';
+                            }
+                        
+                            array_push( $wireless,
+                                array(
+                                    "wifi-iface"    => "$if_name",
+                                    "options"   => $base_array
                                 ));
                             
                     }
