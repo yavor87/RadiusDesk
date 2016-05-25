@@ -77,16 +77,26 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                     if(v == null){
                      widget.setText('');
                     }else{
-                        var cls = "wifigreen";
-                        if(v > 70){
+                        if(v < 70){
+                            var cls = "wifigreen";
+                            widget.toggleCls("wifiyellow",false);
+                            widget.toggleCls("wifired",false);
+                            widget.toggleCls(cls,true);     
+                        } 
+                        if(v >= 70 && v < 90){
                             cls = "wifiyellow";
+                            widget.toggleCls("wifigreen",false);
+                            widget.toggleCls("wifired",false);
+                            widget.toggleCls(cls,true);   
                         }
-                        if(v > 90){
+                        if(v >= 90){
                             cls = "wifired"
+                            widget.toggleCls("wifigreen",false);
+                            widget.toggleCls("wifiyellow",false);
+                            widget.toggleCls(cls,true);   
                         }  
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
-                        widget.toggleCls(cls,true);
                     }    
                 },
                 stateId: 'StateGridVouchers8'
@@ -106,12 +116,23 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                     if(v == null){
                       widget.setText('');
                     }else{
-                        var cls = "wifigreen";
-                        if(v > 70){
+                        if(v < 70){
+                            var cls = "wifigreen";
+                            widget.toggleCls("wifiyellow",false);
+                            widget.toggleCls("wifired",false);
+                            widget.toggleCls(cls,true);     
+                        } 
+                        if(v >= 70 && v < 90){
                             cls = "wifiyellow";
+                            widget.toggleCls("wifigreen",false);
+                            widget.toggleCls("wifired",false);
+                            widget.toggleCls(cls,true);   
                         }
-                        if(v > 90){
+                        if(v >= 90){
                             cls = "wifired"
+                            widget.toggleCls("wifigreen",false);
+                            widget.toggleCls("wifiyellow",false);
+                            widget.toggleCls(cls,true);   
                         }  
                         widget.setValue(v / 100);
                         widget.setText( v +" %");
