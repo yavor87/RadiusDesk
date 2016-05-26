@@ -1707,6 +1707,12 @@ class VouchersController extends AppController {
             $u_id = $this->request->query['user_id'];
             array_push($c['conditions'],array($this->modelClass.".user_id" => $u_id));
         }
+        
+        //If it is a combobox filter
+        if(isset($this->request->query['query'])){
+            $query = $this->request->query['query'];
+            array_push($c['conditions'],array("Voucher.name LIKE" => '%'.$query.'%'));
+        }
 
 
         //====== REQUEST FILTER =====

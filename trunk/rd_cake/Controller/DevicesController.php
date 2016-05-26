@@ -1405,6 +1405,12 @@ class DevicesController extends AppController {
             $u_id = $this->request->query['permanent_user_id'];
             array_push($c['conditions'],array($this->modelClass.".permanent_user_id" => $u_id));
         }
+        
+        //If it is a combobox filter
+        if(isset($this->request->query['query'])){
+            $query = $this->request->query['query'];
+            array_push($c['conditions'],array("Device.name LIKE" => '%'.$query.'%'));
+        }
 
 
         //====== REQUEST FILTER =====

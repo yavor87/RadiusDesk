@@ -1878,6 +1878,12 @@ class PermanentUsersController extends AppController {
         $c['order'] = array("$sort $dir");
         //==== END SORT ===
 
+         //If it is a combobox filter
+        if(isset($this->request->query['query'])){
+            $query = $this->request->query['query'];
+            array_push($c['conditions'],array("PermanentUser.username LIKE" => '%'.$query.'%'));
+        }
+
 
         //====== REQUEST FILTER =====
         if(isset($this->request->query['filter'])){
