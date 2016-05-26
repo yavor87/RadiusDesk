@@ -478,6 +478,17 @@ class MeshesController extends AppController {
 
         $id    = $this->request->query['entry_id'];
         $q_r   = $entry->findById($id);
+        
+        if($q_r['MeshEntry']['macfilter'] != 'disable'){ 
+            $pu = ClassRegistry::init('PermanentUser');
+            $pu->contain();
+            $q = $pu->findById($q_r['MeshEntry']['permanent_user_id']);
+            if($q){
+                $q_r['MeshEntry']['username'] = $q['PermanentUser']['username'];    
+            }else{
+                $q_r['MeshEntry']['username'] = "!!!User Missing!!!";
+            }
+        }
 
         $this->set(array(
             'data'     => $q_r['MeshEntry'],

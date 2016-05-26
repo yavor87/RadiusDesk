@@ -928,7 +928,19 @@ class ApsController extends AppController {
                             if($ap_profile_e['macfilter'] != 'disable'){
                                 $base_array['macfilter']    = $ap_profile_e['macfilter'];
                                 //Replace later
-                                $base_array['maclist']      = '08:ed:b9:00:bc:55 08:ed:b9:00:bc:56 08:ed:b9:00:bc:57';
+                                $pu_id      = $ap_profile_e['permanent_user_id'];
+                                $device     = ClassRegistry::init('Device');
+                                $device->contain();
+                                $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                $mac_list   = array();
+                                foreach($q_d as $device){
+                                    $mac = $device['Device']['name'];
+                                    $mac = str_replace('-',':',$mac);
+                                    array_push($mac_list,$mac);
+                                }
+                                if(count($mac_list)>0){
+                                    $base_array['maclist'] = implode(" ",$mac_list);
+                                }
                             }
                         
                             array_push( $wireless,
@@ -1131,48 +1143,99 @@ class ApsController extends AppController {
                         ($ap_profile_e['frequency_band'] == 'both')||
                         ($ap_profile_e['frequency_band'] == $band_0)){
                         $if_name    = $this->_number_to_word($start_number);
+                        
+                        
+                        $base_array_0 = array(
+                            "device"        => "radio0",
+                            "ifname"        => "$if_name"."0",
+                            "mode"          => "ap",
+                            "network"       => $epd['network'],
+                            "encryption"    => $ap_profile_e['encryption'],
+                            "ssid"          => $ap_profile_e['name'],
+                            "key"           => $ap_profile_e['key'],
+                            "hidden"        => $ap_profile_e['hidden'],
+                            "isolate"       => $ap_profile_e['isolate'],
+                            "auth_server"   => $ap_profile_e['auth_server'],
+                            "auth_secret"   => $ap_profile_e['auth_secret']
+                        );
+                        
+                        if($ap_profile_e['chk_maxassoc']){
+                            $base_array_0['maxassoc'] = $ap_profile_e['maxassoc'];
+                        }
+                        
+                        if($ap_profile_e['macfilter'] != 'disable'){
+                            $base_array_0['macfilter']    = $ap_profile_e['macfilter'];
+                            //Replace later
+                            $pu_id      = $ap_profile_e['permanent_user_id'];
+                            $device     = ClassRegistry::init('Device');
+                            $device->contain();
+                            $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                            $mac_list   = array();
+                            foreach($q_d as $device){
+                                $mac = $device['Device']['name'];
+                                $mac = str_replace('-',':',$mac);
+                                array_push($mac_list,$mac);
+                            }
+                            if(count($mac_list)>0){
+                                $base_array_0['maclist'] = implode(" ",$mac_list);
+                            }
+                        }
+                    
                         array_push( $wireless,
                             array(
-                                "wifi-iface"    => "$if_name",
-                                "options"   => array(
-                                    "device"        => "radio0",
-                                    "ifname"        => "$if_name"."0",
-                                    "mode"          => "ap",
-                                    "network"       => $epd['network'],
-                                    "encryption"    => $ap_profile_e['encryption'],
-                                    "ssid"          => $ap_profile_e['name'],
-                                    "key"           => $ap_profile_e['key'],
-                                    "hidden"        => $ap_profile_e['hidden'],
-                                    "isolate"       => $ap_profile_e['isolate'],
-                                    "auth_server"   => $ap_profile_e['auth_server'],
-                                    "auth_secret"   => $ap_profile_e['auth_secret']
-                               )
-                            ));
-                            $start_number++;
+                                "wifi-iface"=> "$if_name",
+                                "options"   => $base_array_0
+                        ));  
+                        $start_number++;
                     }
                         
                     if(
                         ($ap_profile_e['frequency_band'] == 'both')||
                         ($ap_profile_e['frequency_band'] == $band_1)){   
                         $if_name    = $this->_number_to_word($start_number);
+                        
+                        $base_array_1 = array(
+                            "device"        => "radio1",
+                            "ifname"        => "$if_name"."0",
+                            "mode"          => "ap",
+                            "network"       => $epd['network'],
+                            "encryption"    => $ap_profile_e['encryption'],
+                            "ssid"          => $ap_profile_e['name'],
+                            "key"           => $ap_profile_e['key'],
+                            "hidden"        => $ap_profile_e['hidden'],
+                            "isolate"       => $ap_profile_e['isolate'],
+                            "auth_server"   => $ap_profile_e['auth_server'],
+                            "auth_secret"   => $ap_profile_e['auth_secret']
+                        );
+                        
+                        if($ap_profile_e['chk_maxassoc']){
+                            $base_array_1['maxassoc'] = $ap_profile_e['maxassoc'];
+                        }
+                        
+                        if($ap_profile_e['macfilter'] != 'disable'){
+                            $base_array_1['macfilter']    = $ap_profile_e['macfilter'];
+                            //Replace later
+                            $pu_id      = $ap_profile_e['permanent_user_id'];
+                            $device     = ClassRegistry::init('Device');
+                            $device->contain();
+                            $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                            $mac_list   = array();
+                            foreach($q_d as $device){
+                                $mac = $device['Device']['name'];
+                                $mac = str_replace('-',':',$mac);
+                                array_push($mac_list,$mac);
+                            }
+                            if(count($mac_list)>0){
+                                $base_array_1['maclist'] = implode(" ",$mac_list);
+                            }
+                        }
+                    
                         array_push( $wireless,
                             array(
-                                "wifi-iface"    => "$if_name",
-                                "options"   => array(
-                                    "device"        => "radio1",
-                                    "ifname"        => "$if_name"."0",
-                                    "mode"          => "ap",
-                                    "network"       => $epd['network'],
-                                    "encryption"    => $ap_profile_e['encryption'],
-                                    "ssid"          => $ap_profile_e['name'],
-                                    "key"           => $ap_profile_e['key'],
-                                    "hidden"        => $ap_profile_e['hidden'],
-                                    "isolate"       => $ap_profile_e['isolate'],
-                                    "auth_server"   => $ap_profile_e['auth_server'],
-                                    "auth_secret"   => $ap_profile_e['auth_secret']
-                               )
-                           ));
-                           $start_number++; 
+                                "wifi-iface"=> "$if_name",
+                                "options"   => $base_array_1
+                        ));     
+                        $start_number++; 
                     }           
                         
                     break;
