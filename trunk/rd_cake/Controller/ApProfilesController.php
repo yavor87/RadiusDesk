@@ -443,7 +443,7 @@ class ApProfilesController extends AppController {
 
         if ($this->request->is('post')) {
 
-            $check_items = array('hidden','isolate','apply_to_all');
+            $check_items = array('hidden','isolate','apply_to_all','chk_maxassoc');
             foreach($check_items as $i){
                 if(isset($this->request->data[$i])){
                     $this->request->data[$i] = 1;
@@ -474,6 +474,17 @@ class ApProfilesController extends AppController {
 
         $id    = $this->request->query['entry_id'];
         $q_r   = $entry->findById($id);
+        
+        if($q_r['ApProfileEntry']['macfilter'] != 'disable'){ 
+            $pu = ClassRegistry::init('PermanentUser');
+            $pu->contain();
+            $q = $pu->findById($q_r['ApProfileEntry']['permanent_user_id']);
+            if($q){
+                $q_r['ApProfileEntry']['username'] = $q['PermanentUser']['username'];    
+            }else{
+                $q_r['ApProfileEntry']['username'] = "!!!User Missing!!!";
+            }
+        }
 
         $this->set(array(
             'data'     => $q_r['ApProfileEntry'],

@@ -874,23 +874,48 @@ class NodesController extends AppController {
                 foreach($entry_point_data as $epd){
                   //  print_r($epd);
                     if($epd['entry_id'] == $entry_id){ //We found our man :-)
+                    
+                        $base_array = array(
+                            "device"        => "radio0",
+                            "ifname"        => "$if_name"."0",
+                            "mode"          => "ap",
+                            "network"       => $epd['network'],
+                            "encryption"    => $me['encryption'],
+                            "ssid"          => $me['name'],
+                            "key"           => $me['key'],
+                            "hidden"        => $me['hidden'],
+                            "isolate"       => $me['isolate'],
+                            "auth_server"   => $me['auth_server'],
+                            "auth_secret"   => $me['auth_secret']
+                        );
+                        
+                        if($me['chk_maxassoc']){
+                            $base_array['maxassoc'] = $me['maxassoc'];
+                        }
+                        
+                        if($me['macfilter'] != 'disable'){
+                            $base_array['macfilter']    = $me['macfilter'];
+                            //Replace later
+                            $pu_id      = $me['permanent_user_id'];
+                            $device     = ClassRegistry::init('Device');
+                            $device->contain();
+                            $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                            $mac_list   = array();
+                            foreach($q_d as $device){
+                                $mac = $device['Device']['name'];
+                                $mac = str_replace('-',':',$mac);
+                                array_push($mac_list,$mac);
+                            }
+                            if(count($mac_list)>0){
+                                $base_array['maclist'] = implode(" ",$mac_list);
+                            }
+                        }
+                    
                         array_push( $wireless,
                             array(
-                                "wifi-iface"    => "$if_name",
-                                "options"   => array(
-                                    "device"        => "radio0",
-                                    "ifname"        => "$if_name"."0",
-                                    "mode"          => "ap",
-                                    "network"       => $epd['network'],
-                                    "encryption"    => $me['encryption'],
-                                    "ssid"          => $me['name'],
-                                    "key"           => $me['key'],
-                                    "hidden"        => $me['hidden'],
-                                    "isolate"       => $me['isolate'],
-                                    "auth_server"   => $me['auth_server'],
-                                    "auth_secret"   => $me['auth_secret']
-                               )
-                            ));
+                                "wifi-iface"=> "$if_name",
+                                "options"   => $base_array
+                        ));    
                         break;
                     }
                 }
@@ -905,24 +930,50 @@ class NodesController extends AppController {
                                 foreach($entry_point_data as $epd){
                                     //We have a hit; we have to  add this entry
                                     if($epd['entry_id'] == $entry_id){ //We found our man :-)
+                                    
+                                        $base_array = array(
+                                            "device"        => "radio0",
+                                            "ifname"        => "$if_name"."0",
+                                            "mode"          => "ap",
+                                            "network"       => $epd['network'],
+                                            "encryption"    => $me['encryption'],
+                                            "ssid"          => $me['name'],
+                                            "key"           => $me['key'],
+                                            "hidden"        => $me['hidden'],
+                                            "isolate"       => $me['isolate'],
+                                            "auth_server"   => $me['auth_server'],
+                                            "auth_secret"   => $me['auth_secret']
+                                        );
+                                        
+                                        if($me['chk_maxassoc']){
+                                            $base_array['maxassoc'] = $me['maxassoc'];
+                                        }
+                                        
+                                        if($me['macfilter'] != 'disable'){
+                                            $base_array['macfilter']    = $me['macfilter'];
+                                            //Replace later
+                                            $pu_id      = $me['permanent_user_id'];
+                                            $device     = ClassRegistry::init('Device');
+                                            $device->contain();
+                                            $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                            $mac_list   = array();
+                                            foreach($q_d as $device){
+                                                $mac = $device['Device']['name'];
+                                                $mac = str_replace('-',':',$mac);
+                                                array_push($mac_list,$mac);
+                                            }
+                                            if(count($mac_list)>0){
+                                                $base_array['maclist'] = implode(" ",$mac_list);
+                                            }
+                                        }
+                                    
                                         array_push( $wireless,
                                             array(
-                                                "wifi-iface"    => "$if_name",
-                                                "options"   => array(
-                                                    "device"        => "radio0",
-                                                    "ifname"        => "$if_name"."0",
-                                                    "mode"          => "ap",
-                                                    "network"       => $epd['network'],
-                                                    "encryption"    => $me['encryption'],
-                                                    "ssid"          => $me['name'],
-                                                    "key"           => $me['key'],
-                                                    "hidden"        => $me['hidden'],
-                                                    "isolate"       => $me['isolate'],
-                                                    "auth_server"   => $me['auth_server'],
-                                                    "auth_secret"   => $me['auth_secret']
-                                               )
-                                            ));
-                                            break;
+                                                "wifi-iface"=> "$if_name",
+                                                "options"   => $base_array
+                                        ));    
+                                               
+                                        break;
                                     }
                                 }
                             }
@@ -1319,43 +1370,95 @@ class NodesController extends AppController {
                     if($epd['entry_id'] == $entry_id){ //We found our man :-)
 
 						if(($mesh['NodeDetail']['radio0_enable'] == 1)&&($mesh['NodeDetail']['radio0_entry'] == 1)){
-		                    array_push( $wireless,
-		                        array(
-		                            "wifi-iface"    => "$if_name",
-		                            "options"   => array(
-		                                "device"        => "radio0",
-		                                "ifname"        => "$if_name"."0",
-		                                "mode"          => "ap",
-		                                "network"       => $epd['network'],
-		                                "encryption"    => $me['encryption'],
-		                                "ssid"          => $me['name'],
-		                                "key"           => $me['key'],
-		                                "hidden"        => $me['hidden'],
-		                                "isolate"       => $me['isolate'],
-		                                "auth_server"   => $me['auth_server'],
-		                                "auth_secret"   => $me['auth_secret']
-		                           )
-		                        ));
+												    
+						    $base_array = array(
+                                "device"        => "radio0",
+                                "ifname"        => "$if_name"."0",
+                                "mode"          => "ap",
+                                "network"       => $epd['network'],
+                                "encryption"    => $me['encryption'],
+                                "ssid"          => $me['name'],
+                                "key"           => $me['key'],
+                                "hidden"        => $me['hidden'],
+                                "isolate"       => $me['isolate'],
+                                "auth_server"   => $me['auth_server'],
+                                "auth_secret"   => $me['auth_secret']
+                            );
+                            
+                            if($me['chk_maxassoc']){
+                                $base_array['maxassoc'] = $me['maxassoc'];
+                            }
+                            
+                            if($me['macfilter'] != 'disable'){
+                                $base_array['macfilter']    = $me['macfilter'];
+                                //Replace later
+                                $pu_id      = $me['permanent_user_id'];
+                                $device     = ClassRegistry::init('Device');
+                                $device->contain();
+                                $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                $mac_list   = array();
+                                foreach($q_d as $device){
+                                    $mac = $device['Device']['name'];
+                                    $mac = str_replace('-',':',$mac);
+                                    array_push($mac_list,$mac);
+                                }
+                                if(count($mac_list)>0){
+                                    $base_array['maclist'] = implode(" ",$mac_list);
+                                }
+                            }
+                        
+                            array_push( $wireless,
+                                array(
+                                    "wifi-iface"=> "$if_name",
+                                    "options"   => $base_array
+                            ));    
+						  
 						}
 
 						if(($mesh['NodeDetail']['radio1_enable'] == 1)&&($mesh['NodeDetail']['radio1_entry'] == 1)){
-		                    array_push( $wireless,
-		                        array(
-		                            "wifi-iface"    => "$if_name"."_1",
-		                            "options"   => array(
-		                                "device"        => "radio1",
-		                                "ifname"        => "$if_name"."1",
-		                                "mode"          => "ap",
-		                                "network"       => $epd['network'],
-		                                "encryption"    => $me['encryption'],
-		                                "ssid"          => $me['name'],
-		                                "key"           => $me['key'],
-		                                "hidden"        => $me['hidden'],
-		                                "isolate"       => $me['isolate'],
-		                                "auth_server"   => $me['auth_server'],
-		                                "auth_secret"   => $me['auth_secret']
-		                           )
-		                        ));
+
+						    $base_array = array(
+                                "device"        => "radio1",
+                                "ifname"        => "$if_name"."1",
+                                "mode"          => "ap",
+                                "network"       => $epd['network'],
+                                "encryption"    => $me['encryption'],
+                                "ssid"          => $me['name'],
+                                "key"           => $me['key'],
+                                "hidden"        => $me['hidden'],
+                                "isolate"       => $me['isolate'],
+                                "auth_server"   => $me['auth_server'],
+                                "auth_secret"   => $me['auth_secret']
+                            );
+                            
+                            if($me['chk_maxassoc']){
+                                $base_array['maxassoc'] = $me['maxassoc'];
+                            }
+                            
+                            if($me['macfilter'] != 'disable'){
+                                $base_array['macfilter']    = $me['macfilter'];
+                                //Replace later
+                                $pu_id      = $me['permanent_user_id'];
+                                $device     = ClassRegistry::init('Device');
+                                $device->contain();
+                                $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                $mac_list   = array();
+                                foreach($q_d as $device){
+                                    $mac = $device['Device']['name'];
+                                    $mac = str_replace('-',':',$mac);
+                                    array_push($mac_list,$mac);
+                                }
+                                if(count($mac_list)>0){
+                                    $base_array['maclist'] = implode(" ",$mac_list);
+                                }
+                            }
+                        
+                            array_push( $wireless,
+                                array(
+                                    "wifi-iface"=> "$if_name"."_1",
+                                    "options"   => $base_array
+                            ));   
+		                        
 						}
                         break;
                     }
@@ -1373,43 +1476,95 @@ class NodesController extends AppController {
                                     if($epd['entry_id'] == $entry_id){ //We found our man :-)
 
 										if(($mesh['NodeDetail']['radio0_enable'] == 1)&&($mesh['NodeDetail']['radio0_entry'] == 1)){
-		                                    array_push( $wireless,
-		                                        array(
-		                                            "wifi-iface"    => "$if_name",
-		                                            "options"   => array(
-		                                                "device"        => "radio0",
-		                                                "ifname"        => "$if_name"."0",
-		                                                "mode"          => "ap",
-		                                                "network"       => $epd['network'],
-		                                                "encryption"    => $me['encryption'],
-		                                                "ssid"          => $me['name'],
-		                                                "key"           => $me['key'],
-		                                                "hidden"        => $me['hidden'],
-		                                                "isolate"       => $me['isolate'],
-		                                                "auth_server"   => $me['auth_server'],
-		                                                "auth_secret"   => $me['auth_secret']
-		                                           )
-		                                        ));
+										
+										    $base_array = array(
+                                                "device"        => "radio0",
+                                                "ifname"        => "$if_name"."0",
+                                                "mode"          => "ap",
+                                                "network"       => $epd['network'],
+                                                "encryption"    => $me['encryption'],
+                                                "ssid"          => $me['name'],
+                                                "key"           => $me['key'],
+                                                "hidden"        => $me['hidden'],
+                                                "isolate"       => $me['isolate'],
+                                                "auth_server"   => $me['auth_server'],
+                                                "auth_secret"   => $me['auth_secret']
+                                            );
+                                            
+                                            if($me['chk_maxassoc']){
+                                                $base_array['maxassoc'] = $me['maxassoc'];
+                                            }
+                                            
+                                            if($me['macfilter'] != 'disable'){
+                                                $base_array['macfilter']    = $me['macfilter'];
+                                                //Replace later
+                                                $pu_id      = $me['permanent_user_id'];
+                                                $device     = ClassRegistry::init('Device');
+                                                $device->contain();
+                                                $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                                $mac_list   = array();
+                                                foreach($q_d as $device){
+                                                    $mac = $device['Device']['name'];
+                                                    $mac = str_replace('-',':',$mac);
+                                                    array_push($mac_list,$mac);
+                                                }
+                                                if(count($mac_list)>0){
+                                                    $base_array['maclist'] = implode(" ",$mac_list);
+                                                }
+                                            }
+                                        
+                                            array_push( $wireless,
+                                                array(
+                                                    "wifi-iface"=> "$if_name",
+                                                    "options"   => $base_array
+                                            ));   
+								   
 										}
 
 										if(($mesh['NodeDetail']['radio1_enable'] == 1)&&($mesh['NodeDetail']['radio1_entry'] == 1)){
+										
+										    $base_array = array(
+                                                "device"        => "radio1",
+                                                "ifname"        => "$if_name"."1",
+                                                "mode"          => "ap",
+                                                "network"       => $epd['network'],
+                                                "encryption"    => $me['encryption'],
+                                                "ssid"          => $me['name'],
+                                                "key"           => $me['key'],
+                                                "hidden"        => $me['hidden'],
+                                                "isolate"       => $me['isolate'],
+                                                "auth_server"   => $me['auth_server'],
+                                                "auth_secret"   => $me['auth_secret']
+                                            );
+                                            
+                                            if($me['chk_maxassoc']){
+                                                $base_array['maxassoc'] = $me['maxassoc'];
+                                            }
+                                            
+                                            if($me['macfilter'] != 'disable'){
+                                                $base_array['macfilter']    = $me['macfilter'];
+                                                //Replace later
+                                                $pu_id      = $me['permanent_user_id'];
+                                                $device     = ClassRegistry::init('Device');
+                                                $device->contain();
+                                                $q_d        = $device->find('all',array('conditions' => array('Device.permanent_user_id' => $pu_id)));
+                                                $mac_list   = array();
+                                                foreach($q_d as $device){
+                                                    $mac = $device['Device']['name'];
+                                                    $mac = str_replace('-',':',$mac);
+                                                    array_push($mac_list,$mac);
+                                                }
+                                                if(count($mac_list)>0){
+                                                    $base_array['maclist'] = implode(" ",$mac_list);
+                                                }
+                                            }
+										   										    
 		                                    array_push( $wireless,
 		                                        array(
 		                                            "wifi-iface"    => "$if_name"."_1",
-		                                            "options"   => array(
-		                                                "device"        => "radio1",
-		                                                "ifname"        => "$if_name"."1",
-		                                                "mode"          => "ap",
-		                                                "network"       => $epd['network'],
-		                                                "encryption"    => $me['encryption'],
-		                                                "ssid"          => $me['name'],
-		                                                "key"           => $me['key'],
-		                                                "hidden"        => $me['hidden'],
-		                                                "isolate"       => $me['isolate'],
-		                                                "auth_server"   => $me['auth_server'],
-		                                                "auth_secret"   => $me['auth_secret']
-		                                           )
-		                                        ));
+		                                            "options"       => $base_array
+		                                    ));     
+		                                        
 										}
                                         break;
                                     }
