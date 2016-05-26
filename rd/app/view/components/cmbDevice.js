@@ -17,19 +17,15 @@ Ext.define('Rd.view.components.cmbDevice', {
     initComponent: function() {
         var me= this;
         var s = Ext.create('Ext.data.Store', {
-            model: 'Rd.model.mDevice',
-            //To make it load AJAXly from the server specify the follown 3 attributes
-            buffered: false,
-           // leadingBufferZone: 150, 
-          //  pageSize: 50,
-            //To force server side sorting:
-            remoteSort: true,
-            proxy: {
+            model       : 'Rd.model.mDevice',
+            buffered    : false,
+            remoteSort  : true,
+            proxy       : {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
                 url     : '/cake2/rd_cake/devices/index.json',
-                reader: {
+                reader  : {
                     type: 'json',
                     rootProperty: 'items',
                     messageProperty: 'message',
@@ -37,7 +33,7 @@ Ext.define('Rd.view.components.cmbDevice', {
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },
-            autoLoad: false
+            autoLoad    : false
         });
         me.store = s;
         this.callParent(arguments);
