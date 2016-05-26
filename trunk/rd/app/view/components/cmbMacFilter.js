@@ -20,7 +20,7 @@ Ext.define('Rd.view.components.cmbMacFilter', {
             data : [
                 {"id":"disable",    "text": i18n("sDisabled")},
                 {"id":"allow",      "text": i18n("sAllow")},
-                {"id":"deny",       "text": i18n("sDeny")},
+                {"id":"deny",       "text": i18n("sDeny")}
             ]
         });
         
