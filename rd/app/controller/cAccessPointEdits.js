@@ -88,6 +88,12 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             'winAccessPointAddEntry cmbEncryptionOptions': {
                 change: me.cmbEncryptionChange
             },
+            'winAccessPointAddEntry #chk_maxassoc': {
+                change: me.chkMaxassocChange
+            },
+            'winAccessPointAddEntry cmbMacFilter': {
+                change: me.cmbMacFilterChange
+            },
             'winAccessPointAddEntry #save': {
                 click: me.btnAddEntrySave
             },
@@ -99,6 +105,12 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             },
              'winAccessPointEditEntry cmbEncryptionOptions': {
                 change: me.cmbEncryptionChange
+            },
+            'winAccessPointEditEntry #chk_maxassoc': {
+                change: me.chkMaxassocChange
+            },
+            'winAccessPointEditEntry cmbMacFilter': {
+                change: me.cmbMacFilterChange
             },
             'winAccessPointEditEntry #save': {
                 click: me.btnEditEntrySave
@@ -296,6 +308,33 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         }
 
     },
+    chkMaxassocChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var num     = form.down('#maxassoc');    
+        var val     = chk.getValue();
+        if(val){
+            num.setVisible(true);
+            num.setDisabled(false); 
+        }else{
+            num.setVisible(false);
+            num.setDisabled(true);
+        }
+    },
+    cmbMacFilterChange:function(cmb){
+        var me      = this;
+        var form    = cmb.up('form');
+        var pu      = form.down('cmbPermanentUser');
+        var val     = cmb.getValue();
+        
+        if(val == 'disable'){
+            pu.setVisible(false);
+            pu.setDisabled(true); 
+        }else{
+            pu.setVisible(true);
+            pu.setDisabled(false); 
+        }
+    },
     btnAddEntrySave:  function(button){
         var me      = this;
         var win     = button.up("winAccessPointAddEntry");
@@ -349,8 +388,22 @@ Ext.define('Rd.controller.cAccessPointEdits', {
     loadEntry: function(win){
         var me      = this; 
         var form    = win.down('form');
-        var entryId = win.entryId;
-        form.load({url:me.getUrlViewEntry(), method:'GET',params:{entry_id:entryId}});
+        var entryId = win.entryId;      
+        form.load({
+            url         :me.getUrlViewEntry(), 
+            method      :'GET',
+            params      :{entry_id:entryId},
+            success     : function(a,b,c){
+                var mf     = form.down("cmbMacFilter");
+                var mf_val = mf.getValue();
+                if(mf_val != 'disable'){
+                    var cmb     = form.down("cmbPermanentUser");
+                    var rec     = Ext.create('Rd.model.mPermanentUser', {username: b.result.data.username, id: b.result.data.permanent_user_id});
+                    cmb.getStore().loadData([rec],false);
+                    cmb.setValue(b.result.data.permanent_user_id);
+                }
+            }
+        });  
     },
     btnEditEntrySave:  function(button){
         var me      = this;

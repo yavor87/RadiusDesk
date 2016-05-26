@@ -38,7 +38,6 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                 labelAlign      : 'left',
                 labelSeparator  : '',
                 labelWidth      : Rd.config.labelWidth,
-              //  maxWidth        : Rd.config.maxWidth, 
                 margin          : Rd.config.fieldMargin
             },
             defaultType: 'textfield',
@@ -186,7 +185,7 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                 }
                             ]
                         },
-                         { 
+                        { 
                             'title'     : i18n("sAdvanced"),
                             'layout'    : 'anchor',
                             itemId      : 'tabAdvanced',
@@ -201,7 +200,8 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                     name        : 'chk_maxassoc',
                                     inputValue  : 'chk_maxassoc',
                                     checked     : false,
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    itemId      : 'chk_maxassoc'
                                 },          
                                 {
                                     xtype       : 'numberfield',
@@ -210,7 +210,10 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                     value       : 100,
                                     maxValue    : 1000,
                                     minValue    : 1,
-                                    labelClsExtra: 'lblRdReq'
+                                    labelClsExtra: 'lblRdReq',
+                                    hidden      : true,
+                                    disabled    : true,
+                                    itemId      : 'maxassoc'
                                 }, 
                                 { 
                                     xtype       : 'cmbMacFilter',
@@ -220,7 +223,9 @@ Ext.define('Rd.view.aps.winAccessPointAddEntry', {
                                     xtype       : 'cmbPermanentUser',
                                     fieldLabel  : i18n("sBYOD_Belonging_To"),
                                     labelClsExtra: 'lblRdReq',
-                                    name        : 'permanent_user_id'
+                                    name        : 'permanent_user_id',
+                                    hidden      : true,
+                                    disabled    : true
                                 }     
                             ]
                         }
