@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class RadacctsController extends AppController {
 
     public $name       = 'Radaccts';
-    public $components = array('Aa','Kicker', 'Counters','GridFilter');
+    public $components = array('Aa','Kicker', 'Counters','GridFilter','TimeCalculations');
     public $uses       = array('Radacct','User','PermanentUser');
     protected $base    = "Access Providers/Controllers/Radaccts/";
 
@@ -263,19 +263,13 @@ class RadacctsController extends AppController {
         
            // print_r($i);
         
-            $user_type = 'unknown'; 
-            //Find device type
-           /* if(count($i['Radcheck']) > 0){
-                foreach($i['Radcheck'] as $rc){
-                    if($rc['attribute'] == 'Rd-User-Type'){
-                        $user_type = $rc['value'];   
-                    }
-                }
-            }*/
+            $user_type      = 'unknown';
+            $online_human   = '';
 
             if($i['Radacct']['acctstoptime'] == null){
                 $online_time    = time()-strtotime($i['Radacct']['acctstarttime']);
                 $active         = true; 
+                $online_human   = $this->TimeCalculations->time_elapsed_string($i['Radacct']['acctstarttime']);
             }else{
                 $online_time    = $i['Radacct']['acctstoptime'];
                 $active         = false;
@@ -311,7 +305,8 @@ class RadacctsController extends AppController {
                     'acctstopdelay'     => $i['Radacct']['acctstopdelay'],
                     'xascendsessionsvrkey' => $i['Radacct']['xascendsessionsvrkey'],
                     'user_type'         => $user_type,
-                    'active'            => $active
+                    'active'            => $active,
+                    'online_human'      => $online_human
                 )
             );
         }                
