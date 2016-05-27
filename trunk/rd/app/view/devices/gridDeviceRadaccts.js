@@ -46,7 +46,8 @@ Ext.define('Rd.view.devices.gridDeviceRadaccts' ,{
             filter      : {type: 'date',dateFormat: 'Y-m-d'},
             renderer    : function(value,metaData, record){
                 if(record.get('active') == true){
-                    return "<div class=\"fieldGreen\">"+i18n("sActive")+" "+Ext.ux.secondsToHuman(value)+"</div>";
+                    var human_value = record.get('online_human')
+                    return "<div class=\"fieldGreen\">"+i18n("sStarted")+" "+human_value+"</div>";
                 }else{
                     return value;
                 }              

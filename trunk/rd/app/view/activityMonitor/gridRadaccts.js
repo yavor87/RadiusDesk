@@ -44,7 +44,7 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
             {xtype: 'rownumberer',stateId: 'StateGridRadaccts1'},
             { text: i18n('sAcct_session_id'),dataIndex: 'acctsessionid',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true,stateId: 'StateGridRadaccts2'},
             { text: i18n('sAcct_unique_id'),dataIndex: 'acctuniqueid',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true,stateId: 'StateGridRadaccts3'},
-            { text: i18n('sUsername'),      dataIndex: 'username',      tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridRadaccts4'},
+            { text: i18n('sUsername'),      dataIndex: 'username',      tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridRadaccts4'},
             { text: i18n('sGroupname'),     dataIndex: 'groupname',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true,stateId: 'StateGridRadaccts5'},
             { text: i18n('sRealm'),         dataIndex: 'realm',         tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridRadaccts6'},
             { text: i18n('sNAS_IP_Address'),dataIndex: 'nasipaddress',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true, stateId: 'StateGridRadaccts7'},
@@ -68,7 +68,8 @@ Ext.define('Rd.view.activityMonitor.gridRadaccts' ,{
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},
                 renderer    : function(value,metaData, record){
                     if(record.get('active') == true){
-                        return "<div class=\"fieldGreen\">"+i18n("sActive")+" "+Ext.ux.secondsToHuman(value)+"</div>";
+                        var human_value = record.get('online_human')
+                        return "<div class=\"fieldGreen\">"+i18n("sStarted")+" "+human_value+"</div>";
                     }else{
                         return value;
                     }              

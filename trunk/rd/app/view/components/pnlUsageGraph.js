@@ -42,7 +42,7 @@ Ext.define('Rd.view.components.pnlUsageGraph', {
 
     //The following attributes will influence the query for the stats
 
-    type        : 'permanent', //Can be permanent, voucher, device, nas, realm
+    type        : 'permanent', //Can be permanent, voucher, device, nas, realm or 'activity_viewer'
     span        : 'daily', //Can be daily weekly or monthly
     username    : false, //if device = mac; if nas = nas_id if realm = realm_id    
     initComponent: function(){

@@ -34,7 +34,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                         items   : [{
                             xtype   : 'tabpanel',
                             layout  : 'fit',
-                            margins : '0 0 0 0',
+                            margin  : '0 0 0 0',
                             border  : true,
                             plain   : false,
                             items   : [
@@ -606,13 +606,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 var graph_tab_name  = sr.get('username');
                 graph_tab_name      = graph_tab_name.replace("@","_");//Replece @
                 graph_tab_name      = graph_tab_name.toLowerCase();//Make lower case
-                var type            = sr.get('user_type');
-                //username
                 var username        = sr.get('username');
-                if(type == 'device'){
-                    graph_tab_name  = sr.get('callingstationid');
-                    username        = sr.get('callingstationid');
-                }
+               
 
                 var graph_id    = 'graphTab_'+graph_tab_name;
                 var grapht      = tp.down('#'+graph_id);
@@ -622,18 +617,19 @@ Ext.define('Rd.controller.cActivityMonitor', {
                 }
                 //Tab not there - add one
                 tp.add({ 
-                    title       : type+' '+graph_tab_name,
+                    title       : graph_tab_name,
                     itemId      : graph_id,
                     closable    : true,
                     iconCls     : 'graph',
                     glyph       : Rd.config.icnGraph, 
                     layout      :  'fit', 
                     xtype       : 'tabpanel',
-                    margins     : '0 0 0 0',
+                    margin      : '0 0 0 0',
                     plain       : true,
-                    border      : true,
-                    tabPosition: 'bottom',
-                    items   :   [
+                    border      : false,
+                    tabPosition : 'top',
+                    cls         : 'subTab',            
+                    items       :   [
                         {
                             title   : "Daily",
                             itemId  : "daily",
@@ -641,7 +637,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             span    : 'daily',
                             layout  : 'fit',
                             username: username,
-                            type    : type
+                            type    : 'activity_viewer'
                         },
                         {
                             title   : "Weekly",
@@ -650,7 +646,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             span    : 'weekly',
                             layout  : 'fit',
                             username: username,
-                            type    : type
+                            type    : 'activity_viewer'
                         },
                         {
                             title   : "Monthly",
@@ -659,7 +655,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
                             xtype   : 'pnlUsageGraph',
                             span    : 'monthly',
                             username: username,
-                            type    : type
+                            type    : 'activity_viewer'
                         }
                     ]
                 });
