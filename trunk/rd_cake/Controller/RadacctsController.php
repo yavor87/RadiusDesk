@@ -269,7 +269,7 @@ class RadacctsController extends AppController {
             if($i['Radacct']['acctstoptime'] == null){
                 $online_time    = time()-strtotime($i['Radacct']['acctstarttime']);
                 $active         = true; 
-                $online_human   = $this->TimeCalculations->time_elapsed_string($i['Radacct']['acctstarttime']);
+                $online_human   = $this->TimeCalculations->time_elapsed_string($i['Radacct']['acctstarttime'],false,true);
             }else{
                 $online_time    = $i['Radacct']['acctstoptime'];
                 $active         = false;
@@ -569,6 +569,16 @@ class RadacctsController extends AppController {
         $c['contain']   = array(
         //                    'Radcheck'   //This makes it slow
                         );
+                        
+                        
+        //====== Only_connectd filter ==========
+        $only_connected = false;
+        if(isset($this->request->query['only_connected'])){
+            if($this->request->query['only_connected'] == 'true'){
+                $only_connected = true;
+                array_push($c['conditions'],array($this->modelClass.".acctstoptime" => null));
+            }
+        }                  
 
         //===== SORT =====
         //Default values for sort and dir
@@ -577,18 +587,17 @@ class RadacctsController extends AppController {
 
         if(isset($this->request->query['sort'])){
             $sort = $this->modelClass.'.'.$this->request->query['sort'];
+            //Here we do a trick if we onlt list active connections since we can't order by null
+            if(($sort == 'Radacct.acctstoptime')&&($only_connected)){
+                $sort = 'Radacct.acctstarttime';
+            }
             $dir  = $this->request->query['dir'];
         } 
 
         $c['order'] = array("$sort $dir");
         //==== END SORT ===
 
-        //====== Only_connectd filter ==========
-        if(isset($this->request->query['only_connected'])){
-            if($this->request->query['only_connected'] == 'true'){
-                array_push($c['conditions'],array($this->modelClass.".acctstoptime" => null));
-            }
-        }
+       
 
         //======= For a specified username filter *Usually on the edit of user / voucher ======
         if(isset($this->request->query['username'])){

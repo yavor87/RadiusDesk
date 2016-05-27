@@ -40,7 +40,7 @@ class TimeCalculationsComponent extends Component {
     }
     
     
-    function time_elapsed_string($datetime, $full = false) {
+    function time_elapsed_string($datetime, $full = false,$no_suffix = false) {
         $now = new DateTime;
         $then = new DateTime( $datetime );
         $diff = (array) $now->diff( $then );
@@ -71,7 +71,11 @@ class TimeCalculationsComponent extends Component {
         }
 
         if ( ! $full ) $string = array_slice( $string, 0, 1 );
-        return $string ? implode( ', ', $string ) . ' ago' : 'just now';
+        if($no_suffix){
+            return implode( ', ', $string );
+        }else{
+            return $string ? implode( ', ', $string ) . ' ago' : 'just now';
+        }
     }
     
 }
