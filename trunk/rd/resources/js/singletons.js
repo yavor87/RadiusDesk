@@ -664,7 +664,8 @@ Local = {
         'sMacFilter' : 'MAC Filter',
         'sDisabled' : 'Disabled',
         'sDeny' : 'Deny',
-        'sBYOD_Belonging_To' : 'BYOD Owner'     
+        'sBYOD_Belonging_To' : 'BYOD Owner',
+        'sOnline' : 'Online'   
     }
 }
 

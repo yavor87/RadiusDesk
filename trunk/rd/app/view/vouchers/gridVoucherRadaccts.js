@@ -48,7 +48,7 @@ Ext.define('Rd.view.vouchers.gridVoucherRadaccts' ,{
             renderer    : function(value,metaData, record){
                 if(record.get('active') == true){
                     var human_value = record.get('online_human')
-                    return "<div class=\"fieldGreen\">"+i18n("sStarted")+" "+human_value+"</div>";
+                    return "<div class=\"fieldGreen\">"+human_value+" "+i18n('sOnline')+"</div>";
                 }else{
                     return value;
                 }              
