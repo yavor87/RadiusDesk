@@ -59,7 +59,7 @@ function interface_switch()
 			lan_up_trigger();
 		end
 		if((act == 'ifdown')and(int == 'lan'))then
-			lan_idown_trigger();
+			lan_down_trigger();
 		end
 		if((act == 'ifup')and(string.find(int,"client")))then
 			wifi_up_trigger();
