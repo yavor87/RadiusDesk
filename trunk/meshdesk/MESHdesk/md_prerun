@@ -30,6 +30,18 @@ start() {
 		    /etc/init.d/odhcpd stop
 		fi
 		
+		if [ -e /etc/init.d/dnsmasq ]; then
+		    echo "Disable rc.d symlink for DNSMASQ"
+		    /etc/init.d/dnsmasq disable
+		    /etc/init.d/dnsmasq stop
+		fi
+		
+		if [ -e /etc/init.d/chilli ]; then
+		    echo "Disable rc.d symlink for CoovaChilli"
+		    /etc/init.d/chilli disable
+		    /etc/init.d/chilli stop
+		fi
+		
 		if [ -e /etc/init.d/privoxy ]; then
 		    echo "Disable rc.d symlink for Privoxy"
 		    /etc/init.d/privoxy disable
