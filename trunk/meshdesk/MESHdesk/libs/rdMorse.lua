@@ -53,6 +53,12 @@ function rdMorse:rdMorse()
 	self.nine	= "_ _ _ _ ." 
 	self.zero	= "_" 
 	
+	--Short ones
+	self.config = ". ."
+	self.lan	= ". " 
+	self.rone	= ". ."
+	self.rtwo	= ". . ." 
+	
 	--Determine the LED to use--
 	--This is specified in the meshdesk config file under settings hardware
 	--and has to match a hardware definition in the same file
