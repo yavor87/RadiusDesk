@@ -153,7 +153,7 @@ function do_fw_config()
 
 	-- LAN we flash "I"
 	log("Do Firmware configuration - if server running")
-	os.execute("/etc/MESHdesk/main_led.lua start i")
+	os.execute("/etc/MESHdesk/main_led.lua start config")
     --Set eth0 (and eth1) to a known IP Address
     local network = rdNetwork()
 	network:frmwrStart()
@@ -176,7 +176,7 @@ function wait_for_lan()
 
 	-- LAN we flash "A"
 	log("Starting LAN wait")
-	os.execute("/etc/MESHdesk/main_led.lua start a")
+	os.execute("/etc/MESHdesk/main_led.lua start lan")
 	local start_time	= os.time()
 	local loop			= true
 	local lan_is_up		= false
@@ -225,7 +225,7 @@ function wait_for_lan()
 	
 	--See what happended and how we should handle it
 	if(lan_is_up)then
-		os.execute("/etc/MESHdesk/main_led.lua start b")
+		--os.execute("/etc/MESHdesk/main_led.lua start b")
 		log("sleep at least 10 seconds to make sure it got a DHCP addy")
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
@@ -288,7 +288,7 @@ function try_settings_through_lan()
 		try_wifi()
 	else
 		--flash D--
-		os.execute("/etc/MESHdesk/main_led.lua start d")
+		--os.execute("/etc/MESHdesk/main_led.lua start d")
 		configure_device(config_file)
 	end
 end
@@ -308,7 +308,7 @@ function try_wifi()
 			if(got_settings)then
 				--flash D--
 				got_new_config = true
-				os.execute("/etc/MESHdesk/main_led.lua start d")
+				--os.execute("/etc/MESHdesk/main_led.lua start d")
 				configure_device(config_file)
 				break -- We already got the new config and can break our search of next radio
 			end
@@ -333,7 +333,13 @@ function wait_for_wifi(radio_number)
 
 	-- WiFi we flash "C"
 	log("Try settings through WiFi network")
-	os.execute("/etc/MESHdesk/main_led.lua start c")
+	if(radio_number == 0)then
+	    os.execute("/etc/MESHdesk/main_led.lua start rone")
+    end
+	
+	if(radio_number == 1)then
+	    os.execute("/etc/MESHdesk/main_led.lua start rtwo")
+    end
 	
 	-- Start the WiF interface
 	require("rdWireless")
@@ -412,7 +418,7 @@ function check_for_previous_settings()
 	print("Checking for previous settings")
 	if(file_exists(previous_config_file))then
 		print("Using previous settings")
-		os.execute("/etc/MESHdesk/main_led.lua start e")
+		--os.execute("/etc/MESHdesk/main_led.lua start e")
 		configure_device(previous_config_file)
 	else
 		--Nothing we can do but flash an SOS
@@ -494,6 +500,8 @@ function configure_device(config)
 	end
 	  
     os.execute("/etc/init.d/network reload")
+    sleep(2)
+    os.execute("/sbin/wifi")
 
 	-- Do we have some system settings?
 	if(o.config_settings.system ~= nil)then  
@@ -558,7 +566,8 @@ function ap_wait_for_lan()
 	                 
 	-- LAN we flash "1"
 	log("Starting LAN wait")
-	os.execute("/etc/MESHdesk/main_led.lua start one")
+	--os.execute("/etc/MESHdesk/main_led.lua start one")
+	os.execute("/etc/MESHdesk/main_led.lua start lan")
 	local start_time	= os.time()
 	local loop			= true
 	local lan_is_up		= false
@@ -605,7 +614,7 @@ function ap_wait_for_lan()
 	
 	--See what happended and how we should handle it
 	if(lan_is_up)then
-		os.execute("/etc/MESHdesk/main_led.lua start two")
+		--os.execute("/etc/MESHdesk/main_led.lua start two")
 		log("sleep at least 10 seconds to make sure it got a DHCP addy")
 		-- sleep at least 10 seconds to make sure it got a DHCP addy
 		sleep(10)
@@ -672,7 +681,7 @@ function ap_try_settings_through_lan()
 		ap_check_for_previous_settings()
 	else
 		--flash D--
-		os.execute("/etc/MESHdesk/main_led.lua start three")
+		--os.execute("/etc/MESHdesk/main_led.lua start three")
 		ap_configure_device(config_file)
 	end
 end
@@ -681,7 +690,7 @@ function ap_check_for_previous_settings()
 	print("Checking for previous settings")
 	if(file_exists(previous_config_file))then
 		print("Using previous settings")
-		os.execute("/etc/MESHdesk/main_led.lua start four")
+		--os.execute("/etc/MESHdesk/main_led.lua start four")
 		ap_configure_device(previous_config_file)
 	else
 		--Nothing we can do but flash an SOS
