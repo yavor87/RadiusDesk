@@ -18,6 +18,8 @@ class NodesController extends AppController {
 
             $mac    = $this->request->query['mac'];
            // $mac    = 'AC-86-74-10-03-10'; //manual override
+            $mac    = strtoupper($mac);
+           
             $node   = ClassRegistry::init('Node');
             $mesh   = ClassRegistry::init('Mesh');
             $node->contain();
