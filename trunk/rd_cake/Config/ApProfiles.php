@@ -92,7 +92,100 @@ $config['ApProfiles']['hardware'][1]      = array(
         )	
 );
 
+
 $config['ApProfiles']['hardware'][2]      = array(
+		'name' 		=> __('TP-Link WDR3500 (Dual Radio)'),	
+		'id'    	=> 'tl_wdr3500',
+		'radios'	=> 2, 
+		'active'    => true,
+		'eth_br'	=> 'eth0 eth1',
+		
+		'radio0_disabled'       => 0,
+        'radio0_band'           => '24',
+        'radio0_channel_two'    => '8',
+        'radio0_hwmode'         => '11g',
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '23',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+        
+        'radio1_disabled'       => 0,
+        'radio1_band'           => '5',
+        'radio1_channel_five'   => '44',
+        'radio1_hwmode'         => '11a',
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '23',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )		
+);
+
+$config['ApProfiles']['hardware'][3]      = array(
+		'name' 		=> __('TP-Link WDR3600 (Dual Radio)'),	
+		'id'    	=> 'tl_wdr3600',
+		'radios'	=> 2, 
+		'active'    => true,
+		'eth_br'	=> 'eth0 eth1',
+		
+		'radio0_disabled'       => 0,
+        'radio0_band'           => '24',
+        'radio0_channel_two'    => '8',
+        'radio0_hwmode'         => '11g',
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '23',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        ),
+        
+        'radio1_disabled'       => 0,
+        'radio1_band'           => '5',
+        'radio1_channel_five'   => '44',
+        'radio1_hwmode'         => '11a',
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '23',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+);
+
+
+
+$config['ApProfiles']['hardware'][4]      = array(
 		'name' 		            => __('Generic 1 Radio'),	
 		'id'    	            => 'genoneradio',
 		'radios'	            => 1, 
@@ -119,7 +212,7 @@ $config['ApProfiles']['hardware'][2]      = array(
         )
 );
 
-$config['ApProfiles']['hardware'][3]      = array(
+$config['ApProfiles']['hardware'][5]      = array(
         'name'                  => __('Generic 2 Radio'),
         'id'                    => 'gentworadio',
         'radios'                => 2,
