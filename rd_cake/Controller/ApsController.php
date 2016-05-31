@@ -14,7 +14,7 @@ class ApsController extends AppController {
 	protected $Power	= '10'; //Some default
     protected $RadioSettings = array();
     
-    protected $special_mac = "30-B5-C2-B3-80-B0"; //hack
+    protected $special_mac = "30-B5-C2-B3-80-B1"; //hack
     
     public function get_config_for_ap(){
 
@@ -22,6 +22,8 @@ class ApsController extends AppController {
 
             $mac            = $this->request->query['mac'];
            // $mac    = 'AC-86-74-10-03-10'; //manual override
+           //Make sure the MAC is in captials
+           $mac             = strtoupper($mac);
 
             $this->Ap->contain();
             $q_r            = $this->Ap->findByMac($mac);
