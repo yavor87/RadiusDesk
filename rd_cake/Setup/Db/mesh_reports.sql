@@ -8,7 +8,7 @@ CREATE TABLE `node_systems` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `node_loads`;
 CREATE TABLE `node_loads` (
@@ -24,7 +24,7 @@ CREATE TABLE `node_loads` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `node_stations`;
 CREATE TABLE `node_stations` (
@@ -55,7 +55,7 @@ CREATE TABLE `node_stations` (
   `created`             datetime NOT NULL,
   `modified`            datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `node_ibss_connections`;
 CREATE TABLE `node_ibss_connections` (
@@ -86,6 +86,6 @@ CREATE TABLE `node_ibss_connections` (
   `created`             datetime NOT NULL,
   `modified`            datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

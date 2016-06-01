@@ -12,7 +12,7 @@ CREATE TABLE `user_stats` (
 `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 `acctinputoctets` bigint(20) NOT NULL,
 `acctoutputoctets` bigint(20) NOT NULL, 
-PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 ALTER TABLE user_stats ADD INDEX user_stats_index (radacct_id, username, realm, nasipaddress, nasidentifier, callingstationid);
 

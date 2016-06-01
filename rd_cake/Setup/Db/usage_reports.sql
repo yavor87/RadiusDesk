@@ -5,7 +5,7 @@ CREATE TABLE `new_accountings` (
   `mac` varchar(17) NOT NULL,
   `username` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`mac`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -23,7 +23,7 @@ CREATE TABLE `mac_usages` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
