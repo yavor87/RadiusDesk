@@ -17,7 +17,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -37,7 +37,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -59,7 +59,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -73,7 +73,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
         
 end if;
 
@@ -101,7 +101,7 @@ if not exists (select * from information_schema.columns
           `proxy_auth_password` varchar(128) NOT NULL DEFAULT '',
           `coova_optional` varchar(255) NOT NULL DEFAULT '',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -120,7 +120,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
         
 end if;
 
@@ -134,7 +134,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -158,7 +158,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -173,7 +173,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -188,7 +188,7 @@ if not exists (select * from information_schema.columns
           `modified` datetime NOT NULL,
           `available_to_siblings` tinyint(1) NOT NULL DEFAULT '0',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -223,7 +223,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -239,7 +239,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
         
 end if;
 
@@ -255,7 +255,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=856 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=856 DEFAULT CHARSET=utf8;
         
 end if;
 
@@ -279,7 +279,7 @@ if not exists (select * from information_schema.columns
           `created` datetime NOT NULL,
           `modified` datetime NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
         
 end if;
 
@@ -297,7 +297,7 @@ if not exists (select * from information_schema.columns
           `new_server` varchar(255) NOT NULL DEFAULT '',
           `new_server_status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+        ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
         
 end if;
 

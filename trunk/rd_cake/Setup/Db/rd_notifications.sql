@@ -21,7 +21,7 @@ if not exists (select * from information_schema.columns
 	  `created` datetime NOT NULL,
 	  `modified` datetime NOT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 end if;
 end//

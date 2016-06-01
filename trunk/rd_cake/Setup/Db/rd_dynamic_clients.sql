@@ -27,7 +27,7 @@ if not exists (select * from information_schema.columns
 	  `created` datetime NOT NULL,
 	  `modified` datetime NOT NULL,
 	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -40,7 +40,7 @@ if not exists (select * from information_schema.columns
       `created` datetime NOT NULL,
       `modified` datetime NOT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 end if;
 
@@ -53,7 +53,7 @@ if not exists (select * from information_schema.columns
       `created` datetime NOT NULL,
       `modified` datetime NOT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+    ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 end if;
 
 if not exists (select * from information_schema.columns
@@ -65,7 +65,7 @@ if not exists (select * from information_schema.columns
       `created` datetime NOT NULL,
       `modified` datetime NOT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 end if;
 
 
@@ -82,7 +82,7 @@ if not exists (select * from information_schema.columns
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `nasidentifier` (`nasidentifier`),
 	  UNIQUE KEY `calledstationid` (`calledstationid`)
-	) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 end if;
 
 
