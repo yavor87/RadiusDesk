@@ -510,16 +510,6 @@ function configure_device(config)
 	    local s = rdSystem()    
 	    s:configureFromTable(o.config_settings.system) 
 	end
-
-    -- Check if there are perhaps some captive portals to set up once everything has been done --
-    sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
-    if(o.config_settings.captive_portals ~= nil)then
-    	print("Doing Captive Portals")
-    	require("rdCoovaChilli")
-    	local a = rdCoovaChilli()
-    	a:createConfigs(o.config_settings.captive_portals)                  
-    	a:startPortals()	
-    end
     
     -- Do the LED's we have configured in /etc/config/system
     os.execute("ifconfig bat0 up") 	--On the pico's it goes down
@@ -547,6 +537,17 @@ function configure_device(config)
 
     log('Starting Batman neighbour scan')
     ext:startOne('/etc/MESHdesk/batman_neighbours.lua &','batman_neighbours.lua')
+    
+    --We move it to last since it gave more trouble with 802.11s based transport
+    -- Check if there are perhaps some captive portals to set up once everything has been done --
+    sleep(5) -- Wait a bit before doing this part else the DHCP not work correct
+    if(o.config_settings.captive_portals ~= nil)then
+    	print("Doing Captive Portals")
+    	require("rdCoovaChilli")
+    	local a = rdCoovaChilli()
+    	a:createConfigs(o.config_settings.captive_portals)                  
+    	a:startPortals()	
+    end
         
 --]]--
 end
