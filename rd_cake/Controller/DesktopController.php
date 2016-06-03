@@ -570,8 +570,11 @@ class DesktopController extends AppController {
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
             array_push($items, array( 'name' => 'Vouchers', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cVouchers'));
         }
-
-        array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+       
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Radaccts/index")){
+            array_push($items, array( 'name'    => 'Activity monitor', 'iconCls' => 'activity-shortcut', 'controller' => 'cActivityMonitor'));
+        }
+        
         
         
         //Meshdesk
