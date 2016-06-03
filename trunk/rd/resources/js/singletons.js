@@ -248,7 +248,7 @@ Local = {
         "sRecord_authentication_requests": "Record authentication requests",
         "sAuto_close_stale_sessions": "Auto close stale sessions",
         "sAuto_close_activation_time": "Auto close activation time",
-        "sAvailable_to_sub_providers": "Available to sub-providers",
+        "sMake_available_to_sub_providers": "Make available to sub-providers",
         "sConnection_type": "Connection type",
         "sAvailable_to_sub_providers": "Available to sub-providers",
         "sMake_available_to_any_realm": "Make available to any realm",

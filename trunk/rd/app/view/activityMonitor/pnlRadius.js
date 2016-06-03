@@ -30,9 +30,9 @@ Ext.define('Rd.view.activityMonitor.pnlRadius', {
     initComponent: function(){
         var me      = this;
 
-     //   var auth_basic  = me.auth_basic();
-     //   var auth_detail = me.auth_detail();
-    //    var acct_detail = me.acct_detail();
+       // var auth_basic  = me.auth_basic();
+       // var auth_detail = me.auth_detail();
+       // var acct_detail = me.acct_detail();
 
         me.items = [{
                 xtype: 'panel',
