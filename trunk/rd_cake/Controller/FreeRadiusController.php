@@ -12,7 +12,6 @@ class FreeRadiusController extends AppController {
         //First the auth
         $type = 'auth';
         exec("sudo /usr/share/nginx/html/cake2/rd_cake/Setup/Scripts/radmin_wrapper.pl stats $type",$output_auth);
-
         $items = array();
         $items['auth_basic']  = array();
         $items['auth_detail'] = array(); 
@@ -22,6 +21,7 @@ class FreeRadiusController extends AppController {
                 $clean = trim($i);
                 $clean = preg_replace("/\s+/", ";", $clean);
                 $e = explode(';',$clean);
+                
                 //First the basics
                 if(($e[0] == 'accepts')&&(intval($e[1]) != 0)){
                     array_push($items['auth_basic'], array('name' => __("Accepted"), 'data' => intval($e[1])));
@@ -59,8 +59,12 @@ class FreeRadiusController extends AppController {
                     array_push($items['auth_detail'], array('name' => __("Dropped"), 'data' => intval($e[1])));
                 }
 
-                 if(($e[0] == 'unknown_types')&&(intval($e[1]) != 0)){
+                if(($e[0] == 'unknown_types')&&(intval($e[1]) != 0)){
                     array_push($items['auth_detail'], array('name' => __("Unknown types"), 'data' => intval($e[1])));
+                }
+                
+                if(($e[0] == 'bad_authenticator')&&(intval($e[1]) != 0)){
+                    array_push($items['auth_detail'], array('name' => __("Bad Authenticator"), 'data' => intval($e[1])));
                 }
             }
         }
