@@ -77,7 +77,7 @@ Ext.define('Rd.controller.cDesktop', {
                 title: user,
                 iconCls: cls,
                 glyph: Rd.config.icnBug,
-                height: 380,
+                minHeight: 175,
                 menu: dd.menu,
                 toolConfig: {
                     width: 120,
@@ -146,7 +146,6 @@ Ext.define('Rd.controller.cDesktop', {
     createWindowMenu: function () {
         var me = this;
         return {
-            defaultAlign: 'br-tr',
             items: [
                 { text: i18n('sRestore'), handler: me.onWindowMenuRestore, scope: me },
                 { text: i18n('sMinimize'), handler: me.onWindowMenuMinimize, scope: me },
