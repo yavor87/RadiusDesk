@@ -373,7 +373,7 @@ class DesktopController extends AppController {
 
         return $menus;
     }
-
+    
     private function _build_ap_menus($id){
 
         $menu   = array();
@@ -387,77 +387,89 @@ class DesktopController extends AppController {
         $base   = "Access Providers/Controllers/";
 
         //____ Realms and Providers ____
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Realms/index")){    //Will not give an AP AP rigts without this
 
-                //___Check the sub-menu rights___:
-                $sm_r_p = array();
-                if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."AccessProviders/index")){
-                    array_push($sm_r_p, array('text' => __('Access Providers') ,'glyph' => Configure::read('icnKey'),    'itemId' => 'cAccessProviders'));
-                }
-                //Then the one we checked for ... realms
-                array_push($sm_r_p, array('text' => __('Realms') , 'glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'));
-
-                //___Check for SSID___:
-                if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Ssids/index")){
-                    array_push($sm_r_p, array('text' => __('SSIDs') ,'glyph' => Configure::read('icnWifi'),    'itemId' => 'cSsids'));
-                }
-
-                //___ END Sub Menu___
-
-            array_push($menu, array(  'text'  => __('Realms and Providers'),  'glyph' => Configure::read('icnRealm'), 'menu'  => array('items' =>$sm_r_p)));     
+        //___Check the sub-menu rights___:
+        $sm_r_p = array();
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."AccessProviders/index")){
+            array_push($sm_r_p, array('text' => __('Access Providers') ,'glyph' => Configure::read('icnKey'),    'itemId' => 'cAccessProviders'));
         }
+        //Then the one we checked for ... realms
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Realms/index")){
+            array_push($sm_r_p, array('text' => __('Realms') , 'glyph' => Configure::read('icnRealm'), 'itemId' => 'cRealms'));
+        }
+        //___Check for SSID___:
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Ssids/index")){
+            array_push($sm_r_p, array('text' => __('SSIDs') ,'glyph' => Configure::read('icnWifi'),    'itemId' => 'cSsids'));
+        }
+
+        //___ END Sub Menu___
+        if ($sm_r_p != null) {
+            array_push($menu, array(  'text'  => __('Realms and Providers'),  'glyph' => Configure::read('icnRealm'), 'menu'  => array('items' =>$sm_r_p)));
+        }
+                 
+        
 
         //____ NAS devices _____
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){    //Required to show the NAS Devices menu item
 
-            $sm_nas_devices = array();
-            
-            //__ DynamicClients __
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicClients/index")){
-                array_push($sm_nas_devices, array('text' => __('Dynamic RADIUS Clients') ,  'glyph' => Configure::read('icnDynamicNas'), 'itemId' => 'cDynamicClients'));
-            }
-            
-            array_push($sm_nas_devices, array(  'text'  => __('NAS Devices'),  'glyph' => Configure::read('icnNas'),  'itemId' => 'cNas'));
-
-            //___Check the sub-menu rights___:
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Tags/index")){
-                array_push($sm_nas_devices, array(  'text'  => __('NAS Device tags'),   'glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'));
-            } 
-            //___ END Sub Menu___
-
-            array_push($menu, array(  'text'  => __('NAS Devices'),  'glyph' => Configure::read('icnNas'), 'menu'  => array('items' =>$sm_nas_devices)));     
+        $sm_nas_devices = array();
+        
+        //__ DynamicClients __
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicClients/index")){
+            array_push($sm_nas_devices, array('text' => __('Dynamic RADIUS Clients') ,  'glyph' => Configure::read('icnDynamicNas'), 'itemId' => 'cDynamicClients'));
         }
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")) {
+            array_push($sm_nas_devices, array('text' => __('NAS Devices'), 'glyph' => Configure::read('icnNas'), 'itemId' => 'cNas'));
+        }
+        //___Check the sub-menu rights___:
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Tags/index")){
+            array_push($sm_nas_devices, array(  'text'  => __('NAS Device tags'),   'glyph' => Configure::read('icnTag'), 'itemId' => 'cTags'));
+        } 
+        //___ END Sub Menu___
+
+        if ($sm_nas_devices != null) {
+            array_push($menu, array(  'text'  => __('NAS Devices'),  'glyph' => Configure::read('icnNas'), 'menu'  => array('items' =>$sm_nas_devices)));
+        }
+        
 
         //____ Profiles _____
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Profiles/index")){    //Required to show the Profiles menu item
 
-            $sm_profiles = array();
+        $sm_profiles = array();
 
-            //___Check the sub-menu rights___:
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ProfileComponents/index")){
-                array_push($sm_profiles, array('text' => __('Profile Components') ,  'glyph' => Configure::read('icnComponent'), 'itemId' => 'cProfileComponents'));
-            } 
-            //___ END Sub Menu___
-
-            array_push($sm_profiles, array('text' => __('Profiles') ,  'glyph' => Configure::read('icnProfile'),'itemId' => 'cProfiles'));
-
+        //___Check the sub-menu rights___:
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ProfileComponents/index")){
+            array_push($sm_profiles, array('text' => __('Profile Components') ,  'glyph' => Configure::read('icnComponent'), 'itemId' => 'cProfileComponents'));
+        } 
+        //___ END Sub Menu___
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Profiles/index")) {
+            array_push($sm_profiles, array('text' => __('Profiles'), 'glyph' => Configure::read('icnProfile'), 'itemId' => 'cProfiles'));
+        }
+        if ($sm_profiles != null) {
             array_push($menu, array(  'text'  => __('Profiles'),  'glyph' => Configure::read('icnProfile'),  'menu'  => array('items' =>$sm_profiles)));     
         }
 
         //____ Tools ____
 
-        $sm_tools = array(
-                            array(  
-                                'text'      => __('RADIUS client'),         
-                                'glyph'     => Configure::read('icnRadius'),  
-                                'itemId'    => 'cRadiusClient'
-                            ),
-                            array(  
-                                'text'      => __('Password manager'),         
-                                'glyph'     => Configure::read('icnLock'),  
-                                'itemId'    => 'cPassword'
-                            )  
-                        );
+        $sm_tools = array();
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/change_password")) {
+            array_push($sm_tools,
+                array(
+                    'text'      => __('Password manager'),
+                    'glyph'     => Configure::read('icnLock'),
+                    'itemId'    => 'cPassword'
+                )
+            );
+        }
+
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."FreeRadius/test_radius")) {
+            array_push($sm_tools,
+                array(
+                    'text' => __('RADIUS client'),
+                    'glyph' => Configure::read('icnRadius'),
+                    'itemId' => 'cRadiusClient'
+                )
+            );
+        }
 /*
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."LicensedDevices/index")){
              array_push($sm_tools, 
@@ -468,10 +480,13 @@ class DesktopController extends AppController {
                 );
         }
 */
+        if ($sm_tools != null)    {
+            array_push($menu,
+                array(  'text'  => __('Tools'),  'glyph' => Configure::read('icnLight'),  'menu'  => array( 'items' =>$sm_tools))
+            );
+        }
 
-        array_push($menu,
-             array(  'text'  => __('Tools'),  'glyph' => Configure::read('icnLight'),  'menu'  => array( 'items' =>$sm_tools))
-        );
+
 
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
              $pu_sub_menu = array(
@@ -521,19 +536,15 @@ class DesktopController extends AppController {
 			);
 		}
 
-
         //Meshdesk
 		if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
 			array_push($menu,
 				array(  'text'  => __('MESHdesk'),  'glyph' => Configure::read('icnMesh'), 'itemId' => 'cMeshes')
 			);
 		}
-
-
-        
+		    
         return $menu;
     }
-
 
     private function _build_admin_shortcuts(){
         $items = array();
