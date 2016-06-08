@@ -1,17 +1,35 @@
 $(if error == '')
 <html>
-   <head>
-      <title>...</title>
-      <meta http-equiv="refresh" content="0; url=http://repace_with_your_server.com/cake2/rd_cake/dynamic_details/mikrotik_browser_detect/?loginlink=$(link-login-only)&nasid=$(identity)&ssid=Struisbaai&type=mikrotik&link_status=$(link-status)&link_login_only=$(link-login-only)&link_logout=$(link-logout)&mac=$(mac-esc)">
-      <meta http-equiv="pragma" content="no-cache">
-      <meta http-equiv="expires" content="-1">
-   </head>
-   <body>
-   </body>
+    <head><title>...</title></head>
+    <body>
+        $(if chap-id)
+        <noscript>
+            <center><b>JavaScript required. Enable JavaScript to continue.</b></center>
+        </noscript>
+        $(endif)
+        <center>If you are not redirected in a few seconds, click 'continue' below<br>
+        <form name="redirect" action="http://198.27.111.78/cake2/rd_cake/dynamic_details/mikrotik_browser_detect" method="post">
+            <input type="hidden" name="loginlink" value="$(link-login-only)">
+            <input type="hidden" name="nasid" value="$(identity)">
+            <input type="hidden" name="link_status" value="$(link-status)">
+            <input type="hidden" name="link_login_only" value="$(link-login-only)">
+            <input type="hidden" name="link_logout" value="$(link-logout)">
+            <input type="hidden" name="mac" value="$(mac-esc)">
+            <input type="hidden" name="type" value="mikrotik">
+            <input type="hidden" name="ssid" value="Struisbaai">
+            <input type="submit" value="continue">
+        </form>
+        <script language="JavaScript">
+        <!--
+           document.redirect.submit();
+        //-->
+        </script>
+        </center>
+    </body>
 </html>
 $(else)
 $(var)({
-	'logged_in' 		: '$(logged-in)', 	
+	'logged_in' 	    : '$(logged-in)', 	
 	'link_login_only' 	: '$(link-login-only)',
 	'error_orig'		: '$(error-orig)',
 	'error'			: '$(error)'
