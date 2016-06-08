@@ -189,14 +189,29 @@ class DynamicDetailsController extends AppController {
     
     public function mikrotik_browser_detect(){
 
-		$conditions = array("OR" =>array());
-
-		foreach(array_keys($this->request->query) as $key){
-                array_push($conditions["OR"],
-                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+		$conditions     = array("OR" =>array());
+		$query_string   = $_SERVER['QUERY_STRING'];
+		
+		if (!$this->request->is('post')) {
+		    foreach(array_keys($this->request->query) as $key){
+                    array_push($conditions["OR"],
+                        array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->query[$key])
+                    ); //OR query all the keys
+           	}	
+		}else{
+		    $q_array = array();
+		    foreach(array_keys($this->request->data) as $key){
+		    
+		        $q_array[$key] = $this->request->data[$key];
+		        
+		        array_push($conditions["OR"],
+                    array("DynamicPair.name" => $key, "DynamicPair.value" =>  $this->request->data[$key])
                 ); //OR query all the keys
-       	}
-
+		     }
+		     
+		     $query_string =  http_build_query($q_array);
+		}
+		
        	$this->{$this->modelClass}->DynamicPair->contain('DynamicDetail');
       	$q_r = $this->{$this->modelClass}->DynamicPair->find('first', 
                 array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
@@ -206,11 +221,12 @@ class DynamicDetailsController extends AppController {
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
 		}
+		
 
 	    if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
-		    $redir_to = $q_r['DynamicDetail']['mikrotik_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $q_r['DynamicDetail']['mikrotik_desktop_url'].'?'.$query_string;
 		    if($this->request->is('mobile')){
-                $redir_to = $q_r['DynamicDetail']['mikrotik_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $q_r['DynamicDetail']['mikrotik_mobile_url'].'?'.$query_string;
             }
 		}else{  //Else we fetch the 'global' theme's value from the file
 		    Configure::load('DynamicLogin'); 
@@ -219,9 +235,9 @@ class DynamicDetailsController extends AppController {
 			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
 		    }
 
-		    $redir_to = $pages['mikrotik_desktop'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['mikrotik_desktop'].'?'.$query_string;
             if($this->request->is('mobile')){
-                $redir_to = $pages['mikrotik_mobile'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $pages['mikrotik_mobile'].'?'.$query_string;
             }
         }
 
