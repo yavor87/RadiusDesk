@@ -892,6 +892,36 @@ $config['hardware'][23]      = array(
 
 );
 
+$config['hardware'][24]      = array(
+    'name'          => __('ZBT WE2026'),
+    'id'            => 'zbt_we2026' ,
+    'radios'        => 1,
+    'active'        => true,
+    'max_power'     => '20',
+    'eth_br'        => 'eth0',
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '20',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ldpc'           => true,
+    'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+
+);
+
+
 //== MESHdesk SSID/BSSID
 $config['MEHSdesk']['bssid'] = "02:CA:FE:CA:00:00"; //This will be the first one; subsequent ones will be incremented 
 
