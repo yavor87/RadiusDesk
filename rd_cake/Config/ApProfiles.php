@@ -257,6 +257,33 @@ $config['ApProfiles']['hardware'][5]      = array(
         )
 );
 
+$config['ApProfiles']['hardware'][1]      = array(
+		'name' 		            => __('ZBT WE2026'),   	
+		'id'    	            => 'zbt_we2026',
+		'active'                => true,
+		'radios'	            => 1,
+		'eth_br'	            => 'eth0',
+		
+		'radio0_disabled'       => 0,
+		'radio0_band'           => '24',
+        'radio0_channel_two'    => '8',
+		'radio0_hwmode'	        => '11g',
+        'radio0_htmode'         => 'HT20',
+        'radio0_txpower'        => '20',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio0_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )	
+);
+
 
 
 //== OpenWrt timezones====
