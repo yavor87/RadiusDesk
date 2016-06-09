@@ -163,4 +163,14 @@ config hardware 'tl_wdr3600'
     option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
     option internet_led '/sys/class/leds/tp-link:blue:lan4/brightness'
     option wifi_led 'tp-link:blue:wlan2g'
+    
+config hardware 'tl_wdr3600'
+    option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
+    option internet_led '/sys/class/leds/tp-link:blue:lan4/brightness'
+    option wifi_led 'tp-link:blue:wlan2g'
+    
+config hardware 'zbt_we2026'
+    option morse_led '/sys/class/leds/zbt-wr8305rt:green:sys/brightness'
+    option internet_led '/sys/class/leds/zbt-wr8305rt:green:sys/brightness'
+    option wifi_led 'zbt-wr8305rt:green:wifi'
 

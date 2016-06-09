@@ -16,9 +16,85 @@ pid_file_alfred="/var/run/alfred.pid"
 pid_file_vis="/var/run/batadv-vis.pid"
 enable=0
 vis_enable=0
-batmanif=""
 SERVICE_DAEMONIZE=1
 SERVICE_WRITE_PID=1
+
+wait_for_dir()
+{
+	local ifce="$1" dir="$2"
+
+	if ! [ -d "$dir" ] ; then
+		timeout=30
+		echo "${initscript}: waiting $timeout secs for $ifce interface..."
+		for i in $(seq $timeout); do
+			sleep 1
+			[ -d "$dir" ] && break
+			if [ $i == $timeout ] ; then
+				echo "${initscript}: $ifce not detected, alfred not starting."
+				exit 1
+			fi
+		done
+	fi
+}
+
+wait_for_ll_address()
+{
+	local iface="$1"
+	local timeout=30
+
+	echo "${initscript}: waiting $timeout secs for $iface address..."
+	for i in $(seq $timeout); do
+		# We look for
+		# - the link-local address (starts with fe80)
+		# - without tentative flag (bit 0x40 in the flags field; the first char of the flags field begins 38 columns after the fe80 prefix
+		# - on interface $iface
+		if awk '
+			BEGIN { RET=1 }
+			/^fe80.{37} [012389ab]/ { if ($6 == "'"$iface"'") RET=0 }
+			END { exit RET }
+		' /proc/net/if_inet6; then
+			return
+		fi
+		sleep 1
+	done
+
+	echo "${initscript}: $iface address not detected, alfred not starting."
+	exit 1
+}
+
+fix_bridge_mac()
+{
+    #Fix the MAC if needed
+    local zero_mac=''
+    local one_mac=''
+    local br_mac=''
+   
+    if [[ -f "/sys/class/net/br-one/address" ]]; then
+        echo "Found br-one"
+        br_mac=`cat /sys/class/net/br-one/address`
+        
+        #If one0 exists
+        if [[ -f "/sys/class/net/one0/address" ]]; then
+            zero_mac=`cat /sys/class/net/one0/address`
+            if [[ "$zero_mac" != "$br_mac" ]]; then
+                echo "Found br-one and one0"
+                ifconfig br-one hw ether $zero_mac
+            fi
+        else
+            #IF one1 exists
+            if [[ -f "/sys/class/net/one1/address" ]]; then
+                one_mac=`cat /sys/class/net/one1/address`
+                if [[ "$one_mac" != "$br_mac" ]]; then
+                    echo "Found br-one and one1"
+                    ifconfig br-one hw ether $one_mac
+                fi
+            fi 
+        fi   
+    fi 
+       
+	return 0
+}
+
 
 alfred_start()
 {
@@ -41,17 +117,25 @@ alfred_start()
 	config_get batmanif "$section" batmanif
 	append args "-b $batmanif"
 
+	if [ "$batmanif" != "none" ]; then
+		wait_for_dir "$batmanif" "/sys/class/net/$batmanif/mesh"
+	fi
+
+	wait_for_ll_address "$interface"
+
 	append alfred_args "$args"
 	enable=1
 
-        config_get_bool start_vis "$section" start_vis 0
-        if [ "$start_vis" = 1 ] && [ -x /usr/sbin/batadv-vis ]; then
-                vis_enable=1
-                append vis_args "-i $batmanif -s"
-        fi
+	config_get_bool start_vis "$section" start_vis 0
+	if [ "$start_vis" = 1 ] && [ -x /usr/sbin/batadv-vis ]; then
+		vis_enable=1
+		append vis_args "-i $batmanif -s"
+	fi
 
 	config_get_bool run_facters "$section" run_facters 0
-
+	
+	fix_bridge_mac
+	 
 	return 0
 }
 
@@ -62,22 +146,6 @@ start()
 
 	if [ "$enable" = "0" ]; then
 		exit 0
-	fi
-
-	if [ $batmanif != "none" ]; then 
-		mesh_dir="/sys/class/net/$batmanif/mesh/"
-		if ! [ -d "$mesh_dir" ] ; then
-			timeout=30
-			echo "${initscript}: waiting $timeout secs for $batmanif interface..."
-			for i in $(seq $timeout); do
-				sleep 1
-				[ -d "$mesh_dir" ] && break
-				if [ $i == $timeout ] ; then
-					echo "${initscript}: $batmanif not detected, alfred not starting."
-					exit 1
-				fi
-			done
-		fi
 	fi
 
 	echo "${initscript}: starting alfred"
@@ -93,16 +161,9 @@ start()
 	if [ "$run_facters" = "1" ]; then
 		( for file in $facters_dir/* ; do [ -x $file ] && $file ; done )
 		if ! ( grep -q "for file in $facters_dir/\* ; do " /etc/crontabs/root 2>/dev/null ) ; then
-			#echo "*/5 * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root
-            #MESHdesk change - Make it once a minute so that we have a responsive reporting mechanism 
-			#-> use crontab else cron does not like this at all (worked fine in AA)!
-            cp /etc/crontabs/root /tmp/ct_root                                                                          
-            echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /tmp/ct_root         
-            crontab -u root /tmp/ct_root                                                                                
-            rm /tmp/ct_root                                                                                             
-            #echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root  
-            /etc/init.d/cron enable                                                                                     
-            /etc/init.d/cron restart  
+			echo "* * * * * ( for file in $facters_dir/* ; do [ -x \$file ] && \$file ; done )" >> /etc/crontabs/root
+			/etc/init.d/cron enable
+			/etc/init.d/cron restart
 		fi
 	fi
 }
