@@ -40,7 +40,8 @@ local choices = {
     "TP-Link WA850RE",
     "TP-Link WA901N",
     "Generic 1 Radio",
-    "Generic 2 Radio"
+    "Generic 2 Radio",
+    "ZBT WE2026"
 }
 local hardware      = {}
 hardware[0]         = 'dragino'
@@ -67,6 +68,7 @@ hardware[20]        = 'tl_wa850re'
 hardware[21]        = 'tl_wa901n'
 hardware[22]        = 'genoneradio'
 hardware[23]        = 'gentworadio'
+hardware[24]        = 'zbt_we2026'
 
 local mode_choices = {
     "Mesh",
@@ -153,6 +155,9 @@ function HandleEvents(event)
     end
     if(event:GetSelection() == 23)then
         sbmHardware:SetBitmap(bm_gentworadio)
+    end
+     if(event:GetSelection() == 24)then
+        sbmHardware:SetBitmap(bm_zbt_we2026)
     end
 end
 
@@ -349,6 +354,9 @@ function build_gui()
     
     bm_gentworadio      = wx.wxBitmap();
     bm_gentworadio:LoadFile("./graphics/gentworadio.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_zbt_we2026      = wx.wxBitmap();
+    bm_zbt_we2026:LoadFile("./graphics/zbt_we2026.png",wx.wxBITMAP_TYPE_ANY )
 
 
 
