@@ -257,7 +257,7 @@ $config['ApProfiles']['hardware'][5]      = array(
         )
 );
 
-$config['ApProfiles']['hardware'][1]      = array(
+$config['ApProfiles']['hardware'][6]      = array(
 		'name' 		            => __('ZBT WE2026'),   	
 		'id'    	            => 'zbt_we2026',
 		'active'                => true,
