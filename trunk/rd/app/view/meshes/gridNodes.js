@@ -72,7 +72,7 @@ Ext.define('Rd.view.meshes.gridNodes' ,{
             {xtype: 'rownumberer',stateId: 'StateGridNodes1'},
             { text: i18n('sName'),              dataIndex: 'name',           tdCls: 'gridMain', flex: 1,stateId: 'StateGridNodes2'},
             { text: i18n('sDescription'),       dataIndex: 'description',    tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes3'},
-            { text: i18n('sMAC_Address'),       dataIndex: 'mac',            tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes4'},
+            { text: i18n('sMAC_address'),       dataIndex: 'mac',            tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes4'},
             { text: i18n('sHardware'),          dataIndex: 'hardware',       tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes5'},
             { text: i18n('sPower'),             dataIndex: 'power',          tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes6'},
             { text: i18n('sIP_Address'),        dataIndex: 'ip',             tdCls: 'gridTree', flex: 1,stateId: 'StateGridNodes7'},

@@ -669,7 +669,14 @@ Local = {
         'sMeshes' : 'Meshes',
         'sKnown_Nodes': 'Known_Nodes',
         'sUnknown_Nodes': 'Unknown Nodes',
-        'sView': 'View' 
+        'sView': 'View',
+        'sLast_command': 'Last Command',
+        'sHardware': 'Hardware',
+        'sFirmware': 'Firmware',
+        'sSystem_load': 'System load',
+        'sSystem_time' : 'System time',
+        'sCPU' : 'CPU'
+         
     }
 }
 

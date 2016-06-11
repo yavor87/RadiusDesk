@@ -54,16 +54,16 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
         
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGMVND1'},
-            { text: i18n.sName,              dataIndex: 'name',          tdCls: 'gridTree', width: 130,stateId: 'StateGMVND2'},
-            { text: i18n.sDescription,       dataIndex: 'description',   tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND3', hidden : true},
-            { text: 'MAC_Address',       		dataIndex: 'mac',           tdCls: 'gridTree', width: 130,stateId: 'StateGMVND4'},
-            { text: i18n.sHardware,          dataIndex: 'hw_human',      tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND5', hidden : true},
-            { text: i18n.sPower,             dataIndex: 'power',         tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND6', hidden : true},
-            { text: i18n.sIP_Address,        dataIndex: 'ip',            tdCls: 'gridTree', width: 110,stateId: 'StateGMVND7'},
-			{ text: 'Uptime',        			dataIndex: 'uptime',   		tdCls: 'gridTree', width: 110,stateId: 'StateGMVND8'},
-			{ text: 'System time',      		dataIndex: 'system_time',   tdCls: 'gridTree', width: 110,stateId: 'StateGMVND9'},
+            { text: i18n('sName'),              dataIndex: 'name',          tdCls: 'gridTree', width: 130,stateId: 'StateGMVND2'},
+            { text: i18n('sDescription'),       dataIndex: 'description',   tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND3', hidden : true},
+            { text: i18n('sMAC_address'),       		dataIndex: 'mac',           tdCls: 'gridTree', width: 130,stateId: 'StateGMVND4'},
+            { text: i18n('sHardware'),          dataIndex: 'hw_human',      tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND5', hidden : true},
+            { text: i18n('sPower'),             dataIndex: 'power',         tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND6', hidden : true},
+            { text: i18n('sIP_Address'),        dataIndex: 'ip',            tdCls: 'gridTree', width: 110,stateId: 'StateGMVND7'},
+			{ text: i18n('sUptime'),        			dataIndex: 'uptime',   		tdCls: 'gridTree', width: 110,stateId: 'StateGMVND8'},
+			{ text: i18n('sSystem_time'),      		dataIndex: 'system_time',   tdCls: 'gridTree', width: 110,stateId: 'StateGMVND9'},
 			{ 
-                text        : 'System load',   
+                text        : i18n('sSystem_load'),   
                 dataIndex   : 'mem_total',  
                 tdCls       : 'gridTree', 
                 width		: 130,
@@ -75,7 +75,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 hidden : true
             },
            	{ 
-                text    : 'Firmware',
+                text    : i18n('sFirmware'),
                 sortable: false,
                 flex    : 1,  
                 xtype   : 'templatecolumn', 
@@ -89,7 +89,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
 				hidden	: true
             }, 
             { 
-                text    : 'Hardware',
+                text    : i18n('sCPU'),
                 sortable: false,
                 flex    : 1,  
                 xtype   :  'templatecolumn', 
@@ -103,7 +103,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
 				hidden	: true
             },
 			{ 
-                text        : 'Last contact',   
+                text        : i18n('sLast_contact'),   
                 dataIndex   : 'state',  
                 tdCls       : 'gridTree', 
                 flex        : 1,
@@ -123,7 +123,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 },stateId: 'StateGMVND13'
             },
 			{ 
-                text    : 'Last command',
+                text    : i18n('sLast_command'),
                 sortable: false,
                 tdCls   : 'gridTree', 
                 flex    : 1,  
