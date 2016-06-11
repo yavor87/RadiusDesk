@@ -591,7 +591,7 @@ Local = {
         "sMap": "Map",
         "sEdit_mesh_entry_point": "Edit mesh entry point",
         "sEdit_mesh_exit_point": "Edit mesh exit point",
-        "sMESHdesk_overview": "MESHdesk overview",
+        "sMESHdesk": "MESHdesk",
         "sNew_mesh_entry_point_added": "New mesh entry point added",
         "sNew_mesh_enty_point_created_fine": "New mesh enty point created fine",
         "sItem_added_fine": "Item added fine",
@@ -665,7 +665,11 @@ Local = {
         'sDisabled' : 'Disabled',
         'sDeny' : 'Deny',
         'sBYOD_Belonging_To' : 'BYOD Owner',
-        'sOnline' : 'Online'   
+        'sOnline' : 'Online',
+        'sMeshes' : 'Meshes',
+        'sKnown_Nodes': 'Known_Nodes',
+        'sUnknown_Nodes': 'Unknown Nodes',
+        'sView': 'View' 
     }
 }
 

@@ -312,7 +312,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         var me      = this; 
 		var id		= 'winMeshEdit'+ mesh_id;
         if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-			var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: 'MESHdesk edit '+name, meshId :mesh_id, meshName: name});
+			var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: i18n('sEdit')+' '+name, meshId :mesh_id, meshName: name});
             me.application.runAction('cDesktop','Add',w);      
         }
     },

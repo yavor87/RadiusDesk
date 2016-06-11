@@ -7,8 +7,7 @@ Ext.define('Rd.controller.cMeshes', {
         if(!win){
             win = desktop.createWindow({
                 id      : 'meshWin',
-                //title   : 'MESHdesk overview',
-                btnText : i18n('sMESHdesk_overview'),
+                btnText : i18n('sMESHdesk'),
                 width           : Rd.config.winWidth,
                 height          : Rd.config.winHeight,
                 iconCls : 'mesh',
@@ -23,7 +22,7 @@ Ext.define('Rd.controller.cMeshes', {
                     {
                         region  : 'north',
                         xtype   : 'pnlBanner',
-                        heading : i18n('sMESHdesk_overview'),
+                        heading : i18n('sMESHdesk'),
                         image   : 'resources/images/48x48/mesh.png'
                     },
 					{
@@ -38,9 +37,9 @@ Ext.define('Rd.controller.cMeshes', {
                             border  : true,
                             plain   : false,
                             items   : [
-								{ 'title' : i18n('sHome'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnHome},
-								{ 'title' : 'Known nodes', 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnCheck},
-								{ 'title' : 'Unknown nodes','xtype':'gridUnknownNodes',	'glyph': Rd.config.icnQuestion}
+								{ 'title' : i18n('sMeshes'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnMesh},
+								{ 'title' : i18n('sKnown_Nodes'), 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnCheck},
+								{ 'title' : i18n('sUnknown_Nodes'),'xtype':'gridUnknownNodes',	'glyph': Rd.config.icnQuestion}
                         ]}]
                     }
                 ]
