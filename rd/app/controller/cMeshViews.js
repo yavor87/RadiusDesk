@@ -161,7 +161,7 @@ Ext.define('Rd.controller.cMeshViews', {
         var me      = this;
 		var id      = 'winMeshView'+mesh_id; 
         if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-            var w = Ext.widget('winMeshView',{id:id, name:name, stateId:id,title: 'MESHdesk view '+name, meshId: mesh_id});
+            var w = Ext.widget('winMeshView',{id:id, name:name, stateId:id,title: i18n('sView')+' '+name, meshId: mesh_id});
             me.application.runAction('cDesktop','Add',w);      
         }
     },

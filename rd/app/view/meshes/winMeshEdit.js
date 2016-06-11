@@ -4,7 +4,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
     width           : Rd.config.winWidth,
     height          : Rd.config.winHeight,
     iconCls : 'mesh',
-    glyph   : Rd.config.icnMesh,
+    glyph   : Rd.config.icnMeshEdit,
     animCollapse:false,
     border  :false,
     isWindow: true,
@@ -23,7 +23,7 @@ Ext.define('Rd.view.meshes.winMeshEdit', {
                 region: 'north',
                 xtype:  'pnlBanner',
                 heading: me.title,
-                image:  'resources/images/48x48/mesh.png'
+                image:  'resources/images/48x48/mesh_edit.png'
             },
             {
                 region  : 'center',
