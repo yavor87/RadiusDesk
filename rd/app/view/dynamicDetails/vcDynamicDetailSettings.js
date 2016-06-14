@@ -61,9 +61,9 @@ Ext.define('Rd.view.dynamicDetails.vcDynamicDetailSettings', {
         var me  = this;
         var pnl = chk.up('panel');
         if(chk.getValue()){
-             pnl.down('txtRegSuffix').setDisabled(false);
+             pnl.down('#txtRegSuffix').setDisabled(false);
         }else{
-             pnl.down('txtRegSuffix').setDisabled(false);
+             pnl.down('#txtRegSuffix').setDisabled(true);
         }
     }
 });
