@@ -675,8 +675,9 @@ Local = {
         'sFirmware': 'Firmware',
         'sSystem_load': 'System load',
         'sSystem_time' : 'System time',
-        'sCPU' : 'CPU'
-         
+        'sCPU' : 'CPU',
+        'sRegistration' : 'Registration',
+        'sUser_registration' : 'User registration'
     }
 }
 

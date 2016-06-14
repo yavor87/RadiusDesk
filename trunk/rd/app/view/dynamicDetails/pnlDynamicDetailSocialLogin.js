@@ -5,6 +5,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSocialLogin', {
     dynamic_detail_id: null,
     layout  : 'hbox',
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
+    user_id : undefined, // The user_id of the Access Provider who owns the Dynamic Login page -> This will influence the list of Realms and Profiles
     initComponent: function(){
         var me = this;
 

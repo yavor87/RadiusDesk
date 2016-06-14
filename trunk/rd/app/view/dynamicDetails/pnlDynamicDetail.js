@@ -42,7 +42,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
                 title   : 'Settings',
                 itemId  : 'tabSettings',
                 xtype   : 'pnlDynamicDetailSettings',
-                dynamic_detail_id : me.dynamic_detail_id
+                dynamic_detail_id : me.dynamic_detail_id,
+                user_id : me.user_id
             },
             { 
                 title   : 'Click to connect',
@@ -54,7 +55,8 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetail', {
                 title   : 'Social login',
                 itemId  : 'tabSocialLogin',
                 xtype   : 'pnlDynamicDetailSocialLogin',
-                dynamic_detail_id : me.dynamic_detail_id
+                dynamic_detail_id : me.dynamic_detail_id,
+                user_id : me.user_id
             }
 
         ]; 

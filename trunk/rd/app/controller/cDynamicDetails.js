@@ -269,7 +269,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 click:      me.pairEditSave
             },
             'pnlDynamicDetail #tabSettings': {
-                activate:       me.tabDetailActivate
+                activate:       me.tabSettingsActivate
             },
             'pnlDynamicDetail #tabClickToConect': {
                 activate:       me.tabDetailActivate
@@ -569,6 +569,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
             var tp      = me.getGrid().up('tabpanel');
             var sr      = me.getGrid().getSelectionModel().getLastSelected();
             var id      = sr.getId();
+            var user_id = sr.get('user_id');
             var tab_id  = 'dynamicDetailTab_'+id;
             var nt      = tp.down('#'+tab_id);
             if(nt){
@@ -584,7 +585,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 closable:   true,
                 glyph       : Rd.config.icnEdit, 
                 layout:     'fit', 
-                items:      {'xtype' : 'pnlDynamicDetail',dynamic_detail_id: id}
+                items:      {'xtype' : 'pnlDynamicDetail',dynamic_detail_id: id, user_id: user_id}
             });
             tp.setActiveTab(tab_id); //Set focus on Add Tab
         }
@@ -875,6 +876,30 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var form    = tab.down('form');
         var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
         form.load({url:me.getUrlViewDynamicDetail(), method:'GET',params:{dynamic_detail_id:dynamic_detail_id}});
+    },
+    tabSettingsActivate : function(tab){
+        var me      = this;
+        var form    = tab.down('form');
+        var dynamic_detail_id= tab.up('pnlDynamicDetail').dynamic_detail_id;
+        form.load({
+            url         : me.getUrlViewDynamicDetail(), 
+            method      : 'GET',
+            params      : {dynamic_detail_id:dynamic_detail_id},
+            success     : function(a,b,c){
+                 if(b.result.data.realm_id != null){
+                    var realm = form.down("#realm");
+                    var mr    = Ext.create('Rd.model.mRealm', {name: b.result.data.realm, id: b.result.data.realm_id});
+                    realm.getStore().loadData([mr],false);
+                    realm.setValue(b.result.data.realm_id);
+                }
+                if(b.result.data.profile_id != null){
+                    var profile = form.down("#profile");
+                    var mp     = Ext.create('Rd.model.mProfile', {name: b.result.data.profile, id: b.result.data.profile_id});
+                    profile.getStore().loadData([mp],false);
+                    profile.setValue(b.result.data.profile_id);
+                }
+            }
+        }); 
     },
     tabLogoActivate: function(tab){
         var me      = this;
