@@ -9,6 +9,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
         'Rd.view.dynamicDetails.vcDynamicDetailSettings'
     ],
     controller  : 'vcDynamicDetailSettings',
+    user_id : undefined, // The user_id of the Access Provider who owns the Dynamic Login page -> This will influence the list of Realms and Profiles
     initComponent: function(){
         var me = this;
 
@@ -161,14 +162,6 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
 								    },
 									{
 								        xtype       : 'checkbox',      
-								        fieldLabel  : 'User registration',
-								        itemId      : 'chkRegisterUsers',
-								        name        : 'register_users',
-								        inputValue  : 'register_users',
-								        labelClsExtra: 'lblRd'
-								    },
-									{
-								        xtype       : 'checkbox',      
 								        fieldLabel  : 'Lost password',
 								        itemId      : 'chkLostPassword',
 								        name        : 'lost_password',
@@ -261,6 +254,95 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
 								        minValue    : 60,
 								        disabled    : true
 								    }	      
+                                ]
+                            },
+                            { 
+                                'title'     : i18n('sRegistration'),
+                                'layout'    : 'anchor',
+                                itemId      : 'tabRegistration',
+                                defaults    : {
+                                    anchor: '100%'
+                                },
+                                autoScroll:true,
+                                items       : [
+									 {
+								        xtype       : 'checkbox',      
+								        fieldLabel  : i18n('sUser_registration'),
+								        itemId      : 'chkRegisterUsers',
+								        name        : 'register_users',
+								        inputValue  : 'register_users',
+								        labelClsExtra: 'lblRdReq',
+								        listeners   : {
+                                            change : 'onChkRegisterUsersChange'
+                                        } 
+								    },
+								    {
+                                        xtype       : 'cmbRealm',
+                                        allowBlank  : false,
+                                        labelClsExtra: 'lblRdReq',
+                                        itemId      : 'realm',
+                                        disabled    : true,
+						                extraParam  : me.user_id
+                                    },
+                                    {
+                                        xtype       : 'cmbProfile',
+                                        allowBlank  : false,
+                                        labelClsExtra: 'lblRdReq',
+                                        itemId      : 'profile',
+                                        disabled    : true,
+						                extraParam  : me.user_id
+                                    },
+                                    {
+								        xtype       : 'checkbox',      
+								        fieldLabel  : 'Auto-add suffix',
+								        itemId      : 'chkRegAutoSuffix',
+								        name        : 'reg_auto_suffix_check',
+								        inputValue  : 'reg_auto_suffix_check',
+								        checked     : true,
+								        labelClsExtra: 'lblRdReq',
+								        disabled    : true,
+								        listeners   : {
+                                            change : 'onChkRegAutoSuffixChange'
+                                        } 
+								    },
+									{
+								        xtype       : 'textfield',
+								        fieldLabel  : 'Suffix',
+								        itemId      : 'txtRegSuffix',
+								        name        : 'reg_auto_suffix',
+								        disabled    : true,
+								        labelClsExtra: 'lblRdReq'
+								    },
+								    {
+								        xtype       : 'checkbox',      
+								        boxLabel    : 'One user registration per device',
+								        itemId      : 'chkRegMacCheck',
+								        name        : 'reg_mac_check',
+								        inputValue  : 'reg_mac_check',
+								        disabled    : true,
+								        checked     : true,
+								        cls         : 'lblRd'
+								    },
+								    {
+                                        xtype       : 'checkbox',      
+                                        boxLabel    : 'Auto-add device after authentication',
+                                        itemId      : 'chkRegAutoAdd',
+                                        name        : 'reg_auto_add',
+                                        inputValue  : 'reg_auto_add',
+                                        disabled    : true,
+                                        checked     : false,
+                                        cls         : 'lblRd'
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
+                                        boxLabel    : 'Send confirmation email',
+                                        itemId      : 'chkRegEmail',
+                                        name        : 'reg_email',
+                                        inputValue  : 'reg_email',
+                                        disabled    : true,
+                                        checked     : false,
+                                        cls         : 'lblRd'
+                                    }  
                                 ]
                             }
                         ]
