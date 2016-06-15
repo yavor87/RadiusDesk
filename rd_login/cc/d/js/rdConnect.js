@@ -950,6 +950,8 @@ $$('sliderData').refresh();
         var onBtnClickRegister = function(){
         
             webix.rules.intNumber = function(val){ return /^\d{10}$/.test(val); }
+            
+            var mac = getParameterByName('mac');
              
             var mv = {
 		        view    : "multiview",
@@ -972,13 +974,20 @@ $$('sliderData').refresh();
                             {
                                 view        : 'text',
                                 name        : 'mac',
-                                hidden      : true
+                                hidden      : true,
+                                value       : mac
                             },
                             {
                                 view        : 'text',
                                 name        : 'login_page',
                                 hidden      : true,
                                 value       : cDynamicData.detail.name
+                            },
+                            {
+                                view        : 'text',
+                                name        : 'login_page_id',
+                                hidden      : true,
+                                value       : cDynamicData.detail.id
                             },
 	                        {
                                 view        : 'text',

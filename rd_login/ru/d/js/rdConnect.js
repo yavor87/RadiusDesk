@@ -892,6 +892,12 @@ $$('sliderData').refresh();
                                 hidden      : true,
                                 value       : cDynamicData.detail.name
                             },
+                            {
+                                view        : 'text',
+                                name        : 'login_page_id',
+                                hidden      : true,
+                                value       : cDynamicData.detail.id
+                            },
 	                        {
                                 view        : 'text',
                                 label       : 'First Name',
