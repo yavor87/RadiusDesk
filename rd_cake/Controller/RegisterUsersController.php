@@ -2,38 +2,64 @@
 class RegisterUsersController extends AppController {
 
     public $name       = 'RegisterUsers';
-    public $uses       = array('User','Profile','Realm','PermanentUser');
+    public $uses       = array('User','Profile','Realm','PermanentUser','DynamicDetail');
 
 	public function new_permanent_user(){
 
-
-		//Some dummy data
-		//$data 			= array('username' => 'dvdwalt', 'password' => 'dvdwalt');
-
-		//
-		Configure::load('RegisterUsers');
+		//--No login_page_id no reg --
+		if(array_key_exists('login_page_id',$this->request->data)){
+		    $page_id = $this->request->data['login_page_id'];
+		    $this->DynamicDetail->contain();
+		    $q_r = $this->DynamicDetail->findById($page_id);
+		    if(!$q_r){
+		         $this->set(array(
+				    'success'   => false,
+				    'errors'	=> array('Login Page ID' => 'Page not found in database'),
+					    '_serialize' => array('success','errors')
+			    ));	
+			    return;
+		    }
+		}else{
+		    $this->set(array(
+				'success'   => false,
+				'errors'	=> array('Login Page ID' => 'Login Page ID missing'),
+					'_serialize' => array('success','errors')
+			));	
+			return;
+		}
+		
+		if(!$q_r['DynamicDetail']['register_users']){
+		    $this->set(array(
+				'success'   => false,
+				'errors'	=> array('Registration forbidden' => 'User Registration not allowed'),
+					'_serialize' => array('success','errors')
+			));	
+			return; 
+		}
+		
 
 		//--Do the MAC test --
-		$mac = '';
-		if(array_key_exists('mac',$this->request->data)){
-			$mac = $this->request->data['mac'];
-		}
-
-		$force_mac = Configure::read('register_users.default.force_mac');
-		if($force_mac){
-			if(array_key_exists('mac',$this->request->data)){
+		if($q_r['DynamicDetail']['reg_mac_check']){
+		    if(array_key_exists('mac',$this->request->data)){
 				$mac = $this->request->data['mac'];
-				//Check if this MAC did not perhaps alreade registered with us.
+				if($mac == ''){//Can't use empty MACs
+				    $this->set(array(
+				        'success'   => false,
+				        'errors'	=> array('Address not specified' => 'MAC Address not specified'),
+					        '_serialize' => array('success','errors')
+			        ));	
+			        return;
+				}
 				$this->PermanentUser->contain();
-				$q_r	= $this->PermanentUser->find('first',
+				$q	= $this->PermanentUser->find('first',
 					array('conditions' => 
 						array(
 							'PermanentUser.extra_name' 	=> 'mac',
 							'PermanentUser.extra_value' => $mac,
 						)
 					));
-				if($q_r){
-					$already_username = $q_r['PermanentUser']['username'];
+				if($q){
+					$already_username = $q['PermanentUser']['username'];
 					$this->set(array(
 						'success'   => false,
 						'errors'	=> array('username' => "MAC Address $mac in use by $already_username"),
@@ -45,45 +71,53 @@ class RegisterUsersController extends AppController {
 
 				$this->set(array(
 					'success'   => false,
-					'errors'	=> array('username' => 'MAC Address missing'),
+					'errors'	=> array('Device ID Missing' => 'Device MAC not in request'),
 						'_serialize' => array('success','errors')
 				));	
 				return;
 			}
 		}
+		
 
-
-		//Get the token of the owner
-        $owner 		= Configure::read('register_users.default.creator');
+		//Get the token of the Dynamic Login Page owner
 		$this->User->contain();
-		$q_r 		= $this->User->findByUsername($owner);
-		$token		= $q_r['User']['token'];
+		$q_u 		= $this->User->findById($q_r['DynamicDetail']['user_id']);
+		$token		= $q_u['User']['token'];
 
-		//Get the realm id
-        $realm 		= Configure::read('register_users.default.realm');
-		$this->Realm->contain();
-		$q_r 		= $this->Realm->findByName($realm);
-		$realm_id	= $q_r['Realm']['id'];
+		//Realm id
+		$realm_id	= $q_r['DynamicDetail']['realm_id'];
 
-		//Get the profile id
-        $profile 	= Configure::read('register_users.default.profile');
-		$this->Profile->contain();
-		$q_r 		= $this->Profile->findByName($profile);
-		$profile_id	= $q_r['Profile']['id'];
+		//Profile id
+		$profile_id	= $q_r['DynamicDetail']['profile_id'];
 		
         $active   	= 'active';
         $cap_data 	= 'hard';
         $language   = '4_4';
         $parent_id  = 0;        
         $url        = 'http://127.0.0.1/cake2/rd_cake/permanent_users/add.json';
-
-		$username	= $this->request->data['username'];
+        
+        //This is a nice to have to allow one user to register with the same email addy many places!
+        if($q_r['DynamicDetail']['reg_auto_suffix_check']){ 
+            $username	= $this->request->data['username'].'@'.$q_r['DynamicDetail']['reg_auto_suffix'];
+        }else{
+            $username	= $this->request->data['username'];
+        }
 		$password	= $this->request->data['password'];
-
+		
+		$auto_add   = 0;
+		if($q_r['DynamicDetail']['reg_auto_add']){
+		    $auto_add = 1;
+		}
+		
 		//--- ADD ON ---- Expire them after 30 days
+		/*
 		$from_date	=  date("n/j/Y");
 		$plus_30  	= mktime(0, 0, 0, date("m"),   date("d")+31,   date("Y")); //We actually put 31 since today is already gone
 		$to_date	=  date("n/j/Y",$plus_30);
+		
+		'from_date'		=> $from_date,
+	    'to_date'		=> $to_date,
+	    */
          
         // The data to send to the API
         $postData = array(
@@ -98,8 +132,7 @@ class RegisterUsersController extends AppController {
             'password'      => $password,
 			'extra_name'	=> 'mac',
 			'extra_value'	=> $mac,
-			'from_date'		=> $from_date,
-			'to_date'		=> $to_date,
+			'auto_add'      => $auto_add
         );
      
         // Setup cURL
@@ -137,7 +170,7 @@ class RegisterUsersController extends AppController {
 		if($responseData['success'] == true){
 
 			//Check if we need to email them
-			if(Configure::read('register_users.default.send_email')){
+			if($q_r['DynamicDetail']['reg_email']){
 				$this->_email_user_detail($username,$password);
 			}
 
@@ -166,7 +199,7 @@ class RegisterUsersController extends AppController {
         $Email = new CakeEmail();
         $Email->config($email_server);
         $Email->subject('New user registration');
-        $Email->to($username);
+        $Email->to($this->request->data['username']);
         $Email->viewVars(compact( 'username', 'password'));
         $Email->template('user_detail', 'user_notify');
         $Email->emailFormat('html');

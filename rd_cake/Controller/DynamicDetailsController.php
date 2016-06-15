@@ -64,6 +64,7 @@ class DynamicDetailsController extends AppController {
 
         //Get the detail for the page
         if($q_r){
+            $items['detail']['id']              = $q_r['DynamicDetail']['id'];
             $items['detail']['name']            = $q_r['DynamicDetail']['name'];
             $items['detail']['icon_file_name']  = Configure::read('paths.dynamic_detail_icon').$q_r['DynamicDetail']['icon_file_name'];
             $items['detail']['phone']           = $q_r['DynamicDetail']['phone'];
@@ -849,6 +850,28 @@ class DynamicDetailsController extends AppController {
             $this->{$this->modelClass}->contain();
             $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_detail_id']);
             if($q_r){
+            
+                $realm = '';
+            
+                if($q_r['DynamicDetail']['realm_id'] != null){
+                    $r  = ClassRegistry::init('Realm');
+                    $r->contain();
+                    $q_realm    = $r->findById($q_r['DynamicDetail']['realm_id']);
+                    if($q_r){
+                        $realm = $q_realm['Realm']['name'];
+                    }
+                }
+                $profile = '';
+                
+                if($q_r['DynamicDetail']['profile_id'] != null){
+                    $p  = ClassRegistry::init('Profile');
+                    $p->contain();
+                    $q_profile    = $p->findById($q_r['DynamicDetail']['profile_id']);
+                    if($q_profile){
+                        $profile = $q_profile['Profile']['name'];
+                    }
+                }
+            
                 $owner_tree                         = $this->_find_parents($q_r['DynamicDetail']['user_id']);
                 $items['id']                        = $q_r['DynamicDetail']['id'];
                 $items['name']                      = $q_r['DynamicDetail']['name'];
@@ -892,6 +915,17 @@ class DynamicDetailsController extends AppController {
                 $items['coova_mobile_url']          = $q_r['DynamicDetail']['coova_mobile_url'];
                 $items['mikrotik_desktop_url']      = $q_r['DynamicDetail']['mikrotik_desktop_url'];
                 $items['mikrotik_mobile_url']       = $q_r['DynamicDetail']['mikrotik_mobile_url'];
+                
+                //User registration add on
+                $items['realm_id']                  = $q_r['DynamicDetail']['realm_id'];
+                $items['profile_id']                = $q_r['DynamicDetail']['profile_id'];
+                $items['reg_auto_suffix_check']     = $q_r['DynamicDetail']['reg_auto_suffix_check'];
+                $items['reg_auto_suffix']           = $q_r['DynamicDetail']['reg_auto_suffix'];
+                $items['reg_mac_check']             = $q_r['DynamicDetail']['reg_mac_check'];
+                $items['reg_auto_add']              = $q_r['DynamicDetail']['reg_auto_add'];
+                $items['reg_email']                 = $q_r['DynamicDetail']['reg_email'];
+                $items['realm']                     = $realm;
+                $items['profile']                   = $profile;
                 
             }
         }
