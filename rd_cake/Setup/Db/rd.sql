@@ -1124,6 +1124,13 @@ CREATE TABLE `dynamic_details` (
   `mikrotik_desktop_url` varchar(255) NOT NULL DEFAULT '',
   `mikrotik_mobile_url` varchar(255) NOT NULL DEFAULT '',
   `default_language` varchar(255) NOT NULL DEFAULT '',
+  `realm_id` int(11) DEFAULT NULL,
+  `profile_id` int(11) DEFAULT NULL,
+  `reg_auto_suffix_check` tinyint(1) NOT NULL DEFAULT '0',
+  `reg_auto_suffix` char(200) NOT NULL DEFAULT '',
+  `reg_mac_check` tinyint(1) NOT NULL DEFAULT '0',
+  `reg_auto_add` tinyint(1) NOT NULL DEFAULT '0',
+  `reg_email` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1134,7 +1141,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-04-14 14:34:50',1,1,0,'walt',1,120,'Custom',0,0,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','');
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1369296799.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2016-04-14 14:34:50',1,1,0,'walt',1,120,'Custom',0,0,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','',NULL,NULL,0,'',0,0,0);
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4118,4 +4125,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-01  5:36:44
+-- Dump completed on 2016-06-14 12:18:13
