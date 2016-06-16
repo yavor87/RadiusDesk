@@ -1061,6 +1061,10 @@ class MeshesController extends AppController {
             $node   = ClassRegistry::init('Node');
             $node->contain('NodeWifiSetting');
             $q_r    = $node->findById($this->request->query['node_id']);
+            
+            $data['radio0_band'] = $q_r['Node']['radio0_band'];
+            $data['radio1_band'] = $q_r['Node']['radio1_band'];
+            
             if($q_r){
                 $current_model = $q_r['Node']['hardware'];
                 if($current_model == $model){ //Its the same so lets check if there are any custom settings
@@ -1093,21 +1097,41 @@ class MeshesController extends AppController {
                         if($radio1_flag){
                             $data['radio1_ht_capab'] = implode("\n",$r1_ht_capab);
                         }
-
                         $no_overrides = false;
                         //After the loop we
-
                     }
                 }
             }
         }
 
         if($no_overrides){
-
             foreach($hw as $h){
                 $id     = $h['id'];
                 if($model == $id){
+                    $device_type = 'standard';
+                    $radio0_band = 24;
+                    $radio1_band = 24;
                     foreach(array_keys($h) as $key){
+                    
+                        //AC Device or not
+                        if($key == 'device_type'){
+                            $device_type = $h["$key"];
+                        }
+                    
+                        //Radio zero band adjust
+                        if($key == 'five'){
+                            if($h["$key"]){
+                                $radio0_band = 5;
+                            }
+                        }
+                        
+                        //Radio one band adjust
+                        if($key == 'five1'){
+                            if($h["$key"]){
+                                $radio1_band = 5;
+                            }
+                        }
+                        
                         if(preg_match('/^radio\d+_/',$key)){
                             if(preg_match('/^radio\d+_ht_capab/',$key)){
                                 $data["$key"] = implode("\n",$h["$key"]);
@@ -1116,12 +1140,15 @@ class MeshesController extends AppController {
                             }
                         }
                     }
+                       
+                    $data['radio0_band'] = $radio0_band;
+                    $data['radio1_band'] = $radio1_band;
+                    $data['device_type'] = $device_type;
                     break;
                 }
             }
-
         }
-
+       
         $this->set(array(
             'data' => $data,
             'success' => true,
@@ -1340,6 +1367,16 @@ class MeshesController extends AppController {
                         $wifi_setting->id = null;
                     }
                 }
+                
+                if($key == 'device_type'){
+                    $wifi_setting->create();
+                    $d_setting = array();
+                    $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                    $d_setting['NodeWifiSetting']['name']      = $key;
+                    $d_setting['NodeWifiSetting']['value']     = $this->request->data["$key"];
+                    $wifi_setting->save($d_setting);
+                    $wifi_setting->id = null;
+                }  
             }
             //------- END Add settings for this node ---
 
@@ -1503,6 +1540,17 @@ class MeshesController extends AppController {
                             $wifi_setting->id = null;
                         }
                     }
+                    
+                    if($key == 'device_type'){
+                        $wifi_setting->create();
+                        $d_setting = array();
+                        $d_setting['NodeWifiSetting']['node_id']   = $n_id;
+                        $d_setting['NodeWifiSetting']['name']      = $key;
+                        $d_setting['NodeWifiSetting']['value']     = $this->request->data["$key"];
+                        $wifi_setting->save($d_setting);
+                        $wifi_setting->id = null;
+                    }
+                    
                 }
                 //------- END Add settings for this node ---
 
