@@ -615,6 +615,7 @@ class NodesController extends AppController {
 
         //There seems to be specific settings for the node
         if($q_r){
+            //print_r($q_r);
             if(count($q_r['NodeWifiSetting']) > 0){
                 $ht_capab_zero  = array();
                 $ht_capab_one   = array();
@@ -622,13 +623,18 @@ class NodesController extends AppController {
                 foreach($q_r['NodeWifiSetting'] as $i){
                     $name  = $i['name'];
                     $value = $i['value'];
+                    
+                    if($name == 'device_type'){
+                        continue;
+                    }
+                    
                     if(preg_match('/^radio0_/',$name)){
                         $radio_number = 0;
                     }
                     if(preg_match('/^radio1_/',$name)){
                         $radio_number = 1;
                     }
-
+                     
                     if(preg_match('/^radio\d+_ht_capab/',$name)){
                         if($radio_number == 0){
                             array_push($ht_capab_zero,$value);
