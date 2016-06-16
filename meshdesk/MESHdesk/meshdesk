@@ -164,13 +164,19 @@ config hardware 'tl_wdr3600'
     option internet_led '/sys/class/leds/tp-link:blue:lan4/brightness'
     option wifi_led 'tp-link:blue:wlan2g'
     
-config hardware 'tl_wdr3600'
-    option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
-    option internet_led '/sys/class/leds/tp-link:blue:lan4/brightness'
-    option wifi_led 'tp-link:blue:wlan2g'
-    
 config hardware 'zbt_we2026'
     option morse_led '/sys/class/leds/zbt-wr8305rt:green:sys/brightness'
     option internet_led '/sys/class/leds/zbt-wr8305rt:green:sys/brightness'
     option wifi_led 'zbt-wr8305rt:green:wifi'
+    
+config hardware 'tl_ac1750_c7'
+    option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
+	option internet_led '/sys/class/leds/tp-link:blue:wan/brightness'
+	option wifi_led 'tp-link:blue:wlan2g'
+	
+config hardware 'miwifi_mini'
+    option morse_led '/sys/class/leds/miwifi-mini:yellow:status/brightness'
+	option internet_led '/sys/class/leds/miwifi-mini:purple:status/brightness'
+	option wifi_led 'miwifi-mini:red:status'
+
 
