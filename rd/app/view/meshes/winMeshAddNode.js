@@ -5,8 +5,8 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     draggable:  true,
     resizable:  true,
     title:      i18n('sNew_mesh_node'),
-    width:      400,
-    height:     450,
+    width:      450,
+    height:     500,
     plain:      true,
     border:     false,
     layout:     'fit',
@@ -18,18 +18,20 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     defaults: {
             border: false
     },
+    listeners : {
+        beforeshow : 'loadAdvancedWifiSettings'
+    },
     requires: [
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Rd.view.meshes.cmbHardwareOptions',
-		'Rd.view.meshes.cmbDialoutCode',
-		'Rd.view.meshes.cmbCodec',
-		'Rd.view.meshes.cmbSoftphoneSupport',
 		'Rd.view.components.cmbMesh',
-        'Rd.view.components.cmbFiveGigChannels'
+        'Rd.view.components.cmbFiveGigChannels',
+        'Rd.view.meshes.vcMeshNodeGeneric'
     ],
-     initComponent: function() {
+    controller  : 'vcMeshNodeGeneric',
+    initComponent: function() {
         var me 	= this;
  
 		var cmb = Ext.create('Rd.view.components.cmbMesh',{'itemId' : 'mesh_id', labelClsExtra: 'lblRdReq'});
@@ -85,15 +87,13 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                             },
                             autoScroll:true,
                             items       : [
-
-
-                               /* {
-						            itemId  	: 'mesh_id',
-						            xtype   	: 'textfield',
-						            name    	: "mesh_id",
-						            hidden  	: true,
-						            value   	: me.meshId
-						        }, */
+						        {
+						            itemId      : 'ac_device',
+						            xtype       : 'textfield',
+						            name        : 'device_type',
+						            hidden      : true,
+						            value       : 'standard'
+						        },
 								cmb,
 						        {
 						            xtype       : 'textfield',
@@ -123,7 +123,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 						        {
 						            xtype           : 'cmbHardwareOptions',
 						            labelClsExtra   : 'lblRdReq',
-						            allowBlank      : false 
+						            allowBlank      : false,
+						            listeners       : {
+                                            change : 'onCmbHardwareOptionsChange'
+                                    } 
 						        },
 						        {
 						            xtype       : 'cmbStaticEntries',
@@ -169,7 +172,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name        : 'radio0_enable',
 											        inputValue  : 'radio0_enable',
 											        checked     : true,
-											        labelClsExtra: 'lblRdReq'
+											        labelClsExtra: 'lblRdReq',
+											        listeners   : {
+											            change  : 'onChkRadioEnableChange'
+											        }
 								
 										        },
 										        {
@@ -179,7 +185,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name        : 'radio0_mesh',
 											        inputValue  : 'radio0_mesh',
 											        checked     : true,
-											        labelClsExtra: 'lblRd'
+											        labelClsExtra: 'lblRd',
+											        listeners   : {
+											            change  : 'onChkRadioMeshChange'
+											        }
 								
 										        },
 										        {
@@ -198,7 +207,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        inputValue	: '24',
 											        itemId      : 'radio24',
 											        labelClsExtra: 'lblRd',
-											        checked		: true
+											        checked		: true,
+											        listeners   : {
+											            change  : 'onRadio_0_BandChange'
+											        }
 										        }, 
 										        {
 											        xtype       : 'radio',
@@ -206,7 +218,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name      	: 'radio0_band',
 											        inputValue	: '5',
 											        itemId      : 'radio5',
-											        labelClsExtra: 'lblRd'
+											        labelClsExtra: 'lblRd',
+											        listeners   : {
+											            change  : 'onRadio_0_BandChange'
+											        }
 										        },
 										        {
 										            xtype       : 'numberfield',
@@ -248,8 +263,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name        : 'radio1_enable',
 											        inputValue  : 'radio1_enable',
 											        checked     : true,
-											        labelClsExtra: 'lblRdReq'
-								
+											        labelClsExtra: 'lblRdReq',
+											        listeners   : {
+											            change  : 'onChkRadioEnableChange'
+											        }
 										        },
 										        {
 											        xtype       : 'checkbox',      
@@ -258,8 +275,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name        : 'radio1_mesh',
 											        inputValue  : 'radio1_mesh',
 											        checked     : true,
-											        labelClsExtra: 'lblRd'
-								
+											        labelClsExtra: 'lblRd',
+											        listeners   : {
+											            change  : 'onChkRadioMeshChange'
+											        }
 										        },
 										        {
 											        xtype       : 'checkbox',      
@@ -276,7 +295,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name      	: 'radio1_band',
 											        inputValue	: '24',
 											        itemId      : 'radio24',
-											        labelClsExtra: 'lblRd'
+											        labelClsExtra: 'lblRd',
+											        listeners   : {
+											            change  : 'onRadio_1_BandChange'
+											        }
 										        }, 
 										        {
 											        xtype       : 'radio',
@@ -285,7 +307,10 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        inputValue	: '5',
 											        itemId      : 'radio5',
 											        checked		: true,
-											        labelClsExtra: 'lblRd'
+											        labelClsExtra: 'lblRd',
+											        listeners   : {
+											            change  : 'onRadio_1_BandChange'
+											        }
 										        },
 										        {
 										            xtype       : 'numberfield',
@@ -342,28 +367,45 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                         autoScroll:true,
                                         items       :[
                                             {
-                                                xtype      : 'fieldcontainer',
-                                                fieldLabel : 'HT-mode',
-                                                defaultType: 'radiofield',
-                                                labelClsExtra: 'lblRd',
-                                                layout: {
-                                                    type    : 'hbox',
-                                                    align   : 'begin',
-                                                    pack    : 'start'
-                                                },
-                                                items: [
+                                                xtype       : 'radiogroup',
+                                                fieldLabel  : 'HT-mode',
+                                                columns     : 2,
+                                                vertical    : false,
+                                                items       : [
                                                     {
                                                         boxLabel  : 'HT20',
-                                                        name      	: 'radio0_htmode',
+                                                        name      : 'radio0_htmode',
                                                         inputValue: 'HT20',
-                                                        checked   : true,
-                                                        margin    : Rd.config.radioMargin
+                                                        checked   : true
                                                     }, 
                                                     {
                                                         boxLabel  : 'HT40',
-                                                        name      	: 'radio0_htmode',
-                                                        inputValue: 'HT40',
-                                                        margin    : Rd.config.radioMargin
+                                                        name      : 'radio0_htmode',
+                                                        inputValue: 'HT40'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT20',
+                                                        name      : 'radio0_htmode',
+                                                        itemId    : 'radio0_htmode_vht20',
+                                                        inputValue: 'VHT20'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT40',
+                                                        name      : 'radio0_htmode',
+                                                        itemId    : 'radio0_htmode_vht40',
+                                                        inputValue: 'VHT40'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT80',
+                                                        name      : 'radio0_htmode',
+                                                        itemId    : 'radio0_htmode_vht80',
+                                                        inputValue: 'VHT80'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT160',
+                                                        name      : 'radio0_htmode',
+                                                        itemId    : 'radio0_htmode_vht160',
+                                                        inputValue: 'VHT160'
                                                     }
                                                 ]
                                             },
@@ -446,28 +488,45 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                         autoScroll:true,
                                         items       :[
                                              {
-                                                xtype      : 'fieldcontainer',
-                                                fieldLabel : 'HT-mode',
-                                                defaultType: 'radiofield',
-                                                labelClsExtra: 'lblRd',
-                                                layout: {
-                                                    type    : 'hbox',
-                                                    align   : 'begin',
-                                                    pack    : 'start'
-                                                },
-                                                items: [
+                                                xtype       : 'radiogroup',
+                                                fieldLabel  : 'HT-mode',
+                                                columns     : 2,
+                                                vertical    : false,
+                                                items       : [
                                                     {
                                                         boxLabel  : 'HT20',
-                                                        name      	: 'radio1_htmode',
+                                                        name      : 'radio1_htmode',
                                                         inputValue: 'HT20',
-                                                        checked   : true,
-                                                        margin    : Rd.config.radioMargin
+                                                        checked   : true
                                                     }, 
                                                     {
                                                         boxLabel  : 'HT40',
-                                                        name      	: 'radio1_htmode',
-                                                        inputValue: 'HT40',
-                                                        margin    : Rd.config.radioMargin
+                                                        name      : 'radio1_htmode',
+                                                        inputValue: 'HT40'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT20',
+                                                        name      : 'radio1_htmode',
+                                                        itemId    : 'radio1_htmode_vht20',
+                                                        inputValue: 'VHT20'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT40',
+                                                        name      : 'radio1_htmode',
+                                                        itemId    : 'radio1_htmode_vht40',
+                                                        inputValue: 'VHT40'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT80',
+                                                        name      : 'radio1_htmode',
+                                                        itemId    : 'radio1_htmode_vht80',
+                                                        inputValue: 'VHT80'
+                                                    },
+                                                    {
+                                                        boxLabel  : 'VHT160',
+                                                        name      : 'radio1_htmode',
+                                                        itemId    : 'radio1_htmode_vht160',
+                                                        inputValue: 'VHT160'
                                                     }
                                                 ]
                                             },
@@ -580,150 +639,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                     }
                                 ]}
                             ]
-                        },
-                        { 
-                            title       : 'VOIP',
-                            layout      : 'anchor',
-                            disabled    : true,
-                            itemId      : 'tabVoip',
-							hidden		: true,
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            autoScroll:true,
-                            items       : [
-								{
-						            xtype       : 'checkbox',      
-						            fieldLabel  : 'SIP enable',
-						            itemId      : 'chkSip',
-						            name        : 'enable',
-						            inputValue  : 'enable',
-						            checked     : false,
-						            labelClsExtra: 'lblRdReq'
-									
-						        },
-								{
-						            xtype       : 'textfield',
-						            fieldLabel  : 'SIP host',
-						            name        : "host",
-						            allowBlank  : true,
-						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRdReq',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'textfield',
-						            fieldLabel  : 'Username',
-						            name        : "username",
-						            allowBlank  : true,
-						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRdReq',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'textfield',
-						            fieldLabel  : 'Password',
-						            name        : "secret",
-						            allowBlank  : true,
-						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRdReq',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'cmbDialoutCode',
-									labelClsExtra: 'lblRdReq',
-									disabled	: true
-						        }  
-                            ]
-                        },
-						{ 
-                            title       : 'VOIP - Advanced',
-                            layout      : 'anchor',
-                            disabled    : true,
-                            itemId      : 'tabVoipAdvanced',
-							hidden		: true,
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            autoScroll:true,
-                            items       : [
-								{
-						            xtype       : 'checkbox',      
-						            fieldLabel  : 'Asterisk enable',
-						            itemId      : 'chkAsterisk',
-						            name        : 'enable_ast',
-						            inputValue  : 'enable_ast',
-						            checked     : false,
-						            labelClsExtra: 'lblRdReq'
-						        },
-								{
-									xtype		: 'cmbSoftphoneSupport',
-									disabled	: true
-								},
-        						{
-									xtype		: 'cmbCodec',
-									fieldLabel  : 'Codec1',
-									name		: 'codec1',
-									value		: 'gsm',
-									labelClsExtra: 'lblRdReq',
-									disabled	: true
-								},
-								{
-									xtype		: 'cmbCodec',
-									fieldLabel  : 'Codec2',
-									name		: 'codec2',
-									value		: 'ulaw',
-									labelClsExtra: 'lblRdReq',
-									disabled	: true
-								},
-								{
-									xtype		: 'cmbCodec',
-									fieldLabel  : 'Codec3',
-									name		: 'codec3',
-									value		: 'alaw',
-									labelClsExtra: 'lblRdReq',
-									disabled	: true
-								},
-								{
-						            xtype       : 'checkbox',      
-						            fieldLabel  : 'SIP Register',
-						            itemId      : 'chkSipRegister',
-						            name        : 'register',
-						            inputValue  : 'register',
-						            checked     : false,
-						            labelClsExtra: 'lblRd',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'textfield',
-						            fieldLabel  : 'SIP registrar',
-						            name        : "reghost",
-						            allowBlank  : true,
-						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'checkbox',      
-						            fieldLabel  : 'Enable Asterisk NAT',
-						            itemId      : 'chkAsteriskNat',
-						            name        : 'enablenat',
-						            inputValue  : 'enablenat',
-						            checked     : false,
-						            labelClsExtra: 'lblRd',
-									disabled	: true
-						        },
-								{
-						            xtype       : 'textfield',
-						            fieldLabel  : 'NAT external IP',
-						            name        : "externip",
-						            allowBlank  : true,
-						            blankText   : i18n('sSupply_a_value'),
-						            labelClsExtra: 'lblRd',
-									disabled	: true
-						        }
-                            ]
-                        } 
+                        }
                     ]
                 }              
             ]

@@ -162,14 +162,8 @@ Ext.define('Rd.controller.cMeshEdits', {
             'gridNodes #add': {
                 click:  me.addNode
             },
-            '#winMeshAddNodeEdit' : {
-                beforeshow:  me.loadAdvancedWifiSettings
-            },
             '#winMeshAddNodeEdit #save' : {
                 click:  me.btnAddNodeSave
-            },
-			'#winMeshAddNodeEdit cmbHardwareOptions': {
-                change: me.cmbHardwareOptionsChange
             },
             'gridNodes #delete': {
                 click: me.delNode
@@ -186,66 +180,6 @@ Ext.define('Rd.controller.cMeshEdits', {
             '#winMeshEditNodeEdit #save': {
                 click: me.btnEditNodeSave
             },
-			'#winMeshEditNodeEdit cmbHardwareOptions': {
-                change: me.cmbHardwareOptionsChange
-            },
-
-			//Dual RADIO Choices
-            //Add
-            '#winMeshAddNodeEdit #chkRadio0Enable'	: {
-				change	: me.chkRadioEnableChange
-			},
-			'#winMeshAddNodeEdit #chkRadio1Enable' : {
-				change	: me.chkRadioEnableChange
-			},
-			'#winMeshAddNodeEdit #chkRadio0Mesh' : {
-				change	: me.chkRadioMeshChange
-			},
-			'#winMeshAddNodeEdit #chkRadio1Mesh' : {
-				change	: me.chkRadioMeshChange
-			},
-            '#winMeshAddNodeEdit radio[name=radio0_band]' : {
-                change  : me.radio_0_BandChange  
-            },
-            '#winMeshAddNodeEdit radio[name=radio1_band]' : {
-                change  : me.radio_1_BandChange  
-            },
-            
-            //Edit
-			'#winMeshEditNodeEdit #chkRadio0Enable'	: {
-				change	: me.chkRadioEnableChange
-			},
-			'#winMeshEditNodeEdit #chkRadio1Enable' : {
-				change	: me.chkRadioEnableChange
-			},
-			'#winMeshEditNodeEdit #chkRadio0Mesh' : {
-				change	: me.chkRadioMeshChange
-			},
-			'#winMeshEditNodeEdit #chkRadio1Mesh' : {
-				change	: me.chkRadioMeshChange
-			},
-            '#winMeshEditNodeEdit radio[name=radio0_band]' : {
-                change  : me.radio_0_BandChange  
-            },
-            '#winMeshEditNodeEdit radio[name=radio1_band]' : {
-                change  : me.radio_1_BandChange  
-            },
-
-			//VOIP Choices
-            //Add
-            '#winMeshAddNodeEdit #chkSip'	: {
-				change	: me.chkSipChange
-			},
-			'#winMeshAddNodeEdit #chkAsterisk' : {
-				change	: me.chkAsteriskChange
-			},
-            //Edit
-			'#winMeshEditNodeEdit #chkSip'	: {
-				change	: me.chkSipChange
-			},
-			'#winMeshEditNodeEdit #chkAsterisk' : {
-				change	: me.chkAsteriskChange
-			},
             
 			//---- MAP Starts here..... -----
 			'winMeshEdit #mapTab'		: {
@@ -956,72 +890,6 @@ Ext.define('Rd.controller.cMeshEdits', {
         var nodes   = win.down("gridNodes");
         nodes.getStore().reload();
     },
-
-    //Initial load of the Advanced settings
-    loadAdvancedWifiSettings: function(win){
-        var me      = this;
-        var form    = win.down('form');
-        var hw      = form.down('cmbHardwareOptions');
-        var val     = hw.getValue();
-
-        //We have to disable this and hide it upon initial loading
-        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
-        tabAdvRadio1.setDisabled(true);
-        tabAdvRadio1.tab.hide();
-
-        form.load({url:me.getUrlAdvancedSettingsForModel(), method:'GET',params:{model:val}});
-    },
-
-	cmbHardwareOptionsChange: function(cmb){
-		var me      = this;
-        var form    = cmb.up('form');
-        var key     = form.down('#key');
-        var voip    = form.down('#tabVoip');
-        var adv     = form.down('#tabVoipAdvanced');
-		var radio	= form.down('#tabRadio');
-        var val     = cmb.getValue();
-        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
-        var window  = cmb.up('window');
-
-        if(window.getItemId() != 'winMeshEditNodeEdit'){
-            //Load the advanced settings for this hardware...
-            form.load({url:me.getUrlAdvancedSettingsForModel(), method:'GET',params:{model:val}});
-        }else{
-            //Include the node_id
-            form.load({url:me.getUrlAdvancedSettingsForModel(), method:'GET',params:{model:val,node_id:window.nodeId}});
-        }
-
-		if((val == 'mp2_basic')||(val == 'mp2_phone')){
-			voip.setDisabled(false);
-			adv.setDisabled(false);
-			adv.tab.show();
-			voip.tab.show();
-		}else{
-			voip.setDisabled(true);
-			adv.setDisabled(true);
-			adv.tab.hide();
-			voip.tab.hide();
-		}
-
-		if(
-			(val == 'tl_wdr3500')||
-            (val == 'tl_wdr3600')||
-			(val == 'alix3d2')||
-			(val == 'unifiappro')||
-			(val == 'gentworadio')||
-            (val == 'rb433')
-		){
-			radio.setDisabled(false);	
-			radio.tab.show();
-            tabAdvRadio1.setDisabled(false);
-            tabAdvRadio1.tab.show();
-		}else{
-			radio.setDisabled(true);
-			radio.tab.hide();
-            tabAdvRadio1.setDisabled(true);
-            tabAdvRadio1.tab.hide();
-		}
-	},
     addNode: function(button){
         var me      = this;
         var win     = button.up("winMeshEdit");
@@ -1162,116 +1030,6 @@ Ext.define('Rd.controller.cMeshEdits', {
         });
     },
 
-	//___ Dual RADIO _____
-	chkRadioEnableChange: function(chk){
-		var me 		= this;
-		var fs    	= chk.up('panel');//fs
-        var value   = chk.getValue();
-		var fields_voip = Ext.ComponentQuery.query('field',fs);
-		Ext.Array.forEach(fields_voip,function(item){
-			if(item != chk){
-				item.setDisabled(!value);
-			}
-		});
-	},
-	chkRadioMeshChange: function(chk){
-		var me 		= this;
-		var fs    	= chk.up('panel');//fs
-		var t_band	= fs.down('#radio24');
-		var n_t		= fs.down('#numRadioTwoChan');
-		var n_v		= fs.down('#numRadioFiveChan');
-
-		if(chk.getValue() == false){
-			if(t_band.getValue()){	//2.4 selected... show it
-				n_t.setVisible(true);
-				n_t.setDisabled(false);
-				n_v.setVisible(false);
-				n_v.setDisabled(true);
-			}else{
-				n_t.setVisible(false);
-				n_t.setDisabled(true);
-				n_v.setVisible(true);
-				n_v.setDisabled(false);
-			}
-		}else{
-			//hide and disable both
-			n_t.setVisible(false);
-			n_t.setDisabled(true);
-			n_v.setVisible(false);
-			n_v.setDisabled(true);
-		}		
-	},
-
-    radio_0_BandChange: function(rb){
-        var me      = this;
-        var band    = rb.getValue();      
-        var fs      = rb.up('panel');//fs   
-        var mesh    = fs.down('#chkRadio0Mesh');
-        var t_band	= fs.down('#radio24');
-        var n_t		= fs.down('#numRadioTwoChan');
-		var n_v		= fs.down('#numRadioFiveChan');
-        if(mesh.getValue() == false){
-            if(t_band.getValue()){	//2.4 selected... show it
-				n_t.setVisible(true);
-				n_t.setDisabled(false);
-				n_v.setVisible(false);
-				n_v.setDisabled(true);
-			}else{
-				n_t.setVisible(false);
-				n_t.setDisabled(true);
-				n_v.setVisible(true);
-				n_v.setDisabled(false);
-			}
-        }
-    },
-    radio_1_BandChange: function(rb){
-        var me      = this;
-        var band    = rb.getValue();      
-        var fs      = rb.up('panel');//fs    
-        var mesh    = fs.down('#chkRadio1Mesh');
-        var t_band	= fs.down('#radio24');
-        var n_t		= fs.down('#numRadioTwoChan');
-		var n_v		= fs.down('#numRadioFiveChan');
-
-        if(mesh.getValue() == false){
-            if(t_band.getValue()){	//2.4 selected... show it
-				n_t.setVisible(true);
-				n_t.setDisabled(false);
-				n_v.setVisible(false);
-				n_v.setDisabled(true);
-			}else{
-				n_t.setVisible(false);
-				n_t.setDisabled(true);
-				n_v.setVisible(true);
-				n_v.setDisabled(false);
-			}
-        }
-    },
-
-	//____ VOIP _____
-	chkSipChange: function(chk){
-		var me 		= this;
-		var voip    = chk.up('#tabVoip');
-        var value   = chk.getValue();
-		var fields_voip = Ext.ComponentQuery.query('field',voip);
-		Ext.Array.forEach(fields_voip,function(item){
-			if(item != chk){
-				item.setDisabled(!value);
-			}
-		});
-	},
-	chkAsteriskChange: function(chk){
-		var me 		= this;
-		var voipA   = chk.up('#tabVoipAdvanced');
-        var value   = chk.getValue();
-		var fields_voip = Ext.ComponentQuery.query('field',voipA);
-		Ext.Array.forEach(fields_voip,function(item){
-			if(item != chk){
-				item.setDisabled(!value);
-			}
-		});
-
-	},
 	//____ MAP ____
 
     mapLoadApi:   function(button){
