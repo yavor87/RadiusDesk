@@ -16,7 +16,7 @@ Ext.define('Rd.view.meshes.cmbHardwareOptions', {
     initComponent: function(){
         var me      = this;
         var s       = Ext.create('Ext.data.Store', {
-            fields: ['id', 'name'],
+            fields: ['id', 'name','radios'],
             proxy: {
                     type    : 'ajax',
                     format  : 'json',

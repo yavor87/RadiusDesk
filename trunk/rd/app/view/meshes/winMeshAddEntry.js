@@ -107,7 +107,7 @@ Ext.define('Rd.view.meshes.winMeshAddEntry', {
                                     fieldLabel  : i18n('sApply_to_all_nodes'),
                                     name        : 'apply_to_all',
                                     inputValue  : 'apply_to_all',
-                                    checked     : false,
+                                    checked     : true,
                                     labelClsExtra: 'lblRdReq'
                                 }
                             ]
