@@ -41,6 +41,7 @@ config settings 'settings'
 	option gw_dhcp_timeout '120'
 	option gw_auto_reboot_time '600'
 	option mode 'mesh'
+	option id_if 'eth0'
 
 config captive_portal 'captive_portal'
 	option default_dns_1 '208.67.222.222'

@@ -154,7 +154,7 @@ function do_fw_config()
 	-- LAN we flash "I"
 	log("Do Firmware configuration - if server running")
 	os.execute("/etc/MESHdesk/main_led.lua start config")
-    --Set eth0 (and eth1) to a known IP Address
+    --Set meshdesk.settings.id_if (typically eth0) to a known IP Address
     local network = rdNetwork()
 	network:frmwrStart()
     sleep(4) --jus so it eases out
@@ -255,7 +255,8 @@ function try_settings_through_lan()
 	        print("Ping os server was OK try to fetch the settings")
 	        log("Ping os server was OK try to fetch the settings")
     		--local id	= "A8-40-41-13-60-E3"
-	        local id		= getMac('eth0')
+    		local id_if     = fetch_config_value('meshdesk.settings.id_if')
+	        local id		= getMac(id_if)
 	        local proto 	= fetch_config_value('meshdesk.internet1.protocol')
 	        local url   	= fetch_config_value('meshdesk.internet1.url')
 	        local query     = proto .. "://" .. server .. "/" .. url 
@@ -399,7 +400,8 @@ function try_settings_through_wifi()
 		print("Ping os server was OK try to fetch the settings")
 		log("Ping os server was OK try to fetch the settings")
 --		local id	="A8-40-41-13-60-E3"
-		local id	= getMac('eth0')
+        local id_if     = fetch_config_value('meshdesk.settings.id_if')
+		local id	    = getMac(id_if)
 		local proto 	= fetch_config_value('meshdesk.internet1.protocol')
 		local url   	= fetch_config_value('meshdesk.internet1.url')
 		local query     = proto .. "://" .. server .. "/" .. url 
@@ -648,7 +650,8 @@ function ap_try_settings_through_lan()
 	        print("Ping os server was OK try to fetch the settings")
 	        log("Ping os server was OK try to fetch the settings")
     		--local id	= "A8-40-41-13-60-E3"
-	        local id		= getMac('eth0')
+    		local id_if     = fetch_config_value('meshdesk.settings.id_if')
+	        local id		= getMac(id_if)
 	        local proto 	= fetch_config_value('meshdesk.internet1.protocol')
 	        local url   	= fetch_config_value('meshdesk.internet1.ap_url')
 	        local query     = proto .. "://" .. server .. "/" .. url 

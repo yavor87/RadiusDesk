@@ -25,7 +25,10 @@ function rdActions:rdActions()
 	self.x		    = uci.cursor(nil,'/var/state')
 	self.waiting	= 115
 	self.completed	= 116
-	self.eth0		= self.network:getMac()
+	
+	local id_if     = self.x.get('meshdesk','settings','id_if');
+	
+	self.id_if		= self.network:getMac(id_if)
 	self.results	= '/tmp/actions_result.json'
 end
         
@@ -81,8 +84,8 @@ function rdActions.__getWaitingList(self)
             local node, value = unpack(row)
             local data = self.json.decode(value)
 			for k in pairs(data) do
-				if(k == self.eth0)then
-					self:log("Potential actions for "..self.eth0)
+				if(k == self.id_if)then
+					self:log("Potential actions for "..self.id_if)
 					ret_val = data[k]
 				end
 			end
@@ -99,8 +102,8 @@ function rdActions.__getCompletedList(self)
 			local node, value = unpack(row)
 			local data = self.json.decode(value)
 			for k in pairs(data) do
-				if(k == self.eth0)then
-					self:log("Found completed list for "..self.eth0)
+				if(k == self.id_if)then
+					self:log("Found completed list for "..self.id_if)
 					ret_val = data[k]
 				end
 			end
@@ -129,7 +132,7 @@ function rdActions.__checkForNewActions(self,waiting,completed)
 end
 
 function rdActions.__fetchActions(self)
-	local curl_data = '{"mac":"'..self.eth0..'"}'
+	local curl_data = '{"mac":"'..self.id_if..'"}'
     local proto 	= self.x.get('meshdesk','internet1','protocol')
     local mode      = self.x.get('meshdesk','settings','mode')
     
@@ -186,12 +189,12 @@ function rdActions.__addToCompleted(self,id)
 		if(not_found)then --Did not find the item in the completed list add and write to Alfred
 			table.insert(c, id)
 			local t = {}
-			t[self.eth0] = c
+			t[self.id_if] = c
 			self.alfred:writeData(t, self.completed)
 		end
 	else --empty list
 		local e = {}
-		e[self.eth0] = {id}
+		e[self.id_if] = {id}
 		self.alfred:writeData(e, self.completed)
 	end
 end

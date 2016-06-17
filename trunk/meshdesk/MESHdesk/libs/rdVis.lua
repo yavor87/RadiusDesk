@@ -42,8 +42,7 @@ end
 
 
 function rdVis.__getVis(self)
-
-    
+   
 	--We have the mac lookup so now we can work on the output of
 	self:__buildMacMap()
 

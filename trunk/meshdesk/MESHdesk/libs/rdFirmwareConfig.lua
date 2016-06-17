@@ -124,9 +124,10 @@ function rdFirmwareConfig.__send_my_info(self)
     --The letter 'b' will inform the server there is local info about the device on its way
     local a         = {}
 
-    --Insert eth0
-    local eth0      = self.network:getMac()
-    table.insert(a, 'eth0='..eth0)
+    --Insert id_if (typically eth0)
+    local id_if   = self.x.get('meshdesk','settings','id_if');
+    local id      = self.network:getMac(id_if)
+    table.insert(a, 'eth0='..id) --FIXME Change the Node Config Utility to take whatever is specified
 
     --Insert server
     local server    = self.x.get('meshdesk', 'internet1','ip')

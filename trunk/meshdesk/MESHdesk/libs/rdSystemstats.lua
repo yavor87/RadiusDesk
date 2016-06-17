@@ -9,11 +9,14 @@ class "rdSystemstats"
 function rdSystemstats:rdSystemstats()
 	require('rdLogger');
 	require('rdExternal');
+	require('rdNetwork');
+	
 	self.version 	= "1.0.0"
 	self.json	    = require("json")
 	self.logger	    = rdLogger()
 	self.external	= rdExternal()
 	self.debug	    = true
+	self.network    = rdNetwork
 end
         
 function rdSystemstats:getVersion()
@@ -44,9 +47,9 @@ function rdSystemstats._getStats(self)
 	self:log('Getting System stats')
 	local s 	= {}
 
-	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
-	io.input("/sys/class/net/eth0/address")                                                                      
-	s['eth0']   = io.read("*line") 
+	local id_if = self.x.get('meshdesk','settings','id_if');
+    local id    = self.network:getMac(id_if)                                                                 
+	s['eth0']   = id 
 
     s['sys']    = {}
 	
