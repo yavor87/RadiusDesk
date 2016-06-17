@@ -10,6 +10,8 @@ function rdNetstats:rdNetstats()
 
 	require('rdLogger');
 	require('rdExternal');
+	require('rdNetwork');
+	
 	local uci 		= require("uci")
 
 	self.version 	= "1.0.0"
@@ -18,8 +20,8 @@ function rdNetstats:rdNetstats()
 	self.external	= rdExternal()
 	self.debug		= true
 	self.x			= uci.cursor(nil,'/var/state')
+	self.network    = rdNetwork
 	
-
 end
         
 function rdNetstats:getVersion()
@@ -70,11 +72,10 @@ function rdNetstats.__mapEthWithMeshMac(self)
 	--And the various mesh interfaces (mesh0... mesh5)-----
 	--We have to go though each one since anit can have mesh1 running but not mesh0 , or both can be on...
 
-	local m 	= {};
-
-	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
-	io.input("/sys/class/net/eth0/address")                                                                      
-	m['eth0']       = io.read("*line")
+	local m     = {};
+	local id_if = self.x.get('meshdesk','settings','id_if');
+    local id    = self.network:getMac(id_if)                                                                           
+	m['eth0']   = id --FIXME The back-end still thinks its eth0 but it can be set in firmware to be another eth
 
 	--Our loopy-de-loop
 	local i 	= 0;
@@ -126,9 +127,9 @@ function rdNetstats._getWifi(self)
 	local w 	= {}
 	w['radios']	= {}
 	
-	--Add the eth0 addy which is used as the key and we assume each device will at least have an eth0            
-	io.input("/sys/class/net/eth0/address")                                                                      
-	w['eth0']       = io.read("*line")   
+	local id_if = self.x.get('meshdesk','settings','id_if');
+    local id    = self.network:getMac(id_if)
+    w['eth0']   = id --FIXME The back-end still thinks its eth0 but it can be set in firmware
 	
 	local phy 	= nil
 	local i_info	= {}

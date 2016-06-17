@@ -10,14 +10,20 @@ function rdNetwork:rdNetwork()
 	require('rdLogger');
 	require('rdExternal');
 
+    local uci 	    = require("uci")
+    self.x		    = uci.cursor(nil,'/var/state')
 	self.version 	= "2.0.0"
 	self.logger	    = rdLogger()
 	self.debug	    = true
     self.dhcp_one   = "/etc/MESHdesk/configs/dhcp_network_one_eth"
     self.dhcp_two   = "/etc/MESHdesk/configs/dhcp_network_two_eth"
+    
+    self.dhcp_eth_one   = "/etc/MESHdesk/configs/dhcp_network_eth_one"
 
     self.frmwr_one  = "/etc/MESHdesk/configs/frmwr_network_one_eth"
     self.frmwr_two  = "/etc/MESHdesk/configs/frmwr_network_two_eth"
+    
+    self.frmwr_eth_one  = "/etc/MESHdesk/configs/frmwr_network_eth_one"
 	--Add external command object
 	self.external	= rdExternal()
 
@@ -35,20 +41,30 @@ end
 
 function rdNetwork:dhcpStart()
     --Determine which file to use based on whether the board has eth1 or not
-    if(self:__getMac('eth1'))then
-        os.execute("cp " .. self.dhcp_two .. " /etc/config/network")
+    local id_if = self.x.get('meshdesk','settings','id_if');
+    if(id_if == 'eth1')then --if it is eth1 we are not bridging it
+        os.execute("cp " .. self.dhcp_eth_one .. " /etc/config/network")  
     else
-        os.execute("cp " .. self.dhcp_one .. " /etc/config/network") 
+        if(self:__getMac('eth1'))then
+            os.execute("cp " .. self.dhcp_two .. " /etc/config/network")
+        else
+            os.execute("cp " .. self.dhcp_one .. " /etc/config/network") 
+        end
     end
 	os.execute("/etc/init.d/network reload")
 end
 
 function rdNetwork:frmwrStart()
     --Determine which file to use based on whether the board has eth1 or not
-    if(self:__getMac('eth1'))then
-        os.execute("cp " .. self.frmwr_two .. " /etc/config/network")
+    local id_if = self.x.get('meshdesk','settings','id_if');
+    if(id_if == 'eth1')then --if it is eth1 we are not bridging it
+        os.execute("cp " .. self.dhcp_eth_one .. " /etc/config/network")  
     else
-        os.execute("cp " .. self.frmwr_one .. " /etc/config/network") 
+        if(self:__getMac('eth1'))then
+            os.execute("cp " .. self.frmwr_two .. " /etc/config/network")
+        else
+            os.execute("cp " .. self.frmwr_one .. " /etc/config/network") 
+        end
     end
 	os.execute("/etc/init.d/network reload")
 end
