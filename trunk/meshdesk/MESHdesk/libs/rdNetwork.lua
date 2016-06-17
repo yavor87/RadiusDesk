@@ -58,7 +58,7 @@ function rdNetwork:frmwrStart()
     --Determine which file to use based on whether the board has eth1 or not
     local id_if = self.x.get('meshdesk','settings','id_if');
     if(id_if == 'eth1')then --if it is eth1 we are not bridging it
-        os.execute("cp " .. self.dhcp_eth_one .. " /etc/config/network")  
+        os.execute("cp " .. self.frmwr_eth_one .. " /etc/config/network")  
     else
         if(self:__getMac('eth1'))then
             os.execute("cp " .. self.frmwr_two .. " /etc/config/network")
