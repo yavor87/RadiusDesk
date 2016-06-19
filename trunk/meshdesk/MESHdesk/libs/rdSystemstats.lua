@@ -11,11 +11,14 @@ function rdSystemstats:rdSystemstats()
 	require('rdExternal');
 	require('rdNetwork');
 	
+	local uci 		= require("uci")
+	
 	self.version 	= "1.0.0"
 	self.json	    = require("json")
 	self.logger	    = rdLogger()
 	self.external	= rdExternal()
 	self.debug	    = true
+	self.x			= uci.cursor(nil,'/var/state')
 	self.network    = rdNetwork
 end
         
