@@ -47,13 +47,6 @@ start() {
 		    /etc/init.d/privoxy disable
 		    /etc/init.d/privoxy stop
 		fi
-		#FIXME REMOVE THIS LATER
-		if [ -d /lib/firmware/ath10k/QCA988X/hw2.0 ]; then
-		    echo "Copy fixes ower for Archer board"
-		    cp /etc/MESHdesk/files/common/802_11_ac/mac80211.sh /lib/netifd/wireless/mac80211.sh
-		    cp /etc/MESHdesk/files/common/802_11_ac/firmware-5.bin /lib/firmware/ath10k/QCA988X/firmware-5.bin
-		    cp /etc/MESHdesk/files/common/802_11_ac/55-ath10k /etc/modules.d/55-ath10k
-		fi
 		
 		uci set meshdesk.settings.first_run=0
 		uci commit
