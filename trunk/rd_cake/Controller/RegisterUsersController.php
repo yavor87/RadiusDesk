@@ -39,9 +39,14 @@ class RegisterUsersController extends AppController {
 		
 
 		//--Do the MAC test --
+		$mac_name   = '';
+		$mac_value  = '';
+		
 		if($q_r['DynamicDetail']['reg_mac_check']){
 		    if(array_key_exists('mac',$this->request->data)){
 				$mac = $this->request->data['mac'];
+				$mac_value = $mac;
+				$mac_name  = 'mac';
 				if($mac == ''){//Can't use empty MACs
 				    $this->set(array(
 				        'success'   => false,
@@ -130,8 +135,8 @@ class RegisterUsersController extends AppController {
             'token'         => $token,
             'username'      => $username,
             'password'      => $password,
-			'extra_name'	=> 'mac',
-			'extra_value'	=> $mac,
+			'extra_name'	=> $mac_name,
+			'extra_value'	=> $mac_value,
 			'auto_add'      => $auto_add
         );
      
