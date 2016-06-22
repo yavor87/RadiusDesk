@@ -224,7 +224,7 @@ var rdDynamic = (function () {
                     
                 }
                 
-                b.push({view:"template",borderless:true,id:'tplConnectInfo'});
+                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 50});
                 
                 b.push({ 
                     view    : "button", 
@@ -254,7 +254,7 @@ var rdDynamic = (function () {
                     
                 }
                 
-                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 30});
+                b.push({view:"template",borderless:true,id:'tplConnectInfo',height: 50});
                 
                 
                  if(
