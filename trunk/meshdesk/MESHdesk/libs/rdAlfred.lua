@@ -39,6 +39,11 @@ function rdAlfred:readData(nr)
 	return self:__readData(nr)
 end
 
+function rdAlfred:cleanUp()
+   self:log("== Clean up potential stuck processes ==")
+   self:__cleanUp() 
+end
+
 function rdAlfred:masterEnableAndStart()
 
     local interface = self.x.get('alfred','alfred','interface')
@@ -177,10 +182,31 @@ function rdAlfred.__readData(self,nr)
         local output = fd:read("*a")
         if output then
           assert(loadstring("rows = {" .. output .. "}"))()
-        end
-        fd:close()
+        end     
     end
+    fd:close()
     return rows
+end
+
+function rdAlfred.__cleanUp(self)
+--We added this since there seems to be a problem where the 'alfred -r <nr>' would sometimes hang, breaking things.
+    local fd = io.popen("pgrep -fl 'alfred -r *'") 
+    if fd then
+        local found_problem = false
+        for line in fd:lines() do
+            --print(line)
+            --print(string.find(line, 'pgrep'))
+            local process = string.gsub(line, "%s+.+", "")
+            --print(process)
+            if(string.find(line, 'pgrep')== nil)then
+                os.execute('kill '..process)
+                found_problem = true
+            end
+        end
+        if(found_problem)then
+            os.execute('/etc/init.d/alfred restart')
+        end
+    end
 end
 
 
