@@ -104,12 +104,11 @@ var rdDynamic = (function () {
                         fDebug(cDynamicData);
                         buildGuiBasedOnData();
                     }else{
-                        webix.alert({
-                            title: "Huston we have a problem",
-                            text: "Go to RADIUSdesk, open the <b>Dynamic Login Pages</b> applet.<br>"+
-                            "Select an entry and <b>edit</b> it.<br>"+
-                            "Make sure you added an identifier from this URL's query string under <b>Dynamic Keys</b>"+
-                            " to ensure proper working of this login page<br>",
+                         webix.alert({
+                            title: i18n("sHuston_we_have_a_problem"),
+                            text: i18n('sGo_to_RADIUSdesk_cm_open_the_b_Dynamic Login Pages_b_applet_fs')+"<br>"+
+                            i18n('sSelect_an_entry_and_b_edit_b_it_fs')+"<br>"+
+                            i18n('sMake_sure_you_added_an_identifier_from_this_URL_s_query_string_under_b_Dynamic_Keys_b_to_ensure_proper_working_of_this_login_page')+"<br>",
                             type:"confirm-error"
                         });
                     }
@@ -159,8 +158,8 @@ var rdDynamic = (function () {
                             value   :'userView',
                             css     :"tabSmaller",
                             options : [
-                                { value: "<span class='webix_icon fa-user'></span>User", id: 'userView' },
-                                { value: "<span class='webix_icon fa-ticket'></span>Voucher", id: 'voucherView'}
+                                { value: "<span class='webix_icon fa-user'></span>"+i18n("sUser"), id: 'userView' },
+                                { value: "<span class='webix_icon fa-ticket'></span>"+i18n("sVoucher"), id: 'voucherView'}
                             ]
                         },
                         {
@@ -168,14 +167,14 @@ var rdDynamic = (function () {
                                 {
                                     id:"userView",
                                     rows:[
-                                        { view:"text", label:"Username", name: "username",id:'Username'},
-                                        { view:"text", type:"password", name: "password",label:"Password",id:"Password"}
+                                        { view:"text", label:i18n("sUsername"), name: "username",id:'Username'},
+                                        { view:"text", type:"password", name: "password",label:i18n("sPassword"),id:"Password"}
                                     ]
                                 },
                                 {
                                     id  :"voucherView", 
                                     rows:[
-                                        { view:"text", label:"Voucher", name: "voucher",id:'voucher'}
+                                        { view:"text", label:i18n("sVoucher"), name: "voucher",id:'voucher'}
                                     ]
                                 }
 
@@ -189,8 +188,8 @@ var rdDynamic = (function () {
                     (cDynamicData.settings.user_login_check == true)){
                 
                     voucher_user = [
-                        { view:"text", label:"Username", name: "username",id:'Username'},
-                        { view:"text", type:"password", name: "password",label:"Password",id:"Password"}
+                        { view:"text", label:i18n("sUsername"), name: "username",id:'Username'},
+                        { view:"text", type:"password", name: "password",label:i18n("sPassword"),id:"Password"}
                     ];
                 }
                 
@@ -198,7 +197,7 @@ var rdDynamic = (function () {
                     (cDynamicData.settings.voucher_login_check == true)&&
                     (cDynamicData.settings.user_login_check == false)){
                 
-                        voucher_user = [{ view:"text", label:"Voucher", name: "voucher",id:'voucher'}]; //Default is to have the voucher;
+                        voucher_user = [{ view:"text", label:i18n("sVoucher"), name: "voucher",id:'voucher'}]; //Default is to have the voucher;
                 }
                      
             }
@@ -211,7 +210,7 @@ var rdDynamic = (function () {
                     b.push({ 
                         view    : "checkbox",
                         id      : 'checkboxTandC',
-                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>Terms and Conditions</a>"
+                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>"+i18n("sTerms_and_Conditions")+"</a>"
                     });
                     
                      b.push({
@@ -219,7 +218,7 @@ var rdDynamic = (function () {
                         borderless  : true,
                         height      : 40,
                         css         : 'tcText',
-                        template    : "* By continuing, you agree to the terms and conditions."
+                        template    : "* "+i18n('sBy_continuing_cm_you_agree_to_the_terms_and_conditions_fs')
                     });
                     
                 }
@@ -228,7 +227,7 @@ var rdDynamic = (function () {
                 
                 b.push({ 
                     view    : "button", 
-                    value   : "Free Access" , 
+                    value   : i18n('sFree_Access') , 
                     id      : 'btnClickToConnect',
                     css     : 'btnDashed'
                 });  
@@ -241,7 +240,7 @@ var rdDynamic = (function () {
                         view    : "checkbox", 
                         id      : 'checkboxTandC',
                         css     : 'checkboxTandC',
-                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>Terms and Conditions</a>"
+                        labelRight:"<a href='"+cDynamicData.settings.t_c_url+"' target='_blank'>"+i18n("sTerms_and_Conditions")+"</a>"
                     });
                     
                      b.push({
@@ -249,7 +248,7 @@ var rdDynamic = (function () {
                         borderless  : true,
                         height      : 40,
                         css         : 'tcText',
-                        template    : "* By continuing, you agree to the terms and conditions."
+                        template    : "* "+i18n('sBy_continuing_cm_you_agree_to_the_terms_and_conditions_fs')
                     });
                     
                 }
@@ -263,7 +262,7 @@ var rdDynamic = (function () {
                 
                         b.push({
                             view    : "button", 
-                            value   : "Login" , 
+                            value   : i18n('sLogin'),
                             type    : "form",
                             id      : 'btnLogin'
                         });
@@ -271,7 +270,7 @@ var rdDynamic = (function () {
                                 
                  b.push({
                     view    : "button", 
-                    value   : "Remove me from realm" , 
+                    value   : i18n('sRemove_me_from_realm'), 
                     type    : "danger",
                     hidden  : true,
                     id      : 'btnRemoveMac'
@@ -281,7 +280,7 @@ var rdDynamic = (function () {
                 if(cDynamicData.settings.connect_check == true){
                     b.push({ 
                         view    : "button", 
-                        value   : "Free Access" , 
+                        value   : i18n('sFree_Access') , 
                         id      : 'btnClickToConnect',
                         css     : 'btnDashed'
                     });
@@ -304,7 +303,7 @@ var rdDynamic = (function () {
                         b.push({ 
                             view    : 'button',
                             type    : "htmlbutton", 
-                            label   : '<span class="webix_icon fa-'+icn+'"></span><span class="text"> Connect with '+i.name+'</span>',
+                            label   : '<span class="webix_icon fa-'+icn+'"></span><span class="text"> '+i18n('sConnect_with')+' '+i18n('s'+i.name)+'</span>',
                             id      : 'btn'+n,
                             css     : 'btnDashed btn'+n
                         });
@@ -315,7 +314,7 @@ var rdDynamic = (function () {
                     b.push({ 
                         view    : 'button',
                         type    : "htmlbutton", 
-                        label   : '<span class="webix_icon fa-star"></span><span class="text"> Sign Up</span>',
+                        label   : '<span class="webix_icon fa-star"></span><span class="text"> '+i18n('sSign_Up')+'</span>',
                         id      : 'btnRegister',
                         css     : 'btnDashed btnRegister'
                     });
@@ -325,7 +324,7 @@ var rdDynamic = (function () {
                     b.push({ 
                         view    : 'button',
                         type    : "htmlbutton", 
-                        label   : '<span class="webix_icon fa-key"></span><span class="text"> Lost Password</span>',
+                        label   : '<span class="webix_icon fa-key"></span><span class="text"> '+i18n('sLost_Password')+'</span>',
                         id      : 'btnPassword',
                         css     : 'btnDashed btnPassword'
                     });
@@ -337,7 +336,7 @@ var rdDynamic = (function () {
                  
             //-----
             
-            var sTabBarOptions  = [{ value: "<span class='webix_icon fa-heartbeat'></span>Session", id: 'sessionView' }];
+            var sTabBarOptions  = [{ value: "<span class='webix_icon fa-heartbeat'></span>"+i18n('sSession'), id: 'sessionView' }];
             var sTabBarCells    = [
                 {
                     id:"sessionView",
@@ -348,11 +347,11 @@ var rdDynamic = (function () {
                             height  : 160,
                             editable:false,
                             elements:[
-                                { label :"Username",       type :"text", id:"acct_un"},
-                                { label :"Connected",      type :"text", id:"acct_up"},
-                                { label :"Data in",        type :"text", id:"acct_di"},
-                                { label :"Data out",       type :"text", id:"acct_do"},
-                                { label :"Data tota",      type :"text", id:"acct_dt"}
+                                { label :i18n('sUsername'),       type :"text", id:"acct_un"},
+                                { label :i18n('sConnected'),      type :"text", id:"acct_up"},
+                                { label :i18n('sData_in'),        type :"text", id:"acct_di"},
+                                { label :i18n('sData_out'),       type :"text", id:"acct_do"},
+                                { label :i18n('sData_total'),     type :"text", id:"acct_dt"}
                             ]
                         },
                         {
@@ -360,7 +359,7 @@ var rdDynamic = (function () {
                             borderless:true,
                             height: 25,
                             id  : 'templateSessionRefesh',
-                            template: "<strong>Refreshing in </strong><span id='status_refresh' class='info'> </span><strong> seconds.</strong>"
+                            template: "<strong>"+i18n('sRefreshing_in')+" </strong><span id='status_refresh' class='info'> </span><strong> "+i18n('sseconds_fs')+"</strong>"
                         }
                     ]
                 }
@@ -368,17 +367,17 @@ var rdDynamic = (function () {
             
             
             if(cDynamicData.settings.usage_show_check == true){
-                sTabBarOptions.push({ value: "<span class='webix_icon fa-gears'></span>Usage", id: 'usageView'});
+                sTabBarOptions.push({ value: "<span class='webix_icon fa-gears'></span>"+i18n('sUsage'), id: 'usageView'});
                 
                 sTabBarCells.push(
                     {
                         id  :"usageView",   
                         rows:[
-                            { view:"slider", label:"Data", value:"20", name:"data",       
+                            { view:"slider", label:i18n('sData'), value:"20", name:"data",       
                                 height: 100,
                                 id: 'sliderData'
                             },
-                            { view:"slider", label:"Time", value:"20", name:"time",
+                            { view:"slider", label:i18n('sTime'), value:"20", name:"time",
                                 height: 100,
                                 id: 'sliderTime'
                             },
@@ -387,7 +386,7 @@ var rdDynamic = (function () {
                                 borderless:true,
                                 height: 25,
                                 id  : 'templateUsagerRefesh',
-                                template: "<strong>Refreshing in </strong><span id='usage_refresh' class='info'> </span><strong> seconds.</strong>"
+                                template: "<strong>"+i18n('sRefreshing_in')+" </strong><span id='usage_refresh' class='info'> </span><strong> "+i18n('sseconds_fs')+"</strong>"
                             }
                         ]
                     }
@@ -457,13 +456,13 @@ var rdDynamic = (function () {
                                             tabStatusContent,
                                             { 
                                                 view    :"button", 
-                                                value   :"Go Onto Internet" , 
+                                                value   :i18n('sGo_Onto_Internet') , 
                                                 type    :"form",
                                                 id      : 'btnGoInternet'
                                             },
                                             { 
                                                 view    :"button", 
-                                                value   :"Disconnect" , 
+                                                value   :i18n('sDisconnect') , 
                                                 type    :"danger",
                                                 id      : 'btnDisconnect'
                                             },
@@ -473,8 +472,8 @@ var rdDynamic = (function () {
                                 ]
                             },
                             //scrnNotHotspot
-                            {view:"template",borderless:true, template: "Not a hotspot", type: "header" , batch   : 'scrnNotHotspot'}, 
-                            {view:"template",borderless:true, template: "<br><b>Connect through a hotspot please</b>", batch   : 'scrnNotHotspot'}   
+                            {view:"template",borderless:true, template: i18n('sNot_a_hotspot'), type: "header" , batch   : 'scrnNotHotspot'}, 
+                            {view:"template",borderless:true, template: "<br><b>"+i18n('sConnect_through_a_hotspot_please')+"</b>", batch   : 'scrnNotHotspot'}    
                             
                         ]
                     },
@@ -559,19 +558,19 @@ var rdDynamic = (function () {
                 css         :'layoutAbout', 
                 height      : 400,
                 elements:[
-                    { label:"Contact Detail", type:"label"},
-                    { label :"Cell",            type :"text", id:"abt_cell"},
-                    { label :"Phone",           type :"text", id:"abt_phone"},
-                    { label :"Fax",             type :"text", id:"abt_fax"},
-                    { label :"email",           type :"text", id:"abt_email"},
-                    { label :"URL",             type :"text", id:"abt_url"},
+                    { label:i18n('sContact_Detail'), type:"label"},
+                    { label :i18n('Cell'),              type :"text", id:"abt_cell"},
+                    { label :i18n('Phone'),             type :"text", id:"abt_phone"},
+                    { label :i18n('sFax'),              type :"text", id:"abt_fax"},
+                    { label :i18n('semail'),            type :"text", id:"abt_email"},
+                    { label :i18n('sURL'),              type :"text", id:"abt_url"},
                     {},
-                    { label:"Other Info", type:"label"},
-                    { label :"Street",          type :"text", id:"abt_street"},
-                    { label :"Town/Suburb",     type :"text", id:"abt_town_suburb"},
-                    { label :"City",            type :"text", id:"abt_city"},
-                    { label :"Country",         type :"text", id:"abt_country"},
-                    { label :"Lat/Lon",         type :"text", id:"abt_lat_lon"}
+                    { label :i18n('sOther_Info'), type:"label"},
+                    { label :i18n('sStreet'),           type :"text", id:"abt_street"},
+                    { label :i18n('Town_fs_Suburb'),    type :"text", id:"abt_town_suburb"},
+                    { label :i18n('sCity'),             type :"text", id:"abt_city"},
+                    { label :i18n('sCountry'),          type :"text", id:"abt_country"},
+                    { label :i18n('sLat_fs_Lon'),       type :"text", id:"abt_lat_lon"}
                 ]
             } 
             
