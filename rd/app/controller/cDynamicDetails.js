@@ -54,7 +54,8 @@ Ext.define('Rd.controller.cDynamicDetails', {
         'dynamicDetails.winPageEdit',       'dynamicDetails.gridDynamicDetailPairs',    'dynamicDetails.winPairAdd',
         'dynamicDetails.winPairEdit',       'dynamicDetails.pnlDynamicDetailSettings',  'dynamicDetails.pnlDynamicDetailClickToConnect',
 		'dynamicDetails.cmbThemes',			'components.cmbPermanentUser',				'components.cmbRealm',
-		'components.cmbProfile',			'dynamicDetails.pnlDynamicDetailSocialLogin'       
+		'components.cmbProfile',			'dynamicDetails.pnlDynamicDetailSocialLogin'  ,
+		'dynamicDetails.cmbDynamicDetailLanguages'     
     ],
     stores: ['sDynamicDetails','sAccessProvidersTree', 'sThemes', 'sPermanentUsers','sProfiles','sRealms'],
     models: [
