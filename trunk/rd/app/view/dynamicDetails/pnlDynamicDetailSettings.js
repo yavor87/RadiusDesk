@@ -344,6 +344,20 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                                         cls         : 'lblRd'
                                     }  
                                 ]
+                            },
+                            { 
+                                'title'     : i18n('sLanguage'),
+                                'layout'    : 'anchor',
+                                itemId      : 'tabLanguage',
+                                defaults    : {
+                                    anchor: '100%'
+                                },
+                                autoScroll:true,
+                                items       : [
+                                    {
+                                        xtype       : 'cmbDynamicDetailLanguages'
+                                    } 
+                                ]
                             }
                         ]
                     }

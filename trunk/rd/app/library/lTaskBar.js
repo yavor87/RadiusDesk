@@ -39,7 +39,12 @@ Ext.define('Rd.library.lTaskBar', {
             },'-',
             me.windowBar,
             '-',
-            me.tray
+            {
+                xtype   : 'button',
+                glyph   :  Rd.config.icnMenu,
+                scale   :  'medium'
+            }
+           // me.tray
         ];
 
         me.callParent();
