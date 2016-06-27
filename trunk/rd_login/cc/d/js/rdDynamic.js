@@ -307,7 +307,7 @@ var rdDynamic = (function () {
                     b.push({ 
                         view    : 'button',
                         type    : "htmlbutton", 
-                        label   : '<span class="webix_icon fa-star"></span><span class="text"> Sign Up</span>',
+                        label   : '<span class="webix_icon fa-star"></span><span class="text">'+ i18n('gooi')+'</span>',
                         id      : 'btnRegister',
                         css     : 'btnDashed btnRegister'
                     });

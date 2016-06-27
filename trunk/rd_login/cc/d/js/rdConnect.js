@@ -164,8 +164,7 @@ var rdConnect = (function () {
             }
             return true;        //Is a hotspot
         }
-        
-        
+            
         function getParameterByName(name) {
            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
