@@ -146,7 +146,8 @@ class DynamicDetailsController extends AppController {
 
     public function chilli_browser_detect(){
 
-		$conditions = array("OR" =>array());
+		$conditions     = array("OR" =>array());
+		$query_string   = $_SERVER['QUERY_STRING'];
 
 		foreach(array_keys($this->request->query) as $key){
                 array_push($conditions["OR"],
@@ -159,17 +160,23 @@ class DynamicDetailsController extends AppController {
                 array('conditions' => $conditions, 'order' => 'DynamicPair.priority DESC')); //Return the one with the highest priority
 
 		//See which Theme are selected
-		$theme 			= 'Default';
+		$theme = 'Default';
 		$theme_selected = 'Default';
+		
+		$i18n = 'en_GB';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
+            if($q_r['DynamicDetail']['default_language'] != ''){
+                $i18n = $q_r['DynamicDetail']['default_language'];
+            }
 		}
+		$query_string = $query_string."&i18n=$i18n";
 		
 		
         if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
-		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$query_string;
 		    if($this->request->is('mobile')){
-                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$query_string;
             }    
 		}else{  //Else we fetch the 'global' theme's value from the file
 
@@ -179,9 +186,9 @@ class DynamicDetailsController extends AppController {
 			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
 		    }
 
-		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['coova_desktop'].'?'.$query_string;
             if($this->request->is('mobile')){
-                $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $pages['coova_mobile'].'?'.$query_string;
             }
         }
 
@@ -219,9 +226,16 @@ class DynamicDetailsController extends AppController {
 
 		//See which Theme are selected
 		$theme = 'Default';
+		$theme_selected = 'Default';
+		
+		$i18n = 'en_GB';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
+            if($q_r['DynamicDetail']['default_language'] != ''){
+                $i18n = $q_r['DynamicDetail']['default_language'];
+            }
 		}
+		$query_string = $query_string."&i18n=$i18n";
 		
 
 	    if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
@@ -248,7 +262,8 @@ class DynamicDetailsController extends AppController {
 
     public function ruckus_browser_detect(){
 
-		$conditions = array("OR" =>array());
+		$conditions     = array("OR" =>array());
+		$query_string   = $_SERVER['QUERY_STRING'];
 
 		foreach(array_keys($this->request->query) as $key){
                 array_push($conditions["OR"],
@@ -263,18 +278,24 @@ class DynamicDetailsController extends AppController {
 		//See which Theme are selected
 		$theme = 'Default';
 		$theme_selected = 'Default';
+		
+		$i18n = 'en_GB';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
+            if($q_r['DynamicDetail']['default_language'] != ''){
+                $i18n = $q_r['DynamicDetail']['default_language'];
+            }
 		}
-
+		$query_string = $query_string."&i18n=$i18n";
+		
         //------------------------
         //FIXME For now we'll use the Coova URL on custom as a hack
         //-----------------------
         
 	    if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
-		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$query_string;
 		    if($this->request->is('mobile')){
-                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$query_string;
             }
 		}else{  //Else we fetch the 'global' theme's value from the file
 		    Configure::load('DynamicLogin'); 
@@ -283,9 +304,9 @@ class DynamicDetailsController extends AppController {
 			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
 		    }
 
-		    $redir_to = $pages['ruckus_desktop'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['ruckus_desktop'].'?'.$query_string;
             if($this->request->is('mobile')){
-                $redir_to = $pages['ruckus_mobile'].'?'.$_SERVER['QUERY_STRING'];
+                $redir_to = $pages['ruckus_mobile'].'?'.$query_string;
             }
         }
 
@@ -300,13 +321,17 @@ class DynamicDetailsController extends AppController {
       	
 		//See which Theme are selected
 		$theme = 'Default';
+		$i18n = 'en_GB';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
+            if($q_r['DynamicDetail']['default_language'] != ''){
+                $i18n = $q_r['DynamicDetail']['default_language'];
+            }
 		}
 
 		if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
 		
-		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $q_r['DynamicDetail']['coova_desktop_url'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";
 		    
         }else{   
 		    Configure::load('DynamicLogin'); 
@@ -314,7 +339,7 @@ class DynamicDetailsController extends AppController {
 		    if(!$pages){
 			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
 		    }
-		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";
 		}
 
         $this->response->header('Location', $redir_to);
@@ -327,23 +352,46 @@ class DynamicDetailsController extends AppController {
       	
 		//See which Theme are selected
 		$theme = 'Default';
+		$i18n = 'en_GB';
 		if($q_r){
             $theme_selected =  $q_r['DynamicDetail']['theme'];
+            if($q_r['DynamicDetail']['default_language'] != ''){
+                $i18n = $q_r['DynamicDetail']['default_language'];
+            }
 		}
 
 		if($theme_selected == 'Custom'){ //With custom themes we read the valuse out of the DB
-		    $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING'];    
+		    $redir_to = $q_r['DynamicDetail']['coova_mobile_url'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";    
         }else{  
 		    Configure::load('DynamicLogin'); 
             $pages       = Configure::read('DynamicLogin.theme.'.$theme_selected); //Read the defaults
 		    if(!$pages){
 			    $pages       = Configure::read('DynamicLogin.theme.'.$theme); //Read the defaults
 		    }
-		    $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING'];
+		    $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";
 		}
 
         $this->response->header('Location', $redir_to);
 	}
+	
+	//------ List of configured dynamic attributes types ------
+    //This is displayed as a select to choose from when the user adds a NAS of connection type dynamic
+    public function i18n(){
+        $items = array();
+        Configure::load('DynamicLogin');
+        $i18n = Configure::read('DynamicLogin.i18n');
+        foreach($i18n as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
 
     public function export_csv(){
 
@@ -926,6 +974,7 @@ class DynamicDetailsController extends AppController {
                 $items['reg_email']                 = $q_r['DynamicDetail']['reg_email'];
                 $items['realm']                     = $realm;
                 $items['profile']                   = $profile;
+                $items['default_language']          = $q_r['DynamicDetail']['default_language'];
                 
             }
         }
