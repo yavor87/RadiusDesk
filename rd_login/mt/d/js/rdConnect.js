@@ -225,11 +225,11 @@ var rdConnect = (function () {
                 }else{
                     fDebug("Timed out"); //FIXME
                     webix.alert({
-                        title: "Hotspot not responding",
-                        text: "The hotspot is not responding to status queries",
-                        type:"confirm-error"
-                    }); 
-                    showLoginError("Hotspot not responding");
+                            title: i18n('sHotspot_not_responding'),
+                            text: i18n('sThe_hotspot_is_not_responding_to_status_queries'),
+                            type:"confirm-error"
+                        }); 
+                    showLoginError(i18n('sHotspot_not_responding'));
                 }
             });
         }
@@ -298,7 +298,7 @@ var rdConnect = (function () {
 	    
 	    //_______Disconnect_______
 	    var onBtnDisconnectClick = function(){
-		    showFeedback("Disconnect the user");
+		    showFeedback(i18n('sDisconnect_the_user'));
 		    showOverlay();
             var urlLogout = getParameterByName('link_logout');
             $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout ,date: {}})
@@ -312,7 +312,7 @@ var rdConnect = (function () {
                 if(currentRetry <= retryCount){
                     onBtnDisconnectClick();
                 }else{
-                    showLoginError("MT Not responding to logout requests");
+                    showLoginError(i18n('sMT_Not_responding_to_logout_requests'));
                 }     
             });
 	    }
@@ -400,7 +400,7 @@ var rdConnect = (function () {
 					    var time_avail	   = j.data.time_cap - j.data.time_used;
                         
                         $$('sliderTime').setValue(pers_time_used);
-                        $$('sliderTime').define("title", "<strong>Used </strong>"+time(j.data.time_used)+"<strong> Available </strong>"+ time(time_avail));
+                        $$('sliderTime').define("title", "<strong>"+i18n('sUsed')+" </strong>"+time(j.data.time_used)+"<strong> "+i18n('sAvailable')+" </strong>"+ time(time_avail));
                         $$('sliderTime').refresh();
                         
                     }
@@ -415,7 +415,7 @@ var rdConnect = (function () {
 					    var data_avail	   = j.data.data_cap - j.data.data_used;
 					    
                         $$('sliderData').setValue(pers_data_used);
-                        $$('sliderData').define("title", "<strong>Used </strong>"+bytes(j.data.data_used)+"<strong><br>Available </strong>"+ bytes(data_avail));
+                        $$('sliderData').define("title", "<strong>"+i18n('sUsed')+" </strong>"+bytes(j.data.data_used)+"<strong> "+i18n('sAvailable')+" </strong>"+ bytes(data_avail));
                         $$('sliderData').refresh();
                         
                         //.html("<strong>Used </strong>"+bytes(j.data.data_used)+"<strong> Available </strong>"+ bytes(data_avail));
@@ -438,7 +438,7 @@ var rdConnect = (function () {
             if(cDynamicData.settings.t_c_check == true){
 		        if($$('checkboxTandC') != undefined){
 		            if(!$$('checkboxTandC').getValue()){
-		                showLoginError("First agree to T&C");
+		                showLoginError(i18n('sFirst_agree_to_T_amp_C'));
 		                return;
 		            }
 		        }
@@ -478,7 +478,7 @@ var rdConnect = (function () {
 				    ($$('Username').getValue().length == 0)
 			    ){
 				    //console.log("voucher and user EMPTY");
-				    showLoginError("Required value missing - Please supply");
+				    showLoginError(i18n('sRequired_value_missing_dash_Please_supply'));
                 	return;
 			    }
 
@@ -497,7 +497,7 @@ var rdConnect = (function () {
 			    }
 
 			    if(!found_flag){
-				    showLoginError("Required value missing - Please supply");
+				    showLoginError(i18n('sRequired_value_missing_dash_Please_supply'));
                 	return;
 			    }
 		    }
@@ -505,7 +505,7 @@ var rdConnect = (function () {
 		    if((voucher_present)&&(user_present == false)
 		    ){
 			    if($$('voucher').getValue().length == 0){
-				    showLoginError("Supply value for voucher");
+				    showLoginError(i18n('sSupply_value_for_voucher'));
 				    return;
 			    }
 			    userName = escape($$('voucher').getValue());
@@ -515,15 +515,15 @@ var rdConnect = (function () {
 		    if((user_present)&&(voucher_present == false)
 		    ){
 			    if(($$('Username').getValue().length == 0)||($$('Password').getValue().length == 0)){
-				    showLoginError("Supply both username and password");
+				    showLoginError(i18n('sSupply_both_username_and_password'));
                 	return;
 			    }
 			    if($$('Username').getValue().length == 0){
-				    showLoginError("Supply Username");
+				    showLoginError(i18n('sSupply_Username'));
                 	return;
 			    }
 			    if($$('Password').getValue().length == 0){
-				    showLoginError("Supply Password");
+				    showLoginError(i18n('sSupply_Password'));
                 	return;
 			    }
 			    userName = escape($$('Username').getValue());
@@ -533,7 +533,7 @@ var rdConnect = (function () {
 		    if(cDynamicData.settings.t_c_check == true){
 		        if($$('checkboxTandC') != undefined){
 		            if(!$$('checkboxTandC').getValue()){
-		                showLoginError("First agree to T&C");
+		                 showLoginError(i18n('sFirst_agree_to_T_amp_C'));
 		                return;
 		            }
 		        }
@@ -555,7 +555,7 @@ var rdConnect = (function () {
         }
         
         var login =  function(){
-            showFeedback("Log "+userName+" into Captive Portal");
+            showFeedback(i18n('sLog')+" "+userName+" "+i18n('sinto_Captive_Portal'));
             var urlLogin = getParameterByName('link_login_only');
             $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
             .done(function(j){
@@ -568,11 +568,11 @@ var rdConnect = (function () {
                     login();
                 }else{
                     webix.alert({
-                        title: "MT Not responding to login requests",
-                        text: "MT Not responding to login requests",
+                        title: i18n('sMT_Not_responding_to_login_requests'),
+                        text: i18n('sMT_Not_responding_to_login_requests'),
                         type:"confirm-error"
                     });
-                    showLoginError("MT Not responding to login requests");
+                    showLoginError(i18n('sMT_Not_responding_to_login_requests'));
                 }
             });
         }
@@ -584,7 +584,7 @@ var rdConnect = (function () {
             if(j.logged_in == 'yes'){          
                 mtRefresh(true); //Refresh
             }else{
-                var msg = 'Authentication failure please try again'
+                var msg = i18n('sAuthentication_failure_please_try_again')
                 if(j.error_orig != undefined){
                     msg =j.error_orig;
                     //Test to see if it moans about the MAC
@@ -615,14 +615,14 @@ var rdConnect = (function () {
             .done(function(j){
                 console.log("Ajax call fine");
                 if(j.success == true){
-                    showLoginError("Device "+mac_username+" removed from realm, please log in again");
+                    showLoginError(i18n('sDevice')+" "+mac_username+" "+i18n('sremoved_from_realm_cm_please_log_in_again'));
                     $$('btnRemoveMac').hide();
                 }else{
                     showLoginError(j.message);
                 }
             })
             .fail(function(){     
-                showLoginError('Problems encountered while trying to remove '+mac_username);
+                showLoginError(i18n('sProblems_encountered_while_trying_to_remove')+' '+mac_username);
             });
         }
         
@@ -635,7 +635,7 @@ var rdConnect = (function () {
             if(cDynamicData.settings.t_c_check == true){
 		        if($$('checkboxTandC') != undefined){
 		            if(!$$('checkboxTandC').getValue()){
-		                showLoginError("First agree to T&C");
+		                showLoginError(i18n('sFirst_agree_to_T_amp_C'));
 		                return;
 		            }
 		        }
@@ -644,7 +644,7 @@ var rdConnect = (function () {
             showOverlay();
             
 		    socialName          = a.toLowerCase();
-		    showFeedback('Starting social login for '+ socialName)
+		    showFeedback(i18n('sStarting_social_login_for')+' '+ socialName)
 
             userName = cDynamicData.settings.social_login.temp_username; 
             password = cDynamicData.settings.social_login.temp_password;  
@@ -652,7 +652,7 @@ var rdConnect = (function () {
 	    }
                 
         var socialTempLogin	= function(){
-		    showFeedback("Log temp user into Captive Portal");
+		    showFeedback(i18n('sLog_temp_user_into_Captive_Portal'));
 
             var urlLogin = getParameterByName('link_login_only');
             $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
@@ -665,7 +665,7 @@ var rdConnect = (function () {
                 if(currentRetry <= retryCount){
                     socialTempLogin();
                 }else{
-                    showLoginError("MT Not responding to login requests");
+                    showLoginError(i18n('sMT_Not_responding_to_login_requests'));
                 }
             });
 	    }
@@ -675,7 +675,7 @@ var rdConnect = (function () {
 
             currentRetry = 0;    //Reset if there were retries
             if(j.logged_in == 'no'){       
-                var msg = 'Authentication failure please try again'
+                var msg = i18n('sAuthentication_failure_please_try_again')
                 if(j.error_orig != undefined){
                     msg =j.error_orig;
                 }
@@ -736,18 +736,18 @@ var rdConnect = (function () {
 					    socialTempDisconnect();
 				    }else{
 					    //console.log("big problems");
-					    showLoginError("Could not retrieve Social Login Info");
+					    showLoginError(i18n('sCould_not_retrieve_Social_Login_Info')); 
 				    }
 			    })
 			    .fail(function() {
-				    showLoginError("Could not retrieve Social Login Info"); 
+				    showLoginError(i18n('sCould_not_retrieve_Social_Login_Info')); 
 			    });
             }
 	    }
 	    
 	    var socialTempDisconnect 	=  function(){
 	    
-            showFeedback("Disconnect the social temp user");
+            showFeedback(i18n('sDisconnect_the_social_temp_user'));
             var urlLogout = getParameterByName('link_logout');
             $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout,date: {}})
             .done(function(j){
@@ -760,13 +760,13 @@ var rdConnect = (function () {
                 if(currentRetry <= retryCount){
                     socialTempDisconnect();
                 }else{
-                    showLoginError("MT Not responding to logout requests");
+                    showLoginError(i18n('sMT_Not_responding_to_logout_requests'));
                 }     
             });
         }
 
         var socialFinalLogin = function(encPwd){
-		    showFeedback('Doing final login');
+		    showFeedback(i18n('sDoing_final_login'));
 
             var urlLogin = getParameterByName('link_login_only');
             $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
@@ -779,7 +779,7 @@ var rdConnect = (function () {
                 if(currentRetry <= retryCount){
                     socialFinalLogin();
                 }else{
-                    showLoginError("MT Not responding to login requests");
+                    showLoginError(i18n('sMT_Not_responding_to_login_requests'));
                 }
             });
         }
@@ -801,7 +801,7 @@ var rdConnect = (function () {
                     mtRefresh(true); //Refresh session and usage
                 }
             }else{
-                var msg = 'Authentication failure please try again'
+                var msg = i18n('sAuthentication_failure_please_try_again')
                 if(j.error_orig != undefined){
                     msg =j.error_orig;
                     //Test to see if it moans about the MAC
@@ -844,9 +844,9 @@ var rdConnect = (function () {
                               view      : "template",
                               borderless:true, 
                               height    : 150,
-                              template  : "<h3>Sign-up for free Internet</h3>"+
-			                    "Welcome to free Wi-Fi by <b>"+cDynamicData.detail.name+"</b>.<br>"+
-                                "Sign up once to get Internet access!<br>"
+                              template  : "<h3>"+i18n('sSign_dash_up_for_free_Internet')+"</h3>"+
+			                    i18n('sWelcome_to_free_Wi_dash_Fi_by')+" <b>"+cDynamicData.detail.name+"</b>.<br>"+
+                                i18n('sSign_dash_up_once_to_get_Internet_access')+"!<br>"
                             },
                             {
                                 view        : 'text',
@@ -868,31 +868,31 @@ var rdConnect = (function () {
                             },
 	                        {
                                 view        : 'text',
-                                label       : 'First Name',
+                                label       : i18n('sFirst_Name'),
                                 name        : 'name',
                                 placeholder : 'Supply a value',
                                 required    : true
                             },
                             {
                                 view        : 'text',
-                                label       : 'Surname',
+                                label       : i18n('sSurname'),
                                 name        : 'surname',
-                                placeholder : 'Supply a value',
+                                placeholder : i18n('sSupply_a_value'),
                                 required    : true
                             },
                             {
                                 view        : 'text',
-                                label       : 'Email (username)',
+                                label       : i18n('sEmail_br_username_br'),
                                 name        : 'username',
-                                placeholder : 'Supply a value',
+                                placeholder : i18n('sSupply_a_value'),
                                 required    : true
                             },
                             {
                                 view        : 'text',
-                                label       : 'Password',
+                                label       : i18n('sPassword'),
                                 name        : 'password',
-                                placeholder : 'Supply a value',
-                                bottomLabel : "* The password must have at least 5 characters",
+                                placeholder : i18n('sSupply_a_value'),
+                                bottomLabel : "* "+i18n('sThe_password_must_have_at_least_5_characters'),
                                 required    : true
                                 
                             },
@@ -900,11 +900,11 @@ var rdConnect = (function () {
                                 view        : 'text',
                                 label       : 'Cell',
                                 name        : 'phone',
-                                placeholder : 'Supply a value',
-                                bottomLabel : "* The number must have 10 digits",
+                                placeholder : i18n('sSupply_a_value'),
+                                bottomLabel : "* "+i18n('sThe_number_must_have_10_digits'),
                                 required    : true
                             },
-	                        { view:"button", value: "Submit", type: 'form', click:function(){
+	                        { view:"button", value: i18n('sSubmit'), type: 'form', click:function(){
 	                            var button = this;
 		                        if (this.getParentView().validate()){ //validate form
                                     //webix.message("All is correct");
@@ -929,18 +929,18 @@ var rdConnect = (function () {
                                                   error_string = error_string+"<b>"+new_key+":</b> "+val+"<br>";
                                                 });
                                                 webix.alert({
-                                                    title   : "Error",
+                                                    title   : i18n('sError'),
                                                     text    : error_string,
                                                     type    :"confirm-error"
                                                 }); 
                                             }
                                             
-                                            webix.message({ type:"error", text:"Could not register user" });
+                                            webix.message({ type:"error", text: i18n('sCould_not_register_user') });
                                         }
                                     });
                                 }
 		                        else
-			                        webix.message({ type:"error", text:"Form data is invalid" });
+			                        webix.message({ type:"error", text: i18n('sForm_data_is_invalid') });
 	                        }}
                         ],
                         rules       :{
@@ -966,9 +966,9 @@ var rdConnect = (function () {
                                view         : "template",
                                borderless   : true,
                                css          : 'tmplCenter',
-                               template     : "<h3>Thank you!</h3>"+
-			                    "Thank you for registering with us<br>"+
-			                    "Your username and password are already populated, simply click the <b>Login</b> button to start using the Internet."
+                               template     : "<h3>"+i18n('sThank_you')+"!</h3>"+
+			                    i18n('sThank_you_for_registering_with_us')+"<br>"+
+			                    i18n('sYour_username_and_password_are_already_populated_cm_simply_click_the_b_Login_b_button_to_start_using_the_Internet_fs')
                             }
                          ]
                     }
@@ -1007,9 +1007,9 @@ var rdConnect = (function () {
                             {
                                css          : 'tmplCenter', 
                                borderless   : true,
-                               view: "template", template: "<h3>Supply your email address</h3>"+
-			                    "If you are registered with us<br>"+
-			                    "we will send you your credentials."
+                               view: "template", template: "<h3>"+i18n('sSupply_your_email_address')+"</h3>"+
+			                    i18n('sIf_you_are_registered_with_us')+"<br>"+
+			                    i18n('swe_will_send_you_your_credentials_fs')
                             }
                          ]
                     },
@@ -1029,11 +1029,11 @@ var rdConnect = (function () {
                                    
                                     {
                                         view        : 'text',
-                                        label       : 'Email',
+                                        label       : i18n('sEmail'),
                                         name        : 'email',
-                                        placeholder : 'Supply a value'
+                                        placeholder : i18n('sSupply_a_value')
                                     },
-                                    { view:"button", value: "Submit", type: 'form', click:function(){
+                                    { view:"button", value: i18n('sSubmit'), type: 'form', click:function(){
                                         if (this.getParentView().validate()){ //validate form
                                             //webix.message("All is correct");
                                             //with callback
@@ -1042,14 +1042,14 @@ var rdConnect = (function () {
                                                     fDebug("Got Dynamic Detail");                
                                                     $$('pwdMulti').setValue('pwdEnd'); 
                                                 }else{
-                                                    webix.message({ type:"error", text:"Could not register user" });
+                                                    webix.message({ type:"error", text: i18n('sCould_not_email_password') });
                                                 }
                                             });
                                             //this.getTopParentView().hide(); //hide window
                                             //$$('regMulti').setValue('regEnd');
                                         }
                                         else
-                                            webix.message({ type:"error", text:"Form data is invalid" });
+                                            webix.message({ type:"error", text:i18n('sForm_data_is_invalid') });
                                     }}
                                 ],
                                 rules       :{
@@ -1072,8 +1072,8 @@ var rdConnect = (function () {
                                css          : 'tmplCenter',
                                borderless   : true,
                                view         : "template", 
-                               template     : "<h3>Action complete!</h3>"+
-			                    "Please check your email<br>"
+                               template     : "<h3>"+i18n('sAction_complete')+"!</h3>"+
+			                    i18n('sPlease_check_your_email')+"<br>"
                             }
                          ]
                     }
@@ -1127,7 +1127,7 @@ var rdConnect = (function () {
 	        }
 
             if ( typeof(t) == 'undefined' ) {
-                return 'Not available';
+                return i18n('sNot_available');
             }
 
             t = parseInt ( t , 10 ) ;
@@ -1175,15 +1175,15 @@ var rdConnect = (function () {
                 return zeroReturn;
             }
             var kb = Math.round(b/1024);
-            if (kb < 1) return b  + ' '+'Bytes';
+            if (kb < 1) return b  + ' '+i18n('sBytes');
 
             var mb = Math.round(kb/1024);
-            if (mb < 1)  return kb + ' '+'Kilobytes';
+            if (mb < 1)  return kb + ' '+i18n('sKilobytes');
 
             var gb = Math.round(mb/1024);
-            if (gb < 1)  return mb + ' '+'Megabytes';
+            if (gb < 1)  return mb + ' '+i18n('sMegabytes');
 
-            return gb + ' '+'Gigabytes';
+            return gb + ' '+i18n('sGigabytes');
         }
     
 
