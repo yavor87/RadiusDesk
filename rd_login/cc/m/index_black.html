@@ -19,16 +19,33 @@
     </head>
     <body>
         <script type="text/javascript" charset="utf-8">  
-            webix.ready(function(){
-                webix.ui.fullScreen();
-                webix.ui(ui_scheme); 
-                
-                //Create a rdDynamic instance
-                var d = rdDynamic({});
-                //Fire it up....
-                window.rdDynamic = d;
-                d.init(); 
-             });   
+            //___ Multiple Language Support ___
+            var i18n = 'en_GB';
+            function getByName(name) {
+               name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+               var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                   results = regex.exec(location.search);
+               return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            var i    = getByName('i18n');
+            if(i !== ''){
+                i18n = i;
+            }
+                   
+            $.getScript( "../../codebase/rd_i18n/"+i18n+".js").done(function( script, textStatus ) {
+                //Load the rest - The phrases are in 
+                $.getScript( "js/webix.js").done(function( script, textStatus ) {
+                    webix.ready(function(){
+                        webix.ui.fullScreen();
+                        webix.ui(ui_scheme);                   
+                        //Create a rdDynamic instance
+                        var d = rdDynamic({});
+                        //Fire it up....
+                        window.rdDynamic = d;
+                        d.init();               
+                    });           
+                });
+            });        
         </script>
     </body> 
 </html>

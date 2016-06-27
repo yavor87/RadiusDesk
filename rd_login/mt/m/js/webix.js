@@ -1,13 +1,17 @@
+function i18n(key) {
+    return (Local.localizedStrings[key]);
+}
 
 var tabbar = {
    id:"tabs",
    view:"tabbar", type:"bottom", multiview:true, options: [
-	    { value: "<span class='webix_icon fa-plug'></span><span style='padding-left: 4px'>Connect</span>",          id: 'scrnHome' },
-	    { value: "<span class='webix_icon fa-question-circle'></span><span style='padding-left: 4px'>Help</span>",  id: 'scrnHelp' },
-	    { value: "<span class='webix_icon fa-camera'></span><span style='padding-left: 1px'>Gallery</span>",        id: 'scrnPhoto'},
-	    { value: "<span class='webix_icon fa-info'></span><span style='padding-left: 1px'>About</span>",            id: 'scrnAbout'},
+	    { value: "<span class='webix_icon fa-plug'></span><span style='padding-left: 4px'>"+i18n("sConnect")+"</span>",id: 'scrnHome' },
+	    { value: "<span class='webix_icon fa-question-circle'></span><span style='padding-left: 4px'>"+i18n("sHelp")+"</span>",  id: 'scrnHelp' },
+	    { value: "<span class='webix_icon fa-camera'></span><span style='padding-left: 1px'>"+i18n("sPhotos")+"</span>",        id: 'scrnPhoto'},
+	    { value: "<span class='webix_icon fa-info'></span><span style='padding-left: 1px'>"+i18n("sAbout")+"</span>",            id: 'scrnAbout'},
     ],height:50
 };
+
 
 var data = {
     view        : "multiview",
