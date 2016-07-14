@@ -756,7 +756,6 @@ class NodesController extends AppController {
         if(array_key_exists('radio0_disable_b', $this->RadioSettings[0])) {
             array_push($radio_zero_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
         } 
-        
 
         array_push( $wireless,
                 array(
@@ -766,7 +765,6 @@ class NodesController extends AppController {
                         'disabled'      => 0,
                         'hwmode'        => $hwmode,
                         'country'       => $country,
-
                         'distance'      => intval($this->RadioSettings[0]['radio0_distance']),
                         'htmode'        => $this->RadioSettings[0]['radio0_htmode'],
                         'txpower'       => intval($this->RadioSettings[0]['radio0_txpower']),
@@ -825,6 +823,8 @@ class NodesController extends AppController {
                             "network"       => "mesh",
                             "mode"          => "mesh",
                             "mesh_id"       => $ssid,
+                            "mcast_rate"    => 18000,
+                            "disabled"      => 0,
                             "mesh_ttl"      => 1,
                             "mesh_fwding"   => 0,
                             "encryption"    => 'none'
@@ -842,6 +842,8 @@ class NodesController extends AppController {
                             "network"       => "mesh",
                             "mode"          => "mesh",
                             "mesh_id"       => $ssid,
+                            "mcast_rate"    => 18000,
+                            "disabled"      => 0,
                             "mesh_ttl"      => 1,
                             "mesh_fwding"   => 0,
                             "encryption"    => 'psk2/aes',
@@ -1092,9 +1094,26 @@ class NodesController extends AppController {
             }
         }
         
+        
         if(array_key_exists('radio0_disable_b', $this->RadioSettings[0])) {
             array_push($radio_zero_capab,array('name'    => 'basic_rate', 'value'  => '6000 9000 12000 18000 24000 36000 48000 54000')); 
         } 
+
+        //FIXME 
+/* 
+        //802.11AC experiment
+        array_push( $wireless,
+            array(
+                "wifi-device"   => "radio0",
+                "options"       => array(
+                    'channel'       => intval($r0_channel),
+                    'disabled'      => $r0_disabled,
+                    'hwmode'        => $r0_hwmode,
+                    'htmode'        => $this->RadioSettings[0]['radio0_htmode']
+                ),
+                'lists'          => array()
+      	));
+*/
 
 		array_push( $wireless,
             array(
@@ -1243,6 +1262,8 @@ class NodesController extends AppController {
                                 "network"       => "mesh",
                                 "mode"          => "mesh",
                                 "mesh_id"       => $ssid,
+                                "mcast_rate"    => 18000,
+                                "disabled"      => 0,
                                 "mesh_ttl"      => 1,
                                 "mesh_fwding"   => 0,
                                 "encryption"    => 'none'
@@ -1260,6 +1281,8 @@ class NodesController extends AppController {
                                 "network"       => "mesh",
                                 "mode"          => "mesh",
                                 "mesh_id"       => $ssid,
+                                "mcast_rate"    => 18000,
+                                "disabled"      => 0,
                                 "mesh_ttl"      => 1,
                                 "mesh_fwding"   => 0,
                                 "encryption"    => 'psk2/aes',
@@ -1297,6 +1320,8 @@ class NodesController extends AppController {
                                 "network"       => "mesh",
                                 "mode"          => "mesh",
                                 "mesh_id"       => $ssid,
+                                "mcast_rate"    => 18000,
+                                "disabled"      => 0,
                                 "mesh_ttl"      => 1,
                                 "mesh_fwding"   => 0,
                                 "encryption"    => 'none'
@@ -1314,6 +1339,8 @@ class NodesController extends AppController {
                                 "network"       => "mesh",
                                 "mode"          => "mesh",
                                 "mesh_id"       => $ssid,
+                                "mcast_rate"    => 18000,
+                                "disabled"      => 0,
                                 "mesh_ttl"      => 1,
                                 "mesh_fwding"   => 0,
                                 "encryption"    => 'psk2/aes',
