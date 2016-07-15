@@ -262,7 +262,7 @@ $config['ApProfiles']['hardware'][6]      = array(
 		'id'    	            => 'zbt_we2026',
 		'active'                => true,
 		'radios'	            => 1,
-		'eth_br'	            => 'eth0',
+		'eth_br'	            => 'eth0.1',
 		
 		'radio0_disabled'       => 0,
 		'radio0_band'           => '24',
