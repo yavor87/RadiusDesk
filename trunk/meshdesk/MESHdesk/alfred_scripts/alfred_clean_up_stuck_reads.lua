@@ -1,5 +1,6 @@
 #!/usr/bin/lua
 
+
 --[[--
 
 Script which is periodically run by crond to see if there were 'alfred -r ' processes stuck and then it cleans them up
