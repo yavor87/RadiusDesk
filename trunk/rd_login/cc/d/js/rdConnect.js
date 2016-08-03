@@ -39,8 +39,10 @@ var rdConnect = (function () {
 	    var statusFb		= undefined;
 	    
 	    var cDynamicData    = undefined;
-	    
-	    if(co.cDynamicData != undefined){
+        var redirect_check 	= false;
+        var redirect_url    = undefined;
+
+        if(co.cDynamicData != undefined){
             cDynamicData = co.cDynamicData;
         }
 	    
@@ -115,7 +117,7 @@ var rdConnect = (function () {
                     onBtnClickPassword();
                 });
             }
-            
+
             
             //==== END Connect Events ====
         
@@ -136,6 +138,28 @@ var rdConnect = (function () {
                 coovaRefresh(true);  //Already established we are a hotspot, simply refresh
             }
             
+        }
+
+        var initRedirect    = function () {
+            if (redirect_url == undefined) {
+                var redir_check = false;
+                var redir_url  	= 'http://google.com';
+                if(cDynamicData != undefined){ //We had to add this since it is not always populated by the time this is run
+                    redir_check = cDynamicData.settings.redirect_check;
+                    redir_url   = cDynamicData.settings.redirect_url;
+                    if (redir_url == undefined) {
+                        redir_url = '';
+                    }
+                }
+                redirect_check  = redir_check;
+                redirect_url    = redir_url;
+            }
+        }
+
+        var execRedirect    = function (redir_url) {
+            if (redir_url != '' && redir_url != undefined) {
+                window.location = redir_url;
+            }
         }
         
         
@@ -198,16 +222,8 @@ var rdConnect = (function () {
 
                     if(j.clientState == 1){
                         hideOverlay();
-					    var redirect_check 	= false;
-					    var redirect_url  	= 'http://google.com';
-					    if(cDynamicData != undefined){ //We had to add this sine it is not always populated by the time this is run
-						    redirect_check = cDynamicData.settings.redirect_check;
-						    redirect_url = cDynamicData.settings.redirect_url;
-					    }
-
-					    if(redirect_check){
-				            window.location= redirect_url;
-				        }else{
+					    initRedirect();
+					    if(!redirect_check){
 				        
 				            window.rdDynamic.showStatus();
 				             
@@ -299,14 +315,11 @@ var rdConnect = (function () {
 	    
 	    //____ Go Onto Internet _____
 	    var onBtnGoInternetClick = function(){
-	     
-		    var redirect_url  	= 'http://google.com';
-		    if(cDynamicData != undefined){ 
-			    if(cDynamicData.settings.redirect_url != ''){
-			        redirect_url = cDynamicData.settings.redirect_url;
-			    }
-		    }
-            window.open(redirect_url, '_blank');   
+            initRedirect();
+            execRedirect(redirect_url);
+            /*if(redirect_url != ''){
+                window.open(redirect_url, '_blank');
+            }      */
 	    }
 	    
 	    
@@ -672,7 +685,12 @@ $$('sliderData').refresh();
                 }
                 showLoginError(msg);
             }else{            
-                coovaRefresh(true); //Refresh
+                initRedirect();
+                if(redirect_check) {
+                    execRedirect(redirect_url)
+                } else {
+                    coovaRefresh(true); //Refresh
+                }
             }
         }
         
@@ -703,8 +721,16 @@ $$('sliderData').refresh();
                     socialTempEncPwd(j.challenge);
                 }
                 if(j.clientState == 1){ //FIXME Think we should redirect to Social Login Login...
-                    //Show status screen since we don't need the challenge
-                    coovaRefresh();
+                    if(userName.startsWith('sl_')) {     // Check if the logged in user is of the special social login type
+                           if (redirect_check) {         // Check if the dynamic login page instructs us to redirect to a URL
+                                execRedirect(redirect_url);
+                           } else {
+                                coovaRefresh();  
+                           }
+                    } else {                             // If the user is not of the social login type, simply refresh and show status page
+                        coovaRefresh();
+                    }
+                    
                 }
             })
             .fail(function(){
@@ -858,15 +884,10 @@ $$('sliderData').refresh();
                 if(j.clientState == 0){
 				    socialFinalEncPwd(j.challenge);
                 }
-                if(j.clientState == 1){ //FIXME sort out redirect code
-				    var redirect_check 	= false;
-				    var redirect_url  	= 'http://google.com';
-				    if(cDynamicData != undefined){ //We had to add this sine it is not always populated by the time this is run
-					    redirect_check = cDynamicData.settings.redirect_check;
-					    redirect_url   = cDynamicData.settings.redirect_url;
-				    }
-				    if(redirect_check){
-			            window.location= redirect_url;
+                if(j.clientState == 1){ 
+                    initRedirect();
+                    if(redirect_check){
+                        execRedirect(redirect_url);
 				    }else{             
                         coovaRefresh(); //Refresh 
                     }
@@ -931,14 +952,9 @@ $$('sliderData').refresh();
                 }
                 showLoginError(msg);
             }else{
-			    var redirect_check 	= false;
-			    var redirect_url  	= 'http://google.com';
-			    if(cDynamicData != undefined){ //We had to add this sine it is not always populated by the time this is run
-				    redirect_check = cDynamicData.settings.redirect_check;
-				    redirect_url   = cDynamicData.settings.redirect_url;
-			    }
+			    
 			    if(redirect_check){
-		            window.location= redirect_url;
+		            execRedirect(redirect_url);
 			    }else{             
                     coovaRefresh(true); //Refresh session and usage
                 }
