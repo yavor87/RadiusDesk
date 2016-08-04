@@ -128,8 +128,6 @@ Ext.define('Rd.Application', {
 		    NumericText: 'Only numbers are allowed',
             NumericMask: /[0-9]/
 
-            //__ Voucher batch required __
-
         });
     },
     
