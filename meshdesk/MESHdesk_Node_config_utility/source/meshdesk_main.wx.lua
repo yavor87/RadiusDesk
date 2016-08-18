@@ -41,6 +41,7 @@ local choices = {
     "TP-Link WA901N",
     "Generic 1 Radio",
     "Generic 2 Radio",
+    "ZBT WE1526",
     "ZBT WE2026",
     "Archer C7(AC)",
     "MiWiFi Mini(AC)"
@@ -70,9 +71,10 @@ hardware[20]        = 'tl_wa850re'
 hardware[21]        = 'tl_wa901n'
 hardware[22]        = 'genoneradio'
 hardware[23]        = 'gentworadio'
-hardware[24]        = 'zbt_we2026'
-hardware[25]        = 'tl_ac1750_c7'
-hardware[26]        = 'miwifi_mini'
+hardware[24]        = 'zbt_we1526'
+hardware[25]        = 'zbt_we2026'
+hardware[26]        = 'tl_ac1750_c7'
+hardware[27]        = 'miwifi_mini'
 
 local mode_choices = {
     "Mesh",
@@ -160,13 +162,16 @@ function HandleEvents(event)
     if(event:GetSelection() == 23)then
         sbmHardware:SetBitmap(bm_gentworadio)
     end
-    if(event:GetSelection() == 24)then
-        sbmHardware:SetBitmap(bm_zbt_we2026)
+     if(event:GetSelection() == 24)then
+        sbmHardware:SetBitmap(bm_zbt_we1526)
     end
     if(event:GetSelection() == 25)then
+        sbmHardware:SetBitmap(bm_zbt_we2026)
+    end
+    if(event:GetSelection() == 26)then
         sbmHardware:SetBitmap(bm_tl_ac1750_c7)
     end
-     if(event:GetSelection() == 26)then
+     if(event:GetSelection() == 27)then
         sbmHardware:SetBitmap(bm_miwifi_mini)
     end
 end
@@ -367,6 +372,9 @@ function build_gui()
     
     bm_zbt_we2026      = wx.wxBitmap();
     bm_zbt_we2026:LoadFile("./graphics/zbt_we2026.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_zbt_we1526      = wx.wxBitmap();
+    bm_zbt_we1526:LoadFile("./graphics/zbt_we1526.png",wx.wxBITMAP_TYPE_ANY )
     
     bm_tl_ac1750_c7      = wx.wxBitmap();
     bm_tl_ac1750_c7:LoadFile("./graphics/tl_ac1750_c7.png",wx.wxBITMAP_TYPE_ANY )
