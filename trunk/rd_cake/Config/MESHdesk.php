@@ -893,6 +893,36 @@ $config['hardware'][23]      = array(
 );
 
 $config['hardware'][24]      = array(
+    'name'          => __('ZBT WE1526'),
+    'id'            => 'zbt_we1526' ,
+    'radios'        => 1,
+    'active'        => true,
+    'max_power'     => '20',
+    'eth_br'        => 'eth0 eth1',
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '22',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ldpc'           => true,
+    'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+);
+
+
+
+$config['hardware'][25]      = array(
     'name'          => __('ZBT WE2026'),
     'id'            => 'zbt_we2026' ,
     'radios'        => 1,
@@ -920,7 +950,7 @@ $config['hardware'][24]      = array(
     )
 );
 
-$config['hardware'][25]      = array(
+$config['hardware'][26]      = array(
 		'name' 		    => __('TP-Link Archer C7 (AC)'),	
 		'id'    	    => 'tl_ac1750_c7',
 		'radios'	    => 2, 
@@ -967,7 +997,7 @@ $config['hardware'][25]      = array(
         )
 );
 
-$config['hardware'][26]      = array(
+$config['hardware'][27]      = array(
 		'name' 		    => __('Xiaomi MiWiFi Mini (AC)'),	
 		'id'    	    => 'miwifi_mini',
 		'radios'	    => 2, 
