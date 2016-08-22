@@ -4,33 +4,12 @@ Ext.define('Rd.view.login.pnlLogin', {
     autoCreate  : false,
     xtype       : 'pnlLogin',
     layout      : 'fit',
-    requires    : ['Rd.view.components.compWallpaper','Rd.view.login.pnlAboutMenu'],
+    requires    : ['Rd.view.components.compWallpaper'],
     url         : null,   //Placheholder for wallpaper URL     
     initComponent: function () {
-        var me = this;
-        //Wallpaper background
-        me.items = [{'xtype' : 'compWallpaper','url' : me.url}];
-        
-        var a = Ext.create('Rd.view.login.pnlAboutMenu',{'title': i18n('sAbout_RADIUSdesk')});
-
-        me.tbar = [
-            { 
-                xtype       : 'button',     
-                scale       : 'large', 
-                cls         : 'lblRd', 
-                glyph       : Rd.config.icnInfo, 
-                menu: {
-                    xtype   : 'menu',
-                    border  : false,
-                    plain   : true,
-                    items   : {
-                        xtype   : 'pnlAboutMenu',
-                        border  : false
-                    }
-                }
-            },
-            '->'
-        ];
+        var me      = this;
+        me.items    = [{'xtype' : 'compWallpaper','url' : me.url}];   
+        var a       = Ext.create('Rd.view.login.pnlAboutMenu',{'title': i18n('sAbout_RADIUSdesk')});
         me.add(me.loginWindow());
         me.callParent(arguments);
     },

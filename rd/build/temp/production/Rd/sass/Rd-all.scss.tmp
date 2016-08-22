@@ -1445,7 +1445,6 @@ $include-rd-view-ippools-winippooledit: dynamic(true);;
 $include-rd-view-ippools-winippoolsaddwizard: dynamic(true);;
 $include-rd-view-logviewer-pnlviewfile: dynamic(true);;
 $include-rd-view-logviewer-winradiusinfo: dynamic(true);;
-$include-rd-view-login-pnlaboutmenu: dynamic(true);;
 $include-rd-view-login-pnllogin: dynamic(true);;
 $include-rd-view-meshes-cmbcodec: dynamic(true);;
 $include-rd-view-meshes-cmbcountries: dynamic(true);;
