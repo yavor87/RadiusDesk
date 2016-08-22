@@ -60,7 +60,8 @@ Ext.define('Rd.controller.cDesktop', {
     actionIndex: function(){
         var me      = this;
         var dd      = me.application.getDesktopData();
-        var user    = dd.user.group+'::'+dd.user.username;
+       // var user    = dd.user.group+'::'+dd.user.username;
+        var user    = dd.user.username;
         var cls     = dd.user.cls;
 
         //@@ This is important to create the structure for the taskbar with it's accompanying start menu
@@ -74,19 +75,21 @@ Ext.define('Rd.controller.cDesktop', {
             application: me.application,        //Feed the taskbar with the application
             dock: 'top',
             startConfig: {
-                title: user,
-                iconCls: cls,
-                glyph: Rd.config.icnBug,
-                minHeight: 175,
-                menu: dd.menu,
-                toolConfig: {
-                    width: 120,
-                    items: [
-                        {   text:i18n('sLogout'),      glyph : Rd.config.icnPower,      handler: me.onLogout,   scope: me   },'-',
-                        {   text:i18n('sSettings'),    glyph : Rd.config.icnSpanner ,   handler: me.onSettings, scope: me   },
-                        {   text:i18n('sPassword'),    glyph : Rd.config.icnLock ,      handler: me.onPassword, scope: me   }
-                    ]
-                }
+                title       : user,
+                iconCls     : cls,
+                glyph       : Rd.config.icnBug,
+                minHeight   : 175,
+                menu        : dd.menu
+            },
+            actionsConfig :  {
+                xtype   : 'button',
+                glyph   : Rd.config.icnMenu,
+                scale   : 'medium',
+                menu    : [
+                     {   text:i18n('sLogout'),      glyph : Rd.config.icnPower,      handler: me.onLogout,   scope: me   },'-',
+                     {   text:i18n('sSettings'),    glyph : Rd.config.icnSpanner ,   handler: me.onSettings, scope: me   },
+                     {   text:i18n('sPassword'),    glyph : Rd.config.icnLock ,      handler: me.onPassword, scope: me   }
+                ]  
             }
         };
 

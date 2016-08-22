@@ -12,12 +12,10 @@ Ext.define('Rd.library.lStartMenu', {
     bodyCls     : 'ux-start-menu-body',
     defaultAlign: 'bl-tl',
     iconCls     : 'user',
-    bodyBorder  : true,
-    
-    alias       : 'widget.pnlStartMenu',
-    
-    width       : 320,
-
+    bodyBorder  : true,   
+    alias       : 'widget.pnlStartMenu',   
+   // width       : 320,
+    width       : 280,
     initComponent: function() {
         var me = this;
         me.layout.align = 'stretch';
@@ -33,7 +31,7 @@ Ext.define('Rd.library.lStartMenu', {
                 align: 'stretch'
             }
         }, me.toolConfig));
-        me.addDocked(me.toolbar);
+       // me.addDocked(me.toolbar);
         delete me.toolItems;
     },
 

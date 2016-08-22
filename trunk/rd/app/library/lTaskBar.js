@@ -39,11 +39,17 @@ Ext.define('Rd.library.lTaskBar', {
             },'-',
             me.windowBar,
             '-',
-            {
+            me.actionsConfig
+         /*   {
                 xtype   : 'button',
-                glyph   :  Rd.config.icnMenu,
-                scale   :  'medium'
-            }
+                glyph   : Rd.config.icnMenu,
+                scale   : 'medium',
+                menu    : [
+                     {   text:i18n('sLogout'),      glyph : Rd.config.icnPower,      handler: me.onLogout,   scope: me   },'-',
+                     {   text:i18n('sSettings'),    glyph : Rd.config.icnSpanner ,   handler: me.onSettings, scope: me   },
+                     {   text:i18n('sPassword'),    glyph : Rd.config.icnLock ,      handler: me.onPassword, scope: me   }
+                ]  
+            }*/
            // me.tray
         ];
 
