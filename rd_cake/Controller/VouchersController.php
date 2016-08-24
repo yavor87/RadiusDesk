@@ -254,34 +254,36 @@ class VouchersController extends AppController {
                 $af_hash["$owner_id"] = $this->_get_action_flags($user,$owner_id,$i['Voucher']['realm_id']);
             }
            
-            array_push($items,
-                array(
-                    'id'                    => $i['Voucher']['id'], 
-                    'owner'                 => $i['User']['username'],
-                    'user_id'               => $i['User']['id'],
-                    'batch'                 => $i['Voucher']['batch'],
-                    'name'                  => $i['Voucher']['name'],
-                    'password'              => $i['Voucher']['password'],
-                    'realm'                 => $i['Voucher']['realm'],
-                    'realm_id'              => $i['Voucher']['realm_id'],
-                    'profile'               => $i['Voucher']['profile'],
-                    'profile_id'            => $i['Voucher']['profile_id'],
-                    'perc_time_used'        => $i['Voucher']['perc_time_used'],
-                    'perc_data_used'        => $i['Voucher']['perc_data_used'],
-                    'status'                => $i['Voucher']['status'],
-                    'last_accept_time'      => $i['Voucher']['last_accept_time'],
-                    'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
-                    'last_reject_time'      => $i['Voucher']['last_reject_time'],
-                    'last_reject_nas'       => $i['Voucher']['last_reject_nas'],
-                    'last_reject_message'   => $i['Voucher']['last_reject_message'],
-                    'update'                => $af_hash["$owner_id"]['update'],
-                    'delete'                => $af_hash["$owner_id"]['delete'],
-                    'extra_name'            => $i['Voucher']['extra_name'],
-                    'extra_value'           => $i['Voucher']['extra_value'],
-                    'expire'                => $i['Voucher']['expire'],
-                    'time_valid'            => $i['Voucher']['time_valid']
-                )
-            );
+            if($af_hash["$owner_id"]['read']){     
+                array_push($items,
+                    array(
+                        'id'                    => $i['Voucher']['id'], 
+                        'owner'                 => $i['User']['username'],
+                        'user_id'               => $i['User']['id'],
+                        'batch'                 => $i['Voucher']['batch'],
+                        'name'                  => $i['Voucher']['name'],
+                        'password'              => $i['Voucher']['password'],
+                        'realm'                 => $i['Voucher']['realm'],
+                        'realm_id'              => $i['Voucher']['realm_id'],
+                        'profile'               => $i['Voucher']['profile'],
+                        'profile_id'            => $i['Voucher']['profile_id'],
+                        'perc_time_used'        => $i['Voucher']['perc_time_used'],
+                        'perc_data_used'        => $i['Voucher']['perc_data_used'],
+                        'status'                => $i['Voucher']['status'],
+                        'last_accept_time'      => $i['Voucher']['last_accept_time'],
+                        'last_accept_nas'       => $i['Voucher']['last_accept_nas'],
+                        'last_reject_time'      => $i['Voucher']['last_reject_time'],
+                        'last_reject_nas'       => $i['Voucher']['last_reject_nas'],
+                        'last_reject_message'   => $i['Voucher']['last_reject_message'],
+                        'update'                => $af_hash["$owner_id"]['update'],
+                        'delete'                => $af_hash["$owner_id"]['delete'],
+                        'extra_name'            => $i['Voucher']['extra_name'],
+                        'extra_value'           => $i['Voucher']['extra_value'],
+                        'expire'                => $i['Voucher']['expire'],
+                        'time_valid'            => $i['Voucher']['time_valid']
+                    )
+                );
+            }
         }
         
         $this->set(array(
