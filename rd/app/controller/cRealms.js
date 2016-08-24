@@ -733,7 +733,7 @@ Ext.define('Rd.controller.cRealms', {
     logoSave: function(button){
         var me      = this;
         var form    = button.up('form');
-        var pnl_r   = form.up('pnlRealm');
+        var pnl_r   = form.up('pnlRealmLogo');
         var p_form  = form.up('panel');
         var p_img   = p_form.down('#pnlImg');
         form.submit({
