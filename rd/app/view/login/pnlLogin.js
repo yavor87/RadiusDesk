@@ -8,8 +8,7 @@ Ext.define('Rd.view.login.pnlLogin', {
     url         : null,   //Placheholder for wallpaper URL     
     initComponent: function () {
         var me      = this;
-        me.items    = [{'xtype' : 'compWallpaper','url' : me.url}];   
-        var a       = Ext.create('Rd.view.login.pnlAboutMenu',{'title': i18n('sAbout_RADIUSdesk')});
+        me.items    = [{'xtype' : 'compWallpaper','url' : me.url}];
         me.add(me.loginWindow());
         me.callParent(arguments);
     },

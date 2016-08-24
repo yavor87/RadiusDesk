@@ -184,12 +184,14 @@ Ext.define('Rd.library.lTaskBar', {
 
     removeTaskButton: function (btn) {
         var found, me = this;
-        me.windowBar.items.each(function (item) {
-            if (item === btn) {
-                found = item;
-            }
-            return !found;
-        });
+        if(me.windowBar.items){
+            me.windowBar.items.each(function (item) {
+                if (item === btn) {
+                    found = item;
+                }
+                return !found;
+            });
+        }
         if (found) {
             me.windowBar.remove(found);
         }
@@ -200,11 +202,13 @@ Ext.define('Rd.library.lTaskBar', {
         if (btn) {
             btn.toggle(true);
         } else {
-            this.windowBar.items.each(function (item) {
-                if (item.isButton) {
-                    item.toggle(false);
-                }
-            });
+            if(this.windowBar.items){
+                this.windowBar.items.each(function (item) {
+                    if (item.isButton) {
+                        item.toggle(false);
+                    }
+                });
+            }
         }
     }
 });
