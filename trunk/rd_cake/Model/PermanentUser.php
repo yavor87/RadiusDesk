@@ -106,6 +106,9 @@ class PermanentUser extends AppModel {
         if((isset($this->data['PermanentUser']['token']))&&($this->data['PermanentUser']['token']=='')){
             App::uses('String', 'Utility');
             $this->data['PermanentUser']['token'] = String::uuid();
+        }else{ //If it is not set at all
+            App::uses('String', 'Utility');
+            $this->data['PermanentUser']['token'] = String::uuid();
         }
 
         if(isset($this->data['PermanentUser']['password'])){
