@@ -178,30 +178,32 @@ class DevicesController extends AppController {
                 $action_flags   = $this->_get_action_flags_for_devices($user,$owner_id,$q_r['Realm']['id']);
             }
 
-            array_push($items,
-                array(
-                    'id'            		=> $i['Device']['id'], 
-                    'user'          		=> $i['PermanentUser']['username'],
-                    'permanent_user_id'     => $i['Device']['permanent_user_id'],
-                    'name'          		=> $i['Device']['name'],
-                    'description'   		=> $i['Device']['description'], 
-                    'realm'         		=> $realm,
-                    'profile'       		=> $profile,
-                    //'profile_id'    => $profiles[$profile],
-                    'profile_id'    		=> $p_id,
-                    'perc_time_used'		=> $i['Device']['perc_time_used'],
-                    'perc_data_used'		=> $i['Device']['perc_data_used'],
-                    'active'        		=> $i['Device']['active'],
-                    'last_accept_time'      => $i['Device']['last_accept_time'],
-                    'last_accept_nas'       => $i['Device']['last_accept_nas'],
-                    'last_reject_time'      => $i['Device']['last_reject_time'],
-                    'last_reject_nas'       => $i['Device']['last_reject_nas'],
-                    'last_reject_message'   => $i['Device']['last_reject_message'],
-                    'notes'         		=> $notes_flag,
-                    'update'                => $action_flags['update'],
-                    'delete'                => $action_flags['delete']
-                )
-            );
+            if($action_flags['read']){
+                array_push($items,
+                    array(
+                        'id'            		=> $i['Device']['id'], 
+                        'user'          		=> $i['PermanentUser']['username'],
+                        'permanent_user_id'     => $i['Device']['permanent_user_id'],
+                        'name'          		=> $i['Device']['name'],
+                        'description'   		=> $i['Device']['description'], 
+                        'realm'         		=> $realm,
+                        'profile'       		=> $profile,
+                        //'profile_id'    => $profiles[$profile],
+                        'profile_id'    		=> $p_id,
+                        'perc_time_used'		=> $i['Device']['perc_time_used'],
+                        'perc_data_used'		=> $i['Device']['perc_data_used'],
+                        'active'        		=> $i['Device']['active'],
+                        'last_accept_time'      => $i['Device']['last_accept_time'],
+                        'last_accept_nas'       => $i['Device']['last_accept_nas'],
+                        'last_reject_time'      => $i['Device']['last_reject_time'],
+                        'last_reject_nas'       => $i['Device']['last_reject_nas'],
+                        'last_reject_message'   => $i['Device']['last_reject_message'],
+                        'notes'         		=> $notes_flag,
+                        'update'                => $action_flags['update'],
+                        'delete'                => $action_flags['delete']
+                    )
+                );
+            }
         }
         
         $this->set(array(

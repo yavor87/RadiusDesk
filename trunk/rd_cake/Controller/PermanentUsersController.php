@@ -142,47 +142,50 @@ class PermanentUsersController extends AppController {
             $action_flags['update'] = false;
             $action_flags['delete'] = false;
             $action_flags   = $this->_get_action_flags($user,$owner_id,$i['PermanentUser']['realm_id']);
+              
+            if($action_flags['read']){
+                array_push($items,
+                    array(
+                        'id'        			=> $i['PermanentUser']['id'], 
+                        'owner'     			=> $owner_tree,				//FIXME
+					    'owner_id'				=> $i['PermanentUser']['user_id'], //FIXME
+                        'username'  			=> $i['PermanentUser']['username'],
+                        'name'      			=> $i['PermanentUser']['name'],
+                        'surname'   			=> $i['PermanentUser']['surname'], 
+                        'phone'     			=> $i['PermanentUser']['phone'], 
+                        'email'     			=> $i['PermanentUser']['email'],
+                        'address'   			=> $i['PermanentUser']['address'],
+                        'auth_type' 			=> $i['PermanentUser']['auth_type'],
 
-            array_push($items,
-                array(
-                    'id'        			=> $i['PermanentUser']['id'], 
-                    'owner'     			=> $owner_tree,				//FIXME
-					'owner_id'				=> $i['PermanentUser']['user_id'], //FIXME
-                    'username'  			=> $i['PermanentUser']['username'],
-                    'name'      			=> $i['PermanentUser']['name'],
-                    'surname'   			=> $i['PermanentUser']['surname'], 
-                    'phone'     			=> $i['PermanentUser']['phone'], 
-                    'email'     			=> $i['PermanentUser']['email'],
-                    'address'   			=> $i['PermanentUser']['address'],
-                    'auth_type' 			=> $i['PermanentUser']['auth_type'],
+                        'perc_time_used'		=> $i['PermanentUser']['perc_time_used'],
+                        'perc_data_used'		=> $i['PermanentUser']['perc_data_used'],
+                        'active'    			=> $i['PermanentUser']['active'], 
+                        'last_accept_time'      => $i['PermanentUser']['last_accept_time'],
+                        'last_accept_nas'       => $i['PermanentUser']['last_accept_nas'],
+                        'last_reject_time'      => $i['PermanentUser']['last_reject_time'],
+                        'last_reject_nas'       => $i['PermanentUser']['last_reject_nas'],
+                        'last_reject_message'   => $i['PermanentUser']['last_reject_message'],
 
-                    'perc_time_used'		=> $i['PermanentUser']['perc_time_used'],
-                    'perc_data_used'		=> $i['PermanentUser']['perc_data_used'],
-                    'active'    			=> $i['PermanentUser']['active'], 
-                    'last_accept_time'      => $i['PermanentUser']['last_accept_time'],
-                    'last_accept_nas'       => $i['PermanentUser']['last_accept_nas'],
-                    'last_reject_time'      => $i['PermanentUser']['last_reject_time'],
-                    'last_reject_nas'       => $i['PermanentUser']['last_reject_nas'],
-                    'last_reject_message'   => $i['PermanentUser']['last_reject_message'],
-
-                    'data_used'             => $i['PermanentUser']['data_used'],
-                    'data_cap'              => $i['PermanentUser']['data_cap'],
-					'time_used'             => $i['PermanentUser']['time_used'],
-                    'time_cap'              => $i['PermanentUser']['time_cap'],
-					'time_cap_type'         => $i['PermanentUser']['time_cap_type'],
-                    'date_cap_type'         => $i['PermanentUser']['data_cap_type'],
-					'realm'                 => $i['PermanentUser']['realm'],
-					'realm_id'              => $i['PermanentUser']['realm_id'],
-					'profile'               => $i['PermanentUser']['profile'],
-					'profile_id'            => $i['PermanentUser']['profile_id'],
-                    'static_ip'             => $i['PermanentUser']['static_ip'],
-					'extra_name'            => $i['PermanentUser']['extra_name'],
-					'extra_value'           => $i['PermanentUser']['extra_value'],
-                    'notes'                 => $notes_flag,
-                    'update'                => $action_flags['update'],
-                    'delete'                => $action_flags['delete']
-                )
-            );
+                        'data_used'             => $i['PermanentUser']['data_used'],
+                        'data_cap'              => $i['PermanentUser']['data_cap'],
+					    'time_used'             => $i['PermanentUser']['time_used'],
+                        'time_cap'              => $i['PermanentUser']['time_cap'],
+					    'time_cap_type'         => $i['PermanentUser']['time_cap_type'],
+                        'date_cap_type'         => $i['PermanentUser']['data_cap_type'],
+					    'realm'                 => $i['PermanentUser']['realm'],
+					    'realm_id'              => $i['PermanentUser']['realm_id'],
+					    'profile'               => $i['PermanentUser']['profile'],
+					    'profile_id'            => $i['PermanentUser']['profile_id'],
+                        'static_ip'             => $i['PermanentUser']['static_ip'],
+					    'extra_name'            => $i['PermanentUser']['extra_name'],
+					    'extra_value'           => $i['PermanentUser']['extra_value'],
+                        'notes'                 => $notes_flag,
+                        'update'                => $action_flags['update'],
+                        'delete'                => $action_flags['delete']
+                    )
+                );
+            }
+            
         }                
         $this->set(array(
             'items'         => $items,
@@ -2047,6 +2050,7 @@ class PermanentUsersController extends AppController {
                     'foreign_key'   => $user['id']), 
                     "Access Providers/Other Rights/View users or vouchers not created self")
                 ){
+                    //Only those realms that this user has specified to have read access to
                     $read = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realm','foreign_key' => $realm_id), 'read');

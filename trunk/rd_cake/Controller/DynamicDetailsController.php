@@ -883,8 +883,7 @@ class DynamicDetailsController extends AppController {
         ));
 	}
 
-
-     public function view(){
+    public function view(){
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();

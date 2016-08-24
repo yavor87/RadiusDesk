@@ -2675,8 +2675,6 @@ class MeshesController extends AppController {
             return array('update' => true, 'delete' => true, 'view' => true);
         }
 
-        
-
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $user_id = $user['id'];
 
