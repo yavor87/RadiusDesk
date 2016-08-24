@@ -106,6 +106,9 @@ class User extends AppModel {
         if((isset($this->data['User']['token']))&&($this->data['User']['token']=='')){
             App::uses('String', 'Utility');
             $this->data['User']['token'] = String::uuid();
+        }else{ //If it is not set at all
+            App::uses('String', 'Utility');
+            $this->data['User']['token'] = String::uuid();
         }
 
         if(isset($this->data['User']['password'])){
