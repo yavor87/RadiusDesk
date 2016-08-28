@@ -677,7 +677,10 @@ Local = {
         'sSystem_time' : 'System time',
         'sCPU' : 'CPU',
         'sRegistration' : 'Registration',
-        'sUser_registration' : 'User registration'
+        'sUser_registration' : 'User registration',
+        'sSuffix' : 'Suffix',
+        'sAdd_suffix_when_creating_Permanent_Users' : 'Add suffix when creating Permanent Users',
+        'sAdd_suffix_when_creating_Vouchers' : 'Add suffix when creating Vouchers'
     }
 }
 

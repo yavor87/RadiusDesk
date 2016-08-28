@@ -103,6 +103,7 @@ Ext.define('Rd.view.realms.winRealmAddWizard', {
                     plain   : true,
                     tabPosition: 'bottom',
                     border  : false,
+                    cls     : 'subTab',
                     items   : [
                         { 
                             'title'     : i18n('sRequired_info'),

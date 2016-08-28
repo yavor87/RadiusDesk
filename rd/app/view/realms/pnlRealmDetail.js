@@ -72,6 +72,32 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                                         inputValue  : 'available_to_siblings',
                                         checked     : false,
                                         cls         : 'lblRd'
+                                    },
+                                    {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : i18n('sSuffix'),
+                                        name        : "suffix",
+                                        allowBlank  : true,
+                                        blankText   : i18n("sSupply_a_value"),
+                                        labelClsExtra: 'lblRd',
+                                        regex       : /^[\w\-_\.]+$/,
+                                        regexText   : "Only words, underscores, dashes and full stops allowed"
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
+                                        boxLabel    : i18n('sAdd_suffix_when_creating_Permanent_Users'),
+                                        name        : 'suffix_permanent_users',
+                                        inputValue  : 'suffix_permanent_users',
+                                        checked     : false,
+                                        cls         : 'lblRd'
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
+                                        boxLabel    : i18n('sAdd_suffix_when_creating_Vouchers'),
+                                        name        : 'suffix_vouchers',
+                                        inputValue  : 'suffix_vouchers',
+                                        checked     : false,
+                                        cls         : 'lblRd'
                                     }
                                 ]
                             },
