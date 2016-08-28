@@ -1019,6 +1019,18 @@ class RealmsController extends AppController {
         }else{
             $this->request->data['available_to_siblings'] = 0;
         }
+        
+        if(isset($this->request->data['suffix_permanent_users'])){
+            $this->request->data['suffix_permanent_users'] = 1;
+        }else{
+            $this->request->data['suffix_permanent_users'] = 0;
+        }
+        
+        if(isset($this->request->data['suffix_vouchers'])){
+            $this->request->data['suffix_vouchers'] = 1;
+        }else{
+            $this->request->data['suffix_vouchers'] = 0;
+        }
 
         if ($this->{$this->modelClass}->save($this->request->data)) {
             $this->set(array(
@@ -1051,6 +1063,18 @@ class RealmsController extends AppController {
             $this->request->data['available_to_siblings'] = 1;
         }else{
             $this->request->data['available_to_siblings'] = 0;
+        }
+        
+        if(isset($this->request->data['suffix_permanent_users'])){
+            $this->request->data['suffix_permanent_users'] = 1;
+        }else{
+            $this->request->data['suffix_permanent_users'] = 0;
+        }
+        
+        if(isset($this->request->data['suffix_vouchers'])){
+            $this->request->data['suffix_vouchers'] = 1;
+        }else{
+            $this->request->data['suffix_vouchers'] = 0;
         }
 
 		if ($this->Realm->save($this->request->data)) {
@@ -1110,7 +1134,8 @@ class RealmsController extends AppController {
 			'id',		'name',			'phone',		'fax',			'cell',		'email',
 			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
 			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
-			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings',	'icon_file_name'	
+			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings',	'icon_file_name',
+			'suffix',   'suffix_permanent_users',       'suffix_vouchers'
 		);
 
         $items = array();
