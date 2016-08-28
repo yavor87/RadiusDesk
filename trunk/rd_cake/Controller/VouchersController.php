@@ -348,12 +348,21 @@ class VouchersController extends AppController {
 
         $realm      = false;
         $realm_id   = false;
+        
+        //We also check if we need to add a suffix to the username
+        $suffix          = '';
+        $suffix_vouchers = false;
+        
+        
         if(array_key_exists('realm',$this->request->data)){
             $realm      = $this->request->data['realm'];
             $this->Realm->contain();
             $q_r        = $this->Realm->findByName($realm);
             $realm_id   = $q_r['Realm']['id']; 
-            $this->request->data['realm_id'] = $realm_id;  
+            $this->request->data['realm_id'] = $realm_id; 
+            
+            $suffix     =  $q_r['Realm']['suffix']; 
+            $suffix_vouchers = $q_r['Realm']['suffix_vouchers']; 
         }
 
         if(array_key_exists('realm_id',$this->request->data)){
@@ -361,7 +370,10 @@ class VouchersController extends AppController {
             $this->Realm->contain();
             $q_r        = $this->Realm->findById($realm_id);
             $realm      = $q_r['Realm']['name'];
-            $this->request->data['realm'] = $realm;    
+            $this->request->data['realm'] = $realm; 
+            
+            $suffix     =  $q_r['Realm']['suffix']; 
+            $suffix_vouchers = $q_r['Realm']['suffix_vouchers'];    
         }
 
         if(($realm == false)||($realm_id == false)){
@@ -373,6 +385,10 @@ class VouchersController extends AppController {
             ));
             return;
         }
+        
+        
+       
+        
         //______ END of Realm and Profile check _____
 
 		//Check if this is a single field voucher or not
@@ -407,8 +423,16 @@ class VouchersController extends AppController {
 					//	$this->log('Add a voucher with name and password specified', 'debug');
 					//}else{
 						$pwd = $this->VoucherGenerator->generateVoucher();
+						
 						$this->request->data['name']      = $pwd; 
-		        		$this->request->data['password']  = $pwd;
+		        		$this->request->data['password']  = $pwd;		        		
+		        		
+		        		//Update the auto add of the suffix if it is specified and enabled
+                        if(($suffix != '')&&($suffix_vouchers)){
+                            $this->request->data['name'] = $pwd.'@'.$suffix;
+                            $this->request->data['password'] = $pwd.'@'.$suffix;
+                        }
+		        		
 					//}	
 				}
 

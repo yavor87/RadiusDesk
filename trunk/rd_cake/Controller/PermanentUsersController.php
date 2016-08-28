@@ -242,12 +242,14 @@ class PermanentUsersController extends AppController {
          //_____We need the profile name / id and the realm name / id before we can continue___
         $profile    = false;
         $profile_id = false;
+           
         if(array_key_exists('profile',$this->request->data)){
             $profile    = $this->request->data['profile'];
             $this->Profile->contain();
             $q_r        = $this->Profile->findByName($profile);
             $profile_id = $q_r['Profile']['id'];
-            $this->request->data['profile_id'] = $profile_id;   
+            $this->request->data['profile_id'] = $profile_id;  
+            
         }
 
         if(array_key_exists('profile_id',$this->request->data)){
@@ -270,12 +272,19 @@ class PermanentUsersController extends AppController {
 
         $realm      = false;
         $realm_id   = false;
+        
+        //We also check if we need to add a suffix to the username
+        $suffix                 = '';
+        $suffix_permanent_users = false;
+        
         if(array_key_exists('realm',$this->request->data)){
             $realm      = $this->request->data['realm'];
             $this->Realm->contain();
             $q_r        = $this->Realm->findByName($realm);
             $realm_id   = $q_r['Realm']['id']; 
             $this->request->data['realm_id'] = $realm_id;  
+            $suffix     =  $q_r['Realm']['suffix']; 
+            $suffix_permanent_users = $q_r['Realm']['suffix_permanent_users'];
         }
 
         if(array_key_exists('realm_id',$this->request->data)){
@@ -283,7 +292,9 @@ class PermanentUsersController extends AppController {
             $this->Realm->contain();
             $q_r        = $this->Realm->findById($realm_id);
             $realm      = $q_r['Realm']['name'];
-            $this->request->data['realm'] = $realm;    
+            $this->request->data['realm'] = $realm;
+            $suffix     =  $q_r['Realm']['suffix']; 
+            $suffix_permanent_users = $q_r['Realm']['suffix_permanent_users'];    
         }
 
         if(($realm == false)||($realm_id == false)){
@@ -296,6 +307,12 @@ class PermanentUsersController extends AppController {
             return;
         }
         //______ END of Realm and Profile check _____
+        
+        //Update the auto add of the suffix if it is specified and enabled
+        if(($suffix != '')&&($suffix_permanent_users)){
+            $this->request->data['username'] = $this->request->data['username'].'@'.$suffix;
+        }
+        
 
         //Zero the token to generate a new one for this user:
         $this->request->data['token'] = '';
