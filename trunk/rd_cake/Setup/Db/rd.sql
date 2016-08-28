@@ -3544,6 +3544,9 @@ CREATE TABLE `realms` (
   `linkedin` varchar(255) NOT NULL DEFAULT '',
   `t_c_title` varchar(255) NOT NULL DEFAULT '',
   `t_c_content` text NOT NULL,
+  `suffix` char(200) NOT NULL DEFAULT '',
+  `suffix_permanent_users` tinyint(1) NOT NULL DEFAULT '0',
+  `suffix_vouchers` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3554,7 +3557,7 @@ CREATE TABLE `realms` (
 
 LOCK TABLES `realms` WRITE;
 /*!40000 ALTER TABLE `realms` DISABLE KEYS */;
-INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','0128047000','0128047041','0128047041','info@residence.co.za','http://residence.co.za','601','Graniet Street','Silverton','Pretoria','South Africa',0,0,44,'2013-08-24 22:18:31','2015-08-20 13:54:58','http://twitter.com','http://facebook.com','http://youtube.com','','','T&C + Help','Connect to SSID Residence Inn.\nOpen your browser.\nGo to a website that starts with \'http://\'.\nA login page will appear.\nSupply the voucher and click \'connect\'.'),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47','','','','','','','');
+INSERT INTO `realms` VALUES (34,'Residence Inn',0,'logo.jpg','0128047000','0128047041','0128047041','info@residence.co.za','http://residence.co.za','601','Graniet Street','Silverton','Pretoria','South Africa',0,0,44,'2013-08-24 22:18:31','2015-08-20 13:54:58','http://twitter.com','http://facebook.com','http://youtube.com','','','T&C + Help','Connect to SSID Residence Inn.\nOpen your browser.\nGo to a website that starts with \'http://\'.\nA login page will appear.\nSupply the voucher and click \'connect\'.','',0,0),(35,'College',0,'logo.jpg','','','','','','','','','','',0,0,182,'2013-08-28 11:31:47','2013-08-28 11:31:47','','','','','','','','',0,0);
 /*!40000 ALTER TABLE `realms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4125,4 +4128,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-28 22:11:52
+-- Dump completed on 2016-08-28 21:33:11
