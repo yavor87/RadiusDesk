@@ -292,27 +292,6 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                                         disabled    : true,
 						                extraParam  : me.user_id
                                     },
-                                    {
-								        xtype       : 'checkbox',      
-								        fieldLabel  : 'Auto-add suffix',
-								        itemId      : 'chkRegAutoSuffix',
-								        name        : 'reg_auto_suffix_check',
-								        inputValue  : 'reg_auto_suffix_check',
-								        checked     : true,
-								        labelClsExtra: 'lblRdReq',
-								        disabled    : true,
-								        listeners   : {
-                                            change : 'onChkRegAutoSuffixChange'
-                                        } 
-								    },
-									{
-								        xtype       : 'textfield',
-								        fieldLabel  : 'Suffix',
-								        itemId      : 'txtRegSuffix',
-								        name        : 'reg_auto_suffix',
-								        disabled    : true,
-								        labelClsExtra: 'lblRdReq'
-								    },
 								    {
 								        xtype       : 'checkbox',      
 								        boxLabel    : 'One user registration per device',
