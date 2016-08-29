@@ -966,8 +966,9 @@ class DynamicDetailsController extends AppController {
                 //User registration add on
                 $items['realm_id']                  = $q_r['DynamicDetail']['realm_id'];
                 $items['profile_id']                = $q_r['DynamicDetail']['profile_id'];
-                $items['reg_auto_suffix_check']     = $q_r['DynamicDetail']['reg_auto_suffix_check'];
-                $items['reg_auto_suffix']           = $q_r['DynamicDetail']['reg_auto_suffix'];
+                ///This is taken care of on the realm itself
+                /// $items['reg_auto_suffix_check']     = $q_r['DynamicDetail']['reg_auto_suffix_check'];
+                /// $items['reg_auto_suffix']           = $q_r['DynamicDetail']['reg_auto_suffix'];
                 $items['reg_mac_check']             = $q_r['DynamicDetail']['reg_mac_check'];
                 $items['reg_auto_add']              = $q_r['DynamicDetail']['reg_auto_add'];
                 $items['reg_email']                 = $q_r['DynamicDetail']['reg_email'];
