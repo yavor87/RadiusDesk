@@ -73,7 +73,6 @@ class Mesh extends AppModel {
     );
 
     public function beforeSave($options = array()) {
-
         if(isset($this->data['Mesh']['id'])){
             if($this->data['Mesh']['id'] == ''){
                 $bssid = $this->_determine_mesh_bssid();
@@ -81,6 +80,11 @@ class Mesh extends AppModel {
                 $this->data['Mesh']['ssid']  = $ssid;
                 $this->data['Mesh']['bssid'] = $bssid; 
             }
+        }else{
+            $bssid = $this->_determine_mesh_bssid();
+            $ssid  = str_replace(":", "_", "$bssid");
+            $this->data['Mesh']['ssid']  = $ssid;
+            $this->data['Mesh']['bssid'] = $bssid; 
         }
     }
 
