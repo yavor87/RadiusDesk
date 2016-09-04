@@ -544,7 +544,7 @@ class RadacctsController extends AppController {
 
             $menu = array(
                         array('xtype' => 'buttongroup','title' => __('Action'),                 'items' => $action_group),
-                        array('xtype' => 'buttongroup','title' => __('Document'),'width'=> 75,  'items' => $document_group),
+                        array('xtype' => 'buttongroup','title' => __('Document'),               'items' => $document_group),
                         array('xtype' => 'buttongroup','title' => __('Extra actions'),          'items' => $specific_group)
                     );
         }
