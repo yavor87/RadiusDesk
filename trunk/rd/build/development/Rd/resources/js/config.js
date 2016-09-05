@@ -105,6 +105,8 @@ Rd.config = {
     'icnDynamicNas' : 'xf239@FontAwesome',
     'icnQuestion'   : 'xf059@FontAwesome',
     'icnCheck'      : 'xf058@FontAwesome',
-    'icnCloud'      : 'xf0c2@FontAwesome'
+    'icnCloud'      : 'xf0c2@FontAwesome',
+    'icnMeshEdit'   : 'xf044@FontAwesome',
+    'icnWizard'     : 'xf0d0@FontAwesome'
 }
 

@@ -248,7 +248,7 @@ Local = {
         "sRecord_authentication_requests": "Record authentication requests",
         "sAuto_close_stale_sessions": "Auto close stale sessions",
         "sAuto_close_activation_time": "Auto close activation time",
-        "sAvailable_to_sub_providers": "Available to sub-providers",
+        "sMake_available_to_sub_providers": "Make available to sub-providers",
         "sConnection_type": "Connection type",
         "sAvailable_to_sub_providers": "Available to sub-providers",
         "sMake_available_to_any_realm": "Make available to any realm",
@@ -591,7 +591,7 @@ Local = {
         "sMap": "Map",
         "sEdit_mesh_entry_point": "Edit mesh entry point",
         "sEdit_mesh_exit_point": "Edit mesh exit point",
-        "sMESHdesk_overview": "MESHdesk overview",
+        "sMESHdesk": "MESHdesk",
         "sNew_mesh_entry_point_added": "New mesh entry point added",
         "sNew_mesh_enty_point_created_fine": "New mesh enty point created fine",
         "sItem_added_fine": "Item added fine",
@@ -664,7 +664,23 @@ Local = {
         'sMacFilter' : 'MAC Filter',
         'sDisabled' : 'Disabled',
         'sDeny' : 'Deny',
-        'sBYOD_Belonging_To' : 'BYOD Owner'     
+        'sBYOD_Belonging_To' : 'BYOD Owner',
+        'sOnline' : 'Online',
+        'sMeshes' : 'Meshes',
+        'sKnown_Nodes': 'Known_Nodes',
+        'sUnknown_Nodes': 'Unknown Nodes',
+        'sView': 'View',
+        'sLast_command': 'Last Command',
+        'sHardware': 'Hardware',
+        'sFirmware': 'Firmware',
+        'sSystem_load': 'System load',
+        'sSystem_time' : 'System time',
+        'sCPU' : 'CPU',
+        'sRegistration' : 'Registration',
+        'sUser_registration' : 'User registration',
+        'sSuffix' : 'Suffix',
+        'sAdd_suffix_when_creating_Permanent_Users' : 'Add suffix when creating Permanent Users',
+        'sAdd_suffix_when_creating_Vouchers' : 'Add suffix when creating Vouchers'
     }
 }
 
