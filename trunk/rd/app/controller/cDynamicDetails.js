@@ -57,10 +57,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
 		'components.cmbProfile',			'dynamicDetails.pnlDynamicDetailSocialLogin'  ,
 		'dynamicDetails.cmbDynamicDetailLanguages'     
     ],
-    stores: ['sDynamicDetails','sAccessProvidersTree', 'sThemes', 'sPermanentUsers','sProfiles','sRealms'],
+    stores: ['sDynamicDetails','sAccessProvidersTree', 'sPermanentUsers','sProfiles','sRealms'],
     models: [
 		'mDynamicDetail','mAccessProviderTree','mDynamicPhoto', 
-		'mDynamicPage', 'mDynamicPair', 'mTheme', 'mPermanentUser',
+		'mDynamicPage', 'mDynamicPair', 'mPermanentUser',
 		'mProfile',		'mRealm'
 	],
     selectedRecord: null,

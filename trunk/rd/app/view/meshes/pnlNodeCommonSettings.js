@@ -9,7 +9,7 @@ Ext.define('Rd.view.meshes.pnlNodeCommonSettings', {
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Rd.view.meshes.cmbCountries',      
+        'Rd.view.components.cmbCountries',      
         'Rd.view.components.cmbTimezones'
     ],
     initComponent: function(){

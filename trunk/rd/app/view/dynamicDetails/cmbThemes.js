@@ -3,15 +3,39 @@ Ext.define('Rd.view.dynamicDetails.cmbThemes', {
     alias           : 'widget.cmbThemes',
     fieldLabel      : 'Theme',
     labelSeparator  : '',
-    store           : 'sThemes',
     queryMode       : 'local',
     valueField      : 'id',
     displayField    : 'name',
-    allowBlank      : false,
     editable        : false,
     mode            : 'local',
     itemId          : 'theme',
     name            : 'theme',
     value           : 'Default',
-    labelClsExtra   : 'lblRd'
+    multiSelect     : false,
+    labelClsExtra   : 'lblRd',
+    allowBlank      : false,
+    excludeCustom   : false,
+    initComponent: function(){
+        var me      = this;
+        var s       = Ext.create('Ext.data.Store', {
+            fields  : ['id', 'name'],
+            proxy   : {
+                    type        : 'ajax',
+                    format      : 'json',
+                    batchActions: true,
+                    extraParams : {
+                        exclude_custom : me.excludeCustom
+                    }, 
+                    url         : '/cake2/rd_cake/dynamic_details/available_themes.json',
+                    reader      : {
+                        type            : 'json',
+                        rootProperty    : 'items',
+                        messageProperty : 'message'
+                    }
+            },
+            autoLoad: true
+        });
+        me.store = s;
+        me.callParent(arguments);
+    }
 });
