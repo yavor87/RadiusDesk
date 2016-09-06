@@ -321,7 +321,7 @@ class DynamicDetailsController extends AppController {
 		    $q_r = $this->{$this->modelClass}->findByName($this->request->query['wizard_name']);
 		    if($q_r){
 		        $this->request->query['dynamic_id'] = $q_r['DynamicDetail']['id'];
-		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'];
+		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'].'&uamip=10.1.0.1&uamport=3990';
 		    }   
 	    }else{
 		    $this->{$this->modelClass}->contain();
@@ -361,7 +361,7 @@ class DynamicDetailsController extends AppController {
 		    $q_r = $this->{$this->modelClass}->findByName($this->request->query['wizard_name']);
 		    if($q_r){
 		        $this->request->query['dynamic_id'] = $q_r['DynamicDetail']['id'];
-		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'];
+		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'].'&uamip=10.1.0.1&uamport=3990';
 		    }   
 	    }else{
 		    $this->{$this->modelClass}->contain();
