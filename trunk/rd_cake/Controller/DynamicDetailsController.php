@@ -315,9 +315,18 @@ class DynamicDetailsController extends AppController {
     
 	//----- Give better preview pages -----
 	public function preview_chilli_desktop(){
-
-		$this->{$this->modelClass}->contain();
-		$q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+	
+	    if(isset($this->request->query['wizard_name'])){
+	        $this->{$this->modelClass}->contain();
+		    $q_r = $this->{$this->modelClass}->findByName($this->request->query['wizard_name']);
+		    if($q_r){
+		        $this->request->query['dynamic_id'] = $q_r['DynamicDetail']['id'];
+		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'];
+		    }   
+	    }else{
+		    $this->{$this->modelClass}->contain();
+		    $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+        }
       	
 		//See which Theme are selected
 		$theme = 'Default';
@@ -347,8 +356,17 @@ class DynamicDetailsController extends AppController {
 
 	public function preview_chilli_mobile(){
 
-		$this->{$this->modelClass}->contain();
-		$q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+	    if(isset($this->request->query['wizard_name'])){
+	        $this->{$this->modelClass}->contain();
+		    $q_r = $this->{$this->modelClass}->findByName($this->request->query['wizard_name']);
+		    if($q_r){
+		        $this->request->query['dynamic_id'] = $q_r['DynamicDetail']['id'];
+		        $_SERVER['QUERY_STRING'] = $_SERVER['QUERY_STRING'].'&dynamic_id='.$this->request->query['dynamic_id'];
+		    }   
+	    }else{
+		    $this->{$this->modelClass}->contain();
+		    $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_id']);
+        }
       	
 		//See which Theme are selected
 		$theme = 'Default';
@@ -370,7 +388,7 @@ class DynamicDetailsController extends AppController {
 		    }
 		    $redir_to = $pages['coova_mobile'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";
 		}
-
+		
         $this->response->header('Location', $redir_to);
 	}
 	
@@ -1869,13 +1887,21 @@ class DynamicDetailsController extends AppController {
 
 	public function available_themes(){
 
+        
         $items = array();
         Configure::load('DynamicLogin'); 
         $data       = Configure::read('DynamicLogin.theme');
         foreach(array_keys($data) as $i){
-           array_push($items, array('name' => $i,'id' => $i));
+            array_push($items, array('name' => $i,'id' => $i));   
         }
-
+        
+        if(
+            (isset($this->request->query['exclude_custom']))&&
+            ($this->request->query['exclude_custom'] == 'true')
+        ){
+           array_shift($items); //Remove the first item which will be "Custom" in the config file
+        }
+            
         $this->set(array(
             'items' => $items,
             'success' => true,
