@@ -5,7 +5,7 @@ var rdDynamic = (function () {
     
     
         //=====Constants======
-        cDynUrl         = "http://"+document.location.hostname+"/cake2/rd_cake/dynamic_details/info_for.json";
+        cDynUrl         = location.protocol+'//'+document.location.hostname+"/cake2/rd_cake/dynamic_details/info_for.json";
         cAjaxTimeout    = 3000;
         cDynamicData    = undefined; //Will be populated when gettting DynamicDetail from back-end
         cDebug          = false;
@@ -87,7 +87,6 @@ var rdDynamic = (function () {
         
         var getDynamicDetail = function(){
             var h       = document.location.hostname;
-		    var dynUrl  = "http://"+h+"/cake2/rd_cake/dynamic_details/info_for.json";
             var s       = document.location.search;
             
             fDebug("Fetching DynamicDetail");

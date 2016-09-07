@@ -6,12 +6,12 @@ var rdConnect = (function () {
         var uamIp,uamPort;  //Variables with 'global' scope
 
         var h               = document.location.hostname;
-        var urlUse          = 'http://'+h+'/cake2/rd_cake/radaccts/get_usage.json'
-        var urlUam          = 'http://'+h+'/rd_login/services/uam.php';
-	    var urlSocialBase   = 'http://'+h+'/cake2/rd_cake/auth/'; //Be sure this is the same as specified in FB e.g. IP or DNS!!
-	    var urlSocialInfoFor= 'http://'+h+'/cake2/rd_cake/third_party_auths/info_for.json'; //To pull the username and password associated with this ID + typ 
-	    var urlAdd			= 'http://'+h+'/cake2/rd_cake/register_users/new_permanent_user.json';
-		var urlLostPw		= 'http://'+h+'/cake2/rd_cake/register_users/lost_password.json';
+        var urlUse          = location.protocol+'//'+h+'/cake2/rd_cake/radaccts/get_usage.json'
+        var urlUam          = location.protocol+'//'+h+'/rd_login/services/uam.php';
+	    var urlSocialBase   = location.protocol+'//'+h+'/cake2/rd_cake/auth/'; //Be sure this is the same as specified in FB e.g. IP or DNS!!
+	    var urlSocialInfoFor= location.protocol+'//'+h+'/cake2/rd_cake/third_party_auths/info_for.json'; //To pull the username and password associated with this ID + typ 
+	    var urlAdd			= location.protocol+'//'+h+'/cake2/rd_cake/register_users/new_permanent_user.json';
+		var urlLostPw		= location.protocol+'//'+h+'/cake2/rd_cake/register_users/lost_password.json';
 		
         var counter         = undefined; //refresh counter's id
         var timeUntilStatus = 20; //interval to refresh
