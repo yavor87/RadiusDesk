@@ -147,7 +147,7 @@ function rdActions.__fetchActions(self)
 
     --Remove old results                                                                                              
     os.remove(self.results)
-    os.execute('curl -o '..self.results..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
+    os.execute('curl -k -o '..self.results..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
     
     --Read the results
     local f=io.open(self.results,"r")

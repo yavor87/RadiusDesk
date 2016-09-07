@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
-PKG_VERSION:=3.1.0
+PKG_VERSION:=4.0.0
 PKG_RELEASE:=0
 
 include $(INCLUDE_DIR)/package.mk
@@ -57,7 +57,6 @@ define Package/zzz-MESHdesk/install
 	cp ./files/MESHdesk/alfred_scripts/alfred_meshdesk_scripts.sh $(1)/etc/alfred
 	mkdir -p $(1)/etc/chilli/www
 	cp ./files/MESHdesk/files/common/radiusdesk.html $(1)/etc/chilli/www
-	cp ./files/MESHdesk/files/common/rd.png $(1)/etc/chilli/www
 endef
 
 define Package/zzz-MESHdesk/postinst

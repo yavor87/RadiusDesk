@@ -75,7 +75,7 @@ function submitReport()
 
     --Remove old results                                                                                              
     os.remove(result_file)
-    os.execute('curl -o '..result_file..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
+    os.execute('curl -k -o '..result_file..' -X POST -H "Content-Type: application/json" -d \''..curl_data..'\' '..query)
     
     --Read the results
     local f=io.open(result_file,"r")
