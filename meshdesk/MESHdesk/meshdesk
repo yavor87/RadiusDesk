@@ -175,6 +175,11 @@ config hardware 'zbt_we1526'
     option internet_led '/sys/class/leds/zbt-we1526:green:wan/brightness'
     option wifi_led 'zbt-we1526:green:wlan'
     
+config hardware 'zbt_we3826'
+    option morse_led '/sys/class/leds/zbt-we3826:green:power/brightness'
+    option internet_led '/sys/class/leds/zbt-we3826:green:usb/brightness'
+    option wifi_led 'zbt-we3826:green:wifi'
+    
 config hardware 'tl_ac1750_c7'
     option morse_led '/sys/class/leds/tp-link:blue:qss/brightness'
 	option internet_led '/sys/class/leds/tp-link:blue:wan/brightness'

@@ -77,7 +77,7 @@ function rdConfig:fetchSettings(url,device_id,gateway)
 	url = url.."?mac="..device_id.."&gateway=".. gw
 	self:log("URL is "..url)
 	
-      	local retval = os.execute("curl -o '" .. self.new_file .."' '" .. url .."'")
+      	local retval = os.execute("curl -k -o '" .. self.new_file .."' '" .. url .."'")
       	self:log("The return value of curl is "..retval)
       	if(retval ~= 0)then
       		self:log("Problem executing command to fetch config")
