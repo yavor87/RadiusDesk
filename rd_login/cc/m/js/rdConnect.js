@@ -585,9 +585,9 @@ $$('sliderData').refresh();
 			    ($$('Username').getValue().length != 0)
 			){
 				//Check if not already in username
-				var re = new RegExp(".*"+auto_suffix+"$");
+				var re = new RegExp(".+@"+auto_suffix+"$");
 				if(userName.match(re)==null){
-				    userName = userName+auto_suffix;
+				    userName = userName+'@'+auto_suffix;
 				}
 			}
 			
