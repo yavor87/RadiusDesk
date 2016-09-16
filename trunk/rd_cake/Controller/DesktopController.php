@@ -269,6 +269,7 @@ class DesktopController extends AppController {
                         array(  'text'  => __('Translation manager'), 'glyph' => Configure::read('icnTranslate'),'itemId' => 'cI18n'),
                         array(  'text'  => __('Rights manager'),    'glyph' => Configure::read('icnKey'), 'itemId' => 'cAcos'),
 						array( 'text'  => __('IP Pools'),           'glyph' => Configure::read('icnIP'), 'itemId' => 'cIpPools'),
+						array( 'text'  => __('OpenVPN Servers'),    'glyph' => Configure::read('icnVPN'), 'itemId' => 'cOpenvpnServers'),
                        // array( 'text'  => __('Licensing'),          'glyph' => Configure::read('icnLock'),'itemId' => 'cLicensing'),    
                     )
                 )
