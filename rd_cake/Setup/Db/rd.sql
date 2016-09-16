@@ -186,7 +186,7 @@ CREATE TABLE `ap_profile_exit_ap_profile_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +195,7 @@ CREATE TABLE `ap_profile_exit_ap_profile_entries` (
 
 LOCK TABLES `ap_profile_exit_ap_profile_entries` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` DISABLE KEYS */;
-INSERT INTO `ap_profile_exit_ap_profile_entries` VALUES (56,23,18,'2016-05-10 10:30:15','2016-05-10 10:30:15');
+INSERT INTO `ap_profile_exit_ap_profile_entries` VALUES (56,23,18,'2016-05-10 10:30:15','2016-05-10 10:30:15'),(73,38,17,'2016-09-16 08:24:41','2016-09-16 08:24:41');
 /*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +250,7 @@ DROP TABLE IF EXISTS `ap_profile_exits`;
 CREATE TABLE `ap_profile_exits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ap_profile_id` int(11) DEFAULT NULL,
-  `type` enum('bridge','tagged_bridge','nat','captive_portal') DEFAULT 'bridge',
+  `type` enum('bridge','tagged_bridge','nat','captive_portal','openvpn_bridge') DEFAULT NULL,
   `vlan` int(4) DEFAULT NULL,
   `auto_dynamic_client` tinyint(1) NOT NULL DEFAULT '0',
   `realm_list` varchar(128) NOT NULL DEFAULT '',
@@ -258,8 +258,9 @@ CREATE TABLE `ap_profile_exits` (
   `dynamic_detail_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `openvpn_server_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,7 +269,7 @@ CREATE TABLE `ap_profile_exits` (
 
 LOCK TABLES `ap_profile_exits` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exits` DISABLE KEYS */;
-INSERT INTO `ap_profile_exits` VALUES (23,14,'captive_portal',NULL,1,'35',1,3,'2016-05-10 05:23:30','2016-05-10 10:30:15');
+INSERT INTO `ap_profile_exits` VALUES (23,14,'captive_portal',NULL,1,'35',1,3,'2016-05-10 05:23:30','2016-05-10 10:30:15',NULL),(38,14,'openvpn_bridge',NULL,0,'',0,NULL,'2016-09-16 08:11:55','2016-09-16 08:24:41',1);
 /*!40000 ALTER TABLE `ap_profile_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2006,7 +2007,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2016-04-24 15:58:44',0,0,'192.168.10.10',3128,'admin','admin',''),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2014-08-11 19:27:17',0,0,'',3128,'','','');
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2016-04-24 15:58:44',0,0,'192.168.10.10',3128,'admin','admin',''),(2,36,'206.221.176.235','','testing123','lion_cp1','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:30:33','2014-08-11 19:26:47',0,0,'',3128,'','',''),(3,37,'206.221.176.235','','testing123','lion_cp2','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:33:02','2014-08-11 19:27:02',0,0,'',3128,'','',''),(4,38,'206.221.176.235','','testing123','lion_cp3','http://206.221.176.235/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:34:40','2016-09-16 05:24:23',0,0,'',3128,'','','');
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2024,7 +2025,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2033,7 +2034,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(76,38,56,'2014-08-11 19:27:17','2014-08-11 19:27:17'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(102,30,50,'2016-04-30 11:56:06','2016-04-30 11:56:06');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(74,36,54,'2014-08-11 19:26:47','2014-08-11 19:26:47'),(75,37,55,'2014-08-11 19:27:02','2014-08-11 19:27:02'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(102,30,50,'2016-04-30 11:56:06','2016-04-30 11:56:06'),(120,53,56,'2016-09-16 08:03:35','2016-09-16 08:03:35');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2048,13 +2049,14 @@ CREATE TABLE `mesh_exits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mesh_id` int(11) DEFAULT NULL,
   `name` varchar(128) NOT NULL,
-  `type` enum('bridge','tagged_bridge','nat','captive_portal') DEFAULT 'bridge',
+  `type` enum('bridge','tagged_bridge','nat','captive_portal','openvpn_bridge') DEFAULT NULL,
   `auto_detect` tinyint(1) NOT NULL DEFAULT '0',
   `vlan` int(4) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `openvpn_server_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2063,7 +2065,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-30 11:56:06'),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04'),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44'),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47'),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02'),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2014-08-11 19:27:17');
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-30 11:56:06',NULL),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04',NULL),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44',NULL),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41',NULL),(36,41,'lion_cp1','captive_portal',1,NULL,'2014-08-11 12:30:33','2014-08-11 19:26:47',NULL),(37,41,'lion_cp2','captive_portal',1,NULL,'2014-08-11 12:33:02','2014-08-11 19:27:02',NULL),(38,41,'lion_cp3','captive_portal',1,NULL,'2014-08-11 12:34:40','2016-09-16 05:24:23',NULL),(53,41,'','openvpn_bridge',1,NULL,'2016-09-16 05:26:06','2016-09-16 08:03:35',2);
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2833,6 +2835,79 @@ CREATE TABLE `openvpn_clients` (
 LOCK TABLES `openvpn_clients` WRITE;
 /*!40000 ALTER TABLE `openvpn_clients` DISABLE KEYS */;
 /*!40000 ALTER TABLE `openvpn_clients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `openvpn_server_clients`
+--
+
+DROP TABLE IF EXISTS `openvpn_server_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `openvpn_server_clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mesh_ap_profile` enum('mesh','ap_profile') DEFAULT 'mesh',
+  `openvpn_server_id` int(11) DEFAULT NULL,
+  `mesh_id` int(11) DEFAULT NULL,
+  `mesh_exit_id` int(11) DEFAULT NULL,
+  `ap_profile_id` int(11) DEFAULT NULL,
+  `ap_profile_exit_id` int(11) DEFAULT NULL,
+  `ap_id` int(11) DEFAULT NULL,
+  `ip_address` varchar(40) NOT NULL,
+  `last_contact_to_server` datetime DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `openvpn_server_clients`
+--
+
+LOCK TABLES `openvpn_server_clients` WRITE;
+/*!40000 ALTER TABLE `openvpn_server_clients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `openvpn_server_clients` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `openvpn_servers`
+--
+
+DROP TABLE IF EXISTS `openvpn_servers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `openvpn_servers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `local_remote` enum('local','remote') DEFAULT 'local',
+  `protocol` enum('udp','tcp') DEFAULT 'udp',
+  `ip_address` varchar(40) NOT NULL,
+  `port` int(6) NOT NULL,
+  `vpn_gateway_address` varchar(40) NOT NULL,
+  `vpn_bridge_start_address` varchar(40) NOT NULL,
+  `vpn_mask` varchar(40) NOT NULL,
+  `config_preset` varchar(100) NOT NULL DEFAULT 'default',
+  `ca_crt` text NOT NULL,
+  `extra_name` varchar(100) NOT NULL DEFAULT '',
+  `extra_value` varchar(100) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `openvpn_servers`
+--
+
+LOCK TABLES `openvpn_servers` WRITE;
+/*!40000 ALTER TABLE `openvpn_servers` DISABLE KEYS */;
+INSERT INTO `openvpn_servers` VALUES (1,'USA-1','Tunnel to West Coast',1,44,'local','udp','198.27.111.76',1194,'10.8.0.1','10.8.0.129','255.255.255.0','default','-----BEGIN CERTIFICATE-----\nMIIE+jCCA+KgAwIBAgIJAIZVNkfIiREVMA0GCSqGSIb3DQEBCwUAMIGuMQswCQYD\nVQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UEBxMITWV5ZXJ0b24xETAP\nBgNVBAoTCExpbm92YXRlMRUwEwYDVQQLEwxDb21wdXRlckxhYnMxFDASBgNVBAMT\nC0xpbm92YXRlIENBMREwDwYDVQQpEwhMaW5vdmF0ZTEnMCUGCSqGSIb3DQEJARYY\nZGlya3ZhbmRlcndhbHRAZ21haWwuY29tMB4XDTE2MDkxMjA4MTQwMVoXDTI2MDkx\nMDA4MTQwMVowga4xCzAJBgNVBAYTAlpBMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYD\nVQQHEwhNZXllcnRvbjERMA8GA1UEChMITGlub3ZhdGUxFTATBgNVBAsTDENvbXB1\ndGVyTGFiczEUMBIGA1UEAxMLTGlub3ZhdGUgQ0ExETAPBgNVBCkTCExpbm92YXRl\nMScwJQYJKoZIhvcNAQkBFhhkaXJrdmFuZGVyd2FsdEBnbWFpbC5jb20wggEiMA0G\nCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDDwCqsTqiQOWqC+nAw04GC4wDOvCWM\nMkzjGM1A7W/BJe3vt8gxFg7ffcXjJWrROQvJacv4vodNgL0lNrzltEyhTwkHhkqx\nCHQZMGPBclg0izP5Lz/6cyOd0zv5I9RQGDnBLQPq+baXVfBPudaFi8kBYPlRiFRY\nrDt2N76b13mqMHEdeANhDfwAl5T5ftmd2wKlfQo0wltFkDGmiiwStSdz5e3nDI6D\nyRuopS/hq2gGJWutlw9ucaDIYJf4X5OzvyRrEx9M5bj2MZf4QaDQphW9NMrO8TbN\n7mbh1bS0aJ9b/SSK4vegtqlGLpCx1SME00HuC1osiraHbIPZ0/8L9y4HAgMBAAGj\nggEXMIIBEzAdBgNVHQ4EFgQUYa19kSBWE/C1fEr2tI9j3Zq7238wgeMGA1UdIwSB\n2zCB2IAUYa19kSBWE/C1fEr2tI9j3Zq723+hgbSkgbEwga4xCzAJBgNVBAYTAlpB\nMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYDVQQHEwhNZXllcnRvbjERMA8GA1UEChMI\nTGlub3ZhdGUxFTATBgNVBAsTDENvbXB1dGVyTGFiczEUMBIGA1UEAxMLTGlub3Zh\ndGUgQ0ExETAPBgNVBCkTCExpbm92YXRlMScwJQYJKoZIhvcNAQkBFhhkaXJrdmFu\nZGVyd2FsdEBnbWFpbC5jb22CCQCGVTZHyIkRFTAMBgNVHRMEBTADAQH/MA0GCSqG\nSIb3DQEBCwUAA4IBAQCk3PW1kz26Qg1SkXYjK1plp3dBeQjZ2mkJ+3MZn5wau4+u\nEinJ8OxGdUoiQMliniecOhkuavibrz4vEnIGi0K5OGzA8msLLWb9glHDUSjRXwlV\nTWRgEtL8vmEjcz57vN556zwe/4rNOLLTPjcvexG41PuCw7OQGRV3+Gw2YGREvNn6\nKLjcEqBsT2ju4NJNRAyXu50t4Ugvvi7QJtL3YFniSE87ojsJ06heuDXM58LJf5jz\nPA8p+LCh6V9esHNa3AkHp0M+tHdmlrR0qtfVB8oBk8yuCJQGhlefC80RZFAnhEQN\nwuU0JY1bWFc579IdU/bBIWaxvy7ZGSXpKscbGCpu\n-----END CERTIFICATE-----\n','','','2016-09-15 22:25:46','2016-09-15 23:28:56'),(2,'USA-2','Tunnel to East Coast',1,44,'remote','udp','198.27.111.77',1194,'10.8.0.1','10.8.0.129','255.255.255.0','default','-----BEGIN CERTIFICATE-----\nMIIE+jCCA+KgAwIBAgIJAIZVNkfIiREVMA0GCSqGSIb3DQEBCwUAMIGuMQswCQYD\nVQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UEBxMITWV5ZXJ0b24xETAP\nBgNVBAoTCExpbm92YXRlMRUwEwYDVQQLEwxDb21wdXRlckxhYnMxFDASBgNVBAMT\nC0xpbm92YXRlIENBMREwDwYDVQQpEwhMaW5vdmF0ZTEnMCUGCSqGSIb3DQEJARYY\nZGlya3ZhbmRlcndhbHRAZ21haWwuY29tMB4XDTE2MDkxMjA4MTQwMVoXDTI2MDkx\nMDA4MTQwMVowga4xCzAJBgNVBAYTAlpBMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYD\nVQQHEwhNZXllcnRvbjERMA8GA1UEChMITGlub3ZhdGUxFTATBgNVBAsTDENvbXB1\ndGVyTGFiczEUMBIGA1UEAxMLTGlub3ZhdGUgQ0ExETAPBgNVBCkTCExpbm92YXRl\nMScwJQYJKoZIhvcNAQkBFhhkaXJrdmFuZGVyd2FsdEBnbWFpbC5jb20wggEiMA0G\nCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDDwCqsTqiQOWqC+nAw04GC4wDOvCWM\nMkzjGM1A7W/BJe3vt8gxFg7ffcXjJWrROQvJacv4vodNgL0lNrzltEyhTwkHhkqx\nCHQZMGPBclg0izP5Lz/6cyOd0zv5I9RQGDnBLQPq+baXVfBPudaFi8kBYPlRiFRY\nrDt2N76b13mqMHEdeANhDfwAl5T5ftmd2wKlfQo0wltFkDGmiiwStSdz5e3nDI6D\nyRuopS/hq2gGJWutlw9ucaDIYJf4X5OzvyRrEx9M5bj2MZf4QaDQphW9NMrO8TbN\n7mbh1bS0aJ9b/SSK4vegtqlGLpCx1SME00HuC1osiraHbIPZ0/8L9y4HAgMBAAGj\nggEXMIIBEzAdBgNVHQ4EFgQUYa19kSBWE/C1fEr2tI9j3Zq7238wgeMGA1UdIwSB\n2zCB2IAUYa19kSBWE/C1fEr2tI9j3Zq723+hgbSkgbEwga4xCzAJBgNVBAYTAlpB\nMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYDVQQHEwhNZXllcnRvbjERMA8GA1UEChMI\nTGlub3ZhdGUxFTATBgNVBAsTDENvbXB1dGVyTGFiczEUMBIGA1UEAxMLTGlub3Zh\ndGUgQ0ExETAPBgNVBCkTCExpbm92YXRlMScwJQYJKoZIhvcNAQkBFhhkaXJrdmFu\nZGVyd2FsdEBnbWFpbC5jb22CCQCGVTZHyIkRFTAMBgNVHRMEBTADAQH/MA0GCSqG\nSIb3DQEBCwUAA4IBAQCk3PW1kz26Qg1SkXYjK1plp3dBeQjZ2mkJ+3MZn5wau4+u\nEinJ8OxGdUoiQMliniecOhkuavibrz4vEnIGi0K5OGzA8msLLWb9glHDUSjRXwlV\nTWRgEtL8vmEjcz57vN556zwe/4rNOLLTPjcvexG41PuCw7OQGRV3+Gw2YGREvNn6\nKLjcEqBsT2ju4NJNRAyXu50t4Ugvvi7QJtL3YFniSE87ojsJ06heuDXM58LJf5jz\nPA8p+LCh6V9esHNa3AkHp0M+tHdmlrR0qtfVB8oBk8yuCJQGhlefC80RZFAnhEQN\nwuU0JY1bWFc579IdU/bBIWaxvy7ZGSXpKscbGCpu\n-----END CERTIFICATE-----\n','','','2016-09-16 07:42:38','2016-09-16 07:46:30');
+/*!40000 ALTER TABLE `openvpn_servers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -4128,4 +4203,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-05 21:54:38
+-- Dump completed on 2016-09-16  9:03:37
