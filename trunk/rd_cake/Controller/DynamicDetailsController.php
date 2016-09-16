@@ -733,72 +733,32 @@ class DynamicDetailsController extends AppController {
         if(!$this->_ap_right_check()){
             return;
         }
+            
         //We will not modify user_id
         unset($this->request->data['user_id']);
-
-        //T & C compulsory check
-        if(isset($this->request->data['t_c_check'])){
-            $this->request->data['t_c_check'] = 1;
-        }else{
-            $this->request->data['t_c_check'] = 0;
+        $check_items = array(
+            'reg_email',
+            'reg_auto_add',
+            'reg_mac_check',
+            'register_users',
+            't_c_check',
+            'redirect_check',
+            'slideshow_check',
+            'user_login_check',
+            'voucher_login_check',
+            'auto_suffix_check',
+            'usage_show_check',
+            'lost_password'
+	    );
+	    
+        foreach($check_items as $i){
+            if(isset($this->request->data[$i])){
+                $this->request->data[$i] = 1;
+            }else{
+                $this->request->data[$i] = 0;
+            }
         }
-
-        //redirect_check compulsory check
-        if(isset($this->request->data['redirect_check'])){
-            $this->request->data['redirect_check'] = 1;
-        }else{
-            $this->request->data['redirect_check'] = 0;
-        }
-
-        //slideshow_check compulsory check
-        if(isset($this->request->data['slideshow_check'])){
-            $this->request->data['slideshow_check'] = 1;
-        }else{
-            $this->request->data['slideshow_check'] = 0;
-        }
-
-		//user_login compulsory check
-        if(isset($this->request->data['user_login_check'])){
-            $this->request->data['user_login_check'] = 1;
-        }else{
-            $this->request->data['user_login_check'] = 0;
-        }
-
-		//voucher_login compulsory check
-        if(isset($this->request->data['voucher_login_check'])){
-            $this->request->data['voucher_login_check'] = 1;
-        }else{
-            $this->request->data['voucher_login_check'] = 0;
-        }
-
-		//auto_suffix compulsory check
-        if(isset($this->request->data['auto_suffix_check'])){
-            $this->request->data['auto_suffix_check'] = 1;
-        }else{
-            $this->request->data['auto_suffix_check'] = 0;
-        }
-
-		//usage_show_check compulsory check
-        if(isset($this->request->data['usage_show_check'])){
-            $this->request->data['usage_show_check'] = 1;
-        }else{
-            $this->request->data['usage_show_check'] = 0;
-        }
-
-		//redirect_check compulsory check
-        if(isset($this->request->data['register_users'])){
-            $this->request->data['register_users'] = 1;
-        }else{
-            $this->request->data['register_users'] = 0;
-        }
-
-		//redirect_check compulsory check
-        if(isset($this->request->data['lost_password'])){
-            $this->request->data['lost_password'] = 1;
-        }else{
-            $this->request->data['lost_password'] = 0;
-        }
-
+        
         if ($this->DynamicDetail->save($this->request->data)) {
             $this->set(array(
                 'success' => true,
@@ -1512,6 +1472,12 @@ class DynamicDetailsController extends AppController {
 	}
 
 	public function edit_social_login(){
+	
+	    //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
 
 
 		//We need the social_temp_permanent_user_id else we fail it if it is enabbled...
