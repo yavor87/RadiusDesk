@@ -530,6 +530,7 @@ class DynamicDetailsController extends AppController {
             array_push($items,array(
                 'id'                    => $i['DynamicDetail']['id'], 
                 'name'                  => $i['DynamicDetail']['name'],
+                'user_id'               => $owner_id,
                 'owner'                 => $owner_tree, 
                 'available_to_siblings' => $i['DynamicDetail']['available_to_siblings'],
                 'phone'                 => $i['DynamicDetail']['phone'],
