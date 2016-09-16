@@ -25,7 +25,8 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
         'Ext.form.FieldContainer',
         'Ext.form.field.Radio',
         'Rd.view.components.cmbDynamicDetail',
-        'Rd.view.components.cmbRealm'
+        'Rd.view.components.cmbRealm',
+        'Rd.view.components.cmbOpenVpnServers'
     ],
     initComponent: function() {
         var me              = this;
@@ -71,14 +72,16 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
             var radios = [
                         { boxLabel: i18n('sTagged_Ethernet_bridge'),    name: 'exit_type', inputValue: 'tagged_bridge',checked: true},
                         { boxLabel: i18n('sNAT_plus_DHCP'),             name: 'exit_type', inputValue: 'nat' },
-                        { boxLabel: i18n('sCaptive_Portal'),            name: 'exit_type', inputValue: 'captive_portal' }
+                        { boxLabel: i18n('sCaptive_Portal'),            name: 'exit_type', inputValue: 'captive_portal' },
+                        { boxLabel: i18n('sOpenVPN_Bridge'),            name: 'exit_type', inputValue: 'openvpn_bridge' }
                     ];
         }else{
             var radios = [
                     { boxLabel: i18n('sEthernet_bridge'),          name: 'exit_type', inputValue: 'bridge',checked: true },
                     { boxLabel: i18n('sTagged_Ethernet_bridge'),   name: 'exit_type', inputValue: 'tagged_bridge'},
                     { boxLabel: i18n('sNAT_plus_DHCP'),            name: 'exit_type', inputValue: 'nat' },
-                    { boxLabel: i18n('sCaptive_Portal'),           name: 'exit_type', inputValue: 'captive_portal' }
+                    { boxLabel: i18n('sCaptive_Portal'),           name: 'exit_type', inputValue: 'captive_portal' },
+                    { boxLabel: i18n('sOpenVPN_Bridge'),           name: 'exit_type', inputValue: 'openvpn_bridge' }
                 ];
         }
 
@@ -248,6 +251,12 @@ Ext.define('Rd.view.meshes.winMeshAddExit', {
                                     itemId      : 'cmbDynamicDetail',
                                     xtype       : 'cmbDynamicDetail',
                                     labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'cmbOpenVpnServers',
+                                    xtype       : 'cmbOpenVpnServers',
+                                    labelClsExtra: 'lblRdReq',
+                                    allowBlank  : false
                                 }
                             ]
                         },

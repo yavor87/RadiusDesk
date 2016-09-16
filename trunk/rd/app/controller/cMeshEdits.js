@@ -609,7 +609,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         var vlan    = win.down('#vlan');
         var tab_capt= win.down('#tabCaptivePortal');
         var sel_type= win.down('#type');
-        
+        var vpn     = win.down('#cmbOpenVpnServers')       
         var a_nas   = win.down('#chkNasClient');
         var cmb_realm = win.down('#cmbRealm');
         var a_page  = win.down('#chkLoginPage');
@@ -617,7 +617,15 @@ Ext.define('Rd.controller.cMeshEdits', {
         
         sel_type.setValue(type);
  
-        if(type == 'tagged_bridge'){
+        if(type == 'openvpn_bridge'){
+            vpn.setVisible(true);
+            vpn.setDisabled(false);
+        }else{
+            vpn.setVisible(false);
+            vpn.setDisabled(true);
+        }
+        
+       if(type == 'tagged_bridge'){
             vlan.setVisible(true);
             vlan.setDisabled(false);
         }else{
@@ -627,8 +635,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 
        if(type == 'captive_portal'){
             tab_capt.setDisabled(false);
-			tab_capt.tab.show();
-						
+			tab_capt.tab.show();					
 			a_nas.setVisible(true);
 			a_nas.setDisabled(false);
 			a_page.setVisible(true);
@@ -640,8 +647,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 			
         }else{
             tab_capt.setDisabled(true);
-			tab_capt.tab.hide();
-			
+			tab_capt.tab.hide();		
 			a_nas.setVisible(false);
 			a_nas.setDisabled(true);
 			a_page.setVisible(false);
@@ -650,7 +656,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 			cmb_page.setDisabled(true);
 			cmb_realm.setVisible(false);
 			cmb_realm.setDisabled(true);			
-        }
+        }   
         win.getLayout().setActiveItem('scrnData');
     },
     btnExitDataPrev: function(button){
@@ -748,13 +754,30 @@ Ext.define('Rd.controller.cMeshEdits', {
             }else{
                 var w       = me.getEditExitWin();
                 var vlan    = w.down('#vlan');
+                var vpn     = win.down('#cmbOpenVpnServers'); 
                 var tab_capt= w.down('#tabCaptivePortal');
                 w.exitId    = id;
                 w.meshId    = meshId;
+                
+                if(type == 'openvpn_bridge'){
+                    vpn.setVisible(true);
+                    vpn.setDisabled(false);
+                    
+                    vlan.setVisible(false);
+                    vlan.setDisabled(true);
+                    
+                }else{
+                    vpn.setVisible(false);
+                    vpn.setDisabled(true);
+                }
 
                 if(type == 'tagged_bridge'){
                     vlan.setVisible(true);
                     vlan.setDisabled(false);
+                    
+                    vpn.setVisible(false);
+                    vpn.setDisabled(true);
+                    
                 }else{
                     vlan.setVisible(false);
                     vlan.setDisabled(true);
@@ -783,9 +806,25 @@ Ext.define('Rd.controller.cMeshEdits', {
                 var t     = form.down("#type");
                 var t_val = t.getValue();
                 var vlan  = form.down('#vlan');
+                var vpn   = form.down('#cmbOpenVpnServers') 
+                
+                if(t_val == 'openvpn_bridge'){
+                    vpn.setVisible(true);
+                    vpn.setDisabled(false);
+                    
+                    vlan.setVisible(false);
+                    vlan.setDisabled(true);
+                }else{
+                    vpn.setVisible(false);
+                    vpn.setDisabled(true);
+                }
+                  
                 if(t_val == 'tagged_bridge'){
                     vlan.setVisible(true);
                     vlan.setDisabled(false);
+                    
+                    vpn.setVisible(false);
+                    vpn.setDisabled(true);
                 }else{
                     vlan.setVisible(false);
                     vlan.setDisabled(true);
