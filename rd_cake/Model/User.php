@@ -95,7 +95,13 @@ class User extends AppModel {
         ),
 		'DynamicDetail' => array(
             'dependent'     => true   
-        )
+        ),
+        'OpenvpnServer' => array(
+            'dependent'     => true   
+        ),
+        'ApProfile' => array(
+            'dependent'     => true   
+        ),
     );
 
     public $actsAs = array('Acl' => array('type' => 'requester'),'Containable','Tree','Limit');
