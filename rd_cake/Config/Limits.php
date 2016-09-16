@@ -64,7 +64,4 @@ $config['Limits']['TotalDevices']['Count']          = 3;
 $config['Limits']['TotalDevices']['Description']    = 'Total number of Devices which can <b>EITHER</b> be attached to a Mesh network or an Access Point Probile';
 
 
-
-
-
 ?>
