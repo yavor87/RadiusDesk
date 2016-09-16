@@ -25,7 +25,8 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
         'Ext.form.field.Text',
         'Rd.view.meshes.cmbEncryptionOptions',
         'Rd.store.sEncryptionOptions',
-        'Rd.model.mEncryptionOption'
+        'Rd.model.mEncryptionOption',
+        'Rd.view.components.cmbOpenVpnServers'
     ],
      initComponent: function() {
         var me = this;
@@ -130,7 +131,13 @@ Ext.define('Rd.view.meshes.winMeshEditExit', {
                                     allowBlank  : false,
                                     blankText   : i18n("sSupply_a_value")
                                 },
-                                cmbConnectWith
+                                cmbConnectWith,
+                                {
+                                    itemId      : 'cmbOpenVpnServers',
+                                    xtype       : 'cmbOpenVpnServers',
+                                    labelClsExtra: 'lblRdReq',
+                                    allowBlank  : false
+                                }
                             ]
                         },
                         //---- Captive Protal ----

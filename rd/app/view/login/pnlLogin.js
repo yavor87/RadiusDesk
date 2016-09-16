@@ -25,7 +25,7 @@ Ext.define('Rd.view.login.pnlLogin', {
             width       : 300,
             height      : 310,
             plain       : true,
-            border      : true,
+            border      : false,
             items : [
                 {
                     xtype       : 'form',

@@ -23,7 +23,8 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
         'Ext.tab.Panel',
         'Ext.form.Panel',
         'Ext.form.field.Text',
-        'Rd.view.components.cmbDynamicDetail'
+        'Rd.view.components.cmbDynamicDetail',
+        'Rd.view.components.cmbOpenVpnServers'
     ],
      initComponent: function() {
         var me = this;
@@ -151,6 +152,12 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                                     itemId      : 'cmbDynamicDetail',
                                     xtype       : 'cmbDynamicDetail',
                                     labelClsExtra: 'lblRdReq'
+                                },
+                                {
+                                    itemId      : 'cmbOpenVpnServers',
+                                    xtype       : 'cmbOpenVpnServers',
+                                    labelClsExtra: 'lblRdReq',
+                                    allowBlank  : false
                                 }
                             ]
                         },
