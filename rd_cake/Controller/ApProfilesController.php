@@ -5,7 +5,7 @@ class ApProfilesController extends AppController {
 
     public $name        = 'ApProfiles';
     public $components  = array('Aa','GridFilter','TimeCalculations');
-    public $uses        = array('ApProfile','User','DynamicClient','DynamicPair','DynamicClientRealm','Realm');
+    public $uses        = array('ApProfile','User','DynamicClient','DynamicPair','DynamicClientRealm','Realm','OpenvpnServer','OpenvpnServerClient');
     protected $base     = "Access Providers/Controllers/ApProfiles/";
     protected $itemNote = 'ApProfileNote';
     
@@ -607,7 +607,49 @@ class ApProfilesController extends AppController {
         }
         
         if ($exit->save($this->request->data)) {
-            $new_id = $exit->id;
+            $new_id         = $exit->id;     
+            $ap_profile_id  = $this->request->data['ap_profile_id'];
+            
+            //---- openvpn_bridge -----
+            if($this->request->data['type'] == 'openvpn_bridge'){
+                
+                $server_id  = $this->request->data['openvpn_server_id'];
+                $q_s        = $this->OpenvpnServer->findById($server_id);
+                $next_ip    = $q_s['OpenvpnServer']['vpn_bridge_start_address'];
+                
+                $ap         = ClassRegistry::init('Ap');
+                $ap->contain();
+                $q_aps      = $ap->find('all',array('conditions' =>array('Ap.ap_profile_id' =>$ap_profile_id )));
+ 
+                //We need to add a VPN entry for all the existing ones so we do not need to add them again
+                foreach($q_aps as $ap){
+                    $ap_id = $ap['Ap']['id'];
+                    $not_available      = true;
+                    while($not_available){
+                        if($this->_check_if_available($server_id,$next_ip)){
+                            $d_vpn_c['ip_address'] = $next_ip;
+                            $not_available = false;
+                            break;
+                        }else{
+                            $next_ip = $this->_get_next_ip($next_ip);
+                        }
+                    }
+                    $d_new                      = array();
+                    $d_new['mesh_ap_profile']   = 'ap_profile';
+                    $d_new['openvpn_server_id'] = $server_id;
+                    $d_new['ip_address']        = $next_ip;
+                    $d_new['ap_profile_id']     = $ap_profile_id;
+                    $d_new['ap_profile_exit_id']= $new_id;
+                    $d_new['ap_id']             = $ap['Ap']['id'];
+                    
+                    $this->OpenvpnServerClient->create();
+                    $this->OpenvpnServerClient->save($d_new);
+                }
+            }
+            //---- END openvpn_bridge ------
+            
+            
+            
 
             //===== Captive Portal ==========
             if($this->request->data['type'] == 'captive_portal'){
@@ -698,7 +740,56 @@ class ApProfilesController extends AppController {
 
             $entry_point    = ClassRegistry::init('ApProfileExitApProfileEntry');
             $exit           = ClassRegistry::init('ApProfileExit');
-
+            
+            
+            //---- openvpn_bridge -----
+            if($this->request->data['type'] == 'openvpn_bridge'){
+                
+                $server_id  = $this->request->data['openvpn_server_id'];
+                
+                //We will only do the following if the selected OpenvpnServer changed
+                $exit->contain();
+                $q_exit             = $exit->findById($this->request->data['id']);
+                $current_server_id  = $q_exit['ApProfileExit']['openvpn_server_id'];
+                $server_id          = $this->request->data['openvpn_server_id'];
+                $ap_profile_exit_id = $this->request->data['id'];
+                
+                if($current_server_id !== $server_id){
+                    //Update current list 
+                    $this->OpenvpnServerClient->contain();
+                    $current_aps = $this->OpenvpnServerClient->find('all',
+                        array('conditions' =>array(
+                            'OpenvpnServerClient.openvpn_server_id'     => $current_server_id,
+                            'OpenvpnServerClient.mesh_ap_profile'       => 'ap_profile',
+                            'OpenvpnServerClient.ap_profile_exit_id'    => $ap_profile_exit_id,
+                        ))
+                    );
+                    
+                    $q_r        = $this->OpenvpnServer->findById($server_id);
+                        
+                    foreach($current_aps as $ap){
+                        $next_ip            = $q_r['OpenvpnServer']['vpn_bridge_start_address'];
+                        $not_available      = true;
+                        while($not_available){
+                            if($this->_check_if_available($server_id,$next_ip)){
+                                $d_vpn_c['ip_address'] = $next_ip;
+                                $not_available = false;
+                                break;
+                            }else{
+                                $next_ip = $this->_get_next_ip($next_ip);
+                            }
+                        }      
+                        //Update the record
+                        $d_apdate                       = array();
+                        $d_update['id']                 = $ap['OpenvpnServerClient']['id'];
+                        $d_update['openvpn_server_id']  = $server_id;
+                        $d_update['ip_address']         = $next_ip;
+                        $this->OpenvpnServerClient->save($d_update);
+                    }          
+                }            
+            }
+            //---- END openvpn_bridge ------
+            
 
             //===== Captive Portal ==========
             //== First see if we can save the captive portal data ====
@@ -1234,32 +1325,32 @@ class ApProfilesController extends AppController {
         
             $m['Ap']['last_contact_human']  = $this->TimeCalculations->time_elapsed_string($m['Ap']["last_contact"]);
             
-            //----
-            $location = $GeoIpLocation->find($m['Ap']['last_contact_from_ip']);
-                   
+            //----              
             //Some defaults:
             $country_code = '';
             $country_name = '';
             $city         = '';
             $postal_code  = '';
             
-            if(array_key_exists('GeoIpLocation',$location)){
-                if($location['GeoIpLocation']['country_code'] != ''){
-                    $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
+            if($m['Ap']['last_contact_from_ip'] != null){
+          
+                $location = $GeoIpLocation->find($m['Ap']['last_contact_from_ip']);
+                
+                if(array_key_exists('GeoIpLocation',$location)){
+                    if($location['GeoIpLocation']['country_code'] != ''){
+                        $country_code = utf8_encode($location['GeoIpLocation']['country_code']);
+                    }
+                    if($location['GeoIpLocation']['country_name'] != ''){
+                        $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
+                    }
+                    if($location['GeoIpLocation']['city'] != ''){
+                        $city = utf8_encode($location['GeoIpLocation']['city']);
+                    }
+                    if($location['GeoIpLocation']['postal_code'] != ''){
+                        $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
+                    }
                 }
-                if($location['GeoIpLocation']['country_name'] != ''){
-                    $country_name = utf8_encode($location['GeoIpLocation']['country_name']);
-                }
-                if($location['GeoIpLocation']['city'] != ''){
-                    $city = utf8_encode($location['GeoIpLocation']['city']);
-                }
-                if($location['GeoIpLocation']['postal_code'] != ''){
-                    $postal_code = utf8_encode($location['GeoIpLocation']['postal_code']);
-                }
-            }
-            
-            
-             
+            }   
             //----  
             
             
@@ -1321,6 +1412,47 @@ class ApProfilesController extends AppController {
 				$mac			= $this->request->data['mac'];
  				$unknown_ap->deleteAll(array('UnknownAp.mac' => $mac), true);
 			}
+			
+			//__ OpenVPN Bridges _____	
+			$exit  = ClassRegistry::init('ApProfileExit');
+			//Find out if there are Exit points that is of type 'openvpn_bridge' for this ap_profile
+			$exit->contain('OpenvpnServer');
+			$q_e_vpnb = $exit->find('all',
+			    array('conditions' => array(
+			        'ApProfileExit.ap_profile_id'   => $ap_profile_id,
+			        'ApProfileExit.type'            => 'openvpn_bridge',
+			    ))
+		    );
+		    
+		    foreach($q_e_vpnb as $e){
+		        //Get the OpenvpnServer's detail of reach
+		        $vpn_server_id  = $e['OpenvpnServer']['id'];
+		        $exit_id        = $e['ApProfileExit']['id'];
+		        
+		        $d_vpn_c                        = array();
+                $d_vpn_c['mesh_ap_profile']     = 'ap_profile';
+                $d_vpn_c['openvpn_server_id']   = $vpn_server_id;
+                $d_vpn_c['ap_profile_id']       = $ap_profile_id;
+                $d_vpn_c['ap_profile_exit_id']  = $exit_id;
+                $d_vpn_c['ap_id']               = $new_id;
+            
+                $next_ip        = $e['OpenvpnServer']['vpn_bridge_start_address'];
+                $not_available  = true;
+                
+                while($not_available){
+                    if($this->_check_if_available($vpn_server_id,$next_ip)){
+                        $d_vpn_c['ip_address'] = $next_ip;
+                        $not_available = false;
+                        break;
+                    }else{
+                        $next_ip = $this->_get_next_ip($next_ip);
+                    }
+                }   
+                $this->OpenvpnServerClient->create();
+                $this->OpenvpnServerClient->save($d_vpn_c); 
+		    }	
+			//__ END OpenVPN Bridges ___
+			
 			
 			//______________________________________________________________________			
 	        //We need to see if there are captive portals defined on the ap_profile
@@ -2260,4 +2392,38 @@ class ApProfilesController extends AppController {
             $this->DynamicClient->save($d);            
         }    
     }
+    
+     private function _check_if_available($openvpn_server_id,$ip){
+        $count = $this->OpenvpnServerClient->find('count',
+            array('conditions' => 
+                array(
+                    'OpenvpnServerClient.openvpn_server_id' => $openvpn_server_id,
+                    'OpenvpnServerClient.ip_address' => $ip,
+                )
+            ));
+        if($count == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private function _get_next_ip($ip){
+        $pieces     = explode('.',$ip);
+        $octet_1    = $pieces[0];
+        $octet_2    = $pieces[1];
+        $octet_3    = $pieces[2];
+        $octet_4    = $pieces[3];
+
+        if($octet_4 >= 254){
+            $octet_4 = 1;
+            $octet_3 = $octet_3 +1;
+        }else{
+
+            $octet_4 = $octet_4 +1;
+        }
+        $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
+        return $next_ip;
+    }
+    
 }
