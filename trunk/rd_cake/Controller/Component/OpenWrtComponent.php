@@ -4,7 +4,6 @@ class OpenWrtComponent extends Component {
 
     private $includes       = array();
     
-
     public function getEntries($mesh_name){
 
         $commands = array();

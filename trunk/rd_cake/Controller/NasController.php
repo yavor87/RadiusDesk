@@ -1881,7 +1881,7 @@ class NasController extends AppController {
         return false;
     }
 
-     private function _check_if_available($ip){
+   private function _check_if_available($ip){
 
         $count = $this->Na->find('count',array('conditions' => array('Na.nasname' => $ip)));
         if($count == 0){

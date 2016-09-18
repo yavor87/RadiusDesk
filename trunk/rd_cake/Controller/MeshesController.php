@@ -5,7 +5,7 @@ class MeshesController extends AppController {
 
     public $name        = 'Meshes';
     public $components  = array('Aa','GridFilter');
-    public $uses        = array('Mesh','User','DynamicClient','DynamicPair','DynamicClientRealm');
+    public $uses        = array('Mesh','User','DynamicClient','DynamicPair','DynamicClientRealm','OpenvpnServer','OpenvpnServerClient');
     protected $base     = "Access Providers/Controllers/Meshes/";
     protected $itemNote = 'MeshNote';
 
@@ -670,6 +670,37 @@ class MeshesController extends AppController {
 
         if ($exit->save($this->request->data)) {
             $new_id = $exit->id;
+            
+            //---- openvpn_bridge -----
+            if($this->request->data['type'] == 'openvpn_bridge'){
+                
+                $server_id  = $this->request->data['openvpn_server_id'];
+                $q_r        = $this->OpenvpnServer->findById($server_id);
+                if($q_r){    
+                    $d_vpn_c                    = array();
+                    $d_vpn_c['mesh_ap_profile'] = 'mesh';
+                    $d_vpn_c['mesh_id']         = $this->request->data['mesh_id'];
+                    $d_vpn_c['openvpn_server_id'] = $this->request->data['openvpn_server_id'];
+                    $d_vpn_c['mesh_exit_id']    = $new_id;
+                
+                    $next_ip            = $q_r['OpenvpnServer']['vpn_bridge_start_address'];
+                    $not_available      = true;
+                    while($not_available){
+                        if($this->_check_if_available($server_id,$next_ip)){
+                            $d_vpn_c['ip_address'] = $next_ip;
+                            $not_available = false;
+                            break;
+                        }else{
+                            $next_ip = $this->_get_next_ip($next_ip);
+                        }
+                    }   
+                    $this->OpenvpnServerClient->create();
+                    $this->OpenvpnServerClient->save($d_vpn_c);   
+                }           
+            }
+            //---- END openvpn_bridge ------
+            
+            
 
             //===== Captive Portal ==========
             if($this->request->data['type'] == 'captive_portal'){
@@ -810,6 +841,53 @@ class MeshesController extends AppController {
 
             $entry_point    = ClassRegistry::init('MeshExitMeshEntry');
             $exit           = ClassRegistry::init('MeshExit');
+            
+            
+            //---- openvpn_bridge -----
+            if($this->request->data['type'] == 'openvpn_bridge'){
+                
+                $server_id  = $this->request->data['openvpn_server_id'];
+                
+                //We will only do the following if the selected OpenvpnServer changed
+                $exit->contain();
+                $q_exit             = $exit->findById($this->request->data['id']);
+                $current_server_id  = $q_exit['MeshExit']['openvpn_server_id'];
+                $server_id      = $this->request->data['openvpn_server_id'];
+                
+                if($current_server_id !== $server_id){
+                    //Delete old one 
+                    $this->OpenvpnServerClient->deleteAll(
+                        array('OpenvpnServerClient.openvpn_server_id' => $current_server_id), 
+                        false
+                    );
+                    
+                    $q_r        = $this->OpenvpnServer->findById($server_id);
+                    if($q_r){    
+                        $d_vpn_c                        = array();
+                        $d_vpn_c['mesh_ap_profile']     = 'mesh';
+                        $d_vpn_c['mesh_id']             = $this->request->data['mesh_id'];
+                        $d_vpn_c['openvpn_server_id']   = $this->request->data['openvpn_server_id'];
+                        $d_vpn_c['mesh_exit_id']        = $this->request->data['id'];
+                    
+                        $next_ip            = $q_r['OpenvpnServer']['vpn_bridge_start_address'];
+                        $not_available      = true;
+                        while($not_available){
+                            if($this->_check_if_available($server_id,$next_ip)){
+                                $d_vpn_c['ip_address'] = $next_ip;
+                                $not_available = false;
+                                break;
+                            }else{
+                                $next_ip = $this->_get_next_ip($next_ip);
+                            }
+                        }   
+                        $this->OpenvpnServerClient->create();
+                        $this->OpenvpnServerClient->save($d_vpn_c);   
+                    }
+                    
+                }           
+            }
+            //---- END openvpn_bridge ------
+            
 
 
             //===== Captive Portal ==========
@@ -2946,6 +3024,39 @@ config secn 'asterisk'
         $data['dynamic_detail_id']  = $nas_data['dynamic_detail_id'];
         $data['priority']           = 1;  
         $this->DynamicPair->save($data);
+    }
+    
+    private function _check_if_available($openvpn_server_id,$ip){
+        $count = $this->OpenvpnServerClient->find('count',
+            array('conditions' => 
+                array(
+                    'OpenvpnServerClient.openvpn_server_id' => $openvpn_server_id,
+                    'OpenvpnServerClient.ip_address' => $ip,
+                )
+            ));
+        if($count == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private function _get_next_ip($ip){
+        $pieces     = explode('.',$ip);
+        $octet_1    = $pieces[0];
+        $octet_2    = $pieces[1];
+        $octet_3    = $pieces[2];
+        $octet_4    = $pieces[3];
+
+        if($octet_4 >= 254){
+            $octet_4 = 1;
+            $octet_3 = $octet_3 +1;
+        }else{
+
+            $octet_4 = $octet_4 +1;
+        }
+        $next_ip = $octet_1.'.'.$octet_2.'.'.$octet_3.'.'.$octet_4;
+        return $next_ip;
     }
 
 }
