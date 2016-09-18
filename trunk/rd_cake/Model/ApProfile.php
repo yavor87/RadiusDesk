@@ -28,7 +28,10 @@ class ApProfile extends AppModel {
         ),
 		'ApProfileSpecific'	=> array(
 			'dependent'		=> true
-		)	
+		),
+		'OpenvpnServerClient' => array(
+            'dependent'     => true 
+        )	
     );
     
     public $hasOne = array(
