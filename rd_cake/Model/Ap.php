@@ -54,6 +54,9 @@ class Ap extends AppModel {
     public $hasOne = array(
 			'ApLoad'   => array(
                 'dependent'     => true   
+            ),
+            'OpenvpnServerClient' => array(
+                'dependent'     => true 
             )
     );
 

@@ -12,13 +12,20 @@ class ApProfileExit extends AppModel {
         'DynamicDetail' => array(
                 'className' => 'DynamicDetail',
                 'foreignKey' => 'dynamic_detail_id'
-                ),        
+                ),
+        'OpenvpnServer' => array(
+                'className'     => 'OpenvpnServer',
+                'foreignKey'    => 'openvpn_server_id'
+                ),         
     );
 
     public $hasMany = array(
             'ApProfileExitApProfileEntry'   => array(
                 'dependent'     => true   
-            )
+            ),
+            'OpenvpnServerClient'   => array(
+                'dependent'     => true   
+            ),
     );
 
     public $hasOne = array(

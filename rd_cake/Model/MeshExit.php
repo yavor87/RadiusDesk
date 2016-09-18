@@ -20,6 +20,9 @@ class MeshExit extends AppModel {
     public $hasOne = array(
             'MeshExitCaptivePortal' => array(
                 'dependent'     => true
+            ),
+            'OpenvpnServerClient' => array(
+                'dependent'     => true
             )
     );
 }

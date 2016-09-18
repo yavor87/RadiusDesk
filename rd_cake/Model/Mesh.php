@@ -27,7 +27,11 @@ class Mesh extends AppModel {
         ),
 		'MeshSpecific'	=> array(
 			'dependent'		=> true
-		)
+		),
+		'OpenvpnServerClient' => array(
+            'dependent'     => true 
+        )
+		
     );
 
     public $hasOne = array(
