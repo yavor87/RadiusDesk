@@ -47,7 +47,8 @@ class NodesController extends AppController {
                     'MeshEntry',
                     'NodeSetting',
                     'MeshSetting',
-                    'MeshExit.MeshExitCaptivePortal'
+                    'MeshExit.MeshExitCaptivePortal',
+                    'MeshExit.OpenvpnServerClient'
                 );
                 $m          = $mesh->findById($mesh_id);
 
@@ -60,6 +61,8 @@ class NodesController extends AppController {
 				$data['id'] 			= $this->NodeId;
 				$data['last_contact']	= date("Y-m-d H:i:s", time());
 				$this->Mesh->Node->save($data);
+				
+				$this->Mac = $mac;
                 
                 $json = $this->_build_json($m,$gw);
                 $this->set(array(
@@ -163,11 +166,14 @@ class NodesController extends AppController {
         $entry_data         = $net_return[1];
         $json_wireless      = $this->_build_wireless($mesh,$entry_data);
         $json['config_settings']['wireless'] = $json_wireless;
-
+        
         //========== Gateway or NOT? ======
         if($gateway){   
             $json['config_settings']['gateways']        = $net_return[2]; //Gateways
             $json['config_settings']['captive_portals'] = $net_return[3]; //Captive portals
+                        
+            $openvpn_bridges                            = $this->_build_openvpn_bridges($net_return[4]);
+            $json['config_settings']['openvpn_bridges'] = $openvpn_bridges; //Openvpn Bridges
         }
 
 		//======== System related settings ======
@@ -198,6 +204,31 @@ class NodesController extends AppController {
 
         return $json; 
     }
+    
+    private function _build_openvpn_bridges($openvpn_list){
+        $openvpn_bridges = array();    
+        foreach($openvpn_list as $o){
+        
+            $br                 = array(); 
+            $br['interface']    = $o['interface'];
+            $br['up']           = "mesh_".$this->Mac."\n".md5("mesh_".$this->Mac)."\n";
+            $br['ca']           = $o['ca_crt'];
+            $br['vpn_gateway_address'] = $o['vpn_gateway_address'];
+            
+            Configure::load('OpenvpnClientPresets');
+            $config_file    = Configure::read('OpenvpnClientPresets.'.$o['config_preset']); //Read the defaults
+
+            $config_file['remote']  = $o['ip_address'].' '.$o['port'];
+            $config_file['up']      = '"/etc/openvpn/up.sh br-'.$o['interface'].'"';
+            $config_file['proto']   = $o['protocol'];
+            $config_file['ca']      = '/etc/openvpn/'.$o['interface'].'_ca.crt';
+            $config_file['auth_user_pass'] = '/etc/openvpn/'.$o['interface'].'_up';  
+            $br['config_file']      = $config_file;
+            array_push($openvpn_bridges,$br);
+        }
+        return $openvpn_bridges;
+    }
+    
 
 	private function _build_system($mesh){
 		//Get the root password
@@ -254,6 +285,7 @@ class NodesController extends AppController {
         $network 				= array();
         $nat_data				= array();
         $captive_portal_data 	= array();
+        $openvpn_bridge_data    = array();
 		$include_lan_dhcp 		= true;
 
 
@@ -399,12 +431,13 @@ class NodesController extends AppController {
 
         //Add the auto-attach entry points
         foreach($mesh['MeshExit'] as $me){
-
+        
             $has_entries_attached   = false;
             $if_name                = 'ex_'.$this->_number_to_word($start_number);
             $exit_id                = $me['id'];
             $type                   = $me['type'];
             $vlan                   = $me['vlan'];
+            $openvpn_server_id      = $me['openvpn_server_id'];
 
             //This is used to fetch info eventually about the entry points
             if(count($me['MeshExitMeshEntry']) > 0){
@@ -532,11 +565,61 @@ class NodesController extends AppController {
 							    'ap_isolation' 	=> '0'
 						   )
 					));
-
-
                     $start_number++;
                     continue; //We dont care about the other if's
+                }
+                
+                //___ OpenVPN Bride ________
+                if(($type == 'openvpn_bridge')&&($gateway)){
 
+                    //Add the OpenvpnServer detail
+                    if($type =='openvpn_bridge'){
+                    
+                        $a              = $me['OpenvpnServerClient'];
+                        $a['bridge']    = 'br-'.$if_name;
+                        $a['interface'] = $if_name;
+                        
+                        //Get the info for the OpenvpnServer
+                        $openvpn_server = ClassRegistry::init('OpenvpnServer');
+                        $q_s            = $openvpn_server->findById($me['OpenvpnServerClient']['openvpn_server_id']);
+                        
+                        $a['protocol']  = $q_s['OpenvpnServer']['protocol'];
+                        $a['ip_address']= $q_s['OpenvpnServer']['ip_address'];
+                        $a['port']      = $q_s['OpenvpnServer']['port'];
+                        $a['vpn_mask']  = $q_s['OpenvpnServer']['vpn_mask'];
+                        $a['ca_crt']    = $q_s['OpenvpnServer']['ca_crt'];   
+                        
+                        $a['config_preset']        = $q_s['OpenvpnServer']['config_preset'];  
+                        $a['vpn_gateway_address']  = $q_s['OpenvpnServer']['vpn_gateway_address'];                     
+                        array_push($openvpn_bridge_data,$a);             
+                    }
+                    $interfaces =  "bat0.".$start_number;
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge",
+                                'ipaddr'    => $me['OpenvpnServerClient']['ip_address'],
+                                'netmask'   => $a['vpn_mask'],
+                                'proto'     => 'static'
+                                
+                        ))
+                    );
+
+					//***With its VLAN***
+					$nr = $this->_number_to_word($start_number);
+					array_push($network,
+						array(
+							"interface"    => "bat_vlan_".$nr,
+							"options"   => array(
+							    "ifname"    	=> $interfaces,
+							    "proto"     	=> "batadv_vlan",
+							    'ap_isolation' 	=> '0'
+						   )
+					));
+                    $start_number++;
+                    continue; //We dont care about the other if's
                 }
 
 
@@ -544,7 +627,7 @@ class NodesController extends AppController {
                 //==== STANDARD NODES ===================
                 //=======================================
 
-                if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')||($type =='captive_portal')){
+                if(($type == 'nat')||($type == 'tagged_bridge')||($type == 'bridge')||($type =='captive_portal')||($type =='openvpn_bridge')){
                     $interfaces =  "bat0.".$start_number;
 
 					//===Check if this standard node has an ethernet bridge that has to be included here (NON LAN bridge)
@@ -580,7 +663,7 @@ class NodesController extends AppController {
                 }
             }
         }
-        return array($network,$entry_point_data,$nat_data,$captive_portal_data);
+        return array($network,$entry_point_data,$nat_data,$captive_portal_data,$openvpn_bridge_data);
     }
 
 
