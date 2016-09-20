@@ -541,11 +541,38 @@ class ApsController extends AppController {
         $json['config_settings']['gateways']        = $net_return[2]; //Gateways
         $json['config_settings']['captive_portals'] = $net_return[3]; //Captive portals
         
+        $openvpn_bridges                            = $this->_build_openvpn_bridges($net_return[4]);
+        $json['config_settings']['openvpn_bridges'] = $openvpn_bridges; //Openvpn Bridges
+        
 		//======== System related settings ======
 		$system_data 		= $this->_build_system($ap_profile);
 		$json['config_settings']['system'] = $system_data;
 
         return $json; 
+    }
+    
+     private function _build_openvpn_bridges($openvpn_list){
+        $openvpn_bridges = array();    
+        foreach($openvpn_list as $o){
+        
+            $br                 = array(); 
+            $br['interface']    = $o['interface'];
+            $br['up']           = "mesh_".$this->Mac."\n".md5("mesh_".$this->Mac)."\n";
+            $br['ca']           = $o['ca_crt'];
+            $br['vpn_gateway_address'] = $o['vpn_gateway_address'];
+            
+            Configure::load('OpenvpnClientPresets');
+            $config_file    = Configure::read('OpenvpnClientPresets.'.$o['config_preset']); //Read the defaults
+
+            $config_file['remote']  = $o['ip_address'].' '.$o['port'];
+            $config_file['up']      = '"/etc/openvpn/up.sh br-'.$o['interface'].'"';
+            $config_file['proto']   = $o['protocol'];
+            $config_file['ca']      = '/etc/openvpn/'.$o['interface'].'_ca.crt';
+            $config_file['auth_user_pass'] = '/etc/openvpn/'.$o['interface'].'_up';  
+            $br['config_file']      = $config_file;
+            array_push($openvpn_bridges,$br);
+        }
+        return $openvpn_bridges;
     }
     
     private function _build_system($ap_profile){
@@ -616,6 +643,7 @@ class ApsController extends AppController {
         $network 				= array();
         $nat_data				= array();
         $captive_portal_data 	= array();
+        $openvpn_bridge_data    = array();
 		$include_lan_dhcp 		= true;
 
         //-> loopback if
@@ -773,10 +801,57 @@ class ApsController extends AppController {
                     } ////Tampa hack                             
                     $start_number++;
                     continue; //We dont care about the other if's
-                }           
+                }
+                
+                
+                //___ OpenVPN Bride ________
+                if($type == 'openvpn_bridge'){
+                
+                    $openvpn_server_client = ClassRegistry::init('OpenvpnServerClient');
+                    $openvpn_server_client->contain();
+                    $q_c = $openvpn_server_client->find('first',
+                        array('conditions' => array(
+                            'OpenvpnServerClient.ap_profile_id'         => 14,
+                            'OpenvpnServerClient.ap_profile_exit_id'    => 40,
+                            'OpenvpnServerClient.ap_id'    => $this->ApId,
+                        ))
+                    );
+                    
+                    $a              = $q_c['OpenvpnServerClient'];
+                    $a['bridge']    = 'br-'.$if_name;
+                    $a['interface'] = $if_name;
+                    
+                    //Get the info for the OpenvpnServer
+                    $openvpn_server = ClassRegistry::init('OpenvpnServer');
+                    $q_s            = $openvpn_server->findById($q_c['OpenvpnServerClient']['openvpn_server_id']);
+                    
+                    $a['protocol']  = $q_s['OpenvpnServer']['protocol'];
+                    $a['ip_address']= $q_s['OpenvpnServer']['ip_address'];
+                    $a['port']      = $q_s['OpenvpnServer']['port'];
+                    $a['vpn_mask']  = $q_s['OpenvpnServer']['vpn_mask'];
+                    $a['ca_crt']    = $q_s['OpenvpnServer']['ca_crt'];   
+                    
+                    $a['config_preset']        = $q_s['OpenvpnServer']['config_preset'];  
+                    $a['vpn_gateway_address']  = $q_s['OpenvpnServer']['vpn_gateway_address'];                     
+                    array_push($openvpn_bridge_data,$a);             
+                    
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "type"      => "bridge",
+                                'ipaddr'    => $q_c['OpenvpnServerClient']['ip_address'],
+                                'netmask'   => $a['vpn_mask'],
+                                'proto'     => 'static'
+                                
+                        ))
+                    );
+                    $start_number++;
+                    continue; //We dont care about the other if's
+                }            
             }
         } 
-        return array($network,$entry_point_data,$nat_data,$captive_portal_data);
+        return array($network,$entry_point_data,$nat_data,$captive_portal_data,$openvpn_bridge_data);
     }
     
     private function _build_wireless($ap_profile,$entry_point_data){

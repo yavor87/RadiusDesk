@@ -569,7 +569,7 @@ class NodesController extends AppController {
                     continue; //We dont care about the other if's
                 }
                 
-                //___ OpenVPN Bride ________
+                //___ OpenVPN Bridge ________
                 if(($type == 'openvpn_bridge')&&($gateway)){
 
                     //Add the OpenvpnServer detail
