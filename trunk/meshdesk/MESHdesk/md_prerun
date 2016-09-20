@@ -48,6 +48,15 @@ start() {
 		    /etc/init.d/privoxy stop
 		fi
 		
+		if [ -e /etc/init.d/openvpn ]; then
+		    echo "Disable rc.d symlink for OpenVPN"
+		    /etc/init.d/openvpn disable
+		    /etc/init.d/openvpn stop		    
+		    if [ -d /etc/openvpn ]; then
+		        cp /etc/MESHdesk/files/common/up.sh /etc/openvpn/up.sh
+		    fi
+		fi
+		
 		uci set meshdesk.settings.first_run=0
 		uci commit
 	else

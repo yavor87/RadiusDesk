@@ -550,6 +550,14 @@ function configure_device(config)
     	a:createConfigs(o.config_settings.captive_portals)                  
     	a:startPortals()	
     end
+    
+    if(o.config_settings.openvpn_bridges ~= nil)then
+        print("Doing OpenVPN Bridges")
+        require("rdOpenvpn")
+	    local o = rdOpenvpn()
+        o:configureFromTable(o.config_settings.openvpn_bridges)
+        os.execute("/etc/init.d/openvpn start")
+    end
         
 --]]--
 end
