@@ -799,6 +799,14 @@ function ap_configure_device(config)
     	a:startPortals()	
     end
     
+    if(o.config_settings.openvpn_bridges ~= nil)then
+        print("Doing OpenVPN Bridges")
+        require("rdOpenvpn")
+	    local v = rdOpenvpn()
+        v:configureFromTable(o.config_settings.openvpn_bridges)
+        os.execute("/etc/init.d/openvpn start")
+    end
+    
     --Start Alfred for the collecting of data (No MESH)
     alfred:masterNoBatmanEnableAndStart()
     --Start the heartbeat to the server
