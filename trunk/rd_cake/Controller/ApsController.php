@@ -805,15 +805,14 @@ class ApsController extends AppController {
                 
                 
                 //___ OpenVPN Bride ________
-                if($type == 'openvpn_bridge'){
-                
+                if($type == 'openvpn_bridge'){               
                     $openvpn_server_client = ClassRegistry::init('OpenvpnServerClient');
                     $openvpn_server_client->contain();
                     $q_c = $openvpn_server_client->find('first',
                         array('conditions' => array(
-                            'OpenvpnServerClient.ap_profile_id'         => 14,
-                            'OpenvpnServerClient.ap_profile_exit_id'    => 40,
-                            'OpenvpnServerClient.ap_id'    => $this->ApId,
+                            'OpenvpnServerClient.ap_profile_id'         => $ap_profile_e['ap_profile_id'],
+                            'OpenvpnServerClient.ap_profile_exit_id'    => $ap_profile_e['id'],
+                            'OpenvpnServerClient.ap_id'                 => $this->ApId,
                         ))
                     );
                     
