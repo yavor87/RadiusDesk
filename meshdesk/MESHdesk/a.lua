@@ -554,8 +554,8 @@ function configure_device(config)
     if(o.config_settings.openvpn_bridges ~= nil)then
         print("Doing OpenVPN Bridges")
         require("rdOpenvpn")
-	    local o = rdOpenvpn()
-        o:configureFromTable(o.config_settings.openvpn_bridges)
+	    local v = rdOpenvpn()
+        v:configureFromTable(o.config_settings.openvpn_bridges)
         os.execute("/etc/init.d/openvpn start")
     end
         
