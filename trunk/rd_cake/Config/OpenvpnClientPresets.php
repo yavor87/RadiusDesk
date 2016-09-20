@@ -16,7 +16,8 @@ $config['OpenvpnClientPresets']['default'] 		= array(
     'cipher'            => 'none',
     'up_delay'          => '1',
     'ping'              => 10,
-    'script_security'   => '2'
+    'script_security'   => '2',
+    'tls_client'        => '1'
 );
 
 ?>
