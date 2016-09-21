@@ -189,12 +189,54 @@ class RegisterUsersController extends AppController {
 	}
 
 	public function lost_password(){
+	
+	    $success = false;
+	    if(array_key_exists('email',$this->request->data)){
+	    
+	        $username = $this->request->data['email'];
+	         
+	        if($this->request->data['auto_suffix_check'] == 'true'){
+	            $username = $username.'@'.$this->request->data['auto_suffix'];
+	        }
+	     
+	        $this->PermanentUser->contain('Radcheck'); 
+	        $q_r = $this->PermanentUser->find('first',array('conditions' =>array('PermanentUser.username' => $username)));
+	       
+	        $password = false;       
+	        if($q_r){
+	            foreach($q_r['Radcheck'] as $rc){
+                    if($rc['attribute'] == 'Cleartext-Password'){
+                        $un = $this->request->data['email'];
+                        $password = $rc['value'];
+                        if($this->request->data['auto_suffix_check'] == 'true'){
+	                        $un = $un." ($username)";
+	                    }
+                        $this->_email_lost_password($un,$password);
+                        $success = true;
+                    }
+	            }
+	        }        
+	    }
 
 		$this->set(array(
-            'success'   => true,
+            'success'   => $success,
 			'data'		=> array(),
 		        '_serialize' => array('success','data')
 		    ));
+	}
+	
+	
+	private function _email_lost_password($username,$password){
+	    $email_server = Configure::read('EmailServer');
+        App::uses('CakeEmail', 'Network/Email');
+        $Email = new CakeEmail();
+        $Email->config($email_server);
+        $Email->subject('Lost Password Retrieval');
+        $Email->to($this->request->data['email']);
+        $Email->viewVars(compact( 'username', 'password'));
+        $Email->template('user_detail', 'user_notify');
+        $Email->emailFormat('html');
+        $Email->send();
 	}
 
 
