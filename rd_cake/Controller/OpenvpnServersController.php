@@ -10,6 +10,56 @@ class OpenvpnServersController extends AppController {
 
 //------------------------------------------------------------------------
 
+    public function auth_client(){
+    
+        $success = false;
+    
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+		
+		if(isset($this->data['username'])){
+		    $username = $this->data['username'];
+		}
+		
+		if(isset($this->data['password'])){
+		    $password = $this->data['password'];
+		}
+		
+		$md5_sum = md5($username);
+				
+		if($password == $md5_sum){
+		    
+		    if (preg_match('/^mesh_/',$username)){
+		        $mac    = preg_replace('/^mesh_/', '', $username);
+		        $node   = ClassRegistry::init('Node');
+                $node->contain();
+                $q_r    = $node->findByMac($mac);
+                if($q_r){
+                    $success = true;
+                }
+		    }
+		    
+		    if (preg_match('/^ap_/',$username)){
+		        $mac    = preg_replace('/^ap_/', '', $username);
+		        $ap     = ClassRegistry::init('Ap');
+                $ap->contain();
+                $q_r    = $ap->findByMac($mac);
+                if($q_r){
+                    $success = true;
+                }
+		    }    
+		}
+	  
+         $this->set(array(
+            'username'  => $username,
+            'password'  => $password, 
+            'mac'       => $mac,
+            'success' => $success,
+            '_serialize' => array('mac','username','password','success')
+        ));
+    }
+
     //____ BASIC CRUD Manager ________
     public function index(){
 
