@@ -1037,6 +1037,13 @@ var rdConnect = (function () {
                                         if (this.getParentView().validate()){ //validate form
                                             //webix.message("All is correct");
                                             //with callback
+                                            
+                                            var auto_suffix_check   = cDynamicData.settings.auto_suffix_check;
+		                                    var auto_suffix			= cDynamicData.settings.auto_suffix;
+		                                     
+                                            this.getParentView().setValues({auto_suffix_check:auto_suffix_check,auto_suffix:auto_suffix}, true);
+                                            
+                                            
                                             webix.ajax().post(urlLostPw, this.getParentView().getValues(), function(text, data, xhr){ 
                                                 if(data.json().success == true){
                                                     fDebug("Got Dynamic Detail");                
