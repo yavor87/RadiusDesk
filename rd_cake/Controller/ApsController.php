@@ -32,6 +32,7 @@ class ApsController extends AppController {
              //   print_r($q_r);
                 $ap_profile_id  = $q_r['Ap']['ap_profile_id'];
                 $this->ApId     = $q_r['Ap']['id'];
+                $this->Mac      = $mac;
 				$this->Hardware	= $q_r['Ap']['hardware'];
 				
                 $this->Ap->ApProfile->contain(
@@ -557,7 +558,7 @@ class ApsController extends AppController {
         
             $br                 = array(); 
             $br['interface']    = $o['interface'];
-            $br['up']           = "mesh_".$this->Mac."\n".md5("mesh_".$this->Mac)."\n";
+            $br['up']           = "ap_".$this->Mac."\n".md5("ap_".$this->Mac)."\n";
             $br['ca']           = $o['ca_crt'];
             $br['vpn_gateway_address'] = $o['vpn_gateway_address'];
             
