@@ -1155,7 +1155,6 @@ $$('sliderData').refresh();
                         view    :"form",
                         id      : 'pwdForm',
                         scroll  : true,
-
                         cols    :[ 
                             {},
                             {
@@ -1163,8 +1162,7 @@ $$('sliderData').refresh();
                                 minWidth    : cMinWidth,
                                 maxWidth    : cMaxWidth,
                                 borderless  :true,
-                                elements    : [
-                                   
+                                elements    : [                       
                                     {
                                         view        : 'text',
                                         label       : i18n('sEmail'),
@@ -1175,6 +1173,12 @@ $$('sliderData').refresh();
                                         if (this.getParentView().validate()){ //validate form
                                             //webix.message("All is correct");
                                             //with callback
+                                            
+                                            var auto_suffix_check   = cDynamicData.settings.auto_suffix_check;
+		                                    var auto_suffix			= cDynamicData.settings.auto_suffix;
+		                                     
+                                            this.getParentView().setValues({auto_suffix_check:auto_suffix_check,auto_suffix:auto_suffix}, true);
+                                            
                                             webix.ajax().post(urlLostPw, this.getParentView().getValues(), function(text, data, xhr){ 
                                                 if(data.json().success == true){
                                                     fDebug("Got Dynamic Detail");                
@@ -1238,8 +1242,8 @@ $$('sliderData').refresh();
 				},
                // body        : webix.copy(form)
                 body        : webix.copy(mv)
-            });
-            
+            }); 
+               
             $$("winPassword").show();
         }
         
