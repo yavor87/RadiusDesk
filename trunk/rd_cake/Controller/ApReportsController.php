@@ -608,8 +608,30 @@ class ApReportsController extends AppController {
                 }
             }
         }
-
-      
+        
+        
+        //--- Check if the 'vpn_info' array is in the data ----
+        $this->log('AP: Checking for vpn_info in log', 'debug');
+        if(array_key_exists('vpn_info',$this->request->data)){
+            $this->log('AP: Found vpn_info', 'debug');    
+            $openvpn_server_client = ClassRegistry::init('OpenvpnServerClient');  
+            foreach($this->request->data['vpn_info'] as $vpn_i){
+                $vpn_gw_list = $vpn_i['vpn_gateways'];
+                foreach($vpn_gw_list as $gw){
+                    $vpn_client_id  = $gw['vpn_client_id'];
+                    $state          = $gw['state'];
+                    $timestamp      = $gw['timestamp'];
+                    $date           = date('Y-m-d H:i:s',$timestamp);
+                    
+                    $d              = array();
+                    $d['id']        = $vpn_client_id;
+                    $d['last_contact_to_server'] =  $date;
+                    $d['state']     = $state;
+                    $openvpn_server_client->save($d); 
+                }    
+            }  
+        }
+        
         //--- Check if the 'system_info' array is in the data ----
         $this->log('AP: Checking for system_info in log', 'debug');
         if(array_key_exists('system_info',$this->request->data)){
