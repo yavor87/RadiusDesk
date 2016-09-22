@@ -8,6 +8,7 @@ package.path = "../libs/?.lua;./libs/?.lua;" .. package.path
 local network_data          = 100   --This is where we store network stats
 local system_data           = 101   --This is where we store stats about the system
 local feedback_timestamp    = 102   --This is where feedback timestamp
+local vpn_data              = 103   --This is where we store stats on all the OpenVPN Gateway pings
 local actions_waiting		= 115
 local result_file       	= '/tmp/result.json'
 
@@ -49,7 +50,19 @@ function submitReport()
             table.insert(repacked_system, j_val)
         end
     end
-    local sd        = j.encode(repacked_system)
+    local sd    = j.encode(repacked_system)
+    
+    local repacked_vpn = {}
+    local vpn_t    = a:readData(vpn_data)
+    if(vpn_t)then
+        for i, row in ipairs(vpn_t) do
+            local node, value = unpack(row)
+            local j_val = j.decode(value)
+            table.insert(repacked_vpn, j_val)
+        end
+    end
+    local vpn_d = j.encode(repacked_vpn)
+    
 
 	--Add the neighbor details
 	require('rdVis')
@@ -59,8 +72,8 @@ function submitReport()
 	if(vis_feedback)then
 		vis_string = vis_feedback
 	end
-
-    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..'}'
+	
+    local curl_data = '{"network_info":'..nd..',"system_info":'..sd..',"vis":'..vis_string..',"vpn_info":'..vpn_d..'}'
 
     local proto 	= fetch_config_value('meshdesk.internet1.protocol')
     local mode      = fetch_config_value('meshdesk.settings.mode')
