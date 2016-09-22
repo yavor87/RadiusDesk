@@ -43,6 +43,7 @@ if not exists (select * from information_schema.columns
 	  `ap_id` int(11) DEFAULT NULL,
 	  `ip_address` varchar(40) NOT NULL,
 	  `last_contact_to_server` DATETIME NULL default NULL,
+	  `state` tinyint(1) NOT NULL DEFAULT '0',
 	  `created` datetime NOT NULL,
 	  `modified` datetime NOT NULL,
 	  PRIMARY KEY (`id`)
