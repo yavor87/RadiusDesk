@@ -214,6 +214,7 @@ class NodesController extends AppController {
             $br['up']           = "mesh_".$this->Mac."\n".md5("mesh_".$this->Mac)."\n";
             $br['ca']           = $o['ca_crt'];
             $br['vpn_gateway_address'] = $o['vpn_gateway_address'];
+            $br['vpn_client_id'] = $o['vpn_client_id'];
             
             Configure::load('OpenvpnClientPresets');
             $config_file    = Configure::read('OpenvpnClientPresets.'.$o['config_preset']); //Read the defaults
@@ -590,7 +591,8 @@ class NodesController extends AppController {
                         $a['ca_crt']    = $q_s['OpenvpnServer']['ca_crt'];   
                         
                         $a['config_preset']        = $q_s['OpenvpnServer']['config_preset'];  
-                        $a['vpn_gateway_address']  = $q_s['OpenvpnServer']['vpn_gateway_address'];                     
+                        $a['vpn_gateway_address']  = $q_s['OpenvpnServer']['vpn_gateway_address'];
+                        $a['vpn_client_id']        = $me['OpenvpnServerClient']['id'];                      
                         array_push($openvpn_bridge_data,$a);             
                     }
                     $interfaces =  "bat0.".$start_number;

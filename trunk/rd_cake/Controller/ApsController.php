@@ -561,6 +561,7 @@ class ApsController extends AppController {
             $br['up']           = "ap_".$this->Mac."\n".md5("ap_".$this->Mac)."\n";
             $br['ca']           = $o['ca_crt'];
             $br['vpn_gateway_address'] = $o['vpn_gateway_address'];
+            $br['vpn_client_id'] = $o['vpn_client_id'];
             
             Configure::load('OpenvpnClientPresets');
             $config_file    = Configure::read('OpenvpnClientPresets.'.$o['config_preset']); //Read the defaults
@@ -831,8 +832,9 @@ class ApsController extends AppController {
                     $a['vpn_mask']  = $q_s['OpenvpnServer']['vpn_mask'];
                     $a['ca_crt']    = $q_s['OpenvpnServer']['ca_crt'];   
                     
-                    $a['config_preset']        = $q_s['OpenvpnServer']['config_preset'];  
-                    $a['vpn_gateway_address']  = $q_s['OpenvpnServer']['vpn_gateway_address'];                     
+                    $a['config_preset']         = $q_s['OpenvpnServer']['config_preset'];  
+                    $a['vpn_gateway_address']   = $q_s['OpenvpnServer']['vpn_gateway_address'];
+                    $a['vpn_client_id']         = $q_c['OpenvpnServerClient']['id'];                     
                     array_push($openvpn_bridge_data,$a);             
                     
                     array_push($network,
