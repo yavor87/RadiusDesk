@@ -76,6 +76,7 @@ function rdOpenvpn.__configureFromTable(self,table)
 	    local interface;                                                 
 	    local config_file = {}; -- New empty array for this entry;
 	    local vpn_gateway_address;
+	    local vpn_client_id;
 	    
 	    --Here we collect the various things to eventually process them                             
 		for key, val in pairs(table_entry) do                           
@@ -92,6 +93,10 @@ function rdOpenvpn.__configureFromTable(self,table)
             if(key == 'vpn_gateway_address')then
                 vpn_gateway_address = val
             end 
+            if(key == 'vpn_client_id')then
+                vpn_client_id = val
+            end 
+            
             if(key == 'config_file')then
                 for k, v in pairs(val) do                                                                  
                 	config_file[k] = v                                                                     
@@ -115,16 +120,29 @@ function rdOpenvpn.__configureFromTable(self,table)
         -- Add the UP --
         local up_filename = '/etc/openvpn/'..interface.."_up";
         self:__writeAll(up_filename,up)
+        
+        -- Write the vpn-gateways
+        self.x.set('vpn-gateways',interface,'gateway')
+        self.x.set('vpn-gateways',interface,'ipaddr',vpn_gateway_address);
+        self.x.set('vpn-gateways',interface,'vpn_client_id',vpn_client_id);
       
     end
     self.x.commit('openvpn');
+    self.x.commit('vpn-gateways');
 end
 
 -- Clean start OpenVPN                                                
 function rdOpenvpn.__newOpenvpn(self)
-	local f="/etc/config/openvpn"; 
+	local f="/etc/config/openvpn";
+
     os.execute("rm " .. f);
     os.execute("touch " .. f);
+
+    --List of the gateways--
+	local gw="/etc/config/vpn-gateways"   
+    
+    os.execute("rm " .. gw);
+    os.execute("touch " .. gw);
 end
 
 
