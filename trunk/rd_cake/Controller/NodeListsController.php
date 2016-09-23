@@ -5,7 +5,7 @@ class NodeListsController extends AppController {
 
     public $name        = 'NodeLists';
     public $components  = array('Aa','TimeCalculations','GridFilter');
-    public $uses        = array('Node','Mesh','User','UnknownNode','NodeSetting');
+    public $uses        = array('Node','Mesh','User','UnknownNode','NodeSetting','OpenvpnServerClient');
     protected $base     = "Access Providers/Controllers/NodeLists/";
 
 //------------------------------------------------------------------------
@@ -93,6 +93,9 @@ class NodeListsController extends AppController {
             return;
         }
         $user_id    = $user['id'];
+        
+        $mesh_lookup = array();
+        
         $c = $this->_build_common_query($user); 
 		
         //===== PAGING (MUST BE LAST) ======
@@ -140,11 +143,44 @@ class NodeListsController extends AppController {
             }
             
             //We add this for a visual display of the gateway nodes or non-gateway nodes
-            $gateway = 'unknown';
+            $gateway = 'yes';
 			if(count($i['NodeNeighbor'])>0){
 			    $gateway = $i['NodeNeighbor'][0]['gateway'];
 			}
 			$i['Node']['gateway'] = $gateway;
+			
+			$i['Node']['has_openvpn'] = false;
+			
+			if($gateway == 'yes'){
+			    //See if there are any Openvpn connections
+			    $this->OpenvpnServerClient->contain('OpenvpnServer');
+			    $q_vpn = $this->OpenvpnServerClient->find('all',array('conditions' => array('OpenvpnServerClient.mesh_id' => $mesh_id)));
+			    if($q_vpn){
+			        if(!isset($mesh_lookup[$mesh_id])){ //This will ensure we only to it once per mesh :-)
+			            $i['Node']['has_openvpn'] = true;
+			            $i['Node']['openvpn_list'] = array();
+			            foreach($q_vpn as $vpn){
+			                $vpn_name           = $vpn['OpenvpnServer']['name']; 
+			                $vpn_description    = $vpn['OpenvpnServer']['description'];
+			                $last_contact_to_server  = $vpn['OpenvpnServerClient']['last_contact_to_server'];
+			                if($last_contact_to_server != null){
+			                    $lc_human           = $this->TimeCalculations->time_elapsed_string($last_contact_to_server);
+			                }else{
+			                    $lc_human = 'never';
+			                }
+			                $state              = $vpn['OpenvpnServerClient']['state'];
+			                array_push($i['Node']['openvpn_list'], array(
+			                    'name'          => $vpn_name,
+			                    'description'   => $vpn_description,
+			                    'lc_human'      => $lc_human,
+			                    'state'         => $state
+			                ));
+			            }
+			            //print_r($q_vpn);
+			            $mesh_lookup[$mesh_id] = true;
+			        }
+			    }
+			}
             
             
             $i['Node']['last_contact_human']     = $this->TimeCalculations->time_elapsed_string($i['Node']['last_contact']);
