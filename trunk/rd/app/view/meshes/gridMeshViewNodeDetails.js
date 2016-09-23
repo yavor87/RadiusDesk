@@ -53,8 +53,26 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         
         me.columns  = [
-            {xtype: 'rownumberer',stateId: 'StateGMVND1'},
-            { text: i18n('sName'),              dataIndex: 'name',          tdCls: 'gridTree', width: 130,stateId: 'StateGMVND2'},
+            {xtype: 'rownumberer',stateId: 'StateGMVND1'},           
+            { 
+                text        : i18n('sName'),   
+                dataIndex   : 'name',  
+                tdCls       : 'gridTree',
+                width		: 130,
+                renderer    : function(value,metaData, record){
+                	var gateway = record.get('gateway');
+                	if(gateway == 'unknown'){
+                        return value;
+                    }
+                    if(gateway == 'yes'){
+                        return "<div class=\"fieldGreen\" style=\"text-align:left;\"> "+value+"</div>";
+                    }
+                    if(gateway == 'no'){
+                        return "<div class=\"fieldGrey\" style=\"text-align:left;\"> "+value+"</div>";
+                    }  	             
+                },
+                stateId: 'StateGMVND2'
+            },
             { text: i18n('sDescription'),       dataIndex: 'description',   tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND3', hidden : true},
             { text: i18n('sMAC_address'),       		dataIndex: 'mac',           tdCls: 'gridTree', width: 130,stateId: 'StateGMVND4'},
             { text: i18n('sHardware'),          dataIndex: 'hw_human',      tdCls: 'gridTree', flex: 1,stateId: 'StateGMVND5', hidden : true},
