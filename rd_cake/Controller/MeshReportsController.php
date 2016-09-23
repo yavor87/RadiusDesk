@@ -1044,7 +1044,7 @@ class MeshReportsController extends AppController {
 		//Get the 'dead_after' value
 		$dead_after = $this->_get_dead_after($mesh_id);
 
-		$this->Node->contain('NodeSystem', 'NodeLoad','NodeAction');
+		$this->Node->contain('NodeSystem', 'NodeLoad','NodeAction','NodeNeighbor');
 		$q_r 		= $this->Node->find('all', array('conditions' => array('Node.mesh_id' => $mesh_id )));
 
 		//Create a hardware lookup for proper names of hardware
@@ -1104,6 +1104,12 @@ class MeshReportsController extends AppController {
 				$this_data['last_cmd'] 			= $last_action['command'];
 				$this_data['last_cmd_status'] 	= $last_action['status'];
 			}
+			
+			$gateway = 'unknown';
+			if(count($i['NodeNeighbor'])>0){
+			    $gateway = $i['NodeNeighbor'][0]['gateway'];
+			}
+			$this_data['gateway'] = $gateway;
 
 			array_push($items,$this_data);
 		}

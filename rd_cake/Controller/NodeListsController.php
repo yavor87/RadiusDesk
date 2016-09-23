@@ -119,8 +119,6 @@ class NodeListsController extends AppController {
 
         foreach($q_r as $i){
 
-			//print_r($i);
-
             $owner_id       = $i['Mesh']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user);
@@ -140,6 +138,14 @@ class NodeListsController extends AppController {
                     $state = 'up';
                 }
             }
+            
+            //We add this for a visual display of the gateway nodes or non-gateway nodes
+            $gateway = 'unknown';
+			if(count($i['NodeNeighbor'])>0){
+			    $gateway = $i['NodeNeighbor'][0]['gateway'];
+			}
+			$i['Node']['gateway'] = $gateway;
+            
             
             $i['Node']['last_contact_human']     = $this->TimeCalculations->time_elapsed_string($i['Node']['last_contact']);
             $i['Node']['state']     = $state;
@@ -245,7 +251,8 @@ class NodeListsController extends AppController {
 
         //What should we include....
         $c['contain']   = array(
-                            'Mesh' => array('User')
+                            'Mesh' => array('User'),
+                            'NodeNeighbor'
                         );
 
         //===== SORT =====
