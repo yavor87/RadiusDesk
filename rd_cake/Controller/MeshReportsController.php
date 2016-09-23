@@ -5,7 +5,8 @@ class MeshReportsController extends AppController {
 	public $components  = array('Aa','TimeCalculations');
     public  $uses    	= array(
 		'Node',					'NodeLoad',		'NodeStation',	'NodeSystem','MeshEntry',
-		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction', 'MeshExit'
+		'NodeIbssConnection',	'NodeSetting',	'NodeNeighbor',	'NodeAction', 'MeshExit',
+		'OpenvpnServerClient'
 	);
 	private $blue	 	= '#627dde';
 	private $l_red   	= '#fb6002';
@@ -1040,6 +1041,8 @@ class MeshReportsController extends AppController {
 
 		$items 		= array();
 		$mesh_id 	= $this->request->query['mesh_id'];
+		
+		$do_gateway = true;
 
 		//Get the 'dead_after' value
 		$dead_after = $this->_get_dead_after($mesh_id);
@@ -1105,11 +1108,46 @@ class MeshReportsController extends AppController {
 				$this_data['last_cmd_status'] 	= $last_action['status'];
 			}
 			
-			$gateway = 'unknown';
+			$gateway = 'yes';
 			if(count($i['NodeNeighbor'])>0){
 			    $gateway = $i['NodeNeighbor'][0]['gateway'];
 			}
 			$this_data['gateway'] = $gateway;
+			
+			$this_data['has_openvpn'] = false;
+			
+			if($gateway == 'yes'){
+			    //See if there are any Openvpn connections
+			    $this->OpenvpnServerClient->contain('OpenvpnServer');
+			    $q_vpn = $this->OpenvpnServerClient->find('all',array('conditions' => array('OpenvpnServerClient.mesh_id' => $mesh_id)));
+			    if($q_vpn){
+			        if($do_gateway == true){ //This will ensure we only to it once per mesh :-)
+			            $this_data['has_openvpn'] = true;
+			            $this_data['openvpn_list'] = array();
+			            foreach($q_vpn as $vpn){
+			                $vpn_name           = $vpn['OpenvpnServer']['name']; 
+			                $vpn_description    = $vpn['OpenvpnServer']['description'];
+			                $last_contact_to_server  = $vpn['OpenvpnServerClient']['last_contact_to_server'];
+			                if($last_contact_to_server != null){
+			                    $lc_human           = $this->TimeCalculations->time_elapsed_string($last_contact_to_server);
+			                }else{
+			                    $lc_human = 'never';
+			                }
+			                $state              = $vpn['OpenvpnServerClient']['state'];
+			                array_push($this_data['openvpn_list'], array(
+			                    'name'          => $vpn_name,
+			                    'description'   => $vpn_description,
+			                    'lc_human'      => $lc_human,
+			                    'state'         => $state
+			                ));
+			            }
+			            //print_r($q_vpn);
+			            $do_gateway = false;
+			        }
+			    }
+			}
+			
+			
 
 			array_push($items,$this_data);
 		}
