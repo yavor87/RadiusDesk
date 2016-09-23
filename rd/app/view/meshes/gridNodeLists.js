@@ -78,7 +78,27 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
                 hidden      : true
             },
 			{ text: 'Mesh',  dataIndex: 'mesh',  tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridNodeLists3'},
-            { text: i18n('sName'),  dataIndex: 'name',  tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridNodeLists4'},
+			{ 
+                text        : i18n('sName'),   
+                dataIndex   : 'name',  
+                tdCls       : 'gridMain',
+                width		: 130,
+                renderer    : function(value,metaData, record){
+                	var gateway = record.get('gateway');
+                	if(gateway == 'unknown'){
+                        return value;
+                    }
+                    if(gateway == 'yes'){
+                        return "<div class=\"fieldGreen\" style=\"text-align:left;\"> "+value+"</div>";
+                    }
+                    if(gateway == 'no'){
+                        return "<div class=\"fieldGrey\" style=\"text-align:left;\"> "+value+"</div>";
+                    }  	             
+                },
+                stateId     : 'StateGridNodeLists4',
+                flex        : 1,
+                filter      : {type: 'string'}
+            },
             { 
 				text		: i18n('sDescription'), 
 				dataIndex	: 'description',  

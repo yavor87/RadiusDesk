@@ -16,6 +16,7 @@ Ext.define('Rd.model.mNodeList', {
          {name: 'update',       	type: 'bool'},
          {name: 'delete',       	type: 'bool'},
          'last_contact_human',
-         'state'
+         'state',
+         'gateway'
         ]
 });
