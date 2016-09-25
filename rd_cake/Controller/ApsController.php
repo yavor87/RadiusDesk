@@ -208,6 +208,7 @@ class ApsController extends AppController {
 			$ap_profile_id  = $i['ApProfile']['id'];
 			
 			$l_contact      = $i['Ap']['last_contact'];
+		
 			//Get the 'dead_after' value
 		    $dead_after = $this->_get_dead_after($ap_profile_id);
             if($l_contact == null){
@@ -339,12 +340,12 @@ class ApsController extends AppController {
                     }else{
                         $lc_human = 'never';
                     }
-                    $state              = $vpn['state'];
+                    $vpn_state              = $vpn['state'];
                     array_push($i['Ap']['openvpn_list'], array(
                         'name'          => $vpn_name,
                         'description'   => $vpn_description,
                         'lc_human'      => $lc_human,
-                        'state'         => $state
+                        'state'         => $vpn_state
                     ));
                     }	
 			}	

@@ -1130,12 +1130,12 @@ class MeshReportsController extends AppController {
 			                }else{
 			                    $lc_human = 'never';
 			                }
-			                $state              = $vpn['OpenvpnServerClient']['state'];
+			                $vpn_state              = $vpn['OpenvpnServerClient']['state'];
 			                array_push($this_data['openvpn_list'], array(
 			                    'name'          => $vpn_name,
 			                    'description'   => $vpn_description,
 			                    'lc_human'      => $lc_human,
-			                    'state'         => $state
+			                    'state'         => $vpn_state
 			                ));
 			            }
 			            //print_r($q_vpn);
@@ -1227,14 +1227,14 @@ class MeshReportsController extends AppController {
                 $vpn_gw_list = $vpn_i['vpn_gateways'];
                 foreach($vpn_gw_list as $gw){
                     $vpn_client_id  = $gw['vpn_client_id'];
-                    $state          = $gw['state'];
+                    $vpn_state      = $gw['state'];
                     $timestamp      = $gw['timestamp'];
                     $date           = date('Y-m-d H:i:s',$timestamp);
                     
                     $d              = array();
                     $d['id']        = $vpn_client_id;
                     $d['last_contact_to_server'] =  $date;
-                    $d['state']     = $state;
+                    $d['state']     = $vpn_state;
                     $openvpn_server_client->save($d); 
                 }    
             }  

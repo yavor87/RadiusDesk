@@ -165,12 +165,12 @@ class NodeListsController extends AppController {
 			                }else{
 			                    $lc_human = 'never';
 			                }
-			                $state              = $vpn['OpenvpnServerClient']['state'];
+			                $vpn_state              = $vpn['OpenvpnServerClient']['state'];
 			                array_push($i['Node']['openvpn_list'], array(
 			                    'name'          => $vpn_name,
 			                    'description'   => $vpn_description,
 			                    'lc_human'      => $lc_human,
-			                    'state'         => $state
+			                    'state'         => $vpn_state
 			                ));
 			            }
 			            //print_r($q_vpn);
