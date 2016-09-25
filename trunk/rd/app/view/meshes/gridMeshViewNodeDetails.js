@@ -61,9 +61,6 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 width		: 130,
                 renderer    : function(value,metaData, record){
                 	var gateway = record.get('gateway');
-                	if(gateway == 'unknown'){
-                        return value;
-                    }
                     if(gateway == 'yes'){
                         return "<div class=\"fieldGreen\" style=\"text-align:left;\"> "+value+"</div>";
                     }
@@ -153,6 +150,26 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                         ),
                 stateId	: 'StateGMVND14',
 				hidden	: false
+            },
+            { 
+                text    : 'OpenVPN Connections',
+                sortable: false,
+                width   : 150,
+                hidden  : true,
+                flex    : 1,
+                tdCls   : 'gridTree',
+                xtype   : 'templatecolumn', 
+                tpl:    new Ext.XTemplate(
+                    '<tpl for="openvpn_list">',     // interrogate the realms property within the data
+                        "<tpl if='lc_human == \"never\"'><div class=\"fieldBlue\">Never contacted {name}</div>",
+                        '<tpl else>',
+                            "<tpl if='state == true'><div class=\"fieldGreenWhite\">{name} up {lc_human}</div></tpl>",
+                            "<tpl if='state == false'><div class=\"fieldRedWhite\">{name} down {lc_human}</div></tpl>",
+                        "</tpl>",
+                    '</tpl>'
+                ),
+                dataIndex: 'openvpn_list',
+                stateId : 'StateGMVND15'
             }
         ];
         me.callParent(arguments);

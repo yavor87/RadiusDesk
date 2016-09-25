@@ -17,6 +17,7 @@ Ext.define('Rd.model.mNodeList', {
          {name: 'delete',       	type: 'bool'},
          'last_contact_human',
          'state',
-         'gateway'
+         'gateway',
+         'openvpn_list'
         ]
 });
