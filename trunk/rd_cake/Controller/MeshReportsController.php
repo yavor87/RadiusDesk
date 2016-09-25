@@ -1113,16 +1113,13 @@ class MeshReportsController extends AppController {
 			    $gateway = $i['NodeNeighbor'][0]['gateway'];
 			}
 			$this_data['gateway'] = $gateway;
-			
-			$this_data['has_openvpn'] = false;
-			
+					
 			if($gateway == 'yes'){
 			    //See if there are any Openvpn connections
 			    $this->OpenvpnServerClient->contain('OpenvpnServer');
 			    $q_vpn = $this->OpenvpnServerClient->find('all',array('conditions' => array('OpenvpnServerClient.mesh_id' => $mesh_id)));
 			    if($q_vpn){
 			        if($do_gateway == true){ //This will ensure we only to it once per mesh :-)
-			            $this_data['has_openvpn'] = true;
 			            $this_data['openvpn_list'] = array();
 			            foreach($q_vpn as $vpn){
 			                $vpn_name           = $vpn['OpenvpnServer']['name']; 
