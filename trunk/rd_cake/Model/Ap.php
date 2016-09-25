@@ -48,16 +48,16 @@ class Ap extends AppModel {
           	),			
             'ApWifiSetting'   => array(
                 'dependent'     => true   
+            ),
+            'OpenvpnServerClient' => array(
+                'dependent'     => true 
             )
     );
     
     public $hasOne = array(
 			'ApLoad'   => array(
                 'dependent'     => true   
-            ),
-            'OpenvpnServerClient' => array(
-                'dependent'     => true 
-            )
+            )   
     );
 
 }
