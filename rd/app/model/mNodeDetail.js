@@ -24,6 +24,7 @@ Ext.define('Rd.model.mNodeDetail', {
 	'last_cmd',
 	'last_cmd_status',
     'last_contact_human',
-    'gateway'		
+    'gateway',
+    'openvpn_list'		
   	]
 });

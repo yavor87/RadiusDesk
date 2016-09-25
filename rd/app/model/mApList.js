@@ -27,6 +27,7 @@ Ext.define('Rd.model.mApList', {
          'hardware',
          'hw_human',
          'last_cmd',
-	     'last_cmd_status'		
+	     'last_cmd_status',
+	     'openvpn_list'		
         ]
 });
