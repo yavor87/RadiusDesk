@@ -167,10 +167,17 @@ Ext.define('Rd.view.aps.gridApLists' ,{
                 xtype   : 'templatecolumn', 
                 tpl:    new Ext.XTemplate(
                     '<tpl for="openvpn_list">',     // interrogate the realms property within the data
-                        "<tpl if='lc_human == \"never\"'><div class=\"fieldBlue\">Never contacted {name}</div>",
+                        "<tpl if='lc_human == \"never\"'><div class=\"fieldBlue\">{name}</div>",
+                        "<div style=\"font-size: 12px;\">(Never tested {name})</div>",
                         '<tpl else>',
-                            "<tpl if='state == true'><div class=\"fieldGreenWhite\">{name} up {lc_human}</div></tpl>",
-                            "<tpl if='state == false'><div class=\"fieldRedWhite\">{name} down {lc_human}</div></tpl>",
+                            "<tpl if='state == true'>",
+                                "<div class=\"fieldGreenWhite\">{name}</div>",
+                                "<div style=\"font-size: 12px; color:green;\">Tested up {lc_human}</div>",
+                            "</tpl>",
+                            "<tpl if='state == false'>",
+                                "<div class=\"fieldRedWhite\">{name}</div>",
+                                "<div style=\"font-size: 12px; color:red;\">Tested down {lc_human}</div>",
+                            "</tpl>",
                         "</tpl>",
                     '</tpl>'
                 ),
