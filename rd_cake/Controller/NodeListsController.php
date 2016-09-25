@@ -148,16 +148,13 @@ class NodeListsController extends AppController {
 			    $gateway = $i['NodeNeighbor'][0]['gateway'];
 			}
 			$i['Node']['gateway'] = $gateway;
-			
-			$i['Node']['has_openvpn'] = false;
-			
+					
 			if($gateway == 'yes'){
 			    //See if there are any Openvpn connections
 			    $this->OpenvpnServerClient->contain('OpenvpnServer');
 			    $q_vpn = $this->OpenvpnServerClient->find('all',array('conditions' => array('OpenvpnServerClient.mesh_id' => $mesh_id)));
 			    if($q_vpn){
 			        if(!isset($mesh_lookup[$mesh_id])){ //This will ensure we only to it once per mesh :-)
-			            $i['Node']['has_openvpn'] = true;
 			            $i['Node']['openvpn_list'] = array();
 			            foreach($q_vpn as $vpn){
 			                $vpn_name           = $vpn['OpenvpnServer']['name']; 

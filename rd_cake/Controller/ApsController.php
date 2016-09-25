@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ApsController extends AppController {
 
     public $name        = 'Aps';
-    public $uses        = array('Ap', 'UnknownAp','User','Na','ApProfileSetting','ApStation','ApProfileEntry');
+    public $uses        = array('Ap', 'UnknownAp','User','Na','ApProfileSetting','ApStation','ApProfileEntry','OpenvpnServer');
     public $components  = array('MacVendors','Aa','Formatter','TimeCalculations','GridFilter');
     
     protected $base     = "Access Providers/Controllers/Aps/";
@@ -154,6 +154,8 @@ class ApsController extends AppController {
         $c_page['page']     = $page;
         $c_page['limit']    = $limit;
         $c_page['offset']   = $offset;
+        
+        $OpenvpnServerLookup= array();
         	
 
         $total  = $this->Ap->find('count',$c);      
@@ -168,7 +170,7 @@ class ApsController extends AppController {
         $GeoIpLocation = new GeoIpLocation();
 
         foreach($q_r as $i){
-			//print_r($i);
+
             $owner_id       = $i['ApProfile']['user_id'];
             $owner_tree     = $this->_find_parents($owner_id);
             $action_flags   = $this->_get_action_flags($owner_id,$user); 
@@ -312,6 +314,40 @@ class ApsController extends AppController {
 				$i['Ap']['last_cmd_status'] 	= $last_action['status'];
 			}
 			
+			//List any OpenVPN connections
+			
+			if(count($i['OpenvpnServerClient'])>0){
+			    $i['Ap']['openvpn_list'] = array();
+		        foreach($i['OpenvpnServerClient'] as $vpn){ 
+		            //Do a lookup to save Query time
+		            $s_id = $vpn['openvpn_server_id'];
+		            if(!isset($OpenvpnServerLookup[$s_id])){
+		                $this->OpenvpnServer->contain();
+		                $q_s                = $this->OpenvpnServer->findById($vpn['openvpn_server_id']);
+		                $vpn_name           = $q_s['OpenvpnServer']['name']; 
+                        $vpn_description    = $q_s['OpenvpnServer']['description'];
+		                $l_array = array('name' => $vpn_name, 'description' => $vpn_description);
+		                $OpenvpnServerLookup[$s_id] = $l_array;
+		            }else{
+		                $vpn_name           = $OpenvpnServerLookup[$s_id]['name']; 
+                        $vpn_description    = $OpenvpnServerLookup[$s_id]['description'];
+		            }
+		               
+                    $last_contact_to_server  = $vpn['last_contact_to_server'];
+                    if($last_contact_to_server != null){
+                        $lc_human           = $this->TimeCalculations->time_elapsed_string($last_contact_to_server);
+                    }else{
+                        $lc_human = 'never';
+                    }
+                    $state              = $vpn['state'];
+                    array_push($i['Ap']['openvpn_list'], array(
+                        'name'          => $vpn_name,
+                        'description'   => $vpn_description,
+                        'lc_human'      => $lc_human,
+                        'state'         => $state
+                    ));
+                    }	
+			}	
                 
 			$i['Ap']['update']      = $action_flags['update'];
             $i['Ap']['delete'] 	    = $action_flags['delete'];
@@ -412,7 +448,8 @@ class ApsController extends AppController {
         //What should we include....
         $c['contain']   = array(
                             'ApProfile' => array('User'),
-                            'ApAction'
+                            'ApAction',
+                            'OpenvpnServerClient'
                         );
 
         //===== SORT =====
