@@ -146,7 +146,7 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 tpl:    new Ext.XTemplate(
                             "<tpl if='last_cmd_status == \"\"'><div class=\"fieldBlue\">(nothing)</div></tpl>", 
                             "<tpl if='last_cmd_status == \"awaiting\"'><div class=\"fieldBlue\"><i class=\"fa fa-clock-o\"></i> {last_cmd}</div></tpl>",
-                            "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreenWhite\"><i class=\"fa fa-check-circle\"></i> {last_cmd}</div></tpl>"
+                            "<tpl if='last_cmd_status == \"fetched\"'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> {last_cmd}</div></tpl>"
                         ),
                 stateId	: 'StateGMVND14',
 				hidden	: false
@@ -160,17 +160,17 @@ Ext.define('Rd.view.meshes.gridMeshViewNodeDetails' ,{
                 tdCls   : 'gridTree',
                 xtype   : 'templatecolumn', 
                 tpl:    new Ext.XTemplate(
-                    '<tpl for="openvpn_list">',     // interrogate the realms property within the data
+                     '<tpl for="openvpn_list">',     // interrogate the realms property within the data
                         "<tpl if='lc_human == \"never\"'><div class=\"fieldBlue\">{name}</div>",
                         "<div style=\"font-size: 12px;\">(Never tested {name})</div>",
                         '<tpl else>',
                             "<tpl if='state == true'>",
-                                "<div class=\"fieldGreenWhite\">{name}</div>",
-                                "<div style=\"font-size: 12px; color:green;\">Tested up {lc_human}</div>",
+                                "<div class=\"fieldGreen\">{name}</div>",
+                                "<div style=\"font-size: 12px; color:#4d4d4d;\">Tested up {lc_human}</div>",
                             "</tpl>",
                             "<tpl if='state == false'>",
-                                "<div class=\"fieldRedWhite\">{name}</div>",
-                                "<div style=\"font-size: 12px; color:red;\">Tested down {lc_human}</div>",
+                                "<div class=\"fieldRed\">{name}</div>",
+                                "<div style=\"font-size: 12px; color:#4d4d4d;\">Tested down {lc_human}</div>",
                             "</tpl>",
                         "</tpl>",
                     '</tpl>'
