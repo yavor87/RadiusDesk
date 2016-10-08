@@ -15,6 +15,9 @@ local app           = wx.wxGetApp()
 --Some GUI variables (global)
 local frame,tc_shared_secret,tc_timestamp,tc_eth0,tc_c_srvr,tc_c_key,tc_firmware,choice_hw,tc_new_secret,tc_new_srvr,tc_new_key
 
+--Mobile add-on
+local choice_m_active,choice_m_proto,choice_m_service,tc_m_device,tc_m_apn,tc_m_pincode,tc_m_username,tc_m_password
+
 --Some hardware
 local choices = {
     "Dragino",
@@ -43,6 +46,7 @@ local choices = {
     "Generic 2 Radio",
     "ZBT WE1526",
     "ZBT WE2026",
+    "ZBT WE3826",
     "Archer C7(AC)",
     "MiWiFi Mini(AC)"
 }
@@ -73,8 +77,9 @@ hardware[22]        = 'genoneradio'
 hardware[23]        = 'gentworadio'
 hardware[24]        = 'zbt_we1526'
 hardware[25]        = 'zbt_we2026'
-hardware[26]        = 'tl_ac1750_c7'
-hardware[27]        = 'miwifi_mini'
+hardware[26]        = 'zbt_we3826'
+hardware[27]        = 'tl_ac1750_c7'
+hardware[28]        = 'miwifi_mini'
 
 local mode_choices = {
     "Mesh",
@@ -88,8 +93,87 @@ mode[0] = 'mesh'
 mode[1] = 'ap'
 mode[2] = 'cpe'
 
+--Protocol for 3G--
+local protocol_choices = {
+    "3G",
+    "QMI",
+    "MCN",
+    "WWAN"
+}
+
+local protocol = {}
+
+protocol[0] = '3g'
+protocol[1] = 'qmi'
+protocol[2] = 'mcn'
+protocol[3] = 'wwan'
+
+local active_choices = {
+    "Do Not Change",
+    "Enable",
+    "Disable"
+}
+
+local active = {}
+active[0] = 'unchanged'
+active[1] = '1'
+active[2] = '0'
+
+--Service for 3G--
+local service_choices = {
+    "UMTS",
+    "UMTS Only",
+    "GPRS",
+    "GPRS Only",
+    "CDMA",
+    "EVDO"
+}
+
+local service = {}
+
+service[0] = "umts"
+service[1] = "umts_only"
+service[2] = "gprs"
+service[3] = "gprs_only"
+service[4] = "cdma"
+service[5] = "evdo"
+
+local space = 3
+local label_size = wx.wxSize(80,-1)
+local grey = wx.wxColour(219, 221, 224)
+
+function EventMobileAction(event)
+
+    local c = grey
+    local state = false
+    
+    if(event:GetSelection() == 1)then
+        c = wx.wxWHITE
+        state = true
+    end
+    
+    choice_m_proto:Enable(state)
+    choice_m_service:Enable(state)
+    
+    tc_m_device:SetEditable(state)
+    tc_m_device:SetBackgroundColour(c)
+    
+    tc_m_apn:SetEditable(state)
+    tc_m_apn:SetBackgroundColour(c)
+    
+    tc_m_pincode:SetEditable(state)
+    tc_m_pincode:SetBackgroundColour(c)
+    
+    tc_m_username:SetEditable(state)
+    tc_m_username:SetBackgroundColour(c)
+    
+    tc_m_password:SetEditable(state)
+    tc_m_password:SetBackgroundColour(c)
+end
+
 
 function HandleEvents(event)
+
     if(event:GetSelection() == 0)then
         sbmHardware:SetBitmap(bm_dragino)
     end
@@ -169,9 +253,12 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_zbt_we2026)
     end
     if(event:GetSelection() == 26)then
+        sbmHardware:SetBitmap(bm_zbt_we3826)
+    end
+    if(event:GetSelection() == 27)then
         sbmHardware:SetBitmap(bm_tl_ac1750_c7)
     end
-     if(event:GetSelection() == 27)then
+     if(event:GetSelection() == 28)then
         sbmHardware:SetBitmap(bm_miwifi_mini)
     end
 end
@@ -235,6 +322,42 @@ function set_info(sock)
     if(tc_new_key:GetValue() ~= '')then
         table.insert(a, 'key='..tc_new_key:GetValue())
     end
+    -- Here we pack the 3G settings
+    
+    --Only when we have it Enable (1) do we send the detail
+    --When it is 0 we do nothing and 2 we Disable it
+    if(choice_m_active:GetSelection()== 1)then
+        table.insert(a, 'm_active=1')
+        
+        table.insert(a, 'm_proto='..protocol[choice_m_proto:GetSelection()])
+        table.insert(a, 'm_service='..service[choice_m_service:GetSelection()])
+        
+        if(tc_m_device:GetValue() ~= '')then
+            table.insert(a, 'm_device='..tc_m_device:GetValue())
+        end
+        
+        if(tc_m_apn:GetValue() ~= '')then
+            table.insert(a, 'm_apn='..tc_m_apn:GetValue())
+        end
+        
+        if(tc_m_pincode:GetValue() ~= '')then
+            table.insert(a, 'm_pincode='..tc_m_pincode:GetValue())
+        end
+        
+        if(tc_m_username:GetValue() ~= '')then
+            table.insert(a, 'm_username='..tc_m_username:GetValue())
+        end
+        
+        if(tc_m_password:GetValue() ~= '')then
+            table.insert(a, 'm_password='..tc_m_password:GetValue())
+        end
+    end
+    
+    --2 = Disable
+    if(choice_m_active:GetSelection()== 1)then
+        table.insert(a, 'm_active=0')
+    end
+    
     table.insert(a,'last')
     for i, v in ipairs(a) do
         sock:Write(v.."\n")
@@ -376,16 +499,40 @@ function build_gui()
     bm_zbt_we1526      = wx.wxBitmap();
     bm_zbt_we1526:LoadFile("./graphics/zbt_we1526.png",wx.wxBITMAP_TYPE_ANY )
     
+    bm_zbt_we3826      = wx.wxBitmap();
+    bm_zbt_we3826:LoadFile("./graphics/zbt_we3826.png",wx.wxBITMAP_TYPE_ANY )
+    
     bm_tl_ac1750_c7      = wx.wxBitmap();
     bm_tl_ac1750_c7:LoadFile("./graphics/tl_ac1750_c7.png",wx.wxBITMAP_TYPE_ANY )
     
     bm_miwifi_mini      = wx.wxBitmap();
     bm_miwifi_mini:LoadFile("./graphics/miwifi_mini.png",wx.wxBITMAP_TYPE_ANY )
+    
+    --Some Icons--
+    bm_icn_info         = wx.wxBitmap();
+    bm_icn_info:LoadFile("./graphics/info.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_icn_settings         = wx.wxBitmap();
+    bm_icn_settings:LoadFile("./graphics/settings.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_icn_mobile         = wx.wxBitmap();
+    bm_icn_mobile:LoadFile("./graphics/mobile.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_icn_security         = wx.wxBitmap();
+    bm_icn_security:LoadFile("./graphics/security.png",wx.wxBITMAP_TYPE_ANY )
+    
+     --Nice Icons
+    imageList = wx.wxImageList(32, 32)
+    imageList:Add(bm_icn_info)
+    imageList:Add(bm_icn_settings)
+    imageList:Add(bm_icn_mobile)
+    imageList:Add(bm_icn_security)
 
 
 
-    frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node config utility',
-        wx.wxDefaultPosition, wx.wxSize(550, 670),
+
+    frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, 'MESHdesk Node Config Utility',
+        wx.wxDefaultPosition, wx.wxSize(600, 450),
                     wx.wxDEFAULT_FRAME_STYLE)
                     
         local statusBar = frame:CreateStatusBar(1)
@@ -421,144 +568,273 @@ function build_gui()
                                 frame)
             end )
             
-        --Shared Secret box--
-        local sb1   = wx.wxStaticBox( frame, wx.wxID_ANY, "Shared Secret")
-        local sbs1  = wx.wxStaticBoxSizer( sb1, wx.wxVERTICAL);
-        local hbox1 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st1   = wx.wxStaticText(frame, wx.wxID_ANY, 'Secret ')
-        tc_shared_secret   = wx.wxTextCtrl(frame, wx.wxID_ANY,shared_secret)
-        --tc_shared_secret:SetBackgroundColour(wx.wxGREEN )    --Set the color of the main panel red
-        hbox1:Add(st1, 1,   wx.wxALIGN_LEFT + wx.wxALL, 10)
-        hbox1:Add(tc_shared_secret, 3,   wx.wxALIGN_LEFT + wx.wxALL, 10)
-        sbs1:Add(hbox1, 0,  wx.wxALL , 5)
         
-        --Fit the image in
-        local hboxA = wx.wxBoxSizer(wx.wxHORIZONTAL)
-            local bitmap      = wx.wxBitmap();
-            bitmap:LoadFile("./graphics/logo.png",wx.wxBITMAP_TYPE_ANY )
-            local bm = wx.wxStaticBitmap(frame,-1,bitmap)
-        hboxA:Add(sbs1,  1,  wx.wxALL ,5)
-        hboxA:Add(bm,1,wx.wxALL+wx.wxGROW,10)
-        vbox:Add(hboxA,0,wx.wxALL,5)
+        --Four Tabs--
+        local notebook = wx.wxNotebook(frame, wx.wxID_ANY,wx.wxDefaultPosition, wx.wxDefaultSize)
+           
+
+        notebook:SetImageList(imageList)
         
-        vbox:Add(wx.wxStaticLine(frame,wx.wxID_ANY),0,  wx.wxALL + wx.wxGROW ,10)
+            --Info tab--
+            local pnlInfo = wx.wxPanel(notebook, wx.wxID_ANY)
+            local szrInfo = wx.wxBoxSizer(wx.wxVERTICAL)
+            pnlInfo:SetSizer(szrInfo)
+            szrInfo:SetSizeHints(pnlInfo)
+          
+             --Node info box--
+            local hbox_info  = wx.wxBoxSizer(wx.wxHORIZONTAL)
         
-        local space = 3
+                local hbox_left = wx.wxBoxSizer(wx.wxVERTICAL)
         
-        --Node info box--
-        local sb2   = wx.wxStaticBox( frame, wx.wxID_ANY, "Node info")
-        local sbs2  = wx.wxStaticBoxSizer( sb2, wx.wxHORIZONTAL);
+            local hboxts = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local stts   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Timestamp ',wx.wxDefaultPosition,label_size)
+            tc_timestamp = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_timestamp:SetEditable(false)
+            tc_timestamp:SetBackgroundColour(grey)
+            hboxts:Add(stts, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hboxts:Add(tc_timestamp, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
-        local hbox_left = wx.wxBoxSizer(wx.wxVERTICAL)
+            local hbox2 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st2   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Eth0 ',wx.wxDefaultPosition,label_size)
+            tc_eth0     = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_eth0:SetEditable(false)
+            tc_eth0:SetBackgroundColour(grey)
+            hbox2:Add(st2, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox2:Add(tc_eth0, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
-        local hboxts = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local stts   = wx.wxStaticText(frame, wx.wxID_ANY, 'Timestamp ')
-        tc_timestamp = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hboxts:Add(stts, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hboxts:Add(tc_timestamp, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        
-        local hbox2 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st2   = wx.wxStaticText(frame, wx.wxID_ANY, 'Eth0 ')
-        tc_eth0     = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox2:Add(st2, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox2:Add(tc_eth0, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        
-        local hbox3 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st3   = wx.wxStaticText(frame, wx.wxID_ANY, 'Current Server ')
-        tc_c_srvr   = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox3:Add(st3, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox3:Add(tc_c_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+            local hbox3 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st3   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current Server ',wx.wxDefaultPosition,label_size)
+            tc_c_srvr   = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_c_srvr:SetEditable(false)
+            tc_c_srvr:SetBackgroundColour(grey)
+            hbox3:Add(st3, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox3:Add(tc_c_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
     
-        local hbox3a = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st3a   = wx.wxStaticText(frame, wx.wxID_ANY, 'Current WPA2 Key ')
-        tc_c_key     = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox3a:Add(st3a, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox3a:Add(tc_c_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+            local hbox3a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st3a   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current WPA2 Key ',wx.wxDefaultPosition,label_size)
+            tc_c_key     = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_c_key:SetEditable(false)
+            tc_c_key:SetBackgroundColour(grey)
+            hbox3a:Add(st3a, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox3a:Add(tc_c_key, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
-        local hbox3b = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st3b   = wx.wxStaticText(frame, wx.wxID_ANY, 'Current Mode ')
-        tc_c_mode    = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox3b:Add(st3b, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox3b:Add(tc_c_mode, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+            local hbox3b = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st3b   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current Mode ',wx.wxDefaultPosition,label_size)
+            tc_c_mode    = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_c_mode:SetEditable(false)
+            tc_c_mode:SetBackgroundColour(grey)
+            hbox3b:Add(st3b, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox3b:Add(tc_c_mode, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
     
-                hbox_left:Add(hboxts, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
-                hbox_left:Add(hbox2, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
-                hbox_left:Add(hbox3, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
-                hbox_left:Add(hbox3a, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
-                hbox_left:Add(hbox3b, 0,  wx.wxALIGN_LEFT + wx.wxALL, space)
-            sbs2:Add(hbox_left, 1,  wx.wxALIGN_LEFT + wx.wxALL, space)
+                hbox_left:Add(hboxts, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox2, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox3, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox3a, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox3b, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            hbox_info:Add(hbox_left, 1,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             
-        local hbox_right = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        
-        local hbox4 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st4   = wx.wxStaticText(frame, wx.wxID_ANY, 'Firmware ')
-        tc_firmware = wx.wxTextCtrl(frame, wx.wxID_ANY,'',wx.wxDefaultPosition, wx.wxDefaultSize,
-                             wx.wxTE_MULTILINE+wx.wxTE_DONTWRAP+wx.wxTE_NO_VSCROLL)
-        hbox4:Add(st4, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
-        hbox4:Add(tc_firmware, 1, wx.wxALIGN_LEFT + wx.wxALL+ wx.wxEXPAND , space)
-                hbox_right:Add(hbox4, 1,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND , space)
-            sbs2:Add(hbox_right, 1,  wx.wxALIGN_CENTER + wx.wxALL + wx.wxEXPAND , space)
             
-        vbox:Add(sbs2,0, wx.wxALL+ wx.wxEXPAND,5)
+                local hbox_right = wx.wxBoxSizer(wx.wxHORIZONTAL)
         
-        vbox:Add(wx.wxStaticLine(frame,wx.wxID_ANY),0,  wx.wxALL + wx.wxGROW ,10)
+            local hbox4 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st4   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Firmware ')
+            tc_firmware = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY,'',wx.wxDefaultPosition, wx.wxDefaultSize,
+                                 wx.wxTE_MULTILINE+wx.wxTE_DONTWRAP+wx.wxTE_NO_VSCROLL)
+            tc_firmware:SetEditable(false)
+            tc_firmware:SetBackgroundColour(grey)
+            hbox4:Add(st4, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox4:Add(tc_firmware, 1, wx.wxALIGN_LEFT + wx.wxALL+ wx.wxEXPAND , space)
+                    hbox_right:Add(hbox4, 1,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND , space)
+            hbox_info:Add(hbox_right, 1,  wx.wxALIGN_CENTER + wx.wxALL + wx.wxEXPAND , space)
+            
+        szrInfo:Add(hbox_info,1,wx.wxALL+ wx.wxEXPAND,7)
+          
+          
+  
+        notebook:AddPage(pnlInfo, "Current Settings",false,0)
         
-         --New setting box--
-        local sb3   = wx.wxStaticBox( frame, wx.wxID_ANY, "New node settings")
-        local sbs3  = wx.wxStaticBoxSizer( sb3, wx.wxVERTICAL);
-        local hbox5 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st5   = wx.wxStaticText(frame, wx.wxID_ANY, 'Server IP ')
-        tc_new_srvr = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox5:Add(st5, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
-        hbox5:Add(tc_new_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+            --Settings tab--
+            local pnlSettings = wx.wxPanel(notebook, wx.wxID_ANY)
+            local szrSettings = wx.wxBoxSizer(wx.wxVERTICAL)
+            pnlSettings:SetSizer(szrSettings)
+            szrSettings:SetSizeHints(pnlSettings)
+            
+            
+            local vbox3  = wx.wxBoxSizer(wx.wxVERTICAL);
+                local hbox5 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st5   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Server IP ',wx.wxDefaultPosition,label_size)
+                tc_new_srvr = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                hbox5:Add(st5, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                hbox5:Add(tc_new_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
-        local hbox6a = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st6a   = wx.wxStaticText(frame, wx.wxID_ANY, 'Mode')
-        choice_mode   = wx.wxChoice(frame, wx.wxID_NEW,
+                local hbox6a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st6a   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Mode',wx.wxDefaultPosition,label_size)
+                choice_mode   = wx.wxChoice(pnlSettings, wx.wxID_NEW,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            mode_choices)
-        choice_mode:SetSelection(0)
-        hbox6a:Add(st6a, 1, wx.wxALIGN_LEFT + wx.wxALL , 0)
-        hbox6a:Add(choice_mode, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, 0)
+                choice_mode:SetSelection(0)
+                hbox6a:Add(st6a, 0, wx.wxALIGN_LEFT + wx.wxALL , 0)
+                hbox6a:Add(choice_mode, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
         
-        --print(wx.wxID_ANY)
-        
-        local hbox6 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st6   = wx.wxStaticText(frame, wx.wxID_ANY, 'Hardware type ')
-        choice_hw   = wx.wxChoice(frame, wx.wxID_REDO,
+                local hbox6 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st6   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Hardware type ',wx.wxDefaultPosition,label_size)
+                choice_hw   = wx.wxChoice(pnlSettings, wx.wxID_REDO,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            choices)
-        choice_hw:SetSelection(0)
-        hbox6:Add(st6, 1, wx.wxALIGN_LEFT + wx.wxEXPAND,0)
-        hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                choice_hw:SetSelection(0)
+                hbox6:Add(st6, 0, wx.wxALIGN_LEFT + wx.wxEXPAND,0)
+                hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
 
-        local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st7   = wx.wxStaticText(frame, wx.wxID_ANY, 'Change secret to ')
-        tc_new_secret = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox7:Add(st7, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
-        hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st7   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Change secret to ',wx.wxDefaultPosition,label_size)
+                tc_new_secret = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                hbox7:Add(st7, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
-        local hbox8 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        local st8   = wx.wxStaticText(frame, wx.wxID_ANY, 'WPA2 Key ')
-        tc_new_key  = wx.wxTextCtrl(frame, wx.wxID_ANY)
-        hbox8:Add(st8, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
-        hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                local hbox8 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st8   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'WPA2 Key ',wx.wxDefaultPosition,label_size)
+                tc_new_key  = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                hbox8:Add(st8, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
-        sbs3:Add(hbox6a, 0, wx.wxEXPAND+ wx.wxALL, 5)
-        sbs3:Add(hbox6, 0,  wx.wxEXPAND+ wx.wxALL, 5)
-        sbs3:Add(hbox5, 0,  wx.wxEXPAND+ wx.wxALL, 5)
-        sbs3:Add(hbox8, 0,  wx.wxEXPAND+ wx.wxALL, 5)
-        sbs3:Add(hbox7, 0,  wx.wxEXPAND+ wx.wxALL, 5)
+            vbox3:Add(hbox6a,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            vbox3:Add(hbox6, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            vbox3:Add(hbox5, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            vbox3:Add(hbox8, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            vbox3:Add(hbox7, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
-         --Fit the image in
-        local hboxZ = wx.wxBoxSizer(wx.wxHORIZONTAL)
-        sbmHardware = wx.wxStaticBitmap(frame,-1,bm_dragino)
-        hboxZ:Add(sbs3, 1,  wx.wxALL ,5)
-        hboxZ:Add(sbmHardware,1,wx.wxALL+wx.wxGROW,10)
-        vbox:Add(hboxZ,0,wx.wxALL,5)
+            --Fit the image in
+            local hboxZ = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            sbmHardware = wx.wxStaticBitmap(pnlSettings,-1,bm_dragino)
+            hboxZ:Add(vbox3, 1,  wx.wxALL +wx.wxEXPAND ,5)
+            hboxZ:Add(sbmHardware,0,wx.wxALL+wx.wxGROW,10)
+            
+            szrSettings:Add(hboxZ,1,wx.wxALL +wx.wxEXPAND,5)
+            
+        notebook:AddPage(pnlSettings, "New Settings",false,1)
+        
+            --3G Config--
+            local pnlMobile = wx.wxPanel(notebook, wx.wxID_ANY)
+            local szrMobile = wx.wxBoxSizer(wx.wxVERTICAL)
+            pnlMobile:SetSizer(szrMobile)
+            szrMobile:SetSizeHints(pnlMobile)
+            
+                local vbox_mobile  = wx.wxBoxSizer(wx.wxVERTICAL);
+                
+                    local hbox_m_1 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_1   = wx.wxStaticText(pnlMobile, wx.wxID_ANY, 'Action',wx.wxDefaultPosition,label_size)
+                    choice_m_active   = wx.wxChoice(pnlMobile, wx.wxID_SAVE,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               active_choices)
+                    choice_m_active:SetSelection(0)
+                    hbox_m_1:Add(st_m_1, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_m_1:Add(choice_m_active, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    local hbox_m_2 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_2   = wx.wxStaticText(pnlMobile, wx.wxID_ANY, '* Protocol',wx.wxDefaultPosition,label_size)
+                    choice_m_proto   = wx.wxChoice(pnlMobile, wx.wxID_NEW,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               protocol_choices)
+                    choice_m_proto:SetSelection(0)
+                    choice_m_proto:Disable()
+                    hbox_m_2:Add(st_m_2, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_m_2:Add(choice_m_proto, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    local hbox_m_2a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_2a   = wx.wxStaticText(pnlMobile, wx.wxID_ANY, '* Service',wx.wxDefaultPosition,label_size)
+                    choice_m_service   = wx.wxChoice(pnlMobile, wx.wxID_NEW,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               service_choices)
+                    choice_m_service:SetSelection(0)
+                    choice_m_service:Disable()
+                    hbox_m_2a:Add(st_m_2a, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_m_2a:Add(choice_m_service, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    local hbox_m_3  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_3    = wx.wxStaticText(pnlMobile, wx.wxID_ANY, '* Device',wx.wxDefaultPosition,label_size)
+                    tc_m_device     = wx.wxTextCtrl(pnlMobile, wx.wxID_ANY)
+                    tc_m_device:SetValue("/dev/ttyUSB0")
+                    tc_m_device:SetEditable(false)
+                    tc_m_device:SetBackgroundColour(grey)
+                    hbox_m_3:Add(st_m_3, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_m_3:Add(tc_m_device, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                    local hbox_m_4  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_4    = wx.wxStaticText(pnlMobile, wx.wxID_ANY, '* APN',wx.wxDefaultPosition,label_size)
+                    tc_m_apn        = wx.wxTextCtrl(pnlMobile, wx.wxID_ANY)
+                    tc_m_apn:SetValue("internet")
+                    tc_m_apn:SetEditable(false)
+                    tc_m_apn:SetBackgroundColour(grey)
+                    hbox_m_4:Add(st_m_4, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_m_4:Add(tc_m_apn, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                    local hbox_m_5  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_5    = wx.wxStaticText(pnlMobile, wx.wxID_ANY, 'PIN',wx.wxDefaultPosition,label_size)
+                    tc_m_pincode    = wx.wxTextCtrl(pnlMobile, wx.wxID_ANY)
+                    tc_m_pincode:SetEditable(false)
+                    tc_m_pincode:SetBackgroundColour(grey)
+                    hbox_m_5:Add(st_m_5, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_m_5:Add(tc_m_pincode, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                    local hbox_m_6  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_6    = wx.wxStaticText(pnlMobile, wx.wxID_ANY, 'Username',wx.wxDefaultPosition,label_size)
+                    tc_m_username   = wx.wxTextCtrl(pnlMobile, wx.wxID_ANY)
+                    tc_m_username:SetEditable(false)
+                    tc_m_username:SetBackgroundColour(grey)
+                    hbox_m_6:Add(st_m_6, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_m_6:Add(tc_m_username, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                    local hbox_m_7  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_m_7    = wx.wxStaticText(pnlMobile, wx.wxID_ANY, 'Password',wx.wxDefaultPosition,label_size)
+                    tc_m_password   = wx.wxTextCtrl(pnlMobile, wx.wxID_ANY)
+                    tc_m_password:SetEditable(false)
+                    tc_m_password:SetBackgroundColour(grey)
+                    hbox_m_7:Add(st_m_7, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_m_7:Add(tc_m_password, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+        
+                    
+                vbox_mobile:Add(hbox_m_1,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_2,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_2a,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_3,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_4,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_5,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_6,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_mobile:Add(hbox_m_7,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                    
+                
+            szrMobile:Add(vbox_mobile,1,wx.wxALL +wx.wxEXPAND,5)
+            
+        notebook:AddPage(pnlMobile, "3G Option",false,2)
+        
+            --Security Config--
+            local pnlSecurity = wx.wxPanel(notebook, wx.wxID_ANY)
+            local szrSecurity = wx.wxBoxSizer(wx.wxVERTICAL)
+            pnlSecurity:SetSizer(szrSecurity)
+            szrSecurity:SetSizeHints(pnlSecurity)
+            
+                --Shared Secret box--
+                local sb1   = wx.wxStaticBox( pnlSecurity, wx.wxID_ANY, "Shared Secret")
+                local sbs1  = wx.wxStaticBoxSizer( sb1, wx.wxVERTICAL);
+                local hbox1 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st1   = wx.wxStaticText(pnlSecurity, wx.wxID_ANY, 'Secret ')
+                tc_shared_secret   = wx.wxTextCtrl(pnlSecurity, wx.wxID_ANY,shared_secret)
+                --tc_shared_secret:SetBackgroundColour(wx.wxGREEN )    --Set the color of the main panel red
+                --FIXME You have to select this tab when shared secret is wrong
+                hbox1:Add(st1, 1,   wx.wxALIGN_LEFT + wx.wxALL, 10)
+                hbox1:Add(tc_shared_secret, 3,   wx.wxALIGN_LEFT + wx.wxALL, 10)
+                sbs1:Add(hbox1, 0,  wx.wxALL , 5)
+                
+            szrSecurity:Add(sbs1,1,wx.wxEXPAND+wx.wxALL,5)
+            
+        notebook:AddPage(pnlSecurity, "Security",false,3)
+            
+        vbox:Add(notebook,1,wx.wxEXPAND+wx.wxALL,5)
+        
     
     frame:Connect(wx.wxID_REDO, wx.wxEVT_COMMAND_CHOICE_SELECTED, HandleEvents)
+    frame:Connect(wx.wxID_SAVE, wx.wxEVT_COMMAND_CHOICE_SELECTED, EventMobileAction)
     frame:Centre()
     frame:Show(true)
 end
@@ -584,6 +860,7 @@ function set_up_server()
         local sock = event.Socket
         local socketEvent = event.SocketEvent
         print("The event is:"..socketEvent..":END")
+        
         if socketEvent  == wx.wxSOCKET_INPUT then
             -- We disable input events, so that the test doesn't trigger wxSocketEvent again.
             sock.Notify = wx.wxSOCKET_LOST_FLAG
