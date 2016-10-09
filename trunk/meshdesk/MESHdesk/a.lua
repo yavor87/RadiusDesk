@@ -157,7 +157,7 @@ function do_fw_config()
     --Set meshdesk.settings.id_if (typically eth0) to a known IP Address
     local network = rdNetwork()
 	network:frmwrStart()
-    sleep(4) --jus so it eases out
+    sleep(4) --just so it eases out
     require("rdFirmwareConfig")
     local f = rdFirmwareConfig()
     f:runConfig()
