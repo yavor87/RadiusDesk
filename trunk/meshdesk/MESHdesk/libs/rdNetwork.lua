@@ -51,6 +51,10 @@ function rdNetwork:dhcpStart()
             os.execute("cp " .. self.dhcp_one .. " /etc/config/network") 
         end
     end
+    
+    --Are we using 3G?
+    self:__includeMobileWan()
+	  
 	os.execute("/etc/init.d/network reload")
 end
 
@@ -74,8 +78,12 @@ function rdNetwork:getMac(int)
 end
 
 function rdNetwork:configureFromTable(tbl)
-	self:log("==Configure Wireless from  Lua table==")
+	self:log("==Configure Network from  Lua table==")
 	self:__configureFromTable(tbl)
+	
+	--Are we using 3G?
+    self:__includeMobileWan()
+    
 end
 
 
@@ -91,6 +99,31 @@ end
 ========================================================
 (Note they are in the pattern function <rdName>._function_name(self, arg...) and called self:_function_name(arg...) )
 --]]--
+
+-- Add 3G if enabled --
+function rdNetwork.__includeMobileWan(self)
+
+    -- We need to find out if we perhaps also have 3G (wwan) configured and if it is enabled add it to the settings
+    
+    self.x.foreach('meshdesk','interface', 
+		function(a)
+		    if(a['.name'] == 'wwan')then
+		        if(a['enabled'] ~= nil)then
+		            if(a['enabled'] == '1')then
+		                --Create it
+		                self.x.set('network', 'wwan', "interface")
+	                    self.x.commit('network')
+		                for key, val in pairs(a) do
+		                    if(string.find(key, '.', 1, true) == nil)then
+	                            self.x.set('network', 'wwan',key, val)
+	                        end
+	                    end
+	                    self.x.commit('network')
+		            end
+		        end
+		    end
+	end)
+end
 
 -- Clean start Network                                                 
 function rdNetwork.__newNetwork(self)
