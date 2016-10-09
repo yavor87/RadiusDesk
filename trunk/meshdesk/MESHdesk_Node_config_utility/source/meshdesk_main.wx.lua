@@ -354,7 +354,7 @@ function set_info(sock)
     end
     
     --2 = Disable
-    if(choice_m_active:GetSelection()== 1)then
+    if(choice_m_active:GetSelection()== 2)then
         table.insert(a, 'm_active=0')
     end
     
