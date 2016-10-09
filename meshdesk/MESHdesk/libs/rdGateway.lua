@@ -44,6 +44,8 @@ function rdGateway:enable(exPoints)
 	exPoints = exPoints or {}
 	self:disable()	--Clean up any left overs
 	
+	self:__fwAddMobileWanZone()
+	
 	self:__fwMasqEnable()
 	
 	if(self.mode == 'mesh')then --Default is mesh mode
@@ -58,7 +60,7 @@ function rdGateway:enable(exPoints)
 	os.execute("rm /etc/resolv.conf")
 	os.execute("ln -s /tmp/resolv.conf /etc/resolv.conf")
 
-	--Tell batman we are a client
+	--Tell batman we are a server
 	if(self.mode == 'mesh')then
 	    self.x.set('batman-adv','bat0','gw_mode', 'server')
 	    self.x.commit('batman-adv')
@@ -67,6 +69,7 @@ end
 
 function rdGateway:disable()
 
+    self:__fwRemoveMobileWanZone()
     self:__fwMasqDisable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
@@ -178,7 +181,7 @@ function rdGateway.__fwGwEnable(self,network,forward)
 	local no_redir = true
 	self.x.foreach('firewall', 'redirect',
 		function(a)
-			if(a.src == network)then
+			if((a.src == network)and(a.dst == 'lan'))then
 				no_redir = false
 			end
 		end)
@@ -190,13 +193,14 @@ function rdGateway.__fwGwEnable(self,network,forward)
         self.x.set('firewall',r, 'proto','tcpudp')
         --According the the documentation we are also suppose to add src_dip (and specify the IP of the LAN)
         --Problem is that the LAN IP can and will most probably change so it makes it impractical--
+          
 	end
 	
 	-- Add the forwarding entry
 	local no_forwarding = true
 	self.x.foreach('firewall','forwarding',
 		function(a)
-			if(a.src == network)then
+			if((a.src == network)and(a.dst=='lan'))then
 				no_forwarding = false
 			end
 		end)
@@ -205,8 +209,62 @@ function rdGateway.__fwGwEnable(self,network,forward)
 	if(no_forwarding and (forward == 'yes')and(network ~= self.conf_zone))then -- Only if we specified to add a forward rule
 		local f = self.x.add('firewall', 'forwarding')
 		self.x.set('firewall',f,'src',network)
-		self.x.set('firewall',f,'dst','lan')
+		self.x.set('firewall',f,'dst','lan')   	
 	end
+	
+	--=====================================================
+	--3G things
+	--See if we need to add a rule for the 3G (wwan) connection
+	
+	local mobile_enabled = false;
+	self.x.foreach('meshdesk','interface', 
+        function(a)
+            if(a['.name'] == 'wwan')then
+                if(a['enabled'] ~= nil)then
+                    if(a['enabled'] == '1')then
+                       mobile_enabled = true
+                    end
+                end
+            end
+    end)
+	
+	if(mobile_enabled)then
+	
+	    local no_redir_mobile = true
+	    self.x.foreach('firewall', 'redirect',
+		    function(a)
+			    if((a.src == network)and(a.dst == 'wwan'))then
+				    no_redir_mobile = false
+			    end
+		    end)
+	
+	    if(no_redir_mobile)then
+            --Create it
+            local r_wwan = self.x.add('firewall','redirect')
+           	self.x.set('firewall',r_wwan, 'src',network)
+            self.x.set('firewall',r_wwan, 'dst','wwan')
+            self.x.set('firewall',r_wwan, 'target','SNAT')
+            self.x.set('firewall',r_wwan, 'proto','tcpudp')
+        end
+    
+        local no_forwarding_mobile = true
+	    self.x.foreach('firewall','forwarding',
+		    function(a)
+			    if((a.src == network)and(a.dst=='wwan'))then
+				    no_forwarding_mobile = false
+			    end
+		    end)
+	
+        if(no_forwarding_mobile and (forward == 'yes')and(network ~= self.conf_zone))then -- Only if we specified to add a forward rule				
+            --Create it
+            local f_wwan = self.x.add('firewall','forwarding')
+           	self.x.set('firewall',f_wwan,'src',network)
+            self.x.set('firewall',f_wwan,'dst','wwan')    	
+	    end
+	    
+    end 
+    --=========END 3G ===============================
+	
 	self.x.commit('firewall')
 
 	--only for the config zone
@@ -245,6 +303,29 @@ function rdGateway.__fwGwEnable(self,network,forward)
 			self.x.set('firewall',s,'proto', 'udp')
 			self.x.set('firewall',s,'target', 'ACCEPT')
 			self.x.set('firewall',s,'name', self.ntp_rule)
+			
+			if(mobile_enabled)then
+			
+			    local rm = self.x.add('firewall','rule')
+			    self.x.set('firewall',rm,'src', network)
+			    self.x.set('firewall',rm,'dest', 'wwan')
+			    self.x.set('firewall',rm,'dest_ip', conf_srv)
+			    self.x.set('firewall',rm,'target', 'ACCEPT')
+			    self.x.set('firewall',rm,'name', self.conf_rule)
+			    self.x.set('firewall',rm,'proto', 'all') --required to include ping
+			
+			    --For the ntp server
+			    local sm = self.x.add('firewall','rule')
+			    self.x.set('firewall',sm,'src', network)
+			    self.x.set('firewall',sm,'dest', 'wwan')
+			    self.x.set('firewall',sm,'dest_port', '123')
+			    self.x.set('firewall',sm,'proto', 'udp')
+			    self.x.set('firewall',sm,'target', 'ACCEPT')
+			    self.x.set('firewall',sm,'name', self.ntp_rule)
+			
+			
+			end
+			
 
 			self.x.commit('firewall')
 		end
@@ -331,4 +412,44 @@ function rdGateway.__fwMasqDisable(self,network)
 	end)
     self.x.commit('firewall')
     
+end
+
+function rdGateway.__fwAddMobileWanZone(self)
+
+    local mobile_enabled = false;
+	self.x.foreach('meshdesk','interface', 
+        function(a)
+            if(a['.name'] == 'wwan')then
+                if(a['enabled'] ~= nil)then
+                    if(a['enabled'] == '1')then
+                       mobile_enabled = true
+                    end
+                end
+            end
+    end)
+ 
+    if(mobile_enabled)then
+        --Create it
+        local zone_name = self.x.add('firewall','zone')
+        self.x.set('firewall',zone_name,'name',		'wwan')	
+        self.x.set('firewall',zone_name,'network', { 'wwan' })	
+        self.x.set('firewall',zone_name,'input',	'ACCEPT')	
+        self.x.set('firewall',zone_name,'output',	'ACCEPT')	
+        self.x.set('firewall',zone_name,'forward',	'ACCEPT')
+        self.x.set('firewall',zone_name,'masq',	1)
+        self.x.set('firewall',zone_name,'mtu_fix',	1)
+        self.x.commit('firewall')
+    end
+end
+
+function rdGateway.__fwRemoveMobileWanZone(self)
+
+    self.x.foreach('firewall', 'zone',
+	    function(a)
+		    if(a['name'] == 'wwan')then
+			    local wwan_name	  = a['.name']
+				self.x.delete('firewall',wwan_name)
+				self.x.commit('firewall')
+		    end
+	end)
 end
