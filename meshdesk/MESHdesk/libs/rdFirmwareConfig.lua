@@ -160,9 +160,13 @@ function rdFirmwareConfig.__send_my_info(self)
     end
 end
 
-function rdFirmwareConfig.__get_my_settings(self)	
+function rdFirmwareConfig.__get_my_settings(self)
+
     self:__sData('c') --Tell the server to send the settings along
+    
     local next_setting = true
+    local mobile_settings = {}
+    
     while(next_setting)do
         local s = self:__rData()
         print("==== Settings from the server ====")
@@ -198,10 +202,74 @@ function rdFirmwareConfig.__get_my_settings(self)
 			self.x.set('meshdesk','settings','mode',mode)
             self.x.commit('meshdesk')
         end
-
+        
+        --Mobile (3G) things
+        if(string.find(s, "m_active="))then
+			mobile_settings['enabled'] = string.gsub(s, "m_active=", "")
+        end
+        
+        if(string.find(s, "m_proto="))then
+			mobile_settings['proto'] = string.gsub(s, "m_proto=", "")
+        end
+        
+        if(string.find(s, "m_service="))then
+			mobile_settings['service'] = string.gsub(s, "m_service=", "")
+        end
+        
+        if(string.find(s, "m_device="))then
+			mobile_settings['device'] = string.gsub(s, "m_device=", "")
+        end
+        
+        if(string.find(s, "m_apn="))then
+			mobile_settings['apn'] = string.gsub(s, "m_apn=", "")
+        end
+        
+        if(string.find(s, "m_pincode="))then
+			mobile_settings['pincode'] = string.gsub(s, "m_pincode=", "")
+        end
+        
+        if(string.find(s, "m_username="))then
+			mobile_settings['username'] = string.gsub(s, "m_username=", "")
+        end
+        
+        if(string.find(s, "m_password="))then
+			mobile_settings['password'] = string.gsub(s, "m_password=", "")
+        end
+        --END Mobile (3G) things
+        
 	if(s == 'last')then
 		next_setting = false	
 	end
+	
+    --See if there were mobile data
+    if(mobile_settings['enabled'] ~= nil)then   
+        if(mobile_settings['enabled'] == '0')then
+        
+            --Only if it is there, gently remove it
+            self.x.foreach('meshdesk','interface', 
+	            function(a)
+	                if(a['.name'] == 'wwan')then
+	                    --We found our man
+		                self.x.set('meshdesk',a['.name'],'enabled',mobile_settings['enabled'])
+		                self.x.commit('meshdesk')
+	                end
+            end)
+        end
+        
+        if(mobile_settings['enabled'] == '1')then
+            --Remove existing one if there was one--
+            self:__clear_mobile() 
+            --Create a new one--
+            self.x.set('meshdesk', 'wwan', "interface")
+	        self.x.commit('meshdesk')	
+	        --Populate it 
+	        for key, val in pairs(mobile_settings) do  
+	             self.x.set('meshdesk', 'wwan',key, val)
+	        end
+	        self.x.commit('meshdesk')
+        end
+    end
+	
 	self:__sData("ok\n")
     end
 end
@@ -249,6 +317,18 @@ function rdFirmwareConfig.__set_up_hardware(self,hw)
 	self.x.set('system', 'wifi_led', 'mode',  'link tx rx')
 	self.x.commit('system')	
 
+end
+
+function rdFirmwareConfig.__clear_mobile(self)
+    --Now we need to get rid of the wwan interface entry
+	self.x.foreach('meshdesk','interface', 
+		function(a)
+		    if(a['.name'] == 'wwan')then
+		        --We found our man
+			    self.x.delete('meshdesk',a['.name'])
+			    self.x.commit('meshdesk')
+		    end
+	end)
 end
 
 
