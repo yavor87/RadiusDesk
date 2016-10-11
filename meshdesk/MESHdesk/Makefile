@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
-PKG_VERSION:=4.0.0
-PKG_RELEASE:=1
+PKG_VERSION:=4.1.0
+PKG_RELEASE:=0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,9 +50,6 @@ define Package/zzz-MESHdesk/install
 	$(INSTALL_DATA) ./files/MESHdesk/meshdesk $(1)/etc/config
 	mkdir -p $(1)/etc/hotplug.d/iface
 	cp ./files/MESHdesk/files/common/70-meshdesk $(1)/etc/hotplug.d/iface/
-	mkdir -p $(1)/etc/dropbear
-	cp ./files/MESHdesk/files/common/dropbear_dss_host_key $(1)/etc/dropbear
-	cp ./files/MESHdesk/files/common/dropbear_rsa_host_key $(1)/etc/dropbear
 	mkdir -p $(1)/etc/alfred
 	cp ./files/MESHdesk/alfred_scripts/alfred_meshdesk_scripts.sh $(1)/etc/alfred
 	mkdir -p $(1)/etc/chilli/www
