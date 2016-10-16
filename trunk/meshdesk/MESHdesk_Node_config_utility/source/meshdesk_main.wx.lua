@@ -93,6 +93,18 @@ mode[0] = 'mesh'
 mode[1] = 'ap'
 mode[2] = 'cpe'
 
+--Protocol for Xfer
+local xfer_protocol_choices = {
+    "HTTP",
+    "HTTPS"
+}
+
+local xfer_protocol = {}
+
+xfer_protocol[0] = 'http'
+xfer_protocol[1] = 'https'
+
+
 --Protocol for 3G--
 local protocol_choices = {
     "3G",
@@ -313,6 +325,7 @@ function set_info(sock)
     local a = {}
     table.insert(a, 'mode='..mode[choice_mode:GetSelection()])
     table.insert(a, 'hardware='..hardware[choice_hw:GetSelection()])
+    table.insert(a, 'protocol='..xfer_protocol[choice_proto:GetSelection()])
     if(tc_new_srvr:GetValue() ~= '')then
         table.insert(a, 'server='..tc_new_srvr:GetValue())
     end
@@ -684,6 +697,15 @@ function build_gui()
                 choice_hw:SetSelection(0)
                 hbox6:Add(st6, 0, wx.wxALIGN_LEFT + wx.wxEXPAND,0)
                 hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                
+                local hbox6b = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st6b   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Protocol',wx.wxDefaultPosition,label_size)
+                choice_proto = wx.wxChoice(pnlSettings, wx.wxID_NEW,
+                           wx.wxDefaultPosition, wx.wxDefaultSize,
+                           xfer_protocol_choices)
+                choice_proto:SetSelection(0)
+                hbox6b:Add(st6b, 0, wx.wxALIGN_LEFT + wx.wxALL , 0)
+                hbox6b:Add(choice_proto, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
         
 
                 local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
@@ -700,6 +722,7 @@ function build_gui()
         
             vbox3:Add(hbox6a,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox6, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            vbox3:Add(hbox6b, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox5, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox8, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox7, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
