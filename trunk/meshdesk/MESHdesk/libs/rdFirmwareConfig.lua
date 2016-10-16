@@ -178,6 +178,13 @@ function rdFirmwareConfig.__get_my_settings(self)
             self.x.set('meshdesk','settings','hardware',hw)
             self.x.commit('meshdesk')
         end
+        
+        if(string.find(s, "protocol="))then
+            local protocol = string.gsub(s, "protocol=", "")
+            self.x.set('meshdesk','internet1','protocol',protocol)
+            self.x.commit('meshdesk')
+        end
+        
 
         if(string.find(s, "server="))then
             local ip = string.gsub(s, "server=", "")
