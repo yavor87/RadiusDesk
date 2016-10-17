@@ -35,7 +35,7 @@ class OpenvpnClient extends AppModel {
         )
 	);
 
-    public function beforeSave(){
+    public function beforeSave($options = array()){
 
         //Try to detect if it is an existing (edit):
         $existing_flag = false;
@@ -120,7 +120,7 @@ class OpenvpnClient extends AppModel {
         }
     }
 
-    public function afterSave($created) {
+    public function afterSave($created,$options = array()) {
 
         if($created){
             //New addition; create a new file

@@ -72,7 +72,7 @@ class Node extends AppModel {
             )
     );
 
-    public function beforeSave(){
+    public function beforeSave($options = array()){
 
         //Try to detect if it is an existing (edit):
         $existing_flag = false;

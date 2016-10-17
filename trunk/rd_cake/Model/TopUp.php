@@ -16,7 +16,7 @@ class TopUp extends AppModel {
 	);
 
 
-    public function beforeValidate(){
+    public function beforeValidate($options = array()){
 
         //We need BOTH the permanent username and the permanent userid else we cannot continiue!
     
@@ -51,7 +51,7 @@ class TopUp extends AppModel {
         }
     }
 
-    public function afterSave($created){
+    public function afterSave($created,$options = array()){
         if($created){
             $this->_update_radius_attributes();
         }
