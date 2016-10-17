@@ -154,6 +154,14 @@ local space = 3
 local label_size = wx.wxSize(80,-1)
 local grey = wx.wxColour(219, 221, 224)
 
+local blue = wx.wxColour(0, 255, 255)
+local green = wx.wxColour(0, 255, 0)
+
+local timer;
+local fresh_timer = 0;
+local fresh_trigger = 30;
+
+
 function EventMobileAction(event)
 
     local c = grey
@@ -183,6 +191,32 @@ function EventMobileAction(event)
     tc_m_password:SetBackgroundColour(c)
 end
 
+function EventApplySettings(event)
+
+    local c = grey
+    local state = false
+    
+    if(cb_apply_settings:GetValue())then
+        c = wx.wxWHITE
+        state = true
+    end
+
+    local controlls = {tc_new_srvr, choice_mode,choice_proto,choice_hw,tc_new_key,tc_new_secret}
+
+    tc_new_srvr:SetEditable(state)
+    tc_new_srvr:SetBackgroundColour(c)
+    
+    tc_new_key:SetEditable(state)
+    tc_new_key:SetBackgroundColour(c)
+    
+    tc_new_secret:SetEditable(state)
+    tc_new_secret:SetBackgroundColour(c)
+    
+    choice_mode:Enable(state)
+    choice_proto:Enable(state)
+    choice_hw:Enable(state)
+
+end
 
 function HandleEvents(event)
 
@@ -286,11 +320,21 @@ function get_info(sock)
     print(i)
     print("===== END INFO ======")
     
+    timer:Stop();
+    timer:Start(1000);
+    fresh_timer = 0;
+    tc_timestamp:SetBackgroundColour(green)
+    tc_timestamp:SetValue("Just Now")
+    
     --Check what we need to paint
     if(string.find(i, "eth0="))then
         local eth = string.gsub(i, "eth0=", "")
         tc_eth0:SetValue(eth)
-        tc_timestamp:SetValue(os.date())
+    end
+    
+    if(string.find(i, "protocol="))then
+        local proto = string.gsub(i, "protocol=", "")
+        tc_c_proto:SetValue(proto)
     end
     
     if(string.find(i, "server="))then
@@ -323,17 +367,20 @@ end
 function set_info(sock)
     print("--- NEW SETTINGS ----")
     local a = {}
-    table.insert(a, 'mode='..mode[choice_mode:GetSelection()])
-    table.insert(a, 'hardware='..hardware[choice_hw:GetSelection()])
-    table.insert(a, 'protocol='..xfer_protocol[choice_proto:GetSelection()])
-    if(tc_new_srvr:GetValue() ~= '')then
-        table.insert(a, 'server='..tc_new_srvr:GetValue())
-    end
-    if(tc_new_secret:GetValue() ~= '')then
-        table.insert(a, 'secret='..tc_new_secret:GetValue())
-    end
-    if(tc_new_key:GetValue() ~= '')then
-        table.insert(a, 'key='..tc_new_key:GetValue())
+    
+    if(cb_apply_settings:GetValue())then
+        table.insert(a, 'mode='..mode[choice_mode:GetSelection()])
+        table.insert(a, 'hardware='..hardware[choice_hw:GetSelection()])
+        table.insert(a, 'protocol='..xfer_protocol[choice_proto:GetSelection()])
+        if(tc_new_srvr:GetValue() ~= '')then
+            table.insert(a, 'server='..tc_new_srvr:GetValue())
+        end
+        if(tc_new_secret:GetValue() ~= '')then
+            table.insert(a, 'secret='..tc_new_secret:GetValue())
+        end
+        if(tc_new_key:GetValue() ~= '')then
+            table.insert(a, 'key='..tc_new_key:GetValue())
+        end
     end
     -- Here we pack the 3G settings
     
@@ -600,10 +647,11 @@ function build_gui()
                 local hbox_left = wx.wxBoxSizer(wx.wxVERTICAL)
         
             local hboxts = wx.wxBoxSizer(wx.wxHORIZONTAL)
-            local stts   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Timestamp ',wx.wxDefaultPosition,label_size)
+            local stts   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Last Contact ',wx.wxDefaultPosition,label_size)
             tc_timestamp = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
             tc_timestamp:SetEditable(false)
-            tc_timestamp:SetBackgroundColour(grey)
+            tc_timestamp:SetBackgroundColour(blue)
+            tc_timestamp:SetValue('Never Before')
             hboxts:Add(stts, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
             hboxts:Add(tc_timestamp, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
@@ -614,9 +662,25 @@ function build_gui()
             tc_eth0:SetBackgroundColour(grey)
             hbox2:Add(st2, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
             hbox2:Add(tc_eth0, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            
+            local hbox3b = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st3b   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Mode ',wx.wxDefaultPosition,label_size)
+            tc_c_mode    = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_c_mode:SetEditable(false)
+            tc_c_mode:SetBackgroundColour(grey)
+            hbox3b:Add(st3b, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox3b:Add(tc_c_mode, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+            
+            local hbox3c = wx.wxBoxSizer(wx.wxHORIZONTAL)
+            local st3c   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Protocol ',wx.wxDefaultPosition,label_size)
+            tc_c_proto   = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
+            tc_c_proto:SetEditable(false)
+            tc_c_proto:SetBackgroundColour(grey)
+            hbox3c:Add(st3c, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+            hbox3c:Add(tc_c_proto, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
             local hbox3 = wx.wxBoxSizer(wx.wxHORIZONTAL)
-            local st3   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current Server ',wx.wxDefaultPosition,label_size)
+            local st3   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Server ',wx.wxDefaultPosition,label_size)
             tc_c_srvr   = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
             tc_c_srvr:SetEditable(false)
             tc_c_srvr:SetBackgroundColour(grey)
@@ -624,26 +688,22 @@ function build_gui()
             hbox3:Add(tc_c_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
     
             local hbox3a = wx.wxBoxSizer(wx.wxHORIZONTAL)
-            local st3a   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current WPA2 Key ',wx.wxDefaultPosition,label_size)
+            local st3a   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'WPA2 Key ',wx.wxDefaultPosition,label_size)
             tc_c_key     = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
             tc_c_key:SetEditable(false)
             tc_c_key:SetBackgroundColour(grey)
             hbox3a:Add(st3a, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
             hbox3a:Add(tc_c_key, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
         
-            local hbox3b = wx.wxBoxSizer(wx.wxHORIZONTAL)
-            local st3b   = wx.wxStaticText(pnlInfo, wx.wxID_ANY, 'Current Mode ',wx.wxDefaultPosition,label_size)
-            tc_c_mode    = wx.wxTextCtrl(pnlInfo, wx.wxID_ANY)
-            tc_c_mode:SetEditable(false)
-            tc_c_mode:SetBackgroundColour(grey)
-            hbox3b:Add(st3b, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
-            hbox3b:Add(tc_c_mode, 1, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+          
     
                 hbox_left:Add(hboxts, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
                 hbox_left:Add(hbox2, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox3b, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                hbox_left:Add(hbox3c, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
                 hbox_left:Add(hbox3, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
                 hbox_left:Add(hbox3a, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
-                hbox_left:Add(hbox3b, 0,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+
             hbox_info:Add(hbox_left, 1,  wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             
             
@@ -674,9 +734,19 @@ function build_gui()
             
             
             local vbox3  = wx.wxBoxSizer(wx.wxVERTICAL);
+            
+                local hbox5a = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                local st5a   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, '',wx.wxDefaultPosition,label_size)
+                cb_apply_settings = wx.wxCheckBox(pnlSettings, wx.wxID_UNDO,'Apply New Settings ',wx.wxDefaultPosition,label_size)
+                hbox5a:Add(st5a, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
+                hbox5a:Add(cb_apply_settings, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+            
+            
                 local hbox5 = wx.wxBoxSizer(wx.wxHORIZONTAL)
                 local st5   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Server IP ',wx.wxDefaultPosition,label_size)
                 tc_new_srvr = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                tc_new_srvr:SetEditable(false)
+                tc_new_srvr:SetBackgroundColour(grey)
                 hbox5:Add(st5, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
                 hbox5:Add(tc_new_srvr, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
@@ -685,6 +755,7 @@ function build_gui()
                 choice_mode   = wx.wxChoice(pnlSettings, wx.wxID_NEW,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            mode_choices)
+                choice_mode:Disable()
                 choice_mode:SetSelection(0)
                 hbox6a:Add(st6a, 0, wx.wxALIGN_LEFT + wx.wxALL , 0)
                 hbox6a:Add(choice_mode, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
@@ -694,6 +765,7 @@ function build_gui()
                 choice_hw   = wx.wxChoice(pnlSettings, wx.wxID_REDO,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            choices)
+                choice_hw:Disable()
                 choice_hw:SetSelection(0)
                 hbox6:Add(st6, 0, wx.wxALIGN_LEFT + wx.wxEXPAND,0)
                 hbox6:Add(choice_hw, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
@@ -703,6 +775,7 @@ function build_gui()
                 choice_proto = wx.wxChoice(pnlSettings, wx.wxID_NEW,
                            wx.wxDefaultPosition, wx.wxDefaultSize,
                            xfer_protocol_choices)
+                choice_proto:Disable()
                 choice_proto:SetSelection(0)
                 hbox6b:Add(st6b, 0, wx.wxALIGN_LEFT + wx.wxALL , 0)
                 hbox6b:Add(choice_proto, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
@@ -711,15 +784,20 @@ function build_gui()
                 local hbox7 = wx.wxBoxSizer(wx.wxHORIZONTAL)
                 local st7   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'Change secret to ',wx.wxDefaultPosition,label_size)
                 tc_new_secret = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                tc_new_secret:SetEditable(false)
+                tc_new_secret:SetBackgroundColour(grey)
                 hbox7:Add(st7, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
                 hbox7:Add(tc_new_secret, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
                 local hbox8 = wx.wxBoxSizer(wx.wxHORIZONTAL)
                 local st8   = wx.wxStaticText(pnlSettings, wx.wxID_ANY, 'WPA2 Key ',wx.wxDefaultPosition,label_size)
                 tc_new_key  = wx.wxTextCtrl(pnlSettings, wx.wxID_ANY)
+                tc_new_key:SetEditable(false)
+                tc_new_key:SetBackgroundColour(grey)
                 hbox8:Add(st8, 0, wx.wxALIGN_LEFT + wx.wxALL, 0)
                 hbox8:Add(tc_new_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
         
+            vbox3:Add(hbox5a, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox6a,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox6, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
             vbox3:Add(hbox6b, 0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
@@ -858,6 +936,8 @@ function build_gui()
     
     frame:Connect(wx.wxID_REDO, wx.wxEVT_COMMAND_CHOICE_SELECTED, HandleEvents)
     frame:Connect(wx.wxID_SAVE, wx.wxEVT_COMMAND_CHOICE_SELECTED, EventMobileAction)
+    frame:Connect(wx.wxID_UNDO, wx.wxEVT_COMMAND_CHECKBOX_CLICKED, EventApplySettings)
+    
     frame:Centre()
     frame:Show(true)
 end
@@ -957,3 +1037,22 @@ build_gui()
 set_up_server()
 
 wx.wxGetApp():MainLoop()
+
+timer = wx.wxTimer(frame);
+frame:Connect(wx.wxEVT_TIMER, function (event)
+    --print("Timer event");
+    fresh_timer = fresh_timer + 1;
+    tc_timestamp:SetValue(os.date("!%X",fresh_timer).. "  (Time Ago)")
+        if(fresh_timer > fresh_trigger)then
+            tc_timestamp:SetBackgroundColour(blue)
+        end
+    end
+);
+frame:Connect(wx.wxEVT_CLOSE_WINDOW, function (event)
+    timer:Stop();
+    frame:Destroy();
+    end
+);
+
+--timer:Start(1000);
+--tc_timestamp:SetBackgroundColour(green)
