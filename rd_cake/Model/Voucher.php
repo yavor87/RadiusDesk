@@ -42,7 +42,7 @@ class Voucher extends AppModel {
     );
 */
 
-    public function beforeSave(){
+    public function beforeSave($options = array()){
         //Try to detect if it is an existing (edit):
         //$existing_flag = false;
         if(!isset($this->data['Voucher']['id'])){
@@ -57,7 +57,7 @@ class Voucher extends AppModel {
          
     }
 
-    public function afterSave($created){
+    public function afterSave($created,$options = array()){
         if($created){
             $this->_add_radius_user();
             //Push it on the create voucher stack

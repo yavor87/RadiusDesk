@@ -36,7 +36,7 @@ class PptpClient extends AppModel {
         )
 	);
 
-    public function beforeSave(){
+    public function beforeSave($options = array()){
 
         //Try to detect if it is an existing (edit):
         $existing_flag = false;
@@ -92,7 +92,7 @@ class PptpClient extends AppModel {
         }
     }
 
-    public function afterSave($created) {
+    public function afterSave($created,$options = array()) {
         if($created){
             //New addition; add to chap secrets
             $this->_addToChapSecrets();   

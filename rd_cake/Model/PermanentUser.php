@@ -118,7 +118,7 @@ class PermanentUser extends AppModel {
         return true;
     }
 
-    public function afterSave($created){
+    public function afterSave($created,$options = array()){
 
         if($created){    
         	$this->_add_radius_user();
