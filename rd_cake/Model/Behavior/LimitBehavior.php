@@ -13,7 +13,7 @@ class LimitBehavior extends ModelBehavior {
         $this->settings[$Model->alias] = array_merge($this->settings[$Model->alias], (array)$settings);
     }
 
-    public function beforeSave($model,$options = array()) {
+    public function beforeSave(Model $model,$options = array()) {
     
          //Only when we're adding
         $alias = $model->alias;

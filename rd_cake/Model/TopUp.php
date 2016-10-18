@@ -57,7 +57,7 @@ class TopUp extends AppModel {
         }
     }
 
-    public function beforeDelete(){
+    public function beforeDelete($cascade = true){
 
         $id                 = $this->getID();
         $permanent_user_id  = $this->field('permanent_user_id');

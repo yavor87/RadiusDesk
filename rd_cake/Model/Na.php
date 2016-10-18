@@ -70,7 +70,7 @@ class Na extends AppModel {
     );
 
     //Get the note ID before we delete it
-    public function beforeDelete(){
+    public function beforeDelete($cascade = true){
         if($this->id){
             $class_name     = $this->name;
             $q_r            = $this->findById($this->id);

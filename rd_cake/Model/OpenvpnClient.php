@@ -128,7 +128,7 @@ class OpenvpnClient extends AppModel {
         }  
     }
 
-    public function beforeDelete() {
+    public function beforeDelete($cascade = true) {
         //Find the username which is just the filename
         $qr         = $this->findById($this->id);
         $file       = $qr['OpenvpnClient']['username'];
