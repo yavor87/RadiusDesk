@@ -104,11 +104,11 @@ class PermanentUser extends AppModel {
     public function beforeSave($options = array()) {
 
         if((isset($this->data['PermanentUser']['token']))&&($this->data['PermanentUser']['token']=='')){
-            App::uses('String', 'Utility');
-            $this->data['PermanentUser']['token'] = String::uuid();
+            App::uses('CakeText', 'Utility');
+            $this->data['PermanentUser']['token'] = CakeText::uuid();
         }else{ //If it is not set at all
-            App::uses('String', 'Utility');
-            $this->data['PermanentUser']['token'] = String::uuid();
+            App::uses('CakeText', 'Utility');
+            $this->data['PermanentUser']['token'] = CakeText::uuid();
         }
 
         if(isset($this->data['PermanentUser']['password'])){
