@@ -10,7 +10,7 @@ App::uses('AclBehavior', 'Model/Behavior');
 
 class MyAclBehavior extends AclBehavior {
 
-    public function afterSave($model, $created,$options = array()) {
+    public function afterSave(Model $model, $created,$options = array()) {
         $types = $this->_typeMaps[$this->settings[$model->name]['type']];
         if (!is_array($types)) {
             $types = array($types);
