@@ -1,0 +1,11 @@
+[Unit]
+Description=Node.js SocketIO
+After=syslog.target network.target 
+SourcePath=/etc/init.d/nodejs-socket-io
+
+[Service]
+ExecStart=/etc/init.d/nodejs-socket-io start
+ExecStop=/etc/init.d/nodejs-socket-io stop
+
+[Install]
+WantedBy=multi-user.target

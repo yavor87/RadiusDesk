@@ -63,7 +63,7 @@
 #
 NAME="Node.js SocketIO"
 NODE_BIN_DIR="/usr/bin"
-NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript
+NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript:/usr/local/lib/node_modules/
 #APPLICATION_DIRECTORY="/usr/share/nginx/www/cake2/rd_cake/Setup/Node.js"
 APPLICATION_DIRECTORY="/usr/share/nginx/html/cake2/rd_cake/Setup/Node.js"
 APPLICATION_START="Logfile.node.js"
