@@ -132,6 +132,10 @@ function rdFirmwareConfig.__send_my_info(self)
     --Insert server
     local server    = self.x.get('meshdesk', 'internet1','ip')
     table.insert(a, 'server='..server)
+    
+    --Insert protocol
+    local protocol = self.x.get('meshdesk', 'internet1','protocol')
+    table.insert(a, 'protocol='..protocol)
 
     --Insert firmware
     io.input("/etc/openwrt_release")
