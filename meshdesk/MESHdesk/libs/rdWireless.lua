@@ -52,6 +52,10 @@ end
 function rdWireless:configureFromTable(tbl)
 	self:log("==Configure Wireless from  Lua table==")
 	self:__configureFromTable(tbl)
+	
+	--Is there any Wifi Web specified
+    self:__includeWebByWifi()
+	
 end
 
 
@@ -68,6 +72,58 @@ end
 === Private functions start here =======================
 ========================================================
 --]]--
+
+
+-- Add WiFi Client if enabled
+function rdWireless.__includeWebByWifi(self)
+
+    -- We need to find out if we perhaps also have wifi-iface configured and if it is enabled add it to the settings
+    local iface_name = 'web_by_wifi' 
+    self.x.foreach('meshdesk','wifi-iface', 
+		function(a)
+		    if(a['.name'] == iface_name)then
+		        if(a['disabled'] ~= nil)then
+		            if(a['disabled'] == '0')then
+		                --Create it
+		                self.x.set('wireless', iface_name, "wifi-iface")
+	                    self.x.commit('wireless')
+		                for key, val in pairs(a) do
+		                    if(string.find(key, '.', 1, true) == nil)then
+	                            self.x.set('wireless', iface_name,key, val)
+	                            if(key == 'device')then
+	                                self.x.set('wireless',val,'disabled','0') --Enable the specified radio also
+	                            end
+	                        end
+	                    end
+	                    self.x.commit('wireless')
+	                    
+	                    --Also include the configs in the netwok config
+	                    self.x.set('network', 'web_by_wifi', "interface")
+	                    self.x.commit('network')
+	                    self.x.set('network', 'web_by_wifi','proto', 'dhcp')
+	                    self.x.commit('network')
+	                    
+	                    self.x.set('network', 'stabridge', "interface")
+	                    self.x.commit('network')
+	                    self.x.set('network', 'stabridge','proto', 'relay')
+	                    self.x.set('network', 'stabridge','network', 'lan web_by_wifi')
+	                    
+	                    --Also set a static address on the 'lan'
+	                    self.x.set('network', 'lan','proto', 'static')
+	                    self.x.set('network', 'lan','ipaddr','10.50.50.50')
+	                    self.x.set('network', 'lan','netmask','255.255.255.0')
+	                    
+	                    self.x.commit('network')
+	                    
+		            end
+		        end
+		    end
+	end)
+end
+
+
+
+
 function rdWireless.__newWireless(self)
 	self:log("Removing "..self.config)
 	os.execute("rm "..self.config)

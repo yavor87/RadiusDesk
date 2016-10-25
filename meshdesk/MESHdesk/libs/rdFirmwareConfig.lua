@@ -168,8 +168,9 @@ function rdFirmwareConfig.__get_my_settings(self)
 
     self:__sData('c') --Tell the server to send the settings along
     
-    local next_setting = true
-    local mobile_settings = {}
+    local next_setting      = true
+    local mobile_settings   = {}
+    local web_by_wifi       = {}
     
     while(next_setting)do
         local s = self:__rData()
@@ -248,6 +249,35 @@ function rdFirmwareConfig.__get_my_settings(self)
         end
         --END Mobile (3G) things
         
+        
+        --Web By WiFi things
+        if(string.find(s, "w_active="))then
+            local w_active = string.gsub(s, "w_active=", "")
+            if(w_active == '1')then
+			    web_by_wifi['disabled'] = "0"
+		    else
+		        web_by_wifi['disabled'] = "1"
+		    end  
+        end
+        
+        if(string.find(s, "w_radio="))then
+			web_by_wifi['device'] = string.gsub(s, "w_radio=", "")
+        end
+        
+        if(string.find(s, "w_encryption="))then
+			web_by_wifi['encryption'] = string.gsub(s, "w_encryption=", "")
+        end
+        
+        if(string.find(s, "w_ssid="))then
+			web_by_wifi['ssid'] = string.gsub(s, "w_ssid=", "")
+        end
+        
+        if(string.find(s, "w_key="))then
+			web_by_wifi['key'] = string.gsub(s, "w_key=", "")
+        end
+          
+        --END Web By WiFi things
+        
 	if(s == 'last')then
 		next_setting = false	
 	end
@@ -277,6 +307,38 @@ function rdFirmwareConfig.__get_my_settings(self)
 	        for key, val in pairs(mobile_settings) do  
 	             self.x.set('meshdesk', 'wwan',key, val)
 	        end
+	        self.x.commit('meshdesk')
+        end
+    end
+    
+    --See if there were web_by_wifi
+    if(web_by_wifi['disabled'] ~= nil)then   
+        if(web_by_wifi['disabled'] == '1')then
+        
+            --Only if it is there, gently remove it
+            self.x.foreach('meshdesk','wifi-iface', 
+	            function(a)
+	                if(a['.name'] == 'web_by_wifi')then
+	                    --We found our man
+		                self.x.set('meshdesk',a['.name'],'disabled',web_by_wifi['disabled'])
+		                self.x.commit('meshdesk')
+	                end
+            end)
+        end
+        
+        if(web_by_wifi['disabled'] == '0')then
+            --Remove existing one if there was one--
+            self:__clear_web_by_wifi() 
+            --Create a new one--
+            self.x.set('meshdesk', 'web_by_wifi', "wifi-iface")
+	        self.x.commit('meshdesk')	
+	        --Populate it 
+	        for key, val in pairs(web_by_wifi) do  
+	             self.x.set('meshdesk', 'web_by_wifi',key, val)
+	        end
+	        --Add these two always
+	        self.x.set('meshdesk', 'web_by_wifi','mode', 'sta')
+	        self.x.set('meshdesk', 'web_by_wifi','network','web_by_wifi')
 	        self.x.commit('meshdesk')
         end
     end
@@ -335,6 +397,18 @@ function rdFirmwareConfig.__clear_mobile(self)
 	self.x.foreach('meshdesk','interface', 
 		function(a)
 		    if(a['.name'] == 'wwan')then
+		        --We found our man
+			    self.x.delete('meshdesk',a['.name'])
+			    self.x.commit('meshdesk')
+		    end
+	end)
+end
+
+function rdFirmwareConfig.__clear_web_by_wifi(self)
+    --Now we need to get rid of the wwan interface entry
+	self.x.foreach('meshdesk','wifi-iface', 
+		function(a)
+		    if(a['.name'] == 'web_by_wifi')then
 		        --We found our man
 			    self.x.delete('meshdesk',a['.name'])
 			    self.x.commit('meshdesk')
