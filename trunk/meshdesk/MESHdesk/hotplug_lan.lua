@@ -55,10 +55,10 @@ function interface_switch()
 		print("Script not called by procd/hotplug");
 		print(pidof('led.lua'))
 	else
-		if((act == 'ifup')and((int == 'lan')or(int == 'wwan')))then
+		if((act == 'ifup')and((int == 'lan')or(int == 'wwan')or(int == 'web_by_wifi')))then
 			lan_up_trigger();
 		end
-		if((act == 'ifdown')and((int == 'lan')or(int == 'wwan')))then
+		if((act == 'ifdown')and((int == 'lan')or(int == 'wwan')or(int == 'web_by_wifi')))then
 			lan_down_trigger();
 		end
 		if((act == 'ifup')and(string.find(int,"client")))then
