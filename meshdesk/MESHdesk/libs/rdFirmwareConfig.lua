@@ -204,9 +204,13 @@ function rdFirmwareConfig.__get_my_settings(self)
         end
 
 		if(string.find(s, "key="))then
-            local key = string.gsub(s, "key=", "")
-			self.x.set('meshdesk','wifi_client','key',key)
-            self.x.commit('meshdesk')
+		    if(string.find(s, "w_key="))then
+		        print("Not this key")
+		    else
+                local key = string.gsub(s, "key=", "")
+			    self.x.set('meshdesk','wifi_client','key',key)
+                self.x.commit('meshdesk')
+            end
         end
         
         if(string.find(s, "mode="))then

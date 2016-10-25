@@ -229,8 +229,10 @@ function rdNetstats._getSsidForInterface(self,interface)
 		function(a)
 			--print(a['.name'].." "..interface)
 			--Check the name--
-			if(string.find(a['ifname'],interface))then
-				retval = a['ssid']
+			if(a['ifname'] ~= nil)then
+				if(string.find(a['ifname'],interface))then
+					retval = a['ssid']
+				end
 			end
  		end)
 	return retval
