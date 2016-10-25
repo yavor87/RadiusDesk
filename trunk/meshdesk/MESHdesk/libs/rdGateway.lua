@@ -46,6 +46,8 @@ function rdGateway:enable(exPoints)
 	
 	self:__fwAddMobileWanZone()
 	
+	self:__fwAddWebByWifiZone()
+	
 	self:__fwMasqEnable()
 	
 	if(self.mode == 'mesh')then --Default is mesh mode
@@ -70,6 +72,7 @@ end
 function rdGateway:disable()
 
     self:__fwRemoveMobileWanZone()
+    self:__fwRemoveWebByWifiZone()
     self:__fwMasqDisable()
 	self:__fwGwDisable()
 	self:__dhcpGwDisable()
@@ -449,6 +452,44 @@ function rdGateway.__fwRemoveMobileWanZone(self)
 		    if(a['name'] == 'wwan')then
 			    local wwan_name	  = a['.name']
 				self.x.delete('firewall',wwan_name)
+				self.x.commit('firewall')
+		    end
+	end)
+end
+
+function rdGateway.__fwAddWebByWifiZone(self)
+
+    local wifi_enabled = false;
+	self.x.foreach('meshdesk','wifi-iface', 
+        function(a)
+            if(a['.name'] == 'web_by_wifi')then
+                if(a['disabled'] ~= nil)then
+                    if(a['disabled'] == '0')then
+                       wifi_enabled = true
+                    end
+                end
+            end
+    end)
+ 
+    if(wifi_enabled)then
+        --Create it
+        local zone_name = self.x.add('firewall','zone')
+        self.x.set('firewall',zone_name,'name',		'lan_relay')	
+        self.x.set('firewall',zone_name,'network', { 'lan', 'web_by_wifi' })	
+        self.x.set('firewall',zone_name,'input',	'ACCEPT')	
+        self.x.set('firewall',zone_name,'output',	'ACCEPT')	
+        self.x.set('firewall',zone_name,'forward',	'ACCEPT')
+        self.x.commit('firewall')
+    end
+end
+
+function rdGateway.__fwRemoveWebByWifiZone(self)
+
+    self.x.foreach('firewall', 'zone',
+	    function(a)
+		    if(a['name'] == 'lan_relay')then
+			    local relay_name	  = a['.name']
+				self.x.delete('firewall',relay_name)
 				self.x.commit('firewall')
 		    end
 	end)
