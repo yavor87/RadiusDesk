@@ -274,6 +274,20 @@ function rdGateway.__fwGwEnable(self,network,forward)
 	--We need to add a rule to allow traffic to the config server for the config zone
 	
 	if(network == self.conf_zone)then 
+	
+	    --Web_by_wifi check
+	    local wifi_enabled = false;
+	    self.x.foreach('meshdesk','wifi-iface', 
+            function(a)
+                if(a['.name'] == 'web_by_wifi')then
+                    if(a['disabled'] ~= nil)then
+                        if(a['disabled'] == '0')then
+                           wifi_enabled = true
+                        end
+                    end
+                end
+        end)
+	
 
 		--Avoid duplicates
 		local no_conf_accept_rule = true
@@ -325,10 +339,27 @@ function rdGateway.__fwGwEnable(self,network,forward)
 			    self.x.set('firewall',sm,'proto', 'udp')
 			    self.x.set('firewall',sm,'target', 'ACCEPT')
 			    self.x.set('firewall',sm,'name', self.ntp_rule)
-			
-			
+					
 			end
 			
+			if(wifi_enabled)then
+			    local rw = self.x.add('firewall','rule')
+			    self.x.set('firewall',rw,'src', network)
+			    self.x.set('firewall',rw,'dest', 'web_by_wifi')
+			    self.x.set('firewall',rw,'dest_ip', conf_srv)
+			    self.x.set('firewall',rw,'target', 'ACCEPT')
+			    self.x.set('firewall',rw,'name', self.conf_rule)
+			    self.x.set('firewall',rw,'proto', 'all') --required to include ping
+			
+			    --For the ntp server
+			    local sw = self.x.add('firewall','rule')
+			    self.x.set('firewall',sw,'src', network)
+			    self.x.set('firewall',sw,'dest', 'web_by_wifi')
+			    self.x.set('firewall',sw,'dest_port', '123')
+			    self.x.set('firewall',sw,'proto', 'udp')
+			    self.x.set('firewall',sw,'target', 'ACCEPT')
+			    self.x.set('firewall',sw,'name', self.ntp_rule)
+			end		
 
 			self.x.commit('firewall')
 		end
@@ -474,11 +505,13 @@ function rdGateway.__fwAddWebByWifiZone(self)
     if(wifi_enabled)then
         --Create it
         local zone_name = self.x.add('firewall','zone')
-        self.x.set('firewall',zone_name,'name',		'lan_relay')	
+        self.x.set('firewall',zone_name,'name',		'web_by_wifi')	
         self.x.set('firewall',zone_name,'network', { 'lan', 'web_by_wifi' })	
         self.x.set('firewall',zone_name,'input',	'ACCEPT')	
         self.x.set('firewall',zone_name,'output',	'ACCEPT')	
         self.x.set('firewall',zone_name,'forward',	'ACCEPT')
+        self.x.set('firewall',zone_name,'masq',	1)
+        self.x.set('firewall',zone_name,'mtu_fix',	1)
         self.x.commit('firewall')
     end
 end
@@ -487,7 +520,7 @@ function rdGateway.__fwRemoveWebByWifiZone(self)
 
     self.x.foreach('firewall', 'zone',
 	    function(a)
-		    if(a['name'] == 'lan_relay')then
+		    if(a['name'] == 'web_by_wifi')then
 			    local relay_name	  = a['.name']
 				self.x.delete('firewall',relay_name)
 				self.x.commit('firewall')
