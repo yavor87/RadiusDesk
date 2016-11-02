@@ -32,13 +32,13 @@ Ext.define('Rd.controller.cRadiusClient', {
                 change:      me.userTypeChange
             },
             'frmRadiusRequest cmbPermanentUser': {
-                render:      me.renderEventPu
+                afterrender:      me.renderEventPu
             },
             'frmRadiusRequest cmbDevice': {
-                render:      me.renderEventD
+                afterrender:      me.renderEventD
             },
             'frmRadiusRequest cmbVoucher': {
-                render:      me.renderEventV
+                afterrender:      me.renderEventV
             },
             'frmRadiusRequest #send': {
                 click:      me.submitRequest
@@ -108,7 +108,7 @@ Ext.define('Rd.controller.cRadiusClient', {
     actionTestVoucher: function(v_record){
         var me = this;
         me.vRecord = v_record;
-        if(me.cmbVRendered == true){
+       if(me.cmbVRendered == true){
             console.log("Combo already rendered... set it");
             me.getCmbUserType().setValue('voucher');
             me.getCmbVoucher().getStore().loadData([me.vRecord],false);

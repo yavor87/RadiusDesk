@@ -46,7 +46,7 @@ Ext.define('Rd.view.permanentUsers.gridUserRadpostauths' ,{
         //Create a store specific to this Permanent User
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mRadpostauth',
-            buffered: true,
+            buffered: false,
             leadingBufferZone: 450, 
             pageSize: 150,
             //To force server side sorting:

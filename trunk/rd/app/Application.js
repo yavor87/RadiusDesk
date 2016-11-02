@@ -9,8 +9,8 @@ Ext.define('Rd.Application', {
     name: 'Rd',
     
     requires: [
-     //'Ext.*',   //Uncomment when building production
-     //'Rd.*'    //Uncomment when building production
+     'Ext.*',   //Uncomment when building production
+     'Rd.*'    //Uncomment when building production
     ],
 
     controllers: [
@@ -34,6 +34,9 @@ Ext.define('Rd.Application', {
         Ext.tip.QuickTipManager.init();
         Ext.state.Manager.setProvider(Ext.create('Ext.state.LocalStorageProvider'));
         me.applyVtypes();
+        
+        //Disable Aria Warnings
+        Ext.ariaWarn = Ext.emptyFn;
     },
     
     launch: function () {
