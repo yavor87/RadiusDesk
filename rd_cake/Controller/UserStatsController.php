@@ -20,7 +20,7 @@ class UserStatsController extends AppController {
        
         if(isset($this->request->query['day'])){
             //Format will be: 2013-09-18T00:00:00
-            $pieces = split('T',$this->request->query['day']);
+            $pieces = explode('T',$this->request->query['day']);
             $day = $pieces[0];
         }
 
@@ -108,7 +108,7 @@ class UserStatsController extends AppController {
         $total_in_out   = 0;
 
          //With weekly we need to find the start of week for the specified date
-        $pieces     = split('-', $day);
+        $pieces     = explode('-', $day);
         $start_day  = date('Y-m-d', strtotime('this week', mktime(0, 0, 0, $pieces[1],$pieces[2], $pieces[0])));
 
         //Prime the days
@@ -141,7 +141,7 @@ class UserStatsController extends AppController {
             }
 
             //Get the nex day in the slots (we move one day on)
-            $pieces     = split('-',$start_day);
+            $pieces     = explode('-',$start_day);
             $start_day  = date('Y-m-d',strtotime('+1 day', mktime(0, 0, 0, $pieces[1],$pieces[2], $pieces[0])));
             $slot_start = "$start_day 00:00:00";
             $slot_end   = "$start_day 59:59:59";
@@ -159,7 +159,7 @@ class UserStatsController extends AppController {
 
         //With weekly we need to find the start of week for the specified date
         //$givenday = date("w", mktime(0, 0, 0, MM, dd, yyyy));
-        $pieces     = split('-', $day);
+        $pieces     = explode('-', $day);
         $start_day  = date('Y-m-d', strtotime('first day of', mktime(0, 0, 0, $pieces[1],$pieces[2], $pieces[0])));
 
 
@@ -193,7 +193,7 @@ class UserStatsController extends AppController {
             }
 
             //Get the nex day in the slots (we move one day on)
-            $pieces     = split('-',$start_day);
+            $pieces     = explode('-',$start_day);
             $start_day  = date('Y-m-d',strtotime('+1 day', mktime(0, 0, 0, $pieces[1],$pieces[2], $pieces[0])));
             $slot_start = "$start_day 00:00:00";
             $slot_end   = "$start_day 59:59:59";
