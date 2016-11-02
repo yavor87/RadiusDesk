@@ -232,12 +232,10 @@ Ext.define('Rd.controller.cMeshes', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoReload);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
 
         if(n == 'mnuRefreshCancel'){
             b.setGlyph(Rd.config.icnReload);
-            b.setIconCls('b-reload');
             return;
         }
         
@@ -677,7 +675,6 @@ Ext.define('Rd.controller.cMeshes', {
 
         if(n == 'mnuRefreshCancel'){
             b.setGlyph(Rd.config.icnReload);
-            b.setIconCls('b-reload');
             return;
         }
         
@@ -851,7 +848,6 @@ Ext.define('Rd.controller.cMeshes', {
 
         if(n == 'mnuRefreshCancel'){
             b.setGlyph(Rd.config.icnReload);
-            b.setIconCls('b-reload');
             return;
         }
         

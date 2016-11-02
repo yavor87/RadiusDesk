@@ -1238,11 +1238,9 @@ Ext.define('Rd.controller.cNas', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoReload);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
         
         if(n == 'mnuRefreshCancel'){
-            b.setIconCls('b-reload');
             b.setGlyph(Rd.config.icnReload);
             return;
         }
