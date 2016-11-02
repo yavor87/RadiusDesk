@@ -257,12 +257,10 @@ Ext.define('Rd.controller.cMeshViews', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoRefresInterval);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
 
         if(n == 'mnuRefreshCancel'){
             b.setGlyph(Rd.config.icnReload);
-            b.setIconCls('b-reload');
             return;
         }
         

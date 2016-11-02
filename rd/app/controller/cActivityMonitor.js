@@ -218,11 +218,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoReloadAcct);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
 
         if(n == 'mnuRefreshCancel'){
-            b.setIconCls('b-reload');
             b.setGlyph(Rd.config.icnReload);
             return;
         }
@@ -244,11 +242,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoReloadAuth);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
         
         if(n == 'mnuRefreshCancel'){
-            b.setIconCls('b-reload');
             b.setGlyph(Rd.config.icnReload);
             return;
         }
@@ -303,11 +299,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var b       = menu_item.up('button'); 
         var interval= 30000; //default
         clearInterval(me.autoReloadRadius);   //Always clear
-        b.setIconCls('b-reload_time');
         b.setGlyph(Rd.config.icnTime);
 
         if(n == 'mnuRefreshCancel'){
-            b.setIconCls('b-reload');
             b.setGlyph(Rd.config.icnReload);
             return;
         }
