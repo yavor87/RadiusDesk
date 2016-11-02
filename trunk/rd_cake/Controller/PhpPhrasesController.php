@@ -512,7 +512,7 @@ class PhpPhrasesController extends AppController {
                 $line = preg_replace('/"/', "", $line);
                 $line = chop($line);
                 if(strlen($line)> 10){
-                    list($item, $value) = split(": ", $line);
+                    list($item, $value) = explode(": ", $line);
                     $meta_data["$item"] = $value;
                 }
             }
