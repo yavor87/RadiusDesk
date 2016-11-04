@@ -6,7 +6,7 @@ var rdClient = (function () {
     
         //=====Constants======
         var h               = document.location.hostname;
-        var urlUse          = 'http://'+h+'/cake2/rd_cake/radaccts/get_usage.json'
+        var urlUse          = location.protocol+'//'+h+'/cake2/rd_cake/radaccts/get_usage.json'
         var cAjaxTimeout    = 3000;
         var cDynamicData    = undefined; //Will be populated when gettting DynamicDetail from back-end
         var cDebug          = false;
