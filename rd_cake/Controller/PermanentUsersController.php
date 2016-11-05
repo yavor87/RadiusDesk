@@ -124,6 +124,12 @@ class PermanentUsersController extends AppController {
         $items      = array();
         $profiles   = array();
         $realms     = array();
+        
+      /*  if($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $ap_flag        = true;
+            $ap_children    = $this->User->find_access_provider_children($user_id);
+        }
+        */
 
         foreach($q_r as $i){ 
             $owner_id       = $i['PermanentUser']['user_id'];
@@ -137,11 +143,14 @@ class PermanentUsersController extends AppController {
                     break;
                 }
             }
+            
+            //if $user_id == realm
 
             $action_flags = array();
             $action_flags['update'] = false;
             $action_flags['delete'] = false;
-            $action_flags   = $this->_get_action_flags($user,$owner_id,$i['PermanentUser']['realm_id']);
+            
+            $action_flags   = $this->_get_action_flags($user,$owner_id,$i['Realm']);
               
             if($action_flags['read']){
                 array_push($items,
@@ -352,11 +361,27 @@ class PermanentUsersController extends AppController {
 	    if(isset($this->data['id'])){   //Single item delete
             $message = "Single item ".$this->data['id'];
 
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:   
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:  
+            $this->{$this->modelClass}->contain('Realm'); 
             $item       = $this->{$this->modelClass}->findById($this->data['id']);
+
             $owner_id   = $item['PermanentUser']['user_id']; 
             $username   = $item['PermanentUser']['username'];
             if($owner_id != $user_id){
+            
+                //What if the realm belongs to the $user_id or someone the $user_id created
+                $realm_owner    = $item['Realm']['user_id'];
+                $ap_children    = $this->User->find_access_provider_children($realm_owner);
+                if($ap_children){   //Only if the AP has any children...
+                    foreach($ap_children as $i){
+                        if($user_id == $i['id']){
+                            $this->{$this->modelClass}->id = $this->data['id'];
+                            $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                            $this->_delete_clean_up_user($username);
+                        }
+                    }       
+                }  
+            
                 if($this->_is_sibling_of($user_id,$owner_id)== true){
                     $this->{$this->modelClass}->id = $this->data['id'];
                     $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
@@ -372,11 +397,26 @@ class PermanentUsersController extends AppController {
    
         }else{                          //Assume multiple item delete
             foreach($this->data as $d){
-
+                $this->{$this->modelClass}->contain('Realm');
                 $item       = $this->{$this->modelClass}->findById($d['id']);
                 $owner_id   = $item['PermanentUser']['user_id']; 
                 $username   = $item['PermanentUser']['username'];  
+                
                 if($owner_id != $user_id){
+                
+                    //What if the realm belongs to the $user_id or someone the $user_id created
+                    $realm_owner    = $item['Realm']['user_id'];
+                    $ap_children    = $this->User->find_access_provider_children($realm_owner);
+                    if($ap_children){   //Only if the AP has any children...
+                        foreach($ap_children as $i){
+                            if($user_id == $i['id']){
+                                $this->{$this->modelClass}->id = $d['id'];
+                                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
+                                $this->_delete_clean_up_user($username);
+                            }
+                        }       
+                    }      
+                
                     if($this->_is_sibling_of($user_id,$owner_id) == true){
                         $this->{$this->modelClass}->id = $d['id'];
                         $this->{$this->modelClass}->delete($this->{$this->modelClass}->id,true);
@@ -1963,13 +2003,17 @@ class PermanentUsersController extends AppController {
             }
   
             //** ALL the AP's children
+
             $ap_children    = $this->User->find_access_provider_children($user_id);
             if($ap_children){   //Only if the AP has any children...
                 foreach($ap_children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array('User.id' => $id));
                 }       
-            }    
+            } 
+            
+            //print_r($tree_array); 
+                        
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $tree_array));  
         }      
@@ -2047,7 +2091,7 @@ class PermanentUsersController extends AppController {
         return false;
     }
 
-    private function _get_action_flags($user,$owner_id,$realm_id){
+    private function _get_action_flags($user,$owner_id,$realm){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return array('update' => true, 'delete' => true, 'read' => true);
         }
@@ -2059,9 +2103,24 @@ class PermanentUsersController extends AppController {
                 return array('update' => true, 'delete' => true, 'read' => true);
             }
             
+            $realm_id = $realm['id'];         
+            
             if(array_key_exists($realm_id,$this->AclCache)){
                 return $this->AclCache[$realm_id];
             }else{
+            
+                //If the Realm is owned by the $user or someone owned by the $user we allow them
+                $ap_children    = $this->User->find_access_provider_children($user['id']);
+                if($ap_children){   //Only if the AP has any children...
+                    foreach($ap_children as $i){
+                        $c_id = $i['id'];
+                        if($c_id == $realm['user_id']){
+                            $this->AclCache[$realm_id] =  array('update' => true, 'delete' => true,'read' => true);
+                            return array('update' => true, 'delete' => true, 'read' => true); 
+                        }
+                    }       
+                }  
+            
                 if($this->Acl->check(array(
                     'model'         => 'User', 
                     'foreign_key'   => $user['id']), 
