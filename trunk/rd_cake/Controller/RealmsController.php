@@ -59,8 +59,13 @@ class RealmsController extends AppController {
             $user_id = $user['id'];
         }
         $items      = array();
+        
+        $ap_id = false;
+        if(isset($this->request->query['ap_id'])){
+            $ap_id      = $this->request->query['ap_id'];
+        }
 
-        if($admin_flag){
+        if(($admin_flag)&&($ap_id == false)){
             $r = $this->Realm->find('all');
             foreach($r as $j){
                 $id     = $j['Realm']['id'];
@@ -70,11 +75,14 @@ class RealmsController extends AppController {
 
         }else{
             //Access Providers needs more work...
-            $ap_id      = $user_id;
+            if($ap_id == false){
+                $ap_id      = $user_id;
+            }
             if($ap_id == 0){
                 $ap_id = $user_id;
             }
-            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root           
+            $q_r        = $this->User->getPath($ap_id); //Get all the parents up to the root   
+                   
             foreach($q_r as $i){    
                 $user_id    = $i['User']['id'];
                 $this->Realm->contain();
@@ -91,29 +99,25 @@ class RealmsController extends AppController {
                 }
             }
 
-/*
-            //Get all the realms owned by the $ap_id but NOT available_to_siblings
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
-            foreach($r  as $j){
-                $id     = $j['Realm']['id'];
-                $name   = $j['Realm']['name'];
-                $create = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'create'); 
-                if($create == true){
-                        array_push($items,array('id' => $id, 'name' => $name));
-                }
+            //All the realms owned by anyone this access provider created (and also itself) 
+            //will automatically be under full controll of this access provider
+            
+            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $tree_array     = array();
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array('Realm.user_id' => $id));
+                }       
             }  
-*/
-
-            //Get all the realms owned by the $ap_id 
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id)));
-            foreach($r  as $j){
+            $this->Realm->contain();
+            $r_sub  = $this->Realm->find('all',array('conditions' => array('OR' => $tree_array))); 
+            foreach($r_sub  as $j){
                 $id     = $j['Realm']['id'];
                 $name   = $j['Realm']['name'];
                 array_push($items,array('id' => $id, 'name' => $name));
             }
-
+           
         }
 
         $this->set(array(
@@ -123,7 +127,7 @@ class RealmsController extends AppController {
         ));
     }
 
-        public function index_ap_update(){
+    public function index_ap_update(){
     //This method will display the Access Provider we are looking at's list of realms which it has edit rights for
     //This will be used to display in the Wizard of available Realms in the Edit screens of Vouchers; Permanent Users; and Devices
 
@@ -144,8 +148,14 @@ class RealmsController extends AppController {
             $admin_flag = true;
         }
         $items      = array();
+        
+        $ap_id = false;
+        if(isset($this->request->query['ap_id'])){
+            $ap_id      = $this->request->query['ap_id'];
+        }
 
-       if($admin_flag){
+        if(($admin_flag)&&($ap_id == false)){
+
             $r = $this->Realm->find('all');
             foreach($r as $j){
                 $id     = $j['Realm']['id'];
@@ -155,7 +165,10 @@ class RealmsController extends AppController {
 
         }else{
             //Access Providers needs more work...
-            $ap_id      = $user_id;
+             if($ap_id == false){
+                $ap_id      = $user_id;
+            }
+            
             if($ap_id == 0){
                 $ap_id = $user_id;
             }
@@ -176,20 +189,27 @@ class RealmsController extends AppController {
                     }
                 }
             }
-
-            //Get all the realms owned by the $ap_id but NOT available_to_siblings
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
-            foreach($r  as $j){
+   
+            
+            //All the realms owned by anyone this access provider created (and also itself) 
+            //will automatically be under full controll of this access provider
+            
+            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $tree_array     = array();
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array('Realm.user_id' => $id));
+                }       
+            }  
+            $this->Realm->contain();
+            $r_sub  = $this->Realm->find('all',array('conditions' => array('OR' => $tree_array))); 
+            foreach($r_sub  as $j){
                 $id     = $j['Realm']['id'];
                 $name   = $j['Realm']['name'];
-                $create = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'update'); 
-                if($create == true){
-                        array_push($items,array('id' => $id, 'name' => $name));
-                }
-            }   
-
+                array_push($items,array('id' => $id, 'name' => $name));
+            }
+            
         }
 
         $this->set(array(
@@ -250,25 +270,25 @@ class RealmsController extends AppController {
                 }
             }
 
-            //Get all the realms owned by the $ap_id but NOT available_to_siblings
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id, 'Realm.available_to_siblings' => false)));
-            foreach($r  as $j){
+            
+            //All the realms owned by anyone this access provider created (and also itself) 
+            //will automatically be under full controll of this access provider
+            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $tree_array     = array();
+            if($ap_children){   //Only if the AP has any children...
+                foreach($ap_children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array,array('Realm.user_id' => $id));
+                }       
+            }  
+            $this->Realm->contain();
+            $r_sub  = $this->Realm->find('all',array('conditions' => array('OR' => $tree_array))); 
+            foreach($r_sub  as $j){
                 $id     = $j['Realm']['id'];
                 $name   = $j['Realm']['name'];
-                $create = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'create');
-                $read   = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'read');
-                $update = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'update');
-                $delete = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'delete');
-                array_push($items,array('id' => $id, 'name' => $name, 'create' => $create, 'read' => $read, 'update' => $update, 'delete' => $delete));
-            }   
+                array_push($items,array('id' => $id, 'name' => $name, 'create' => true, 'read' => true, 'update' => true, 'delete' => true));
+            }
+              
         }  
 
         $this->set(array(
