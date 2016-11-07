@@ -260,9 +260,7 @@ class RadacctsController extends AppController {
         
         $items  = array();
         foreach($q_r as $i){
-        
-           // print_r($i);
-        
+              
             $user_type      = 'unknown';
             $online_human   = '';
 
@@ -667,41 +665,58 @@ class RadacctsController extends AppController {
         //====== END REQUEST FILTER =====
 
         //====== AP FILTER =====
-        if($user['group_name'] == Configure::read('group.ap')){  //AP 
-            $this->Realm = ClassRegistry::init('Realm');
-            $q_r        = $this->User->getPath($user['id']); //Get all the parents up to the root
-            $ap_clause  = array();
-            $ap_id      = $user['id'];
+        if($user['group_name'] == Configure::read('group.ap')){  //AP               
+        
+            $this->Realm    = ClassRegistry::init('Realm');
+            $q_r            = $this->User->getPath($user['id']); //Get all the parents up to the root
+            $ap_clause      = array();
+            $ap_id          = $user['id'];
+            
+            //** ALL the AP's children **
+            $tree_array_children    = array();
+            $this->children         = $this->User->find_access_provider_children($user['id']);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
+                    $id = $i['id'];
+                    array_push($tree_array_children,array('Realm.user_id' => $id));
+                }       
+            } 
 
-            foreach($q_r as $i){         
-                $user_id    = $i['User']['id'];
-                $this->Realm->contain();
-                $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $user_id, 'Realm.available_to_siblings' => true)));
-                foreach($r  as $j){
-                    $id     = $j['Realm']['id'];
-                    $name   = $j['Realm']['name'];   
-                    $read   = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
-                                array('model' => 'Realm','foreign_key' => $id), 'read');
-                    if($read == true){
-                        array_push($ap_clause,array($this->modelClass.'.realm' => $name));
-                    }                   
+            $this->Realm->contain();
+            $r_children = $this->Realm->find('all',array('conditions' => array('OR' => $tree_array_children)));
+            foreach($r_children as $r_c){
+                $name   = $r_c['Realm']['name'];
+                array_push($ap_clause,array($this->modelClass.'.realm' => $name));
+            }
+            
+            //** ALL the AP's Parents **
+            $tree_array_parents     = array();
+            $this->parents          = $this->User->getPath($user['id'],'User.id');
+            foreach($this->parents as $i){
+                $i_id = $i['User']['id'];
+                if($i_id != $user['id']){ //upstream
+                    array_push($tree_array_parents,array('Realm.user_id' => $i_id,'Realm.available_to_siblings' => true));
                 }
             }
-
-            //Get all the realms owned by the $ap_id 
-            $r        = $this->Realm->find('all',array('conditions' => array('Realm.user_id' => $ap_id)));
-            foreach($r  as $j){
-                $id     = $j['Realm']['id'];
-                $name   = $j['Realm']['name'];
-                array_push($ap_clause,array($this->modelClass.'.realm' => $name));
-            }   
-
+            
+            $this->Realm->contain();
+            $r_parents = $this->Realm->find('all',array('conditions' => array('OR' => $tree_array_parents)));
+            foreach($r_parents as $r_p){
+                $id     = $r_p['Realm']['id'];
+                $name   = $r_p['Realm']['name'];
+                $read   = $this->Acl->check(
+                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Realm','foreign_key' => $id), 'read');
+                if($read == true){
+                    array_push($ap_clause,array($this->modelClass.'.realm' => $name));
+                }                  
+            }
+            
             //Add it as an OR clause
             array_push($c['conditions'],array('OR' => $ap_clause)); 
         }
         //====== END AP FILTER =====
-        //print_r($c);
+
         return $c;
     }
 

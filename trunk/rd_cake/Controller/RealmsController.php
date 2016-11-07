@@ -102,10 +102,10 @@ class RealmsController extends AppController {
             //All the realms owned by anyone this access provider created (and also itself) 
             //will automatically be under full controll of this access provider
             
-            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $this->children    = $this->User->find_access_provider_children($ap_id);
             $tree_array     = array();
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array('Realm.user_id' => $id));
                 }       
@@ -194,10 +194,10 @@ class RealmsController extends AppController {
             //All the realms owned by anyone this access provider created (and also itself) 
             //will automatically be under full controll of this access provider
             
-            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $this->children    = $this->User->find_access_provider_children($ap_id);
             $tree_array     = array();
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array('Realm.user_id' => $id));
                 }       
@@ -273,10 +273,10 @@ class RealmsController extends AppController {
             
             //All the realms owned by anyone this access provider created (and also itself) 
             //will automatically be under full controll of this access provider
-            $ap_children    = $this->User->find_access_provider_children($ap_id);
+            $this->children    = $this->User->find_access_provider_children($ap_id);
             $tree_array     = array();
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array('Realm.user_id' => $id));
                 }       
@@ -414,9 +414,9 @@ class RealmsController extends AppController {
             }
             
             //Now get all the realms of the siblings of the owner
-            $ap_children    = $this->User->find_access_provider_children($owner_id);
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            $this->children    = $this->User->find_access_provider_children($owner_id);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $user_id = $i['id'];
                     $this->Realm->contain('NaRealm.na_id');
                     $q = $this->Realm->find('all',
@@ -616,9 +616,9 @@ class RealmsController extends AppController {
             }
             
             //Now get all the realms of the siblings of the owner
-            $ap_children    = $this->User->find_access_provider_children($owner_id);
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            $this->children    = $this->User->find_access_provider_children($owner_id);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $user_id = $i['id'];
                     $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
                     $q = $this->Realm->find('all',
@@ -1604,9 +1604,9 @@ class RealmsController extends AppController {
                 }
             }
             //** ALL the AP's children
-            $ap_children    = $this->User->find_access_provider_children($user['id']);
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            $this->children    = $this->User->find_access_provider_children($user['id']);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array($this->modelClass.'.user_id' => $id));
                 }       
@@ -1640,7 +1640,7 @@ class RealmsController extends AppController {
 
             //Test for Children
             foreach($this->children as $i){
-                if($i['User']['id'] == $owner_id){
+                if($i['id'] == $owner_id){
                     return array('update' => true, 'delete' => true);
                 }
             }  

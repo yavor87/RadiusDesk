@@ -251,7 +251,7 @@ class VouchersController extends AppController {
             $owner_id   = $i['Voucher']['user_id'];
 
             if(!array_key_exists($owner_id,$af_hash)){ //Avoid duplicate queries
-                $af_hash["$owner_id"] = $this->_get_action_flags($user,$owner_id,$i['Voucher']['realm_id']);
+                $af_hash["$owner_id"] = $this->_get_action_flags($user,$owner_id,$i['Realm']);
             }
            
             if($af_hash["$owner_id"]['read']){     
@@ -1890,7 +1890,7 @@ class VouchersController extends AppController {
         return false;
     }
 
-    private function _get_action_flags($user,$owner_id,$realm_id){
+    private function _get_action_flags($user,$owner_id,$realm){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return array('update' => true, 'delete' => true, 'read' => true);
         }
@@ -1902,10 +1902,24 @@ class VouchersController extends AppController {
                 return array('update' => true, 'delete' => true, 'read' => true);
             }
             
+            $realm_id = $realm['id'];
+            
             if(array_key_exists($realm_id,$this->AclCache)){
                 return $this->AclCache[$realm_id];
             }else{
             
+                //If the Realm is owned by the $user or someone owned by the $user we allow them
+                $ap_children    = $this->User->find_access_provider_children($user['id']);
+                if($ap_children){   //Only if the AP has any children...
+                    foreach($ap_children as $i){
+                        $c_id = $i['id'];
+                        if($c_id == $realm['user_id']){
+                            $this->AclCache[$realm_id] =  array('update' => true, 'delete' => true,'read' => true);
+                            return array('update' => true, 'delete' => true, 'read' => true); 
+                        }
+                    }       
+                }
+              
                 if($this->Acl->check(array(
                     'model'         => 'User', 
                     'foreign_key'   => $user['id']), 
