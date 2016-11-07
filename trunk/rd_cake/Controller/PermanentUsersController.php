@@ -1879,15 +1879,15 @@ class PermanentUsersController extends AppController {
                             'boxLabel'      => 'Connect only from listed devices', 
                             'itemId'        => 'chkListedOnly',
                             'checked'       => $checked, 
-                            'boxLabelCls'   => 'lblRdCheck',
+                            'cls'           => 'lblRd',
                             'margin'        => 5
                         ),
                         array( 
                             'xtype'         => 'checkbox', 
                             'boxLabel'      => 'Auto-add device after authentication', 
-                            'itemId'        => 'chkAutoAdd',
-                            'checked'       => false, 
-                            'boxLabelCls'   => 'lblRdCheck',
+                            'itemId'        => 'chkAutoAddMac',
+                            'checked'       => $checked_add_mac, 
+                            'cls'           => 'lblRd',
                             'margin'        => 5
                         )
                 )) 
