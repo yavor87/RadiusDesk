@@ -211,7 +211,7 @@ class UserStatsController extends AppController {
         if(isset($this->request->query['type'])){
             $type = $this->request->query['type'];
             //Permanent users an vouchers
-            if(($type == 'permanent')||($type == 'voucher')||($type == 'user')||('activity_viewer')){
+            if(($type == 'permanent')||($type == 'voucher')||($type == 'user')||($type == 'activity_viewer')){
                 array_push($base_search,array('UserStat.username' => $username));   
             }
             //Devices
@@ -244,7 +244,7 @@ class UserStatsController extends AppController {
                 $dc = ClassRegistry::init('DynamicClient');
                 $dc->contain();
                 $q_r = $dc->findById($username);
-                if($q_r){ 
+                if($q_r){  
                     $nas_identifier = $q_r['DynamicClient']['nasidentifier'];
                     array_push($base_search,array('UserStat.nasidentifier' => $nas_identifier));
                 }
