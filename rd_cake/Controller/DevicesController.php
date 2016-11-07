@@ -175,7 +175,7 @@ class DevicesController extends AppController {
             if($realm != 'not defined'){
                 $owner_id       = $i['PermanentUser']['user_id'];
                 $q_r            = ClassRegistry::init('Realm')->findByName($realm);
-                $action_flags   = $this->_get_action_flags_for_devices($user,$owner_id,$q_r['Realm']['id']);
+                $action_flags   = $this->_get_action_flags_for_devices($user,$owner_id,$q_r['Realm']);
             }
 
             if($action_flags['read']){
@@ -1511,9 +1511,9 @@ class DevicesController extends AppController {
             }
   
             //** ALL the AP's children
-            $ap_children    = $this->User->find_access_provider_children($user_id);
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            $this->children    = $this->User->find_access_provider_children($user_id);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array('PermanentUser.user_id' => $id));
                 }       
@@ -1589,7 +1589,7 @@ class DevicesController extends AppController {
         return false;
     }
 
-    private function _get_action_flags_for_devices($user,$owner_id,$realm_id){
+    private function _get_action_flags_for_devices($user,$owner_id,$realm){
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             return array('update' => true, 'delete' => true, 'read' => true);
         }
@@ -1601,9 +1601,24 @@ class DevicesController extends AppController {
                 return array('update' => true, 'delete' => true, 'read' => true);
             }
             
+            $realm_id = $realm['id'];
+            
             if(array_key_exists($realm_id,$this->AclCache)){
                 return $this->AclCache[$realm_id];
             }else{
+            
+                //If the Realm is owned by the $user or someone owned by the $user we allow them
+                $ap_children    = $this->User->find_access_provider_children($user['id']);
+                if($ap_children){   //Only if the AP has any children...
+                    foreach($ap_children as $i){
+                        $c_id = $i['id'];
+                        if($c_id == $realm['user_id']){
+                            $this->AclCache[$realm_id] =  array('update' => true, 'delete' => true,'read' => true);
+                            return array('update' => true, 'delete' => true, 'read' => true); 
+                        }
+                    }       
+                }
+            
             
                 if($this->Acl->check(array(
                     'model'         => 'User', 
@@ -1651,7 +1666,7 @@ class DevicesController extends AppController {
 
             //Test for Children
             foreach($this->children as $i){
-                if($i['User']['id'] == $owner_id){
+                if($i['id'] == $owner_id){
                     return array('update' => true, 'delete' => true);
                 }
             }  

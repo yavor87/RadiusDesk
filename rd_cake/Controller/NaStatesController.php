@@ -314,7 +314,7 @@ class NaStatesController extends AppController {
 
             //Test for Children
             foreach($this->children as $i){
-                if($i['User']['id'] == $owner_id){
+                if($i['id'] == $owner_id){
                     return array('update' => true, 'delete' => true);
                 }
             }  

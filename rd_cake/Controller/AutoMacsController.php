@@ -1009,9 +1009,9 @@ class AutoMacsController extends AppController {
                 }
             }
             //** ALL the AP's children
-            $ap_children    = $this->User->find_access_provider_children($user['id']);
-            if($ap_children){   //Only if the AP has any children...
-                foreach($ap_children as $i){
+            $this->children    = $this->User->find_access_provider_children($user['id']);
+            if($this->children){   //Only if the AP has any children...
+                foreach($this->children as $i){
                     $id = $i['id'];
                     array_push($tree_array,array($this->modelClass.'.user_id' => $id));
                 }       
@@ -1049,7 +1049,7 @@ class AutoMacsController extends AppController {
 
             //Test for Children
             foreach($this->children as $i){
-                if($i['User']['id'] == $owner_id){
+                if($i['id'] == $owner_id){
                     return array('update' => true, 'delete' => true);
                 }
             }  

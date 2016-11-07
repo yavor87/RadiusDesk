@@ -2003,7 +2003,6 @@ class PermanentUsersController extends AppController {
             }
   
             //** ALL the AP's children
-
             $ap_children    = $this->User->find_access_provider_children($user_id);
             if($ap_children){   //Only if the AP has any children...
                 foreach($ap_children as $i){

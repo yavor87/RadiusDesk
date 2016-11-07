@@ -591,12 +591,12 @@ class DesktopController extends AppController {
         
         //Meshdesk
 		if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
-			array_push($items, array( 'name' => 'MESHdesk', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cMeshes'));
+			array_push($items, array( 'name' => 'MESHdesk', 'iconCls' => 'meshdesk-shortcut', 'controller' => 'cMeshes'));
 		}
         
         
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
-            array_push($items, array( 'name' => 'APdesk', 'iconCls' => 'vouchers-shortcut', 'controller' => 'cAccessPoints'));
+            array_push($items, array( 'name' => 'APdesk', 'iconCls' => 'apdesk-shortcut', 'controller' => 'cAccessPoints'));
         }
         
         
