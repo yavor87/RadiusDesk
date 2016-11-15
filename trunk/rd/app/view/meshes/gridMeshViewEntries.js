@@ -90,6 +90,12 @@ Ext.define('Rd.view.meshes.gridMeshViewEntries' ,{
                 width: 150,
                 renderer: function (v, m, r) {
                     if(v != null){
+                        if(m.firstRun == undefined){
+                            m.firstRun = true;
+                        }
+                        if(m.firstRun){
+                            return;
+                        }
                         var bar = r.get('signal_avg_bar');
                         var cls = 'wifigreen';
                         if(bar < 0.3){

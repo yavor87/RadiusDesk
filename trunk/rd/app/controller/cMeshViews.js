@@ -175,6 +175,7 @@ Ext.define('Rd.controller.cMeshViews', {
         var me      = this;
         var win     = button.up("winMeshView");
         var entGrid = win.down("gridMeshViewEntries");
+        
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
         var span    = 'hour';

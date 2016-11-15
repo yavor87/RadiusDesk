@@ -19,6 +19,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 layout: 'border',
                 stateful: true,
                 stateId: 'permanentUsersWin',
+                maximized: true,
                 items: [
                     {
                         region: 'north',
