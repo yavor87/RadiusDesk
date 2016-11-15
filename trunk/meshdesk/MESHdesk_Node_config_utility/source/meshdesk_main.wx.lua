@@ -20,7 +20,7 @@ local choice_m_active,choice_m_proto,choice_m_service,tc_m_device,tc_m_apn,tc_m_
 
 --Some hardware
 local choices = {
-    "Dragino",
+    "Dragino", 
     "MP2 Basic",
     "MP2 Phone",
     "OpenMesh", 
@@ -42,6 +42,9 @@ local choices = {
     "TP-Link WR841N",
     "TP-Link WA850RE",
     "TP-Link WA901N",
+    "TP-Link WR1043ND",
+    "TP-Link CPE210",
+    "EnGenius EAP300",
     "Generic 1 Radio",
     "Generic 2 Radio",
     "ZBT WE1526",
@@ -73,25 +76,26 @@ hardware[18]        = 'tl_wdr3600'
 hardware[19]        = 'tl841n'
 hardware[20]        = 'tl_wa850re'
 hardware[21]        = 'tl_wa901n'
-hardware[22]        = 'genoneradio'
-hardware[23]        = 'gentworadio'
-hardware[24]        = 'zbt_we1526'
-hardware[25]        = 'zbt_we2026'
-hardware[26]        = 'zbt_we3826'
-hardware[27]        = 'tl_ac1750_c7'
-hardware[28]        = 'miwifi_mini'
+hardware[22]        = 'tl_wr1043'
+hardware[23]        = 'tl_cpe210'
+hardware[24]        = 'eap300'
+hardware[25]        = 'genoneradio'
+hardware[26]        = 'gentworadio'
+hardware[27]        = 'zbt_we1526'
+hardware[28]        = 'zbt_we2026'
+hardware[29]        = 'zbt_we3826'
+hardware[30]        = 'tl_ac1750_c7'
+hardware[31]        = 'miwifi_mini'
 
 local mode_choices = {
     "Mesh",
-    "Access Point",
-    "CPE"
+    "Access Point"
 }
 
 local mode = {}
 
 mode[0] = 'mesh'
 mode[1] = 'ap'
-mode[2] = 'cpe'
 
 --Protocol for Xfer
 local xfer_protocol_choices = {
@@ -150,6 +154,29 @@ service[3] = "gprs_only"
 service[4] = "cdma"
 service[5] = "evdo"
 
+local radio_choices = {
+    "Radio0",
+    "Radio1"
+}
+
+local radio = {}
+
+radio[0] = "radio0"
+radio[1] = "radio1"
+
+local encryption_choices = {
+    "None",
+    "WEP",
+    "WPA-PSK",
+    "WPA2-PSK"
+}
+
+local encryption = {}
+encryption[0]   = 'none'
+encryption[1]   = 'wep'
+encryption[2]   = 'psk'
+encryption[3]   = 'psk2'
+
 local space = 3
 local label_size = wx.wxSize(80,-1)
 local grey = wx.wxColour(219, 221, 224)
@@ -189,6 +216,27 @@ function EventMobileAction(event)
     
     tc_m_password:SetEditable(state)
     tc_m_password:SetBackgroundColour(c)
+end
+
+function EventWifiAction(event)
+
+    local c = grey
+    local state = false
+    
+    if(event:GetSelection() == 1)then
+        c = wx.wxWHITE
+        state = true
+    end
+    
+    choice_w_radio:Enable(state)
+    choice_w_encryption:Enable(state)
+    
+    tc_w_ssid:SetEditable(state)
+    tc_w_ssid:SetBackgroundColour(c)
+    
+    tc_w_key:SetEditable(state)
+    tc_w_key:SetBackgroundColour(c)
+    
 end
 
 function EventApplySettings(event)
@@ -287,26 +335,36 @@ function HandleEvents(event)
         sbmHardware:SetBitmap(bm_tl_wa901n)
     end
     if(event:GetSelection() == 22)then
-        sbmHardware:SetBitmap(bm_genoneradio)
+        sbmHardware:SetBitmap(bm_tl_wr1043)
     end
     if(event:GetSelection() == 23)then
-        sbmHardware:SetBitmap(bm_gentworadio)
+        sbmHardware:SetBitmap(bm_tl_cpe210)
     end
-     if(event:GetSelection() == 24)then
-        sbmHardware:SetBitmap(bm_zbt_we1526)
+    if(event:GetSelection() == 24)then
+        sbmHardware:SetBitmap(bm_eap300)
     end
     if(event:GetSelection() == 25)then
-        sbmHardware:SetBitmap(bm_zbt_we2026)
+        sbmHardware:SetBitmap(bm_genoneradio)
     end
     if(event:GetSelection() == 26)then
+        sbmHardware:SetBitmap(bm_gentworadio)
+    end
+     if(event:GetSelection() == 27)then
+        sbmHardware:SetBitmap(bm_zbt_we1526)
+    end
+    if(event:GetSelection() == 28)then
+        sbmHardware:SetBitmap(bm_zbt_we2026)
+    end
+    if(event:GetSelection() == 29)then
         sbmHardware:SetBitmap(bm_zbt_we3826)
     end
-    if(event:GetSelection() == 27)then
+    if(event:GetSelection() == 30)then
         sbmHardware:SetBitmap(bm_tl_ac1750_c7)
     end
-     if(event:GetSelection() == 28)then
+     if(event:GetSelection() == 31)then
         sbmHardware:SetBitmap(bm_miwifi_mini)
     end
+    
 end
 
 function md5sum_to_client(sock)
@@ -382,6 +440,7 @@ function set_info(sock)
             table.insert(a, 'key='..tc_new_key:GetValue())
         end
     end
+    
     -- Here we pack the 3G settings
     
     --Only when we have it Enable (1) do we send the detail
@@ -417,6 +476,33 @@ function set_info(sock)
     if(choice_m_active:GetSelection()== 2)then
         table.insert(a, 'm_active=0')
     end
+    
+    
+    -- Here we pack the WIFI Client settings
+    
+    --Only when we have it Enable (1) do we send the detail
+    --When it is 0 we do nothing and 2 we Disable it
+    if(choice_w_active:GetSelection()== 1)then
+        table.insert(a, 'w_active=1')
+        
+        table.insert(a, 'w_radio='..radio[choice_w_radio:GetSelection()])
+        table.insert(a, 'w_encryption='..encryption[choice_w_encryption:GetSelection()])
+
+        
+        if(tc_w_ssid:GetValue() ~= '')then
+            table.insert(a, 'w_ssid='..tc_w_ssid:GetValue())
+        end
+        
+        if(tc_w_key:GetValue() ~= '')then
+            table.insert(a, 'w_key='..tc_w_key:GetValue())
+        end
+    end
+    
+    --2 = Disable
+    if(choice_w_active:GetSelection()== 2)then
+        table.insert(a, 'w_active=0')
+    end
+    
     
     table.insert(a,'last')
     for i, v in ipairs(a) do
@@ -547,6 +633,15 @@ function build_gui()
     bm_tl_wa901n      = wx.wxBitmap();
     bm_tl_wa901n:LoadFile("./graphics/tl_wa901n.png",wx.wxBITMAP_TYPE_ANY )
     
+    bm_tl_cpe210        = wx.wxBitmap();
+    bm_tl_cpe210:LoadFile("./graphics/tl_cpe210.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_tl_wr1043        = wx.wxBitmap();
+    bm_tl_wr1043:LoadFile("./graphics/tl_wr1043.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_eap300           = wx.wxBitmap();
+    bm_eap300:LoadFile("./graphics/eap300.png",wx.wxBITMAP_TYPE_ANY )
+    
     bm_genoneradio      = wx.wxBitmap();
     bm_genoneradio:LoadFile("./graphics/genoneradio.png",wx.wxBITMAP_TYPE_ANY )
     
@@ -568,24 +663,31 @@ function build_gui()
     bm_miwifi_mini      = wx.wxBitmap();
     bm_miwifi_mini:LoadFile("./graphics/miwifi_mini.png",wx.wxBITMAP_TYPE_ANY )
     
+    
     --Some Icons--
     bm_icn_info         = wx.wxBitmap();
     bm_icn_info:LoadFile("./graphics/info.png",wx.wxBITMAP_TYPE_ANY )
     
-    bm_icn_settings         = wx.wxBitmap();
+    bm_icn_settings     = wx.wxBitmap();
     bm_icn_settings:LoadFile("./graphics/settings.png",wx.wxBITMAP_TYPE_ANY )
     
-    bm_icn_mobile         = wx.wxBitmap();
+    bm_icn_mobile      = wx.wxBitmap();
     bm_icn_mobile:LoadFile("./graphics/mobile.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_icn_wifi         = wx.wxBitmap();
+    bm_icn_wifi:LoadFile("./graphics/wifi.png",wx.wxBITMAP_TYPE_ANY )
     
     bm_icn_security         = wx.wxBitmap();
     bm_icn_security:LoadFile("./graphics/security.png",wx.wxBITMAP_TYPE_ANY )
+    
+    
     
      --Nice Icons
     imageList = wx.wxImageList(32, 32)
     imageList:Add(bm_icn_info)
     imageList:Add(bm_icn_settings)
     imageList:Add(bm_icn_mobile)
+    imageList:Add(bm_icn_wifi)
     imageList:Add(bm_icn_security)
 
 
@@ -909,6 +1011,73 @@ function build_gui()
             
         notebook:AddPage(pnlMobile, "3G Option",false,2)
         
+        
+            --WiFi Client options
+            local pnlWiFi = wx.wxPanel(notebook, wx.wxID_ANY)
+            local szrWiFi = wx.wxBoxSizer(wx.wxVERTICAL)
+            pnlWiFi:SetSizer(szrWiFi)
+            szrWiFi:SetSizeHints(pnlWiFi)
+            
+                local vbox_wifi  = wx.wxBoxSizer(wx.wxVERTICAL);
+                
+                    local hbox_w_1 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_w_1   = wx.wxStaticText(pnlWiFi, wx.wxID_ANY, 'Action',wx.wxDefaultPosition,label_size)
+                    choice_w_active= wx.wxChoice(pnlWiFi, wx.wxID_BOLD,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               active_choices)
+                    choice_w_active:SetSelection(0)
+                    hbox_w_1:Add(st_w_1, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_w_1:Add(choice_w_active, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    local hbox_w_2 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_w_2   = wx.wxStaticText(pnlWiFi, wx.wxID_ANY, 'Radio',wx.wxDefaultPosition,label_size)
+                    choice_w_radio = wx.wxChoice(pnlWiFi, wx.wxID_SAVE,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               radio_choices)
+                    choice_w_radio:Disable()
+                    choice_w_radio:SetSelection(0)
+                    hbox_w_2:Add(st_w_2, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_w_2:Add(choice_w_radio, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    local hbox_w_3 = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_w_3   = wx.wxStaticText(pnlWiFi, wx.wxID_ANY, 'Encryption',wx.wxDefaultPosition,label_size)
+                    choice_w_encryption = wx.wxChoice(pnlWiFi, wx.wxID_SAVE,
+                               wx.wxDefaultPosition, wx.wxDefaultSize,
+                               encryption_choices)
+                    choice_w_encryption:SetSelection(0)
+                    choice_w_encryption:Disable()
+                    hbox_w_3:Add(st_w_3, 0, wx.wxALIGN_LEFT + wx.wxALL , space)
+                    hbox_w_3:Add(choice_w_encryption, 1, wx.wxALL + wx.wxGROW + wx.wxCENTER, space)
+                    
+                    
+                    local hbox_w_4  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_w_4    = wx.wxStaticText(pnlWiFi, wx.wxID_ANY, 'SSID',wx.wxDefaultPosition,label_size)
+                    tc_w_ssid   = wx.wxTextCtrl(pnlWiFi, wx.wxID_ANY)
+                    tc_w_ssid:SetEditable(false)
+                    tc_w_ssid:SetBackgroundColour(grey)
+                    hbox_w_4:Add(st_w_4, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_w_4:Add(tc_w_ssid, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                     local hbox_w_5  = wx.wxBoxSizer(wx.wxHORIZONTAL)
+                    local st_w_5    = wx.wxStaticText(pnlWiFi, wx.wxID_ANY, 'Key',wx.wxDefaultPosition,label_size)
+                    tc_w_key   = wx.wxTextCtrl(pnlWiFi, wx.wxID_ANY)
+                    tc_w_key:SetEditable(false)
+                    tc_w_key:SetBackgroundColour(grey)
+                    hbox_w_5:Add(st_w_5, 0, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    hbox_w_5:Add(tc_w_key, 1, wx.wxALIGN_LEFT + wx.wxALL, space)
+                    
+                vbox_wifi:Add(hbox_w_1,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_wifi:Add(hbox_w_2,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_wifi:Add(hbox_w_4,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_wifi:Add(hbox_w_3,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                vbox_wifi:Add(hbox_w_5,0, wx.wxALIGN_LEFT + wx.wxALL + wx.wxEXPAND, space)
+                    
+                
+            szrWiFi:Add(vbox_wifi,1,wx.wxALL +wx.wxEXPAND,5)
+        
+        
+        notebook:AddPage(pnlWiFi, "WiFi Client",false,3)
+        
             --Security Config--
             local pnlSecurity = wx.wxPanel(notebook, wx.wxID_ANY)
             local szrSecurity = wx.wxBoxSizer(wx.wxVERTICAL)
@@ -929,13 +1098,14 @@ function build_gui()
                 
             szrSecurity:Add(sbs1,1,wx.wxEXPAND+wx.wxALL,5)
             
-        notebook:AddPage(pnlSecurity, "Security",false,3)
+        notebook:AddPage(pnlSecurity, "Security",false,4)
             
         vbox:Add(notebook,1,wx.wxEXPAND+wx.wxALL,5)
         
     
     frame:Connect(wx.wxID_REDO, wx.wxEVT_COMMAND_CHOICE_SELECTED, HandleEvents)
     frame:Connect(wx.wxID_SAVE, wx.wxEVT_COMMAND_CHOICE_SELECTED, EventMobileAction)
+    frame:Connect(wx.wxID_BOLD, wx.wxEVT_COMMAND_CHOICE_SELECTED, EventWifiAction)
     frame:Connect(wx.wxID_UNDO, wx.wxEVT_COMMAND_CHECKBOX_CLICKED, EventApplySettings)
     
     frame:Centre()
