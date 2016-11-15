@@ -9,7 +9,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
     ap_id       :  null,
     columns     : [
         {xtype: 'rownumberer', stateId: 'StateGridApRealms1'},
-        { text: i18n('sRealm'),    dataIndex: 'name',      tdCls: 'gridMain', flex: 1},
+        { text: i18n('sRealm'),    dataIndex: 'name',      tdCls: 'gridMain', flex: 1}, 
         {
             xtype       : 'advCheckColumn',
             text        : i18n('sCreate'),
