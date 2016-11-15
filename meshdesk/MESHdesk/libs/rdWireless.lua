@@ -138,11 +138,13 @@ function rdWireless.__newWireless(self)
 			os.execute("cp "..name.." "..self.config)
 		else
 			self:log("Found  NO sample "..self.config.." for "..hardware.." create one")
-			os.execute("wifi detect >> "..self.config)
+			--os.execute("wifi detect >> "..self.config)--On OpenWrt it probably still is detect and not config
+			os.execute("wifi config >> "..self.config)
 		end
 	else
 		self:log("Generating a new "..self.config)
-		os.execute("wifi detect >> "..self.config)
+		--os.execute("wifi detect >> "..self.config)--On OpenWrt it probably still is detect and not config
+		os.execute("wifi config >> "..self.config)
 	end
 
 	--This is if we have two radios!
