@@ -65,6 +65,17 @@ start() {
 		    /etc/init.d/dropbear start
 		fi
 		
+		#We also keep the original /etc/config/wireless and /etc/config/network files if they want to disable the MESHdesk firmware
+		if [ -e /etc/config/network ]; then
+		    echo "Copy Original Network config file over"
+		    cp /etc/config/network /etc/MESHdesk/configs/network_original
+		fi
+		
+		if [ -e /etc/config/wireless ]; then
+		    echo "Copy Original Wireless config file over"
+		    cp /etc/config/wireless /etc/MESHdesk/configs/wireless_original
+		fi
+		
 		uci set meshdesk.settings.first_run=0
 		uci commit
 	else
