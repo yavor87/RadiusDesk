@@ -828,6 +828,10 @@ end
 --END AP Specifics ----
 --=====================
 
+function ensure_original_config()
+--This function is called if the mode is set to 'off'. Then it checks if the '_original' files it has is the same as 
+
+end
 
 --=====================
 --Pre-setup: ----------
@@ -842,7 +846,11 @@ mode = fetch_config_value('meshdesk.settings.mode')
 if(mode == 'ap')then
     print("Device in AP Mode");
     ap_wait_for_lan()
-else
+elseif(mode == 'mesh')then
     print("Device in Mesh node");
     wait_for_lan()
+elseif(mode == 'off')then
+    print("Device in off mode -> MESHdesk firmware inactive")
+else
+    print("Device in unknown mode of "..mode)    
 end
