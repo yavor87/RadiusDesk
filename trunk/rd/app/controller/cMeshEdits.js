@@ -1,7 +1,7 @@
 Ext.define('Rd.controller.cMeshEdits', {
     extend: 'Ext.app.Controller',
     views:  [
-        'components.pnlBanner',  	'meshes.winMeshEdit',
+        'meshes.pnlMeshEdit',
         'meshes.gridMeshEntries',   'meshes.winMeshAddEntry',   'meshes.cmbEncryptionOptions',
         'meshes.winMeshEditEntry',  'meshes.pnlMeshSettings',   'meshes.gridMeshExits',
         'meshes.winMeshAddExit',    'meshes.cmbMeshEntryPoints','meshes.winMeshEditExit',
@@ -45,7 +45,8 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     refs: [
     	{  ref: 'editEntryWin', 	selector: 'winMeshEditEntry'},
-        {  ref: 'editExitWin',  	selector: 'winMeshEditExit'}  
+        {  ref: 'editExitWin',  	selector: 'winMeshEditExit'},
+        {  ref: 'tabMeshes',        selector: '#tabMeshes'     }   
     ],
     init: function() {
         var me = this;
@@ -97,7 +98,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             'winMeshEditEntry #save': {
                 click: me.btnEditEntrySave
             },
-            'winMeshEdit #tabMeshSettings' : {
+            'pnlMeshEdit #tabMeshSettings' : {
                 activate:      me.frmMeshSettingsLoad
             },
             'pnlMeshSettings  #con_mesh_point' : {
@@ -146,7 +147,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             '#chkProxyEnable' : {
                 change:  me.chkProxyEnableChange
             },
-            'winMeshEdit #tabNodeCommonSettings' : {
+            'pnlMeshEdit #tabNodeCommonSettings' : {
                 activate:      me.frmNodeCommonSettingsLoad
             },
             'pnlNodeCommonSettings #save': {
@@ -182,7 +183,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             },
             
 			//---- MAP Starts here..... -----
-			'winMeshEdit #mapTab'		: {
+			'pnlMeshEdit #mapTab'		: {
 				activate: function(pnl){
 					me.reloadMap(pnl);
 				}
@@ -244,11 +245,27 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     actionIndex: function(mesh_id,name){
         var me      = this; 
-		var id		= 'winMeshEdit'+ mesh_id;
-        if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-			var w = Ext.widget('winMeshEdit',{id:id, name:name, stateId:id,title: i18n('sEdit')+' '+name, meshId :mesh_id, meshName: name});
-            me.application.runAction('cDesktop','Add',w);      
-        }
+         
+        var id		= 'tabMeshEdit'+ mesh_id;
+        var tabMeshes = me.getTabMeshes();
+        var newTab  = tabMeshes.items.findBy(
+            function (tab){
+                return tab.getItemId() === id;
+            });
+         
+        if (!newTab){
+            newTab = tabMeshes.add({
+                glyph   : Rd.config.icnEdit, 
+                title   : name,
+                closable: true,
+                layout  : 'fit',
+                xtype   : 'pnlMeshEdit',
+                itemId  : id,
+                border  : false,
+                mesh_id : mesh_id
+            });
+        }    
+        tabMeshes.setActiveTab(newTab);
     },
     gridActivate: function(grid){
         var me = this;
@@ -256,22 +273,22 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
 	reloadEntry: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var entGrid = win.down("gridMeshEntries");
         entGrid.getStore().reload();
     },
     addEntry: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var store   = win.down("gridMeshEntries").getStore();
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddEntryId')){
+        if(!Ext.WindowManager.get('winMeshAddEntryId')){
             var w = Ext.widget('winMeshAddEntry',
             {
                 id          :'winMeshAddEntryId',
                 store       : store,
                 meshId      : win.meshId
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }
     },
     cmbEncryptionChange: function(cmb){
@@ -358,7 +375,7 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     editEntry: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var store   = win.down("gridMeshEntries").getStore();
 
         if(win.down("gridMeshEntries").getSelectionModel().getCount() == 0){
@@ -371,14 +388,14 @@ Ext.define('Rd.controller.cMeshEdits', {
         }else{
             var sr      = win.down("gridMeshEntries").getSelectionModel().getLastSelected();
             var id      = sr.getId();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditEntryId')){
+            if(!Ext.WindowManager.get('winMeshEditEntryId')){
                 var w = Ext.widget('winMeshEditEntry',
                 {
                     id          :'winMeshEditEntryId',
                     store       : store,
                     entryId     : id
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w,show();         
             }else{
                 var w       = me.getEditEntryWin();
                 w.entryId   = id; 
@@ -564,7 +581,7 @@ Ext.define('Rd.controller.cMeshEdits', {
     
     reloadExit: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var exit    = win.down("gridMeshExits");
         exit.getStore().reload();
     },
@@ -576,7 +593,7 @@ Ext.define('Rd.controller.cMeshEdits', {
     addExit: function(button){
         var me      = this;
 
-        var win             = button.up("winMeshEdit");
+        var win             = button.up("pnlMeshEdit");
 
         //If there are NO entry points defined; we will NOT pop up this window.
         var entries_count   = win.down("gridMeshEntries").getStore().count();
@@ -592,14 +609,14 @@ Ext.define('Rd.controller.cMeshEdits', {
         
         //Entry points present; continue 
         var store   = win.down("gridMeshExits").getStore();
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddExitId')){
+        if(!Ext.WindowManager.get('winMeshAddExitId')){
             var w = Ext.widget('winMeshAddExit',
             {
                 id          :'winMeshAddExitId',
                 store       : store,
                 meshId      : win.meshId
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     btnExitTypeNext: function(button){
@@ -726,7 +743,7 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     editExit: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var store   = win.down("gridMeshExits").getStore();
 
         if(win.down("gridMeshExits").getSelectionModel().getCount() == 0){
@@ -741,7 +758,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
             var type    = sr.get('type');
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditExitId')){
+            if(!Ext.WindowManager.get('winMeshEditExitId')){
                 var w = Ext.widget('winMeshEditExit',
                 {
                     id          :'winMeshEditExitId',
@@ -750,7 +767,7 @@ Ext.define('Rd.controller.cMeshEdits', {
                     meshId      : meshId,
                     type        : type
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();        
             }else{
                 var w       = me.getEditExitWin();
                 var vlan    = w.down('#vlan');
@@ -925,17 +942,17 @@ Ext.define('Rd.controller.cMeshEdits', {
     },//Nodes related
     reloadNodes: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var nodes   = win.down("gridNodes");
         nodes.getStore().reload();
     },
     addNode: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         
         //Entry points present; continue 
         var store   	= win.down("gridNodes").getStore();
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
+        if(!Ext.WindowManager.get('winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
                 id          :'winMeshAddNodeId',
@@ -944,7 +961,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 				meshName	: win.meshName,
                 itemId      : 'winMeshAddNodeEdit'	
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }
     },
     btnAddNodeSave: function(button){
@@ -1009,7 +1026,7 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     editNode: function(button){
         var me      = this;
-        var win     = button.up("winMeshEdit");
+        var win     = button.up("pnlMeshEdit");
         var store   = win.down("gridNodes").getStore();
         if(win.down("gridNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -1022,8 +1039,7 @@ Ext.define('Rd.controller.cMeshEdits', {
             var sr      = win.down("gridNodes").getSelectionModel().getLastSelected();
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
-
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
+            if(!Ext.WindowManager.get('winMeshEditNodeId')){
                 var w = Ext.widget('winMeshEditNode',
                 {
                     id          :'winMeshEditNodeId',
@@ -1033,7 +1049,7 @@ Ext.define('Rd.controller.cMeshEdits', {
 					meshName	: win.meshName,
                     itemId      : 'winMeshEditNodeEdit'
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },
@@ -1108,7 +1124,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         }
 
         var map_tab_name    = i18n("sGoogle_Maps");
-		var win 		    = tp.up('winMeshEdit');
+		var win 		    = tp.up('pnlMeshEdit');
 		var mesh_id		    = win.meshId;
 
         //We need to fetch the Preferences for this user's Google Maps map
@@ -1227,14 +1243,14 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
 	mapPreferences: function(button){
        	var me 		= this;
-		var win		= button.up('winMeshEdit');
+		var win		= button.up('pnlMeshEdit');
 		var mesh_id	= win.meshId;
 		var pref_id = 'winMeshMapPreferences_'+mesh_id;
 		var map_p	= win.down('pnlMeshEditGMap');
 
-       	if(!me.application.runAction('cDesktop','AlreadyExist',pref_id)){
+        if(!Ext.WindowManager.get(pref_id)){
             var w = Ext.widget('winMeshMapPreferences',{id:pref_id,mapPanel: map_p,meshId: mesh_id});
-            me.application.runAction('cDesktop','Add',w);
+            w.show();
             //We need to load this widget's form with the latest data:
             w.down('form').load({
 				url		: me.getUrlMapPrefView(),
@@ -1247,14 +1263,14 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
    	mapNodeAdd: function(button){
         var me 		= this;
-		var win		= button.up('winMeshEdit');
+		var win		= button.up('pnlMeshEdit');
 		var mesh_id	= win.meshId;
 		var add_id  = 'winMeshMapNodeAdd_'+mesh_id;
 		var map_p	= win.down('pnlMeshEditGMap');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist',add_id)){
+        if(!Ext.WindowManager.get(add_id)){
             var w = Ext.widget('winMeshMapNodeAdd',{id: add_id,mapPanel: map_p,meshId:mesh_id});
-            me.application.runAction('cDesktop','Add',w);       
+            w.show()     
        }   
     },
     meshMapNodeAddSubmit: function(button){

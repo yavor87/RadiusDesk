@@ -1,55 +1,27 @@
 Ext.define('Rd.controller.cDevices', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('devicesWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'devicesWin',
-                //title: i18n('sBYOD_manager'),
-                btnText: i18n('sBYOD_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'devices',
-                glyph: Rd.config.icnDevice,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'devicesWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sBYOD_manager'),
-                        image:  'resources/images/48x48/devices.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabDevices',
-                            items   : { 'title' : i18n('sHome'), xtype: 'gridDevices','glyph': Rd.config.icnHome}}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+             
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : true,
+            itemId  : 'tabDevices',
+            plain	: true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), xtype: 'gridDevices','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
-       'components.pnlBanner',          'devices.gridDevices',    'devices.winDeviceAddWizard',
+       'devices.gridDevices',    'devices.winDeviceAddWizard',
        'components.cmbPermanentUser',   'components.cmbProfile',  'components.cmbCap',
        'components.winNote',            'components.winNoteAdd',  'components.winCsvColumnSelect',
        'components.winEnableDisable',   'devices.pnlDevice',      'devices.gridDeviceRadaccts', 
@@ -272,11 +244,11 @@ Ext.define('Rd.controller.cDevices', {
     },
     add: function(button){  
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winDeviceAddWizardId')){
+        if(!Ext.WindowManager.get('winDeviceAddWizardId')){
             var w = Ext.widget('winDeviceAddWizard',{
                 id:'winDeviceAddWizardId', selLanguage : me.application.getSelLanguage()
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }  
     },
     btnDataNext:  function(button){
@@ -515,9 +487,9 @@ Ext.define('Rd.controller.cDevices', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectDevices')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectDevices')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectDevices',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -602,7 +574,7 @@ Ext.define('Rd.controller.cDevices', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevices'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteDevices'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteDevices'+sr.getId(),
@@ -610,7 +582,7 @@ Ext.define('Rd.controller.cDevices', {
                             noteForGrid : 'devices',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();      
                 }
             }    
         }
@@ -631,7 +603,7 @@ Ext.define('Rd.controller.cDevices', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevicesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDevicesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDevicesAdd'+grid.noteForId,
@@ -639,10 +611,10 @@ Ext.define('Rd.controller.cDevices', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDevicesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDevicesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDevicesAdd'+grid.noteForId,
@@ -654,7 +626,7 @@ Ext.define('Rd.controller.cDevices', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -779,14 +751,13 @@ Ext.define('Rd.controller.cDevices', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+            if(!Ext.WindowManager.get('winEnableDisableUser')){
                 var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();      
             }    
         }
     },
     enableDisableSubmit:function(button){
-
         var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');

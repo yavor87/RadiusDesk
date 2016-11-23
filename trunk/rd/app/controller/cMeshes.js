@@ -1,52 +1,22 @@
 Ext.define('Rd.controller.cMeshes', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
         var me      = this;
-        var desktop = this.application.getController('cDesktop');
-        var win     = desktop.getWindow('meshWin');
-        if(!win){
-            win = desktop.createWindow({
-                id      : 'meshWin',
-                btnText : i18n('sMESHdesk'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls : 'mesh',
-                glyph   : Rd.config.icnMesh,
-                animCollapse:false,
-                border  :false,
-                constrainHeader:true,
-                layout  : 'border',
-                stateful: true,
-                stateId : 'meshWin',
-                items: [
-                    {
-                        region  : 'north',
-                        xtype   : 'pnlBanner',
-                        heading : i18n('sMESHdesk'),
-                        image   : 'resources/images/48x48/mesh.png'
-                    },
-					{
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            items   : [
-								{ 'title' : i18n('sMeshes'), 	'xtype':'gridMeshes',		'glyph': Rd.config.icnMesh},
-								{ 'title' : i18n('sKnown_Nodes'), 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnCheck},
-								{ 'title' : i18n('sUnknown_Nodes'),'xtype':'gridUnknownNodes',	'glyph': Rd.config.icnQuestion}
-                        ]}]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+     
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : true,
+            itemId  : 'tabMeshes',
+            items   : [
+                { 'title' : i18n('sMeshes'), 	    'xtype':'gridMeshes',		'glyph': Rd.config.icnMesh},
+				{ 'title' : i18n('sKnown_Nodes'), 	'xtype':'gridNodeLists',	'glyph': Rd.config.icnCheck},
+				{ 'title' : i18n('sUnknown_Nodes'), 'xtype':'gridUnknownNodes',	'glyph': Rd.config.icnQuestion}
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
@@ -75,7 +45,7 @@ Ext.define('Rd.controller.cMeshes', {
         urlRedirectNode :   '/cake2/rd_cake/nodes/redirect_unknown.json'
     },
     refs: [
-        {  ref: 'grid',         selector: 'gridMeshes'} 
+        {  ref: 'grid',         selector: 'gridMeshes'}
     ],
     init: function() {
         var me = this;
@@ -85,17 +55,13 @@ Ext.define('Rd.controller.cMeshes', {
         me.inited = true;
 
         me.control({
-            '#meshWin'    : {
-                beforeshow:      me.winClose,
-                destroy   :      me.winClose
-            },
-			'#meshWin gridMeshes' : {
+			'#tabMeshes gridMeshes' : {
 				activate	: me.gridActivate
 			},
-			'#meshWin gridNodeLists' : {
+			'#tabMeshes gridNodeLists' : {
 				activate	: me.gridActivate
 			},
-			'#meshWin gridUnknownNodes' : {
+			'#tabMeshes gridUnknownNodes' : {
 				activate	: me.gridActivate
 			},
             'gridMeshes #reload': {
@@ -204,19 +170,6 @@ Ext.define('Rd.controller.cMeshes', {
 			}
         });
     },
-    winClose:   function(){
-        var me = this;
-        if(me.autoReload != undefined){
-            clearInterval(me.autoReload);   //Always clear
-        }
-        if(me.autoReloadNodeLists != undefined){
-            clearInterval(me.autoReloadNodeLists);
-        }
-        
-        if(me.autoReloadUnknownNodes != undefined){
-            clearInterval(me.autoReloadUnknownNodes);
-        }
-    },
 	gridActivate: function(g){
         var me = this;
         g.getStore().load();
@@ -265,16 +218,16 @@ Ext.define('Rd.controller.cMeshes', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddWizardId')){
+                        if(!Ext.WindowManager.get('winMeshAddWizardId')){
                             var w = Ext.widget('winMeshAddWizard',{id:'winMeshAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddWizardId')){
+                        if(!Ext.WindowManager.get('winMeshAddWizardId')){
                             var w = Ext.widget('winMeshAddWizard',
                                 {id:'winMeshAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }
                 }   
@@ -494,7 +447,7 @@ Ext.define('Rd.controller.cMeshes', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteMeshes'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteMeshes'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteMeshes'+sr.getId(),
@@ -502,7 +455,7 @@ Ext.define('Rd.controller.cMeshes', {
                             noteForGrid : 'meshes',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -524,7 +477,7 @@ Ext.define('Rd.controller.cMeshes', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteMeshesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteMeshesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteMeshesAdd'+grid.noteForId,
@@ -532,10 +485,10 @@ Ext.define('Rd.controller.cMeshes', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteMeshesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteMeshesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteMeshesAdd'+grid.noteForId,
@@ -547,7 +500,7 @@ Ext.define('Rd.controller.cMeshes', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show()       
                         }
                     }
                 }   
@@ -691,10 +644,10 @@ Ext.define('Rd.controller.cMeshes', {
     },
     addNode: function(button){
         var me      = this;     
-        var win     = button.up("#meshWin"); 
+        var win     = button.up("#tabMeshes"); 
         var store   = win.down("gridNodeLists").getStore();
 		var hide_power  = true; //FIXME To be fixed with real value from mesh
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeId')){
+		if(!Ext.WindowManager.get('winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
                 id          :'winMeshAddNodeId',
@@ -703,7 +656,7 @@ Ext.define('Rd.controller.cMeshes', {
 				meshName	: '',
                 itemId      : 'winMeshAddNodeMain'	
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     btnAddNodeSave: function(button){
@@ -768,7 +721,7 @@ Ext.define('Rd.controller.cMeshes', {
     },
     editNode: function(button){
         var me      = this;
-        var win     = button.up("#meshWin");
+        var win     = button.up("#tabMeshes");
         var store   = win.down("gridNodeLists").getStore();
         if(win.down("gridNodeLists").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -785,7 +738,7 @@ Ext.define('Rd.controller.cMeshes', {
 
 			//Determine if we can show a power bar or not.
 			var hide_power = true; //FIXME To be fiexed with real value from mesh
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshEditNodeId')){
+            if(!Ext.WindowManager.get('winMeshEditNodeId')){
                 var w = Ext.widget('winMeshEditNode',
                 {
                     id          :'winMeshEditNodeId',
@@ -796,7 +749,7 @@ Ext.define('Rd.controller.cMeshes', {
 					hidePower	: hide_power,
                     itemId      : 'winMeshEditNodeMain'
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },
@@ -866,7 +819,7 @@ Ext.define('Rd.controller.cMeshes', {
 	//_______ Unknown Nodes ______
 	attachNode: function(button){
         var me      = this;
-        var win     = button.up("#meshWin");
+        var win     = button.up("#tabMeshes");
         var store   = win.down("gridUnknownNodes").getStore();
         if(win.down("gridUnknownNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -884,14 +837,14 @@ Ext.define('Rd.controller.cMeshes', {
 
 			//Determine if we can show a power bar or not.
 			var hide_power = true; //FIXME To be fiexed with real value from mesh
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAttachNodeId')){
+			if(!Ext.WindowManager.get('winMeshAttachNodeId')){
                 var w = Ext.widget('winMeshAttachNode',
                 {
                     id          :'winMeshAttachNodeId',
                     store       : store,
 					mac			: mac
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },
@@ -958,7 +911,7 @@ Ext.define('Rd.controller.cMeshes', {
     //Redirecting
     redirectNode: function(button){
         var me      = this;
-        var win     = button.up("#meshWin");
+        var win     = button.up("#tabMeshes");
         var store   = win.down("gridUnknownNodes").getStore();
         if(win.down("gridUnknownNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -971,7 +924,7 @@ Ext.define('Rd.controller.cMeshes', {
             var sr          = win.down("gridUnknownNodes").getSelectionModel().getLastSelected();
             var id          = sr.getId();
             var new_server  = sr.get('new_server');
-            if(!me.application.runAction('cDesktop','AlreadyExist','winMeshUnknownRedirectId')){
+            if(!Ext.WindowManager.get('winMeshUnknownRedirectId')){
                 var w = Ext.widget('winMeshUnknownRedirect',
                 {
                     id              :'winMeshUnknownRedirectId',
@@ -979,7 +932,7 @@ Ext.define('Rd.controller.cMeshes', {
 					new_server	    : new_server,
                     store           : store
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },

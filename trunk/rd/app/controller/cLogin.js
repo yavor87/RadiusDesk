@@ -61,7 +61,9 @@ Ext.define('Rd.controller.cLogin', {
 
                 me.getViewP().removeAll(true);
                 win.close();
-                me.application.runAction('cDesktop','Index');
+                console.log("Gooi Hom Pappie");
+                //me.application.runAction('cDesktop','Index');
+                me.application.runAction('cDashboard','Index');
             },
             failure: Ext.ux.formFail
         });

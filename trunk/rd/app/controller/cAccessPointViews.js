@@ -4,10 +4,6 @@ Ext.define('Rd.controller.cAccessPointViews', {
         'aps.pnlAccessPointView', 
         'charts.pnlChartApMain',		
         'aps.gridApViewEntries'
-
-		//'meshes.pnlAccessPointViewGMap',
-		//'meshes.gridMeshViewNodeActions',						
-		//'meshes.winMeshAddNodeAction'
     ],
     config      : {  
         urlApChildCheck				: '/cake2/rd_cake/access_providers/child_check.json',

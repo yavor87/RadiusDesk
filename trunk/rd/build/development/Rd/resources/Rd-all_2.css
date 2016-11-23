@@ -8955,76 +8955,41 @@ tr.x-grid-subtable-row {
     border: 2px solid #d91717;
     background: #ffe3e3;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:46 */
-#poweredby {
-    /*-- End Toaster--*/
-    /*-- Logo --*/
-    position: absolute;
-    bottom: 40px;
-    right: 10px;
-    z-index: 15000;
-    /* IE 5-7 */
-    filter: opacity=90;
-    /* Netscape */
-    -moz-opacity: 0.9;
-    /* Netscape */
-    /* Safari 1.x */
-    -khtml-opacity: 0.9;
-    /* Safari 1.x */
-    /* Good browsers */
-    opacity: 0.9;
-}
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:63 */
-#poweredby div {
-    position: relative;
-    width: 320px;
-    /*  background-image: url(../images/logo.png);
-    background-repeat: no-repeat;   */
-    height: 145px;
-}
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:73 */
-.x-ie6 #poweredby div,
-.x-ie7 #poweredby div,
-.x-ie8 #poweredby div {
-    /* The simple background image PNG does not work in IE6-8, but does in IE9 */
-    background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/logo.png', sizingMethod='scale');
-}
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:82 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:47 */
 .lblRdCheck {
-    /*-- End Logo --*/
+    /*-- End Toaster--*/
     /*-- Label experiment --*/
     color: #2f4078;
     font-size: 16px;
     padding-left: 5px;
     padding-right: 5px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:90 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:55 */
 .lblRdReq {
     color: #2f4078;
     font-size: 16px;
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:96 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:61 */
 .lblRdReq-after {
     margin-left: 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:102 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:67 */
 .lblRd {
     color: #2f4078;
     font-size: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:107 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:72 */
 .x-toolbar .lblRd {
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:111 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:76 */
 .x-toolbar .lblWizard {
     color: #2f4078;
     font-size: 16px;
     padding: 5px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:120 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:85 */
 .thumb-wrap {
     /*Wallpaper selection */
     text-align: center;
@@ -9033,41 +8998,41 @@ tr.x-grid-subtable-row {
     border: 2px solid #86a5e5;
     background: #f3f5f9;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:128 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:93 */
 .thumb-wrap:hover {
     border: 2px solid #526b9d;
     background: #c4cbd7;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:133 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:98 */
 .thumb-wrap img {
     cursor: pointer;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:137 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:102 */
 .thumb-wrap.x-item-selected {
     border: 1px solid #fd6473;
     background: #e1c8d4;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:142 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:107 */
 .thumb-wrap h1 {
     padding: 10px;
     color: #526b9d;
     font-size: 20px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:148 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:113 */
 .thumb-wrap .description {
     padding: 10px;
     color: #526b9d;
     font-size: 14px;
     font-style: oblique;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:156 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:121 */
 .banner {
     /* Windows needs a banner */
     width: 100%;
     height: 100%;
     background-color: #dbdbdb;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:162 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:127 */
 .banner h1 {
     margin-left: 52px;
     padding: 18px;
@@ -9075,7 +9040,7 @@ tr.x-grid-subtable-row {
     color: #00359a;
     font-size: 25px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:171 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:136 */
 .gridTree .x-grid-cell-inner {
     /* Grid styles */
     color: #676d76;
@@ -9087,12 +9052,12 @@ tr.x-grid-subtable-row {
     padding: 2px !important;
     margin: 2px !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:180 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:145 */
 .gridMain .x-grid-cell-inner {
     color: #0b42b3;
     font-size: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:185 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:150 */
 .gridRealm.availAll {
     background: black;
     border: 1px solid #ccc;
@@ -9101,7 +9066,7 @@ tr.x-grid-subtable-row {
     color: white;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:194 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:159 */
 .gridTag {
     background: #e7edf6;
     border: 1px solid #616b77;
@@ -9110,23 +9075,23 @@ tr.x-grid-subtable-row {
     color: #727982;
     font-size: 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:203 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:168 */
 .gridComment .x-grid-cell-inner {
     color: #676d76;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:209 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:174 */
 .x-grid-cell-checkcolumn .x-grid-cell-inner {
     /* EXP for check column */
     padding-top: 4px;
     padding-bottom: 2px;
     line-height: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:214 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:179 */
 .x-grid-with-row-lines .x-grid-cell-checkcolumn .x-grid-cell-inner {
     padding-top: 3px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:218 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:183 */
 .x-grid-checkheader {
     /*
     width: 13px;
@@ -9175,25 +9140,25 @@ tr.x-grid-subtable-row {
     display: block;
     margin: auto;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:244 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:209 */
 .x-grid-checkheader-checked {
     /* background-position: 0 -13px;*/
     /* background-position: 0 -13px;*/
     background-image: url(images/16x16/yes.png);
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:249 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:214 */
 .x-grid-checkheader-disabled {
     background-position: -39px 0;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:253 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:218 */
 .x-grid-checkheader-checked-disabled {
     background-position: -39px -13px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:257 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:222 */
 .x-grid-checkheader-editor .x-form-cb-wrap {
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:262 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:227 */
 .noRight {
     /* EXP column display yes/no */
     background: #f6cecf;
@@ -9203,7 +9168,7 @@ tr.x-grid-subtable-row {
     color: #6b032f;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:271 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:236 */
 .hasRight {
     background: #d4e0ce;
     border: 1px solid #ccc;
@@ -9212,7 +9177,7 @@ tr.x-grid-subtable-row {
     color: #1e5304;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:282 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:247 */
 .fieldRed {
     /* Note rather replace the .hasRight and .noRight with a more generic class eg. red or green */
     background: #f6cecf;
@@ -9223,7 +9188,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:292 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:257 */
 .fieldGreen {
     background: #d4e0ce;
     margin: 1px 0px 1px 0px;
@@ -9233,7 +9198,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:302 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:267 */
 .fieldBlue {
     background: #c5f5fd;
     margin: 1px 0px 1px 0px;
@@ -9243,7 +9208,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:312 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:277 */
 .fieldOrange {
     background: #ffd9b3;
     margin: 1px 0px 1px 0px;
@@ -9253,7 +9218,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:322 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:287 */
 .fieldGrey {
     background: #e6e6e6;
     margin: 1px 0px 1px 0px;
@@ -9263,7 +9228,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:332 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:297 */
 .fieldYellow {
     background: #ffffb3;
     margin: 1px 0px 1px 0px;
@@ -9273,7 +9238,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:342 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:307 */
 .fieldRedWhite {
     background: #e00404;
     margin: 1px 0px 1px 0px;
@@ -9283,7 +9248,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:352 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:317 */
 .fieldGreenWhite {
     background: #1a9406;
     margin: 1px 0px 1px 0px;
@@ -9293,7 +9258,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:362 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:327 */
 .fieldGreyWhite {
     background: #767575;
     color: #fff;
@@ -9303,7 +9268,7 @@ tr.x-grid-subtable-row {
     margin: 1px 0px 1px 0px;
     padding: 2px 0px 2px 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:373 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:338 */
 .fieldBlueWhite {
     background: #1e66d2;
     margin: 1px 0px 1px 0px;
@@ -9313,7 +9278,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:383 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:348 */
 .fieldPurpleWhite {
     background: #99f;
     margin: 1px 0px 1px 0px;
@@ -9323,48 +9288,48 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:394 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:359 */
 .txtGrey {
     color: #98989b;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:398 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:363 */
 .txtGreen {
     color: #2c7607;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:402 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:367 */
 .txtRed {
     color: #d92435;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:406 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:371 */
 .txtBlue {
     color: #5c88e0;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:410 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:375 */
 .txtBold {
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:414 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:379 */
 .green_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #0ca630;
     background: #d0f8da;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:421 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:386 */
 .blue_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #4a709b;
     background: #d3dfec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:428 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:393 */
 .red_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #d92435;
     background: #f1e2e2;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:435 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:400 */
 .fileViewer {
     padding: 10px;
     margin: 2px;
@@ -9374,37 +9339,37 @@ tr.x-grid-subtable-row {
     /* For IE8 and earlier */
     filter: opacity=90;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:444 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:409 */
 .ux-filtered-column .x-column-header-inner {
     background-image: url(images/16x16/filter.png) !important;
     background-repeat: no-repeat;
     padding-left: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:451 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:416 */
 .x-grid-cell-inner-treecolumn .admin {
     /* Treeview does not support Glyphs yet */
     background-image: url(images/16x16/list.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:455 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:420 */
 .x-grid-cell-inner-treecolumn .users {
     background-image: url(images/16x16/users.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:459 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:424 */
 .x-grid-cell-inner-treecolumn .user {
     background-image: url(images/16x16/user.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:463 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:428 */
 .list {
     background-image: url(images/16x16/list.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:471 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:436 */
 .ux-wallpaper {
     /*----------------------------------------------------
     FIN: Desktop DataView
 */
     background-color: #3d71b8;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:476 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:441 */
 .ux-desktop-shortcut {
     cursor: pointer;
     text-align: center;
@@ -9413,7 +9378,7 @@ tr.x-grid-subtable-row {
     width: 210px;
     height: 70px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:485 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:450 */
 .ux-desktop-shortcut-icon {
     width: 52px;
     height: 52px;
@@ -9424,7 +9389,7 @@ tr.x-grid-subtable-row {
     border-radius: 50%;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:496 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:461 */
 .ux-desktop-shortcut-text {
     font: bold 14px tahoma, arial, verdana, sans-serif;
     text-decoration: none;
@@ -9434,11 +9399,11 @@ tr.x-grid-subtable-row {
     text-align: left;
     padding-top: 20px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:506 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:471 */
 .x-view-over .ux-desktop-shortcut-text {
     text-decoration: underline;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:510 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:475 */
 .ux-desktop-shortcut.x-view-over {
     background: #361919;
     /* Fall-back for browsers that don't support rgba */
@@ -9446,64 +9411,64 @@ tr.x-grid-subtable-row {
     /* Fall-back for browsers that don't support rgba */
     border: 1px solid #2f4078;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:518 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:483 */
 .vouchers-shortcut {
     /* Fin Desktop shortcuts */
     background-image: url(images/48x48/vouchers.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:523 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:488 */
 .byod-shortcut {
     background-image: url(images/48x48/devices.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:528 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:493 */
 .users-shortcut {
     background-image: url(images/48x48/users.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:533 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:498 */
 .activity-shortcut {
     background-image: url(images/48x48/activity.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:538 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:503 */
 .password-shortcut {
     background-image: url(images/48x48/key.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:543 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:508 */
 .apdesk-shortcut {
     background-image: url(images/48x48/cloud.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:548 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:513 */
 .meshdesk-shortcut {
     background-image: url(images/48x48/mesh.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:554 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:519 */
 #east-region-body {
     background-color: #ececec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:559 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:524 */
 .mapInfoDiv {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:565 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:530 */
 .mapEditDiv {
     height: 190px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:571 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:536 */
 .divMapAction {
     margin: 5px;
     padding: 5px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:576 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:541 */
 .lblMap {
     width: 120px;
     float: left;
@@ -9512,137 +9477,141 @@ tr.x-grid-subtable-row {
     font-size: 14px;
     margin: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:585 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:550 */
 .lblValue {
     text-align: left;
     font-size: 14px;
     margin: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:591 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:556 */
 .subTab {
     background: #cce5ff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:597 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:560 */
+.subSubTab {
+    background: #bababa;
+}
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:566 */
 td.grdBold div {
     /*--- Translator applet ---*/
     /*--- Translator applet ---*/
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:601 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:570 */
 td.grdGrey div {
     color: #4b4b4b;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:605 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:574 */
 td.grdItalic div {
     font-style: italic;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:609 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:578 */
 td.grdEditable div {
     border: 1px solid #a9bfd3;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:613 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:582 */
 .regMsg {
     margin: 15px;
     font-size: 16px;
     color: #6b6a72;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:619 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:588 */
 .bodyCls {
     background-color: white;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:623 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:592 */
 .new {
     background-color: #12f6f9;
     font-style: italic;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:630 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:599 */
 .combo-wrapper {
     border: 1px solid #ccc;
     padding: 1px;
     margin: 2px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:636 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:605 */
 .combo-wrapper img {
     float: right;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:641 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:610 */
 .combo-country {
     font-weight: bold;
     font-size: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:646 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:615 */
 .combo-language {
     font-size: 12px;
     color: #666;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:653 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:622 */
 .combo-main {
     font-weight: bold;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:658 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:627 */
 .combo-detail {
     color: #392bef;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:664 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:633 */
 .x-grid-row-summary .x-grid-cell-inner {
     font-weight: bold;
     font-size: 12px;
     color: #0652c3;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:671 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:640 */
 .x-progress.wifired .x-progress-bar {
     /*Red progressbar */
     background-color: #e00404;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:678 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:647 */
 .x-progress.wifiyellow .x-progress-bar {
     /*Yello progressbar */
     background-color: #f90;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:683 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:652 */
 .x-progress.wifigreen .x-progress-bar {
     /*Green progressbar*/
     background-color: #1a9406;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:688 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:657 */
 .conn {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:694 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:663 */
 .grpInfo {
     color: grey;
     font-size: 10px;
     font-style: italic;
     font-weight: lighter;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:701 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:670 */
 .grpNever {
     color: #1383bd;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:706 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:675 */
 .grpUp {
     color: green;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:711 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:680 */
 .grpDown {
     color: red;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:717 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:686 */
 .divTip {
     background: #595959;
     margin-top: 2px;
     padding: 5px 10px;
     color: #fff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:725 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:694 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -9652,48 +9621,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:735 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:704 */
 .node:hover {
     color: #393434;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:739 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:708 */
 .hidden {
     display: none;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:743 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:712 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:747 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:716 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:751 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:720 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:755 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:724 */
 .lightRed {
     background-color: #ffecec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:759 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:728 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:765 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:734 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:770 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:739 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:776 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:745 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -9703,7 +9672,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:786 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:755 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -9713,10 +9682,1719 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:796 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:765 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;
     margin: 1px;
     color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-tab-navigation-top {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    padding: 18px 18px 18px 18px;
+    border-width: 1px;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-tab-navigation-top-mc {
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-tab-navigation-top {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-tab-navigation-top-frameInfo {
+    font-family: th-1-1-1-1-1-1-1-1-18-18-18-18;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-tab-navigation-top-tl {
+    background-position: 0 -2px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-tab-navigation-top-tr {
+    background-position: right -3px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-tab-navigation-top-bl {
+    background-position: 0 -4px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-tab-navigation-top-br {
+    background-position: right -5px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-tab-navigation-top-ml {
+    background-position: 0 top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-tab-navigation-top-mr {
+    background-position: right top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-tab-navigation-top-tc {
+    background-position: 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-tab-navigation-top-bc {
+    background-position: 0 -1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-tab-navigation-top-tr,
+.x-tab-navigation-top-br,
+.x-tab-navigation-top-mr {
+    padding-right: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-tab-navigation-top-tl,
+.x-tab-navigation-top-bl,
+.x-tab-navigation-top-ml {
+    padding-left: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-tab-navigation-top-tc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-tab-navigation-top-bc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-tab-navigation-top-mc {
+    padding: 18px 18px 18px 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:1px 1px 1px 1px" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-tab-navigation-bottom {
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+    -moz-border-radius-topright: 0;
+    -webkit-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    -moz-border-radius-bottomright: 0;
+    -webkit-border-bottom-right-radius: 0;
+    border-bottom-right-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -webkit-border-bottom-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 18px 18px 18px 18px;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-tab-navigation-bottom-mc {
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-tab-navigation-bottom {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-tab-navigation-bottom-frameInfo {
+    font-family: th-1-1-1-1-1-1-1-1-18-18-18-18;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-tab-navigation-bottom-tl {
+    background-position: 0 -2px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-tab-navigation-bottom-tr {
+    background-position: right -3px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-tab-navigation-bottom-bl {
+    background-position: 0 -4px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-tab-navigation-bottom-br {
+    background-position: right -5px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-tab-navigation-bottom-ml {
+    background-position: 0 bottom;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-tab-navigation-bottom-mr {
+    background-position: right bottom;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-tab-navigation-bottom-tc {
+    background-position: 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-tab-navigation-bottom-bc {
+    background-position: 0 -1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-tab-navigation-bottom-tr,
+.x-tab-navigation-bottom-br,
+.x-tab-navigation-bottom-mr {
+    padding-right: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-tab-navigation-bottom-tl,
+.x-tab-navigation-bottom-bl,
+.x-tab-navigation-bottom-ml {
+    padding-left: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-tab-navigation-bottom-tc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-tab-navigation-bottom-bc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-tab-navigation-bottom-mc {
+    padding: 18px 18px 18px 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:1px 1px 1px 1px" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-tab-navigation-left {
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+    -moz-border-radius-topright: 0;
+    -webkit-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    -moz-border-radius-bottomright: 0;
+    -webkit-border-bottom-right-radius: 0;
+    border-bottom-right-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -webkit-border-bottom-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 18px 18px 18px 18px;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-tab-navigation-left-mc {
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-tab-navigation-left {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-tab-navigation-left-frameInfo {
+    font-family: th-1-1-1-1-1-1-1-1-18-18-18-18;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-tab-navigation-left-tl {
+    background-position: 0 -2px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-tab-navigation-left-tr {
+    background-position: right -3px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-tab-navigation-left-bl {
+    background-position: 0 -4px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-tab-navigation-left-br {
+    background-position: right -5px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-tab-navigation-left-ml {
+    background-position: 0 top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-tab-navigation-left-mr {
+    background-position: right top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-tab-navigation-left-tc {
+    background-position: 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-tab-navigation-left-bc {
+    background-position: 0 -1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-tab-navigation-left-tr,
+.x-tab-navigation-left-br,
+.x-tab-navigation-left-mr {
+    padding-right: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-tab-navigation-left-tl,
+.x-tab-navigation-left-bl,
+.x-tab-navigation-left-ml {
+    padding-left: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-tab-navigation-left-tc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-tab-navigation-left-bc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-tab-navigation-left-mc {
+    padding: 18px 18px 18px 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:1px 1px 1px 1px" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-tab-navigation-right {
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+    -moz-border-radius-topright: 0;
+    -webkit-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    -moz-border-radius-bottomright: 0;
+    -webkit-border-bottom-right-radius: 0;
+    border-bottom-right-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -webkit-border-bottom-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 18px 18px 18px 18px;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-tab-navigation-right-mc {
+    background-color: transparent;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-tab-navigation-right {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-tab-navigation-right-frameInfo {
+    font-family: th-1-1-1-1-1-1-1-1-18-18-18-18;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-tab-navigation-right-tl {
+    background-position: 0 -2px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-tab-navigation-right-tr {
+    background-position: right -3px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-tab-navigation-right-bl {
+    background-position: 0 -4px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-tab-navigation-right-br {
+    background-position: right -5px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-tab-navigation-right-ml {
+    background-position: 0 top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-tab-navigation-right-mr {
+    background-position: right top;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-tab-navigation-right-tc {
+    background-position: 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-tab-navigation-right-bc {
+    background-position: 0 -1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:388 */
+.x-tab-navigation-right-tr,
+.x-tab-navigation-right-br,
+.x-tab-navigation-right-mr {
+    padding-right: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:394 */
+.x-tab-navigation-right-tl,
+.x-tab-navigation-right-bl,
+.x-tab-navigation-right-ml {
+    padding-left: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:400 */
+.x-tab-navigation-right-tc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:403 */
+.x-tab-navigation-right-bc {
+    height: 1px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
+.x-tab-navigation-right-mc {
+    padding: 18px 18px 18px 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, frame:1px 1px 1px 1px" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1597 */
+.x-tab-navigation {
+    border-color: transparent;
+    cursor: pointer;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1656 */
+.x-tab-navigation-top {
+    margin: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1660 */
+.x-tab-navigation-top.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1665 */
+.x-tab-navigation-top.x-tab-rotate-left {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1669 */
+.x-tab-navigation-top.x-tab-rotate-left.x-rtl {
+    margin: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1687 */
+.x-tab-navigation-top.x-tab-focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1716 */
+.x-tab-navigation-top.x-tab-focus.x-tab-over {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1745 */
+.x-tab-navigation-top.x-tab-focus.x-tab-active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1771 */
+.x-tab-navigation-right {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1775 */
+.x-tab-navigation-right.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1780 */
+.x-tab-navigation-right.x-tab-rotate-right {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1784 */
+.x-tab-navigation-right.x-tab-rotate-right.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1802 */
+.x-tab-navigation-right.x-tab-focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1831 */
+.x-tab-navigation-right.x-tab-focus.x-tab-over {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1860 */
+.x-tab-navigation-right.x-tab-focus.x-tab-active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1886 */
+.x-tab-navigation-bottom {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1890 */
+.x-tab-navigation-bottom.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1895 */
+.x-tab-navigation-bottom.x-tab-rotate-left {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1899 */
+.x-tab-navigation-bottom.x-tab-rotate-left.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1917 */
+.x-tab-navigation-bottom.x-tab-focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1946 */
+.x-tab-navigation-bottom.x-tab-focus.x-tab-over {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1975 */
+.x-tab-navigation-bottom.x-tab-focus.x-tab-active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2001 */
+.x-tab-navigation-left {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2005 */
+.x-tab-navigation-left.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2010 */
+.x-tab-navigation-left.x-tab-rotate-right {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2014 */
+.x-tab-navigation-left.x-tab-rotate-right.x-rtl {
+    margin: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2032 */
+.x-tab-navigation-left.x-tab-focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2061 */
+.x-tab-navigation-left.x-tab-focus.x-tab-over {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2090 */
+.x-tab-navigation-left.x-tab-focus.x-tab-active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2116 */
+.x-tab-button-navigation {
+    height: 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2121 */
+.x-tab-inner-navigation {
+    font: bold 15px/15px 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    color: #acacac;
+    max-width: 100%;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2137 */
+.x-tab-icon-right > .x-tab-inner-navigation,
+.x-tab-icon-left > .x-tab-inner-navigation {
+    max-width: calc(100% - 18px);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2145 */
+.x-tab-icon-el-navigation {
+    min-height: 18px;
+    background-position: center center;
+    font-size: 18px;
+    line-height: 18px;
+    color: #acacac;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2146 */
+.x-tab-icon-left > .x-tab-icon-el-navigation,
+.x-tab-icon-right > .x-tab-icon-el-navigation {
+    width: 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2151 */
+.x-tab-icon-top > .x-tab-icon-el-navigation,
+.x-tab-icon-bottom > .x-tab-icon-el-navigation {
+    min-width: 18px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2162 */
+.x-tab-bar-plain .x-tab-icon-el-navigation {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2187 */
+.x-tab-text.x-tab-icon-left > .x-tab-icon-el-navigation {
+    margin-right: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2191 */
+.x-tab-text.x-tab-icon-left > .x-tab-icon-el-navigation.x-rtl {
+    margin-right: 0;
+    margin-left: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2198 */
+.x-tab-text.x-tab-icon-right > .x-tab-icon-el-navigation {
+    margin-left: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2202 */
+.x-tab-text.x-tab-icon-right > .x-tab-icon-el-navigation.x-rtl {
+    margin-left: 0;
+    margin-right: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2209 */
+.x-tab-text.x-tab-icon-top > .x-tab-icon-el-navigation {
+    margin-bottom: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2213 */
+.x-tab-text.x-tab-icon-bottom > .x-tab-icon-el-navigation {
+    margin-top: 6px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2218 */
+.x-tab-focus.x-tab-navigation {
+    border-color: transparent;
+    background-color: transparent;
+    outline: 1px solid #5fa2dd;
+    outline-offset: -3px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/css-outline.scss:64 */
+.x-ie .x-tab-focus.x-tab-navigation,
+.x-ie10p .x-tab-focus.x-tab-navigation,
+.x-edge .x-tab-focus.x-tab-navigation {
+    outline: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/css-outline.scss:40 */
+.x-ie .x-tab-focus.x-tab-navigation:after,
+.x-ie10p .x-tab-focus.x-tab-navigation:after,
+.x-edge .x-tab-focus.x-tab-navigation:after {
+    position: absolute;
+    content: ' ';
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    border: 1px solid #5fa2dd;
+    pointer-events: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2314 */
+.x-tab-bar-plain .x-tab-focus.x-tab-navigation .x-tab-inner-navigation {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2346 */
+.x-tab-bar-plain .x-tab-focus.x-tab-navigation .x-tab-icon-el {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2354 */
+.x-tab-over.x-tab-navigation {
+    border-color: transparent;
+    background-image: none;
+    background-color: rgba(80, 80, 80, 0.08);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/background-opacity.scss:19 */
+.x-ie8 .x-tab-over.x-tab-navigation {
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#14505050, endColorstr=#14505050)";
+    zoom: 1;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2383 */
+.x-ie8 .x-tab-over.x-tab-navigation.x-tab-rotate-left {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2389 */
+.x-ie8 .x-tab-over.x-tab-navigation.x-tab-rotate-right {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2410 */
+.x-tab-over.x-tab-navigation .x-tab-inner-navigation {
+    color: #c4c4c4;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2415 */
+.x-tab-bar-plain .x-tab-over.x-tab-navigation .x-tab-inner-navigation {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2430 */
+.x-tab-over.x-tab-navigation .x-tab-icon-el {
+    color: #c4c4c4;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2439 */
+.x-ie8m .x-tab-over.x-tab-navigation .x-tab-icon-el {
+    color: #c4c4c4;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2446 */
+.x-tab-bar-plain .x-tab-over.x-tab-navigation .x-tab-icon-el {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2466 */
+.x-tab-focus.x-tab-over.x-tab-navigation {
+    border-color: transparent;
+    background-image: none;
+    background-color: rgba(80, 80, 80, 0.08);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/background-opacity.scss:19 */
+.x-ie8 .x-tab-focus.x-tab-over.x-tab-navigation {
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#14505050, endColorstr=#14505050)";
+    zoom: 1;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2495 */
+.x-ie8 .x-tab-focus.x-tab-over.x-tab-navigation.x-tab-rotate-left {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2501 */
+.x-ie8 .x-tab-focus.x-tab-over.x-tab-navigation.x-tab-rotate-right {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2527 */
+.x-tab-bar-plain .x-tab-focus.x-tab-over.x-tab-navigation .x-tab-inner-navigation {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2558 */
+.x-tab-bar-plain .x-tab-focus.x-tab-over.x-tab-navigation .x-tab-icon-el {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2581 */
+.x-tab.x-tab-active.x-tab-navigation {
+    border-color: #fff;
+    background-color: #303030;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2637 */
+.x-tab.x-tab-active.x-tab-navigation .x-tab-inner-navigation {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2642 */
+.x-tab-bar-plain .x-tab.x-tab-active.x-tab-navigation .x-tab-inner-navigation {
+    color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2657 */
+.x-tab.x-tab-active.x-tab-navigation .x-tab-icon-el {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2665 */
+.x-ie8 .x-tab.x-tab-active.x-tab-navigation .x-tab-icon-el {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2671 */
+.x-tab-bar-plain .x-tab.x-tab-active.x-tab-navigation .x-tab-icon-el {
+    color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2692 */
+.x-tab-focus.x-tab-active.x-tab-navigation {
+    border-color: #fff;
+    background-color: #303030;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2753 */
+.x-tab-bar-plain .x-tab-focus.x-tab-active.x-tab-navigation .x-tab-inner-navigation {
+    color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2784 */
+.x-tab-bar-plain .x-tab-focus.x-tab-active.x-tab-navigation .x-tab-icon-el {
+    color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2808 */
+.x-tab.x-tab-disabled.x-tab-navigation {
+    border-color: transparent;
+    background-color: transparent;
+    cursor: default;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2868 */
+.x-tab.x-tab-disabled.x-tab-navigation .x-tab-inner-navigation {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    opacity: 0.3;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2873 */
+.x-tab-bar-plain .x-tab.x-tab-disabled.x-tab-navigation .x-tab-inner-navigation {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2892 */
+.x-tab.x-tab-disabled.x-tab-navigation .x-tab-icon-el-navigation {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    opacity: 0.5;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2897 */
+.x-tab.x-tab-disabled.x-tab-navigation .x-tab-icon-el {
+    color: #acacac;
+    opacity: 0.3;
+    filter: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2918 */
+.x-tab-bar-plain .x-tab.x-tab-disabled.x-tab-navigation .x-tab-icon-el {
+    color: #606060;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2938 */
+.x-nbr .x-tab-navigation {
+    background-image: none;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-over .x-tab-navigation-top-tl,
+.x-tab-over .x-tab-navigation-top-bl,
+.x-tab-over .x-tab-navigation-top-tr,
+.x-tab-over .x-tab-navigation-top-br,
+.x-tab-over .x-tab-navigation-top-tc,
+.x-tab-over .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-over .x-tab-navigation-top-ml,
+.x-tab-over .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-over .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus .x-tab-navigation-top-tl,
+.x-tab-focus .x-tab-navigation-top-bl,
+.x-tab-focus .x-tab-navigation-top-tr,
+.x-tab-focus .x-tab-navigation-top-br,
+.x-tab-focus .x-tab-navigation-top-tc,
+.x-tab-focus .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-focus-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus .x-tab-navigation-top-ml,
+.x-tab-focus .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-focus-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-focus-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-over .x-tab-navigation-top-tl,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-bl,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-tr,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-br,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-tc,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-focus-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-over .x-tab-navigation-top-ml,
+.x-tab-focus.x-tab-over .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-focus-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-over .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-focus-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-active .x-tab-navigation-top-tl,
+.x-tab.x-tab-active .x-tab-navigation-top-bl,
+.x-tab.x-tab-active .x-tab-navigation-top-tr,
+.x-tab.x-tab-active .x-tab-navigation-top-br,
+.x-tab.x-tab-active .x-tab-navigation-top-tc,
+.x-tab.x-tab-active .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-active .x-tab-navigation-top-ml,
+.x-tab.x-tab-active .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-active .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-active .x-tab-navigation-top-tl,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-bl,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-tr,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-br,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-tc,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-focus-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-active .x-tab-navigation-top-ml,
+.x-tab-focus.x-tab-active .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-focus-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-active .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-focus-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-disabled .x-tab-navigation-top-tl,
+.x-tab.x-tab-disabled .x-tab-navigation-top-bl,
+.x-tab.x-tab-disabled .x-tab-navigation-top-tr,
+.x-tab.x-tab-disabled .x-tab-navigation-top-br,
+.x-tab.x-tab-disabled .x-tab-navigation-top-tc,
+.x-tab.x-tab-disabled .x-tab-navigation-top-bc {
+    background-image: url(images/tab/tab-navigation-top-disabled-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-disabled .x-tab-navigation-top-ml,
+.x-tab.x-tab-disabled .x-tab-navigation-top-mr {
+    background-image: url(images/tab/tab-navigation-top-disabled-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-disabled .x-tab-navigation-top-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-top-disabled-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-over .x-tab-navigation-right-tl,
+.x-tab-over .x-tab-navigation-right-bl,
+.x-tab-over .x-tab-navigation-right-tr,
+.x-tab-over .x-tab-navigation-right-br,
+.x-tab-over .x-tab-navigation-right-tc,
+.x-tab-over .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-over .x-tab-navigation-right-ml,
+.x-tab-over .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-over .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus .x-tab-navigation-right-tl,
+.x-tab-focus .x-tab-navigation-right-bl,
+.x-tab-focus .x-tab-navigation-right-tr,
+.x-tab-focus .x-tab-navigation-right-br,
+.x-tab-focus .x-tab-navigation-right-tc,
+.x-tab-focus .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-focus-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus .x-tab-navigation-right-ml,
+.x-tab-focus .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-focus-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-focus-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-over .x-tab-navigation-right-tl,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-bl,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-tr,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-br,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-tc,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-focus-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-over .x-tab-navigation-right-ml,
+.x-tab-focus.x-tab-over .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-focus-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-over .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-focus-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-active .x-tab-navigation-right-tl,
+.x-tab.x-tab-active .x-tab-navigation-right-bl,
+.x-tab.x-tab-active .x-tab-navigation-right-tr,
+.x-tab.x-tab-active .x-tab-navigation-right-br,
+.x-tab.x-tab-active .x-tab-navigation-right-tc,
+.x-tab.x-tab-active .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-active .x-tab-navigation-right-ml,
+.x-tab.x-tab-active .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-active .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-active .x-tab-navigation-right-tl,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-bl,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-tr,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-br,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-tc,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-focus-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-active .x-tab-navigation-right-ml,
+.x-tab-focus.x-tab-active .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-focus-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-active .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-focus-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-disabled .x-tab-navigation-right-tl,
+.x-tab.x-tab-disabled .x-tab-navigation-right-bl,
+.x-tab.x-tab-disabled .x-tab-navigation-right-tr,
+.x-tab.x-tab-disabled .x-tab-navigation-right-br,
+.x-tab.x-tab-disabled .x-tab-navigation-right-tc,
+.x-tab.x-tab-disabled .x-tab-navigation-right-bc {
+    background-image: url(images/tab/tab-navigation-right-disabled-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-disabled .x-tab-navigation-right-ml,
+.x-tab.x-tab-disabled .x-tab-navigation-right-mr {
+    background-image: url(images/tab/tab-navigation-right-disabled-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-disabled .x-tab-navigation-right-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-right-disabled-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-over .x-tab-navigation-bottom-tl,
+.x-tab-over .x-tab-navigation-bottom-bl,
+.x-tab-over .x-tab-navigation-bottom-tr,
+.x-tab-over .x-tab-navigation-bottom-br,
+.x-tab-over .x-tab-navigation-bottom-tc,
+.x-tab-over .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-over .x-tab-navigation-bottom-ml,
+.x-tab-over .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-over .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus .x-tab-navigation-bottom-tl,
+.x-tab-focus .x-tab-navigation-bottom-bl,
+.x-tab-focus .x-tab-navigation-bottom-tr,
+.x-tab-focus .x-tab-navigation-bottom-br,
+.x-tab-focus .x-tab-navigation-bottom-tc,
+.x-tab-focus .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-focus-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus .x-tab-navigation-bottom-ml,
+.x-tab-focus .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-focus-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-focus-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-tl,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-bl,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-tr,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-br,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-tc,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-focus-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-ml,
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-focus-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-over .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-focus-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-active .x-tab-navigation-bottom-tl,
+.x-tab.x-tab-active .x-tab-navigation-bottom-bl,
+.x-tab.x-tab-active .x-tab-navigation-bottom-tr,
+.x-tab.x-tab-active .x-tab-navigation-bottom-br,
+.x-tab.x-tab-active .x-tab-navigation-bottom-tc,
+.x-tab.x-tab-active .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-active .x-tab-navigation-bottom-ml,
+.x-tab.x-tab-active .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-active .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-tl,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-bl,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-tr,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-br,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-tc,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-focus-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-ml,
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-focus-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-active .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-focus-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-tl,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-bl,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-tr,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-br,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-tc,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-bc {
+    background-image: url(images/tab/tab-navigation-bottom-disabled-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-ml,
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-mr {
+    background-image: url(images/tab/tab-navigation-bottom-disabled-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-disabled .x-tab-navigation-bottom-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-bottom-disabled-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-over .x-tab-navigation-left-tl,
+.x-tab-over .x-tab-navigation-left-bl,
+.x-tab-over .x-tab-navigation-left-tr,
+.x-tab-over .x-tab-navigation-left-br,
+.x-tab-over .x-tab-navigation-left-tc,
+.x-tab-over .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-over .x-tab-navigation-left-ml,
+.x-tab-over .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-over .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus .x-tab-navigation-left-tl,
+.x-tab-focus .x-tab-navigation-left-bl,
+.x-tab-focus .x-tab-navigation-left-tr,
+.x-tab-focus .x-tab-navigation-left-br,
+.x-tab-focus .x-tab-navigation-left-tc,
+.x-tab-focus .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-focus-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus .x-tab-navigation-left-ml,
+.x-tab-focus .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-focus-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-focus-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-over .x-tab-navigation-left-tl,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-bl,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-tr,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-br,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-tc,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-focus-over-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-over .x-tab-navigation-left-ml,
+.x-tab-focus.x-tab-over .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-focus-over-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-over .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-focus-over-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-active .x-tab-navigation-left-tl,
+.x-tab.x-tab-active .x-tab-navigation-left-bl,
+.x-tab.x-tab-active .x-tab-navigation-left-tr,
+.x-tab.x-tab-active .x-tab-navigation-left-br,
+.x-tab.x-tab-active .x-tab-navigation-left-tc,
+.x-tab.x-tab-active .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-active .x-tab-navigation-left-ml,
+.x-tab.x-tab-active .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-active .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab-focus.x-tab-active .x-tab-navigation-left-tl,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-bl,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-tr,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-br,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-tc,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-focus-active-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab-focus.x-tab-active .x-tab-navigation-left-ml,
+.x-tab-focus.x-tab-active .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-focus-active-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab-focus.x-tab-active .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-focus-active-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+.x-tab.x-tab-disabled .x-tab-navigation-left-tl,
+.x-tab.x-tab-disabled .x-tab-navigation-left-bl,
+.x-tab.x-tab-disabled .x-tab-navigation-left-tr,
+.x-tab.x-tab-disabled .x-tab-navigation-left-br,
+.x-tab.x-tab-disabled .x-tab-navigation-left-tc,
+.x-tab.x-tab-disabled .x-tab-navigation-left-bc {
+    background-image: url(images/tab/tab-navigation-left-disabled-corners.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+.x-tab.x-tab-disabled .x-tab-navigation-left-ml,
+.x-tab.x-tab-disabled .x-tab-navigation-left-mr {
+    background-image: url(images/tab/tab-navigation-left-disabled-sides.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+.x-tab.x-tab-disabled .x-tab-navigation-left-mc {
+    background-repeat: repeat-x;
+    background-image: url(images/tab/tab-navigation-left-disabled-fbg.gif);
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2981 */
+.x-tab-navigation-tl,
+.x-tab-navigation-bl,
+.x-tab-navigation-tr,
+.x-tab-navigation-br {
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2991 */
+.x-tab-navigation .x-tab-close-btn {
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    font: 12px/1 FontAwesome;
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-tab-navigation .x-tab-close-btn:before {
+    content: "\f00d";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3001 */
+.x-tab-bar-plain .x-tab-navigation .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3013 */
+.x-tab-navigation .x-tab-close-btn-over {
+    background-position: -16px 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3023 */
+.x-tab-navigation .x-tab-close-btn-pressed {
+    background-position: -32px 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3030 */
+.x-tab-navigation.x-tab-focus .x-tab-close-btn {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3034 */
+.x-tab-bar-plain .x-tab-navigation.x-tab-focus .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3044 */
+.x-tab-navigation.x-tab-over .x-tab-close-btn {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3048 */
+.x-tab-bar-plain .x-tab-navigation.x-tab-over .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3058 */
+.x-tab-navigation.x-tab-focus.x-tab-over .x-tab-close-btn {
+    color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3062 */
+.x-tab-bar-plain .x-tab-navigation.x-tab-focus.x-tab-over .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3072 */
+.x-tab-navigation.x-tab-active .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3102 */
+.x-tab-navigation.x-tab-focus.x-tab-active .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3115 */
+.x-tab-navigation.x-tab-disabled .x-tab-close-btn {
+    color: #fff;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    opacity: 0.3;
+    background-position: 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3120 */
+.x-tab-bar-plain .x-tab-navigation.x-tab-disabled .x-tab-close-btn {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3136 */
+.x-rtl.x-tab-navigation .x-tab-close-btn {
+    right: auto;
+    left: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3142 */
+.x-tab-closable.x-tab-navigation .x-tab-button {
+    padding-right: 16px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Tab.scss:3147 */
+.x-rtl.x-tab-closable.x-tab-navigation .x-tab-button {
+    padding-right: 0px;
+    padding-left: 16px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-corners.gif), sides:url(images/tab/tab-navigation-top-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-corners.gif), sides:url(images/tab/tab-navigation-right-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-corners.gif), sides:url(images/tab/tab-navigation-left-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-over.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-over-corners.gif), sides:url(images/tab/tab-navigation-top-over-sides.gif), frame-bg:url(images/tab/tab-navigation-top-over-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-over.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-over-corners.gif), sides:url(images/tab/tab-navigation-right-over-sides.gif), frame-bg:url(images/tab/tab-navigation-right-over-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-over.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-over-corners.gif), sides:url(images/tab/tab-navigation-bottom-over-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-over-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-over.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-over-corners.gif), sides:url(images/tab/tab-navigation-left-over-sides.gif), frame-bg:url(images/tab/tab-navigation-left-over-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-active.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-active-corners.gif), sides:url(images/tab/tab-navigation-top-active-sides.gif), frame-bg:url(images/tab/tab-navigation-top-active-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-active.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-active-corners.gif), sides:url(images/tab/tab-navigation-right-active-sides.gif), frame-bg:url(images/tab/tab-navigation-right-active-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-active.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-active-corners.gif), sides:url(images/tab/tab-navigation-bottom-active-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-active-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-active.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-active-corners.gif), sides:url(images/tab/tab-navigation-left-active-sides.gif), frame-bg:url(images/tab/tab-navigation-left-active-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-over-corners.gif), sides:url(images/tab/tab-navigation-top-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-over-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-over-corners.gif), sides:url(images/tab/tab-navigation-right-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-over-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-over-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-over-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-over-corners.gif), sides:url(images/tab/tab-navigation-left-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-over-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-active-corners.gif), sides:url(images/tab/tab-navigation-top-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-active-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-active-corners.gif), sides:url(images/tab/tab-navigation-right-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-active-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-active-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-active-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-active-corners.gif), sides:url(images/tab/tab-navigation-left-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-active-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-disabled.x-tab-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-disabled-corners.gif), sides:url(images/tab/tab-navigation-top-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-top-disabled-fbg.gif), frame:1px 1px 1px 1px, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-disabled.x-tab-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-disabled-corners.gif), sides:url(images/tab/tab-navigation-right-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-right-disabled-fbg.gif), frame:1px 1px 1px 1px, stretch:left" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-disabled.x-tab-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-disabled-corners.gif), sides:url(images/tab/tab-navigation-bottom-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-disabled-fbg.gif), frame:1px 1px 1px 1px, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-disabled.x-tab-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-disabled-corners.gif), sides:url(images/tab/tab-navigation-left-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-left-disabled-fbg.gif), frame:1px 1px 1px 1px, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:168 */
+.x-tab-bar-navigation {
+    background-color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:207 */
+.x-tab-bar-navigation-top > .x-tab-bar-body-navigation {
+    padding: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:211 */
+.x-tab-bar-navigation-bottom > .x-tab-bar-body-navigation {
+    padding: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:215 */
+.x-tab-bar-navigation-left > .x-tab-bar-body-navigation {
+    padding: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:220 */
+.x-rtl.x-tab-bar-navigation-left > .x-tab-bar-body-navigation {
+    padding: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:225 */
+.x-tab-bar-navigation-right > .x-tab-bar-body-navigation {
+    padding: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:230 */
+.x-rtl.x-tab-bar-navigation-right > .x-tab-bar-body-navigation {
+    padding: 0 0 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:238 */
+.x-tab-bar-plain.x-tab-bar-navigation-top > .x-tab-bar-body-navigation {
+    padding: 8px 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:242 */
+.x-tab-bar-plain.x-tab-bar-navigation-bottom > .x-tab-bar-body-navigation {
+    padding: 0 0 8px 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:246 */
+.x-tab-bar-plain.x-tab-bar-navigation-left > .x-tab-bar-body-navigation {
+    padding: 0 0 0 8px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:251 */
+.x-rtl.x-tab-bar-plain.x-tab-bar-navigation-left > .x-tab-bar-body-navigation {
+    padding: 0 8px 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:256 */
+.x-tab-bar-plain.x-tab-bar-navigation-right > .x-tab-bar-body-navigation {
+    padding: 0 8px 0 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:261 */
+.x-rtl.x-tab-bar-plain.x-tab-bar-navigation-right > .x-tab-bar-body-navigation {
+    padding: 0 0 0 8px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:269 */
+.x-tab-bar-plain.x-tab-bar-navigation-horizontal {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:276 */
+.x-tab-bar-plain.x-tab-bar-navigation-vertical {
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:390 */
+.x-tab-bar-horizontal > .x-tab-bar-body-navigation {
+    min-height: 56px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:393 */
+.x-ie8m .x-tab-bar-horizontal > .x-tab-bar-body-navigation {
+    min-height: 56px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:400 */
+.x-tab-bar-vertical > .x-tab-bar-body-navigation {
+    min-width: 56px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:403 */
+.x-ie8m .x-tab-bar-vertical > .x-tab-bar-body-navigation {
+    min-width: 56px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:170 */
+.x-tab-bar-navigation-scroller .x-box-scroller-body-horizontal {
+    margin-left: 24px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:175 */
+.x-tab-bar-navigation-scroller.x-rtl .x-box-scroller-body-horizontal {
+    margin-left: 0;
+    margin-right: 24px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:183 */
+.x-tab-bar-navigation-vertical-scroller .x-box-scroller-body-vertical {
+    margin-top: 24px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:188 */
+.x-box-scroller-tab-bar-navigation {
+    cursor: pointer;
+    color: #fff;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    opacity: 0.5;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:198 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-hover {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+    opacity: 0.6;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:204 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-pressed {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    opacity: 0.7;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:210 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-disabled {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=25)";
+    opacity: 0.25;
+    cursor: default;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:220 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-left,
+.x-box-scroller-tab-bar-navigation.x-box-scroller-right {
+    width: 24px;
+    height: 24px;
+    top: 50%;
+    margin-top: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:247 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-left {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    font: 16px/24px FontAwesome;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-left:before {
+    content: "\f053";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:272 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-right {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    font: 16px/24px FontAwesome;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-right:before {
+    content: "\f054";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:299 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-top,
+.x-box-scroller-tab-bar-navigation.x-box-scroller-bottom {
+    height: 24px;
+    width: 24px;
+    left: 50%;
+    margin-left: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:326 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-top {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    font: 16px/24px FontAwesome;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-top:before {
+    content: "\f077";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/layout/container/Box.scss:351 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-bottom {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    font: 16px/24px FontAwesome;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-box-scroller-tab-bar-navigation.x-box-scroller-bottom:before {
+    content: "\f078";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:483 */
+.x-tab-bar-more-icon {
+    font: 16px/1 FontAwesome;
+    color: #f0f0f0;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/etc/mixins/font-icon.scss:126 */
+.x-tab-bar-more-icon:before {
+    content: "\f0c9";
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:500 */
+.x-tab-bar-plain.x-tab-bar-navigation-scroller .x-box-scroller-body-horizontal {
+    margin-left: 24px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:506 */
+.x-tab-bar-plain.x-tab-bar-navigation-vertical-scroller .x-box-scroller-body-vertical {
+    margin-top: 16px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:511 */
+.x-tab-bar-plain .x-box-scroller-tab-bar-navigation {
+    color: #919191;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:559 */
+.x-tab-bar-navigation-top .x-box-scroller-tab-bar-navigation {
+    margin-top: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:563 */
+.x-tab-bar-navigation-right .x-box-scroller-tab-bar-navigation {
+    margin-left: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:567 */
+.x-tab-bar-navigation-bottom .x-box-scroller-tab-bar-navigation {
+    margin-top: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:571 */
+.x-tab-bar-navigation-left .x-box-scroller-tab-bar-navigation {
+    margin-left: -12px;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:580 */
+.x-box-scroller-tab-bar-navigation {
+    background-color: #404040;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-neutral/sass/src/tab/Bar.scss:586 */
+.x-box-scroller-tab-bar-navigation .x-ie8 .x-box-scroller-plain {
+    background-color: #fff;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-bar-navigation-top:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:bottom" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-bar-navigation-bottom:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:top" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-bar-navigation-left:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:right" !important;
+}
+/* /usr/share/nginx/html/rd/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
+.x-cmd-slicer.x-tab-bar-navigation-right:before {
+    /*<if slicer>*/
+    display: none;
+    content: "x-slicer:, stretch:left" !important;
 }

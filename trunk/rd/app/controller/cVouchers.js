@@ -1,56 +1,28 @@
 Ext.define('Rd.controller.cVouchers', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('vouchersWin');
-        if(!win){
-            win = desktop.createWindow({
-                id              : 'vouchersWin',
-                btnText         : i18n('sVouchers'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph           : Rd.config.icnVoucher,
-                animCollapse    : false,
-                border          : false,
-                constrainHeader : true,
-                layout          : 'border',
-                style           : 'background-color: transparent !important',
-                stateful        : true,
-                stateId         : 'vouchersWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        border  : false,
-                        heading: i18n('sVouchers'),
-                        image:  'resources/images/48x48/vouchers.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabVouchers',
-                            items   : { 'title' : i18n('sHome'), xtype: 'gridVouchers','glyph': Rd.config.icnHome}}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+            
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : true,
+            itemId  : 'tabVouchers',
+            plain	: true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), xtype: 'gridVouchers','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;
+       
     },
 
     views:  [
-        'components.pnlBanner',     	'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
+        'vouchers.gridVouchers',    'vouchers.winVoucherAddWizard',
         'components.cmbRealm',      	'components.cmbProfile',    'vouchers.pnlVoucher',  'vouchers.gridVoucherPrivate',
         'components.cmbVendor',     	'components.cmbAttribute',  'vouchers.gridVoucherRadaccts',
         'vouchers.winVoucherPassword', 	'components.winPdf',     'vouchers.winVoucherPdf',
@@ -355,12 +327,12 @@ Ext.define('Rd.controller.cVouchers', {
                     if(jsonData.success){
                             
                         if(jsonData.items.tree == true){
-                            if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
+                            if(!Ext.WindowManager.get('winVoucherAddWizardId')){
                                 var w = Ext.widget('winVoucherAddWizard',{id:'winVoucherAddWizardId',singleField: me.singleField});
-                                me.application.runAction('cDesktop','Add',w);         
+                                w.show();         
                             }
                         }else{
-                            if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddWizardId')){
+                            if(!Ext.WindowManager.get('winVoucherAddWizardId')){
                                 var w = Ext.widget('winVoucherAddWizard',
                                     {
 									    id			: 'winVoucherAddWizardId',
@@ -372,7 +344,7 @@ Ext.define('Rd.controller.cVouchers', {
 									    singleField : me.singleField
 								    }
                                 );
-                                me.application.runAction('cDesktop','Add',w);         
+                                w.show();         
                             }
                         }
                     }   
@@ -447,12 +419,12 @@ Ext.define('Rd.controller.cVouchers', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherCsvImportId')){
+                        if(!Ext.WindowManager.get('winVoucherCsvImportId')){
                             var w = Ext.widget('winVoucherCsvImport',{id:'winVoucherCsvImportId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherCsvImportId')){
+                        if(!Ext.WindowManager.get('winVoucherCsvImportId')){
                             var w = Ext.widget('winVoucherCsvImport',
                                 {
 						            id			: 'winVoucherCsvImportId',
@@ -463,7 +435,7 @@ Ext.define('Rd.controller.cVouchers', {
 						            apId		:'0'
 					            }
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -683,9 +655,9 @@ Ext.define('Rd.controller.cVouchers', {
             selecteds = true;
         }
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherPdfId')){
+        if(!Ext.WindowManager.get('winVoucherPdfId')){
             var w = Ext.widget('winVoucherPdf',{id:'winVoucherPdfId', selecteds : selecteds});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     pdfExportSubmit: function(button){
@@ -750,20 +722,18 @@ Ext.define('Rd.controller.cVouchers', {
     },
     pdfOpenWindow: function(url_to_add){
         var me      = this;
-        var win     = me.application.runAction('cDesktop','AlreadyExist','winPdfId');
         var title   = i18n('sVoucher_export_to_pdf');
-        var urlPdf  = me.getUrlPdfBase()+'?'+url_to_add;
-
-        if(!win){
+        var urlPdf  = me.getUrlPdfBase()+'?'+url_to_add;      
+        if(!Ext.WindowManager.get('winPdfId')){
             var w = Ext.widget('winPdf',{
                 id          : 'winPdfId',
                 title       : title,
                 srcUrl      : urlPdf
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();      
         }else{
-            win.setSrc(urlPdf);
-            win.setTitle(title);
+            Ext.WindowManager.get('winPdfId').setSrc(urlPdf);
+            Ext.WindowManager.get('winPdfId').setTitle(title);
         }
     },
 	frmPdfExportLoad: function(tab){
@@ -782,9 +752,9 @@ Ext.define('Rd.controller.cVouchers', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectVouchers')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectVouchers')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectVouchers',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -869,14 +839,14 @@ Ext.define('Rd.controller.cVouchers', {
                 var sr              = me.getGrid().getSelectionModel().getLastSelected();
                 var voucher_name    = sr.get('name');
 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherEmailDetailId'+sr.getId())){
+                if(!Ext.WindowManager.get('winVoucherEmailDetailId'+sr.getId())){
                     var w = Ext.widget('winVoucherEmailDetail',
                         {
                             id          : 'winVoucherEmailDetailId'+sr.getId(),
                             voucherId   : sr.getId(),
                             voucher_name: voucher_name
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -1075,14 +1045,14 @@ Ext.define('Rd.controller.cVouchers', {
         //Entry points present; continue 
         var store   	= pnl.down("gridVoucherDevices").getStore();
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherAddDeviceId')){
+        if(!Ext.WindowManager.get('winVoucherAddDeviceId')){
             var w = Ext.widget('winVoucherAddDevice',
             {
                 id          :'winVoucherAddDeviceId',
                 store       : store,
                 username    : pnl.v_name	
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     btnDeviceAddSave: function(button){
@@ -1219,7 +1189,7 @@ Ext.define('Rd.controller.cVouchers', {
 
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected(); 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winVoucherPassword'+sr.getId())){
+                if(!Ext.WindowManager.get('winVoucherPassword'+sr.getId())){
                     var w = Ext.widget('winVoucherPassword',
                         {
                             id          : 'winVoucherPassword'+sr.getId(),
@@ -1227,7 +1197,7 @@ Ext.define('Rd.controller.cVouchers', {
                             username    : sr.get('name'),
                             title       : i18n('sChange_password_for')+' '+sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }

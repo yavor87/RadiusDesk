@@ -263,14 +263,14 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         var pnl     = button.up("pnlAccessPointEdit");
         var store   = pnl.down("gridAccessPointEntries").getStore();
        
-        if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAddEntryId')){
+        if(!Ext.WindowManager.get('winAccessPointAddEntryId')){
             var w = Ext.widget('winAccessPointAddEntry',
             {
                 id          :'winAccessPointAddEntryId',
                 store       : store,
                 apProfileId : pnl.ap_profile_id
             });
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();      
         }
     },
     cmbEncryptionChange: function(cmb){
@@ -370,14 +370,15 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         }else{
             var sr      = pnl.down("gridAccessPointEntries").getSelectionModel().getLastSelected();
             var id      = sr.getId();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointEditEntryId')){
+            
+            if(!Ext.WindowManager.get('winAccessPointEditEntryId')){
                 var w = Ext.widget('winAccessPointEditEntry',
                 {
                     id          :'winAccessPointEditEntryId',
                     store       : store,
                     entryId     : id
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }else{
                 var w       = Ext.WindowManager.get('winAccessPointEditEntryId');
                 w.entryId   = id; 
@@ -526,14 +527,14 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         
         //Entry points present; continue 
         var store   = pnl.down("gridAccessPointExits").getStore();
-        if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAddExitId')){
+        if(!Ext.WindowManager.get('winAccessPointAddExitId')){
             var w = Ext.widget('winAccessPointAddExit',
             {
                 id              :'winAccessPointAddExitId',
                 store           : store,
                 apProfileId     : pnl.ap_profile_id
             });
-            me.application.runAction('cDesktop','Add',w);        
+            w.show();        
         }
     },
     btnExitTypeNext: function(button){
@@ -688,7 +689,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             var apProfileId = sr.get('ap_profile_id');
             var type        = sr.get('type');
             
-            if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointEditExitId')){
+            if(!Ext.WindowManager.get('winAccessPointEditExitId')){
                 var w = Ext.widget('winAccessPointEditExit',
                 {
                     id          :'winAccessPointEditExitId',
@@ -697,7 +698,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
                     apProfileId : apProfileId,
                     type        : type
                 });
-                me.application.runAction('cDesktop','Add',w); 
+                w.show(); 
                         
             }else{
                 var w           = Ext.WindowManager.get('winAccessPointEditExitId');
@@ -959,7 +960,8 @@ Ext.define('Rd.controller.cAccessPointEdits', {
         
         //Entry points present; continue 
         var store   	= pnl.down("gridAccessPointAps").getStore();
-        if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAddApId')){
+        
+        if(!Ext.WindowManager.get('winAccessPointAddApId')){
             var w = Ext.widget('winAccessPointAddAp',
             {
                 id              :'winAccessPointAddApId',
@@ -968,7 +970,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 				apProfileName	: pnl.title,
                 itemId          : 'winAccessPointAddApEdit'	
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     btnAddApSave: function(button){
@@ -1057,7 +1059,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
             var id          = sr.getId();
             var apProfileId = sr.get('ap_profile_id');
 
-            if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointEditApId')){
+            if(!Ext.WindowManager.get('winAccessPointEditApId')){
                 var w = Ext.widget('winAccessPointEditAp',
                 {
                     id              :'winAccessPointEditApId',
@@ -1067,7 +1069,7 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 					apProfileName	: pnl.title,
                     itemId          : 'winAccessPointEditApEdit'
                 });
-                me.application.runAction('cDesktop','Add',w);          
+                w.show();          
             }
         }
     },
@@ -1326,9 +1328,9 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 		var pref_id = 'winMeshMapPreferences_'+mesh_id;
 		var map_p	= pnl.down('pnlMeshEditGMap');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist',pref_id)){
+        if(!Ext.WindowManager.get(pref_id)){
             var w = Ext.widget('winMeshMapPreferences',{id:pref_id,mapPanel: map_p,meshId: mesh_id});
-            me.application.runAction('cDesktop','Add',w);
+            w.show();
             //We need to load this widget's form with the latest data:
             w.down('form').load({
 				url		: me.getUrlMapPrefView(),
@@ -1346,9 +1348,9 @@ Ext.define('Rd.controller.cAccessPointEdits', {
 		var add_id  = 'winMeshMapNodeAdd_'+mesh_id;
 		var map_p	= pnl.down('pnlMeshEditGMap');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist',add_id)){
+        if(!Ext.WindowManager.get(add_id)){
             var w = Ext.widget('winMeshMapNodeAdd',{id: add_id,mapPanel: map_p,meshId:mesh_id});
-            me.application.runAction('cDesktop','Add',w);     
+            w.show();     
        }   
     },
     meshMapNodeAddSubmit: function(button){
