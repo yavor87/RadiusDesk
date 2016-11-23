@@ -1,51 +1,16 @@
 Ext.define('Rd.controller.cAccessProviders', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
-
+    actionIndex: function(pnl){
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('accessProvidersWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'accessProvidersWin',
-                btnText : i18n('sAccess_Providers'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'key',
-                glyph: Rd.config.icnKey,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'accessProvidersWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sAccess_Providers'),
-                        image:  'resources/images/48x48/key.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            items   : { 'title' : i18n('sHome'), xtype: 'gridAccessProviders','glyph': Rd.config.icnHome}}
-            
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : true,
+            items   : [{ xtype :'gridAccessProviders','glyph': Rd.config.icnHome}]
+        });
+        me.populated = true;
     },
     views:  [
         'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
@@ -203,17 +168,17 @@ Ext.define('Rd.controller.cAccessProviders', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
+                        if(!Ext.WindowManager.get('winApAddWizardId')){
                             var w = Ext.widget('winApAddWizard',
                             {
                                 id          :'winApAddWizardId',
                                 no_tree     : false,
                                 selLanguage : me.application.getSelLanguage()
                             });
-                            me.application.runAction('cDesktop','Add',w);         
-                        }
+                            w.show();         
+                        }   
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winApAddWizardId')){
+                        if(!Ext.WindowManager.get('winApAddWizardId')){
                             var w = Ext.widget('winApAddWizard',
                             {
                                 id          :'winApAddWizardId',
@@ -223,8 +188,8 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 user_id     : '0',
                                 owner       : i18n('sLogged_in_user')
                             });
-                            me.application.runAction('cDesktop','Add',w);         
-                        }   
+                            w.show()         
+                        }
                     }
                 }   
             },
@@ -480,9 +445,9 @@ Ext.define('Rd.controller.cAccessProviders', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAp')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectAp')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAp',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }
     },
     csvExportSubmit: function(button){
@@ -568,7 +533,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteAp'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteAp'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteAp'+sr.getId(),
@@ -576,7 +541,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                             noteForGrid : 'access_providers',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -598,7 +563,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteApAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteApAdd'+grid.noteForId,
@@ -606,10 +571,10 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteApAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteApAdd'+grid.noteForId,
@@ -621,7 +586,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -762,7 +727,7 @@ Ext.define('Rd.controller.cAccessProviders', {
 
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected(); 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUsersPassword'+sr.getId())){
+                if(!Ext.WindowManager.get('winPermanentUsersPassword'+sr.getId())){
                     var w = Ext.widget('winPermanentUserPassword',
                         {
                             id          : 'winPermanentUsersPassword'+sr.getId(),
@@ -770,7 +735,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                             username    : sr.get('username'),
                             title       : i18n('sChange_password_for')+' '+sr.get('username')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();      
                 }
             }    
         }
@@ -814,9 +779,9 @@ Ext.define('Rd.controller.cAccessProviders', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+            if(!Ext.WindowManager.get('winEnableDisableUser')){
                 var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();       
             }    
         }
     },

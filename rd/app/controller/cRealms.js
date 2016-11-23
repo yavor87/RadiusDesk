@@ -1,54 +1,26 @@
 Ext.define('Rd.controller.cRealms', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('realmsWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'realmsWin',
-                btnText:i18n('sRealms_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'realms',
-                glyph  : Rd.config.icnRealm,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'realmsWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading:i18n('sRealms'),
-                        image:  'resources/images/48x48/realms.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabRealms',
-                            items   : { 'title' : i18n('sHome'), 'xtype':'gridRealms','glyph': Rd.config.icnHome}}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabRealms',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), 'xtype':'gridRealms','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;
     },
     views:  [
-        'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',  'components.pnlBanner',
+        'realms.gridRealms',                'realms.winRealmAddWizard', 'realms.winRealmAdd',   'realms.pnlRealm',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','realms.pnlRealmDetail',
         'realms.pnlRealmLogo',              'components.pnlUsageGraph',
         'realms.pnlRealmGraphs'
@@ -232,15 +204,15 @@ Ext.define('Rd.controller.cRealms', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
+                        if(!Ext.WindowManager.get('winApAddWizardId')){
                             var w = Ext.widget('winRealmAddWizard',
                             {
                                 id          :'winRealmAddWizardId'
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winRealmAddWizardId')){
+                        if(!Ext.WindowManager.get('winApAddWizardId')){
                             var w   = Ext.widget('winRealmAddWizard',
                             {
                                 id          : 'winRealmAddWizardId',
@@ -249,7 +221,7 @@ Ext.define('Rd.controller.cRealms', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show()       
                         }
                     }
                 }   
@@ -420,9 +392,9 @@ Ext.define('Rd.controller.cRealms', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectRealms')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectRealms')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectRealms',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -508,7 +480,7 @@ Ext.define('Rd.controller.cRealms', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealms'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteRealms'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteRealms'+sr.getId(),
@@ -516,7 +488,7 @@ Ext.define('Rd.controller.cRealms', {
                             noteForGrid : 'realms',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -538,7 +510,7 @@ Ext.define('Rd.controller.cRealms', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteRealmsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteRealmsAdd'+grid.noteForId,
@@ -546,10 +518,10 @@ Ext.define('Rd.controller.cRealms', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteRealmsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteRealmsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteRealmsAdd'+grid.noteForId,
@@ -561,7 +533,7 @@ Ext.define('Rd.controller.cRealms', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();      
                         }
                     }
                 }   

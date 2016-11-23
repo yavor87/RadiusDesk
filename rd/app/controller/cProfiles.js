@@ -1,48 +1,23 @@
 Ext.define('Rd.controller.cProfiles', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('profilesWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'profilesWin',
-                //title: i18n('sProfiles_manager'),
-                btnText: i18n('sProfiles_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'profiles',
-                glyph: Rd.config.icnProfile,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'profilesWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sProfiles_manager'),
-                        image:  'resources/images/48x48/profiles.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        xtype   : 'gridProfiles'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridProfiles',
+            border  : true,
+            itemId  : 'pnlProfiles',
+            plain   : true
+        });
+        me.populated = true;
     },
 
     views:  [
-        'components.pnlBanner',             'profiles.gridProfiles',    'profiles.winProfileAddWizard',
+        'profiles.gridProfiles',    'profiles.winProfileAddWizard',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd',
         'profiles.winComponentManage'
     ],
@@ -151,16 +126,16 @@ Ext.define('Rd.controller.cProfiles', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                        if(!Ext.WindowManager.get('winProfileAddWizardId')){
                             var w = Ext.widget('winProfileAddWizard',{id:'winProfileAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winProfileAddWizardId')){
+                        if(!Ext.WindowManager.get('winProfileAddWizardId')){
                             var w = Ext.widget('winProfileAddWizard',
                                 {id:'winProfileAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -302,9 +277,9 @@ Ext.define('Rd.controller.cProfiles', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winComponentManageId')){
+            if(!Ext.WindowManager.get('winComponentManageId')){
                 var w = Ext.widget('winComponentManage',{id:'winComponentManageId'});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();       
             }    
         }
     },
@@ -388,9 +363,9 @@ Ext.define('Rd.controller.cProfiles', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectProfiles')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectProfiles')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectProfiles',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -474,9 +449,8 @@ Ext.define('Rd.controller.cProfiles', {
             }else{
 
                 //Determine the selected record:
-                var sr = me.getGrid().getSelectionModel().getLastSelected();
-                
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfiles'+sr.getId())){
+                var sr = me.getGrid().getSelectionModel().getLastSelected();            
+                if(!Ext.WindowManager.get('winNoteProfiles'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteProfiles'+sr.getId(),
@@ -484,7 +458,7 @@ Ext.define('Rd.controller.cProfiles', {
                             noteForGrid : 'profiles',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -505,7 +479,7 @@ Ext.define('Rd.controller.cProfiles', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteProfilesAdd'+grid.noteForId,
@@ -513,10 +487,10 @@ Ext.define('Rd.controller.cProfiles', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteProfilesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteProfilesAdd'+grid.noteForId,
@@ -528,7 +502,7 @@ Ext.define('Rd.controller.cProfiles', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   

@@ -1,7 +1,8 @@
 Ext.define('Rd.controller.cMeshViews', {
     extend: 'Ext.app.Controller',
     views:  [
-        'components.pnlBanner', 	'meshes.winMeshView', 		'meshes.gridMeshViewEntries',	
+        'meshes.pnlMeshView',
+        'meshes.gridMeshViewEntries',	
 		'meshes.gridMeshViewNodes',	'meshes.pnlMeshViewNodes',	'meshes.gridMeshViewNodeNodes',
 		'meshes.gridMeshViewNodeDetails',						'meshes.pnlMeshViewGMap',
 		'meshes.gridMeshViewNodeActions',						'meshes.winMeshAddNodeAction'
@@ -31,7 +32,7 @@ Ext.define('Rd.controller.cMeshViews', {
 		urlPhoneBlueNode			: 'resources/images/map_markers/phone_blue.png'
     },
     refs: [
-       
+        {  ref: 'tabMeshes',        selector: '#tabMeshes'     }    
     ],
     init: function() {
         var me = this;
@@ -42,82 +43,75 @@ Ext.define('Rd.controller.cMeshViews', {
 
         me.control({
 			//==== MESHdesk View related ====
-            'winMeshView gridMeshViewEntries #reload' : {
+            'pnlMeshView gridMeshViewEntries #reload' : {
                 click: me.reloadViewEntry
             },
-            'winMeshView gridMeshViewEntries button' : {
+            'pnlMeshView gridMeshViewEntries button' : {
                 toggle: me.viewEntryTimeToggle
             },
-            'winMeshView gridMeshViewNodes #reload' : {
+            'pnlMeshView gridMeshViewNodes #reload' : {
                 click: me.reloadViewNode
             },
-            'winMeshView gridMeshViewNodes button' : {
+            'pnlMeshView gridMeshViewNodes button' : {
                 toggle: me.viewNodeTimeToggle
             },
-            'winMeshView #tabMeshViewEntries': {
+            'pnlMeshView #tabMeshViewEntries': {
                 activate:       me.tabMeshViewEntriesActivate
             },
-            'winMeshView #tabMeshViewNodes': {
+            'pnlMeshView #tabMeshViewNodes': {
                 activate:       me.tabMeshViewNodesActivate
             },
-			'winMeshView #tabMeshViewNodeNodes': {
+			'pnlMeshView #tabMeshViewNodeNodes': {
                 activate:       me.tabMeshViewNodeNodesActivate
             },
-			'winMeshView #tabMeshViewNodeDetails': {
+			'pnlMeshView #tabMeshViewNodeDetails': {
                 activate:       me.tabMeshViewNodeDetailsActivate
             },
-            'winMeshView gridMeshViewEntries #reload menuitem[group=refresh]'   : {
+            'pnlMeshView gridMeshViewEntries #reload menuitem[group=refresh]'   : {
                 click:      function(menu){
                     var me = this;
                     me.autoRefresh(menu,'entries');
                 }
             },
-            'winMeshView gridMeshViewNodes #reload menuitem[group=refresh]'   : {
+            'pnlMeshView gridMeshViewNodes #reload menuitem[group=refresh]'   : {
                 click:      function(menu){
                     me.autoRefresh(menu,'nodes');
                 }
             },
-			'winMeshView gridMeshViewNodeNodes #reload menuitem[group=refresh]'   : {
+			'pnlMeshView gridMeshViewNodeNodes #reload menuitem[group=refresh]'   : {
                 click:      function(menu){
                     me.autoRefresh(menu,'node_nodes');
                 }
             }, 
-            'winMeshView': {
+            'pnlMeshView': {
                 beforeshow:      me.winViewClose,
                 destroy   :      me.winViewClose
             },
-			'winMeshView pnlMeshViewNodes':	{
+			'pnlMeshView pnlMeshViewNodes':	{
 				activate:		function(pnl){
-				    var tab = pnl.up('tabpanel');
-				    //console.log(pnl.getConfig('displayBugFix'));
-				    if(pnl.getConfig('displayBugFix') == false){
-				       // console.log("Do display bug fix");
-			            tab.setActiveTab(1);
-			            pnl.setConfig('displayBugFix', true);
-			        }
 					pnl.getData()
 				}
 			},
 			'#pnlMapsNodeInfo #restart': {
 				click:	me.mapRestart
 			},
-			'winMeshView pnlMeshViewNodes #reload':	{
+			'pnlMeshView pnlMeshViewNodes #reload':	{
 				click:		function(button){
 					var me 	= this;
 					var pnl = button.up("pnlMeshViewNodes");
 					pnl.getData()
 				}
 			},
-			'winMeshView gridMeshViewNodeNodes #reload':	{
+			'pnlMeshView gridMeshViewNodeNodes #reload':	{
 				click: me.reloadViewNodeNodes
 			},
-			'winMeshView gridMeshViewNodeNodes button' : {
+			'pnlMeshView gridMeshViewNodeNodes button' : {
                 toggle: me.viewNodeNodesTimeToggle
             },
 			'gridMeshViewNodeDetails #map' : {
                 click: 	me.mapLoadApi
             },
-			'winMeshView #mapTab'		: {
+			'pnlMeshView #mapTab'		: {
 				activate: function(pnl){
 					me.reloadMap(pnl);
 				}
@@ -128,42 +122,56 @@ Ext.define('Rd.controller.cMeshViews', {
 					me.reloadMap(b.up('pnlMeshViewGMap'));
 				}
 			},
-			'winMeshView gridMeshViewNodeDetails #reload' : {
+			'pnlMeshView gridMeshViewNodeDetails #reload' : {
 				click	: me.reloadViewNodeDetails
 			},
-			'winMeshView gridMeshViewNodeDetails #execute' : {
+			'pnlMeshView gridMeshViewNodeDetails #execute' : {
 				click	: me.execute
 			},
-			'winMeshView gridMeshViewNodeDetails #history' : {
+			'pnlMeshView gridMeshViewNodeDetails #history' : {
 				click	: me.history
 			},
-			'winMeshView gridMeshViewNodeDetails #restart' : {
+			'pnlMeshView gridMeshViewNodeDetails #restart' : {
 				click	: me.restart
 			},
 			'winMeshAddNodeAction #save' : {
 				click	: me.commitExecute
 			},
-			'winMeshView gridMeshViewNodeActions #reload' : {
+			'pnlMeshView gridMeshViewNodeActions #reload' : {
 				click	: me.reloadNodeActions
 			},
-			'winMeshView gridMeshViewNodeActions #add' : {
+			'pnlMeshView gridMeshViewNodeActions #add' : {
 				click	: me.addNodeActions
 			},
-			'winMeshView gridMeshViewNodeActions #delete' : {
+			'pnlMeshView gridMeshViewNodeActions #delete' : {
 				click	: me.deleteNodeActions
 			},
-			'winMeshView gridMeshViewNodeActions' : {
+			'pnlMeshView gridMeshViewNodeActions' : {
 				activate: me.activateNodeActions
 			}
         });
     },
     actionIndex: function(mesh_id,name){
-        var me      = this;
-		var id      = 'winMeshView'+mesh_id; 
-        if(!me.application.runAction('cDesktop','AlreadyExist',id)){
-            var w = Ext.widget('winMeshView',{id:id, name:name, stateId:id,title: i18n('sView')+' '+name, meshId: mesh_id});
-            me.application.runAction('cDesktop','Add',w);      
-        }
+        var me          = this;
+        var id		    = 'tabMeshView'+ mesh_id;
+        var tabMeshes   = me.getTabMeshes();
+        var newTab      = tabMeshes.items.findBy(
+            function (tab){
+                return tab.getItemId() === id;
+            });
+         
+        if (!newTab){
+            newTab = tabMeshes.add({
+                glyph   : Rd.config.icnView, 
+                title   : name,
+                closable: true,
+                layout  : 'fit',
+                xtype   : 'pnlMeshView',
+                itemId  : id,
+                mesh_id : mesh_id
+            });
+        }    
+        tabMeshes.setActiveTab(newTab);     
     },
 	viewEntryTimeToggle: function(button,pressed){
         var me = this;
@@ -173,7 +181,7 @@ Ext.define('Rd.controller.cMeshViews', {
     },
     reloadViewEntry: function(button){
         var me      = this;
-        var win     = button.up("winMeshView");
+        var win     = button.up("pnlMeshView");
         var entGrid = win.down("gridMeshViewEntries");
         
         var day     = entGrid.down('#day');
@@ -196,7 +204,7 @@ Ext.define('Rd.controller.cMeshViews', {
     },
     reloadViewNode: function(button){
         var me      = this;
-        var win     = button.up("winMeshView");
+        var win     = button.up("pnlMeshView");
         var entGrid = win.down("gridMeshViewNodes");
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
@@ -218,7 +226,7 @@ Ext.define('Rd.controller.cMeshViews', {
     },
 	reloadViewNodeNodes: function(button){
         var me      = this;
-        var win     = button.up("winMeshView");
+        var win     = button.up("pnlMeshView");
         var entGrid = win.down("gridMeshViewNodeNodes");
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
@@ -331,7 +339,7 @@ Ext.define('Rd.controller.cMeshViews', {
         }
 
         var map_tab_name = i18n("sGoogle_Maps");
-		var win 		= tp.up('winMeshView');
+		var win 		= tp.up('pnlMeshView');
 		var mesh_id		= win.meshId;
 
         //We need to fetch the Preferences for this user's Google Maps map
@@ -462,7 +470,7 @@ Ext.define('Rd.controller.cMeshViews', {
 	},
 	reloadViewNodeDetails: function(button){
         var me      = this;
-        var win     = button.up("winMeshView");
+        var win     = button.up("pnlMeshView");
         var grid    = win.down("gridMeshViewNodeDetails"); 
         grid.getStore().reload();
     },
@@ -486,9 +494,9 @@ Ext.define('Rd.controller.cMeshViews', {
             );
         }else{
         	//console.log("Show window for command content")
-			if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeActionId')){
+        	if(!Ext.WindowManager.get('winMeshAddNodeActionId')){
                 var w = Ext.widget('winMeshAddNodeAction',{id:'winMeshAddNodeActionId',grid : grid});
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },
@@ -524,7 +532,7 @@ Ext.define('Rd.controller.cMeshViews', {
 	history:   function(button){
 
 		var me 			= this
-		var win			= button.up('winMeshView');
+		var win			= button.up('pnlMeshView');
         var tp          = button.up('tabpanel');
 		var grid		= win.down('gridMeshViewNodeDetails');
   
@@ -656,9 +664,9 @@ Ext.define('Rd.controller.cMeshViews', {
 		var grid 	= b.up('gridMeshViewNodeActions');
 		var nodeId	= grid.nodeId;
 
-		if(!me.application.runAction('cDesktop','AlreadyExist','winMeshAddNodeAction_'+nodeId)){
+        if(!Ext.WindowManager.get('winMeshAddNodeAction_'+nodeId)){
             var w = Ext.widget('winMeshAddNodeAction',{id:'winMeshAddNodeAction_'+nodeId,grid : grid,nodeId: nodeId});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();       
         }
 	},
 	deleteNodeActions:   function(b){

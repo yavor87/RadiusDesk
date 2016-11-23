@@ -14,7 +14,7 @@ Ext.define('Rd.controller.cStartup', {
    actionIndex: function(){
         //Declare some scoped variables
         var me          = this;     
-        me.application.setSelLanguage(Rd.config.selLanguage); //We hardcode the language since it is not very efficient to stroe the phrases in DB
+        me.application.setSelLanguage(Rd.config.selLanguage); //We hardcode the language since it is not very efficient to store the phrases in DB
         Ext.Ajax.setExtraParams({'sel_language': me.application.getSelLanguage()});
         me.checkToken();
     },
@@ -47,7 +47,9 @@ Ext.define('Rd.controller.cStartup', {
                         //This is the second place of three where we set the extraParams. The token is valid 3rt blace in cLogin.js
                         Ext.Ajax.setExtraParams({'token': token,'sel_language': me.application.getSelLanguage()});
                         me.application.setDesktopData(jsonData.data);
-                        me.application.runAction('cDesktop','Index');
+                        //me.application.runAction('cDesktop','Index');
+                        console.log("Gooi Hom Pappie");
+                        me.application.runAction('cDashboard','Index');
 
                     }else{
 

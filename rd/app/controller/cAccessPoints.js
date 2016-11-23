@@ -1,70 +1,40 @@
 Ext.define('Rd.controller.cAccessPoints', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(record){
-        var me      = this;       
-        var desktop = this.application.getController('cDesktop');
-        var win     = desktop.getWindow('apWin');
-        if(!win){
-            win = desktop.createWindow({
-                id      : 'apWin',
-                btnText : i18n('sAccess_Point_Management'),
-                width   : Rd.config.winWidth,
-                height  : Rd.config.winHeight,
-                glyph   : Rd.config.icnCloud,
-                animCollapse:false,
-                border  :false,
-                constrainHeader:true,
-                layout  : 'border',
-                stateful: true,
-                stateId : 'apWin',
-                items: [
-                    {
-                        region  : 'north',
-                        xtype   : 'pnlBanner',
-                        heading : i18n('sAccess_Point_Management'),
-                        image   : 'resources/images/48x48/cloud.png'
-                    },
-					{
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabAccessPoints',
-                            items   : [
-								{   
-                                   xtype       : 'gridApProfiles',
-                                    tabConfig   : {
-                                        title       : i18n('sAccess_Point_Profiles'), 
-                                        glyph       : Rd.config.icnProfile   
-                                    } 
-                                },
-                                { 
-                                    xtype       : 'gridApLists',  
-                                    tabConfig   : {
-                                        title       : i18n('sAttached_Devices'),
-                                        glyph       : Rd.config.icnChain
-                                    }
-                                },
-                                {  
-                                    xtype       : 'gridUnknownAps', 
-                                    tabConfig   : {
-                                        title       : i18n('sDetached_Devices'),
-                                        glyph       : Rd.config.icnChainBroken
-                                    }
-                                }	
-                        ]}]
+    actionIndex: function(pnl){
+        var me      = this; 
+    
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : true,
+            itemId  : 'tabAccessPoints',
+            items   : [
+                {   
+                   xtype       : 'gridApProfiles',
+                    tabConfig   : {
+                        title       : i18n('sAccess_Point_Profiles'), 
+                        glyph       : Rd.config.icnProfile   
+                    } 
+                },
+                { 
+                    xtype       : 'gridApLists',  
+                    tabConfig   : {
+                        title       : i18n('sAttached_Devices'),
+                        glyph       : Rd.config.icnChain
                     }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+                },
+                {  
+                    xtype       : 'gridUnknownAps', 
+                    tabConfig   : {
+                        title       : i18n('sDetached_Devices'),
+                        glyph       : Rd.config.icnChainBroken
+                    }
+                }	
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
@@ -456,7 +426,7 @@ Ext.define('Rd.controller.cAccessPoints', {
         var win     = button.up("#apWin"); 
         var store   = win.down("gridApLists").getStore();
         
-        if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAddApId')){
+        if(!Ext.WindowManager.get('winAccessPointAddApId')){
             var w = Ext.widget('winAccessPointAddAp',
             {
                 id              :'winAccessPointAddApId',
@@ -465,7 +435,7 @@ Ext.define('Rd.controller.cAccessPoints', {
 				apProfileName	: '',
                 itemId          : 'winAccessPointAddApMain'	
             });
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();       
         }
     },
     btnAddApSave: function(button){
@@ -552,7 +522,7 @@ Ext.define('Rd.controller.cAccessPoints', {
             var apProfileId = sr.get('ap_profile_id');
             var apProfile   = sr.get('ap_profile');
 
-            if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointEditApId')){
+            if(!Ext.WindowManager.get('winAccessPointEditApId')){
                 var w = Ext.widget('winAccessPointEditAp',
                 {
                     id              :'winAccessPointEditApId',
@@ -562,7 +532,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                     apProfileName	: apProfile,
                     itemId          : 'winAccessPointEditApMain'
                 });
-                me.application.runAction('cDesktop','Add',w);     
+                w.show();     
             }
         }
     },
@@ -621,9 +591,9 @@ Ext.define('Rd.controller.cAccessPoints', {
             );
         }else{
         	//console.log("Show window for command content")
-        	if(!me.application.runAction('cDesktop','AlreadyExist','winHardwareAddActionMain')){
+        	if(!Ext.WindowManager.get('winHardwareAddActionMain')){
                 var w = Ext.widget('winHardwareAddAction',{id:'winHardwareAddActionMain',grid : grid});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();       
             }
         }
     },
@@ -765,14 +735,14 @@ Ext.define('Rd.controller.cAccessPoints', {
             var id              = sr.getId();
 			var mac		        = sr.get('mac');
 
-			if(!me.application.runAction('cDesktop','AlreadyExist','winAccessPointAttachApId')){
+            if(!Ext.WindowManager.get('winAccessPointAttachApId')){
                 var w = Ext.widget('winAccessPointAttachAp',
                 {
                     id          :'winAccessPointAttachApId',
 					mac			: mac,
 					store       : store
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();        
             }
         }
     },
@@ -965,16 +935,16 @@ Ext.define('Rd.controller.cAccessPoints', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winApProfileAddWizardId')){
+                        if(!Ext.WindowManager.get('winApProfileAddWizardId')){
                             var w = Ext.widget('winApProfileAddWizard',{id:'winApProfileAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winApProfileAddWizardId')){
+                        if(!Ext.WindowManager.get('winApProfileAddWizardId')){
                             var w = Ext.widget('winApProfileAddWizard',
                                 {id:'winApProfileAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n("sLogged_in_user"), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);          
+                            w.show()          
                         }
                     }
                 }   
@@ -1108,8 +1078,6 @@ Ext.define('Rd.controller.cAccessPoints', {
                 var sr      = me.getGrid().getSelectionModel().getLastSelected();
                 var id      = sr.getId();
                 var name    = sr.get('name');
-                //var cont    = Rd.app.createController('cAccessPointEdits');
-                //cont.actionIndex(id,name); 
                 me.application.runAction('cAccessPointEdits','Index',id,name); 
             }
         }
@@ -1140,7 +1108,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApProfiles'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteApProfiles'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteApProfiles'+sr.getId(),
@@ -1148,7 +1116,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                             noteForGrid : 'ap_profiles',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -1170,7 +1138,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApProfilesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteApProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteApProfilesAdd'+grid.noteForId,
@@ -1178,10 +1146,10 @@ Ext.define('Rd.controller.cAccessPoints', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);        
+                            w.show()        
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteApProfilesAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteApProfilesAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteApProfilesAdd'+grid.noteForId,
@@ -1193,7 +1161,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                                 owner       : i18n("sLogged_in_user"),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);        
+                            w.show()        
                         }
                     }
                 }   
@@ -1332,7 +1300,7 @@ Ext.define('Rd.controller.cAccessPoints', {
             var id          = sr.getId();
             var new_server  = sr.get('new_server');
 
-            if(!me.application.runAction('cDesktop','AlreadyExist','winApUnknownRedirectId')){
+            if(!Ext.WindowManager.get('winApUnknownRedirectId')){
                 var w = Ext.widget('winApUnknownRedirect',
                 {
                     id              :'winApUnknownRedirectId',
@@ -1340,7 +1308,7 @@ Ext.define('Rd.controller.cAccessPoints', {
 					new_server	    : new_server,
                     store           : store
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }
         }
     },

@@ -1,56 +1,26 @@
 Ext.define('Rd.controller.cPermanentUsers', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('permanentUsersWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'permanentUsersWin',
-                //title: i18n('sPermanent_Users'),
-                btnText: i18n('sPermanent_Users'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'users',
-                glyph: Rd.config.icnUser,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'permanentUsersWin',
-                maximized: true,
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sPermanent_Users'),
-                        image:  'resources/images/48x48/users.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabPermanentUsers',
-                            items   : { 'title' : i18n('sHome'), xtype: 'gridPermanentUsers','glyph': Rd.config.icnHome}}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabPermanentUsers',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), xtype: 'gridPermanentUsers','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
-       	'components.pnlBanner',  'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
+       	'permanentUsers.gridPermanentUsers',   'permanentUsers.winPermanentUserAddWizard',
        	'components.cmbRealm',   'components.cmbProfile',  'components.cmbCap',
        	'components.winNote',    'components.winNoteAdd',  'components.winCsvColumnSelect',
        	'permanentUsers.pnlPermanentUser', 'permanentUsers.gridUserRadaccts', 'permanentUsers.gridUserRadpostauths',
@@ -330,14 +300,15 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
+                    
+                        if(!Ext.WindowManager.get('winPermanentUserAddWizardId')){
                             var w = Ext.widget('winPermanentUserAddWizard',{
                                 id:'winPermanentUserAddWizardId', selLanguage : me.application.getSelLanguage()
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUserAddWizardId')){
+                        if(!Ext.WindowManager.get('winPermanentUserAddWizardId')){
                             var w = Ext.widget('winPermanentUserAddWizard',{
                                 id			:'winPermanentUserAddWizardId',
                                 startScreen	: 'scrnData',
@@ -346,7 +317,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                                 no_tree		: true,
                                 selLanguage : me.application.getSelLanguage()
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -640,9 +611,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectPermanentUsers')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectPermanentUsers')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectPermanentUsers',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -729,7 +700,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsers'+sr.getId())){
+                if(!Ext.WindowManager.get('winNotePermananetUsers'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNotePermananetUsers'+sr.getId(),
@@ -737,7 +708,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                             noteForGrid : 'permanentUsers',
                             noteForName : sr.get('username')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -758,7 +729,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsersAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNotePermananetUsersAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNotePermananetUsersAdd'+grid.noteForId,
@@ -766,10 +737,10 @@ Ext.define('Rd.controller.cPermanentUsers', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();      
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNotePermananetUsersAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNotePermananetUsersAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNotePermananetUsersAdd'+grid.noteForId,
@@ -781,7 +752,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -918,7 +889,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected(); 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPermanentUsersPassword'+sr.getId())){
+                if(!Ext.WindowManager.get('winPermanentUsersPassword'+sr.getId())){
                     var w = Ext.widget('winPermanentUserPassword',
                         {
                             id          : 'winPermanentUsersPassword'+sr.getId(),
@@ -926,7 +897,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
                             username    : sr.get('username'),
                             title       : i18n('sChange_password_for')+' '+sr.get('username')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();      
                 }
             }    
         }
@@ -970,9 +941,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winEnableDisableUser')){
+            if(!Ext.WindowManager.get('winEnableDisableUser')){
                 var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();       
             }    
         }
     },

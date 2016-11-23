@@ -2,58 +2,28 @@ Ext.define('Rd.controller.cDynamicClients', {
     extend: 'Ext.app.Controller',
     owner   : undefined,
     user_id : undefined,
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('dcWin');
-        if(!win){
-            win = desktop.createWindow({
-                id          : 'dcWin',
-                btnText     : 'Dynamic RADIUS Clients',
-                width       : Rd.config.winWidth,
-                height      : Rd.config.winHeight,
-                glyph       : Rd.config.icnDynamicNas,
-                animCollapse: false,
-                border      : false,
-                constrainHeader: true,
-                layout      : 'border',
-                stateful    : true,
-                stateId     : 'dcWin',
-                items: [
-                    {
-                        region  : 'north',
-                        xtype   : 'pnlBanner',
-                        heading : 'Dynamic RADIUS Clients',
-                        image   : 'resources/images/48x48/dynamic_clients.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabDynamicClients',
-                            items   : [
-                                { 'title' : i18n('sHome'),      xtype : 'gridDynamicClients',       'glyph': Rd.config.icnHome},
-                                { 'title' : 'Unknown clients',  xtype:'gridUnknownDynamicClients',	'glyph': Rd.config.icnQuestion}
-                            ]
-                        }]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabDynamicClients',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'),      xtype : 'gridDynamicClients',       'glyph': Rd.config.icnHome},
+                { 'title' : 'Unknown clients',  xtype:'gridUnknownDynamicClients',	'glyph': Rd.config.icnQuestion}
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
-        'components.pnlBanner', 
         'dynamicClients.gridDynamicClients',
         'dynamicClients.winDynamicClientAddWizard',
         'dynamicClients.gridUnknownDynamicClients',
@@ -111,14 +81,14 @@ Ext.define('Rd.controller.cDynamicClients', {
         }
         me.inited = true;
         me.control({
-             '#dcWin'    : {
+             '#tabDynamicClients'    : {
                 beforeshow:      me.winClose,
                 destroy   :      me.winClose
             },
-            '#dcWin gridDynamicClients' : {
+            '#tabDynamicClients gridDynamicClients' : {
 				activate	: me.gridActivate
 			},
-			'#dcWin gridUnknownDynamicClients' : {
+			'#tabDynamicClients gridUnknownDynamicClients' : {
 				activate	: me.gridActivate
 			},
             'gridDynamicClients #reload': {
@@ -398,7 +368,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     add: function(button){    
         var me      = this;
-        var win     = button.up("#dcWin");
+        var win     = button.up("#tabDynamicClients");
         var store   = win.down("gridDynamicClients").getStore();
         Ext.Ajax.request({
             url: me.getUrlApChildCheck(),
@@ -408,12 +378,12 @@ Ext.define('Rd.controller.cDynamicClients', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicClientAddWizardId')){
+                        if(!Ext.WindowManager.get('winDynamicClientAddWizardId')){
                             var w = Ext.widget('winDynamicClientAddWizard',{id:'winDynamicClientAddWizardId',store: store});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicClientAddWizardId')){
+                        if(!Ext.WindowManager.get('winDynamicClientAddWizardId')){
                             var w = Ext.widget('winDynamicClientAddWizard',
                                 {
                                     id          :'winDynamicClientAddWizardId',
@@ -424,7 +394,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                                     store       : store
                                 }
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -877,7 +847,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     attachAttachUnknownDynamicClient: function(button){
         var me      = this;
-        var win     = button.up("#dcWin");
+        var win     = button.up("#tabDynamicClients");
         var store   = win.down("gridUnknownDynamicClients").getStore();
         if(win.down("gridUnknownDynamicClients").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
@@ -894,7 +864,7 @@ Ext.define('Rd.controller.cDynamicClients', {
   
 			//Determine if we can show a power bar or not.
 			var hide_power = true; //FIXME To be fiexed with real value from mesh
-            if(!me.application.runAction('cDesktop','AlreadyExist','winAttachUnknownDynamicClientId')){
+			if(!Ext.WindowManager.get('winAttachUnknownDynamicClientId')){
                 var w = Ext.widget('winAttachUnknownDynamicClient',
                 {
                     id              :'winAttachUnknownDynamicClientId',
@@ -903,7 +873,7 @@ Ext.define('Rd.controller.cDynamicClients', {
 					calledstationid : calledstationid,
 					unknown_dynamic_client_id : id	
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show()        
             }
         }
     },
@@ -974,7 +944,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicClient'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteDynamicClient'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteDynamicClient'+sr.getId(),
@@ -982,7 +952,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                             noteForGrid : 'dynamic_clients',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show()       
                 }
             }    
         }
@@ -1003,7 +973,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicClientAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDynamicClientAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDynamicClientAdd'+grid.noteForId,
@@ -1011,10 +981,10 @@ Ext.define('Rd.controller.cDynamicClients', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicClientAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDynamicClientAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDynamicClientAdd'+grid.noteForId,
@@ -1026,7 +996,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -1324,9 +1294,9 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     mapPreferences: function(button){
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMapPreferencesId')){
+        if(!Ext.WindowManager.get('winMapPreferencesId')){
             var w = Ext.widget('winMapPreferences',{id:'winMapPreferencesId'});
-            me.application.runAction('cDesktop','Add',w);
+            w.show();
             //We need to load this widget's form with the latest data:
             w.down('form').load({url:me.getUrlViewMapPref(), method:'GET'});
        }   
@@ -1372,9 +1342,9 @@ Ext.define('Rd.controller.cDynamicClients', {
     }, 
     mapDynamicClientAdd: function(button){
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMapDynamicClientAddId')){
+        if(!Ext.WindowManager.get('winMapDynamicClientAddId')){
             var w = Ext.widget('winMapDynamicClientAdd',{id:'winMapDynamicClientAddId'});
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();       
        }   
     },
     mapDynamicClientAddSubmit: function(button){

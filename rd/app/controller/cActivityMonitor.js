@@ -1,58 +1,28 @@
 Ext.define('Rd.controller.cActivityMonitor', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('activityMonitorWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'activityMonitorWin',
-                //title: i18n('sActivity_monitor'),
-                btnText: i18n('sActivity_monitor'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'activity',
-                glyph: Rd.config.icnActivity,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'activityMonitorWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sActivity_monitor'),
-                        image:  'resources/images/48x48/activity.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margin  : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            items   : [
-                                { 'title' : i18n('sAccounting_data'),       xtype: 'gridRadaccts'},
-                                { 'title' : i18n('sAuthentication_data'),   xtype: 'gridRadpostauths'},
-                                { 'title' : i18n('sFreeRADIUS_info'),         xtype: 'pnlRadius'}
-                            ]}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabActivityMonitor',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sAccounting_data'),       xtype: 'gridRadaccts'},
+                { 'title' : i18n('sAuthentication_data'),   xtype: 'gridRadpostauths'}
+                //{ 'title' : i18n('sFreeRADIUS_info'),       xtype: 'pnlRadius'}
+            ]
+        });
+        me.populated = true;
     },
 
     views:  [
-       'components.pnlBanner',  'activityMonitor.gridRadaccts', 'activityMonitor.gridRadpostauths', 'components.cmbNas',
+        'activityMonitor.gridRadaccts', 'activityMonitor.gridRadpostauths', 'components.cmbNas',
         'activityMonitor.pnlRadius',    'components.winCsvColumnSelect',    'components.pnlUsageGraph'
     ],
     stores: [ 'sRadaccts',  'sRadpostauths'  ],
@@ -338,9 +308,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAcct')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectAcct')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAcct',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmitAcct: function(button){
@@ -413,9 +383,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectAuth')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectAuth')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectAuth',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmitAuth: function(button){
