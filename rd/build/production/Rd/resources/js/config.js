@@ -109,6 +109,7 @@ Rd.config = {
     'icnMeshEdit'   : 'xf044@FontAwesome',
     'icnWizard'     : 'xf0d0@FontAwesome',
     'icnVPN'        : 'xf10e@FontAwesome',
-    'icnAdmin'      : 'xf19d@FontAwesome'
+    'icnAdmin'      : 'xf19d@FontAwesome',
+    'icnRadius'     : 'xf140@FontAwesome'
 }
 

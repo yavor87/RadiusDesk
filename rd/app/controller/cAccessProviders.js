@@ -15,7 +15,7 @@ Ext.define('Rd.controller.cAccessProviders', {
     views:  [
         'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
         'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
-        'components.pnlBanner',                 'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
+        'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
         'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd',
         'permanentUsers.winPermanentUserPassword','components.winEnableDisable',        'components.vCmbLanguages',
         'accessProviders.gridAccessProviderLimits'

@@ -2,58 +2,28 @@ Ext.define('Rd.controller.cNas', {
     extend: 'Ext.app.Controller',
     owner   : undefined,
     user_id : undefined,
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('nasWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'nasWin',
-                //title:i18n('sNAS_Device_manager'),
-                btnText:i18n('sNAS_Device_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'nas',
-                glyph: Rd.config.icnNas,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'nasWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sNAS_devices'),
-                        image:  'resources/images/48x48/nas.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            itemId  : 'tabNas',
-                            items   : { 'title' : i18n('sHome'), xtype: 'gridNas','glyph': Rd.config.icnHome}}
-            
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabNas',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), xtype: 'gridNas','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;   
     },
 
     views:  [
-        'components.pnlBanner','nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
+        'nas.gridNas','nas.winNasAddWizard','nas.gridRealmsForNasOwner','nas.winTagManage', 
         'components.winCsvColumnSelect', 'components.winNote', 'components.winNoteAdd', 'nas.pnlNas',
         'nas.pnlRealmsForNasOwner', 'nas.pnlNasOpenVpn', 'nas.pnlNasNas', 'nas.pnlNasPptp', 'nas.pnlNasDynamic', 
         'nas.cmbNasTypes', 'components.pnlGMap', 'components.cmbNas', 'nas.winMapNasAdd', 'nas.pnlNasPhoto', 
@@ -110,10 +80,6 @@ Ext.define('Rd.controller.cNas', {
         }
         me.inited = true;
         me.control({
-            '#nasWin'    : {
-                beforeshow:      me.winClose,
-                destroy   :      me.winClose
-            },
             'gridNas #reload': {
                 click:      me.reload
             },
@@ -400,15 +366,15 @@ Ext.define('Rd.controller.cNas', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
+                        if(!Ext.WindowManager.get('winNasAddWizardId')){
                             var w = Ext.widget('winNasAddWizard',{
                                 id          :'winNasAddWizardId',
                                 startScreen : 'scrnApTree'
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNasAddWizardId')){
+                        if(!Ext.WindowManager.get('winNasAddWizardId')){
                             me.user_id = 0; //We do it a bit defferent on this one
                             var w = Ext.widget('winNasAddWizard',{
                                 id          :'winNasAddWizardId',
@@ -417,7 +383,7 @@ Ext.define('Rd.controller.cNas', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -655,9 +621,9 @@ Ext.define('Rd.controller.cNas', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!me.application.runAction('cDesktop','AlreadyExist','winTagManageId')){
+            if(!Ext.WindowManager.get('winNasAddWizardId')){
                 var w = Ext.widget('winTagManage',{id:'winTagManageId'});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();      
             }    
         }
     },
@@ -923,18 +889,18 @@ Ext.define('Rd.controller.cNas', {
     },
     mapPreferences: function(button){
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMapPreferencesId')){
+        if(!Ext.WindowManager.get('winMapPreferencesId')){
             var w = Ext.widget('winMapPreferences',{id:'winMapPreferencesId'});
-            me.application.runAction('cDesktop','Add',w);
+            w.show();
             //We need to load this widget's form with the latest data:
             w.down('form').load({url:me.getUrlViewMapPref(), method:'GET'});
        }   
     },
     mapNasAdd: function(button){
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winMapNasAddId')){
+        if(!Ext.WindowManager.get('winMapNasAddId')){
             var w = Ext.widget('winMapNasAdd',{id:'winMapNasAddId'});
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();      
        }   
     },
     mapNasAddSubmit: function(button){
@@ -981,9 +947,9 @@ Ext.define('Rd.controller.cNas', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectNas')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectNas')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectNas',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();         
         }
     },
     csvExportSubmit: function(button){
@@ -1069,7 +1035,7 @@ Ext.define('Rd.controller.cNas', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNas'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteNas'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteNas'+sr.getId(),
@@ -1077,7 +1043,7 @@ Ext.define('Rd.controller.cNas', {
                             noteForGrid : 'nas',
                             noteForName : sr.get('nasname')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();     
                 }
             }    
         }
@@ -1098,7 +1064,7 @@ Ext.define('Rd.controller.cNas', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteNasAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteNasAdd'+grid.noteForId,
@@ -1106,10 +1072,10 @@ Ext.define('Rd.controller.cNas', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteNasAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteNasAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteNasAdd'+grid.noteForId,
@@ -1121,7 +1087,7 @@ Ext.define('Rd.controller.cNas', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -1743,9 +1709,9 @@ Ext.define('Rd.controller.cNas', {
         var pnl_nas = button.up('pnlNas');
         var grid    = button.up('gridNasActions');
         var nas_id  = pnl_nas.nas_id;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winNasActionAddId')){
+        if(!Ext.WindowManager.get('winNasActionAddId')){
             var w = Ext.widget('winNasActionAdd',{id:'winNasActionAddId',nas_id: nas_id,grid: grid});
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();      
        }   
     },
    gridNasActionsAddSubmit: function(button){

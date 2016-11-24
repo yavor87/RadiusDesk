@@ -48,8 +48,7 @@ Ext.define('Rd.controller.cAccessPoints', {
         'aps.winAccessPointAddAp', 
         'components.cmbDynamicDetail',
         'components.winHardwareAddAction',
-        'aps.winApUnknownRedirect',
-        'components.pnlBanner'
+        'aps.winApUnknownRedirect'
     ],
     stores: ['sAccessProvidersTree', 'sUnknownAps', 'sApProfiles', 'sApLists'  ],
     models: ['mAccessProviderTree',  'mUnknownAp',  'mApProfile',  'mApList', 'mDynamicDetail' ],

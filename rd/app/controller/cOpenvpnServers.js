@@ -1,46 +1,23 @@
 Ext.define('Rd.controller.cOpenvpnServers', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('sOpenvpnServersWin');
-        if(!win){
-            win = desktop.createWindow({
-                id          : 'sOpenvpnServersWin',
-                btnText     : 'OpenVPN Servers manager',
-                width       : Rd.config.winWidth,
-                height      : Rd.config.winHeight,
-                glyph       : Rd.config.icnVPN,
-                animCollapse:false,
-                border      :false,
-                constrainHeader:true,
-                layout      : 'border',
-                stateful    : true,
-                stateId     : 'sOpenvpnServersWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: 'OpenVPN Servers manager',
-                        image:  'resources/images/48x48/openvpn.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-						xtype   : 'gridOpenvpnServers'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridOpenvpnServers',
+            border  : true,
+            itemId  : 'pnlOpenvpnServers',
+            plain   : true
+        });
+        me.populated = true;
     },
 
     views:  [
-        'components.pnlBanner',  	'openvpnServers.gridOpenvpnServers',           
+        'openvpnServers.gridOpenvpnServers',           
         'openvpnServers.winOpenvpnServerEdit', 		'openvpnServers.winOpenvpnServerAddWizard'
     ],
     stores: ['sAccessProvidersTree','sOpenvpnServers'],
@@ -112,16 +89,16 @@ Ext.define('Rd.controller.cOpenvpnServers', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winOpenvpnServerAddWizardId')){
+                        if(!Ext.WindowManager.get('winOpenvpnServerAddWizardId')){
                             var w = Ext.widget('winOpenvpnServerAddWizard',{id:'winOpenvpnServerAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winOpenvpnServerAddWizardId')){
+                        if(!Ext.WindowManager.get('winOpenvpnServerAddWizardId')){
                             var w = Ext.widget('winOpenvpnServerAddWizard',
                                 {id:'winOpenvpnServerAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }
                 }   
@@ -263,9 +240,9 @@ Ext.define('Rd.controller.cOpenvpnServers', {
             );
         }else{
 			var sr      =  me.getGrid().getSelectionModel().getLastSelected();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winOpenvpnServerEditId')){
+			if(!Ext.WindowManager.get('winOpenvpnServerEditId')){
                 var w = Ext.widget('winOpenvpnServerEdit',{id:'winOpenvpnServerEditId',record: sr});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();      
             }    
         }
     },

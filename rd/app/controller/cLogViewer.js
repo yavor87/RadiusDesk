@@ -1,96 +1,72 @@
 Ext.define('Rd.controller.cLogViewer', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('logViewerWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'logViewerWin',
-                //title:i18n('sLogfile_viewer'),
-                btnText: i18n('sLogfile_viewer'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph: Rd.config.icnLog,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'logViewerWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading:i18n('sLogfile_viewer'),
-                        image:  'resources/images/48x48/logfile_viewer.png'
-                    },//We had to add this manually (not using pnlViewFile in ExtJS 4.2 since somehow it refused to create the item)
-                    {
-                        region  : 'center',
-                        layout  : 'fit',
-                        margins : '0 0 0 0',
-                        border  : false,
-                        html    : '',
-                        autoScroll : true,
-                        border  : '5 5 5 5',
-                        bodyCls : 'fileViewer',
-                        itemId  : 'pnlViewFile',
-                        tbar: [
-                            { xtype: 'buttongroup', title: i18n('sAction'), items : [ 
-                                { 
-                                    xtype: 'button',  
-                                    glyph: Rd.config.icnClear,
-                                    scale: 'large', 
-                                    itemId: 'clear',    
-                                    tooltip:    i18n('sClear_screen')   
-                                }
-                                
-                            ]},
-                            { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), width:200, items : [ 
-                                { 
-                                    xtype: 'button',  
-                                    glyph: Rd.config.icnStart, 
-                                    scale: 'large', 
-                                    itemId: 'start',    
-                                    tooltip:    i18n('sStart_FreeRADIUS'),
-                                    toggleGroup     : 'start_stop',
-                                    enableToggle    : true,
-                                    pressed         : true
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add([{
+            xtype: 'panel',
+            tbar: [
+            { xtype: 'buttongroup', title: i18n('sAction'), items : [ 
+                { 
+                    xtype: 'button',  
+                    glyph: Rd.config.icnClear,
+                    scale: 'large', 
+                    itemId: 'clear',    
+                    tooltip:    i18n('sClear_screen')   
+                }
+                
+                ]},
+                { xtype: 'buttongroup', title: i18n('sStart_fs_Stop'), width:200, items : [ 
+                    { 
+                        xtype: 'button',  
+                        glyph: Rd.config.icnStart, 
+                        scale: 'large', 
+                        itemId: 'start',    
+                        tooltip:    i18n('sStart_FreeRADIUS'),
+                        toggleGroup     : 'start_stop',
+                        enableToggle    : true,
+                        pressed         : true
 
-                                },
-                                { 
-                                    xtype: 'button',  
-                                    glyph: Rd.config.icnStop,  
-                                    scale: 'large', 
-                                    itemId: 'stop',     
-                                    tooltip:    i18n('sStop_FreeRADIUS'),
-                                    toggleGroup     : 'start_stop',
-                                    enableToggle    : true,
-                                    pressed         : false
-                                },
-                                { 
-                                    xtype: 'button',  
-                                    glyph: Rd.config.icnInfo,  
-                                    scale: 'large', 
-                                    itemId: 'info',     
-                                    tooltip:    i18n('sFreeRADIUS_info')
-                                }
-                            ]}
-                        ],
-                        bbar: [
-                            {   xtype: 'component', itemId: 'feedback',  tpl: '{message}',   style: 'margin-right:5px', cls: 'lblYfi'  }
-                        ]
+                    },
+                    { 
+                        xtype: 'button',  
+                        glyph: Rd.config.icnStop,  
+                        scale: 'large', 
+                        itemId: 'stop',     
+                        tooltip:    i18n('sStop_FreeRADIUS'),
+                        toggleGroup     : 'start_stop',
+                        enableToggle    : true,
+                        pressed         : false
+                    },
+                    { 
+                        xtype: 'button',  
+                        glyph: Rd.config.icnInfo,  
+                        scale: 'large', 
+                        itemId: 'info',     
+                        tooltip:    i18n('sFreeRADIUS_info')
                     }
-                ]
-            });
-            win
-        }
-        desktop.restoreWindow(win);    
-        return win;
+                ]}
+            ],
+            bbar: [
+                {   xtype: 'component', itemId: 'feedback',  tpl: '{message}',   style: 'margin-right:5px', cls: 'lblYfi'  }
+            ],
+            layout  : 'fit',
+            margins : '0 0 0 0',
+            border  : false,
+            html    : '',
+            autoScroll : true,
+            border  : '5 5 5 5',
+            bodyCls : 'fileViewer',
+            itemId  : 'pnlViewFile'
+        }]);
+        me.populated = true;
     },
     views:  [
-        'components.pnlBanner', 'logViewer.winRadiusInfo'
+        'logViewer.winRadiusInfo'
     ],
     stores: [],
     models: [],
@@ -128,10 +104,10 @@ Ext.define('Rd.controller.cLogViewer', {
             '#pnlViewFile #info': {
                 click:      me.info
             },
-            '#logViewerWin'     : {
-                show:       me.onShow,
-                render:     me.onRender,
-                destroy:    me.onDestroy
+            '#pnlViewFile'     : {
+                afterrender : me.onShow,
+                render      : me.onRender,
+                destroy     : me.onDestroy
             }
         });
     },
@@ -198,12 +174,12 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     showInfo: function(info){
         var me = this;
-        if(!me.application.runAction('cDesktop','AlreadyExist','winRadiusInfo')){
+        if(!Ext.WindowManager.get('winRadiusInfo')){
             var w = Ext.widget('winRadiusInfo',{
                         id      :'winRadiusInfoId',
                         info    : info
                     });
-            me.application.runAction('cDesktop','Add',w); 
+            w.show();
         }
     },
     ioLoaded:   function(i){
@@ -241,6 +217,7 @@ Ext.define('Rd.controller.cLogViewer', {
         });
     },
     onShow: function(w){
+    
         var me = this;
         console.log("Window show");
         if(me.showFirstTime == undefined){

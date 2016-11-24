@@ -1,46 +1,23 @@
 Ext.define('Rd.controller.cTopUps', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('topUpsWin');
-        if(!win){
-            win = desktop.createWindow({
-                id          : 'topUpsWin',
-                btnText     : 'TopUp manager',
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph       : Rd.config.icnTopUp,
-                animCollapse:false,
-                border      :false,
-                constrainHeader:true,
-                layout      : 'border',
-                stateful    : true,
-                stateId     : 'topUpsWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: 'TopUp manager',
-                        image:  'resources/images/48x48/topup.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        xtype   : 'gridTopUps'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridTopUps',
+            border  : true,
+            itemId  : 'pnlTopUps',
+            plain   : true
+        });
+        me.populated = true; 
     },
 
     views:  [
-        'components.pnlBanner',             'topUps.gridTopUps',    'topUps.winTopUpAddWizard',
+        'topUps.gridTopUps',    'topUps.winTopUpAddWizard',
         'components.cmbPermanentUser',      'topUps.winTopUpEdit'
   
     ],
@@ -158,16 +135,16 @@ Ext.define('Rd.controller.cTopUps', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTopUpAddWizardId')){
+                        if(!Ext.WindowManager.get('winTopUpAddWizardId')){
                             var w = Ext.widget('winTopUpAddWizard',{id:'winTopUpAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTopUpAddWizardId')){
+                        if(!Ext.WindowManager.get('winTopUpAddWizardId')){
                             var w = Ext.widget('winTopUpAddWizard',
                                 {id:'winTopUpAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }
                 }   
@@ -326,7 +303,7 @@ Ext.define('Rd.controller.cTopUps', {
                 var days_to_use     = sr.get('days_to_use');
                 var comment         = sr.get('comment');
 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winTopUpEditId')){
+                if(!Ext.WindowManager.get('winTopUpEditId')){
                     var w = Ext.widget('winTopUpEdit',{ 
                         id              : 'winTopUpEditId', 
                         topUpId         : sr.getId(), 
@@ -336,7 +313,7 @@ Ext.define('Rd.controller.cTopUps', {
                         days_to_use     : days_to_use,
                         comment         : comment     
                     });
-                    me.application.runAction('cDesktop','Add',w);      
+                    w.show();      
                 }
             }
         }

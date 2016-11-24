@@ -52,6 +52,12 @@ Ext.define('Rd.view.dashboard.tpDashboard', {
                 layout  : 'fit'
             },
             {
+                title: 'Top-Ups',
+                glyph: Rd.config.icnTopUp,
+                id      : 'cTopUps',
+                layout  : 'fit'
+            },
+            {
                 title   : 'Realms (Groups)',
                 glyph   : Rd.config.icnRealm,
                 id      : 'cRealms',
@@ -77,8 +83,7 @@ Ext.define('Rd.view.dashboard.tpDashboard', {
                 glyph   : Rd.config.icnProfile,
                 id      : 'cProfiles',
                 layout  : 'fit'
-            },
-            
+            }   
         ]
     }, 
     {
@@ -104,6 +109,12 @@ Ext.define('Rd.view.dashboard.tpDashboard', {
                 glyph   : Rd.config.icnTag,
                 id      : 'cTags',
                 layout  : 'fit'
+            },
+            {
+                title   : 'SSIDs',
+                glyph   : Rd.config.icnSsid,
+                id      : 'cSsids',
+                layout  : 'fit'
             }  
         ]
     }, 
@@ -125,12 +136,43 @@ Ext.define('Rd.view.dashboard.tpDashboard', {
         xtype   : 'tabpanel',
         layout  : 'fit',
         items   : [
+             {
+                title   : 'Dynamic Login Pages',
+                glyph   : Rd.config.icnDynamic,
+                id      : 'cDynamicDetails',
+                layout  : 'fit'
+            },
             {
-                title   : 'SSIDs',
-                glyph   : Rd.config.icnSsid,
-                id      : 'cSsids',
+                title   : 'OpenVPN Servers',
+                glyph   : Rd.config.icnVPN,
+                id      : 'cOpenvpnServers',
+                layout  : 'fit'
+            },
+            {
+                title   : 'IP Pools',
+                glyph   : Rd.config.icnIP,
+                id      : 'cIpPools',
+                layout  : 'fit'
+            },
+            {
+                title   : 'Rights Manager',
+                glyph   : Rd.config.icnKey,
+                id      : 'cAcos',
+                layout  : 'fit'
+            },
+            {
+                title   : 'Logfile Viewer',
+                glyph   : Rd.config.icnLog,
+                id      : 'cLogViewer',
+                layout  : 'fit'
+            },
+             {
+                title   : 'Debug Output',
+                glyph   : Rd.config.icnBug,
+                id      : 'cDebug',
                 layout  : 'fit'
             }
+            
         ]
     }
     ], 

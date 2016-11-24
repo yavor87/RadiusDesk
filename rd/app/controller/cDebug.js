@@ -1,50 +1,26 @@
 Ext.define('Rd.controller.cDebug', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('debugWin');
-        if(!win){
-
-             //Do it this way to avoid a race condition
-            var vd = Ext.create('Rd.view.debugOutput.pnlViewDebug',{
-                    region  : 'center',
-                    layout  : 'fit',
-                    margins : '0 0 0 0',
-                    border  : false
-            });
-
-            win = desktop.createWindow({
-                id: 'debugWin',
-                //title:i18n('sDebug_output'),
-                btnText: i18n('sDebug_output'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'debug',
-                glyph: Rd.config.icnBug,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'debugWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading:i18n('sDebug_output'),
-                        image:  'resources/images/48x48/bug.png'
-                    },
-                    vd
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        if (me.populated) {
+            return; 
+        } 
+        
+         //Do it this way to avoid a race condition
+        var vd = Ext.create('Rd.view.debugOutput.pnlViewDebug',{
+                region  : 'center',
+                layout  : 'fit',
+                margins : '0 0 0 0',
+                border  : false,
+                itemId  : 'pnlDebug'
+        });
+            
+        pnl.add(vd);
+        me.populated = true;       
     },
     views:  [
-        'components.pnlBanner', 'debugOutput.pnlViewDebug'
+       'debugOutput.pnlViewDebug'
     ],
     stores: [],
     models: ['mNas'],
@@ -84,10 +60,10 @@ Ext.define('Rd.controller.cDebug', {
             'pnlViewDebug #time': {
                 click:      me.time
             },
-            '#debugWin'     : {
-                show:       me.onShow,
-                render:     me.onRender,
-                destroy:    me.onDestroy
+            '#pnlDebug'   : {
+                afterrender : me.onShow,
+                render      : me.onRender,
+                destroy     : me.onDestroy
             }
         });
     },

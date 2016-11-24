@@ -1,56 +1,25 @@
 Ext.define('Rd.controller.cAcos', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('acosWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'acosWin',
-                //title: i18n('sRights_manager'),
-                btnText: i18n('sRights_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'rights',
-                glyph: Rd.config.icnKey,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'acosWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sRights_management'),
-                        image:  'resources/images/48x48/key.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : {
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            items   : [
-                                { 'title' : i18n('sAccess_Controll_Objects'),'xtype':'treeAco'},
-                                { 'title' : i18n('sAccess_Provider_Rights'),'xtype':'treeApRights'}/*,  
-                                { 'title' : i18n('sPermanent_User_Rights')}*/
-                            ]}
-                    }    
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabAcos',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                  { 'title' : i18n('sAccess_Controll_Objects'),'xtype':'treeAco'},
+                  { 'title' : i18n('sAccess_Provider_Rights'),'xtype':'treeApRights'} 
+            ]
+        });
+        me.populated = true;   
     },
-    views:  ['components.pnlBanner','acos.treeAco','acos.winAcoAdd','acos.winAcoEdit','acos.treeApRights'],
+    views:  ['acos.treeAco','acos.winAcoAdd','acos.winAcoEdit','acos.treeApRights'],
     stores: ['sAcos','sApRights'],
     models: ['mAco','mApRight'],
     acoSelectedRecord: undefined,
@@ -91,13 +60,13 @@ Ext.define('Rd.controller.cAcos', {
             'winAcoEdit #save':{
                 click:      me.acoEditSubmit
             },
-            '#acosWin treeAco'   : {
+            '#tabAcos treeAco'   : {
                 itemclick:  me.acoGridClick
             },
             'treeApRights advCheckColumn': {
                 checkchange: me.apRightChange
             },
-            '#acosWin treeApRights'   : {
+            '#tabAcos treeApRights'   : {
                 itemclick:  me.apRightsGridClick
             },
             'treeApRights #reload': {
@@ -135,11 +104,12 @@ Ext.define('Rd.controller.cAcos', {
                 console.log(me.acoSelectedRecord.getId());
                 var parent_id = me.acoSelectedRecord.getId();
                 var alias     = me.acoSelectedRecord.get('alias');
-                if(!me.application.runAction('cDesktop','AlreadyExist','winAcoAddId')){
-                     var parent_id = me.acoSelectedRecord.getId();
-                var alias     = me.acoSelectedRecord.get('alias');
+                
+               if(!Ext.WindowManager.get('winAcoAddId')){
+                    var parent_id = me.acoSelectedRecord.getId();
+                    var alias     = me.acoSelectedRecord.get('alias');
                     var w = Ext.widget('winAcoAdd',{id:'winAcoAddId','parentId': parent_id,'parentDisplay': alias});
-                    me.application.runAction('cDesktop','Add',w);         
+                    w.show();         
                 }
             }
         }
@@ -196,9 +166,9 @@ Ext.define('Rd.controller.cAcos', {
                     );
 
                 }else{
-                    if(!me.application.runAction('cDesktop','AlreadyExist','winAcoEditId')){
+                    if(!Ext.WindowManager.get('winAcoEditId')){
                         var w = Ext.widget('winAcoEdit',{id:'winAcoAddId'});
-                        me.application.runAction('cDesktop','Add',w);  
+                        w.show();  
                         w.down('form').loadRecord(me.acoSelectedRecord);
                         //Set the parent ID
                         w.down('hiddenfield[name="parent_id"]').setValue(me.acoSelectedRecord.parentNode.getId());

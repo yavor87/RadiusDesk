@@ -1,46 +1,23 @@
 Ext.define('Rd.controller.cSsids', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('sSidsWin');
-        if(!win){
-            win = desktop.createWindow({
-                id          : 'sSidsWin',
-                btnText     : 'SSIDs manager',
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph       : Rd.config.icnWifi,
-                animCollapse:false,
-                border      :false,
-                constrainHeader:true,
-                layout      : 'border',
-                stateful    : true,
-                stateId     : 'sSidsWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: 'SSIDs manager',
-                        image:  'resources/images/48x48/ssids.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-						xtype   : 'gridSsids'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridSsids',
+            border  : true,
+            itemId  : 'pnlSsids',
+            plain   : true
+        });
+        me.populated = true;
     },
 
     views:  [
-        'components.pnlBanner',  	'ssids.gridSsids',           
+        'ssids.gridSsids',           
         'ssids.winSsidEdit', 		'ssids.winSsidAddWizard'
     ],
     stores: ['sAccessProvidersTree','sSids'],
@@ -112,16 +89,16 @@ Ext.define('Rd.controller.cSsids', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winSsidAddWizardId')){
+                        if(!Ext.WindowManager.get('winSsidAddWizardId')){
                             var w = Ext.widget('winSsidAddWizard',{id:'winSsidAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();        
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winSsidAddWizardId')){
+                        if(!Ext.WindowManager.get('winSsidAddWizardId')){
                             var w = Ext.widget('winSsidAddWizard',
                                 {id:'winSsidAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }
                 }   
@@ -263,9 +240,9 @@ Ext.define('Rd.controller.cSsids', {
             );
         }else{
 			var sr      =  me.getGrid().getSelectionModel().getLastSelected();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winSsidEditId')){
+			if(!Ext.WindowManager.get('winSsidEditId')){
                 var w = Ext.widget('winSsidEdit',{id:'winSsidEditId',record: sr});
-                me.application.runAction('cDesktop','Add',w);       
+                w.show();       
             }    
         }
     },
