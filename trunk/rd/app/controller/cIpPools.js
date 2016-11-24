@@ -1,46 +1,23 @@
 Ext.define('Rd.controller.cIpPools', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('iPPools');
-        if(!win){
-            win = desktop.createWindow({
-                id          : 'iPPools',
-                btnText     : 'IP Pools',
-                 width          : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph       : Rd.config.icnIP,
-                animCollapse:false,
-                border      :false,
-                constrainHeader:true,
-                layout      : 'border',
-                stateful    : true,
-                stateId     : 'iPPools',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: 'IP Pools',
-                        image:  'resources/images/48x48/ip_pools.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-						xtype   : 'gridIpPools'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridIpPools',
+            border  : true,
+            itemId  : 'pnlIpPools',
+            plain   : true
+        });
+        me.populated = true; 
     },
 
     views:  [
-        'components.pnlBanner',			'iPPools.gridIpPools', 			'iPPools.winIpPoolsAddWizard',
+        'iPPools.gridIpPools', 			'iPPools.winIpPoolsAddWizard',
 		'iPPools.winIpPoolEdit',		'components.cmbPermanentUser'
     ],
     stores: ['sIpPools'	, 'sPermanentUsers' ],
@@ -111,8 +88,10 @@ Ext.define('Rd.controller.cIpPools', {
         me.getGrid().down('#count').update({count: count});
     },
 	add: function(button){
-		var w = Ext.widget('winIpPoolsAddWizard',{id:'winIpPoolsAddWizardId'});
-    	me.application.runAction('cDesktop','Add',w);
+	    if(!Ext.WindowManager.get('winIpPoolsAddWizardId')){
+		    var w = Ext.widget('winIpPoolsAddWizard',{id:'winIpPoolsAddWizardId'});
+		    w.show();
+	    }
 	},
 	btnScrnChoiceNext: function(button){
         var me      = this;
@@ -235,7 +214,7 @@ Ext.define('Rd.controller.cIpPools', {
         }else{
             var sr      =  me.getGrid().getSelectionModel().getLastSelected();
             var id      = sr.getId();
-            if(!me.application.runAction('cDesktop','AlreadyExist','winIpPoolEditId')){
+            if(!Ext.WindowManager.get('winIpPoolEditId')){
                 var w = Ext.widget('winIpPoolEdit',
                 {
                     id          :'winIpPoolEditId',
@@ -243,7 +222,7 @@ Ext.define('Rd.controller.cIpPools', {
                     poolId      : id,
 					record		: sr
                 });
-                me.application.runAction('cDesktop','Add',w);         
+                w.show();         
             }else{
                 var w       = me.getEditWin();
                 w.poolId    = id;

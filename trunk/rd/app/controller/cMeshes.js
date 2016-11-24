@@ -20,7 +20,7 @@ Ext.define('Rd.controller.cMeshes', {
     },
 
     views:  [
-        'components.pnlBanner',     'meshes.gridMeshes',        'meshes.winMeshAddWizard',
+        'meshes.gridMeshes',        'meshes.winMeshAddWizard',
 		'meshes.gridNodeLists',		'meshes.winMeshEditNode',	'meshes.gridUnknownNodes',
 		'meshes.winMeshAttachNode',
         'meshes.winMeshUnknownRedirect',

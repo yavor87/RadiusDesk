@@ -59,8 +59,8 @@ Ext.define('Rd.view.logViewer.winRadiusInfo', {
             proxy: {
                 type: 'memory',
                 reader: {
-                    type: 'json',
-                    root: 'items'
+                    type            : 'json',
+                    rootProperty    : 'items'
                 }
             }
         });

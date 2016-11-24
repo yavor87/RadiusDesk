@@ -1,48 +1,23 @@
 Ext.define('Rd.controller.cTags', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('tagsWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'tagsWin',
-                //title: i18n('sTags_manager'),
-                btnText: i18n('sTags_manager'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'tags',
-                glyph: Rd.config.icnTags,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'tagsWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sNAS_device_tags'),
-                        image:  'resources/images/48x48/tags.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        xtype   : 'gridTags'
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'gridTags',
+            border  : true,
+            itemId  : 'pnlTags',
+            plain   : true
+        });
+        me.populated = true;
     },
 
     views:  [
-        'components.pnlBanner',             'tags.gridTags',        'tags.winTagAddWizard',     'tags.winTagEdit',
+        'tags.gridTags',        'tags.winTagAddWizard',     'tags.winTagEdit',
         'components.winCsvColumnSelect',    'components.winNote',   'components.winNoteAdd'
     ],
     stores: ['sTags',   'sAccessProvidersTree'],
@@ -145,16 +120,16 @@ Ext.define('Rd.controller.cTags', {
                 if(jsonData.success){
                         
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
+                        if(!Ext.WindowManager.get('winTagAddWizardId')){
                             var w = Ext.widget('winTagAddWizard',{id:'winTagAddWizardId'});
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winTagAddWizardId')){
+                        if(!Ext.WindowManager.get('winTagAddWizardId')){
                             var w = Ext.widget('winTagAddWizard',
                                 {id:'winTagAddWizardId',startScreen: 'scrnData',user_id:'0',owner: i18n('sLogged_in_user'), no_tree: true}
                             );
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }
                 }   
@@ -304,9 +279,9 @@ Ext.define('Rd.controller.cTags', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winTagEditId')){
+                if(!Ext.WindowManager.get('winTagEditId')){
                     var w = Ext.widget('winTagEdit',{id:'winTagEditId'});
-                    me.application.runAction('cDesktop','Add',w);
+                    w.show();
                     var sr      = me.getGrid().getSelectionModel().getLastSelected();
                     w.down('form').loadRecord(sr);         
                 }
@@ -351,9 +326,9 @@ Ext.define('Rd.controller.cTags', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectTags')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectTags')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectTags',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }
     },
     csvExportSubmit: function(button){
@@ -439,7 +414,7 @@ Ext.define('Rd.controller.cTags', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTags'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteTags'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteTags'+sr.getId(),
@@ -447,7 +422,7 @@ Ext.define('Rd.controller.cTags', {
                             noteForGrid : 'tags',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();     
                 }
             }    
         }
@@ -468,7 +443,7 @@ Ext.define('Rd.controller.cTags', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteTagsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteTagsAdd'+grid.noteForId,
@@ -476,10 +451,10 @@ Ext.define('Rd.controller.cTags', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteTagsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteTagsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteTagsAdd'+grid.noteForId,
@@ -491,7 +466,7 @@ Ext.define('Rd.controller.cTags', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();      
                         }
                     }
                 }   

@@ -1,53 +1,27 @@
 Ext.define('Rd.controller.cDynamicDetails', {
     extend: 'Ext.app.Controller',
-    actionIndex: function(){
+    actionIndex: function(pnl){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('dynamicDetailsWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'dynamicDetailsWin',
-               // title:i18n('sDynamic_login_pages'),
-                btnText : i18n('sDynamic_login_pages'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                glyph: Rd.config.icnDynamic,
-                animCollapse:false,
-                border:false,
-                constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'dynamicDetailsWinA',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading:i18n('sDynamic_login_pages'),
-                        image:  'resources/images/48x48/dynamic_pages.png'
-                    },
-                    {
-                        region  : 'center',
-                        xtype   : 'panel',
-                        layout  : 'fit',
-                        border  : false,
-                        items   : [{
-                            xtype   : 'tabpanel',
-                            layout  : 'fit',
-                            margins : '0 0 0 0',
-                            border  : true,
-                            plain   : false,
-                            items   : { 'title' : i18n('sHome'), 'xtype':'gridDynamicDetails','glyph': Rd.config.icnHome}}
-                        ]
-                    }
-                ]
-            });
-        }
-        desktop.restoreWindow(win);    
-        return win;
+        
+        
+        if (me.populated) {
+            return; 
+        }     
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabDynamicDetails',
+            plain   : true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 'title' : i18n('sHome'), 'xtype':'gridDynamicDetails','glyph': Rd.config.icnHome}
+            ]
+        });
+        me.populated = true;  
     },
     views:  [
-        'dynamicDetails.gridDynamicDetails',                'dynamicDetails.winDynamicDetailAddWizard', 'dynamicDetails.pnlDynamicDetail',  'components.pnlBanner',
+        'dynamicDetails.gridDynamicDetails',                'dynamicDetails.winDynamicDetailAddWizard', 'dynamicDetails.pnlDynamicDetail',
         'components.winCsvColumnSelect',    'components.winNote',       'components.winNoteAdd','dynamicDetails.pnlDynamicDetailDetail',
         'dynamicDetails.pnlDynamicDetailLogo',  'dynamicDetails.pnlDynamicDetailPhoto', 'dynamicDetails.winPhotoAdd',
         'dynamicDetails.winPhotoEdit',      'dynamicDetails.gridDynamicDetailPages',    'dynamicDetails.winPageAdd',
@@ -344,15 +318,16 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicDetailAddWizardId')){
+                    
+                        if(!Ext.WindowManager.get('winDynamicDetailAddWizardId')){
                             var w = Ext.widget('winDynamicDetailAddWizard',
                             {
                                 id          :'winDynamicDetailAddWizardId'
                             });
-                            me.application.runAction('cDesktop','Add',w);         
+                            w.show();         
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winDynamicDetailAddWizardId')){
+                        if(!Ext.WindowManager.get('winDynamicDetailAddWizardId')){
                             var w   = Ext.widget('winDynamicDetailAddWizard',
                             {
                                 id          : 'winDynamicDetailAddWizardId',
@@ -361,7 +336,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }
                 }   
@@ -620,9 +595,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
             }
         }); 
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winCsvColumnSelectDynamicDetails')){
+        if(!Ext.WindowManager.get('winCsvColumnSelectDynamicDetails')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectDynamicDetails',columns: col_list});
-            me.application.runAction('cDesktop','Add',w);         
+            w.show();        
         }
     },
     csvExportSubmit: function(button){
@@ -708,7 +683,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 //Determine the selected record:
                 var sr = me.getGrid().getSelectionModel().getLastSelected();
                 
-                if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicDetails'+sr.getId())){
+                if(!Ext.WindowManager.get('winNoteDynamicDetails'+sr.getId())){
                     var w = Ext.widget('winNote',
                         {
                             id          : 'winNoteDynamicDetails'+sr.getId(),
@@ -716,7 +691,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                             noteForGrid : 'dynamicDetails',
                             noteForName : sr.get('name')
                         });
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();       
                 }
             }    
         }
@@ -738,7 +713,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 var jsonData    = Ext.JSON.decode(response.responseText);
                 if(jsonData.success){                      
                     if(jsonData.items.tree == true){
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicDetailsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDynamicDetailsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDynamicDetailsAdd'+grid.noteForId,
@@ -746,10 +721,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
                                 noteForGrid : grid.noteForGrid,
                                 refreshGrid : grid
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();       
                         }
                     }else{
-                        if(!me.application.runAction('cDesktop','AlreadyExist','winNoteDynamicDetailsAdd'+grid.noteForId)){
+                        if(!Ext.WindowManager.get('winNoteDynamicDetailsAdd'+grid.noteForId)){
                             var w   = Ext.widget('winNoteAdd',
                             {
                                 id          : 'winNoteDynamicDetailsAdd'+grid.noteForId,
@@ -761,7 +736,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
                                 owner       : i18n('sLogged_in_user'),
                                 no_tree     : true
                             });
-                            me.application.runAction('cDesktop','Add',w);       
+                            w.show();      
                         }
                     }
                 }   
@@ -966,14 +941,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var d_id = b.up('pnlDynamicDetail').dynamic_detail_id;
         var d_v  = b.up('#tabPhoto').down('dataview');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winPhotoAddId')){
+        if(!Ext.WindowManager.get('winPhotoAddId')){
             var w   = Ext.widget('winPhotoAdd',
             {
                 id                  : 'winPhotoAddId',
                 dynamic_detail_id   : d_id,
                 data_view           : d_v
             });
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();      
         }
     },
     photoAddSave: function(button){
@@ -1065,14 +1040,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPhotoEditId')){
+                if(!Ext.WindowManager.get('winPhotoEditId')){
                     var w   = Ext.widget('winPhotoEdit',
                     {
                         id                  : 'winPhotoEditId',
                         data_view           : d_view
                     });
                     w.down('form').loadRecord(d_view.getSelectionModel().getLastSelected());
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();     
                 }
             }    
         }
@@ -1117,14 +1092,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var d_id    = b.up('pnlDynamicDetail').dynamic_detail_id;
         var grid    = b.up('pnlDynamicDetail').down('#tabPages');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winPageAddId')){
+        if(!Ext.WindowManager.get('winPageAddId')){
             var w   = Ext.widget('winPageAdd',
             {
                 id                  : 'winPageAddId',
                 dynamic_detail_id   : d_id,
                 grid                : grid
             });
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();      
         }
     },
     pageAddSave: function(button){
@@ -1170,14 +1145,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPageEditId')){
+                if(!Ext.WindowManager.get('winPageEditId')){
                     var w   = Ext.widget('winPageEdit',
                     {
                         id                  : 'winPageEditId',
                         grid                : grid
                     });
                     w.down('form').loadRecord(grid.getSelectionModel().getLastSelected());
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();      
                 }
             }    
         }
@@ -1256,14 +1231,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
         var d_id    = b.up('pnlDynamicDetail').dynamic_detail_id;
         var grid    = b.up('pnlDynamicDetail').down('#tabPairs');
 
-        if(!me.application.runAction('cDesktop','AlreadyExist','winPairAddId')){
+        if(!Ext.WindowManager.get('winPairAddId')){
             var w   = Ext.widget('winPairAdd',
             {
                 id                  : 'winPairAddId',
                 dynamic_detail_id   : d_id,
                 grid                : grid
             });
-            me.application.runAction('cDesktop','Add',w);       
+            w.show();       
         }
     },
     pairAddSave: function(button){
@@ -1309,14 +1284,14 @@ Ext.define('Rd.controller.cDynamicDetails', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                if(!me.application.runAction('cDesktop','AlreadyExist','winPairEditId')){
+                if(!Ext.WindowManager.get('winPairEditId')){
                     var w   = Ext.widget('winPairEdit',
                     {
                         id                  : 'winPairEditId',
                         grid                : grid
                     });
                     w.down('form').loadRecord(grid.getSelectionModel().getLastSelected());
-                    me.application.runAction('cDesktop','Add',w);       
+                    w.show();     
                 }
             }    
         }

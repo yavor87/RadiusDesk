@@ -73,9 +73,9 @@ Ext.define('Rd.controller.cDashboard', {
 				        me.application.runAction('cDevices','Index',pnl);
 				    }
 			    },
-			    'tpDashboard #cRealms' : {
+			    'tpDashboard #cTopUps' : {
 				    activate	: function(pnl){
-				        me.application.runAction('cRealms','Index',pnl);
+				        me.application.runAction('cTopUps','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cRealms' : {
@@ -86,6 +86,51 @@ Ext.define('Rd.controller.cDashboard', {
 			    'tpDashboard #cDynamicClients' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cDynamicClients','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cNas' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cNas','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cTags' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cTags','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cSsids' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cSsids','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cDynamicDetails' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cDynamicDetails','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cOpenvpnServers' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cOpenvpnServers','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cIpPools' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cIpPools','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cAcos' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cAcos','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cLogViewer' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cLogViewer','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cDebug' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cDebug','Index',pnl);
 				    }
 			    }
 		    }
