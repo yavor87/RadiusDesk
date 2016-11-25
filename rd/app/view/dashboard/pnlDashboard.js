@@ -20,9 +20,15 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
                 '<h1>RADIUSdesk</h1>',
                 '->',
                 {
-                    xtype   : 'button', // default for Toolbars
-                    text    : 'Button'
-                }    
+                xtype   : 'button',
+                glyph   : Rd.config.icnMenu,
+                scale   : 'medium',
+                menu    : [
+                        {   text:i18n('sLogout'),      glyph : Rd.config.icnPower,  itemId: 'mnuLogout'},'-',
+                        //{   text:i18n('sSettings'),    glyph : Rd.config.icnSpanner },
+                        {   text:i18n('sPassword'),    glyph : Rd.config.icnLock,   itemId: 'mnuPassword'    }
+                    ]  
+                } 
             ]
         }
     ],

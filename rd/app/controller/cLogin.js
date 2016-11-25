@@ -49,7 +49,7 @@ Ext.define('Rd.controller.cLogin', {
             clientValidation: true,
             url: me.getUrlLogin(),
             success: function(form, action) {
-                me.application.setDesktopData(action.result.data);
+                me.application.setDashboardData(action.result.data);
 
                 //Set the token cookie
                 var now = new Date();
@@ -61,8 +61,6 @@ Ext.define('Rd.controller.cLogin', {
 
                 me.getViewP().removeAll(true);
                 win.close();
-                console.log("Gooi Hom Pappie");
-                //me.application.runAction('cDesktop','Index');
                 me.application.runAction('cDashboard','Index');
             },
             failure: Ext.ux.formFail
@@ -71,8 +69,6 @@ Ext.define('Rd.controller.cLogin', {
     actionExit: function() {
         var me = this;
         me.getViewP().removeAll(true);     //Remove the current panel that fills the viewport
-        var desktop = this.application.getController('cDesktop');
-        desktop.closeAllWindows();
         Ext.util.Cookies.clear("Token");
         me.actionIndex();
     }

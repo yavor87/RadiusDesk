@@ -18,7 +18,7 @@ Ext.define('Rd.Application', {
         'cLogin'
     ],
     
-    desktopData : null,  //Data on how the desktop will look like which will be returned after login
+    dashboardData : null,  //Data on how the dashboard will look like which will be returned after login
     languages   : null,
     selLanguage : null,
     autoCreateViewport: true,
@@ -52,14 +52,14 @@ Ext.define('Rd.Application', {
         return controller['action'+actionName](a,b);
     },
     
-    setDesktopData: function(data){
+    setDashboardData: function(data){
         var me          = this;
-        me.desktopData  = data;
+        me.dashboardData  = data;
     },
 
-    getDesktopData: function(){
+    getDashboardData: function(){
         var me          = this;
-        return me.desktopData;
+        return me.dashboardData;
     },
 
     setLanguages: function(data){

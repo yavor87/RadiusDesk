@@ -185,7 +185,7 @@ Ext.define('Rd.controller.cLogViewer', {
     ioLoaded:   function(i){
         var me = this;
         //Connect to host
-        var t = me.application.getDesktopData().token;
+        var t = me.application.getDashboardData().token;
         //Get the current host
         var host = document.location.host;
         me.socket = io.connect('http://'+host+':'+me.getPortWebSocket()+'?token='+t);
