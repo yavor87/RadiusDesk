@@ -3,13 +3,12 @@ Ext.define('Rd.controller.cPassword', {
     actionIndex: function(){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('passwordWin');
-        if(!win){
-            win = desktop.createWindow({
+        
+        if(!Ext.WindowManager.get('passwordWin')){
+            var win = Ext.widget({
+                xtype       : 'window',
                 id          : 'passwordWin',
-               // title       : "Password manager",
-                btnText     : i18n('sPassword_manager'),
+                title       : "Password manager",
                 width       : 450,
                 height      : 500,
                 resizable   : true,
@@ -45,9 +44,8 @@ Ext.define('Rd.controller.cPassword', {
                     }
                 ]
             });
+            win.show();
         }
-        desktop.restoreWindow(win);    
-        return win;
     },
 
     views:  [

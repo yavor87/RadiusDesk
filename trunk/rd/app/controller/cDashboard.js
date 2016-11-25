@@ -2,10 +2,11 @@ Ext.define('Rd.controller.cDashboard', {
     extend: 'Ext.app.Controller',
     views: [
         'dashboard.pnlDashboard',
-        'dashboard.tpDashboard'
+        'dashboard.tpDashboard',
+        'dashboard.winPasswordChanger'
     ],
     config: {
-      
+        urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json'
     },
     models: [
     
@@ -132,13 +133,22 @@ Ext.define('Rd.controller.cDashboard', {
 				    activate	: function(pnl){
 				        me.application.runAction('cDebug','Index',pnl);
 				    }
-			    }
+			    },
+			    'pnlDashboard  #mnuLogout' : {
+			        click   : me.onLogout
+			    },
+			    'pnlDashboard  #mnuPassword' : {
+			        click   : me.onPassword
+			    },
+			        'winPasswordChanger #save': {
+                    'click' : me.onChangePassword
+                }
 		    }
         );
     },
     actionIndex: function(){
         var me      = this;
-        var dd      = me.application.getDesktopData();
+        var dd      = me.application.getDashboardData();
         var user    = dd.user.username;
         var cls     = dd.user.cls;   
         //We first create a plain dashboard
@@ -148,5 +158,43 @@ Ext.define('Rd.controller.cDashboard', {
         vp.removeAll(true);
         vp.add([pnlDash]);
         pnlDash.add([tpDash]);
+    },
+    onLogout: function(b){
+        var me = this;
+        b.up('panel').close();
+        me.getViewP().removeAll(true);
+        me.application.runAction('cLogin','Exit');
+    },
+    onPassword: function(b){
+        var me = this;
+        if(!Ext.WindowManager.get('winPasswordChangerId')){
+            var w = Ext.widget('winPasswordChanger',{
+                id  :'winPasswordChangerId'
+            });
+            w.show();        
+        }
+    },
+    onChangePassword: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+
+        form.submit({
+            clientValidation: true,
+            url: me.getUrlChangePassword(),
+            success: function(form, action) {
+                //Important to update the token for the next requests
+                var token = action.result.data.token; 
+                Ext.Ajax.setExtraParams({token : token});
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     }
 });

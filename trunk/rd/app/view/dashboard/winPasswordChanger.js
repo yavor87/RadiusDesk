@@ -1,4 +1,4 @@
-Ext.define('Rd.view.desktop.winPasswordChanger', {
+Ext.define('Rd.view.dashboard.winPasswordChanger', {
     extend  : 'Ext.window.Window',
     alias   : 'widget.winPasswordChanger',
     title   : i18n('sChange_password'),

@@ -2,7 +2,7 @@
 This controller is the starting point. 
 It checks if a user is logged in
 If not it will load the Login controller and call it's Index action
-If they are logged in it will load the Desktop controller and call it's Index action
+If they are logged in it will load the Dashboard controller and call it's Index action
 */
 
 Ext.define('Rd.controller.cStartup', {
@@ -46,9 +46,7 @@ Ext.define('Rd.controller.cStartup', {
                         //Set extra params to token's value
                         //This is the second place of three where we set the extraParams. The token is valid 3rt blace in cLogin.js
                         Ext.Ajax.setExtraParams({'token': token,'sel_language': me.application.getSelLanguage()});
-                        me.application.setDesktopData(jsonData.data);
-                        //me.application.runAction('cDesktop','Index');
-                        console.log("Gooi Hom Pappie");
+                        me.application.setDashboardData(jsonData.data);
                         me.application.runAction('cDashboard','Index');
 
                     }else{

@@ -11,8 +11,17 @@ Ext.define('Rd.view.dashboard.tpDashboard', {
     items: [
     {
         title   : 'Overview',
+        xtype   : 'tabpanel',
         glyph   : Rd.config.icnView,
-        html    : "Home tab"
+        layout  : 'fit',
+        items   : [
+            {
+                title   : 'Data Usage',
+                glyph   : Rd.config.icnData,
+                id      : 'cOverview',
+                layout  : 'fit'
+            }
+        ]
     }, 
     {
         title   : 'Admins',
