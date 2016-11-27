@@ -256,13 +256,15 @@ Ext.define('Rd.controller.cMeshEdits', {
         if (!newTab){
             newTab = tabMeshes.add({
                 glyph   : Rd.config.icnEdit, 
+                //title   : i18n('sEdit')+' '+name,
                 title   : name,
                 closable: true,
                 layout  : 'fit',
                 xtype   : 'pnlMeshEdit',
                 itemId  : id,
                 border  : false,
-                mesh_id : mesh_id
+                meshId  : mesh_id,
+                meshName: name
             });
         }    
         tabMeshes.setActiveTab(newTab);
@@ -279,14 +281,14 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     addEntry: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshEdit");
-        var store   = win.down("gridMeshEntries").getStore();
+        var tabEdit = button.up("pnlMeshEdit");
+        var store   = tabEdit.down("gridMeshEntries").getStore();
         if(!Ext.WindowManager.get('winMeshAddEntryId')){
             var w = Ext.widget('winMeshAddEntry',
             {
                 id          :'winMeshAddEntryId',
                 store       : store,
-                meshId      : win.meshId
+                meshId      : tabEdit.meshId
             });
             w.show();        
         }
@@ -446,8 +448,8 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     delEntry:   function(btn){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridMeshEntries");
+        var tabEdit = btn.up("pnlMeshEdit");
+        var grid    = tabEdit.down("gridMeshEntries");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -593,10 +595,10 @@ Ext.define('Rd.controller.cMeshEdits', {
     addExit: function(button){
         var me      = this;
 
-        var win             = button.up("pnlMeshEdit");
+        var tabEdit = button.up("pnlMeshEdit");
 
         //If there are NO entry points defined; we will NOT pop up this window.
-        var entries_count   = win.down("gridMeshEntries").getStore().count();
+        var entries_count   = tabEdit.down("gridMeshEntries").getStore().count();
         if(entries_count == 0){
             Ext.ux.Toaster.msg(
                 i18n('sNo_entry_points_defined'),
@@ -608,13 +610,13 @@ Ext.define('Rd.controller.cMeshEdits', {
         }
         
         //Entry points present; continue 
-        var store   = win.down("gridMeshExits").getStore();
+        var store   = tabEdit.down("gridMeshExits").getStore();
         if(!Ext.WindowManager.get('winMeshAddExitId')){
             var w = Ext.widget('winMeshAddExit',
             {
                 id          :'winMeshAddExitId',
                 store       : store,
-                meshId      : win.meshId
+                meshId      : tabEdit.meshId
             });
             w.show();         
         }
@@ -703,8 +705,8 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     delExit:   function(btn){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridMeshExits");
+        var tabEdit = btn.up("pnlMeshEdit");
+        var grid    = tabEdit.down("gridMeshExits");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -947,18 +949,18 @@ Ext.define('Rd.controller.cMeshEdits', {
         nodes.getStore().reload();
     },
     addNode: function(button){
-        var me      = this;
-        var win     = button.up("pnlMeshEdit");
+        var me          = this;
+        var tabEdit     = button.up("pnlMeshEdit");
         
         //Entry points present; continue 
-        var store   	= win.down("gridNodes").getStore();
+        var store   	= tabEdit.down("gridNodes").getStore();
         if(!Ext.WindowManager.get('winMeshAddNodeId')){
             var w = Ext.widget('winMeshAddNode',
             {
                 id          :'winMeshAddNodeId',
                 store       : store,
-                meshId      : win.meshId,
-				meshName	: win.meshName,
+                meshId      : tabEdit.meshId,
+				meshName	: tabEdit.meshName,
                 itemId      : 'winMeshAddNodeEdit'	
             });
             w.show();        
@@ -986,8 +988,8 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     delNode:   function(btn){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridNodes");
+        var tabEdit = btn.up("pnlMeshEdit");
+        var grid    = tabEdit.down("gridNodes");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -1026,9 +1028,9 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
     editNode: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshEdit");
-        var store   = win.down("gridNodes").getStore();
-        if(win.down("gridNodes").getSelectionModel().getCount() == 0){
+        var tabEdit = button.up("pnlMeshEdit");
+        var store   = tabEdit.down("gridNodes").getStore();
+        if(tabEdit.down("gridNodes").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -1036,7 +1038,7 @@ Ext.define('Rd.controller.cMeshEdits', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            var sr      = win.down("gridNodes").getSelectionModel().getLastSelected();
+            var sr      = tabEdit.down("gridNodes").getSelectionModel().getLastSelected();
             var id      = sr.getId();
             var meshId  = sr.get('mesh_id');
             if(!Ext.WindowManager.get('winMeshEditNodeId')){
@@ -1045,8 +1047,8 @@ Ext.define('Rd.controller.cMeshEdits', {
                     id          :'winMeshEditNodeId',
                     store       : store,
                     nodeId      : id,
-                    meshId      : win.meshId,
-					meshName	: win.meshName,
+                    meshId      : tabEdit.meshId,
+					meshName	: tabEdit.meshName,
                     itemId      : 'winMeshEditNodeEdit'
                 });
                 w.show();         
@@ -1114,7 +1116,7 @@ Ext.define('Rd.controller.cMeshEdits', {
         });
     },
     mapCreatePanel : function(button){
-        var me = this
+        var me          = this
         var tp          = button.up('tabpanel');
         var map_tab_id  = 'mapTab';
         var nt          = tp.down('#'+map_tab_id);
@@ -1124,8 +1126,8 @@ Ext.define('Rd.controller.cMeshEdits', {
         }
 
         var map_tab_name    = i18n("sGoogle_Maps");
-		var win 		    = tp.up('pnlMeshEdit');
-		var mesh_id		    = win.meshId;
+		var tabEdit 		= tp.up('pnlMeshEdit');
+		var mesh_id		    = tp.meshId;
 
         //We need to fetch the Preferences for this user's Google Maps map
         Ext.Ajax.request({
@@ -1243,10 +1245,10 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
 	mapPreferences: function(button){
        	var me 		= this;
-		var win		= button.up('pnlMeshEdit');
-		var mesh_id	= win.meshId;
+		var tabEdit = button.up('pnlMeshEdit');
+		var mesh_id	= tabEdit.meshId;
 		var pref_id = 'winMeshMapPreferences_'+mesh_id;
-		var map_p	= win.down('pnlMeshEditGMap');
+		var map_p	= tabEdit.down('pnlMeshEditGMap');
 
         if(!Ext.WindowManager.get(pref_id)){
             var w = Ext.widget('winMeshMapPreferences',{id:pref_id,mapPanel: map_p,meshId: mesh_id});
@@ -1263,10 +1265,10 @@ Ext.define('Rd.controller.cMeshEdits', {
     },
    	mapNodeAdd: function(button){
         var me 		= this;
-		var win		= button.up('pnlMeshEdit');
-		var mesh_id	= win.meshId;
+		var tabEdit = button.up('pnlMeshEdit');
+		var mesh_id	= tabEdit.meshId;
 		var add_id  = 'winMeshMapNodeAdd_'+mesh_id;
-		var map_p	= win.down('pnlMeshEditGMap');
+		var map_p	= tabEdit.down('pnlMeshEditGMap');
 
         if(!Ext.WindowManager.get(add_id)){
             var w = Ext.widget('winMeshMapNodeAdd',{id: add_id,mapPanel: map_p,meshId:mesh_id});

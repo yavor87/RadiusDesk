@@ -81,7 +81,7 @@ Ext.define('Rd.view.meshes.gridNodeLists' ,{
 			{ 
                 text        : i18n('sName'),   
                 dataIndex   : 'name',  
-                tdCls       : 'gridMain',
+                tdCls       : 'gridTree',
                 width		: 130,
                 renderer    : function(value,metaData, record){
                 	var gateway = record.get('gateway');

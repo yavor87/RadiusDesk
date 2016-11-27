@@ -129,9 +129,9 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                 filter		: {type: 'string'},stateId: 'StateGridUnknownNodes5'
             },
 			{ 
-                text:   'Gateway',
-                flex: 1,
-				hidden: false, 
+                text    :   'Gateway',
+                flex    : 1,
+				hidden  : false, 
 				tdCls   : 'gridTree',  
                 xtype   :  'templatecolumn', 
                 tpl:    new Ext.XTemplate(
@@ -144,15 +144,16 @@ Ext.define('Rd.view.meshes.gridUnknownNodes' ,{
                 },stateId: 'StateGridUnknownNodes6'
             },
             { 
-                text:   'Redirect To',
-                flex: 1,
-				hidden: false,  
-                xtype:  'templatecolumn', 
-                tpl         : new Ext.XTemplate(
-                            "<tpl if='new_server'>",
-                                "<tpl if='new_server_status == \"awaiting\"'><div class=\"fieldBlueWhite\">{new_server}</div></tpl>",
-                                "<tpl if='new_server_status == \"fetched\"'><div class=\"fieldGreenWhite\">{new_server}</div></tpl>",
-                            "</tpl>"
+                text    : 'Redirect To',
+                flex    : 1,
+				hidden  : false,  
+                xtype   : 'templatecolumn',
+                tdCls   : 'gridTree', 
+                tpl     : new Ext.XTemplate(
+                    "<tpl if='new_server'>",
+                        "<tpl if='new_server_status == \"awaiting\"'><div class=\"fieldBlueWhite\">{new_server}</div></tpl>",
+                        "<tpl if='new_server_status == \"fetched\"'><div class=\"fieldGreenWhite\">{new_server}</div></tpl>",
+                    "</tpl>"
                 ),
                 dataIndex: 'new_server',
                 filter  : {

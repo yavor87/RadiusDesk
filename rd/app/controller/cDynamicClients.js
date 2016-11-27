@@ -368,8 +368,8 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     add: function(button){    
         var me      = this;
-        var win     = button.up("#tabDynamicClients");
-        var store   = win.down("gridDynamicClients").getStore();
+        var tab     = button.up("#tabDynamicClients");
+        var store   = tab.down("gridDynamicClients").getStore();
         Ext.Ajax.request({
             url: me.getUrlApChildCheck(),
             method: 'GET',
@@ -847,9 +847,9 @@ Ext.define('Rd.controller.cDynamicClients', {
     },
     attachAttachUnknownDynamicClient: function(button){
         var me      = this;
-        var win     = button.up("#tabDynamicClients");
-        var store   = win.down("gridUnknownDynamicClients").getStore();
-        if(win.down("gridUnknownDynamicClients").getSelectionModel().getCount() == 0){
+        var tab     = button.up("#tabDynamicClients");
+        var store   = tab.down("gridUnknownDynamicClients").getStore();
+        if(tab.down("gridUnknownDynamicClients").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -857,7 +857,7 @@ Ext.define('Rd.controller.cDynamicClients', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            var sr              = win.down("gridUnknownDynamicClients").getSelectionModel().getLastSelected();
+            var sr              = tab.down("gridUnknownDynamicClients").getSelectionModel().getLastSelected();
             var id              = sr.getId();
 			var nasidentifier   = sr.get('nasidentifier');
             var calledstationid = sr.get('calledstationid');

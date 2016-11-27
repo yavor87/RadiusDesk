@@ -80,17 +80,17 @@ Ext.define('Rd.controller.cAccessPoints', {
         me.inited = true;
         
         me.control({
-            '#apWin'    : {
+            '#tabAccessPoints'    : {
                 beforeshow:      me.winClose,
                 destroy   :      me.winClose
             },
-			'#apWin gridApProfiles' : {
+			'#tabAccessPoints gridApProfiles' : {
 				activate	: me.gridActivate
 			},
-			'#apWin gridApLists' : {
+			'#tabAccessPoints gridApLists' : {
 				activate	: me.gridActivate
 			},
-            '#apWin gridUnknownAps' : {
+            '#tabAccessPoints gridUnknownAps' : {
 				activate	: me.gridActivate
 			},
             'gridApProfiles #reload': {
@@ -422,8 +422,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     //_______ Known APs ________
     addAp: function(button){
         var me      = this;
-        var win     = button.up("#apWin"); 
-        var store   = win.down("gridApLists").getStore();
+        var tab     = button.up("#tabAccessPoints"); 
+        var store   = tab.down("gridApLists").getStore();
         
         if(!Ext.WindowManager.get('winAccessPointAddApId')){
             var w = Ext.widget('winAccessPointAddAp',
@@ -505,9 +505,9 @@ Ext.define('Rd.controller.cAccessPoints', {
     editAp: function(button){
         var me      = this;
         
-        var win     = button.up("#apWin"); 
-        var store   = win.down("gridApLists").getStore();
-        if(win.down("gridApLists").getSelectionModel().getCount() == 0){
+        var tab     = button.up("#tabAccessPoints"); 
+        var store   = tab.down("gridApLists").getStore();
+        if(tab.down("gridApLists").getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
                         i18n('sSelect_an_item'),
                         i18n('sFirst_select_an_item'),
@@ -516,7 +516,7 @@ Ext.define('Rd.controller.cAccessPoints', {
             );
             
         }else{
-            var sr          = win.down("gridApLists").getSelectionModel().getLastSelected();
+            var sr          = tab.down("gridApLists").getSelectionModel().getLastSelected();
             var id          = sr.getId();
             var apProfileId = sr.get('ap_profile_id');
             var apProfile   = sr.get('ap_profile');
@@ -577,8 +577,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     execute:   function(button){
         var me      = this;
         
-        var win     = button.up("#apWin"); 
-        var grid    = win.down("gridApLists");
+        var tab     = button.up("#tabAccessPoints"); 
+        var grid    = tab.down("gridApLists");
          
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -630,8 +630,8 @@ Ext.define('Rd.controller.cAccessPoints', {
     restart:   function(button){
         var me      = this; 
         
-        var win     = button.up("#apWin"); 
-        var grid    = win.down("gridApLists");
+        var tab     = button.up("#tabAccessPoints"); 
+        var grid    = tab.down("gridApLists");
 		
     
         //Find out if there was something selected
@@ -720,9 +720,9 @@ Ext.define('Rd.controller.cAccessPoints', {
     //_______ Unknown Aps ______
 	attachAp: function(button){
         var me      = this;
-        var win     = button.up("#apWin");
-        var store   = win.down("gridUnknownAps").getStore();
-        if(win.down("gridUnknownAps").getSelectionModel().getCount() == 0){
+        var tab     = button.up("#tabAccessPoints");
+        var store   = tab.down("gridUnknownAps").getStore();
+        if(tab.down("gridUnknownAps").getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
                 i18n('sSelect_an_item'),
                 i18n('sFirst_select_an_item'),
@@ -730,7 +730,7 @@ Ext.define('Rd.controller.cAccessPoints', {
                 Ext.ux.Constants.msgWarn
             );  
         }else{
-            var sr              = win.down("gridUnknownAps").getSelectionModel().getLastSelected();
+            var sr              = tab.down("gridUnknownAps").getSelectionModel().getLastSelected();
             var id              = sr.getId();
 			var mac		        = sr.get('mac');
 
@@ -1284,9 +1284,9 @@ Ext.define('Rd.controller.cAccessPoints', {
     //Redirecting
     redirectAp: function(button){
         var me      = this;
-        var win     = button.up("#apWin");
-        var store   = win.down("gridUnknownAps").getStore();
-        if(win.down("gridUnknownAps").getSelectionModel().getCount() == 0){
+        var tab     = button.up("#tabAccessPoints");
+        var store   = tab.down("gridUnknownAps").getStore();
+        if(tab.down("gridUnknownAps").getSelectionModel().getCount() == 0){
             Ext.ux.Toaster.msg(
                 i18n('sSelect_an_item'),
                 i18n('sFirst_select_an_item'),
@@ -1295,7 +1295,7 @@ Ext.define('Rd.controller.cAccessPoints', {
             );
             
         }else{
-            var sr          = win.down("gridUnknownAps").getSelectionModel().getLastSelected();
+            var sr          = tab.down("gridUnknownAps").getSelectionModel().getLastSelected();
             var id          = sr.getId();
             var new_server  = sr.get('new_server');
 

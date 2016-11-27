@@ -681,8 +681,8 @@ Ext.define('Rd.controller.cMeshes', {
     },
     delNode:   function(btn){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridNodeLists");
+        var tab     = btn.up("#tabMeshes");
+        var grid    = tab.down("gridNodeLists");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -870,8 +870,8 @@ Ext.define('Rd.controller.cMeshes', {
     },
 	delUnknownNode:   function(btn){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridUnknownNodes");
+        var tab     = btn.up("#tabMeshes");
+        var grid    = tab.down("gridUnknownNodes");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
