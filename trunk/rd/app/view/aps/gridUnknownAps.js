@@ -91,15 +91,16 @@ Ext.define('Rd.view.aps.gridUnknownAps' ,{
                 filter		: {type: 'string'},stateId: 'StateGridUnknownAps5'
             },       
             { 
-                text:   'Redirect To',
-                flex: 1,
-				hidden: false,  
-                xtype:  'templatecolumn', 
-                tpl         : new Ext.XTemplate(
-                            "<tpl if='new_server'>",
-                                "<tpl if='new_server_status == \"awaiting\"'><div class=\"fieldBlueWhite\">{new_server}</div></tpl>",
-                                "<tpl if='new_server_status == \"fetched\"'><div class=\"fieldGreenWhite\">{new_server}</div></tpl>",
-                            "</tpl>"
+                text    : 'Redirect To',
+                flex    : 1,
+				hidden  : false,  
+                xtype   : 'templatecolumn', 
+                tdCls   : 'gridTree', 
+                tpl     : new Ext.XTemplate(
+                    "<tpl if='new_server'>",
+                        "<tpl if='new_server_status == \"awaiting\"'><div class=\"fieldBlueWhite\">{new_server}</div></tpl>",
+                        "<tpl if='new_server_status == \"fetched\"'><div class=\"fieldGreenWhite\">{new_server}</div></tpl>",
+                    "</tpl>"
                 ),
                 dataIndex: 'new_server',
                 filter  : {

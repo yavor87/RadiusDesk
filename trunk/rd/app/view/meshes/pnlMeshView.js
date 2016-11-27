@@ -1,7 +1,7 @@
 Ext.define('Rd.view.meshes.pnlMeshView', {
     extend      : 'Ext.tab.Panel',
     alias       : 'widget.pnlMeshView',
-    mesh_id     : undefined,
+    meshId      : undefined,
     meshName    : undefined,
     plain       : true,
     tabPosition : 'top',
@@ -16,19 +16,19 @@ Ext.define('Rd.view.meshes.pnlMeshView', {
                 meshId  : me.mesh_id
             },
             {
-                title   : i18n("sSSID_to_Device"),
+                title   : 'SSID &#8660; Device',
                 itemId  : 'tabMeshViewEntries',
                 xtype   : 'gridMeshViewEntries',
                 meshId  : me.mesh_id
             },
             {
-                title   : i18n("sNode_to_Device"),
+                title   : 'Node &#8660; Device',
                 itemId  : 'tabMeshViewNodes',
                 xtype   : 'gridMeshViewNodes',
                 meshId  : me.mesh_id
             },
 		    {
-                title   : i18n("sNode_to_Nodes"),
+                title   : 'Node &#8660; Nodes',
                 itemId  : 'tabMeshViewNodeNodes',
 			    xtype   : 'gridMeshViewNodeNodes',
                 meshId  : me.mesh_id

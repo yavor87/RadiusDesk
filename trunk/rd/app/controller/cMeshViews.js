@@ -181,8 +181,8 @@ Ext.define('Rd.controller.cMeshViews', {
     },
     reloadViewEntry: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshView");
-        var entGrid = win.down("gridMeshViewEntries");
+        var tab     = button.up("pnlMeshView");
+        var entGrid = tab.down("gridMeshViewEntries");
         
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
@@ -204,8 +204,8 @@ Ext.define('Rd.controller.cMeshViews', {
     },
     reloadViewNode: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshView");
-        var entGrid = win.down("gridMeshViewNodes");
+        var tab     = button.up("pnlMeshView");
+        var entGrid = tab.down("gridMeshViewNodes");
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
         var span    = 'hour';
@@ -226,8 +226,8 @@ Ext.define('Rd.controller.cMeshViews', {
     },
 	reloadViewNodeNodes: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshView");
-        var entGrid = win.down("gridMeshViewNodeNodes");
+        var tab     = button.up("pnlMeshView");
+        var entGrid = tab.down("gridMeshViewNodeNodes");
         var day     = entGrid.down('#day');
         var week    = entGrid.down('#week');
         var span    = 'hour';
@@ -339,8 +339,8 @@ Ext.define('Rd.controller.cMeshViews', {
         }
 
         var map_tab_name = i18n("sGoogle_Maps");
-		var win 		= tp.up('pnlMeshView');
-		var mesh_id		= win.meshId;
+		var pnl 		= tp.up('pnlMeshView');
+		var mesh_id		= tp.meshId;
 
         //We need to fetch the Preferences for this user's Google Maps map
         Ext.Ajax.request({
@@ -470,8 +470,8 @@ Ext.define('Rd.controller.cMeshViews', {
 	},
 	reloadViewNodeDetails: function(button){
         var me      = this;
-        var win     = button.up("pnlMeshView");
-        var grid    = win.down("gridMeshViewNodeDetails"); 
+        var tab     = button.up("pnlMeshView");
+        var grid    = tab.down("gridMeshViewNodeDetails"); 
         grid.getStore().reload();
     },
 	markerClick: function(item,map_panel,sel_marker){
@@ -481,8 +481,8 @@ Ext.define('Rd.controller.cMeshViews', {
     },
 	execute:   function(button){
         var me      = this; 
-		var win		= button.up('window')
-		var grid	= win.down('gridMeshViewNodeDetails');
+		var tab		= button.up('pnlMeshView')
+		var grid	= tab.down('gridMeshViewNodeDetails');
 		var mesh_id = grid.meshId;   
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -532,9 +532,9 @@ Ext.define('Rd.controller.cMeshViews', {
 	history:   function(button){
 
 		var me 			= this
-		var win			= button.up('pnlMeshView');
+		var tab			= button.up('pnlMeshView');
         var tp          = button.up('tabpanel');
-		var grid		= win.down('gridMeshViewNodeDetails');
+		var grid		= tab.down('gridMeshViewNodeDetails');
   
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
@@ -572,8 +572,8 @@ Ext.define('Rd.controller.cMeshViews', {
     },
 	restart:   function(button){
         var me      = this; 
-		var win		= button.up('window');
-		var grid	= win.down('gridMeshViewNodeDetails');
+		var tab		= button.up('pnlMeshView');
+		var grid	= tab.down('gridMeshViewNodeDetails');
 		var mesh_id = grid.meshId;
     
         //Find out if there was something selected
