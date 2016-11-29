@@ -80,6 +80,9 @@ Ext.define('Rd.controller.cNas', {
         }
         me.inited = true;
         me.control({
+            '#tabNas' : {
+                destroy   :      me.appClose   
+            },
             'gridNas #reload': {
                 click:      me.reload
             },
@@ -333,8 +336,9 @@ Ext.define('Rd.controller.cNas', {
             }  
         });
     },
-    winClose:   function(){
-        var me = this;
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }

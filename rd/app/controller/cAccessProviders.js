@@ -7,8 +7,11 @@ Ext.define('Rd.controller.cAccessProviders', {
         }     
         pnl.add({
             xtype   : 'tabpanel',
-            border  : true,
-            items   : [{ xtype :'gridAccessProviders','glyph': Rd.config.icnHome}]
+            border  : false,
+            plain   : true,
+            itemId  : 'tabAccessProviders',
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [{ 'title' : i18n('sHome'), xtype :'gridAccessProviders','glyph': Rd.config.icnHome}]
         });
         me.populated = true;
     },
@@ -48,6 +51,9 @@ Ext.define('Rd.controller.cAccessProviders', {
         me.inited = true;
         
         me.control({
+            '#tabAccessProviders' : {
+                destroy   :      me.appClose   
+            },
             'gridAccessProviders #reload': {
                 click:      me.reload
             },
@@ -149,6 +155,10 @@ Ext.define('Rd.controller.cAccessProviders', {
                 click: me.enableDisableSubmit
             }
         });;
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me = this;

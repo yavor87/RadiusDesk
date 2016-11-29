@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cSsids', {
         pnl.add({
             xtype   : 'gridSsids',
             border  : true,
-            itemId  : 'pnlSsids',
+            itemId  : 'tabSsids',
             plain   : true
         });
         me.populated = true;
@@ -40,6 +40,9 @@ Ext.define('Rd.controller.cSsids', {
         }
         me.inited = true;
         me.control({
+            '#tabSsids' : {
+                destroy   :      me.appClose   
+            },
             'gridSsids #reload': {
                 click:      me.reload
             }, 
@@ -68,6 +71,10 @@ Ext.define('Rd.controller.cSsids', {
                 click: me.btnEditSave
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
 	reload: function(){
         var me =this;

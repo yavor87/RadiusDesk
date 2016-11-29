@@ -60,6 +60,9 @@ Ext.define('Rd.controller.cDevices', {
         me.inited = true;
         
         me.control({
+            '#tabDevices' : {
+                destroy   :      me.appClose   
+            },
            'gridDevices #reload': {
                 click:      me.reload
             }, 
@@ -232,7 +235,13 @@ Ext.define('Rd.controller.cDevices', {
         });
 
     },
-
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+    },
     reload: function(){
         var me =this;
         me.getGrid().getSelectionModel().deselectAll(true);
@@ -1001,13 +1010,6 @@ Ext.define('Rd.controller.cDevices', {
                     });
                 }
             });
-        }
-    },
-    winClose:   function(){
-        var me = this;
-       // console.log("Clear interval");
-        if(me.autoReload != undefined){
-            clearInterval(me.autoReload);   //Always clear
         }
     },
     selectDevicePrivate:  function(grid, record, item, index, event){

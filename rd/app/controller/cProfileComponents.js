@@ -47,6 +47,9 @@ Ext.define('Rd.controller.cProfileComponents', {
         me.inited = true;
 
         me.control({
+            '#tabProfileComponents'    : {
+                destroy   :      me.appClose
+            },
             'gridProfileComponents #reload': {
                 click:      me.reload
             }, 
@@ -114,6 +117,10 @@ Ext.define('Rd.controller.cProfileComponents', {
                 click:      me.attrDelete
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me =this;

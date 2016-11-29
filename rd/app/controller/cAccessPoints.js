@@ -81,8 +81,7 @@ Ext.define('Rd.controller.cAccessPoints', {
         
         me.control({
             '#tabAccessPoints'    : {
-                beforeshow:      me.winClose,
-                destroy   :      me.winClose
+                destroy   :      me.appClose
             },
 			'#tabAccessPoints gridApProfiles' : {
 				activate	: me.gridActivate
@@ -271,8 +270,9 @@ Ext.define('Rd.controller.cAccessPoints', {
             }
         });
     },
-    winClose:   function(){
-        var me = this;
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear

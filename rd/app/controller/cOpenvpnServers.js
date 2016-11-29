@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cOpenvpnServers', {
         pnl.add({
             xtype   : 'gridOpenvpnServers',
             border  : true,
-            itemId  : 'pnlOpenvpnServers',
+            itemId  : 'tabOpenvpnServers',
             plain   : true
         });
         me.populated = true;
@@ -40,6 +40,9 @@ Ext.define('Rd.controller.cOpenvpnServers', {
         }
         me.inited = true;
         me.control({
+            '#tabOpenvpnServers' : {
+                destroy   :      me.appClose   
+            },
             'gridOpenvpnServers #reload': {
                 click:      me.reload
             }, 
@@ -68,6 +71,10 @@ Ext.define('Rd.controller.cOpenvpnServers', {
                 click: me.btnEditSave
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
 	reload: function(){
         var me =this;

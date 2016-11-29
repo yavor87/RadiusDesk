@@ -39,6 +39,9 @@ Ext.define('Rd.controller.cAcos', {
         }
         me.inited = true;
         me.control({
+            '#tabAcos' : {
+                destroy   :      me.appClose   
+            },
             'treeAco #reload': {
                 click:      me.acoReload
             },
@@ -76,6 +79,10 @@ Ext.define('Rd.controller.cAcos', {
                 click:      me.apRightsExpand
             }
         });;
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     acoReload: function(){
         var me =this;
