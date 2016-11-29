@@ -66,9 +66,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
 
       //  me.getStore('sPermanentUsers').addListener('load',me.onStorePermanentUsersLoaded, me);
         me.control({
-            '#permanentUsersWin'    : {
-                beforeshow:      me.winClose,
-                destroy   :      me.winClose
+            '#tabPermanentUsers'    : {
+                destroy   :      me.appClose
             },
             'gridPermanentUsers #reload': {
                 click:      me.reload
@@ -1318,8 +1317,9 @@ Ext.define('Rd.controller.cPermanentUsers', {
             failure             : Ext.ux.formFail
         });
     },
-    winClose:   function(){
-        var me = this;
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }

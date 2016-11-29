@@ -219,7 +219,7 @@ Ext.define('Rd.controller.cLogViewer', {
     onShow: function(w){
     
         var me = this;
-        console.log("Window show");
+        //console.log("Window show");
         if(me.showFirstTime == undefined){
             me.showFirstTime = true;
             me.showDiv = me.getFile().body.dom;
@@ -245,7 +245,7 @@ Ext.define('Rd.controller.cLogViewer', {
     },
     onRender: function(w){
         var me = this;
-        console.log("Window Render");
+        //console.log("Window Render");
         if(me.showFirstTime == true){
             me.renderFlag = true; 
         }
@@ -270,9 +270,9 @@ Ext.define('Rd.controller.cLogViewer', {
         });
     },
     onDestroy: function(w){
-        console.log("Window destroyed");
-        var me = this;
-        me.renderFlag = false;
+        var me          = this;
+        me.populated    = false;
+        me.renderFlag   = false;
         me.socket.disconnect();  
     },
     newText: function(line,last){

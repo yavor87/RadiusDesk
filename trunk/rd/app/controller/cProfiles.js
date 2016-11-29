@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cProfiles', {
         pnl.add({
             xtype   : 'gridProfiles',
             border  : true,
-            itemId  : 'pnlProfiles',
+            itemId  : 'tabProfiles',
             plain   : true
         });
         me.populated = true;
@@ -44,6 +44,9 @@ Ext.define('Rd.controller.cProfiles', {
         me.inited = true;
         
         me.control({
+            '#tabProfiles'    : {
+                destroy   :      me.appClose
+            },
             'gridProfiles #reload': {
                 click:      me.reload
             }, 
@@ -105,6 +108,10 @@ Ext.define('Rd.controller.cProfiles', {
                 change: me.radioComponentManage
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me =this;

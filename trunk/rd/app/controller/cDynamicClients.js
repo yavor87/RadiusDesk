@@ -82,8 +82,7 @@ Ext.define('Rd.controller.cDynamicClients', {
         me.inited = true;
         me.control({
              '#tabDynamicClients'    : {
-                beforeshow:      me.winClose,
-                destroy   :      me.winClose
+                destroy   :      me.appClose
             },
             '#tabDynamicClients gridDynamicClients' : {
 				activate	: me.gridActivate
@@ -323,8 +322,9 @@ Ext.define('Rd.controller.cDynamicClients', {
             }
         });
     },
-    winClose:   function(){
-        var me = this;
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }

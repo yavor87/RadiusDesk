@@ -41,9 +41,8 @@ Ext.define('Rd.controller.cTopUps', {
         me.inited = true;
 
         me.control({
-            '#topUpsWin'    : {
-                beforeshow  : me.winClose,
-                destroy     : me.winClose
+            '#tabDevices' : {
+                destroy   :      me.appClose   
             },
             'gridTopUps #reload': {
                 click:      me.reload
@@ -80,8 +79,9 @@ Ext.define('Rd.controller.cTopUps', {
             }
         });
     },
-    winClose:   function(){
+    appClose:   function(){
         var me = this;
+        me.populated    = false;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }

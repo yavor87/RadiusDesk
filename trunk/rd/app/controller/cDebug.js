@@ -265,8 +265,9 @@ Ext.define('Rd.controller.cDebug', {
     },
     onDestroy: function(w){
         //console.log("Window destroyed");
-        var me = this;
-        me.renderFlag = false;
+        var me          = this;
+        me.populated    = false;
+        me.renderFlag   = false;
         me.socket.disconnect();
         clearInterval(me.countTimeout);  
     },

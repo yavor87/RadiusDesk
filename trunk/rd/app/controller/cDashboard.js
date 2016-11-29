@@ -6,7 +6,7 @@ Ext.define('Rd.controller.cDashboard', {
         'dashboard.winPasswordChanger'
     ],
     config: {
-        urlChangePassword           : '/cake2/rd_cake/desktop/change_password.json'
+        urlChangePassword           : '/cake2/rd_cake/dashboard/change_password.json'
     },
     models: [
     
@@ -29,6 +29,11 @@ Ext.define('Rd.controller.cDashboard', {
         me.inited = true; 
         this.control(
             {
+                'tpDashboard #cDataUsage' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cDataUsage','Index',pnl);
+				    }
+			    },     
                 'tpDashboard #cAccessProviders' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cAccessProviders','Index',pnl);
@@ -150,10 +155,10 @@ Ext.define('Rd.controller.cDashboard', {
         var me      = this;
         var dd      = me.application.getDashboardData();
         var user    = dd.user.username;
-        var cls     = dd.user.cls;   
+        var cls     = dd.user.cls;
         //We first create a plain dashboard
-        var pnlDash = me.getView('dashboard.pnlDashboard').create({});
-        var tpDash  = me.getView('dashboard.tpDashboard').create({});
+        var pnlDash = me.getView('dashboard.pnlDashboard').create({dashboard_data: dd});
+        var tpDash  = me.getView('dashboard.tpDashboard').create({dashboard_data: dd});
         var vp = me.getViewP();
         vp.removeAll(true);
         vp.add([pnlDash]);

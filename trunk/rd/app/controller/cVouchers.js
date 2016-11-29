@@ -68,9 +68,8 @@ Ext.define('Rd.controller.cVouchers', {
 		me.addCsvList   = false;
 
         me.control({
-            '#vouchersWin'    : {
-                beforeshow  : me.winClose,
-                destroy     : me.winClose
+            '#tabDevices' : {
+                destroy   :      me.appClose   
             },
             'gridVouchers #reload': {
                 click:      me.reload
@@ -259,8 +258,9 @@ Ext.define('Rd.controller.cVouchers', {
             }
         });
     },
-    winClose:   function(){
-        var me = this;
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         if(me.autoReload != undefined){
             clearInterval(me.autoReload);   //Always clear
         }

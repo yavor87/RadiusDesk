@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cIpPools', {
         pnl.add({
             xtype   : 'gridIpPools',
             border  : true,
-            itemId  : 'pnlIpPools',
+            itemId  : 'tabIpPools',
             plain   : true
         });
         me.populated = true; 
@@ -42,6 +42,9 @@ Ext.define('Rd.controller.cIpPools', {
         me.inited = true;
 
         me.control({
+            '#tabIpPools' : {
+                destroy   :      me.appClose   
+            },
             'gridIpPools #reload': {
                 click:      me.reload
             },
@@ -76,6 +79,10 @@ Ext.define('Rd.controller.cIpPools', {
                 click: me.btnEditSave
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
 	reload: function(){
         var me =this;

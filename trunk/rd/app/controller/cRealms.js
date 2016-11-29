@@ -52,6 +52,9 @@ Ext.define('Rd.controller.cRealms', {
         me.inited = true;
         
         me.control({
+            '#tabRealms' : {
+                destroy   :      me.appClose   
+            },
             'gridRealms #reload': {
                 click:      me.reload
             },
@@ -157,6 +160,10 @@ Ext.define('Rd.controller.cRealms', {
                 change:      me.changeMonthlyGraph
             }  
         });;
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me =this;

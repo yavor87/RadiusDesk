@@ -51,8 +51,8 @@ Ext.define('Rd.controller.cActivityMonitor', {
         me.getStore('sRadaccts').addListener('load',        me.onStoreRadacctsLoaded,       me);
 
         me.control({
-            '#activityMonitorWin'    : {
-                destroy:      me.winClose
+            '#tabActivityMonitor'    : {
+                destroy:      me.appClose
             },
             'gridRadaccts #reload': {
                 click:      me.reload
@@ -169,9 +169,9 @@ Ext.define('Rd.controller.cActivityMonitor', {
         var me =this;
         me.getStore('sRadpostauths').load();
     },
-    winClose:   function(){
-        var me = this;
-
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
         if(me.autoReloadAcct != undefined){
             clearInterval(me.autoReloadAcct);   //Always clear
         }

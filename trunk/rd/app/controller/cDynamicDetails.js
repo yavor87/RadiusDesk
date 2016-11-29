@@ -71,6 +71,9 @@ Ext.define('Rd.controller.cDynamicDetails', {
         }
         me.inited = true;
         me.control({
+            '#tabDynamicDetails'    : {
+                destroy   :      me.appClose
+            },
             'gridDynamicDetails #reload': {
                 click:      me.reload
             },
@@ -271,6 +274,10 @@ Ext.define('Rd.controller.cDynamicDetails', {
                 }
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me =this;

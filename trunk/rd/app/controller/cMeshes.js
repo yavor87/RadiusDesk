@@ -55,6 +55,9 @@ Ext.define('Rd.controller.cMeshes', {
         me.inited = true;
 
         me.control({
+            '#tabMeshes' : {
+                destroy   :      me.appClose   
+            },
 			'#tabMeshes gridMeshes' : {
 				activate	: me.gridActivate
 			},
@@ -169,6 +172,21 @@ Ext.define('Rd.controller.cMeshes', {
 				click: me.btnRedirectNodeSave
 			}
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
+        if(me.autoReload != undefined){
+            clearInterval(me.autoReload);   //Always clear
+        }
+        
+        if(me.autoReloadNodeLists != undefined){
+            clearInterval(me.autoReloadNodeLists);   //Always clear
+        }
+        
+        if(me.autoReloadUnknownNodes != undefined){
+            clearInterval(me.autoReloadUnknownNodes);   //Always clear
+        }
     },
 	gridActivate: function(g){
         var me = this;

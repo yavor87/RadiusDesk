@@ -10,7 +10,7 @@ Ext.define('Rd.controller.cTags', {
         pnl.add({
             xtype   : 'gridTags',
             border  : true,
-            itemId  : 'pnlTags',
+            itemId  : 'tabTags',
             plain   : true
         });
         me.populated = true;
@@ -41,6 +41,9 @@ Ext.define('Rd.controller.cTags', {
         }
         me.inited = true;
         me.control({
+            '#tabTags' : {
+                destroy   :      me.appClose   
+            },
             'gridTags #reload': {
                 click:      me.reload
             }, 
@@ -99,6 +102,10 @@ Ext.define('Rd.controller.cTags', {
                 click: me.btnNoteAddNext
             }
         });
+    },
+    appClose:   function(){
+        var me          = this;
+        me.populated    = false;
     },
     reload: function(){
         var me =this;
