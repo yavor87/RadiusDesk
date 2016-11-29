@@ -16,6 +16,7 @@ class OptimiseUserStatsShell extends AppShell {
         
         if($q_r){
             $this->out("<info>Found and entry </info>");
+            $this->start_time = $q_r['Check']['value'];
         
         }else{
             //Find the earliest entry
@@ -31,7 +32,7 @@ class OptimiseUserStatsShell extends AppShell {
                 $this->start_time = $start_time;
             }
         }
-        
+   
         if($this->start_time){
             $this->_do_optimisation();
         }   
