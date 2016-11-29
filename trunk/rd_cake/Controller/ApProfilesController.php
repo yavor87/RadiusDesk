@@ -1632,8 +1632,10 @@ class ApProfilesController extends AppController {
 				$ap->contain('ApProfile');
 				$q_r 			= $ap->findById($this->request->data['id']);
 				$current_id 	= $q_r['Ap']['ap_profile_id'];
+				$current_ap_id  = $q_r['Ap']['id'];
+				print_r($q_r);
 				if($current_id != $new_ap_profile_id){	//Delete it if the ap profile changed
-					$ap->delete($current_id, true);
+					$ap->delete($current_ap_id, true);
 					$move_ap_profiles = true;
 				}
 				
@@ -1644,11 +1646,13 @@ class ApProfilesController extends AppController {
 				    $ap_profile_name = $q_r['ApProfile']['name'];
 				    $ap_profile_name = preg_replace('/\s+/', '_', $ap_profile_name);
 				    $this->_change_dynamic_shortname($ap_profile_name,$old_name,$new_name); //This is on the NAS Devices
-			    }		
+			    }
+			    		
 			}
      
-            if ($ap->save($this->request->data)) {
-                $new_id = $ap->id;
+            if(true){
+           // if ($ap->save($this->request->data)) {
+          /*      $new_id = $ap->id;
 
 				////if($this->_get_radio_count_for($this->request->data['hardware']) == 2){
 				////	$this->_add_or_edit_dual_radio_settings($new_id); //$this->request will be available in that method we only send the new ap_id
@@ -1702,6 +1706,7 @@ class ApProfilesController extends AppController {
                     }
                 }
                 //------- END Add settings for this ap ---
+                */
 
                 $this->set(array(
                     'success' => true,

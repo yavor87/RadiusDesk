@@ -176,7 +176,11 @@ class UserStatsController extends AppController {
             $conditions = $base_search;
             array_push($conditions,array('UserStat.timestamp >=' => $slot_start));
             array_push($conditions,array('UserStat.timestamp <=' => $slot_end));
-
+            
+            $this->{$this->modelClass}->contain();
+            //print_r($conditions);
+            
+            
             $q_r = $this->{$this->modelClass}->find('first', 
                 array(
                     'conditions'    => $conditions,            
