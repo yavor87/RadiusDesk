@@ -21,7 +21,8 @@ Ext.define('Rd.controller.cDataUsage', {
         'components.pnlUsageGraph',
         'dataUsage.pnlDataUsageDay',
         'dataUsage.pnlDataUsageWeek',
-        'dataUsage.pnlDataUsageMonth'
+        'dataUsage.pnlDataUsageMonth',
+        'dataUsage.pnlDataUsageGraph'
     ],
     stores: [],
     models: ['mRealm','mUserStat'],
@@ -136,8 +137,13 @@ Ext.define('Rd.controller.cDataUsage', {
         totalMonth.setData(data.monthly.totals);
           
         Ext.data.StoreManager.lookup('dayStore').setData(data.daily.top_ten);
+        me.getPnlDataUsageDay().down('cartesian').getStore().setData(data.daily.graph.items);
+        
         Ext.data.StoreManager.lookup('weekStore').setData(data.weekly.top_ten);
+        me.getPnlDataUsageWeek().down('cartesian').getStore().setData(data.weekly.graph.items);
+        
         Ext.data.StoreManager.lookup('monthStore').setData(data.monthly.top_ten);
+        me.getPnlDataUsageMonth().down('cartesian').getStore().setData(data.monthly.graph.items);
     },
     rowClickEvent: function(grid,record){
         var me          = this;
