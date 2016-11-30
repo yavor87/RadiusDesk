@@ -110,6 +110,7 @@ Rd.config = {
     'icnWizard'     : 'xf0d0@FontAwesome',
     'icnVPN'        : 'xf10e@FontAwesome',
     'icnAdmin'      : 'xf19d@FontAwesome',
-    'icnRadius'     : 'xf140@FontAwesome'
+    'icnRadius'     : 'xf140@FontAwesome',
+    'icnBan'        : 'xf05e@FontAwesome'
 }
 

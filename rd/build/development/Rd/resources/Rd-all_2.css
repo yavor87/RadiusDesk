@@ -9611,7 +9611,13 @@ td.grdEditable div {
     padding: 5px 10px;
     color: #fff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:694 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:693 */
+.divInfo {
+    color: #0273b1;
+    text-align: center;
+    padding: 10px;
+}
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:700 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -9621,48 +9627,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:704 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:710 */
 .node:hover {
     color: #393434;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:708 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:714 */
 .hidden {
     display: none;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:712 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:718 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:716 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:722 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:720 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:726 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:724 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:730 */
 .lightRed {
     background-color: #ffecec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:728 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:734 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:734 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:740 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:739 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:745 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:745 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:751 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -9672,7 +9678,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:755 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:761 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -9682,7 +9688,7 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:765 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:771 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;

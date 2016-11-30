@@ -3,9 +3,11 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
     alias   : 'widget.pnlDataUsageWeek',
     ui      : 'light',
     title   : "This Week",
+    headerPosition: 'right',
     height  : 800,
     margin  : 0,
     padding : 0,
+    border  : true,
     layout: {
         type    : 'vbox',
         align   : 'stretch'
@@ -59,57 +61,41 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                         }
                     },
                     {
-                        xtype   : 'panel',
-                        margin : m,
-                        padding: p,
-                        flex    : 1,
-                        border  : true,
-                        html    : 'placeholder'
-                    },
-                    
-                    
-                 /*   {
                         flex    : 1,
                         margin : m,
                         padding: p,
-                        border  : true,
+                        border  : false,
                         bbar    : ['->',{ 
                             xtype   : 'button',    
                             scale   : 'large',  
                             text    : 'See More..'
                         }],
-                        xtype   : 'polar',
-                        interactions: ['rotate', 'itemhighlight'],
-                        store: {
-                           fields: ['name', 'data1'],
-                           data: [{
-                               name: 'metric one',
-                               data1: 14
-                           }, {
-                               name: 'metric two',
-                               data1: 16
-                           }, {
-                               name: 'metric three',
-                               data1: 14
-                           }, {
-                               name: 'metric four',
-                               data1: 6
-                           }, {
-                               name: 'metric five',
-                               data1: 36
-                           }]
-                        },
+                        xtype           : 'polar',
+                        innerPadding    : 10,
+                        interactions    : ['rotate', 'itemhighlight'],
+                        store: Ext.data.StoreManager.lookup('weekStore'),
                         series: {
-                           type: 'pie',
-                           highlight: true,
-                           angleField: 'data1',
-                           label: {
-                               field: 'name',
-                               display: 'rotate'
+                           type         : 'pie',
+                          
+                           highlight    : true,
+                           angleField   : 'data_total',
+                           label        : {
+                               field    : 'name',
+                               display  : 'rotate'
                            },
-                           donut: 20
+                           donut        : 20,    
+                           tooltip : {
+                                trackMouse: true,
+                                renderer: function (tooltip, record, item) {
+                                    tooltip.setHtml(
+                                        "<h2>"+record.get('username')+"</h2><h3>"+Ext.ux.bytesToHuman(record.get('data_total'))+"</h3>"
+                                        
+                                    
+                                    );
+                                }
+                            }    
                         }
-                    },*/
+                    },
                     {
                         xtype   : 'grid',
                         margin  : m,
@@ -150,12 +136,12 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                 },
                 items   : [
                     {
-                        xtype   : 'panel',
+                        xtype   : 'pnlDataUsageGraph',
                         flex    : 1,
-                        margin : m,
-                        padding: p,
-                        border  : false
-                        
+                        margin  : m,
+                        padding : p,
+                        layout  : 'fit',
+                        border  : false   
                     }
                 ]
             }
