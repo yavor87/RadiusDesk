@@ -114,6 +114,7 @@ Rd.config = {
     'icnBan'        : 'xf05e@FontAwesome',
     'icnHourStart'  : 'xf251@FontAwesome',
     'icnHourHalf'   : 'xf252@FontAwesome',
-    'icnHourEnd'    : 'xf253@FontAwesome'
+    'icnHourEnd'    : 'xf253@FontAwesome',
+    'icnBullhorn'   : 'xf0a1@FontAwesome'
 }
 
