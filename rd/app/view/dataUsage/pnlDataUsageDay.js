@@ -4,7 +4,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
     //ui      : 'light',
     title   : "Today",
     headerPosition: 'right',
-    height  : 800,
+    height  : 550,
     margin  : 0,
     padding : 0,
     layout: {
@@ -23,12 +23,18 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                 {name: 'data_in',       type: 'int'},
                 {name: 'data_out',      type: 'int'},
                 {name: 'data_total',    type: 'int'}
-            ],
-            listeners: {
-                datachanged: function() {
-                   // Ext.Msg.alert('Success!', 'We have been loaded');
-                }
-            }
+            ]
+        });
+        
+         Ext.create('Ext.data.Store', {
+            storeId : 'activeStore',
+            fields  :[ 
+                {name: 'id',                type: 'int'},
+                {name: 'username',          type: 'string'},
+                {name: 'callingstationid',  type: 'string'},
+                {name: 'online_human',      type: 'string'},
+                {name: 'online',            type: 'int'}
+            ]
         });
         
         me.items = [
@@ -48,7 +54,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                         flex    : 1,
                         bodyCls : 'subSubTab',
                         layout  : 'fit',
-                        border  : false,
+                        border  : true,
+                        ui      : 'light',
                         itemId  : 'dailyTotal',
                         tpl     : new Ext.XTemplate(
                             '<div class="divInfo">',   
@@ -62,27 +69,21 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                             '</div>'
                         ),
                         data    : {
-                        }
-                    },
-                  /*  {
-                        xtype   : 'panel',
-                        margin : m,
-                        padding: p,
-                        flex    : 1,
-                        border  : true,
-                        html    : 'placeholder'
-                    },*/
-                    
-                    {
-                        flex    : 1,
-                        margin : m,
-                        padding: p,
-                        border  : false,
+                        },
                         bbar    : ['->',{ 
                             xtype   : 'button',    
                             scale   : 'large',  
-                            text    : 'See More..'
-                        }],
+                            text    : 'See More..',
+                            glyph   : Rd.config.icnView,
+                            itemId  : 'btnSeeMore'
+                        }]
+                    },
+                    {
+                        flex            : 1,
+                        margin          : m,
+                        padding         : p,
+                        border          : false,
+                    
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],
@@ -96,7 +97,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                                field    : 'name',
                                display  : 'rotate'
                            },
-                           donut        : 20,    
+                           donut        : 10,    
                            tooltip : {
                                 trackMouse: true,
                                 renderer: function (tooltip, record, item) {
@@ -164,12 +165,23 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                         ui      : 'light',
                         title   : 'Active Sessions',
                         border  : true,       
-                        store   : Ext.data.StoreManager.lookup('simpsonsStore'),
+                        store   : Ext.data.StoreManager.lookup('activeStore'),
+                        emptyText: 'No Active Sessions Now',
                         columns: [
                             { xtype: 'rownumberer'},
-                            { text: 'Username',     dataIndex: 'username', tdCls: 'gridMain' },
-                            { text: 'Data Total',   dataIndex: 'data_total' },
-                            { text: 'Last Seen',    dataIndex: 'last_seen',flex: 1 }
+                            { text: 'Username',     dataIndex: 'username', flex: 1 },
+                            { text: 'MAC Address',  dataIndex: 'callingstationid' },
+                            { 
+                                text        : 'Time Online',   
+                                dataIndex   : 'online',  
+                                tdCls       : 'gridTree', 
+                                flex        : 1,
+                                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                                renderer    : function(value,metaData,record){
+                                    var human_value = record.get('online_human')
+                                    return "<div class=\"fieldGreen\">"+human_value+" "+i18n('sOnline')+"</div>";           
+                                }
+                            }
                         ],
                         flex: 1
                     }

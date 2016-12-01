@@ -4,7 +4,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
     //ui      : 'light',
     title   : "This Month",
     headerPosition: 'right',
-    height  : 800,
+    height  : 550,
     margin  : 0,
     padding : 0,
     layout: {
@@ -43,7 +43,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
                         flex    : 1,
                         bodyCls : 'subSubTab',
                         layout  : 'fit',
-                        border  : false,
+                        border  : true,
+                        ui      : 'light',
                         itemId  : 'monthlyTotal',
                         tpl     : new Ext.XTemplate(
                             '<div class="divInfo">',   
@@ -57,18 +58,21 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
                             '</div>'
                         ),
                         data    : {
-                        }
-                    },
-                    {
-                        flex    : 1,
-                        margin : m,
-                        padding: p,
-                        border  : false,
+                        },
                         bbar    : ['->',{ 
                             xtype   : 'button',    
                             scale   : 'large',  
-                            text    : 'See More..'
-                        }],
+                            text    : 'See More..',
+                            glyph   : Rd.config.icnView,
+                            itemId  : 'btnSeeMore'
+                        }]
+                    },
+                    {
+                        flex            : 1,
+                        margin          : m,
+                        padding         : p,
+                        border          : false,
+                    
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],
@@ -137,8 +141,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
                     {
                         xtype   : 'pnlDataUsageGraph',
                         flex    : 1,
-                        margin  : m,
-                        padding : p,
+                        margin  : 0,
+                        padding : 0,
                         layout  : 'fit',
                         border  : false   
                     }

@@ -4,7 +4,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
     ui      : 'light',
     title   : "This Week",
     headerPosition: 'right',
-    height  : 800,
+    height  : 550,
     margin  : 0,
     padding : 0,
     border  : true,
@@ -44,7 +44,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                         flex    : 1,
                         bodyCls : 'subSubTab',
                         layout  : 'fit',
-                        border  : false,
+                        border  : true,
+                        ui      : 'light',
                         itemId  : 'weeklyTotal',
                         tpl     : new Ext.XTemplate(
                             '<div class="divInfo">',   
@@ -58,23 +59,25 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                             '</div>'
                         ),
                         data    : {
-                        }
-                    },
-                    {
-                        flex    : 1,
-                        margin : m,
-                        padding: p,
-                        border  : false,
+                        },
                         bbar    : ['->',{ 
                             xtype   : 'button',    
                             scale   : 'large',  
-                            text    : 'See More..'
-                        }],
+                            text    : 'See More..',
+                            glyph   : Rd.config.icnView,
+                            itemId  : 'btnSeeMore'
+                        }]
+                    },
+                    {
+                        flex            : 1,
+                        margin          : 0,
+                        padding         : 0,
+                        border          : false,
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],
-                        store: Ext.data.StoreManager.lookup('weekStore'),
-                        series: {
+                        store           : Ext.data.StoreManager.lookup('weekStore'),
+                        series          : {
                            type         : 'pie',
                           
                            highlight    : true,
@@ -83,14 +86,12 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                                field    : 'name',
                                display  : 'rotate'
                            },
-                           donut        : 20,    
-                           tooltip : {
+                           donut        : 10,    
+                           tooltip      : {
                                 trackMouse: true,
                                 renderer: function (tooltip, record, item) {
                                     tooltip.setHtml(
                                         "<h2>"+record.get('username')+"</h2><h3>"+Ext.ux.bytesToHuman(record.get('data_total'))+"</h3>"
-                                        
-                                    
                                     );
                                 }
                             }    
@@ -138,8 +139,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                     {
                         xtype   : 'pnlDataUsageGraph',
                         flex    : 1,
-                        margin  : m,
-                        padding : p,
+                        margin  : 0,
+                        padding : 0,
                         layout  : 'fit',
                         border  : false   
                     }

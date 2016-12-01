@@ -45,6 +45,9 @@ Ext.define('Rd.controller.cDataUsage', {
         }
         me.inited = true;
         me.control({
+            'pnlDataUsage'  : {
+                afterlayout : me.resizeSegments
+            },
             '#tabDataUsage' : {
                 destroy   :      me.appClose   
             },
@@ -60,6 +63,9 @@ Ext.define('Rd.controller.cDataUsage', {
             },
             '#tabDataUsage grid' : {
                 rowclick    : me.rowClickEvent
+            },
+            '#tabDataUsage #btnSeeMore' : {
+                click       : me.openActivityViewer
             }
         });
     },
@@ -137,6 +143,7 @@ Ext.define('Rd.controller.cDataUsage', {
         totalMonth.setData(data.monthly.totals);
           
         Ext.data.StoreManager.lookup('dayStore').setData(data.daily.top_ten);
+         Ext.data.StoreManager.lookup('activeStore').setData(data.daily.active_sessions);
         me.getPnlDataUsageDay().down('cartesian').getStore().setData(data.daily.graph.items);
         
         Ext.data.StoreManager.lookup('weekStore').setData(data.weekly.top_ten);
@@ -161,5 +168,20 @@ Ext.define('Rd.controller.cDataUsage', {
         me.setUsername(me.getPnlDataUsage().down('cmbRealm').getValue());
         me.setType('realm');
         me.fetchDataUsage();
+    },
+    resizeSegments: function(pnl){
+        var me = this;
+        if(pnl.getHeight() > 400){
+            me.getPnlDataUsageDay().setHeight((pnl.getHeight()-40));
+            me.getPnlDataUsageWeek().setHeight((pnl.getHeight()-40));
+            me.getPnlDataUsageMonth().setHeight((pnl.getHeight()-40));
+        }
+    },
+    openActivityViewer: function(btn){
+        var me = this;
+        console.log("Open Activity Viewer");
+        var pnl = me.getPnlDataUsage();
+        me.application.runAction('cActivityMonitor','Index',pnl); 
+    
     }
 });
