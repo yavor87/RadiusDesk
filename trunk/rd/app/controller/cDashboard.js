@@ -33,7 +33,12 @@ Ext.define('Rd.controller.cDashboard', {
 				    activate	: function(pnl){
 				        me.application.runAction('cDataUsage','Index',pnl);
 				    }
-			    },     
+			    },  
+			    'tpDashboard #cUtilities' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cUtilities','Index',pnl);
+				    }
+			    },    
                 'tpDashboard #cAccessProviders' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cAccessProviders','Index',pnl);

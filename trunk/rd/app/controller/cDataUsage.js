@@ -178,10 +178,8 @@ Ext.define('Rd.controller.cDataUsage', {
         }
     },
     openActivityViewer: function(btn){
-        var me = this;
-        console.log("Open Activity Viewer");
+        var me  = this;
         var pnl = me.getPnlDataUsage();
         me.application.runAction('cActivityMonitor','Index',pnl); 
-    
     }
 });

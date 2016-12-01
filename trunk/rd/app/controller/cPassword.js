@@ -9,8 +9,8 @@ Ext.define('Rd.controller.cPassword', {
                 xtype       : 'window',
                 id          : 'passwordWin',
                 title       : "Password manager",
-                width       : 450,
-                height      : 500,
+                width       : 600,
+                height      : 450,
                 resizable   : true,
                 iconCls     : 'rights',
                 glyph: Rd.config.icnKey,
@@ -21,12 +21,6 @@ Ext.define('Rd.controller.cPassword', {
                 stateful    : true,
                 stateId     : 'passwordWin',
                 items       : [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading: i18n('sPassword_manager'),
-                        image:  'resources/images/48x48/key.png'
-                    },
                     {
                         region  : 'center',
                         layout  : {
@@ -49,7 +43,7 @@ Ext.define('Rd.controller.cPassword', {
     },
 
     views:  [
-        'components.pnlBanner', 'password.frmPassword'
+        'password.frmPassword'
     ],
     stores: [],
     models: ['mPermanentUser'],

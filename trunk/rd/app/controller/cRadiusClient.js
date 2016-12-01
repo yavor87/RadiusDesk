@@ -7,7 +7,7 @@ Ext.define('Rd.controller.cRadiusClient', {
     cmbDRendered    : false,
     dRecord         : undefined,
     views:  [
-        'components.pnlBanner',     'radiusClient.frmRadiusRequest',    'radiusClient.pnlRadiusReply'
+        'radiusClient.frmRadiusRequest',    'radiusClient.pnlRadiusReply'
     ],
     stores: [],
     models: ['mPermanentUser','mDevice', 'mVoucher' ],
@@ -51,30 +51,21 @@ Ext.define('Rd.controller.cRadiusClient', {
     actionIndex: function(){
 
         var me = this;
-        var desktop = this.application.getController('cDesktop');
-        var win = desktop.getWindow('radiusClientWin');
-        if(!win){
-            win = desktop.createWindow({
-                id: 'radiusClientWin',
-                //title:i18n('sRADIUS_client'),
-                btnText:i18n('sRADIUS_client'),
-                width           : Rd.config.winWidth,
-                height          : Rd.config.winHeight,
-                iconCls: 'radius_client',
-                glyph: Rd.config.icnRadius,
+        
+        if(!Ext.WindowManager.get('radiusClientWin')){
+            var win = Ext.widget('window',{
+                id          : 'radiusClientWin',
+                title       : i18n('sRADIUS_client'),
+                width       : 700,
+                height      : 450,
+                glyph       : Rd.config.icnRadius,
                 animCollapse:false,
-                border:false,
+                border      :false,
                 constrainHeader:true,
-                layout: 'border',
-                stateful: true,
-                stateId: 'radiusClientWin',
-                items: [
-                    {
-                        region: 'north',
-                        xtype:  'pnlBanner',
-                        heading:i18n('sRADIUS_client'),
-                        image:  'resources/images/48x48/radius_client.png'
-                    },
+                layout      : 'border',
+                stateful    : true,
+                stateId     : 'radiusClientWin',
+                items       : [
                     {
                         region  : 'center',
                         layout  : {
@@ -89,21 +80,24 @@ Ext.define('Rd.controller.cRadiusClient', {
                                 title       : i18n('sRequest'),
                                 flex        : 1,
                                 xtype       : 'frmRadiusRequest',
+                                ui          : 'light',
+                                glyph       : Rd.config.icnQuestion,
                                 margin      : 5
                             },
                             {
                                 title       : i18n('sReply'),
                                 flex        : 1,
                                 xtype       : 'pnlRadiusReply',
+                                ui          : 'light',
+                                glyph       : Rd.config.icnBullhorn,
                                 margin      : 5
                             }
                         ]
                     }
                 ]
             });
+            win.show();
         }
-        desktop.restoreWindow(win);    
-        return win;
     },
     actionTestVoucher: function(v_record){
         var me = this;
