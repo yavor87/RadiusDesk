@@ -1421,6 +1421,7 @@ $include-rd-view-datausage-pnldatausageday: dynamic(true);;
 $include-rd-view-datausage-pnldatausagegraph: dynamic(true);;
 $include-rd-view-datausage-pnldatausagemonth: dynamic(true);;
 $include-rd-view-datausage-pnldatausageweek: dynamic(true);;
+$include-rd-view-datausage-vcpnldatausage: dynamic(true);;
 $include-rd-view-debugoutput-pnlviewdebug: dynamic(true);;
 $include-rd-view-devices-griddeviceprivate: dynamic(true);;
 $include-rd-view-devices-griddeviceradaccts: dynamic(true);;

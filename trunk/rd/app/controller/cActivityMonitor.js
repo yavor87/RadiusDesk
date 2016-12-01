@@ -3,6 +3,39 @@ Ext.define('Rd.controller.cActivityMonitor', {
     actionIndex: function(pnl){
         var me = this;
         
+        
+        //Check if the node is not already open; else open the node:
+        var tp          = pnl.up('tabpanel');
+        am_id           = 'tabActivityMonitor';          
+        var nt          = tp.down('#'+am_id);
+        if(nt){
+            tp.setActiveTab(am_id); //Set focus on  Tab
+            return;
+        }
+        
+        //Tab not there - add one
+        tp.add({ 
+            title       : "Activity Monitor",
+            xtype       : 'tabpanel',
+            itemId      : am_id,
+            closable    : true,
+            glyph       : Rd.config.icnActivity,
+            border      : false,
+            itemId      : 'tabActivityMonitor',
+            plain       : true,
+            cls         : 'subSubTab', //Make darker -> Maybe grey
+            layout      : 'fit', 
+            items       : [
+                { 'title' : i18n('sAccounting_data'),       xtype: 'gridRadaccts'},
+                { 'title' : i18n('sAuthentication_data'),   xtype: 'gridRadpostauths'}
+                //{ 'title' : i18n('sFreeRADIUS_info'),       xtype: 'pnlRadius'}
+            ]
+        });
+        tp.setActiveTab(am_id); //Set focus on Add Tab
+        
+        
+        
+        /*
         if (me.populated) {
             return; 
         }     
@@ -19,6 +52,7 @@ Ext.define('Rd.controller.cActivityMonitor', {
             ]
         });
         me.populated = true;
+        */
     },
 
     views:  [

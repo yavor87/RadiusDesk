@@ -111,6 +111,9 @@ Rd.config = {
     'icnVPN'        : 'xf10e@FontAwesome',
     'icnAdmin'      : 'xf19d@FontAwesome',
     'icnRadius'     : 'xf140@FontAwesome',
-    'icnBan'        : 'xf05e@FontAwesome'
+    'icnBan'        : 'xf05e@FontAwesome',
+    'icnHourStart'  : 'xf251@FontAwesome',
+    'icnHourHalf'   : 'xf252@FontAwesome',
+    'icnHourEnd'    : 'xf253@FontAwesome'
 }
 
