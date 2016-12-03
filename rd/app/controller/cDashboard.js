@@ -1,15 +1,18 @@
 Ext.define('Rd.controller.cDashboard', {
     extend: 'Ext.app.Controller',
     views: [
+        'components.cmbRealm',
         'dashboard.pnlDashboard',
         'dashboard.tpDashboard',
-        'dashboard.winPasswordChanger'
+        'dashboard.winPasswordChanger',
+        'dashboard.winDashboardSettings'
     ],
     config: {
-        urlChangePassword           : '/cake2/rd_cake/dashboard/change_password.json'
+        urlChangePassword           : '/cake2/rd_cake/dashboard/change_password.json',
+        urlSettingsSubmit           : '/cake2/rd_cake/dashboard/settings_submit.json'
     },
     models: [
-    
+        'mRealm'
     ],
     requires: [
  
@@ -147,10 +150,16 @@ Ext.define('Rd.controller.cDashboard', {
 			    'pnlDashboard  #mnuLogout' : {
 			        click   : me.onLogout
 			    },
+			    'pnlDashboard  #mnuSettings' : {
+			        click   : me.onSettings
+			    },
+			    'winDashboardSettings #save': {
+                    'click' : me.onSettingsSubmit
+                },
 			    'pnlDashboard  #mnuPassword' : {
 			        click   : me.onPassword
 			    },
-			        'winPasswordChanger #save': {
+			    'winPasswordChanger #save': {
                     'click' : me.onChangePassword
                 }
 		    }
@@ -174,6 +183,34 @@ Ext.define('Rd.controller.cDashboard', {
         b.up('panel').close();
         me.getViewP().removeAll(true);
         me.application.runAction('cLogin','Exit');
+    },
+    onSettings: function(b){
+        var me = this;
+        if(!Ext.WindowManager.get('winDashboardSettingsId')){
+            var w = Ext.widget('winDashboardSettings',{
+                id  :'winDashboardSettingsId'
+            });
+            w.show();        
+        }  
+    },
+    onSettingsSubmit: function(button){
+        var me      = this;
+        var form    = button.up('form');
+        var win     = button.up('window');
+        form.submit({
+            clientValidation: true,
+            url: me.getUrlSettingsSubmit(),
+            success: function(form, action) {
+                win.close();
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     onPassword: function(b){
         var me = this;
