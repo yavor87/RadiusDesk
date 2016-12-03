@@ -1415,6 +1415,7 @@ $include-rd-view-components-winnoteadd: dynamic(true);;
 $include-rd-view-components-winpdf: dynamic(true);;
 $include-rd-view-dashboard-pnldashboard: dynamic(true);;
 $include-rd-view-dashboard-tpdashboard: dynamic(true);;
+$include-rd-view-dashboard-windashboardsettings: dynamic(true);;
 $include-rd-view-dashboard-winpasswordchanger: dynamic(true);;
 $include-rd-view-datausage-pnldatausage: dynamic(true);;
 $include-rd-view-datausage-pnldatausageday: dynamic(true);;

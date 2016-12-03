@@ -10,7 +10,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsage', {
         'Rd.view.dataUsage.vcPnlDataUsage',
         'Rd.view.dataUsage.pnlDataUsageDay',
         'Rd.view.dataUsage.pnlDataUsageWeek',
-        'Rd.view.dataUsage.pnlDataUsageMonth'
+        'Rd.view.dataUsage.pnlDataUsageMonth',
+        'Rd.view.components.cmbRealm'
     ],
     controller : 'vcPnlDataUsage',
     initComponent: function() {
