@@ -9,7 +9,8 @@ Ext.define('Rd.controller.cDashboard', {
     ],
     config: {
         urlChangePassword           : '/cake2/rd_cake/dashboard/change_password.json',
-        urlSettingsSubmit           : '/cake2/rd_cake/dashboard/settings_submit.json'
+        urlSettingsSubmit           : '/cake2/rd_cake/dashboard/settings_submit.json',
+        urlViewSettings             : '/cake2/rd_cake/dashboard/settings_view.json'
     },
     models: [
         'mRealm'
@@ -156,6 +157,9 @@ Ext.define('Rd.controller.cDashboard', {
 			    'winDashboardSettings #save': {
                     'click' : me.onSettingsSubmit
                 },
+                'winDashboardSettings': {
+                    beforeshow:      me.loadSettings
+                },
 			    'pnlDashboard  #mnuPassword' : {
 			        click   : me.onPassword
 			    },
@@ -183,6 +187,20 @@ Ext.define('Rd.controller.cDashboard', {
         b.up('panel').close();
         me.getViewP().removeAll(true);
         me.application.runAction('cLogin','Exit');
+    },
+    loadSettings: function(win){
+        var me      = this; 
+        var form    = win.down('form'); 
+        form.load({
+            url         :me.getUrlViewSettings(), 
+            method      :'GET',
+            success     : function(a,b,c){
+                var cmb     = form.down("cmbRealm");
+                var rec     = Ext.create('Rd.model.mRealm', {name: b.result.data.realm_name, id: b.result.data.realm_id});
+                cmb.getStore().loadData([rec],false);
+                cmb.setValue(b.result.data.realm_id);  
+            }
+        });    
     },
     onSettings: function(b){
         var me = this;

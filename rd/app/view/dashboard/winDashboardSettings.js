@@ -36,16 +36,16 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
                     {
                         xtype       : 'checkbox',      
                         boxLabel  : 'Show Data Usage',
-                        name        : 'data_usage',
-                        inputValue  : 'data_usage',
+                        name        : 'show_data_usage',
+                        inputValue  : 'show_data_usage',
                         checked     : true,
                         cls         : 'lblRdReq'
                     },
                     {
                         xtype       : 'checkbox',      
                         boxLabel  : 'Show Recent Failures',
-                        name        : 'recent_failures',
-                        inputValue  : 'recent_failures',
+                        name        : 'show_recent_failures',
+                        inputValue  : 'show_recent_failures',
                         checked     : true,
                         cls         : 'lblRdReq'
                     }
