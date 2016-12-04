@@ -50,7 +50,7 @@ class DataUsageController extends AppController {
                 $active         = true; 
                 $online_human   = $this->TimeCalculations->time_elapsed_string($i['Radacct']['acctstarttime'],false,true);
                 array_push($active_sessions,array(
-                    'id'                => $i['Radacct']['radacctid'],
+                    'id'                => intval($i['Radacct']['radacctid']),
                     'username'          => $i['Radacct']['username'],
                     'callingstationid'  => $i['Radacct']['callingstationid'],
                     'online_human'      => $online_human,
