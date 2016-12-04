@@ -339,6 +339,11 @@ $config['icnDynamicNas']= 'xf239@'.$config['webFont'];
 $config['icnCloud']     = 'xf0c2@'.$config['webFont'];
 $config['icnVPN']       = 'xf10e@'.$config['webFont'];
 
+$config['icnAdmin']     = 'xf19d@'.$config['webFont'];
+$config['icnRadius']    = 'xf140@'.$config['webFont'];
+$config['icnBan']       = 'xf05e@'.$config['webFont'];
+$config['icnData']      = 'xf1c0@'.$config['webFont'];
+$config['icnGears']     = 'xf085@'.$config['webFont'];
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
