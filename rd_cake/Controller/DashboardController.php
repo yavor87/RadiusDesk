@@ -73,6 +73,39 @@ class DashboardController extends AppController {
         }
     }
     
+    public function utilities_items(){       
+        $data = array(
+            array(
+                'xtype'   => 'button',
+                'text'    => 'RADIUS Client',
+                'glyph'   => Configure::read('icnRadius'),
+                'scale'   => 'large',
+                'itemId'  => 'cRadiusClient'
+            ),
+            array(
+                'xtype'   => 'button',
+                'text'    => 'Password Manager',
+                'glyph'   => Configure::read('icnKey'),
+                'scale'   => 'large',
+                'itemId'  => 'cPassword'
+            ),
+           /* array(
+                'xtype'   => 'button',
+                'text'    => 'Setup Wizard',
+                'glyph'   => Configure::read('icnWizard'),
+                'scale'   => 'large',
+                'itemId'  => 'cSetupWizard'
+            )*/
+        );
+        
+        $this->set(array(
+            'data'   => $data,
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    
+    }
+    
     public function settings_view(){
         $user = $this->Aa->user_for_token($this);
         if(!$user){
