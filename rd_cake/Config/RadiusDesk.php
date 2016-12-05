@@ -344,6 +344,7 @@ $config['icnRadius']    = 'xf140@'.$config['webFont'];
 $config['icnBan']       = 'xf05e@'.$config['webFont'];
 $config['icnData']      = 'xf1c0@'.$config['webFont'];
 $config['icnGears']     = 'xf085@'.$config['webFont'];
+$config['icnWizard']    = 'xf0d0@'.$config['webFont'];
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
