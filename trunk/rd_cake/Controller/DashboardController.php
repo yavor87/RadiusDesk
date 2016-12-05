@@ -296,7 +296,7 @@ class DashboardController extends AppController {
 
         if( $group == Configure::read('group.admin')){  //Admin
             $cls = 'admin';
-            $tabs= $this->_build_admin_tabs();  //We do not care for rights here;
+            $tabs= $this->_build_admin_tabs($id);  //We do not care for rights here;
             $isRootUser = true;
         }
         if( $group == Configure::read('group.ap')){  //Or AP
@@ -321,7 +321,7 @@ class DashboardController extends AppController {
         );
     }
 
-    private function _build_admin_tabs(){
+    private function _build_admin_tabs($user_id){
     
         $tabs = array(
             array(
@@ -488,47 +488,113 @@ class DashboardController extends AppController {
                 )
               )
         ); 
+              
+        //____ Overview Tab ___
+        //This one is a bit different :-)
+        $overview_items = array();
         
-        $this->Realm->contain();
-        $q_r            = $this->Realm->find('first',array());
-        if($q_r){
-            $realm_name         = $q_r['Realm']['name'];
-            $data['realm_name'] = $realm_name;
-            $data['realm_id']   = $q_r['Realm']['id'];
-            
-            $this->realm_id     = $q_r['Realm']['id'];
-            $this->realm_name   = $realm_name;
-        } 
+        //Find out if there is a dafault setting for the realm.
+        $show_data_usage        = true;
+        $show_recent_failures   = true;
+        $realm_blank            = false;
         
+        //Find if there is a realm specified in the settings
+        $q_rr = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'realm_id')));
+        if($q_rr){
+            //Get the name of the realm
+            $this->Realm->contain();
+            $q_r                = $this->Realm->findById($q_rr['UserSetting']['value']);
+            if($q_r){
+                $realm_name         = $q_r['Realm']['name'];
+                $data['realm_name'] = $realm_name;
+                $data['realm_id']   = $q_rr['UserSetting']['value'];
+                
+                $this->realm_name   = $realm_name;
+                $this->realm_id     = $q_rr['UserSetting']['value'];
+               
+                //Get the settings of whether to show the two tabs
+                $q_rdu = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'show_data_usage')));
+                
+                if($q_rdu['UserSetting']['value'] == 0){
+                    $show_data_usage = false;
+                }
+                
+                $q_rf = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'show_recent_failures')));
+                
+                if($q_rf['UserSetting']['value'] == 0){
+                    $show_recent_failures = false;
+                }
+            }else{            
+                $realm_blank = true;
+            }       
+        //No realm specified in settings; get a default one (if there might be one )    
+        }else{ 
+            $this->Realm->contain();
+            $q_r            = $this->Realm->find('first',array());
+            if($q_r){
+                $realm_name         = $q_r['Realm']['name'];
+                $data['realm_name'] = $realm_name;
+                $data['realm_id']   = $q_r['Realm']['id'];
+                
+                $this->realm_name   = $realm_name;
+                $this->realm_id     = $q_r['Realm']['id'];
+            }else{
+                $realm_blank = true;
+            }
+        }
         
-        array_unshift($tabs,array(
-                'title'     => __('Overview'),
-                'xtype'     => 'tabpanel',
-                'glyph'     => Configure::read('icnView'),
-                'itemId'    => 'tpOverview',
-                'layout'    => 'fit',
-                'items'     => array(
-                   array(
-                        'title'   => __('Data Usage'),
-                        'glyph'   => Configure::read('icnData'),
-                        'id'      => 'cDataUsage',
+        //We found a realm and should display it
+        if(($realm_blank == false)&&($show_data_usage == true)){
+            array_push($overview_items, array(
+                    'title'   => __('Data Usage'),
+                    'glyph'   => Configure::read('icnData'),
+                    'id'      => 'cDataUsage',
+                    'layout'  => 'fit'
+                )
+            );
+        }else{
+        
+            //We could not find a realm and should display a welcome message
+            if($realm_blank == true){
+                array_push($overview_items, array(
+                        'title'   => __('Welcome Message'),
+                        'glyph'   => Configure::read('icnNote'),
+                        'id'      => 'cWelcome',
                         'layout'  => 'fit'
-                    ),
-                    array(
-                        'title'   => __('Recent Failures'),
+                    )
+                );
+            }
+        }
+        
+        //We found a realm and should display it
+        if(($realm_blank == false)&&($show_recent_failures == true)){
+            array_push($overview_items, array(
+                    'title'   => __('Recent Failures'),
                         'glyph'   => Configure::read('icnBan'),
                         'id'      => 'cRejects',
                         'layout'  => 'fit'
-                    ),
-                    array(
-                        'title'   => __('Utilities'),
-                        'glyph'   => Configure::read('icnGears'),
-                        'id'      => 'cUtilities',
-                        'layout'  => 'fit'
-                    )
                 )
-            ));
-             
+            );
+        } 
+       
+        
+        array_push($overview_items, array(
+                'title'   => __('Utilities'),
+                'glyph'   => Configure::read('icnGears'),
+                'id'      => 'cUtilities',
+                'layout'  => 'fit'
+            )
+        );
+               
+        array_unshift($tabs,array(
+            'title'     => __('Overview'),
+            'xtype'     => 'tabpanel',
+            'glyph'     => Configure::read('icnView'),
+            'itemId'    => 'tpOverview',
+            'layout'    => 'fit',
+            'items'     => $overview_items
+        ));   
+                
         return $tabs;
     }
     
@@ -549,8 +615,10 @@ class DashboardController extends AppController {
         $show_recent_failures   = true;
         $realm_blank            = false;
         
+        //Find if there is a realm specified in the settings
         $q_rr = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'realm_id')));
         if($q_rr){
+            //Get the name of the realm
             $this->Realm->contain();
             $q_r                = $this->Realm->findById($q_rr['UserSetting']['value']);
             $realm_name         = $q_r['Realm']['name'];
@@ -560,6 +628,7 @@ class DashboardController extends AppController {
             $this->realm_name   = $realm_name;
             $this->realm_id     = $q_rr['UserSetting']['value'];
            
+            //Get the settings of whether to show the two tabs
             $q_rdu = $this->UserSetting->find('first',array('conditions' => array('UserSetting.user_id' => $user_id,'UserSetting.name' => 'show_data_usage')));
             
             if($q_rdu['UserSetting']['value'] == 0){
@@ -571,7 +640,8 @@ class DashboardController extends AppController {
             if($q_rf['UserSetting']['value'] == 0){
                 $show_recent_failures = false;
             }  
-            
+         
+        //No realm specified in settings; get a default one (if there might be one )    
         }else{    
             $realm_detail = $this->_ap_default_realm($user_id);
             if(array_key_exists('realm_id',$realm_detail)){
@@ -580,11 +650,12 @@ class DashboardController extends AppController {
                 
                 $this->realm_name   = $realm_detail['realm_name'];
                 $this->realm_id     = $realm_detail['realm_id'];
-            }else{
+            }else{ // Could not find a default realm
                 $realm_blank = true;
             }  
         }
         
+        //We found a realm and should display it
         if(($realm_blank == false)&&($show_data_usage == true)){
             array_push($overview_items, array(
                     'title'   => __('Data Usage'),
@@ -594,6 +665,8 @@ class DashboardController extends AppController {
                 )
             );
         }else{
+        
+            //We could not find a realm and should display a welcome message
             if($realm_blank == true){
                 array_push($overview_items, array(
                         'title'   => __('Welcome Message'),
@@ -605,7 +678,7 @@ class DashboardController extends AppController {
             }
         }
         
-        
+        //We found a realm and should display it
         if(($realm_blank == false)&&($show_recent_failures == true)){
             array_push($overview_items, array(
                     'title'   => __('Recent Failures'),
