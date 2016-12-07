@@ -877,10 +877,10 @@ Ext.define('Rd.controller.cDynamicClients', {
             }
         }
     },
-	delUnknownDynamicClient:   function(btn){
+	delUnknownDynamicClient:   function(button){
         var me      = this;
-        var win     = btn.up("window");
-        var grid    = win.down("gridUnknownDynamicClients");
+        var tab     = button.up("#tabDynamicClients");
+        var grid    = tab.down("gridUnknownDynamicClients");
     
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){

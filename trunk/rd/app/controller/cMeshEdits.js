@@ -397,7 +397,7 @@ Ext.define('Rd.controller.cMeshEdits', {
                     store       : store,
                     entryId     : id
                 });
-                w,show();         
+                w.show();         
             }else{
                 var w       = me.getEditEntryWin();
                 w.entryId   = id; 
@@ -858,8 +858,9 @@ Ext.define('Rd.controller.cMeshEdits', {
                         cmb.getStore().loadData([rec],false);
                         cmb.setValue( b.result.data.dynamic_detail_id );
                     }else{
-                        form.down("cmbDynamicDetail").setVisible(false);
-                        form.down("cmbDynamicDetail").setDisabled(true);
+                        //FIXME PLEASE CHECK WHAT MUST HAPPEN HERE
+                        //form.down("cmbDynamicDetail").setVisible(false);
+                        //form.down("cmbDynamicDetail").setDisabled(true);
                     }
                 }  
             }
