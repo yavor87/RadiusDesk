@@ -24,82 +24,93 @@ class CountersTask extends Shell {
         $counters = array();
         //First we need to find all the goupnames associated with this profile
         $this->Radusergroup->contain();
-        $q_r = $this->Radusergroup->find('all',array('conditions' => array('Radusergroup.username' => $username)));
+        $q_r = $this->Radusergroup->find('all',
+            array(
+                'conditions' => array('Radusergroup.username' => $username),
+                'order' => array('Radusergroup.priority ASC') //So smallese numbers first. then bigger numbers can override the smaller numbers
+            ));
+        
+        $counters_info = array();
 
-        foreach($q_r as $i){
+        foreach($q_r as $i){       
             $g  = $i['Radusergroup']['groupname'];
-            $tc = $this->_look_for_time_counters($g);
-            if($tc){
-                $counters['time'] = $tc;
-            }
-
-            $dc = $this->_look_for_data_counters($g);
-            if($dc){
-                $counters['data'] = $dc;
+            
+            $this->Radgroupcheck->contain();
+            $q_gchk = $this->Radgroupcheck->find('all',
+                array('conditions' => array('Radgroupcheck.groupname' => $g)
+            ));
+            
+            foreach($q_gchk as $j){
+                $attribute  = $j['Radgroupcheck']['attribute'];
+                $value      = $j['Radgroupcheck']['value'];
+                $counters_info[$attribute] = $value;
             }
         }
+        
+        //Once we accumalated all the data; we can now go through them to determine if wnad what counters are there
+        $tc = $this->_look_for_time_counters($counters_info);
+        if($tc){
+            $counters['time'] = $tc;
+        }
+
+        $dc = $this->_look_for_data_counters($counters_info);
+        if($dc){
+            $counters['data'] = $dc;
+        }
+        
         return $counters;
     }
 
 
-    private function _look_for_time_counters($groupname){
+    private function _look_for_time_counters($counters_info){
         $counter = false;
-        $cap     = $this->_query_radgroupcheck($groupname,'Rd-Cap-Type-Time');
-        if($cap){
+        
+        if(array_key_exists('Rd-Cap-Type-Time', $counters_info)){
             $counter            = array();
-            $counter['cap']     = $cap;
-            $counter['reset']   = $this->_query_radgroupcheck($groupname,'Rd-Reset-Type-Time');
-            $counter['value']   = $this->_query_radgroupcheck($groupname,'Rd-Total-Time');
+            $counter['cap']     = $counters_info['Rd-Cap-Type-Time'];
+            $counter['reset']   = $counters_info['Rd-Reset-Type-Time'];
+            $counter['value']   = $counters_info['Rd-Total-Time'];
 
 			//Defaults for mac_counter and reset_interval
 			$mac_counter		= false;
 			$reset_interval		= false;
 			if($counter['reset'] == 'dynamic'){
-				$reset_interval = $this->_query_radgroupcheck($groupname,'Rd-Reset-Interval-Time');
+				$reset_interval = $counters_info['Rd-Reset-Interval-Time'];
 			}
-			$mac_counter		= $this->_query_radgroupcheck($groupname,'Rd-Mac-Counter-Time');
+			if(array_key_exists('Rd-Mac-Counter-Time', $counters_info)){
+			    $mac_counter		= $counters_info['Rd-Mac-Counter-Time'];
+		    }
 			$counter['reset_interval'] 	= $reset_interval;
 			$counter['mac_counter'] 	= $mac_counter;
-
-            //Rd-Used-Time := "%{sql:SELECT IFNULL(SUM(AcctSessionTime),0) FROM radacct WHERE username='%{request:User-Name}'}"
         }
         return $counter;
     }
 
-    private function _look_for_data_counters($groupname){
+    private function _look_for_data_counters($counters_info){
         $counter = false;
-        $cap     = $this->_query_radgroupcheck($groupname,'Rd-Cap-Type-Data');
-        if($cap){
-            $counter = array();
-            $counter['cap']     = $cap;
-            $counter['reset']   = $this->_query_radgroupcheck($groupname,'Rd-Reset-Type-Data');
-            $counter['value']   = $this->_query_radgroupcheck($groupname,'Rd-Total-Data');
+
+        if(array_key_exists('Rd-Cap-Type-Data', $counters_info)){
+            $counter            = array();
+            $counter['cap']     = $counters_info['Rd-Cap-Type-Data'];
+            $counter['reset']   = $counters_info['Rd-Reset-Type-Data'];
+            $counter['value']   = $counters_info['Rd-Total-Data'];
 
 			//Defaults for mac_counter and reset_interval
 			$mac_counter		= false;
 			$reset_interval		= false;
 			if($counter['reset'] == 'dynamic'){
-				$reset_interval = $this->_query_radgroupcheck($groupname,'Rd-Reset-Interval-Data');
+				$reset_interval = $counters_info['Rd-Reset-Interval-Data'];
 			}
-			$mac_counter		= $this->_query_radgroupcheck($groupname,'Rd-Mac-Counter-Data');
+			
+			if(array_key_exists('Rd-Mac-Counter-Data', $counters_info)){
+			    $mac_counter		= $counters_info['Rd-Mac-Counter-Data'];
+		    }
+			
 			$counter['reset_interval'] 	= $reset_interval;
 			$counter['mac_counter'] 	= $mac_counter;
         }
         return $counter;
     }
-
-    private function _query_radgroupcheck($groupname,$attribute){
-        $retval = false;
-        $this->Radgroupcheck->contain();
-        $q_r = $this->Radgroupcheck->find('first',
-            array('conditions' => array('Radgroupcheck.groupname' => $groupname, 'Radgroupcheck.attribute' => $attribute)
-        ));
-        if($q_r){
-            $retval = $q_r['Radgroupcheck']['value'];
-        }
-        return $retval;
-    }
-
 }
 
 ?>
