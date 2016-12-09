@@ -22,7 +22,8 @@ Ext.define('Rd.controller.cDataUsage', {
         'dataUsage.pnlDataUsageDay',
         'dataUsage.pnlDataUsageWeek',
         'dataUsage.pnlDataUsageMonth',
-        'dataUsage.pnlDataUsageGraph'
+        'dataUsage.pnlDataUsageGraph',
+        'dataUsage.pnlDataUsageUserDetail'
     ],
     stores: [],
     models: ['mRealm','mUserStat'],
@@ -143,7 +144,7 @@ Ext.define('Rd.controller.cDataUsage', {
         totalMonth.setData(data.monthly.totals);
           
         Ext.data.StoreManager.lookup('dayStore').setData(data.daily.top_ten);
-         Ext.data.StoreManager.lookup('activeStore').setData(data.daily.active_sessions);
+        Ext.data.StoreManager.lookup('activeStore').setData(data.daily.active_sessions);
         me.getPnlDataUsageDay().down('cartesian').getStore().setData(data.daily.graph.items);
         
         Ext.data.StoreManager.lookup('weekStore').setData(data.weekly.top_ten);
@@ -151,6 +152,44 @@ Ext.define('Rd.controller.cDataUsage', {
         
         Ext.data.StoreManager.lookup('monthStore').setData(data.monthly.top_ten);
         me.getPnlDataUsageMonth().down('cartesian').getStore().setData(data.monthly.graph.items);
+        
+        if(data.user_detail != undefined){
+            me.paintUserDetail(data.user_detail); 
+        }else{
+            me.hideUserDetail();   
+        }     
+    },
+    paintUserDetail: function(user_detail){
+        var me          = this; 
+        me.getPnlDataUsageDay().down('#plrDaily').hide();
+        me.getPnlDataUsageDay().down('pnlDataUsageUserDetail').show();
+        
+        if(user_detail.perc_data_used != undefined){
+        
+            var str_data_usage = '<i class="fa  fa-database"></i>  Data Usage '+user_detail.perc_data_used+' %';
+            var val_data_usage = user_detail.perc_data_used / 100;
+            
+            me.getPnlDataUsageDay().down('#pbData').show().setValue(val_data_usage).updateText(str_data_usage);
+        }else{
+            me.getPnlDataUsageDay().down('#pbData').hide()
+        }
+        
+        if(user_detail.perc_time_used != undefined){
+        
+            var str_time_usage = '<i class="fa fa-clock-o"></i> Time Usage '+user_detail.perc_time_used+' %';
+            var val_time_usage = user_detail.perc_time_used / 100;  
+         
+            me.getPnlDataUsageDay().down('#pbTime').show().setValue(val_time_usage).updateText(str_time_usage);
+        }else{
+            me.getPnlDataUsageDay().down('#pbTime').hide()
+        }
+        
+    },
+    hideUserDetail: function(){
+        var me          = this; 
+        me.getPnlDataUsageDay().down('#plrDaily').show();
+        me.getPnlDataUsageDay().down('pnlDataUsageUserDetail').hide();
+    
     },
     rowClickEvent: function(grid,record){
         var me          = this;
@@ -158,7 +197,7 @@ Ext.define('Rd.controller.cDataUsage', {
         me.getPnlDataUsage().down('#btnShowRealm').show();
         me.getPnlDataUsage().down('cmbRealm').setDisabled(true);
         me.setUsername(username);
-        me.setType('user');
+        me.setType('user'); 
         me.fetchDataUsage();
     },
     btnShowRealmClick: function(btn){
@@ -166,7 +205,7 @@ Ext.define('Rd.controller.cDataUsage', {
         me.getPnlDataUsage().down('cmbRealm').setDisabled(false);
         btn.hide();
         me.setUsername(me.getPnlDataUsage().down('cmbRealm').getValue());
-        me.setType('realm');
+        me.setType('realm');  
         me.fetchDataUsage();
     },
     resizeSegments: function(pnl){
