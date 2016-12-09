@@ -2,8 +2,8 @@
 class DataUsageController extends AppController {
 
     public $name        = 'DataUsage';
-    public $uses        = array('UserStat');
-    public $components  = array('TimeCalculations');
+    public $uses        = array('UserStat','Voucher','PermanentUser','Device');
+    public $components  = array('TimeCalculations','Formatter');
     protected $base     = "Access Providers/Controllers/DataUsage/";
     
     protected   $type       = false;
@@ -60,6 +60,15 @@ class DataUsageController extends AppController {
             $data['daily']['active_sessions'] = $active_sessions;
             
         }
+        
+        //____ Get some Dope on the user if it is a user
+        if($this->type == 'user'){
+            
+            $data['user_detail'] = $this->_getUserDetail();
+        
+        }
+        
+        
         $data['daily']['graph']     = $this->_getDailyGraph($today);
         $data['daily']['totals']    = $this->_getTotal($today,'day');
         
@@ -376,6 +385,58 @@ class DataUsageController extends AppController {
             $this->type = $type;    
         }
         return $base_search;
+    }
+    
+    private function _getUserDetail(){
+    
+        $user_detail = array();
+        $username = $this->item_name;
+        
+        //Test to see if it is a Voucher
+        $this->Voucher->contain();
+        $q_v = $this->Voucher->find('first',array('conditions' =>array('Voucher.name' => $username)));
+       // print_r($q_v);
+        if($q_v){
+            $user_detail['type']    = 'voucher';
+            $user_detail['profile'] = $q_v['Voucher']['profile'];
+            $user_detail['created'] = $this->TimeCalculations->time_elapsed_string($q_v['Voucher']['created'],false,false);
+            $user_detail['status']  = $q_v['Voucher']['status'];
+            if($q_v['Voucher']['last_reject_time'] != null){
+                $user_detail['last_reject_time'] = $this->TimeCalculations->time_elapsed_string($q_v['Voucher']['last_reject_time'],false,false);
+                $user_detail['last_reject_message'] = $q_v['Voucher']['last_reject_message'];
+            }
+            
+            if($q_v['Voucher']['last_accept_time'] != null){
+                $user_detail['last_accept_time'] = $this->TimeCalculations->time_elapsed_string($q_v['Voucher']['last_accept_time'],false,false);
+            }
+            
+            if($q_v['Voucher']['data_cap'] != null){
+                $user_detail['data_cap'] = $this->Formatter->formatted_bytes($q_v['Voucher']['data_cap']);
+            }
+            
+            if($q_v['Voucher']['data_used'] != null){
+                $user_detail['data_used'] = $this->Formatter->formatted_bytes($q_v['Voucher']['data_used']);
+            }
+            
+            if($q_v['Voucher']['perc_data_used'] != null){
+                $user_detail['perc_data_used'] = $q_v['Voucher']['perc_data_used'];
+            }
+            
+            if($q_v['Voucher']['time_cap'] != null){
+                $user_detail['time_cap'] = $this->Formatter->formatted_seconds($q_v['Voucher']['time_cap']);
+            }
+            
+            if($q_v['Voucher']['time_used'] != null){
+                $user_detail['time_used'] = $this->Formatter->formatted_seconds($q_v['Voucher']['time_used']);
+            }
+            
+            if($q_v['Voucher']['perc_time_used'] != null){
+                $user_detail['perc_time_used'] = $q_v['Voucher']['perc_time_used'];
+            }
+   
+        }
+        
+        return $user_detail;
     }
 
     
