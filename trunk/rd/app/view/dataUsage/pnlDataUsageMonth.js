@@ -104,7 +104,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
                         margin  : m,
                         padding : p,
                         ui      : 'light',
-                        title   : 'Top 10 Users',
+                        title   : 'Top 10 Users This Month',
                         itemId  : 'gridTopTenMonthly',
                         border  : true,       
                         store   : Ext.data.StoreManager.lookup('monthStore'),

@@ -102,7 +102,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                         margin  : m,
                         padding : p,
                         ui      : 'light',
-                        title   : 'Top 10 Users',
+                        title   : 'Top 10 Users This Week',
                         itemId  : 'gridTopTenDaily',
                         border  : true,       
                         store   : Ext.data.StoreManager.lookup('weekStore'),

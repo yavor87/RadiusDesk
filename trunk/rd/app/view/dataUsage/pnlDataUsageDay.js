@@ -79,11 +79,18 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                         }]
                     },
                     {
+                        xtype   : 'pnlDataUsageUserDetail',
+                        margin  : m,
+                        padding : p,
+                        hidden  : true,
+                        flex    : 1  
+                    },
+                    {
                         flex            : 1,
                         margin          : m,
                         padding         : p,
                         border          : false,
-                    
+                        itemId          : 'plrDaily',
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],
@@ -115,7 +122,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageDay', {
                         margin  : m,
                         padding : p,
                         ui      : 'light',
-                        title   : 'Top 10 Users',
+                        title   : 'Top 10 Users Today',
                         itemId  : 'gridTopTenDaily',
                         border  : true,       
                         store   : Ext.data.StoreManager.lookup('dayStore'),
