@@ -27,86 +27,85 @@ class AccountingShell extends AppShell {
             $profile = $this->_find_user_profile($username);
             if($profile){
                 $counters = $this->Counters->return_counter_data($profile,$type);
+                //print_r($counters);
                 if(array_key_exists('time', $counters)){
-                    if($counters['time']['reset'] == 'never'){ //Voucher counters are **Always** suppose to never reset
+                       
+                    $counters['time']['usage'] = $this->Usage->time_usage($counters['time'],$username,'username');
+                    //Calculate the time left
+                    $not_depleted = true;
+                    $not_expired  = true;
+                    $time_left = $counters['time']['value'] - $counters['time']['usage'];
 
-                        $counters['time']['usage'] = $this->Usage->find_no_reset_time_usage($username);
+                    //Compare with days_from start time left
+                    $ret_val 				= $this->Usage->time_left_from_login($username);
+					$time_left_from_login 	= $ret_val[0];
+					$time_avail 			= $ret_val[1];
 
-                        //Calculate the time left
-                        $not_depleted = true;
-                        $not_expired  = true;
-                        $time_left = $counters['time']['value'] - $counters['time']['usage'];
-
-                        //Compare with days_from start time left
-                        $ret_val 				= $this->Usage->time_left_from_login($username);
-						$time_left_from_login 	= $ret_val[0];
-						$time_avail 			= $ret_val[1];
-
-                        if($time_left_from_login){
-                            if($time_left_from_login == 'depleted'){
-                                //Mark time usage as 100% and voucher as depleted
-                                $q_r = $this->Voucher->findByName($username);
-                                if($q_r){
-                                    $this->Voucher->id              = $q_r['Voucher']['id'];
-                                    $d['Voucher']['id']             = $q_r['Voucher']['id'];
-                                    $d['Voucher']['precede']        = '';
-                                    $d['Voucher']['perc_time_used'] = 100;
-                                    $d['Voucher']['status']         = 'depleted';
-									if($time_avail){
-										$d['Voucher']['time_cap']       = $time_avail;
-										$d['Voucher']['time_used']      = $time_avail; //Make them equal
-									}
-                                    $this->Voucher->save($d);
-                                }
-                                $not_depleted = false;
-
-                            }else{
-                                if($time_left_from_login < $time_left){
-                                    $time_left = $time_left_from_login;
-                                }
-                            }
-                        }
-
-                        //Compare with time left till expire date
-                        $time_left_from_expire = $this->Usage->time_left_from_expire($username);
-                        if($time_left_from_expire){
-                            if($time_left_from_expire == 'expired'){
-                                //Mark time usage as 100% and voucher as expired
-                                $q_r = $this->Voucher->findByName($username);
-                                if($q_r){
-                                    $this->Voucher->id              = $q_r['Voucher']['id'];
-                                    $d['Voucher']['id']             = $q_r['Voucher']['id'];
-                                    $d['Voucher']['precede']        = '';
-                                    $d['Voucher']['perc_time_used'] = 100;
-                                    $d['Voucher']['status']         = 'expired';
-                                    $this->Voucher->save($d);
-                                }
-                                $not_expired = false;
-                            }else{
-                                if($time_left_from_expire < $time_left){
-                                    $time_left = $time_left_from_expire;
-                                }
-                            }
-                        }
-                        
-                        //Calculate the usage and update
-                        if(($not_depleted)&&($not_expired)){
-                            $perc_time_used = intval((($counters['time']['value']-$time_left) / $counters['time']['value'])* 100);
+                    if($time_left_from_login){
+                        if($time_left_from_login == 'depleted'){
+                            //Mark time usage as 100% and voucher as depleted
                             $q_r = $this->Voucher->findByName($username);
                             if($q_r){
                                 $this->Voucher->id              = $q_r['Voucher']['id'];
                                 $d['Voucher']['id']             = $q_r['Voucher']['id'];
                                 $d['Voucher']['precede']        = '';
-                                $d['Voucher']['perc_time_used'] = $perc_time_used;
-                                $d['Voucher']['status']         = 'used';
+                                $d['Voucher']['perc_time_used'] = 100;
+                                $d['Voucher']['status']         = 'depleted';
 								if($time_avail){
 									$d['Voucher']['time_cap']       = $time_avail;
-									$d['Voucher']['time_used']      = $time_left; //Make them equal
+									$d['Voucher']['time_used']      = $time_avail; //Make them equal
 								}
                                 $this->Voucher->save($d);
                             }
+                            $not_depleted = false;
+
+                        }else{
+                            if($time_left_from_login < $time_left){
+                                $time_left = $time_left_from_login;
+                            }
                         }
                     }
+
+                    //Compare with time left till expire date
+                    $time_left_from_expire = $this->Usage->time_left_from_expire($username);
+                    if($time_left_from_expire){
+                        if($time_left_from_expire == 'expired'){
+                            //Mark time usage as 100% and voucher as expired
+                            $q_r = $this->Voucher->findByName($username);
+                            if($q_r){
+                                $this->Voucher->id              = $q_r['Voucher']['id'];
+                                $d['Voucher']['id']             = $q_r['Voucher']['id'];
+                                $d['Voucher']['precede']        = '';
+                                $d['Voucher']['perc_time_used'] = 100;
+                                $d['Voucher']['status']         = 'expired';
+                                $this->Voucher->save($d);
+                            }
+                            $not_expired = false;
+                        }else{
+                            if($time_left_from_expire < $time_left){
+                                $time_left = $time_left_from_expire;
+                            }
+                        }
+                    }
+                        
+                    //Calculate the usage and update
+                    if(($not_depleted)&&($not_expired)){
+                        $perc_time_used = intval((($counters['time']['value']-$time_left) / $counters['time']['value'])* 100);
+                        $q_r = $this->Voucher->findByName($username);
+                        if($q_r){
+                            $this->Voucher->id              = $q_r['Voucher']['id'];
+                            $d['Voucher']['id']             = $q_r['Voucher']['id'];
+                            $d['Voucher']['precede']        = '';
+                            $d['Voucher']['perc_time_used'] = $perc_time_used;
+                            $d['Voucher']['status']         = 'used';
+							if($time_avail){
+								$d['Voucher']['time_cap']       = $time_avail;
+								$d['Voucher']['time_used']      = $time_left; //Make them equal
+							}
+                            $this->Voucher->save($d);
+                        }
+                    }
+
                 }else{
 
                     //If there are not a time based counter we at least want to see if there's a countdown from login attribute..
@@ -119,7 +118,7 @@ class AccountingShell extends AppShell {
                     $perc_used_from_login = $this->Usage->perc_used_from_login($username);
 					//END FIXME
 
-                    print_r($perc_used_from_login);
+                    //print_r($perc_used_from_login);
                     if($perc_used_from_login){
                         if($perc_used_from_login == 'depleted'){
                             //Mark time usage as 100% and voucher as depleted
@@ -157,20 +156,19 @@ class AccountingShell extends AppShell {
                 }
 
                 if(array_key_exists('data', $counters)){
-                    if($counters['data']['reset'] == 'never'){ //Voucher counters are **Always** suppose to never reset
-                        $counters['data']['usage'] =$this->Usage->find_no_reset_data_usage($username);
-                        $perc_data_used = intval(($counters['data']['usage'] / $counters['data']['value'])* 100);
-                        $q_r = $this->Voucher->findByName($username);
-                            if($q_r){
-                                $this->Voucher->id              = $q_r['Voucher']['id'];
-                                $d['Voucher']['id']             = $q_r['Voucher']['id'];
-                                $d['Voucher']['precede']        = '';
-                                $d['Voucher']['perc_data_used'] = $perc_data_used;
-                                $d['Voucher']['status']         = 'used';
-				$d['Voucher']['data_used']	= intval($counters['data']['usage']);
-				$d['Voucher']['data_cap']	= $counters['data']['value'];
-                                $this->Voucher->save($d);
-                            }
+                    $counters['data']['usage'] = $this->Usage->data_usage($counters['data'],$username,'username');
+                    $counters['data']['usage'] =$this->Usage->find_no_reset_data_usage($username);
+                    $perc_data_used = intval(($counters['data']['usage'] / $counters['data']['value'])* 100);
+                    $q_r = $this->Voucher->findByName($username);
+                    if($q_r){
+                        $this->Voucher->id              = $q_r['Voucher']['id'];
+                        $d['Voucher']['id']             = $q_r['Voucher']['id'];
+                        $d['Voucher']['precede']        = '';
+                        $d['Voucher']['perc_data_used'] = $perc_data_used;
+                        $d['Voucher']['status']         = 'used';
+		                $d['Voucher']['data_used']	= intval($counters['data']['usage']);
+		                $d['Voucher']['data_cap']	= $counters['data']['value'];
+                        $this->Voucher->save($d);
                     }
                 }
             }
@@ -184,7 +182,7 @@ class AccountingShell extends AppShell {
             $profile = $this->_find_user_profile($username);
             if($profile){
                 $counters = $this->Counters->return_counter_data($profile,$type);
-				print_r($counters);
+				//print_r($counters);
                 //___time___
                 if(array_key_exists('time', $counters)){
 					//We will only update the usage if it is NOT Rd-Mac-Counter-Time in the counter (mac_counter)
@@ -324,7 +322,7 @@ class AccountingShell extends AppShell {
 
         //Test to see if the voucher has a time based or data based counter
         $counters = $this->find_counters($username);
-        print_r($counters);
+        //print_r($counters);
     }
 
     private function find_counters($username){
