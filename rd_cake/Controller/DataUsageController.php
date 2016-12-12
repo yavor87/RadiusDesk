@@ -389,6 +389,8 @@ class DataUsageController extends AppController {
     
     private function _getUserDetail(){
     
+        $found = false;
+    
         $user_detail = array();
         $username = $this->item_name;
         
@@ -397,6 +399,9 @@ class DataUsageController extends AppController {
         $q_v = $this->Voucher->find('first',array('conditions' =>array('Voucher.name' => $username)));
        // print_r($q_v);
         if($q_v){
+        
+            $user_detail['username'] = $username;
+            
             $user_detail['type']    = 'voucher';
             $user_detail['profile'] = $q_v['Voucher']['profile'];
             $user_detail['created'] = $this->TimeCalculations->time_elapsed_string($q_v['Voucher']['created'],false,false);
@@ -433,8 +438,59 @@ class DataUsageController extends AppController {
             if($q_v['Voucher']['perc_time_used'] != null){
                 $user_detail['perc_time_used'] = $q_v['Voucher']['perc_time_used'];
             }
+            $found = true;
    
         }
+        
+        if(!$found){
+            $this->PermanentUser->contain();
+            $q_pu = $this->PermanentUser->find('first',array('conditions' =>array('PermanentUser.username' => $username)));
+        
+           // print_r($q_pu);
+            if($q_pu){
+            
+                $user_detail['username']    = $username;
+                $user_detail['type']        = 'user';
+                $user_detail['profile']     = $q_pu['PermanentUser']['profile'];
+                $user_detail['created']     = $this->TimeCalculations->time_elapsed_string($q_pu['PermanentUser']['created'],false,false);
+                if($q_pu['PermanentUser']['last_reject_time'] != null){
+                    $user_detail['last_reject_time'] = $this->TimeCalculations->time_elapsed_string($q_pu['PermanentUser']['last_reject_time'],false,false);
+                    $user_detail['last_reject_message'] = $q_pu['PermanentUser']['last_reject_message'];
+                }
+            
+                if($q_pu['PermanentUser']['last_accept_time'] != null){
+                    $user_detail['last_accept_time'] = $this->TimeCalculations->time_elapsed_string($q_pu['PermanentUser']['last_accept_time'],false,false);
+                }
+            
+                if($q_pu['PermanentUser']['data_cap'] != null){
+                    $user_detail['data_cap'] = $this->Formatter->formatted_bytes($q_pu['PermanentUser']['data_cap']);
+                }
+            
+                if($q_pu['PermanentUser']['data_used'] != null){
+                    $user_detail['data_used'] = $this->Formatter->formatted_bytes($q_pu['PermanentUser']['data_used']);
+                }
+            
+                if($q_pu['PermanentUser']['perc_data_used'] != null){
+                    $user_detail['perc_data_used'] = $q_pu['PermanentUser']['perc_data_used'];
+                }
+            
+                if($q_pu['PermanentUser']['time_cap'] != null){
+                    $user_detail['time_cap'] = $this->Formatter->formatted_seconds($q_pu['PermanentUser']['time_cap']);
+                }
+            
+                if($q_pu['PermanentUser']['time_used'] != null){
+                    $user_detail['time_used'] = $this->Formatter->formatted_seconds($q_pu['PermanentUser']['time_used']);
+                }
+            
+                if($q_pu['PermanentUser']['perc_time_used'] != null){
+                    $user_detail['perc_time_used'] = $q_pu['PermanentUser']['perc_time_used'];
+                }
+                $found = true;
+            
+            }
+        
+        }
+        
         
         return $user_detail;
     }
