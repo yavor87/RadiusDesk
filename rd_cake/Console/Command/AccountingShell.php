@@ -157,7 +157,8 @@ class AccountingShell extends AppShell {
 
                 if(array_key_exists('data', $counters)){
                     $counters['data']['usage'] = $this->Usage->data_usage($counters['data'],$username,'username');
-                    $counters['data']['usage'] =$this->Usage->find_no_reset_data_usage($username);
+                    //$counters['data']['usage'] =$this->Usage->find_no_reset_data_usage($username); 
+                    //--People are actually issuing vouchers which resets monthly-- 
                     $perc_data_used = intval(($counters['data']['usage'] / $counters['data']['value'])* 100);
                     $q_r = $this->Voucher->findByName($username);
                     if($q_r){
