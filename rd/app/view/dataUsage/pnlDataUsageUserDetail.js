@@ -21,7 +21,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
                 text    : '<i class="fa  fa-database"></i> Data Usage',
                 height  : 20,
                 margin  : 5,
-                cls     : 'wifired',
+                //cls     : 'wifired',
                 value   : 1 
             },
             {
@@ -31,7 +31,7 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
                 height  : 20,
                 margin  : 5,
                 width   : '100%',
-                cls     : 'wifigreen',
+                //cls     : 'wifigreen',
                 value   : 0.5
             },
             {
@@ -98,6 +98,24 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
         
         if(Ext.isDefined(user_detail.perc_data_used)){
         
+            if(user_detail.perc_data_used < 70){
+                var cls = "wifigreen";
+                me.down('#pbData').toggleCls("wifiyellow",false);
+                me.down('#pbData').toggleCls("wifired",false);
+                me.down('#pbData').toggleCls(cls,true);     
+            } 
+            if(user_detail.perc_data_used >= 70 && user_detail.perc_data_used < 90){
+                cls = "wifiyellow";
+                me.down('#pbData').toggleCls("wifigreen",false);
+                me.down('#pbData').toggleCls("wifired",false);
+                me.down('#pbData').toggleCls(cls,true);   
+            }
+            if(user_detail.perc_data_used >= 90){
+                cls = "wifired"
+                me.down('#pbData').toggleCls("wifigreen",false);
+                me.down('#pbData').toggleCls("wifiyellow",false);
+                me.down('#pbData').toggleCls(cls,true);   
+            }
             var str_data_usage = '<i class="fa  fa-database"></i>  Data Usage '+user_detail.perc_data_used+' %';
             var val_data_usage = user_detail.perc_data_used / 100;
             
@@ -108,6 +126,25 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
         
         if(Ext.isDefined(user_detail.perc_time_used)){
         
+            if(user_detail.perc_time_used < 70){
+                var cls = "wifigreen";
+                me.down('#pbTime').toggleCls("wifiyellow",false);
+                me.down('#pbTime').toggleCls("wifired",false);
+                me.down('#pbTime').toggleCls(cls,true);     
+            } 
+            if(user_detail.perc_time_used >= 70 && user_detail.perc_time_used < 90){
+                cls = "wifiyellow";
+                me.down('#pbTime').toggleCls("wifigreen",false);
+                me.down('#pbTime').toggleCls("wifired",false);
+                me.down('#pbTime').toggleCls(cls,true);   
+            }
+            if(user_detail.perc_time_used >= 90){
+                cls = "wifired"
+                me.down('#pbTime').toggleCls("wifigreen",false);
+                me.down('#pbTime').toggleCls("wifiyellow",false);
+                me.down('#pbTime').toggleCls(cls,true);   
+            }
+            
             var str_time_usage = '<i class="fa fa-clock-o"></i> Time Usage '+user_detail.perc_time_used+' %';
             var val_time_usage = user_detail.perc_time_used / 100;  
          
