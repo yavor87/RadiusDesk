@@ -68,11 +68,18 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageMonth', {
                         }]
                     },
                     {
+                        xtype   : 'pnlDataUsageUserDetail',
+                        margin  : m,
+                        padding : p,
+                        hidden  : true,
+                        flex    : 1  
+                    },
+                    {
                         flex            : 1,
                         margin          : m,
                         padding         : p,
                         border          : false,
-                    
+                        itemId          : 'plrMonthly',
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],

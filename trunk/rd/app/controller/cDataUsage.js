@@ -161,34 +161,29 @@ Ext.define('Rd.controller.cDataUsage', {
     },
     paintUserDetail: function(user_detail){
         var me          = this; 
+        me.getPnlDataUsageDay().down('pnlDataUsageUserDetail').paintUserDetail(user_detail);
         me.getPnlDataUsageDay().down('#plrDaily').hide();
         me.getPnlDataUsageDay().down('pnlDataUsageUserDetail').show();
         
-        if(user_detail.perc_data_used != undefined){
+        me.getPnlDataUsageWeek().down('pnlDataUsageUserDetail').paintUserDetail(user_detail);
+        me.getPnlDataUsageWeek().down('#plrWeekly').hide();
+        me.getPnlDataUsageWeek().down('pnlDataUsageUserDetail').show();
         
-            var str_data_usage = '<i class="fa  fa-database"></i>  Data Usage '+user_detail.perc_data_used+' %';
-            var val_data_usage = user_detail.perc_data_used / 100;
-            
-            me.getPnlDataUsageDay().down('#pbData').show().setValue(val_data_usage).updateText(str_data_usage);
-        }else{
-            me.getPnlDataUsageDay().down('#pbData').hide()
-        }
-        
-        if(user_detail.perc_time_used != undefined){
-        
-            var str_time_usage = '<i class="fa fa-clock-o"></i> Time Usage '+user_detail.perc_time_used+' %';
-            var val_time_usage = user_detail.perc_time_used / 100;  
-         
-            me.getPnlDataUsageDay().down('#pbTime').show().setValue(val_time_usage).updateText(str_time_usage);
-        }else{
-            me.getPnlDataUsageDay().down('#pbTime').hide()
-        }
-        
+        me.getPnlDataUsageMonth().down('pnlDataUsageUserDetail').paintUserDetail(user_detail);
+        me.getPnlDataUsageMonth().down('#plrMonthly').hide();
+        me.getPnlDataUsageMonth().down('pnlDataUsageUserDetail').show();
+           
     },
     hideUserDetail: function(){
         var me          = this; 
         me.getPnlDataUsageDay().down('#plrDaily').show();
         me.getPnlDataUsageDay().down('pnlDataUsageUserDetail').hide();
+        
+        me.getPnlDataUsageWeek().down('#plrWeekly').show();
+        me.getPnlDataUsageWeek().down('pnlDataUsageUserDetail').hide();
+        
+        me.getPnlDataUsageMonth().down('#plrMonthly').show();
+        me.getPnlDataUsageMonth().down('pnlDataUsageUserDetail').hide();
     
     },
     rowClickEvent: function(grid,record){

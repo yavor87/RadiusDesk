@@ -8,6 +8,8 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
     },
     border      : true,
     ui          : 'light',
+    title       : "Today",
+    headerPosition: 'right',
     initComponent: function() {
         var me      = this;
         
@@ -34,24 +36,87 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageUserDetail', {
             },
             {
                 xtype   : 'panel',
+                itemId  : 'pnlInfo',
                 height  : 150,
                 tpl     : new Ext.XTemplate(
-                    '<div class="divInfo">',   
-                    '<tpl if="type==\'realm\'"><h2 style="color: #009933;"><i class="fa fa-dribbble"></i> {item_name}</h2></tpl>',
-                    '<tpl if="type==\'user\'"><h2 style="color: #0066ff;"><i class="fa fa-user"></i> {item_name}</h2></tpl>',
-                    '<h1 style="font-size:250%;">{data_total}</h1>',       
-                    '<p style="color: #000000; font-size:110%;">',
-                        'In: Bla<br>',
-                        'Out: Bla',
-                    '</p>',
+                    '<div>',   
+                        '<ul class="fa-ul">',    
+                            "<tpl if='type == \"voucher\"'>",
+                            "<li style='color:blue;'><i class='fa-li fa  fa-ticket'></i> Voucher</li>",
+                            "</tpl>",
+                            "<li><i class='fa-li fa  fa-cubes'></i> {profile}</li>",
+                            "<li><i class='fa-li fa  fa-star'></i><b>Created</b> {created}</li>",
+                            '<tpl if="Ext.isDefined(last_reject_time)">', 
+                                "<li style='color:red;'><i class='fa-li fa fa-warning'></i> <b>Last Failed Login</b> {last_reject_time}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(last_reject_message)">', 
+                                "<li style='color:red;'><i class='fa-li fa fa-warning'></i> <b>Failed Login Message</b> {last_reject_message}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(last_accept_time)">', 
+                                "<li style='color:green;'><i class='fa-li fa fa-check-circle'></i> <b>Last Good Login</b> {last_accept_time}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(data_cap)">', 
+                                "<li><i class='fa-li fa fa-database'></i> <b>Data Cap</b> {data_cap}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(data_used)">', 
+                                "<li style='color:blue;'><i class='fa-li fa fa-database'></i> <b>Data Used</b> {data_used}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(time_cap)">', 
+                                "<li><i class='fa-li fa fa-clock-o'></i> <b>Time Cap</b> {time_cap}</li>",
+                            "</tpl>",
+                            '<tpl if="Ext.isDefined(time_used)">', 
+                                "<li style='color:blue;'><i class='fa-li fa fa-clock-o'></i> <b>Time Used</b> {time_used}</li>",
+                            "</tpl>",
+                        '</ul>',
                     '</div>'
-                ),
-                data: {
-                   
-                }
+                )
             } 
         ]; 
         
         me.callParent(arguments);
+    },
+    paintUserDetail: function(user_detail){
+    
+        var me = this;
+        
+        if(Ext.isDefined(user_detail.username)){ 
+            me.setTitle(user_detail.username);
+        }
+        
+        if(Ext.isDefined(user_detail.type)){ 
+            if(user_detail.type == 'voucher'){
+                me.setGlyph(Rd.config.icnVoucher);
+            }
+            if(user_detail.type == 'user'){
+                me.setGlyph(Rd.config.icnUser);
+            }
+            if(user_detail.type == 'device'){
+                me.setGlyph(Rd.config.icnDevice);
+            }
+            
+        }
+        
+        if(Ext.isDefined(user_detail.perc_data_used)){
+        
+            var str_data_usage = '<i class="fa  fa-database"></i>  Data Usage '+user_detail.perc_data_used+' %';
+            var val_data_usage = user_detail.perc_data_used / 100;
+            
+            me.down('#pbData').show().setValue(val_data_usage).updateText(str_data_usage);
+        }else{
+            me.down('#pbData').hide()
+        }
+        
+        if(Ext.isDefined(user_detail.perc_time_used)){
+        
+            var str_time_usage = '<i class="fa fa-clock-o"></i> Time Usage '+user_detail.perc_time_used+' %';
+            var val_time_usage = user_detail.perc_time_used / 100;  
+         
+            me.down('#pbTime').show().setValue(val_time_usage).updateText(str_time_usage);
+        }else{
+            me.down('#pbTime').hide()
+        }
+        
+        me.down('#pnlInfo').setData(user_detail)
+    
     }
 });

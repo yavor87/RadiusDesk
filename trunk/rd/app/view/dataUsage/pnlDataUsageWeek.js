@@ -69,10 +69,18 @@ Ext.define('Rd.view.dataUsage.pnlDataUsageWeek', {
                         }]
                     },
                     {
+                        xtype   : 'pnlDataUsageUserDetail',
+                        margin  : m,
+                        padding : p,
+                        hidden  : true,
+                        flex    : 1  
+                    },
+                    {
                         flex            : 1,
                         margin          : 0,
                         padding         : 0,
                         border          : false,
+                        itemId          : 'plrWeekly',
                         xtype           : 'polar',
                         innerPadding    : 10,
                         interactions    : ['rotate', 'itemhighlight'],
