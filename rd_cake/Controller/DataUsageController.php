@@ -24,9 +24,8 @@ class DataUsageController extends AppController {
            
         $this->base_search = $this->_base_search();
         $today = date('Y-m-d', time());
-        
-
-        
+       
+            
         //________ DAILY _________      
         
         //-- Only if $this->type = 'realm' do we need theser --
@@ -489,9 +488,7 @@ class DataUsageController extends AppController {
             
             }
         
-        }
-        
-        
+        }   
         return $user_detail;
     }
 
