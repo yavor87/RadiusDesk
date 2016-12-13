@@ -52,7 +52,9 @@ Ext.define('Rd.controller.cVouchers', {
         urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
 		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json',
 		urlPdfExportLoad:	'/cake2/rd_cake/vouchers/pdf_export_settings.json',
-		urlAddCsv:          '/cake2/rd_cake/vouchers/add_csv/'
+		urlAddCsv:          '/cake2/rd_cake/vouchers/add_csv/',
+		urlDeleteRadaccts:  '/cake2/rd_cake/radaccts/delete.json',
+        urlDeletePostAuths: '/cake2/rd_cake/radpostauths/delete.json'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridVouchers'} ,
@@ -215,7 +217,7 @@ Ext.define('Rd.controller.cVouchers', {
                 click:      me.gridVoucherRadacctsReload
             },
             'pnlVoucher gridVoucherRadaccts #delete' :{
-                click:      me.genericDelete
+                click:      me.deleteRadaccts
             },
             'pnlVoucher gridVoucherRadaccts' : {
                 activate:      me.gridActivate
@@ -1126,9 +1128,62 @@ Ext.define('Rd.controller.cVouchers', {
         g.getSelectionModel().deselectAll(true);
         g.getStore().load();
     },
-    genericDelete:   function(button){
+    
+    deleteRadaccts:   function(button){
         var me      = this;
         var grid    = button.up('grid');   
+        //Find out if there was something selected
+        if(grid.getSelectionModel().getCount() == 0){
+             Ext.ux.Toaster.msg(
+                        i18n('sSelect_an_item'),
+                        i18n('sFirst_select_an_item_to_delete'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{
+            Ext.MessageBox.confirm(i18n('sConfirm'), i18n('sAre_you_sure_you_want_to_do_that_qm'), function(val){
+                if(val== 'yes'){
+                    var selected    = grid.getSelectionModel().getSelection();
+                    var list        = [];
+                    Ext.Array.forEach(selected,function(item){
+                        var id = item.getId();
+                        Ext.Array.push(list,{'id' : id});
+                    });
+                    Ext.Ajax.request({
+                        url: me.getUrlDeleteRadaccts(),
+                        method: 'POST',          
+                        jsonData: list,
+                        success: function(batch,options){console.log('success');
+                            Ext.ux.Toaster.msg(
+                                i18n('sItem_deleted'),
+                                i18n('sItem_deleted_fine'),
+                                Ext.ux.Constants.clsInfo,
+                                Ext.ux.Constants.msgInfo
+                            );
+                            grid.getSelectionModel().deselectAll(true);
+                            grid.getStore().load();
+                        },                                    
+                        failure: function(batch,options){
+                            Ext.ux.Toaster.msg(
+                                i18n('sProblems_deleting_item'),
+                                batch.proxy.getReader().rawData.message.message,
+                                Ext.ux.Constants.clsWarn,
+                                Ext.ux.Constants.msgWarn
+                            );
+                            grid.getSelectionModel().deselectAll(true);
+                            grid.getStore().load();
+                        }
+                    });
+                }
+            });
+        }
+    },
+    
+    
+    genericDelete:   function(button){
+        var me      = this;
+        var grid    = button.up('grid');  
+        console.log(grid); 
         //Find out if there was something selected
         if(grid.getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(
