@@ -80,21 +80,35 @@ class DashboardController extends AppController {
                 'text'    => 'RADIUS Client',
                 'glyph'   => Configure::read('icnRadius'),
                 'scale'   => 'large',
-                'itemId'  => 'cRadiusClient'
+                'itemId'  => 'btnRadiusClient'
             ),
             array(
                 'xtype'   => 'button',
                 'text'    => 'Password Manager',
                 'glyph'   => Configure::read('icnKey'),
                 'scale'   => 'large',
-                'itemId'  => 'cPassword'
+                'itemId'  => 'btnPassword'
+            ),
+            array(
+                'xtype'   => 'button',
+                'text'    => 'Activity Monitor',
+                'glyph'   => Configure::read('icnActivity'),
+                'scale'   => 'large',
+                'itemId'  => 'btnActivityMonitor'
+            ),
+            array(
+                'xtype'   => 'button',
+                'text'    => 'Data Usage',
+                'glyph'   => Configure::read('icnData'),
+                'scale'   => 'large',
+                'itemId'  => 'btnDataUsage'
             ),
            /* array(
                 'xtype'   => 'button',
                 'text'    => 'Setup Wizard',
                 'glyph'   => Configure::read('icnWizard'),
                 'scale'   => 'large',
-                'itemId'  => 'cSetupWizard'
+                'itemId'  => 'btnSetupWizard'
             )*/
         );
         
@@ -601,13 +615,13 @@ class DashboardController extends AppController {
         
         //We found a realm and should display it
         if(($realm_blank == false)&&($show_recent_failures == true)){
-            array_push($overview_items, array(
+         /*   array_push($overview_items, array(
                     'title'   => __('Recent Failures'),
                         'glyph'   => Configure::read('icnBan'),
                         'id'      => 'cRejects',
                         'layout'  => 'fit'
                 )
-            );
+            );*/
         } 
        
         
@@ -713,13 +727,13 @@ class DashboardController extends AppController {
         
         //We found a realm and should display it
         if(($realm_blank == false)&&($show_recent_failures == true)){
-            array_push($overview_items, array(
+           /* array_push($overview_items, array(
                     'title'   => __('Recent Failures'),
                         'glyph'   => Configure::read('icnBan'),
                         'id'      => 'cRejects',
                         'layout'  => 'fit'
                 )
-            );
+            );*/
         } 
        
         
