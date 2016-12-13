@@ -102,6 +102,7 @@ Ext.define('Rd.view.vouchers.gridVoucherRadaccts' ,{
             remoteSort: true,
             proxy: {
                 type    : 'ajax',
+                keepRawData     : true,
                 format  : 'json',
                 batchActions: true, 
                 url     : '/cake2/rd_cake/radaccts/index.json',

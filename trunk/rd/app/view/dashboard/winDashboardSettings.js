@@ -5,7 +5,7 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
     layout  : 'fit',
     autoShow: false,
     width   : 350,
-    height  : 350,
+    height  : 250,
     glyph   : Rd.config.icnSpanner,
     requires: [
         'Rd.view.components.cmbRealm'
@@ -40,7 +40,7 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
                         inputValue  : 'show_data_usage',
                         checked     : true,
                         cls         : 'lblRdReq'
-                    },
+                    }/*,
                     {
                         xtype       : 'checkbox',      
                         boxLabel  : 'Show Recent Failures',
@@ -48,16 +48,16 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
                         inputValue  : 'show_recent_failures',
                         checked     : true,
                         cls         : 'lblRdReq'
-                    }
+                    }*/
                 ],
                 buttons: [
                     {
-                        itemId: 'save',
-                        text: i18n('sOK'),
-                        scale: 'large',
-                        glyph   : Rd.config.icnYes,
-                        formBind: true,
-                        margin: Rd.config.buttonMargin
+                        itemId      : 'save',
+                        text        : i18n('sOK'),
+                        scale       : 'large',
+                        glyph       : Rd.config.icnYes,
+                        formBind    : true,
+                        margin      : Rd.config.buttonMargin
                     }
                 ]
             }

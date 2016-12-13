@@ -36,17 +36,23 @@ Ext.define('Rd.controller.cUtilities', {
             '#tabUtilities' : {
                 destroy   :      me.appClose   
             },
-            'pnlUtilities #cRadiusClient' : {
+            'pnlUtilities #btnRadiusClient' : {
                 click   : function(btn){
                     me.application.runAction('cRadiusClient','Index')
                 } 
             },
-            'pnlUtilities #cPassword' : {
+            'pnlUtilities #btnPassword' : {
                 click   : function(btn){
                     me.application.runAction('cPassword','Index')
                 } 
             },
-            'pnlUtilities #cSetupWizard' : {
+            'pnlUtilities #btnActivityMonitor' : {
+                click   : me.openActivityMonitor
+            },
+            'pnlUtilities #btnDataUsage' : {
+                click   : me.openDataUsage
+            },
+            'pnlUtilities #btnSetupWizard' : {
                 click   : function(btn){
                     me.application.runAction('cSetupWizard','Index')
                 } 
@@ -57,9 +63,30 @@ Ext.define('Rd.controller.cUtilities', {
         var me          = this;
         me.populated    = false;
     },
-    openActivityViewer: function(btn){
+    openActivityMonitor: function(btn){
         var me  = this;
         var pnl = me.getPnlUtilities();
         me.application.runAction('cActivityMonitor','Index',pnl); 
+    },
+    openDataUsage: function(btn){
+        var me  = this;
+        var pnl = me.getPnlUtilities();
+        var tp  = pnl.up('tabpanel');
+        var check_if_there = tp.down('#cDataUsage');
+        
+        if(check_if_there){
+            tp.setActiveTab('cDataUsage');
+            return;
+        }
+        
+        tp.add({
+             title   : 'Data Usage',
+             glyph   : Rd.config.icnData,
+             id      : 'cDataUsage',
+             layout  : 'fit'
+        
+        });
+        tp.setActiveTab('cDataUsage');
+        me.application.runAction('cDataUsage','Index',tp);
     }
 });
