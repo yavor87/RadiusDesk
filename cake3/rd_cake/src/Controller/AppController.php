@@ -17,6 +17,9 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
+use Acl\Controller\Component\AclComponent;
+use Cake\Controller\ComponentRegistry;
+
 /**
  * Application Controller
  *
@@ -37,13 +40,22 @@ class AppController extends Controller
      *
      * @return void
      */
+     
+    public $components = [
+            'Acl' => [
+                'className' => 'Acl.Acl'
+            ]
+        ]; 
+     
     public function initialize()
     {
         parent::initialize();
+        
+        
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-
+        
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see http://book.cakephp.org/3.0/en/controllers/components/security.html
