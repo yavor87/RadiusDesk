@@ -2,7 +2,7 @@ Ext.define('Rd.controller.cLogin', {
     extend: 'Ext.app.Controller',
     views:  ['login.pnlLogin'],
     config: {
-        urlLogin    : '/cake2/rd_cake/dashboard/authenticate.json',
+        urlLogin    : '/cake3/rd_cake/dashboard/authenticate.json',
         urlWallpaper: 'resources/images/wallpapers/3.jpg'
     },
     refs: [

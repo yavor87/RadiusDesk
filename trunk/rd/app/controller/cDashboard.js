@@ -8,9 +8,9 @@ Ext.define('Rd.controller.cDashboard', {
         'dashboard.winDashboardSettings'
     ],
     config: {
-        urlChangePassword           : '/cake2/rd_cake/dashboard/change_password.json',
-        urlSettingsSubmit           : '/cake2/rd_cake/dashboard/settings_submit.json',
-        urlViewSettings             : '/cake2/rd_cake/dashboard/settings_view.json'
+        urlChangePassword           : '/cake3/rd_cake/dashboard/change_password.json',
+        urlSettingsSubmit           : '/cake3/rd_cake/dashboard/settings_submit.json',
+        urlViewSettings             : '/cake3/rd_cake/dashboard/settings_view.json'
     },
     models: [
         'mRealm'
@@ -249,6 +249,11 @@ Ext.define('Rd.controller.cDashboard', {
             url: me.getUrlChangePassword(),
             success: function(form, action) {
                 //Important to update the token for the next requests
+                //Set the token cookie
+                var now = new Date();
+                now.setDate(now.getDate() + 1);
+                Ext.util.Cookies.set("Token", action.result.data.token, now, "/", null, false);
+                
                 var token = action.result.data.token; 
                 Ext.Ajax.setExtraParams({token : token});
                 win.close();
