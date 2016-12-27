@@ -20,6 +20,9 @@ use Cake\Event\Event;
 use Acl\Controller\Component\AclComponent;
 use Cake\Controller\ComponentRegistry;
 
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
+
 /**
  * Application Controller
  *
@@ -51,7 +54,8 @@ class AppController extends Controller
     {
         parent::initialize();
         
-        
+        //Load the Config file we originally always had loaded
+        Configure::load('RadiusDesk','default');
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
@@ -78,4 +82,34 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
     }
+    
+     protected function _ap_right_check(){
+        //This is a common function which will check the right for an access provider on the called action.
+        //We have this as a common function but beware that each controlleer which uses it; 
+        //have to set the value of 'base' in order for it to work correct.
+
+        $action = $this->request->action;
+        //___AA Check Starts ___
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
+                $this->Aa->fail_no_rights($this);
+                return;
+            }
+        }else{
+           $this->Aa->fail_no_rights($this);
+           return;
+        }
+
+        return $user;
+        //__ AA Check Ends ___
+    }
+    
 }

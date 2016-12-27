@@ -7,6 +7,7 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Utility\Text;
 
 class UsersTable extends Table
 {
@@ -31,5 +32,6 @@ class UsersTable extends Table
             array_push($this->ap_children,array('id' => $c->id, 'username' => $c->username));
         }
         return $this->ap_children;      
-    }
+    } 
+    
 }

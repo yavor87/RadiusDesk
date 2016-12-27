@@ -11,17 +11,15 @@
 namespace App\Controller\Component;
 use Cake\Controller\Component;
 
-class CustomComponent extends Component{
+use Cake\ORM\TableRegistry;
 
-    public $components = ['Existing'];
-    
-    //
-    //$controller = $this->_registry->getController();
-    //
-    
+class TokenAuthComponent extends Component {
+  
     public function check_if_valid($controller){
         //First we will ensure there is a token in the request
-        $request = Router::getRequest();
+        $controller = $this->_registry->getController();
+        $request = $controller->request;
+        
         $token = false;
 
         if(isset($request->data['token'])){
@@ -29,6 +27,7 @@ class CustomComponent extends Component{
         }elseif(isset($request->query['token'])){ 
             $token = $request->query['token'];
         }
+        
         
         if($token != false){
             if(strlen($token) != 36){
@@ -55,26 +54,23 @@ class CustomComponent extends Component{
     }
 
     protected function find_token_owner($token){
-        $u = ClassRegistry::init("User");
-        $u->contain('Group');
-        $q_r = $u->find('first',array(
-            'conditions'    => array('User.token' => $token),
-            'fields'        => array('User.id','User.monitor','User.active','Group.name','Group.id')
-        ));
+    
+        $users  = TableRegistry::get('Users');
+        $user   = $users->find()->contain(['Groups'])->where(['Users.token' => $token])->first();
 
-        if($q_r == ''){
+        if(!$user){
             return array('success' => false, 'message' => array('message' => __('No user for token')));
         }else{
 
             //Check if account is active or not:
-            if($q_r['User']['active']==0){
+            if($user->active==0){
                 return array('success' => false, 'message' => array('message' => __('Account disabled')));
             }else{
                 $user = array(
-                    'id'            => $q_r['User']['id'],
-                    'group_name'    => $q_r['Group']['name'],
-                    'group_id'      => $q_r['Group']['id'],
-                    'monitor'       => $q_r['User']['monitor'],
+                    'id'            => $user->id,
+                    'group_name'    => $user->group->name,
+                    'group_id'      => $user->group->id,
+                    'monitor'       => $user->monitor,
                 );  
                 return array('success' => true, 'user' => $user);
             }
