@@ -352,6 +352,10 @@ $config['icnData']      = 'xf1c0@'.$config['webFont'];
 $config['icnGears']     = 'xf085@'.$config['webFont'];
 $config['icnWizard']    = 'xf0d0@'.$config['webFont'];
 
+$config['icnShield']    = 'xf132@'.$config['webFont'];
+$config['icnList']      = 'xf03a@'.$config['webFont'];
+$config['icnScale']     = 'xf24e@'.$config['webFont'];
+
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
 $config['experimental']['active']                   = false;

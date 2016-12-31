@@ -303,7 +303,8 @@ class DashboardController extends AppController{
         
         if( $group == Configure::read('group.ap')){  //Or AP
             $cls = 'access_provider';
-            $tabs= $this->_build_ap_tabs($id);  //We DO care for rights here!      
+            $tabs= $this->_build_ap_tabs($id);  //We DO care for rights here!  
+            //$tabs    = array();    
         }
         
         return array(
@@ -438,6 +439,33 @@ class DashboardController extends AppController{
                 'id'      => 'cAccessPoints',
                 'layout'  => 'fit' 
             ),
+           /* 
+            array(
+                'title'   => __('DNSdesk'),
+                'glyph'   => Configure::read('icnShield'),
+                'xtype'   => "tabpanel",
+                'layout'  => 'fit',
+                'items'   => array(
+                    array(
+                        'title'   => 'Domain Names',
+                        'glyph'   => Configure::read('icnList'),
+                        'id'      => 'cGlobalDomains',
+                        'layout'  => 'fit'
+                    ),
+                    array(
+                        'title'   => 'Domain Tags',
+                        'glyph'   => Configure::read('icnTag'),
+                        'id'      => 'cGlobalTags',
+                        'layout'  => 'fit'
+                    ),
+                    array(
+                        'title'   => 'Policies',
+                        'glyph'   => Configure::read('icnScale'),
+                        'id'      => 'cPolicies',
+                        'layout'  => 'fit'
+                    )  
+                ) 
+            ),  */
             array(
                 'title'   => __('Other'),
                 'glyph'   => Configure::read('icnGears'),
@@ -614,7 +642,7 @@ class DashboardController extends AppController{
         
         //Find if there is a realm specified in the settings        
         $q_rr =  $this->UserSettings->find()->where(['user_id' => $user_id,'name' => 'realm_id'])->first();
-  
+        
         if($q_rr){
             //Get the name of the realm
             $q_r = $this->Realms->find()->where(['id' => $q_rr->value])->first();
@@ -639,7 +667,8 @@ class DashboardController extends AppController{
             }  
          
         //No realm specified in settings; get a default one (if there might be one )    
-        }else{    
+        }else{ 
+           
             $realm_detail = $this->_ap_default_realm($user_id);
             if(array_key_exists('realm_id',$realm_detail)){
                 $data['realm_name'] = $realm_detail['realm_name'];
@@ -650,7 +679,10 @@ class DashboardController extends AppController{
             }else{ // Could not find a default realm
                 $realm_blank = true;
             }  
+            
         }
+        
+       
         
          //We found a realm and should display it
         if(($realm_blank == false)&&($show_data_usage == true)){
@@ -906,6 +938,32 @@ class DashboardController extends AppController{
             );
         }
         
+        
+        //___ DNSdesk tab ___
+      /*  
+        $dns_desk_items = array();
+        
+        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
+            array_push($dns_desk_items, array(
+                    'title'   => 'Domain Names',
+                    'glyph'   => Configure::read('icnList'),
+                    'id'      => 'cGlobalDomains',
+                    'layout'  => 'fit'             
+                )
+            );  
+        }
+        
+         if(count($dns_desk_items) > 0){
+            array_push($tabs, array(
+                'title'   => __('DNSdesk'),
+                'glyph'   => Configure::read('icnShield'),
+                'xtype'   => 'tabpanel',
+                'layout'  => 'fit',
+                'items'   => $dns_desk_items
+                )
+            );
+        }
+          */
         // ____ Other Tab ____
         
         $other_items = array();
@@ -940,7 +998,8 @@ class DashboardController extends AppController{
       
         $q_r = $this->Users->find('path',['for' => $ap_id]);
             
-        $found_flag = false;  
+        $found_flag = false; 
+       
                
         foreach($q_r as $i){    
             $user_id    = $i->id;
@@ -961,11 +1020,10 @@ class DashboardController extends AppController{
                 }
             }
         }
-
+        
         //All the realms owned by anyone this access provider created (and also itself) 
         //will automatically be under full controll of this access provider  
-        if($found_flag == false){
-            
+        if($found_flag == false){           
             $this->children     = $this->Users->find_access_provider_children($ap_id);
             $or_array           = array();
             if($this->children){   //Only if the AP has any children...
@@ -974,13 +1032,14 @@ class DashboardController extends AppController{
                     array_push($or_array,array('Realms.user_id' => $id));
                 }       
             }
-            
-            $r_sub = $this->Realms->find()->where(['OR' => $or_array])->all(); 
-            foreach($r_sub  as $j){
-                $realm['realm_id']     = $j->id;
-                $realm['realm_name']   = $j->name;
-                break; //We only need one
-            }   
+            if(count($or_array)>0){ //Only if there are something to 'OR'
+                $r_sub = $this->Realms->find()->where(['OR' => $or_array])->all(); 
+                foreach($r_sub  as $j){
+                    $realm['realm_id']     = $j->id;
+                    $realm['realm_name']   = $j->name;
+                    break; //We only need one
+                }
+            }              
         }
         return $realm;
     }

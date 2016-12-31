@@ -22,3 +22,2017 @@ require - ROOT/webroot/index.php, line 37
 
 
 
+2016-12-25 02:44:59 Notice: Notice (8): Undefined variable: user in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 40]
+Request URL: /cake3/rd_cake/dashboard/check_token.json?_dc=1482585743916&token=58041890-8d48-45c4-bd0f-1805b2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::checkToken() - APP/Controller/DashboardController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-25 03:18:32 Notice: Notice (8): Undefined variable: users_items in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 322]
+Request URL: /cake3/rd_cake/dashboard/check_token.json?_dc=1482585743916&token=58041890-8d48-45c4-bd0f-1805b2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_build_ap_tabs() - APP/Controller/DashboardController.php, line 322
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 85
+App\Controller\DashboardController::checkToken() - APP/Controller/DashboardController.php, line 44
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-25 03:18:34 Notice: Notice (8): Undefined variable: users_items in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 322]
+Request URL: /cake3/rd_cake/dashboard/check_token.json?_dc=1482585743916&token=58041890-8d48-45c4-bd0f-1805b2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_build_ap_tabs() - APP/Controller/DashboardController.php, line 322
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 85
+App\Controller\DashboardController::checkToken() - APP/Controller/DashboardController.php, line 44
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-25 04:18:18 Notice: Notice (8): Undefined variable: children in [/usr/share/nginx/html/cake3/rd_cake/src/Model/Table/UsersTable.php, line 36]
+Request URL: /cake3/rd_cake/dashboard/check_token.json?_dc=1482585743916&token=58041890-8d48-45c4-bd0f-1805b2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Model\Table\UsersTable::find_access_provider_children() - APP/Model/Table/UsersTable.php, line 36
+App\Controller\DashboardController::_ap_default_realm() - APP/Controller/DashboardController.php, line 506
+App\Controller\DashboardController::_build_ap_tabs() - APP/Controller/DashboardController.php, line 177
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 85
+App\Controller\DashboardController::checkToken() - APP/Controller/DashboardController.php, line 44
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:50:52 Notice: Notice (8): Undefined variable: result in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 46]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 46
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:50:52 Notice: Notice (8): Undefined variable: result in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 48]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 48
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:50:52 Notice: Notice (8): Undefined variable: result in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 49]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 49
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:56:48 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 74]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::find_token_owner() - APP/Controller/Component/TokenAuthComponent.php, line 74
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 41
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:56:48 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 75]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::find_token_owner() - APP/Controller/Component/TokenAuthComponent.php, line 75
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 41
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 05:56:48 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/TokenAuthComponent.php, line 76]
+Request URL: /cake3/rd_cake/dashboard/settings_view.json?_dc=1482730993482&token=58103db5-86a8-4206-9ecf-242ab2203b89&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\TokenAuthComponent::find_token_owner() - APP/Controller/Component/TokenAuthComponent.php, line 76
+App\Controller\Component\TokenAuthComponent::check_if_valid() - APP/Controller/Component/TokenAuthComponent.php, line 41
+App\Controller\Component\AaComponent::user_for_token() - APP/Controller/Component/AaComponent.php, line 18
+App\Controller\DashboardController::settingsView() - APP/Controller/DashboardController.php, line 144
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 13:29:10 Notice: Notice (8): Undefined variable: data in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 285]
+Request URL: /cake3/rd_cake/dashboard/change_password.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::changePassword() - APP/Controller/DashboardController.php, line 285
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Undefined index: User in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 49]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 317]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 317
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 318]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 318
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:31:53 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 339]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 339
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Undefined index: User in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 49]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 317]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 317
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 318]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 318
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:32:15 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 339]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 339
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Undefined index: User in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 50]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 317]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 317
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 318]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 318
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 319]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 319
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:33:37 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 340]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 340
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 50
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 314]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 314
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 314]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 314
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 317]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 317
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:34:26 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 338]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 338
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 48
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 315]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 315
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 316]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 316
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 317]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 317
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 318]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 318
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-26 15:35:55 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 339]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 339
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 49
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-27 02:24:29 Notice: Notice (8): Undefined variable: user in [/usr/share/nginx/html/cake3/rd_cake/src/Model/Entity/User.php, line 27]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Model\Entity\User::_setPassword() - APP/Model/Entity/User.php, line 27
+Cake\ORM\Entity::set() - CORE/src/Datasource/EntityTrait.php, line 265
+Cake\ORM\Entity::__set() - CORE/src/Datasource/EntityTrait.php, line 147
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 51
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-27 02:24:29 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Model/Entity/User.php, line 27]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Model\Entity\User::_setPassword() - APP/Model/Entity/User.php, line 27
+Cake\ORM\Entity::set() - CORE/src/Datasource/EntityTrait.php, line 265
+Cake\ORM\Entity::__set() - CORE/src/Datasource/EntityTrait.php, line 147
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 51
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-27 02:29:32 Notice: Notice (8): Undefined variable: user in [/usr/share/nginx/html/cake3/rd_cake/src/Model/Entity/User.php, line 28]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Model\Entity\User::_setPassword() - APP/Model/Entity/User.php, line 28
+Cake\ORM\Entity::set() - CORE/src/Datasource/EntityTrait.php, line 265
+Cake\ORM\Entity::__set() - CORE/src/Datasource/EntityTrait.php, line 147
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 52
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-27 02:29:32 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Model/Entity/User.php, line 28]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Model\Entity\User::_setPassword() - APP/Model/Entity/User.php, line 28
+Cake\ORM\Entity::set() - CORE/src/Datasource/EntityTrait.php, line 265
+Cake\ORM\Entity::__set() - CORE/src/Datasource/EntityTrait.php, line 147
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 52
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-29 14:44:34 Notice: Notice (8): Undefined variable: t in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 46]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483020081006&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 46
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-29 14:49:19 Notice: Notice (8): Undefined variable: tabs in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 312]
+Request URL: /cake3/rd_cake/dashboard/authenticate.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 312
+App\Controller\DashboardController::authenticate() - APP/Controller/DashboardController.php, line 44
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:31:43 Notice: Notice (8): Undefined variable: or_array in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/DashboardController.php, line 1028]
+Request URL: /cake3/rd_cake/dashboard/check_token.json?_dc=1483023050244&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\DashboardController::_ap_default_realm() - APP/Controller/DashboardController.php, line 1028
+App\Controller\DashboardController::_build_ap_tabs() - APP/Controller/DashboardController.php, line 674
+App\Controller\DashboardController::_get_user_detail() - APP/Controller/DashboardController.php, line 306
+App\Controller\DashboardController::checkToken() - APP/Controller/DashboardController.php, line 80
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:02 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080422223&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:47:25 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 69]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 69
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 79]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 79
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Undefined variable: controller in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 06:48:04 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/GridButtonsComponent.php, line 91]
+Request URL: /cake3/rd_cake/global-domains/menu-for-grid.json?_dc=1483080445077&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\GridButtonsComponent::_fetchBasic() - APP/Controller/Component/GridButtonsComponent.php, line 91
+App\Controller\Component\GridButtonsComponent::returnButtons() - APP/Controller/Component/GridButtonsComponent.php, line 33
+App\Controller\GlobalDomainsController::menuForGrid() - APP/Controller/GlobalDomainsController.php, line 28
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-30 10:09:53 Notice: Notice (8): Undefined variable: print_r in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 194]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483089874599&page=1&start=0&limit=50&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_find_parents() - APP/Controller/GlobalDomainsController.php, line 194
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 63
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:15:48 Notice: Notice (8): Undefined variable: user in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 280]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483089874599&page=1&start=0&limit=50&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 280
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:15:48 Notice: Notice (8): Undefined variable: c in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 307]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483089874599&page=1&start=0&limit=50&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 307
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:41:44 Notice: Notice (8): Undefined variable: users in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 283]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483155493177&page=1&start=0&limit=50&sort=name&dir=ASC&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 283
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:41:44 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 283]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483155493177&page=1&start=0&limit=50&sort=name&dir=ASC&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 283
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:41:47 Notice: Notice (8): Undefined variable: users in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 283]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483155493177&page=1&start=0&limit=50&sort=name&dir=ASC&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 283
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 03:41:47 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 283]
+Request URL: /cake3/rd_cake/global-domains/index.json?_dc=1483155493177&page=1&start=0&limit=50&sort=name&dir=ASC&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::_build_common_query() - APP/Controller/GlobalDomainsController.php, line 283
+App\Controller\GlobalDomainsController::index() - APP/Controller/GlobalDomainsController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2016-12-31 06:54:23 Notice: Notice (8): Use of undefined constant id - assumed 'id' in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php, line 122]
+Request URL: /cake3/rd_cake/global-domains/add-or-edit.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\GlobalDomainsController::addOrEdit() - APP/Controller/GlobalDomainsController.php, line 122
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+

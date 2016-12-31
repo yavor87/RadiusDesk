@@ -23,15 +23,49 @@ class UsersTable extends Table
         $this->belongsTo('Groups');
     }
       
-    public function find_access_provider_children($ap_id){
+    public function find_access_provider_children($id){
 
         $ap_name = Configure::read('group.ap'); 
-        $descendants = $this->find('children', ['for' => $ap_id]);
+        $descendants = $this->find('children', ['for' => $id]);
 
         foreach ($descendants as $c) {
             array_push($this->ap_children,array('id' => $c->id, 'username' => $c->username));
         }
         return $this->ap_children;      
     } 
+      
+    public function find_parents($id){
+      
+        $q_r = $this->find('path',['for' => $id]);
+        $path_string= '';
+        if($q_r){
+            foreach($q_r as $line_num => $i){
+                $username       = $i->username;
+                if($line_num == 0){
+                    $path_string    = $username;
+                }else{
+                    $path_string    = $path_string.' -> '.$username;
+                }
+            }
+            if($line_num > 0){
+                return $username." (".$path_string.")";
+            }else{
+                return $username;
+            }
+        }else{
+            return __("orphaned");
+        }
+    }
     
+    public function is_sibling_of($parent_id,$user_id){
+        $q_r = $this->find('path',['for' => $user_id]);
+        foreach($q_r as $i){
+            $id = $i->id;
+            if($id == $parent_id){
+                return true;
+            }
+        }
+        //No match
+        return false; 
+    }
 }

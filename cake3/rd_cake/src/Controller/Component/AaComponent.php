@@ -9,10 +9,18 @@
 namespace App\Controller\Component;
 use Cake\Controller\Component;
 
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
+
+use Cake\ORM\TableRegistry;
+
 
 class AaComponent extends Component {
 
     public $components = array('TokenAuth', 'TokenAcl');
+    
+    protected $parents  = false;
+    protected $children = false;
 
     public function user_for_token($controller){
         return $this->TokenAuth->check_if_valid($controller);
@@ -90,6 +98,50 @@ class AaComponent extends Component {
         }
         //-> Authorization check complete - continuie --
         return true;
+    }
+    
+    
+    public function get_action_flags($owner_id,$user){
+    
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return array('update' => true, 'delete' => true);
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $user_id = $user['id'];
+
+            //test for self
+            if($owner_id == $user_id){
+                return array('update' => true, 'delete' => true );
+            }
+            
+            //Test for Parents
+            //NOTE If parents does not exist -> Get it
+            if(!$this->parents){
+                $users          = TableRegistry::get('Users')->find();
+                $this->parents  = $users->find('path',['for' => $user_id]);
+            }
+            
+            foreach($this->parents as $i){
+                if($i->id == $owner_id){
+                    return array('update' => false, 'delete' => false );
+                }
+            }
+
+            //Test for Children
+            //NOTE If parents does not exist -> Get it
+            if(!$this->children){
+                $users          = TableRegistry::get('Users')->find();
+                $this->children = $this->find('children', ['for' => $user_id]);
+            }
+             
+            foreach($this->children as $i){
+                if($i->id == $owner_id){
+                    return array('update' => true, 'delete' => true);
+                }
+            }  
+        }
+    
     }
 
 }
