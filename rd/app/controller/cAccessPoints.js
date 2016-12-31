@@ -12,25 +12,19 @@ Ext.define('Rd.controller.cAccessPoints', {
             itemId  : 'tabAccessPoints',
             items   : [
                 {   
-                   xtype       : 'gridApProfiles',
-                    tabConfig   : {
-                        title       : i18n('sAccess_Point_Profiles'), 
-                        glyph       : Rd.config.icnProfile   
-                    } 
+                    xtype       : 'gridApProfiles',
+                    title       : i18n('sAccess_Point_Profiles'), 
+                    glyph       : Rd.config.icnProfile   
                 },
                 { 
                     xtype       : 'gridApLists',  
-                    tabConfig   : {
-                        title       : i18n('sAttached_Devices'),
-                        glyph       : Rd.config.icnChain
-                    }
+                    title       : i18n('sAttached_Devices'),
+                    glyph       : Rd.config.icnChain
                 },
                 {  
                     xtype       : 'gridUnknownAps', 
-                    tabConfig   : {
-                        title       : i18n('sDetached_Devices'),
-                        glyph       : Rd.config.icnChainBroken
-                    }
+                    title       : i18n('sDetached_Devices'),
+                    glyph       : Rd.config.icnChainBroken
                 }	
             ]
         });

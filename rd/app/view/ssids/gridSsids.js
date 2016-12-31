@@ -13,7 +13,7 @@ Ext.define('Rd.view.ssids.gridSsids' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/ssids/menu_for_grid.json',
+    urlMenu: '/cake3/rd_cake/ssids/menu_for_grid.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;
