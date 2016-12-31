@@ -165,7 +165,20 @@ Ext.define('Rd.controller.cDashboard', {
 			    },
 			    'winPasswordChanger #save': {
                     'click' : me.onChangePassword
-                }
+                },
+                
+                //Add-on
+                'tpDashboard #cGlobalDomains' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cGlobalDomains','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cGlobalTags' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cGlobalTags','Index',pnl);
+				    }
+			    }
+                    
 		    }
         );
     },

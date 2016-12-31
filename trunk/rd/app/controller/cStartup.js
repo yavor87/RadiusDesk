@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cStartup', {
     extend: 'Ext.app.Controller',
     config: {
         urlLocalizedStrings:    '/cake2/rd_cake/phrase_values/get_language_strings.json',
-        urlCheckToken:          '/cake2/rd_cake/dashboard/check_token.json'
+        urlCheckToken:          '/cake3/rd_cake/dashboard/check_token.json'
     },
    actionIndex: function(){
         //Declare some scoped variables

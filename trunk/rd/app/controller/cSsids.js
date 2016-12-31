@@ -25,10 +25,9 @@ Ext.define('Rd.controller.cSsids', {
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv    : '/cake2/rd_cake/ssids/export_csv',
-        urlAdd          : '/cake2/rd_cake/ssids/add.json',
-        urlDelete       : '/cake2/rd_cake/ssids/delete.json',
-		urlEdit         : '/cake2/rd_cake/ssids/edit.json'
+        urlAdd          : '/cake3/rd_cake/ssids/add.json',
+        urlDelete       : '/cake3/rd_cake/ssids/delete.json',
+		urlEdit         : '/cake3/rd_cake/ssids/edit.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridSsids'}       
