@@ -25,7 +25,7 @@ Ext.define('Rd.controller.cTopUps', {
     models: ['mTopUp',  'mAccessProviderTree',  'mPermanentUser' ],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv    : '/cake2/rd_cake/top_ups/export_csv',
         urlAdd          : '/cake2/rd_cake/top_ups/add.json',
         urlDelete       : '/cake2/rd_cake/top_ups/delete.json'

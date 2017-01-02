@@ -24,7 +24,7 @@ Ext.define('Rd.controller.cOpenvpnServers', {
     models: ['mAccessProviderTree',  'mOpenvpnServer'],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv    : '/cake2/rd_cake/openvpn_servers/export_csv',
         urlAdd          : '/cake2/rd_cake/openvpn_servers/add.json',
         urlDelete       : '/cake2/rd_cake/openvpn_servers/delete.json',

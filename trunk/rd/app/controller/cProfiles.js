@@ -28,7 +28,7 @@ Ext.define('Rd.controller.cProfiles', {
         urlAdd:             '/cake2/rd_cake/profiles/add.json',
         urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlDelete:          '/cake2/rd_cake/profiles/delete.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/profiles/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/profiles/note_add.json',
         urlManageComponents:'/cake2/rd_cake/profiles/manage_components.json'

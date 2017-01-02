@@ -27,7 +27,7 @@ Ext.define('Rd.controller.cTags', {
         urlAdd:             '/cake2/rd_cake/tags/add.json',
         urlEdit:            '/cake2/rd_cake/tags/edit.json',
         urlDelete:          '/cake2/rd_cake/tags/delete.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/tags/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/tags/note_add.json'
     },

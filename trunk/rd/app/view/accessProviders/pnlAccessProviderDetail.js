@@ -5,18 +5,8 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
     ap_id  : null,
     layout: 'hbox',
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
-    urlCheckbox: '/cake2/rd_cake/access_providers/record_activity_checkbox.json',
     initComponent: function(){
         var me = this;
-
-        var aCb = Ext.create('Rd.view.components.ajaxCheckbox',{
-            'url'       :      me.urlCheckbox,
-            fieldLabel  : i18n('sRecord_all_acivity'),
-            name        : 'monitor',
-            inputValue  : 'monitor',
-            checked     : true,
-            cls         : 'lblRd'
-        });
 
         me.items =  { 
                 xtype   :  'form',
@@ -96,8 +86,7 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                         inputValue  : 'active',
                                         checked     : true,
                                         cls         : 'lblRd'
-                                    },
-                                    aCb  //Ajax checkbox - state depends on the rights of the AP and their own record activity setting
+                                    }
                                 ]
                             },
                             { 

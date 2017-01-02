@@ -4,7 +4,7 @@ Ext.define('Rd.view.components.winNote', {
     title : i18n('sNote_management'),
     layout: 'fit',
     autoShow: false,
-    width:    400,
+    width:    600,
     height:   400,
     iconCls: 'note',
     glyph   : Rd.config.icnNote,

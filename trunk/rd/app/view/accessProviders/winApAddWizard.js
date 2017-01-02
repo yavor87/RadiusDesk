@@ -19,7 +19,6 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
     no_tree: false, //If the user has no children we don't bother giving them a branchless tree
     user_id: '',
     owner: '',
-    urlCheckbox: '/cake2/rd_cake/access_providers/record_activity_checkbox.json',
     startScreen: 'scrnApTree', //Default start screen
     requires: [
         'Ext.layout.container.Card',
@@ -52,14 +51,6 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
     mkScrnData: function(){
         var me      = this;
     
-        var aCb = Ext.create('Rd.view.components.ajaxCheckbox',{
-            'url'       :      me.urlCheckbox,
-            fieldLabel  : i18n('sRecord_all_acivity'),
-            name        : 'monitor',
-            inputValue  : 'monitor',
-            checked     : true,
-            cls         : 'lblRd'
-        });
 
         var frmData = Ext.create('Ext.form.Panel',{
             border:     false,
@@ -161,8 +152,7 @@ Ext.define('Rd.view.accessProviders.winApAddWizard', {
                                     inputValue  : 'active',
                                     checked     : true,
                                     cls         : 'lblRd'
-                                },
-                                aCb  //Ajax checkbox - state depends on the rights of the AP and their own record activity setting
+                                }
                             ]
                         },
                         { 

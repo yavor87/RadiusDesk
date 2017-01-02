@@ -16,7 +16,7 @@ Ext.define('Rd.controller.cAccessProviders', {
         me.populated = true;
     },
     views:  [
-        'accessProviders.treeAccessProviders',  'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
+        'accessProviders.pnlAccessProvider',    'accessProviders.pnlAccessProviderDetail',
         'accessProviders.treeApUserRights',     'accessProviders.gridRealms',   
         'accessProviders.gridAccessProviders',  'accessProviders.winApAddWizard',
         'components.winCsvColumnSelect',        'components.winNote',                   'components.winNoteAdd',
@@ -27,19 +27,18 @@ Ext.define('Rd.controller.cAccessProviders', {
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd          : '/cake2/rd_cake/access_providers/add.json',
-        urlEdit         : '/cake2/rd_cake/access_providers/edit.json',
-        urlDelete       : '/cake2/rd_cake/access_providers/delete.json',
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
-        urlExportCsv    : '/cake2/rd_cake/access_providers/export_csv',
-        urlNoteAdd      : '/cake2/rd_cake/access_providers/note_add.json',
-        urlViewAPDetail : '/cake2/rd_cake/access_providers/view.json',
-        urlEnableDisable: '/cake2/rd_cake/access_providers/enable_disable.json',
-        urlChangePassword:'/cake2/rd_cake/access_providers/change_password.json',
+        urlAdd          : '/cake3/rd_cake/access-providers/add.json',
+        urlEdit         : '/cake3/rd_cake/access-providers/edit.json',
+        urlDelete       : '/cake3/rd_cake/access-providers/delete.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
+        urlExportCsv    : '/cake3/rd_cake/access-providers/exportCsv',
+        urlNoteAdd      : '/cake3/rd_cake/access-providers/note_add.json',
+        urlViewAPDetail : '/cake3/rd_cake/access-providers/view.json',
+        urlEnableDisable: '/cake3/rd_cake/access-providers/enable_disable.json',
+        urlChangePassword:'/cake3/rd_cake/access-providers/change_password.json',
         urlLimitCheck   : '/cake2/rd_cake/limits/limit_check.json'
     },
     refs: [
-        { ref:  'treeAccessProviders',  selector:   'treeAccessProviders',  xtype:  '', autoCreate: true    },
         { ref:  'winAccessProviders',   selector:   '#accessProvidersWin'},
         { ref:  'grid',                 selector:   'gridAccessProviders'}
     ],
@@ -114,25 +113,25 @@ Ext.define('Rd.controller.cAccessProviders', {
             '#winCsvColumnSelectAp #save': {
                 click:  me.csvExportSubmit
             },
-            'gridNote[noteForGrid=access_providers] #reload' : {
+            'gridNote[noteForGrid=access-providers] #reload' : {
                 click:  me.noteReload
             },
-            'gridNote[noteForGrid=access_providers] #add' : {
+            'gridNote[noteForGrid=access-providers] #add' : {
                 click:  me.noteAdd
             },
-            'gridNote[noteForGrid=access_providers] #delete' : {
+            'gridNote[noteForGrid=access-providers] #delete' : {
                 click:  me.noteDelete
             },
-            'gridNote[noteForGrid=access_providers]' : {
+            'gridNote[noteForGrid=access-providers]' : {
                 itemclick: me.gridNoteClick
             },
-            'winNoteAdd[noteForGrid=access_providers] #btnTreeNext' : {
+            'winNoteAdd[noteForGrid=access-providers] #btnTreeNext' : {
                 click:  me.btnNoteTreeNext
             },
-            'winNoteAdd[noteForGrid=access_providers] #btnNoteAddPrev'  : {   
+            'winNoteAdd[noteForGrid=access-providers] #btnNoteAddPrev'  : {   
                 click: me.btnNoteAddPrev
             },
-            'winNoteAdd[noteForGrid=access_providers] #btnNoteAddNext'  : {   
+            'winNoteAdd[noteForGrid=access-providers] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
             'pnlAccessProvider #tabDetail': {
@@ -548,7 +547,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                         {
                             id          : 'winNoteAp'+sr.getId(),
                             noteForId   : sr.getId(),
-                            noteForGrid : 'access_providers',
+                            noteForGrid : 'access-providers',
                             noteForName : sr.get('name')
                         });
                     w.show();       
