@@ -99,8 +99,7 @@ class AaComponent extends Component {
         //-> Authorization check complete - continuie --
         return true;
     }
-    
-    
+     
     public function get_action_flags($owner_id,$user){
     
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
@@ -141,7 +140,46 @@ class AaComponent extends Component {
                 }
             }  
         }
+    }
     
+    public function test_for_private_parent($item,$user){
+        //Most tables that has entries which belongs to an Access Provider as the user_id also includes
+        // and available_to_siblings flag which if not set; makes the entry private
+        // This piece of code will take the current user making the request; and compare it with fields in an entry from a table
+        // It will then evaluate where it is in the hirarchy and is below the item marked as private; not display it
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            return false;
+        }
+        
+        if($user['group_name'] == Configure::read('group.ap')){  //AP
+ 
+            $user_id = $user['id'];
+            $owner_id= $item->user_id;
+            $open    = $item->available_to_siblings;
+
+            //test for self
+            if($owner_id == $user_id){
+                return false;
+            }
+            
+            //Test for Parents
+            //NOTE If parents does not exist -> Get it
+            if(!$this->parents){
+                $users          = TableRegistry::get('Users')->find();
+                $this->parents  = $users->find('path',['for' => $user_id]);
+            }
+
+            //**AP and upward in the tree**
+            foreach($this->parents as $i){
+                if($i->id == $owner_id){
+                    if($open == false){
+                        return true; //private item
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
     }
 
 }

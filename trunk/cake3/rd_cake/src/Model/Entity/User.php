@@ -11,19 +11,7 @@ use Cake\Utility\Text;
  */
 class User extends Entity
 {
-
-    /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
-     *
-     * @var array
-     */
-    protected $_accessible = [
-        'email' => true,
-        'password' => true,
-        'bookmarks' => true,
-        'surname'   => true
-    ];
-
+ 
     protected function _setPassword($value){  
         $hasher = new WeakPasswordHasher();
         return $hasher->hash($value);
