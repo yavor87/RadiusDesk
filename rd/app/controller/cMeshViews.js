@@ -14,7 +14,7 @@ Ext.define('Rd.controller.cMeshViews', {
 
     ],
     config      : {  
-        urlApChildCheck				: '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck				: '/cake3/rd_cake/access-providers/child-check.json',
 		urlMapPrefView				: '/cake2/rd_cake/meshes/map_pref_view.json',
 		urlOverviewGoogleMap		: '/cake2/rd_cake/mesh_reports/overview_google_map.json',
 		urlRestartNodes				: '/cake2/rd_cake/mesh_reports/restart_nodes.json',

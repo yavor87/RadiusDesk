@@ -48,7 +48,7 @@ Ext.define('Rd.controller.cDynamicClients', {
     models: ['mAccessProviderTree', 'mDynamicClient', 'mRealmForDynamicClientOwner', 'mUnknownDynamicClient','mDynamicClientState','mUserStat' ],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv    : '/cake2/rd_cake/dynamic_clients/export_csv',
         urlAdd          : '/cake2/rd_cake/dynamic_clients/add.json',
         urlDelete       : '/cake2/rd_cake/dynamic_clients/delete.json',

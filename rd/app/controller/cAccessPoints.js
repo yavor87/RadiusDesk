@@ -48,7 +48,7 @@ Ext.define('Rd.controller.cAccessPoints', {
     models: ['mAccessProviderTree',  'mUnknownAp',  'mApProfile',  'mApList', 'mDynamicDetail' ],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlAdd          : '/cake2/rd_cake/ap_profiles/add.json',
         urlDelete       : '/cake2/rd_cake/ap_profiles/delete.json',
         

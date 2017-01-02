@@ -32,7 +32,7 @@ Ext.define('Rd.controller.cRealms', {
         urlAdd:             '/cake2/rd_cake/realms/add.json',
         urlEdit:            '/cake2/rd_cake/realms/edit.json',
         urlDelete:          '/cake2/rd_cake/realms/delete.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/realms/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/realms/note_add.json',
         urlViewRealmDetail: '/cake2/rd_cake/realms/view.json',

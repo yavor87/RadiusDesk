@@ -45,7 +45,7 @@ Ext.define('Rd.controller.cVouchers', {
         urlDelete:          '/cake2/rd_cake/vouchers/delete.json',
         urlViewBasic:       '/cake2/rd_cake/vouchers/view_basic_info.json',
         urlEditBasic:       '/cake2/rd_cake/vouchers/edit_basic_info.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
         urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
         urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',

@@ -24,7 +24,7 @@ Ext.define('Rd.controller.cSsids', {
     models: ['mAccessProviderTree',  'mSsid'],
     selectedRecord: null,
     config: {
-        urlApChildCheck : '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlAdd          : '/cake3/rd_cake/ssids/add.json',
         urlDelete       : '/cake3/rd_cake/ssids/delete.json',
 		urlEdit         : '/cake3/rd_cake/ssids/edit.json'

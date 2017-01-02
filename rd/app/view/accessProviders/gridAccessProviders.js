@@ -10,7 +10,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
     requires: [
                 'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu     : '/cake2/rd_cake/access_providers/menu_for_grid.json', 
+    urlMenu     : '/cake3/rd_cake/access-providers/menu_for_grid.json', 
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;

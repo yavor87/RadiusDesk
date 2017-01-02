@@ -36,7 +36,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
     selectedRecord: null,
     config: {
         urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json',
         urlViewBasic:       '/cake2/rd_cake/permanent_users/view_basic_info.json',

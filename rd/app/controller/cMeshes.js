@@ -36,7 +36,7 @@ Ext.define('Rd.controller.cMeshes', {
     config      : {
         urlAdd:             '/cake2/rd_cake/meshes/add.json',
         urlDelete:          '/cake2/rd_cake/meshes/delete.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlNoteAdd:         '/cake2/rd_cake/meshes/note_add.json',
 		urlAddNode:         '/cake2/rd_cake/meshes/mesh_node_add.json',
         urlViewNode:        '/cake2/rd_cake/meshes/mesh_node_view.json',

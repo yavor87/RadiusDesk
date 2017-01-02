@@ -44,7 +44,7 @@ Ext.define('Rd.controller.cDynamicDetails', {
         urlEditSettings:    '/cake2/rd_cake/dynamic_details/edit_settings.json',
         urlEditClickToConnect:    '/cake2/rd_cake/dynamic_details/edit_click_to_connect.json',
         urlDelete:          '/cake2/rd_cake/dynamic_details/delete.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/dynamic_details/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/dynamic_details/note_add.json',
         urlViewDynamicDetail: '/cake2/rd_cake/dynamic_details/view.json',

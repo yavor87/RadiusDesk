@@ -6,7 +6,7 @@ Ext.define('Rd.controller.cAccessPointViews', {
         'aps.gridApViewEntries'
     ],
     config      : {  
-        urlApChildCheck				: '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck				: '/cake3/rd_cake/access-providers/child-check.json',
 		urlMapPrefView				: '/cake2/rd_cake/ap_profiles/map_pref_view.json',
 		urlOverviewGoogleMap		: '/cake2/rd_cake/ap_reports/overview_google_map.json',
 		urlRestartNodes				: '/cake2/rd_cake/ap_reports/restart_nodes.json',

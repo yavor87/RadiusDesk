@@ -6,7 +6,7 @@ Ext.define('Rd.store.sAccessProvidersTree', {
     ],
     proxy: {
             type    : 'ajax',
-            url     : '/cake2/rd_cake/access_providers/index_tree.json',
+            url     : '/cake3/rd_cake/access-providers/index-tree.json',
             reader: {
                 type            : 'json',
                 rootProperty    : 'items',

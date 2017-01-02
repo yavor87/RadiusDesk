@@ -44,7 +44,7 @@ Ext.define('Rd.controller.cNas', {
         urlDelete:          '/cake2/rd_cake/nas/delete.json',
         urlEditPanelCfg:    '/cake2/rd_cake/nas/edit_panel_cfg.json',
         urlManageTags:      '/cake2/rd_cake/nas/manage_tags.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/nas/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/nas/note_add.json',
         urlViewOpenVpn:     '/cake2/rd_cake/nas/view_openvpn.json',

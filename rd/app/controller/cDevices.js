@@ -36,7 +36,7 @@ Ext.define('Rd.controller.cDevices', {
     selectedRecord: null,
      config: {
         urlAdd:             '/cake2/rd_cake/devices/add.json',
-        urlApChildCheck:    '/cake2/rd_cake/access_providers/child_check.json',
+        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv:       '/cake2/rd_cake/devices/export_csv',
         urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json',
         urlViewBasic:       '/cake2/rd_cake/devices/view_basic_info.json',
