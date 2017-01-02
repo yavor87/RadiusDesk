@@ -13153,3 +13153,40 @@ require - ROOT/webroot/index.php, line 37
 
 2017-01-02 07:00:34 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
 2017-01-02 07:01:19 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:14:45 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:18:34 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:18:44 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:18:44 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:18:45 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-02 07:18:45 Error: [Cake\Database\Exception] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'rd.global_domains' doesn't exist
+Request URL: /global-domains/index.json?_dc=1483341525259&page=1&start=0&limit=50&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Stack Trace:
+#0 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(97): Cake\Database\Schema\Collection->_reflect('Column', 'global_domains', Array, Object(Cake\Database\Schema\Table))
+#1 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(63): Cake\Database\Schema\Collection->describe('global_domains', Array)
+#2 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Table.php(440): Cake\Database\Schema\CachedCollection->describe('global_domains')
+#3 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(211): Cake\ORM\Table->schema()
+#4 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(168): Cake\ORM\Query->addDefaultTypes(Object(App\Model\Table\GlobalDomainsTable))
+#5 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Table.php(1336): Cake\ORM\Query->__construct(Object(Cake\Database\Connection), Object(App\Model\Table\GlobalDomainsTable))
+#6 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Table.php(964): Cake\ORM\Table->query()
+#7 /usr/share/nginx/html/cake3/rd_cake/src/Controller/GlobalDomainsController.php(38): Cake\ORM\Table->find()
+#8 [internal function]: App\Controller\GlobalDomainsController->index()
+#9 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Controller/Controller.php(435): call_user_func_array(Array, Array)
+#10 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/ActionDispatcher.php(122): Cake\Controller\Controller->invokeAction()
+#11 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/ActionDispatcher.php(96): Cake\Http\ActionDispatcher->_invoke(Object(App\Controller\GlobalDomainsController))
+#12 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/BaseApplication.php(83): Cake\Http\ActionDispatcher->dispatch(Object(Cake\Network\Request), Object(Cake\Network\Response))
+#13 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Http\BaseApplication->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#14 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php(62): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#15 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Routing\Middleware\RoutingMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#16 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php(93): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#17 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Routing\Middleware\AssetMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#18 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php(81): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#19 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Error\Middleware\ErrorHandlerMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#20 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(51): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#21 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Server.php(92): Cake\Http\Runner->run(Object(Cake\Http\MiddlewareQueue), Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#22 /usr/share/nginx/html/cake3/rd_cake/webroot/index.php(37): Cake\Http\Server->run()
+#23 /usr/share/nginx/html/cake3/rd_cake/index.php(16): require('/usr/share/ngin...')
+#24 {main}
+
+
+2017-01-02 07:19:38 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
