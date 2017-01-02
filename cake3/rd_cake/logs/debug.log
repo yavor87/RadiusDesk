@@ -2036,3 +2036,280 @@ require - ROOT/webroot/index.php, line 37
 
 
 
+2017-01-01 16:10:41 Notice: Notice (8): Undefined variable: users in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/CommonQueryComponent.php, line 177]
+Request URL: /cake3/rd_cake/access-providers/index.json?_dc=1483285216218&page=1&start=0&limit=100&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\CommonQueryComponent::build_ap_query() - APP/Controller/Component/CommonQueryComponent.php, line 177
+App\Controller\AccessProvidersController::index() - APP/Controller/AccessProvidersController.php, line 40
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-01 18:00:54 Notice: Notice (8): Undefined variable: tree_array in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/CommonQueryComponent.php, line 190]
+Request URL: /cake3/rd_cake/access-providers/index.json?_dc=1483285216218&page=1&start=0&limit=100&token=521dc362-81a4-4a34-8a0b-052f03662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\CommonQueryComponent::build_ap_query() - APP/Controller/Component/CommonQueryComponent.php, line 190
+App\Controller\AccessProvidersController::index() - APP/Controller/AccessProvidersController.php, line 53
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 02:54:22 Notice: Notice (8): Undefined variable: querty in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/NotesComponent.php, line 35]
+Request URL: /cake3/rd_cake/access-providers/note_index.json?_dc=1483325662370&for_id=191&page=1&start=0&limit=25&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\NotesComponent::index() - APP/Controller/Component/NotesComponent.php, line 35
+App\Controller\AccessProvidersController::noteIndex() - APP/Controller/AccessProvidersController.php, line 457
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 02:54:28 Notice: Notice (8): Undefined variable: querty in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/NotesComponent.php, line 35]
+Request URL: /cake3/rd_cake/access-providers/note_index.json?_dc=1483325662370&for_id=191&page=1&start=0&limit=25&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\NotesComponent::index() - APP/Controller/Component/NotesComponent.php, line 35
+App\Controller\AccessProvidersController::noteIndex() - APP/Controller/AccessProvidersController.php, line 457
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 03:05:18 Notice: Notice (8): Undefined variable: querty in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/NotesComponent.php, line 37]
+Request URL: /cake3/rd_cake/access-providers/note_index.json?_dc=1483325662370&for_id=191&page=1&start=0&limit=25&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\NotesComponent::index() - APP/Controller/Component/NotesComponent.php, line 37
+App\Controller\AccessProvidersController::noteIndex() - APP/Controller/AccessProvidersController.php, line 457
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 03:31:57 Notice: Notice (8): Undefined variable: user_id in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/Component/NotesComponent.php, line 62]
+Request URL: /cake3/rd_cake/access-providers/note_add.json
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\Component\NotesComponent::add() - APP/Controller/Component/NotesComponent.php, line 62
+App\Controller\AccessProvidersController::noteAdd() - APP/Controller/AccessProvidersController.php, line 471
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 93
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 06:53:39 Notice: Notice (8): Undefined variable: q_r in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/AccessProvidersController.php, line 69]
+Request URL: /cake3/rd_cake/access-providers/exportCsv?token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4&columns=%5B%7B%22name%22%3A%22owner%22%7D%2C%7B%22name%22%3A%22username%22%7D%2C%7B%22name%22%3A%22name%22%7D%2C%7B%22name%22%3A%22surname%22%7D%2C%7B%22name%22%3A%22phone%22%7D%2C%7B%22name%22%3A%22email%22%7D%2C%7B%22name%22%3A%22monitor%22%7D%2C%7B%22name%22%3A%22active%22%7D%2C%7B%22name%22%3A%22notes%22%7D%5D
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\AccessProvidersController::exportCsv() - APP/Controller/AccessProvidersController.php, line 69
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 88
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 07:00:20 Notice: Notice (8): Undefined variable: n in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/AccessProvidersController.php, line 79]
+Request URL: /cake3/rd_cake/access-providers/exportCsv?token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4&columns=%5B%7B%22name%22%3A%22owner%22%7D%2C%7B%22name%22%3A%22username%22%7D%2C%7B%22name%22%3A%22name%22%7D%2C%7B%22name%22%3A%22surname%22%7D%2C%7B%22name%22%3A%22phone%22%7D%2C%7B%22name%22%3A%22email%22%7D%2C%7B%22name%22%3A%22monitor%22%7D%2C%7B%22name%22%3A%22active%22%7D%2C%7B%22name%22%3A%22notes%22%7D%5D
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\AccessProvidersController::exportCsv() - APP/Controller/AccessProvidersController.php, line 79
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 88
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 07:00:20 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/AccessProvidersController.php, line 79]
+Request URL: /cake3/rd_cake/access-providers/exportCsv?token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4&columns=%5B%7B%22name%22%3A%22owner%22%7D%2C%7B%22name%22%3A%22username%22%7D%2C%7B%22name%22%3A%22name%22%7D%2C%7B%22name%22%3A%22surname%22%7D%2C%7B%22name%22%3A%22phone%22%7D%2C%7B%22name%22%3A%22email%22%7D%2C%7B%22name%22%3A%22monitor%22%7D%2C%7B%22name%22%3A%22active%22%7D%2C%7B%22name%22%3A%22notes%22%7D%5D
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\AccessProvidersController::exportCsv() - APP/Controller/AccessProvidersController.php, line 79
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 88
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 07:00:20 Notice: Notice (8): Undefined variable: n in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/AccessProvidersController.php, line 79]
+Request URL: /cake3/rd_cake/access-providers/exportCsv?token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4&columns=%5B%7B%22name%22%3A%22owner%22%7D%2C%7B%22name%22%3A%22username%22%7D%2C%7B%22name%22%3A%22name%22%7D%2C%7B%22name%22%3A%22surname%22%7D%2C%7B%22name%22%3A%22phone%22%7D%2C%7B%22name%22%3A%22email%22%7D%2C%7B%22name%22%3A%22monitor%22%7D%2C%7B%22name%22%3A%22active%22%7D%2C%7B%22name%22%3A%22notes%22%7D%5D
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\AccessProvidersController::exportCsv() - APP/Controller/AccessProvidersController.php, line 79
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 88
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+
+2017-01-02 07:00:20 Notice: Notice (8): Trying to get property of non-object in [/usr/share/nginx/html/cake3/rd_cake/src/Controller/AccessProvidersController.php, line 79]
+Request URL: /cake3/rd_cake/access-providers/exportCsv?token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4&columns=%5B%7B%22name%22%3A%22owner%22%7D%2C%7B%22name%22%3A%22username%22%7D%2C%7B%22name%22%3A%22name%22%7D%2C%7B%22name%22%3A%22surname%22%7D%2C%7B%22name%22%3A%22phone%22%7D%2C%7B%22name%22%3A%22email%22%7D%2C%7B%22name%22%3A%22monitor%22%7D%2C%7B%22name%22%3A%22active%22%7D%2C%7B%22name%22%3A%22notes%22%7D%5D
+Referer URL: http://127.0.0.1/rd/
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 146
+App\Controller\AccessProvidersController::exportCsv() - APP/Controller/AccessProvidersController.php, line 79
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 435
+Cake\Http\ActionDispatcher::_invoke() - CORE/src/Http/ActionDispatcher.php, line 122
+Cake\Http\ActionDispatcher::dispatch() - CORE/src/Http/ActionDispatcher.php, line 96
+Cake\Http\BaseApplication::__invoke() - CORE/src/Http/BaseApplication.php, line 83
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\RoutingMiddleware::__invoke() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 62
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Routing\Middleware\AssetMiddleware::__invoke() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 88
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Error\Middleware\ErrorHandlerMiddleware::__invoke() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 81
+Cake\Http\Runner::__invoke() - CORE/src/Http/Runner.php, line 65
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 51
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 92
+require - ROOT/webroot/index.php, line 37
+[main] - ROOT/index.php, line 16
+
+
+

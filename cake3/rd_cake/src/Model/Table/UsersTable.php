@@ -21,6 +21,15 @@ class UsersTable extends Table
         $this->addBehavior('Tree');
           
         $this->belongsTo('Groups');
+        $this->belongsTo('Languages');
+        $this->belongsTo('Countries');
+        
+        $this->belongsTo('Owners', [
+            'className'     => 'Users',
+            'foreignKey'    => 'parent_id'
+        ]);
+        
+        $this->hasMany('UserNotes');
     }
       
     public function find_access_provider_children($id){

@@ -20,13 +20,14 @@ class CommonQueryComponent extends Component {
 
     public $components = array('GridFilter'); 
 
-    public function build_common_query($query,$user){
+    public function build_common_query($query,$user,$contain_array = ['Users']){
 
         //Model Name
         $model = $this->config('model');
 
         //Contain
-        $query->contain('Users');
+        $query->contain($contain_array);
+       
         
         //===== SORT =====
         //Default values for sort and dir
@@ -42,7 +43,6 @@ class CommonQueryComponent extends Component {
             $dir  = $this->request->query['dir'];
         } 
         $query->order([$sort => $dir]);
-        return;
         
         //==== END SORT ===
 
@@ -99,7 +99,7 @@ class CommonQueryComponent extends Component {
                     $id = $i->id;
                     array_push($tree_array,array($model.'.'.'user_id' => $id));
                 }       
-            }       
+            }      
             //Add it as an OR clause
             if(count($tree_array) > 0){
                 array_push($where_clause,array('OR' => $tree_array));
@@ -109,6 +109,88 @@ class CommonQueryComponent extends Component {
         
         $query->where($where_clause);
         return;    
+    }
+    
+    public function build_ap_query($query,$user){
+  
+        $contain_array   = array(
+            'UserNotes' => ['Notes'],
+            'Owners',
+            'Groups'        
+        );
+    
+        //Model Name
+        $model = $this->config('model');
+        //Contain
+        $query->contain($contain_array);
+              
+        //===== SORT =====
+        //Default values for sort and dir
+        $sort   = $model.'.username';
+        $dir    = 'DESC';
+
+        if(isset($this->request->query['sort'])){
+            if($this->request->query['sort'] == 'owner'){
+                $sort = 'Users.username';
+            }else{
+                $sort = $model.'.'.$this->request->query['sort'];
+            }
+            $dir  = $this->request->query['dir'];
+        } 
+        $query->order([$sort => $dir]); 
+        //==== END SORT ===
+    
+        $where_clause = [];
+        
+        //====== REQUEST FILTER =====
+        if(isset($this->request->query['filter'])){
+            $filter = json_decode($this->request->query['filter']);
+            foreach($filter as $f){
+
+                $f = $this->GridFilter->xformFilter($f);
+
+                //Strings
+                if($f->type == 'string'){
+                    if($f->field == 'owner'){
+                        array_push($where_clause,array("Owners.username LIKE" => '%'.$f->value.'%'));   
+                    }else{
+                        $col = $model.'.'.$f->field;
+                        array_push($where_clause,array("$col LIKE" => '%'.$f->value.'%'));
+                    }
+                }
+                //Bools
+                if($f->type == 'boolean'){
+                     $col = $model.'.'.$f->field;
+                     array_push($where_clause,array("$col" => $f->value));
+                }
+            }
+        }
+        
+        //== ONLY Access Providers ==
+        $ap_name = Configure::read('group.ap');
+        array_push($where_clause,array('Groups.name' => $ap_name ));
+        
+        //====== AP FILTER =====
+        //If the user is an AP; we need to add an extra clause to only show all the AP's downward from its position in the tree
+        if($user['group_name'] == Configure::read('group.ap')){  //AP 
+        
+            $user_id    = $user['id'];
+            $users      = TableRegistry::get('Users')->find();  
+            $children   = $users->find('children', ['for' => $user_id]);
+            
+            $ap_clause      = array();
+            foreach($children as $i){
+                array_push($ap_clause,array($model.'.parent_id' => $i->parent_id));
+            }
+               
+            if(count($ap_clause) > 0){      
+                array_push($where_clause,array('OR' => $ap_clause));  
+            }
+        }      
+        //====== END AP FILTER =====
+        
+        $query->where($where_clause);
+        return;
     }
 }
 
