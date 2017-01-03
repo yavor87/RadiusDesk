@@ -439,7 +439,7 @@ class DashboardController extends AppController{
                 'id'      => 'cAccessPoints',
                 'layout'  => 'fit' 
             ),
-          /*  
+            /*
             array(
                 'title'   => __('DNSdesk'),
                 'glyph'   => Configure::read('icnShield'),

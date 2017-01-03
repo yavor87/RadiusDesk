@@ -55,7 +55,6 @@ class CommonQueryComponent extends Component {
             
                  $f = $this->GridFilter->xformFilter($f);
                 //Strings
-                
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
                         array_push($where_clause,array("Users.username LIKE" => '%'.$f->value.'%'));   

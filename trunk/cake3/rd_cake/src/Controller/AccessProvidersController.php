@@ -183,7 +183,7 @@ class AccessProvidersController extends AppController{
                 'monitor'   => $i->monitor,
                 'update'    => $action_flags['update'],
                 'delete'    => $action_flags['delete'],
-                'notes'     => $notes_flag //FIXME Still need to take care of the notes from the results
+                'notes'     => $notes_flag 
             ));
         }
        
