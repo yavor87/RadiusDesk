@@ -24,12 +24,12 @@ Ext.define('Rd.controller.cTags', {
     models: ['mTag',    'mAccessProviderTree'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/tags/add.json',
-        urlEdit:            '/cake2/rd_cake/tags/edit.json',
-        urlDelete:          '/cake2/rd_cake/tags/delete.json',
+        urlAdd:             '/cake3/rd_cake/tags/add.json',
+        urlEdit:            '/cake3/rd_cake/tags/edit.json',
+        urlDelete:          '/cake3/rd_cake/tags/delete.json',
         urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/tags/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/tags/note_add.json'
+        urlExportCsv:       '/cake3/rd_cake/tags/export_csv',
+        urlNoteAdd:         '/cake3/rd_cake/tags/note_add.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridTags'}       
