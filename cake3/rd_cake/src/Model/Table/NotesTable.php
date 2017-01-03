@@ -12,9 +12,9 @@ class NotesTable extends Table
 {
     public function initialize(array $config){  
         $this->addBehavior('Timestamp');       
-        $this->belongsTo('Users');
-        
+        $this->belongsTo('Users');     
         $this->hasMany('UserNotes',['dependent' => true]);
+        $this->hasMany('TagNotes',['dependent' => true]);
         
     }
       

@@ -35,7 +35,7 @@ class NotesComponent extends Component {
             
             foreach($q_r as $i){
                 if(!$this->Aa->test_for_private_parent($i,$user)){
-                    $owner_id   = $i->user_id;
+                    $owner_id   = $i->note->user_id;
                     $owner_tree = $users->find_parents($owner_id);
                     array_push($items,
                         array(
@@ -48,6 +48,7 @@ class NotesComponent extends Component {
                     );
                 }
             }
+            
         } 
         
         $controller = $this->_registry->getController();
