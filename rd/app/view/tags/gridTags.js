@@ -13,7 +13,7 @@ Ext.define('Rd.view.tags.gridTags' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/tags/menu_for_grid.json',
+    urlMenu: '/cake3/rd_cake/tags/menu-for-grid.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;

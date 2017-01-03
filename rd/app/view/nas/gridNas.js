@@ -14,7 +14,7 @@ Ext.define('Rd.view.nas.gridNas' ,{
         'Rd.view.components.ajaxToolbar'
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_grid.json',
-    urlTagFilter:   '/cake2/rd_cake/tags/index_for_filter.json',
+    urlTagFilter:   '/cake3/rd_cake/tags/index-for-filter.json',
     urlRealmFilter: '/cake2/rd_cake/realms/index_for_filter.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
@@ -137,28 +137,28 @@ Ext.define('Rd.view.nas.gridNas' ,{
                         },stateId: 'StateGridNas8'
             },  
             { 
-                text:   i18n('sTags'),
-                sortable: false,
-                flex: 1,
+                text        :   i18n('sTags'),
+                sortable    : false,
+                flex        : 1,
                 hidden      : true,  
-                xtype:  'templatecolumn', 
-                tpl:    new Ext.XTemplate(
-                            '<tpl if="Ext.isEmpty(tags)"><div"></div></tpl>', //Warn them when available to all
-                            '<tpl for="tags">',     // interrogate the realms property within the data
-                                "<tpl if='available_to_siblings == true'><div class=\"gridTag\">{name}</div></tpl>",
-                                "<tpl if='available_to_siblings == false'><div class=\"gridTag\">{name}</div></tpl>",
-                            '</tpl>'
-                        ),
-                dataIndex: 'tags',
-                filter: {
-                            type: 'list',
-                            store: sTags
-                        },stateId: 'StateGridNas9'
+                xtype       :  'templatecolumn', 
+                tpl         :    new Ext.XTemplate(
+                    '<tpl if="Ext.isEmpty(tags)"><div"></div></tpl>', //Warn them when available to all
+                    '<tpl for="tags">',     // interrogate the realms property within the data
+                        "<tpl if='available_to_siblings == true'><div class=\"fieldGreen\">{name}</div></tpl>",
+                        "<tpl if='available_to_siblings == false'><div class=\"fieldRed\">{name}</div></tpl>",
+                    '</tpl>'
+                ),
+                dataIndex   : 'tags',
+                filter      : {
+                    type    : 'list',
+                    store   : sTags
+                },
+                stateId     : 'StateGridNas9'
             },
             { 
                 text        : i18n("sStatus"),   
                 dataIndex   : 'status',  
-                tdCls       : 'gridTree', 
                 flex        : 1,
                 renderer    : function(value,metaData, record){
                     if(value != 'unknown'){                    
