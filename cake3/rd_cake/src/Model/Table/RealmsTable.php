@@ -12,6 +12,7 @@ class RealmsTable extends Table
         $this->belongsTo('Users');    
         $this->hasMany('RealmNotes',['dependent' => true]);
         $this->hasMany('NaRealms',['dependent' => true]);
+        $this->hasMany('DynamicClientRealms',['dependent' => true]);
     }
     
     public function validationDefault(Validator $validator){

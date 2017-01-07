@@ -25921,3 +25921,43 @@ Stack Trace:
 2017-01-07 22:03:32 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
 2017-01-07 22:03:50 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
 2017-01-07 22:07:54 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-07 22:40:08 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-07 22:40:14 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-07 22:40:15 Error: [InvalidArgumentException] Realms is not associated with DynamicClientRealm
+Request URL: /realms/list-realms-for-dynamic-client-owner.json?_dc=1483820027183&nas_id=59&owner_id=44&available_to_siblings=true&clear_flag=true&page=1&start=0&limit=25&token=5772d8bc-b5c4-4962-8fe9-6fc703662c24&sel_language=4_4
+Stack Trace:
+#0 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/EagerLoader.php(256): Cake\ORM\EagerLoader->_normalizeContain(Object(App\Model\Table\RealmsTable), 'DynamicClientRe...', Array, Array)
+#1 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/EagerLoader.php(382): Cake\ORM\EagerLoader->normalized(Object(App\Model\Table\RealmsTable))
+#2 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/EagerLoader.php(353): Cake\ORM\EagerLoader->attachableAssociations(Object(App\Model\Table\RealmsTable))
+#3 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(985): Cake\ORM\EagerLoader->attachAssociations(Object(Cake\ORM\Query), Object(App\Model\Table\RealmsTable), true)
+#4 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(936): Cake\ORM\Query->_transformQuery()
+#5 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(136): Cake\ORM\Query->sql()
+#6 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Connection.php(221): Cake\Database\Driver\Mysql->prepare(Object(Cake\ORM\Query))
+#7 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Connection.php(274): Cake\Database\Connection->prepare(Object(Cake\ORM\Query))
+#8 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Database/Query.php(189): Cake\Database\Connection->run(Object(Cake\ORM\Query))
+#9 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(958): Cake\Database\Query->execute()
+#10 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Datasource/QueryTrait.php(276): Cake\ORM\Query->_execute()
+#11 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/ORM/Query.php(906): Cake\ORM\Query->_all()
+#12 /usr/share/nginx/html/cake3/rd_cake/src/Controller/RealmsController.php(1057): Cake\ORM\Query->all()
+#13 [internal function]: App\Controller\RealmsController->listRealmsForDynamicClientOwner()
+#14 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Controller/Controller.php(435): call_user_func_array(Array, Array)
+#15 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/ActionDispatcher.php(122): Cake\Controller\Controller->invokeAction()
+#16 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/ActionDispatcher.php(96): Cake\Http\ActionDispatcher->_invoke(Object(App\Controller\RealmsController))
+#17 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/BaseApplication.php(83): Cake\Http\ActionDispatcher->dispatch(Object(Cake\Network\Request), Object(Cake\Network\Response))
+#18 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Http\BaseApplication->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#19 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php(62): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#20 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Routing\Middleware\RoutingMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#21 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php(93): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#22 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Routing\Middleware\AssetMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#23 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php(81): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#24 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(65): Cake\Error\Middleware\ErrorHandlerMiddleware->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response), Object(Cake\Http\Runner))
+#25 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Runner.php(51): Cake\Http\Runner->__invoke(Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#26 /usr/share/nginx/html/cake3/rd_cake/vendor/cakephp/cakephp/src/Http/Server.php(92): Cake\Http\Runner->run(Object(Cake\Http\MiddlewareQueue), Object(Zend\Diactoros\ServerRequest), Object(Zend\Diactoros\Response))
+#27 /usr/share/nginx/html/cake3/rd_cake/webroot/index.php(37): Cake\Http\Server->run()
+#28 /usr/share/nginx/html/cake3/rd_cake/index.php(16): require('/usr/share/ngin...')
+#29 {main}
+
+
+2017-01-07 22:40:39 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-07 22:40:40 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
+2017-01-07 22:40:43 Warning: DebugKit not enabled. You need to either install pdo_sqlite, or define the "debug_kit" connection name.
