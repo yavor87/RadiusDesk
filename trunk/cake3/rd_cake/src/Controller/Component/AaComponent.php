@@ -108,6 +108,7 @@ class AaComponent extends Component {
 
         if($user['group_name'] == Configure::read('group.ap')){  //AP
             $user_id = $user['id'];
+            $users   = TableRegistry::get('Users');
 
             //test for self
             if($owner_id == $user_id){
@@ -117,7 +118,6 @@ class AaComponent extends Component {
             //Test for Parents
             //NOTE If parents does not exist -> Get it
             if(!$this->parents){
-                $users          = TableRegistry::get('Users')->find();
                 $this->parents  = $users->find('path',['for' => $user_id]);
             }
             
@@ -130,8 +130,7 @@ class AaComponent extends Component {
             //Test for Children
             //NOTE If parents does not exist -> Get it
             if(!$this->children){
-                $users          = TableRegistry::get('Users')->find();
-                $this->children = $this->find('children', ['for' => $user_id]);
+                $this->children = $users->find('children', ['for' => $user_id]);
             }
              
             foreach($this->children as $i){
@@ -165,7 +164,7 @@ class AaComponent extends Component {
             //Test for Parents
             //NOTE If parents does not exist -> Get it
             if(!$this->parents){
-                $users          = TableRegistry::get('Users')->find();
+                $users          = TableRegistry::get('Users');
                 $this->parents  = $users->find('path',['for' => $user_id]);
             }
 

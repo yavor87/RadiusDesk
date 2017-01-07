@@ -79,8 +79,9 @@ class CommonQueryComponent extends Component {
             $user_id    = $user['id'];
 
             //**AP and upward in the tree**
-            $users         = TableRegistry::get('Users')->find();
+            $users         = TableRegistry::get('Users');
             $this->parents = $users->find('path',['for' => $user_id]);
+
             
             //So we loop this results asking for the parent nodes who have available_to_siblings = true
             foreach($this->parents as $i){
@@ -88,13 +89,15 @@ class CommonQueryComponent extends Component {
                 if($i_id != $user_id){ //upstream
                     array_push($tree_array,array($model.'.'.'user_id' => $i_id,$model.'.'.'available_to_siblings' => true));
                 }else{
-                    array_push($tree_array,array($model.'.'.'user_id' => $i_id));
+                    array_push($tree_array,array($model.'.'.'user_id' => $i_id)); //That is the access provider self
                 }
             }
+            
+            
             //** ALL the AP's children
-            $this->children = $users->find('children', ['for' => $user_id]);
-            if($this->children){   //Only if the AP has any children...
-                foreach($this->children as $i){
+            $children = $users->find('children', ['for' => $user_id]);
+            if($children){   //Only if the AP has any children...
+                foreach($children as $i){
                     $id = $i->id;
                     array_push($tree_array,array($model.'.'.'user_id' => $id));
                 }       
@@ -106,6 +109,8 @@ class CommonQueryComponent extends Component {
         }       
         //====== END AP FILTER ===== 
         
+        //print_r($where_clause);
+             
         $query->where($where_clause);
         return;    
     }
@@ -187,7 +192,7 @@ class CommonQueryComponent extends Component {
             }
         }      
         //====== END AP FILTER =====
-        
+               
         $query->where($where_clause);
         return;
     }

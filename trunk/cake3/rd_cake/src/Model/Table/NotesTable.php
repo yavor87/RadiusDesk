@@ -3,10 +3,7 @@
 // src/Model/Table/NotesTable.php
 
 namespace App\Model\Table;
-
 use Cake\ORM\Table;
-
-use Cake\Utility\Text;
 
 class NotesTable extends Table
 {
@@ -15,7 +12,7 @@ class NotesTable extends Table
         $this->belongsTo('Users');     
         $this->hasMany('UserNotes',['dependent' => true]);
         $this->hasMany('TagNotes',['dependent' => true]);
-        
+        $this->hasMany('RealmNotes',['dependent' => true]);      
     }
       
 }

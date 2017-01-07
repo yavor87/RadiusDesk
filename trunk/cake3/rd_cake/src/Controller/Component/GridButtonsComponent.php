@@ -41,6 +41,13 @@ class GridButtonsComponent extends Component {
             $menu = array($b,$d,$a);
         }
         
+        if($type == 'realms'){
+            $b  = $this->_fetchBasic();
+            $d  = $this->_fetchDocument();
+            $a  = $this->_fetchRealmExtras();
+            $menu = array($b,$d,$a);
+        }
+        
         if($type == 'basic_and_doc'){
             $b  = $this->_fetchBasic();
             $d  = $this->_fetchDocument();
@@ -269,4 +276,29 @@ class GridButtonsComponent extends Component {
             
         return $menu;
     }
+    
+    private function _fetchRealmExtras(){
+        $menu = array(
+            'xtype' => 'buttongroup',
+            'title' => __('More'), 
+            'items' => array(
+                array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnGraph'),
+                    'scale'     => 'large', 
+                    'itemId'    => 'graph',
+                    'tooltip'   => __('Graphs')
+                ),
+                array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnCamera'),
+                    'scale'     => 'large', 
+                    'itemId'    => 'logo',     
+                    'tooltip'   => __('Edit logo')
+                )
+            )
+        );             
+        return $menu;
+    }
+    
 }

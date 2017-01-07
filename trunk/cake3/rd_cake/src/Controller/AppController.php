@@ -99,10 +99,18 @@ class AppController extends Controller
             $user_id = $user['id'];
         }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
             $user_id = $user['id'];
+            
+            $temp_debug = Configure::read('debug');
+           // Configure::write('debug', 0); // turn off debugging
+            
             if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
+                Configure::write('debug', $temp_debug); // return previous setting 
                 $this->Aa->fail_no_rights($this);
                 return;
             }
+            
+            Configure::write('debug', $temp_debug); // return previous setting 
+            
         }else{
            $this->Aa->fail_no_rights($this);
            return;

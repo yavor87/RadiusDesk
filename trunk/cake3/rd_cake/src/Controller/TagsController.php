@@ -8,7 +8,6 @@ use Cake\Core\Configure\Engine\PhpConfig;
 
 use Cake\Utility\Inflector;
 
-
 class TagsController extends AppController{
   
     protected $base  = "Access Providers/Controllers/Tags/";
