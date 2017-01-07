@@ -775,16 +775,6 @@ class RealmsController extends AppController{
         ));
     }
     
-    public function listRealmsForDynamicClientOwner(){
-    
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-    
-        $this->_doListRealmsFor($user,'Na');
-    
-    }
     
     private function _doListRealmsFor($user, $what = 'Na'){
     
@@ -947,7 +937,7 @@ class RealmsController extends AppController{
     
     }
     
-    public function list_realms_for_dynamic_client_owner(){
+    public function listRealmsForDynamicClientOwner(){
 
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -992,8 +982,9 @@ class RealmsController extends AppController{
             }
         }
 
-        if($clear_flag){    //If we first need to remove previous associations!   
-            $this->Realm->DynamicClientRealm->deleteAll(array('DynamicClientRealm.dynamic_client_id' => $dynamic_client_id),false);
+        if($clear_flag){    //If we first need to remove previous associations! 
+            $this->loadModel('DynamicClientRealms');
+            $this->DynamicClientRealms->deleteAll(['DynamicClientRealms.dynamic_client_id' => $dynamic_client_id]);
         }
         //========== END CLEAR FIRST CHECK =======
 
@@ -1001,91 +992,108 @@ class RealmsController extends AppController{
 
         //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
         if($a_to_s == 'false'){
-            $this->User->contain();
-            $q_r        = $this->User->getPath($owner_id, array('id'));
+        
+        
+            $q_r = $this->Users->find('path',['for' => $owner_id]);
+            
             foreach($q_r as $i){
-                $user_id = $i['User']['id'];
-                $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
-                $q = $this->Realm->find('all',
-                    array(  'conditions'    => array('Realm.available_to_siblings' => true,'Realm.user_id' => $user_id),
-                            'fields'        => array('Realm.id','Realm.name')
-                    ));
-                foreach($q as $j){
-                    $selected = false;
-                    foreach($j['DynamicClientRealm'] as $nr){
-                        if($nr['na_id'] == $dynamic_client_id){
-                            $selected = true;
-                        }
-                    }
-                    array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
-                }
-
-                //When it got down to the owner; also get the private realms
-                if($user_id == $owner_id){
-                    $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
-                    $q = $this->Realm->find('all',
-                    array(  'conditions'    => array('Realm.available_to_siblings' => false,'Realm.user_id' => $user_id),
-                            'fields'        => array('Realm.id','Realm.name')
-                    ));
-                    foreach($q as $j){
+                $user_id = $i->id;
+                
+                if($owner_id != $user_id){
+                
+                    $q = $this->Realms
+                        ->find()
+                        ->contain(['DynamicClientRealms'])
+                        ->where(['Realms.user_id' => $owner_id,'Realms.available_to_siblings' => true])
+                        ->all();
+                       
+                    foreach($q as $j){ 
                         $selected = false;
-                        foreach($j['DynamicClientRealm'] as $nr){
-                            if($nr['dynamic_client_id'] == $dynamic_client_id){
-                                $selected = true;
+                        //Check if the nas is not already assigned to this realm
+                        if($dynamic_client_id){
+                            foreach($j->dynamic_client_realms as $nr){
+                                if($nr->dynamic_client_id == $dynamic_client_id){
+                                    $selected = true;
+                                }
                             }
                         }
-                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));  
+                    }
+                
+                }
+                
+                //When it got down to the owner; also get the private realms
+                if($user_id == $owner_id){
+                    $q = $this->Realms
+                        ->find()
+                        ->contain(['DynamicClientRealms'])
+                        ->where(['Realms.user_id' => $owner_id])
+                        ->all();
+                       
+                    foreach($q as $j){ 
+                        $selected = false;
+                        //Check if the nas is not already assigned to this realm
+                        if($dynamic_client_id){
+                            foreach($j->dynamic_client_realms as $nr){
+                                if($nr->dynamic_client_id == $dynamic_client_id){
+                                    $selected = true;
+                                }
+                            }
+                        }
+                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));  
                     }
                 }
-            }
+            }    
         }
 
         //If $a_to_s is true, we neet to find the chain downwards to list ALL the realms of belonging to children of the owner
         if($a_to_s == 'true'){
-
-            //First find all the realms beloning to the owner:
-            $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
-            $q = $this->Realm->find('all',
-                array(  'conditions'    => array('Realm.user_id' => $owner_id),
-                        'fields'        => array('Realm.id','Realm.name')
-                ));
+          
+             //First find all the realms beloning to the owner:
+            $q = $this->Realms
+                    ->find()
+                    ->contain(['DynamicClientRealms'])
+                    ->where(['Realms.user_id' => $owner_id])
+                    ->all();
             foreach($q as $j){
                 $selected = false;
                 //Check if the nas is not already assigned to this realm
                 if($dynamic_client_id){
-                    foreach($j['DynamicClientRealm'] as $nr){
-                        if($nr['dynamic_client_id'] == $dynamic_client_id){
+                    foreach($j->dynamic_client_realms as $nr){
+                        if($nr->dynamic_client_id == $dynamic_client_id){
                             $selected = true;
                         }
                     }
                 }
-                array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));                
             }
             
             //Now get all the realms of the siblings of the owner
-            $this->children    = $this->User->find_access_provider_children($owner_id);
-            if($this->children){   //Only if the AP has any children...
-                foreach($this->children as $i){
-                    $user_id = $i['id'];
-                    $this->Realm->contain('DynamicClientRealm.dynamic_client_id');
-                    $q = $this->Realm->find('all',
-                        array(  'conditions'    => array('Realm.user_id' => $user_id),
-                                'fields'        => array('Realm.id','Realm.name')
-                        ));
+            $children = $this->Users->find('children', ['for' => $owner_id]);
+
+            if($children){   //Only if the AP has any children...
+                foreach($children as $i){
+                    $user_id = $i->id;
+                    $q = $this->Realms
+                        ->find()
+                        ->contain(['DynamicClientRealms'])
+                        ->where(['Realms.user_id' => $user_id])
+                        ->all();
+                  
                     foreach($q as $j){
                         $selected = false;
                         //Check if the nas is not already assigned to this realm
                         if($dynamic_client_id){
-                            foreach($j['DynamicClientRealm'] as $nr){
-                                if($nr['dynamic_client_id'] == $dynamic_client_id){
+                            foreach($j->dynamic_client_realms as $nr){
+                                if($nr->dynamic_client_id == $dynamic_client_id){
                                     $selected = true;
                                 }
                             }
                         }   
-                        array_push($items,array('id' => $j['Realm']['id'], 'name' => $j['Realm']['name'],'selected' => $selected));                
+                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));                
                     }
                 }       
-            }    
+            }               
         }
        
         $this->set(array(
