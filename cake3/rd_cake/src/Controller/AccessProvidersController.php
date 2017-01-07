@@ -11,7 +11,7 @@ use Cake\Utility\Inflector;
 
 class AccessProvidersController extends AppController{
   
-    protected $base  = "Access Providers/Controllers/GlobalDomains/";
+    protected $base  = "Access Providers/Controllers/AccessProviders/";
     
     protected $owner_tree = array();
     
