@@ -70,21 +70,6 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 filter      : {type: 'string'}, stateId: 'StateGridAccessProviders7'
             },
             { 
-                text        : i18n('sMonitor'),  
-                xtype       : 'templatecolumn', 
-                tpl         : new Ext.XTemplate(
-                                "<tpl if='monitor == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='monitor == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
-                            ),
-                dataIndex   : 'monitor',
-                filter      : {
-                        type            : 'boolean',
-                        defaultValue    : false,
-                        yesText         : 'Yes',
-                        noText          : 'No'
-                }, stateId: 'StateGridAccessProviders8'
-            },
-            { 
                 text        : i18n('sActive'),  
                 xtype       : 'templatecolumn', 
                 tpl         : new Ext.XTemplate(

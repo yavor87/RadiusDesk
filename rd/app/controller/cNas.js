@@ -523,6 +523,7 @@ Ext.define('Rd.controller.cNas', {
             grid.show();
         }
         //Clear the grid:
+        //FIXME THIS DOES NOT SEEM TO WORK
         grid.getStore().getProxy().setExtraParam('clear_flag',true);
         grid.getStore().load();
         grid.getStore().getProxy().setExtraParam('clear_flag',false);

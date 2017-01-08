@@ -53,7 +53,7 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                 type        : 'ajax',
                 format      : 'json',
                 batchActions: true, 
-                url         : '/cake2/rd_cake/realms/index_ap.json',
+                url         : '/cake3/rd_cake/realms/index-ap.json',
                 extraParams : { 'ap_id' : me.ap_id },
                 reader      : {
                     type            : 'json',
@@ -64,8 +64,8 @@ Ext.define('Rd.view.accessProviders.gridRealms' ,{
                     writeAllFields: true 
                 },
                 api: {
-                    read    : '/cake2/rd_cake/realms/index_ap.json',
-                    update  : '/cake2/rd_cake/realms/edit_ap.json'
+                    read    : '/cake3/rd_cake/realms/index-ap.json',
+                    update  : '/cake3/rd_cake/realms/edit-ap.json'
                 }
             },
             listeners: {

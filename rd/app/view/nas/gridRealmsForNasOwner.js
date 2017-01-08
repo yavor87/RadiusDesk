@@ -31,11 +31,10 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
     ],
     initComponent: function(){
 
-        var me          = this;
-        var urlUpdate   = '/cake2/rd_cake/realms/dummy_edit.json';
+        var me  = this;
 
         if(me.realFlag){
-            urlUpdate  = '/cake2/rd_cake/realms/update_na_realm.json';
+            urlUpdate  = '/cake3/rd_cake/realms/update-na-realm.json';
             me.tbar = [ 
                 { xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload,   scale: 'large', itemId: 'reload',   tooltip:    i18n('sReload')},
                 { xtype: 'tbseparator' },
@@ -55,17 +54,21 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mRealmForNasOwner',
             proxy: {
-                type: 'ajax',
-                format  : 'json',
+                type        : 'ajax',
+                format      : 'json',
                 batchActions: true, 
-                'url'   : '/cake2/rd_cake/realms/list_realms_for_nas_owner.json',
+                url         : '/cake3/rd_cake/realms/list_realms-for-nas-owner.json',
                 reader: {
-                    type: 'json',
-                    rootProperty: 'items',
-                    messageProperty: 'message'
+                    type            : 'json',
+                    rootProperty    : 'items',
+                    messageProperty : 'message'
+                },
+                writer      : { 
+                    writeAllFields: true 
                 },
                 api: {
-                    update: urlUpdate
+                    read    : '/cake3/rd_cake/realms/list_realms-for-nas-owner.json',
+                    update  : '/cake3/rd_cake/realms/update-na-realm.json'
                 }
             },
             listeners: {
@@ -83,15 +86,27 @@ Ext.define('Rd.view.nas.gridRealmsForNasOwner' ,{
                         me.down('#count').update({count: count});
                     }  
                 },
-                update: function(store, records, success, options) {
-                    store.sync({
-                        success: function(batch,options){
-                           
-                        },
-                        failure: function(batch,options){
-                          
-                        }
-                    });
+                update: function(store, records, action, options,a,b) {
+                    if(action == 'edit'){ //Filter for edit (after commited a second action will fire called commit)
+                        store.sync({
+                            success: function(batch,options){
+                                Ext.ux.Toaster.msg(
+                                    'Updated Realm',
+                                    'Updated Realm',
+                                    Ext.ux.Constants.clsInfo,
+                                    Ext.ux.Constants.msgInfo
+                                );   
+                            },
+                            failure: function(batch,options){
+                                Ext.ux.Toaster.msg(
+                                    'Problems Updating Realm',
+                                    'Problems Updating Realm',
+                                    Ext.ux.Constants.clsWarn,
+                                    Ext.ux.Constants.msgWarn
+                                );
+                            }
+                        });
+                    }
                 },
                 scope: this
             },

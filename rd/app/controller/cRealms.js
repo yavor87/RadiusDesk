@@ -29,15 +29,15 @@ Ext.define('Rd.controller.cRealms', {
     models: ['mRealm','mAccessProviderTree', 'mUserStat'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/realms/add.json',
-        urlEdit:            '/cake2/rd_cake/realms/edit.json',
-        urlDelete:          '/cake2/rd_cake/realms/delete.json',
+        urlAdd:             '/cake3/rd_cake/realms/add.json',
+        urlEdit:            '/cake3/rd_cake/realms/edit.json',
+        urlDelete:          '/cake3/rd_cake/realms/delete.json',
         urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/realms/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/realms/note_add.json',
-        urlViewRealmDetail: '/cake2/rd_cake/realms/view.json',
-        urlLogoBase:        '/cake2/rd_cake/webroot/img/realms/',
-        urlUploadLogo:      '/cake2/rd_cake/realms/upload_logo/'
+        urlExportCsv:       '/cake3/rd_cake/realms/export-csv',
+        urlNoteAdd:         '/cake3/rd_cake/realms/note-add.json',
+        urlViewRealmDetail: '/cake3/rd_cake/realms/view.json',
+        urlLogoBase:        '/cake3/rd_cake/img/realms/',
+        urlUploadLogo:      '/cake3/rd_cake/realms/upload-logo/'
     },
     refs: [
          {  ref:    'gridRealms',           selector:   'gridRealms'},
