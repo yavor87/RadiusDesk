@@ -19,7 +19,11 @@ class RealmsController extends AppController{
     public function initialize(){  
         parent::initialize();
         $this->loadModel('Realms');     
-        $this->loadModel('Users');   
+        $this->loadModel('Users');
+        
+        $this->loadModel('NaRealms');
+        $this->loadModel('DynamicClientRealms');
+           
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
@@ -125,7 +129,7 @@ class RealmsController extends AppController{
                         try{
                             $delete = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), 'deletezz'); //Only if they have create right
+                                array('model' => 'Realm','foreign_key' => $id), 'delete'); //Only if they have create right
                         }catch(\Exception $e){               
                              $delete = false;  
                         }
@@ -656,7 +660,6 @@ class RealmsController extends AppController{
         }
 
         if($clear_flag){    //If we first need to remove previous associations! 
-            $this->loadModel('NaRealms');
             $this->NaRealms->deleteAll(['NaRealms.na_id' => $nas_id]);
         }
         //========== END CLEAR FIRST CHECK =======
@@ -775,167 +778,54 @@ class RealmsController extends AppController{
         ));
     }
     
-    
-    private function _doListRealmsFor($user, $what = 'Na'){
-    
-        $user_id = null;
-        if($user['group_name'] == Configure::read('group.admin')){  //Admin
-            $user_id = $user['id'];
+    public function updateNaRealm(){
+
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
         }
 
-        if($user['group_name'] == Configure::read('group.ap')){  //Or AP
-            $user_id = $user['id'];
-        }
-
-        if(isset($this->request->query['owner_id'])){
-
-            //Check if it was 0 -> which means it is the current user
-            if($this->request->query['owner_id'] == 0){
-                $owner_id = $user_id;
-            }else{
-                $owner_id = $this->request->query['owner_id'];
-            }
-        }
-
-        if(isset($this->request->query['available_to_siblings'])){
-            $a_to_s      = $this->request->query['available_to_siblings'];  
-        }
-
-        //By default nas_id not included
-        $nas_id = false;
         if(isset($this->request->query['nas_id'])){
-            $nas_id      = $this->request->query['nas_id'];  
-        }
-
-        //========== CLEAR FIRST CHECK =======
-        //By default clear_flag is not included
-        $clear_flag = false;
-        if(isset($this->request->query['clear_flag'])){
-            if($this->request->query['clear_flag'] == 'true'){
-                $clear_flag = true;
-            }
-        }
-
-        if($clear_flag){    //If we first need to remove previous associations! 
-            $this->loadModel('NaRealms');
-            $this->NaRealms->deleteAll(['NaRealms.na_id' => $nas_id]);
-        }
-        //========== END CLEAR FIRST CHECK =======
-
-        $items = array();
-
-        //if $a_to_s is false we need to find the chain upwards to root and seek the public realms
-        if($a_to_s == 'false'){
-                    
-            $q_r = $this->Users->find('path',['for' => $owner_id]);
-            
-            foreach($q_r as $i){
-                $user_id = $i->id;
+            $nas_id     = $this->request->query['nas_id'];
+	        if(isset($this->request->data['id'])){   //Single item select
+                $realm_id   = $this->request->data['id'];
+                if($this->request->data['selected']){
                 
-                if($owner_id != $user_id){
-                
-                    $q = $this->Realms
-                        ->find()
-                        ->contain(['NaRealms'])
-                        ->where(['Realms.user_id' => $owner_id,'Realms.available_to_siblings' => true])
-                        ->all();
-                       
-                    foreach($q as $j){ 
-                        $selected = false;
-                        //Check if the nas is not already assigned to this realm
-                        if($nas_id){
-                            foreach($j->na_realms as $nr){
-                                if($nr->na_id == $nas_id){
-                                    $selected = true;
-                                }
-                            }
-                        }
-                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));  
-                    }
-                
+                    $entity = $this->NaRealms->newEntity();
+                    $entity->na_id = $nas_id;
+                    $entity->realm_id =  $realm_id;
+                    $this->NaRealms->save($entity);
+                }else{      
+                    $this->NaRealms->deleteAll(['NaRealms.na_id' => $nas_id,'NaRealms.realm_id' => $realm_id]);            
                 }
-                
-                //When it got down to the owner; also get the private realms
-                if($user_id == $owner_id){
-                    $q = $this->Realms
-                        ->find()
-                        ->contain(['NaRealms'])
-                        ->where(['Realms.user_id' => $owner_id])
-                        ->all();
-                       
-                    foreach($q as $j){ 
-                        $selected = false;
-                        //Check if the nas is not already assigned to this realm
-                        if($nas_id){
-                            foreach($j->na_realms as $nr){
-                                if($nr->na_id == $nas_id){
-                                    $selected = true;
-                                }
-                            }
+            }else{                          //Assume multiple item select
+                foreach($this->request->data as $d){
+                    if(isset($d['id'])){   //Single item select
+                        $realm_id   = $d['id'];
+                        if($d['selected']){
+                            $entity = $this->NaRealms->newEntity();
+                            $entity->na_id = $nas_id;
+                            $entity->realm_id =  $realm_id;
+                            $this->NaRealms->save($entity);
+                        }else{
+                        
+                            $this->NaRealms->deleteAll(['NaRealms.na_id' => $nas_id,'NaRealms.realm_id' => $realm_id]);        
                         }
-                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));  
                     }
                 }
             }
         }
 
-        //If $a_to_s is true, we neet to find the chain downwards to list ALL the realms of belonging to children of the owner
-        if($a_to_s == 'true'){
-
-            //First find all the realms beloning to the owner:
-            $q = $this->Realms
-                    ->find()
-                    ->contain(['NaRealms'])
-                    ->where(['Realms.user_id' => $owner_id])
-                    ->all();
-            foreach($q as $j){
-                $selected = false;
-                //Check if the nas is not already assigned to this realm
-                if($nas_id){
-                    foreach($j->na_realms as $nr){
-                        if($nr->na_id == $nas_id){
-                            $selected = true;
-                        }
-                    }
-                }
-                array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));                
-            }
-            
-            //Now get all the realms of the siblings of the owner
-            $children = $this->Users->find('children', ['for' => $owner_id]);
-
-            if($children){   //Only if the AP has any children...
-                foreach($children as $i){
-                    $user_id = $i->id;
-                    $q = $this->Realms
-                        ->find()
-                        ->contain(['NaRealms'])
-                        ->where(['Realms.user_id' => $user_id])
-                        ->all();
-                  
-                    foreach($q as $j){
-                        $selected = false;
-                        //Check if the nas is not already assigned to this realm
-                        if($nas_id){
-                            foreach($j->na_realms as $nr){
-                                if($nr->na_id == $nas_id){
-                                    $selected = true;
-                                }
-                            }
-                        }   
-                        array_push($items,array('id' => $j->id, 'name' => $j->name,'selected' => $selected));                
-                    }
-                }       
-            }               
-        }
-       
         $this->set(array(
-            'items'     => $items,
-            'success'   => true,
-            '_serialize' => array('items','success')
+            'success' => true,
+            '_serialize' => array('success')
         ));
-    
     }
+    
     
     public function listRealmsForDynamicClientOwner(){
 
@@ -983,7 +873,6 @@ class RealmsController extends AppController{
         }
 
         if($clear_flag){    //If we first need to remove previous associations! 
-            $this->loadModel('DynamicClientRealms');
             $this->DynamicClientRealms->deleteAll(['DynamicClientRealms.dynamic_client_id' => $dynamic_client_id]);
         }
         //========== END CLEAR FIRST CHECK =======
@@ -1102,6 +991,147 @@ class RealmsController extends AppController{
             '_serialize' => array('items','success')
         ));
     }
+    
+    public function updateDynamicClientRealm(){
+    
+    
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        if(isset($this->request->query['dynamic_client_id'])){
+            $dynamic_client_id     = $this->request->query['dynamic_client_id'];
+	        if(isset($this->request->data['id'])){   //Single item select
+                $realm_id   = $this->request->data['id'];
+                if($this->request->data['selected']){
+                    $entity = $this->DynamicClientRealms->newEntity();
+                    $entity->dynamic_client_id = $dynamic_client_id;
+                    $entity->realm_id =  $realm_id;
+                    $this->DynamicClientRealms->save($entity);
+                }else{
+                    $this->DynamicClientRealms->deleteAll(
+                        ['DynamicClientRealms.dynamic_client_id' => $dynamic_client_id,'DynamicClientRealms.realm_id' => $realm_id]
+                    );        
+                }
+            }else{                          //Assume multiple item select
+                foreach($this->request->data as $d){
+                    if(isset($d['id'])){   //Single item select
+                        $realm_id   = $d['id'];
+                        if($d['selected']){
+                            $entity = $this->DynamicClientRealms->newEntity();
+                            $entity->dynamic_client_id = $dynamic_client_id;
+                            $entity->realm_id =  $realm_id;
+                            $this->DynamicClientRealms->save($entity);
+                        }else{
+                            $this->DynamicClientRealms->deleteAll(
+                                ['DynamicClientRealms.dynamic_client_id' => $dynamic_client_id,'DynamicClientRealms.realm_id' => $realm_id]
+                            );        
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+     
+    public function editAp(){
+
+        //The ap_id who's realm rights HAS to be a sibling of the user who initiated the request
+        //___AA Check Starts ___
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        $user_id = null;
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $user_id = $user['id'];
+        }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
+            $user_id = $user['id'];
+        }else{
+           $this->Aa->fail_no_rights($this);
+           return;
+        }
+        //__ AA Check Ends ___
+
+        if(isset($this->request->query['ap_id'])){
+
+            //Make sure the $ap_id is a child of $user_id - perhaps we should sub-class the Behaviaour...
+            //TODO Complete this check
+            
+            $temp_debug = Configure::read('debug');
+            Configure::write('debug', 0); // turn off debugging
+            
+            $success = false;
+
+            $ap_id  = $this->request->query['ap_id'];
+            $id     = $this->request->data['id'];
+            
+            try{
+                       
+                if($this->request->data['create'] == true){
+                    $this->Acl->allow(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'create');
+                }else{
+                    $this->Acl->deny(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'create');
+                } 
+
+                if($this->request->data['read'] == true){
+                    $this->Acl->allow(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'read');
+                }else{
+                    $this->Acl->deny(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'read');
+                }
+
+                if($this->request->data['update'] == true){
+                    $this->Acl->allow(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'update');
+                }else{
+                    $this->Acl->deny(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'update');
+                } 
+                
+                if($this->request->data['delete'] == true){
+                    $this->Acl->allow(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'delete');
+                }else{
+                    $this->Acl->deny(
+                    array('model' => 'User', 'foreign_key' => $ap_id), 
+                    array('model' => 'Realm','foreign_key' => $id), 'delete');
+                } 
+                $success = true;
+                    
+            }catch(\Exception $e){               
+                $success = false;  
+            }        
+            Configure::write('debug', $temp_debug); // turn off debugging 
+        }
+
+        $this->set(array(
+            'items' => array(),
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+    //____ END :: Access Providers application ______
+
     
     
     
