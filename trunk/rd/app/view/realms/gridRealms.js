@@ -10,7 +10,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
     requires    : [
         'Rd.view.components.ajaxToolbar'
     ],
-    urlMenu     : '/cake2/rd_cake/realms/menu_for_grid.json',
+    urlMenu     : '/cake3/rd_cake/realms/menu-for-grid.json',
     plugins     : 'gridfilters',  //*We specify this
     viewConfig: {
         loadMask:true

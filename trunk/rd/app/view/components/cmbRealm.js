@@ -17,9 +17,9 @@ Ext.define('Rd.view.components.cmbRealm', {
     extraParam      : false,
     initComponent: function() {
         var me  = this;
-        var url = '/cake2/rd_cake/realms/index_ap_update.json';
+        var url = '/cake3/rd_cake/realms/index-ap-update.json';
         if(me.type == 'create'){
-            url = '/cake2/rd_cake/realms/index_ap_create.json';  
+            url = '/cake3/rd_cake/realms/index-ap-create.json';  
         }
         var s = Ext.create('Ext.data.Store', {
             model: 'Rd.model.mRealm',

@@ -4,6 +4,9 @@ Ext.define('Rd.model.mAccessProviderGrid', {
          {name: 'id',       type: 'int'     },
          {name: 'owner', type: 'string'  },
          {name: 'username', type: 'string'  },
-         'name','surname', 'phone', 'email', 'monitor', 'active','language','notes'
+         'name','surname', 'phone', 'email', 'monitor', 'active','language','notes',
+         {name: 'notes',            type: 'bool'},
+         {name: 'update',           type: 'bool'},
+         {name: 'delete',           type: 'bool'}
     ]
 });

@@ -15,7 +15,7 @@ Ext.define('Rd.view.nas.gridNas' ,{
     ],
     urlMenu:        '/cake2/rd_cake/nas/menu_for_grid.json',
     urlTagFilter:   '/cake3/rd_cake/tags/index-for-filter.json',
-    urlRealmFilter: '/cake2/rd_cake/realms/index_for_filter.json',
+    urlRealmFilter: '/cake3/rd_cake/realms/index-for-filter.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;  

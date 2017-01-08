@@ -27,7 +27,7 @@ Ext.define('Rd.controller.cAccessProviders', {
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd          : '/cake3/rd_cake/access-providers/add.json',
+        urlAdd          : '/cake3/rd_cake/access_providers/add.json',
         urlEdit         : '/cake3/rd_cake/access-providers/edit.json',
         urlDelete       : '/cake3/rd_cake/access-providers/delete.json',
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
@@ -78,7 +78,8 @@ Ext.define('Rd.controller.cAccessProviders', {
                 click:      me.enableDisable
             },
             'gridAccessProviders'       : {
-                activate:      me.gridActivate
+                activate:      me.gridActivate,
+                itemclick:  me.gridClick
             },
             'winApAddWizard #btnTreeNext': {
                 click:      me.btnTreeNext
@@ -167,6 +168,34 @@ Ext.define('Rd.controller.cAccessProviders', {
     gridActivate: function(g){
         var me = this;
         g.getStore().load();
+    },
+    gridClick:  function(grid, record, item, index, event){
+        var me                  = this;
+        me.selectedRecord = record;
+        //Dynamically update the top toolbar
+        tb = me.getGrid().down('toolbar[dock=top]');
+
+        var edit = record.get('update');
+        if(edit == true){
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#edit') != null){
+                tb.down('#edit').setDisabled(true);
+            }
+        }
+
+        var del = record.get('delete');
+        if(del == true){
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(false);
+            }
+        }else{
+            if(tb.down('#delete') != null){
+                tb.down('#delete').setDisabled(true);
+            }
+        }
     },
     add:    function(){
         var me = this;
