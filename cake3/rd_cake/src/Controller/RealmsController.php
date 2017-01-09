@@ -333,7 +333,7 @@ class RealmsController extends AppController{
             return;
         }
         $query  = $this->{$this->main_model}->find();
-        $this->CommonQuery->build_common_query($query,$user,['Users','RealmNotes' => ['Notes']]);        
+        $this->CommonQuery->build_common_query($query,$user,[]);        
         $q_r    = $query->all();
         $items      = array();
         foreach($q_r as $i){
