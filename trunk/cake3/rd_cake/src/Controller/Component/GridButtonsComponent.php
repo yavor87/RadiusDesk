@@ -51,8 +51,16 @@ class GridButtonsComponent extends Component {
         if($type == 'basic_and_doc'){
             $b  = $this->_fetchBasic();
             $d  = $this->_fetchDocument();
+            $a  = $this->_fetchDynamicDetailExtras();
+            $menu = array($b,$d,$a);
+        }
+        
+        if($type == 'dynamic_details'){
+            $b  = $this->_fetchBasic();
+            $d  = $this->_fetchDocument();
             $menu = array($b,$d);
         }
+        
         
         return $menu;
     }
@@ -295,6 +303,33 @@ class GridButtonsComponent extends Component {
                     'scale'     => 'large', 
                     'itemId'    => 'logo',     
                     'tooltip'   => __('Edit logo')
+                )
+            )
+        );             
+        return $menu;
+    }
+    
+    private function _fetchDynamicDetailExtras(){
+    
+        $menu = array(
+            'xtype' => 'buttongroup',
+            'title' => __('Preview'), 
+            'items' => array(
+                array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-mobile',   
+                    'glyph'     => Configure::read('icnMobile'),  
+                    'scale'     => 'large', 
+                    'itemId'    => 'mobile',    
+                    'tooltip'   => __('Mobile')
+                ),
+                array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-desktop',  
+                    'glyph'     => Configure::read('icnDesktop'),  
+                    'scale'     => 'large', 
+                    'itemId'    => 'desktop',   
+                    'tooltip'   => __('Desktop')
                 )
             )
         );             

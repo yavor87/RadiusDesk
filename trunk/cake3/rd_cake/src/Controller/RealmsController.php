@@ -443,13 +443,7 @@ class RealmsController extends AppController{
 
         $items = array();       
         //Fields
-		$fields  	= array(
-			'id',		'name',			'phone',		'fax',			'cell',		'email',
-			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
-			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
-			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings',	'icon_file_name',
-			'suffix',   'suffix_permanent_users',       'suffix_vouchers'
-		);
+		$fields = $this->{$this->main_model}->schema()->columns();
              
         if(isset($this->request->query['realm_id'])){
             $q_r = $this->{$this->main_model}->find()->where([$this->main_model.'.id' => $this->request->query['realm_id']])->first();
@@ -558,6 +552,7 @@ class RealmsController extends AppController{
        
         $entity         = $this->{$this->main_model}->get($this->request->data['id']);
         $icon_file_name = $unique.'.'.$path_parts['extension'];
+        $old_file       = $entity->icon_file_name;
         $entity->icon_file_name = $icon_file_name;
         
         if($this->{$this->main_model}->save($entity)){
@@ -565,6 +560,13 @@ class RealmsController extends AppController{
             $json_return['id']                  = $this->request->data['id'];
             $json_return['success']             = true;
             $json_return['icon_file_name']      = $icon_file_name;
+            
+             //Remove old file
+            $file_to_delete = WWW_ROOT."/img/realms/".$old_file;
+            if(file_exists($file_to_delete)){
+                unlink($file_to_delete);
+            }
+            
         }else{       
             $errors = $entity->errors();
             $a = [];

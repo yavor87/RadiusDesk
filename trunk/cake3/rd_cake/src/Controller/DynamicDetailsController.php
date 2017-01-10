@@ -22,7 +22,9 @@ class DynamicDetailsController extends AppController{
           
         $this->loadModel('DynamicDetails');
         $this->loadModel('DynamicPairs'); 
-        $this->loadModel('Users'); 
+        $this->loadModel('Users');
+        $this->loadModel('DynamicPhotos');
+        
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
@@ -405,9 +407,8 @@ class DynamicDetailsController extends AppController{
             '_serialize' => array('items','success')
         ));
     }
-    
-    
-     public function add() {
+      
+    public function add() {
 
         if(!$this->_ap_right_check()){
             return;
@@ -457,147 +458,7 @@ class DynamicDetailsController extends AppController{
             ));
         }   
 	}
-    
- /*   
-    public function view(){
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-
-        $items = array();
-        if(isset($this->request->query['dynamic_detail_id'])){
-            $this->{$this->modelClass}->contain();
-            $q_r = $this->{$this->modelClass}->findById($this->request->query['dynamic_detail_id']);
-            if($q_r){
-            
-                $realm = '';
-            
-                if($q_r['DynamicDetail']['realm_id'] != null){
-                    $r  = ClassRegistry::init('Realm');
-                    $r->contain();
-                    $q_realm    = $r->findById($q_r['DynamicDetail']['realm_id']);
-                    if($q_r){
-                        $realm = $q_realm['Realm']['name'];
-                    }
-                }
-                $profile = '';
-                
-                if($q_r['DynamicDetail']['profile_id'] != null){
-                    $p  = ClassRegistry::init('Profile');
-                    $p->contain();
-                    $q_profile    = $p->findById($q_r['DynamicDetail']['profile_id']);
-                    if($q_profile){
-                        $profile = $q_profile['Profile']['name'];
-                    }
-                }
-            
-                $owner_tree                         = $this->_find_parents($q_r['DynamicDetail']['user_id']);
-                $items['id']                        = $q_r['DynamicDetail']['id'];
-                $items['name']                      = $q_r['DynamicDetail']['name'];
-                $items['available_to_siblings']     = $q_r['DynamicDetail']['available_to_siblings'];
-                $items['phone']                     = $q_r['DynamicDetail']['phone'];
-                $items['fax']                       = $q_r['DynamicDetail']['fax'];
-                $items['cell']                      = $q_r['DynamicDetail']['cell'];
-                $items['email']                     = $q_r['DynamicDetail']['email'];
-                $items['url']                       = $q_r['DynamicDetail']['url'];
-                $items['street_no']                 = $q_r['DynamicDetail']['street_no'];
-                $items['street']                    = $q_r['DynamicDetail']['street'];
-                $items['town_suburb']               = $q_r['DynamicDetail']['town_suburb'];
-                $items['city']                      = $q_r['DynamicDetail']['city'];
-                $items['country']                   = $q_r['DynamicDetail']['country'];
-                $items['lat']                       = $q_r['DynamicDetail']['lat'];
-                $items['lon']                       = $q_r['DynamicDetail']['lon'];
-                $items['t_c_check']                 = $q_r['DynamicDetail']['t_c_check'];
-                $items['t_c_url']                   = $q_r['DynamicDetail']['t_c_url'];
-                $items['redirect_check']            = $q_r['DynamicDetail']['redirect_check'];
-                $items['redirect_url']              = $q_r['DynamicDetail']['redirect_url'];
-                $items['slideshow_check']           = $q_r['DynamicDetail']['slideshow_check'];
-                $items['seconds_per_slide']         = $q_r['DynamicDetail']['seconds_per_slide'];
-                $items['connect_check']             = $q_r['DynamicDetail']['connect_check'];
-                $items['connect_username']          = $q_r['DynamicDetail']['connect_username'];
-                $items['connect_suffix']            = $q_r['DynamicDetail']['connect_suffix'];
-                $items['connect_delay']             = $q_r['DynamicDetail']['connect_delay'];
-                $items['connect_only']              = $q_r['DynamicDetail']['connect_only'];
-				$items['user_login_check']          = $q_r['DynamicDetail']['user_login_check'];
-				$items['voucher_login_check']       = $q_r['DynamicDetail']['voucher_login_check'];
-				$items['auto_suffix_check']         = $q_r['DynamicDetail']['auto_suffix_check'];
-				$items['auto_suffix']               = $q_r['DynamicDetail']['auto_suffix'];
-				$items['usage_show_check']          = $q_r['DynamicDetail']['usage_show_check'];
-				$items['usage_refresh_interval']    = $q_r['DynamicDetail']['usage_refresh_interval'];
-				$items['theme']    					= $q_r['DynamicDetail']['theme'];
-				$items['register_users']    		= $q_r['DynamicDetail']['register_users'];
-				$items['lost_password']    			= $q_r['DynamicDetail']['lost_password'];
-                $items['owner']                     = $owner_tree;
-                $items['icon_file_name']            = $q_r['DynamicDetail']['icon_file_name'];
-                
-                $items['coova_desktop_url']         = $q_r['DynamicDetail']['coova_desktop_url'];
-                $items['coova_mobile_url']          = $q_r['DynamicDetail']['coova_mobile_url'];
-                $items['mikrotik_desktop_url']      = $q_r['DynamicDetail']['mikrotik_desktop_url'];
-                $items['mikrotik_mobile_url']       = $q_r['DynamicDetail']['mikrotik_mobile_url'];
-                
-                //User registration add on
-                $items['realm_id']                  = $q_r['DynamicDetail']['realm_id'];
-                $items['profile_id']                = $q_r['DynamicDetail']['profile_id'];
-                ///This is taken care of on the realm itself
-                /// $items['reg_auto_suffix_check']     = $q_r['DynamicDetail']['reg_auto_suffix_check'];
-                /// $items['reg_auto_suffix']           = $q_r['DynamicDetail']['reg_auto_suffix'];
-                $items['reg_mac_check']             = $q_r['DynamicDetail']['reg_mac_check'];
-                $items['reg_auto_add']              = $q_r['DynamicDetail']['reg_auto_add'];
-                $items['reg_email']                 = $q_r['DynamicDetail']['reg_email'];
-                $items['realm']                     = $realm;
-                $items['profile']                   = $profile;
-                $items['default_language']          = $q_r['DynamicDetail']['default_language'];
-                
-            }
-        }
-        
-        $this->set(array(
-            'data'     => $items,
-            'success'   => true,
-            '_serialize'=> array('success', 'data')
-        ));
-    }
-    
-    
-    public function view(){
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $items = array();       
-        //Fields
-		$fields  	= array(
-			'id',		'name',			'phone',		'fax',			'cell',		'email',
-			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
-			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
-			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings',	'icon_file_name',
-			'suffix',   'suffix_permanent_users',       'suffix_vouchers'
-		);
-             
-        if(isset($this->request->query['realm_id'])){
-            $q_r = $this->{$this->main_model}->find()->where([$this->main_model.'.id' => $this->request->query['realm_id']])->first();
-            if($q_r){    
-                $owner_tree         = $this->Users->find_parents($q_r->user_id);
-                $items['owner']     = $owner_tree;      
-                foreach($fields as $field){
-	                $items["$field"]= $q_r->{"$field"};
-		        }  
-            }
-        }
-        
-        $this->set(array(
-            'data'      => $items,
-            'success'   => true,
-            '_serialize'=> array('success', 'data')
-        ));
-    }
-  */  
+      
     public function edit() {
 
         if(!$this->_ap_right_check()){
@@ -639,19 +500,495 @@ class DynamicDetailsController extends AppController{
             $this->set(array(
                 'errors'    => $a,
                 'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
+                'message'   => array('message' => __('Could not update item')),
                 '_serialize' => array('errors','success','message')
             ));
         }
 	}
-     
+	
+	
+    public function editSettings(){
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+            
+        //We will not modify user_id
+        unset($this->request->data['user_id']);
+        $check_items = array(
+            'reg_email',
+            'reg_auto_add',
+            'reg_mac_check',
+            'register_users',
+            't_c_check',
+            'redirect_check',
+            'slideshow_check',
+            'user_login_check',
+            'voucher_login_check',
+            'auto_suffix_check',
+            'usage_show_check',
+            'lost_password'
+	    );
+	    
+        foreach($check_items as $i){
+            if(isset($this->request->data[$i])){
+                $this->request->data[$i] = 1;
+            }else{
+                $this->request->data[$i] = 0;
+            }
+        }
+        
+        $entity = $this->{$this->main_model}->get($this->request->data['id']);
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+
+        if ($this->{$this->main_model}->save($entity)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not update item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+    
+    public function editClickToConnect(){
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+        //We will not modify user_id
+        unset($this->request->data['user_id']);
+
+        //connect_check compulsory check
+        if(isset($this->request->data['connect_check'])){
+            $this->request->data['connect_check'] = 1;
+        }else{
+            $this->request->data['connect_check'] = 0;
+        }
+
+        //connect_only compulsory check
+        if(isset($this->request->data['connect_only'])){
+            $this->request->data['connect_only'] = 1;
+        }else{
+            $this->request->data['connect_only'] = 0;
+        }
+
+        $entity = $this->{$this->main_model}->get($this->request->data['id']);
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+
+        if ($this->{$this->main_model}->save($entity)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not update item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+    
+    public function delete() {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+           
+	    if(isset($this->request->data['id'])){   //Single item delete
+
+            //First find all the photos for this item then delete them           
+            $q_r = $this->DynamicPhotos
+                ->find()
+                ->where(['DynamicPhotos.dynamic_detail_id' => $this->request->data['id']])
+                ->all();
+            foreach($q_r as $i){
+                $file_to_delete = WWW_ROOT."img/dynamic_photos/".$i->file_name;
+                $entity = $this->DynamicPhotos->get($i->id);
+                if($this->DynamicPhotos->delete($entity)){
+                    if(file_exists($file_to_delete)){
+                        unlink($file_to_delete);
+                    }
+                }
+            }
+                    
+            $this->DynamicDetail->id = $this->request->data['id'];
+            $this->DynamicDetail->delete($this->DynamicDetail->id,true);
+      
+        }else{                          //Assume multiple item delete
+            foreach($this->request->data as $d){
+
+                //First find all the photos for this item then delete them             
+                $q_r = $this->DynamicPhotos
+                    ->find()
+                    ->where(['DynamicPhotos.dynamic_detail_id' => $d['id']])
+                    ->all();
+                foreach($q_r as $i){
+                    $file_to_delete = WWW_ROOT."img/dynamic_photos/".$i->file_name;
+                    $entity = $this->DynamicPhotos->get($i->id);
+                    if($this->DynamicPhotos->delete($entity)){
+                        if(file_exists($file_to_delete)){
+                            unlink($file_to_delete);
+                        }
+                    }
+                }
+                $e = $this->{$this->main_model}->get($d['id']);
+                $this->{$this->main_model}->delete($e);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+
+    public function view(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        
+        $user_id    = $user['id'];
+        $items      = array();
+        
+        if(isset($this->request->query['dynamic_detail_id'])){
+
+            $q_r = $this->{$this->main_model}->get($this->request->query['dynamic_detail_id']);
+            if($q_r){
+            
+                $fields = $this->{$this->main_model}->schema()->columns();
+                $realm  = '';
+            
+                if($q_r->realm_id != null){
+                    $this->loadModel('Realms'); 
+                    $q_realm    = $this->Realms->get($q_r->realm_id);
+                    if($q_r){
+                        $realm = $q_realm->name;
+                    }
+                }
+                $profile = '';
+                
+                if($q_r->profile_id != null){
+                    $this->loadModel('Profiles');
+                    $q_profile    = $this->Profiles->get($q_r->profile_id);
+                    if($q_profile){
+                        $profile = $q_profile->name;
+                    }
+                }
+                
+                $owner_tree     = $this->Users->find_parents($q_r->user_id);
+                
+                foreach($fields as $field){
+	                $items["$field"]= $q_r->{"$field"};
+		        }      
+		           
+                $items['owner']     = $owner_tree; 
+                $items['realm']     = $realm;
+                $items['profile']   = $profile;               
+            }
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+    }
+    
+    public function uploadLogo($id = null){   
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.    
+        $this->viewBuilder()->layout('ext_file_upload');
+
+        $path_parts     = pathinfo($_FILES['photo']['name']);
+        $unique         = time();
+        $dest           = WWW_ROOT."img/dynamic_details/".$unique.'.'.$path_parts['extension'];
+        $dest_www       = "/cake3/rd_cake/webroot/img/dynamic_details/".$unique.'.'.$path_parts['extension'];
+       
+        $entity         = $this->{$this->main_model}->get($this->request->data['id']);
+        $icon_file_name = $unique.'.'.$path_parts['extension'];
+        $old_file       = $entity->icon_file_name;
+        $entity->icon_file_name = $icon_file_name;
+        
+        if($this->{$this->main_model}->save($entity)){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $this->request->data['id'];
+            $json_return['success']             = true;
+            $json_return['icon_file_name']      = $icon_file_name;
+            
+            //Remove old file
+            $file_to_delete = WWW_ROOT."img/dynamic_details/".$old_file;
+            if(file_exists($file_to_delete)){
+                unlink($file_to_delete);
+            }
+    
+        }else{       
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+                  
+            $json_return['errors']      = $a;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+        }
+        $this->set('json_return',$json_return);
+    }
+    
+    public function indexPhoto(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];
+
+            $q_r = $this->DynamicPhotos
+                ->find()
+       	        ->where(['DynamicPhotos.dynamic_detail_id' =>$dd_id])
+       	        ->all();
+       	        
+            foreach($q_r as $i){
+                $id     = $i->id;
+                $dd_id  = $i->dynamic_detail_id;
+                $t      = $i->title;
+                $d      = $i->description;
+                $u      = $i->url;
+                $f      = $i->file_name;
+                $location = Configure::read('paths.dynamic_photos').$f;
+                array_push($items,
+                    array(
+                        'id'                => $id, 
+                        'dynamic_detail_id' => $dd_id, 
+                        'title'             => $t, 
+                        'description'       => $d,
+                        'url'               => $u, 
+                        'file_name'         => $f,
+                        'img'               => "/cake3/rd_cake/webroot/files/image.php?width=400&height=200&image=".$location
+                    )
+                );
+            }
+        }
+        
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+    
+    public function uploadPhoto($id = null){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.
+        $this->viewBuilder()->layout('ext_file_upload');
+
+        $path_parts   = pathinfo($_FILES['photo']['name']);
+        $unique       = time();
+        $dest         = WWW_ROOT."img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
+        $dest_www     = "/cake3/rd_cake/webroot/img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
+        
+        $this->request->data['file_name'] = $unique.'.'.$path_parts['extension'];
+        
+        $entity = $this->DynamicPhotos->newEntity($this->request->data()); 
+        if($this->DynamicPhotos->save($entity)){
+            move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+            $json_return['id']                  = $entity->id;
+            $json_return['success']             = true;       
+        }else{
+            $message = 'Error';
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            } 
+            
+            $json_return['errors']      = $a;
+            $json_return['message']     = array("message"   => __('Problem uploading photo'));
+            $json_return['success']     = false;
+           
+        }
+        
+        $this->set('json_return',$json_return);   
+    }
+    
+    public function deletePhoto($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+	    if(isset($this->request->data['id'])){   //Single item delete
+
+            //Get the filename to delete
+            $entity = $this->DynamicPhotos->get($this->request->data['id']);
+            if($entity){
+                $file_to_delete = WWW_ROOT."img/dynamic_photos/".$entity->file_name;
+                if($this->DynamicPhotos->delete($entity)){
+                    if(file_exists($file_to_delete)){
+                        unlink($file_to_delete);
+                    }
+                }
+            }     
+        }else{                          //Assume multiple item delete
+            foreach($this->request->data as $d){
+                //Get the filename to delete
+                $entity = $this->DynamicPhotos->get($d['id']);
+                if($entity){
+                    $file_to_delete = WWW_ROOT."img/dynamic_photos/".$entity->file_name;
+                    if($this->DynamicPhotos->delete($entity)){
+                        if(file_exists($file_to_delete)){
+                            unlink($file_to_delete);
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+	}
+	
+	public function editPhoto(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $this->viewBuilder()->layout('ext_file_upload'); 
+        $entity = $this->DynamicPhotos->get($this->request->data['id']);
+        
+        if($entity){ 
+            $new_photo = false;
+            if($_FILES['photo']['size'] > 0){  
+                $file_name      = $entity->file_name;
+                $file_to_delete = WWW_ROOT."img/dynamic_photos/".$file_name;
+                unlink($file_to_delete);
+
+                $path_parts     = pathinfo($_FILES['photo']['name']);
+                $unique         = time();
+                $dest           = WWW_ROOT."img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
+                move_uploaded_file ($_FILES['photo']['tmp_name'] , $dest);
+                $new_photo = true;
+            }
+             
+            $this->DynamicPhotos->patchEntity($entity, $this->request->data());
+            if($new_photo){
+                $entity->file_name = $unique.'.'.$path_parts['extension']; 
+            }  
+            $this->DynamicPhotos->save($entity);
+        }  
+
+        $json_return['success'] = true;
+        $this->set('json_return',$json_return);
+    }
+
+ 
+
+    public function availableThemes(){
+ 
+        $items = array();
+        Configure::load('DynamicLogin','default'); 
+        $data       = Configure::read('DynamicLogin.theme');
+        foreach(array_keys($data) as $i){
+            array_push($items, array('name' => $i,'id' => $i));   
+        }
+        
+        if(
+            (isset($this->request->query['exclude_custom']))&&
+            ($this->request->query['exclude_custom'] == 'true')
+        ){
+           array_shift($items); //Remove the first item which will be "Custom" in the config file
+        }
+            
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+	 
     public function menuForGrid(){
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
             return;
         }
         
-        $menu = $this->GridButtons->returnButtons($user,true,'access_providers');
+        $menu = $this->GridButtons->returnButtons($user,true,'dynamic_details');
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -659,140 +996,48 @@ class DynamicDetailsController extends AppController{
         ));
     }
     
-    public function delete($id = null) {
-		if (!$this->request->is('post')) {
-			throw new MethodNotAllowedException();
-		}
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-        $user_id    = $user['id'];
-        $fail_flag = false;
-
-	    if(isset($this->request->data['id'])){   //Single item delete
-            $message = "Single item ".$this->request->data['id'];
-
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:         
-            $entity     = $this->{$this->main_model}->get($this->request->data['id']);   
-            $owner_id   = $entity->parent_id;
-            
-            if($owner_id != $user_id){
-                if($this->{$this->main_model}->is_sibling_of($user_id,$owner_id)== true){
-                    $this->{$this->main_model}->delete($entity);
-                    $this->Users->recover();
-                }else{
-                    $fail_flag = true;
-                }
-            }else{
-                $this->{$this->main_model}->delete($entity);
-                $this->Users->recover();
-            }
-   
-        }else{                          //Assume multiple item delete
-            foreach($this->request->data as $d){
-                $entity     = $this->{$this->main_model}->get($d['id']);  
-                $owner_id   = $entity->parent_id;
-                if($owner_id != $user_id){
-                    if($this->{$this->main_model}->is_sibling_of($user_id,$owner_id) == true){
-                        $this->{$this->main_model}->delete($entity);
-                    }else{
-                        $fail_flag = true;
-                    }
-                }else{
-                    $this->{$this->main_model}->delete($entity);
-                    $this->Users->recover();
-                }
-            }
-        }
-
-        if($fail_flag == true){
-            $this->set(array(
-                'success'   => false,
-                'message'   => array('message' => __('Could not delete some items')),
-                '_serialize' => array('success','message')
-            ));
-        }else{
-            $this->set(array(
-                'success' => true,
-                '_serialize' => array('success')
-            ));
-        }
-	}
-	
-	public function changePassword(){
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-        $success = false;
-        if(isset($this->request->data['user_id'])){
-            $entity = $this->{$this->main_model}->get($this->request->data['user_id']); 
-            $data = [
-                'password'  => $this->request->data['password'],
-                'token'     => ''
-            ];
-            $this->{$this->main_model}->patchEntity($entity, $data);
-            $this->{$this->main_model}->save($entity);
-            $success               = true;  
-        }
-
-        $this->set(array(
-            'success' => $success,
-            '_serialize' => array('success',)
-        ));
-    }
-    
-    public function enableDisable(){     
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-        $user_id    = $user['id'];
-        $rb         = $this->request->data['rb'];
-        if($rb == 'enable'){
-            $active = 1;
-        }else{
-            $active = 0;
-        }
-        foreach(array_keys($this->request->data) as $key){
-            if(preg_match('/^\d+/',$key)){  
-                $entity = $this->{$this->main_model}->get($key);
-                $entity->active = $active;
-                $this->{$this->main_model}->save($entity);  
-            }
-        }
-        $this->set(array(
-            'success' => true,
-            '_serialize' => array('success',)
-        ));
-    }
-	
-	public function childCheck(){
+    public function menuForPhotos(){
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
             return;
         }
-        $user_id  = $user['id'];
-        $tree     = false;     
-        $entity = $this->Users->get($user_id); 
-        if($this->Users->childCount($entity) > 0){
-            $tree = true;
-        }
-        $items['tree'] = $tree;
+        
+        $menu = $this->GridButtons->returnButtons($user,false,'basic');
         $this->set(array(
-            'items'         => $items,
+            'items'         => $menu,
             'success'       => true,
             '_serialize'    => array('items','success')
         ));
     }
+    
+    public function menuForDynamicPages(){
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,false,'basic');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+    
+    public function menuForDynamicPairs(){
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,false,'basic');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+    
     
     public function noteIndex(){
         //__ Authentication + Authorization __
@@ -944,6 +1189,5 @@ class DynamicDetailsController extends AppController{
 		    $redir_to = $pages['coova_desktop'].'?'.$_SERVER['QUERY_STRING']."&i18n=$i18n";
 		}
         return $redir_to;
-	}
-	
+	}	
 }
