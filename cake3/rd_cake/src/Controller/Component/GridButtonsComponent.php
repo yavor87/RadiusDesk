@@ -51,14 +51,14 @@ class GridButtonsComponent extends Component {
         if($type == 'basic_and_doc'){
             $b  = $this->_fetchBasic();
             $d  = $this->_fetchDocument();
-            $a  = $this->_fetchDynamicDetailExtras();
-            $menu = array($b,$d,$a);
+            $menu = array($b,$d);
         }
         
         if($type == 'dynamic_details'){
             $b  = $this->_fetchBasic();
             $d  = $this->_fetchDocument();
-            $menu = array($b,$d);
+            $a  = $this->_fetchDynamicDetailExtras();
+            $menu = array($b,$d,$a);
         }
         
         
