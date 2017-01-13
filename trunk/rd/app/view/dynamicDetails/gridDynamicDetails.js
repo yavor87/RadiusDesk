@@ -11,7 +11,7 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetails' ,{
         'Rd.view.components.ajaxToolbar'
     ],
     plugins     : 'gridfilters',  //*We specify this
-    urlMenu     : '/cake2/rd_cake/dynamic_details/menu_for_grid.json',
+    urlMenu     : '/cake3/rd_cake/dynamic-details/menu-for-grid.json',
    
     initComponent: function(){
         var me      = this;

@@ -25,7 +25,7 @@ Ext.define('Rd.view.components.cmbDynamicDetail', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/dynamic_details/index.json',
+                url     : '/cake3/rd_cake/dynamic-details/index.json',
                 reader: {
                     type            : 'json',
                     rootProperty    : 'items',

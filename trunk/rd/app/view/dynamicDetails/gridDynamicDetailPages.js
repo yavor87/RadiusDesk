@@ -13,7 +13,7 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetailPages' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/dynamic_details/menu_for_dynamic_pages.json',
+    urlMenu: '/cake3/rd_cake/dynamic-details/menu-for-dynamic-pages.json',
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
     ],
@@ -35,7 +35,7 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetailPages' ,{
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/dynamic_details/index_page.json',
+                url     : '/cake3/rd_cake/dynamic-details/index-page.json',
                 extraParams: { 'dynamic_detail_id' : me.dynamic_detail_id },
                 reader: {
                     type: 'json',
@@ -44,7 +44,7 @@ Ext.define('Rd.view.dynamicDetails.gridDynamicDetailPages' ,{
                     totalProperty: 'totalCount' //Required for dynamic paging
                 },
                 api: {
-                    destroy  : '/cake2/rd_cake/dynamic_details/delete_page.json'
+                    destroy  : '/cake3/rd_cake/dynamic-details/delete-page.json'
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             },

@@ -37,7 +37,7 @@ Ext.define('Rd.view.components.gridNote' ,{
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake3/rd_cake/' + me.noteForGrid + '/note_index.json',
+                url     : '/cake3/rd_cake/' + me.noteForGrid + '/note-index.json',
                 extraParams: { 'for_id' : me.noteForId },
                 reader: {
                     type            : 'json',
@@ -46,7 +46,7 @@ Ext.define('Rd.view.components.gridNote' ,{
                     keepRawData     : true
                 },
                 api: {
-                    destroy  : '/cake3/rd_cake/' + me.noteForGrid + '/note_del.json'
+                    destroy  : '/cake3/rd_cake/' + me.noteForGrid + '/note-del.json'
                 }
             },
             autoLoad: true
