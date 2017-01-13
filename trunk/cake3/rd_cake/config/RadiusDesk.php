@@ -75,8 +75,8 @@ $config['voucher_formats'][10]    = array('name' => 'Avery L7163',              
 //FIXME To incorporate
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
 
-$config['paths']['dynamic_photos']      = "/cake3/rd_cake/webroot/img/dynamic_photos/";   
-$config['paths']['dynamic_detail_icon'] = "/cake3/rd_cake/webroot/img/dynamic_details/";
+$config['paths']['dynamic_photos']      = "/cake3/rd_cake/img/dynamic_photos/";   
+$config['paths']['dynamic_detail_icon'] = "/cake3/rd_cake/img/dynamic_details/";
 
 //Define default settings for the users:
 $config['user_settings']['wallpaper']       = "9.jpg";

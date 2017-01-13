@@ -24,6 +24,8 @@ class DynamicDetailsController extends AppController{
         $this->loadModel('DynamicPairs'); 
         $this->loadModel('Users');
         $this->loadModel('DynamicPhotos');
+        $this->loadModel('DynamicPages');
+        $this->loadModel('DynamicDetailSocialLogins');
         
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
@@ -786,51 +788,14 @@ class DynamicDetailsController extends AppController{
         $this->set('json_return',$json_return);
     }
     
-    public function indexPhoto(){
-
+    public function indexPhoto(){   
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
         $user_id    = $user['id'];
-
-        $items = array();
-        if(isset($this->request->query['dynamic_detail_id'])){
-            $dd_id = $this->request->query['dynamic_detail_id'];
-
-            $q_r = $this->DynamicPhotos
-                ->find()
-       	        ->where(['DynamicPhotos.dynamic_detail_id' =>$dd_id])
-       	        ->all();
-       	        
-            foreach($q_r as $i){
-                $id     = $i->id;
-                $dd_id  = $i->dynamic_detail_id;
-                $t      = $i->title;
-                $d      = $i->description;
-                $u      = $i->url;
-                $f      = $i->file_name;
-                $location = Configure::read('paths.dynamic_photos').$f;
-                array_push($items,
-                    array(
-                        'id'                => $id, 
-                        'dynamic_detail_id' => $dd_id, 
-                        'title'             => $t, 
-                        'description'       => $d,
-                        'url'               => $u, 
-                        'file_name'         => $f,
-                        'img'               => "/cake3/rd_cake/webroot/files/image.php?width=400&height=200&image=".$location
-                    )
-                );
-            }
-        }
-        
-        $this->set(array(
-            'items'     => $items,
-            'success'   => true,
-            '_serialize'=> array('success', 'items')
-        ));
+        $this->_genericIndex("DynamicPhotos");
     }
     
     public function uploadPhoto($id = null){
@@ -848,7 +813,7 @@ class DynamicDetailsController extends AppController{
         $path_parts   = pathinfo($_FILES['photo']['name']);
         $unique       = time();
         $dest         = WWW_ROOT."img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
-        $dest_www     = "/cake3/rd_cake/webroot/img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
+        $dest_www     = "/cake3/rd_cake/img/dynamic_photos/".$unique.'.'.$path_parts['extension'];
         
         $this->request->data['file_name'] = $unique.'.'.$path_parts['extension'];
         
@@ -955,8 +920,436 @@ class DynamicDetailsController extends AppController{
         $json_return['success'] = true;
         $this->set('json_return',$json_return);
     }
+    
+    public function shufflePhoto(){
+    
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
 
+        if(!$this->_ap_right_check()){
+            return;
+        }
+        $table = 'DynamicPhotos';
+        
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];   
+            foreach($this->request->data as $d){       
+                $entity     = $this->{$table}->get($d['id']);
+                $e_data     = $entity->toArray();
+                
+                $new_entity = $this->{$table}->newEntity($e_data);
+                $new_entity->unsetProperty('id');
+                $this->{$table}->save($new_entity);
+                
+                $this->{$table}->delete($entity);
+            }    
+        }
+          
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+    
+    
+    public function indexPage(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->_genericIndex("DynamicPages");  
+    }
+
+    public function addPage() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+        
+        $this->_genericAdd('DynamicPages');
  
+       
+	}
+	
+	public function editPage() {
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+             
+        $this->_genericEdit('DynamicPages');
+	}
+	
+	public function deletePage($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        if(!$this->_ap_right_check()){
+            return;
+        }
+
+	    $this->_genericDelete('DynamicPages');
+	}
+	
+	
+	public function indexPair(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->_genericIndex("DynamicPairs");   
+    }
+    
+    public function addPair(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->_genericAdd("DynamicPairs");   
+    }
+    
+    public function editPair(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->_genericEdit("DynamicPairs");   
+    }
+    
+    public function deletePair(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->_genericDelete("DynamicPairs");   
+    }
+    
+    private function _genericIndex($table){
+    
+        $fields = $this->{$table}->schema()->columns();
+        $items = array();
+        
+        if(isset($this->request->query['dynamic_detail_id'])){
+            $dd_id = $this->request->query['dynamic_detail_id'];
+            $q_r = $this->{$table}
+                ->find()
+       	        ->where([$table.'.dynamic_detail_id' =>$dd_id])
+       	        ->all();
+       	    
+       	    foreach($q_r as $i){ 
+           	    $row = array();
+                foreach($fields as $field){
+                    $row["$field"]= $i->{"$field"};
+                } 
+                
+                //Special clause for DynamicPhotos
+                if($table == 'DynamicPhotos'){
+                    $f          = $i->file_name;
+                    $location   = Configure::read('paths.dynamic_photos').$f;
+                    $row['img'] = "/cake3/rd_cake/webroot/files/image.php?width=400&height=100&image=".$location;
+                }              
+           	    array_push($items,$row);
+            }
+        }
+               
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
+    
+    private function _genericAdd($table){
+ 
+         //The rest of the attributes should be same as the form..
+        $entity = $this->{$table}->newEntity($this->request->data()); 
+        if($this->{$table}->save($entity)){
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        }else{
+            $message = 'Error';
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }   
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }   
+    }
+    
+    private function _genericEdit($table){
+    
+        $entity = $this->{$table}->get($this->request->data['id']);
+        $this->{$table}->patchEntity($entity, $this->request->data());
+
+        if ($this->{$table}->save($entity)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not update item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+    
+    private function _genericDelete($table){	
+        if(isset($this->request->data['id'])){ 
+            $entity = $this->{$table}->get($this->request->data['id']);
+            $this->{$table}->delete($entity);
+        }else{                          //Assume multiple item delete
+            foreach($this->request->data as $d){
+                //Get the filename to delete
+                $entity = $this->{$table}->get($d['id']);
+                $this->{$table}->delete($entity);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+    
+    
+    public function viewSocialLogin(){
+
+		 //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $items = array();
+        if(isset($this->request->query['dynamic_detail_id'])){
+        
+            $dd_id = $this->request->query['dynamic_detail_id'];
+            $q_r = $this->{$this->main_model}
+                ->find()
+                ->contain(['DynamicDetailSocialLogins' => ['Realms','Profiles'],'PermanentUsers'])
+                ->where(['DynamicDetails.id' => $dd_id])
+                ->first();
+
+            if($q_r){
+                
+				$items['social_enable']    					= $q_r->social_enable;
+				$items['id']    							= $q_r->id;
+				$items['social_temp_permanent_user_id'] 	= $q_r->social_temp_permanent_user_id;
+				$items['social_temp_permanent_user_name'] 	= $q_r->permanent_user->username;
+				
+				foreach($q_r->dynamic_detail_social_logins as $i){
+				
+				    if($i->name == 'Facebook'){
+				        $prefix = 'fb';
+				    } 
+				    if($i->name == 'Google'){
+				        $prefix = 'gp';
+				    }
+				    if($i->name == 'Twitter'){
+				        $prefix = 'tw';
+				    }
+					$items[$prefix.'_enable'] 		= $i->enable;
+					$items[$prefix.'_record_info'] 	= $i->record_info;
+					$items[$prefix.'_id'] 			= $i->special_key;
+					$items[$prefix.'_secret'] 		= $i->secret;
+					$items[$prefix.'_active'] 		= $i->enable;
+					$items[$prefix.'_profile'] 	    = intval($i->profile_id);
+					$items[$prefix.'_profile_name'] = $i->profile->name;
+					$items[$prefix.'_realm'] 		= intval($i->realm_id);
+					$items[$prefix.'_realm_name'] 	= $i->realm->name;
+					$items[$prefix.'_voucher_or_user']= $i->type;
+
+				}
+            }
+            
+        }
+        
+        $this->set(array(
+            'data'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+	}
+	
+	public function editSocialLogin(){
+	
+	    //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        
+        $check_items = array(
+			'social_enable',
+			'fb_enable',
+			'gp_enable',
+			'tw_enable',
+			'fb_record_info',
+			'gp_record_info',
+			'tw_record_info'
+		);
+		
+        foreach($check_items as $i){
+            if(isset($this->request->data[$i])){
+                $this->request->data[$i] = 1;
+            }else{
+                $this->request->data[$i] = 0;
+            }
+        }
+        
+        $prefixes = ['fb','gp','tw'];
+
+		//We have to have a temp user else we fail it
+		if(($this->request->data['social_enable'] == 1)&&($this->request->data['social_temp_permanent_user_id'] == '')){
+			 $this->set(array(
+                'errors'    => array('social_temp_permanent_user_id' => "Temp user cannot be empty"),
+                'success'   => false,
+                'message'   => array('message' => 'Could not save data'),
+                '_serialize' => array('errors','success','message')
+            ));
+			return;
+		}
+
+
+        //Sanity checks
+        foreach($prefixes as $p){
+            if(
+			    ($this->request->data['social_enable'] == 1)&&
+			    ($this->request->data[$p.'_enable'] == 1)
+		    ){
+
+			    $fb_check_for  = array($p.'_voucher_or_user',$p.'_secret',$p.'_id',$p.'_realm',$p.'_profile');
+			    foreach($fb_check_for as $i){
+				    if($this->request->data["$i"] == ''){
+					    $this->set(array(
+				            'errors'    => array("$i" => $i." is required"),
+				            'success'   => false,
+				            'message'   => array('message' => 'Could not save data'),
+				            '_serialize' => array('errors','success','message')
+				        ));
+					    return;
+				    }
+			    }
+		    }
+        
+        }
+
+		//If it got here without a return we can surely then add the social logins the user defined
+		//First we delete the existing ones:
+		$id = $this->request->data['id'];
+		
+		$entity = $this->{$this->main_model}->get($this->request->data['id']);
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+		
+		$this->DynamicDetailSocialLogins->deleteAll(['DynamicDetailSocialLogins.dynamic_detail_id' => $id], true);
+
+
+		if ($this->{$this->main_model}->save($entity)) {
+			if($this->request->data['social_enable'] == 0){
+			
+				//if not enabled we don't care ....
+				$this->set(array(
+		            'success' => true,
+		            '_serialize' => array('success')
+		        ));
+				return;
+			}
+			
+			foreach($prefixes as $p){
+			
+			    if($this->request->data[$p.'_enable'] == 1){
+				    //Facebook
+				    
+				    if($p == 'fb'){
+				        $name = 'Facebook';   
+				    }
+				    if($p == 'gp'){
+				        $name = 'Google';   
+				    }
+				    if($p == 'tw'){
+				        $name = 'Twitter';   
+				    }
+				    
+				    $data = array();
+				    $data['name'] 				= $name;
+				    $data['dynamic_detail_id'] 	= $id;
+				    $data['profile_id'] 		= $this->request->data["$p"."_profile"];
+				    $data['type'] 				= $this->request->data["$p"."_voucher_or_user"];   
+				    $data['special_key'] 		= $this->request->data["$p"."_id"];   
+				    $data['secret'] 			= $this->request->data["$p"."_secret"]; 
+				    $data['realm_id'] 			= $this->request->data["$p"."_realm"];
+				    $data['secret'] 			= $this->request->data["$p"."_secret"];
+				    $data['record_info']		= $this->request->data["$p"."_record_info"];
+				    $data['enable']				= $this->request->data["$p"."_enable"];	
+				    	    
+				    $entity                     = $this->DynamicDetailSocialLogins->newEntity($data);  
+                    $this->DynamicDetailSocialLogins->save($entity);             
+			    }
+			}
+			
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+
+        } else {
+
+            $message = 'Error';
+            $this->set(array(
+                'errors'    => $this->{$this->modelClass}->validationErrors,
+                'success'   => false,
+                'message'   => array('message' => 'Could not save data'),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+	}
+    
+    
 
     public function availableThemes(){
  
