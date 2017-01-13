@@ -5,7 +5,7 @@ var rdDynamic = (function () {
     
     
         //=====Constants======
-        cDynUrl         = location.protocol+'//'+document.location.hostname+"/cake2/rd_cake/dynamic_details/info_for.json";
+        cDynUrl         = location.protocol+'//'+document.location.hostname+"/cake3/rd_cake/dynamic-details/info-for.json";
         cAjaxTimeout    = 3000;
         cDynamicData    = undefined; //Will be populated when gettting DynamicDetail from back-end
         cDebug          = false;
