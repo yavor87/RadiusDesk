@@ -1060,7 +1060,7 @@ class DynamicDetailsController extends AppController{
                 //Special clause for DynamicPhotos
                 if($table == 'DynamicPhotos'){
                     $f          = $i->file_name;
-                    $location   = Configure::read('paths.dynamic_photos').$f;
+                    $location   = Configure::read('paths.real_photo_path').$f;
                     $row['img'] = "/cake3/rd_cake/webroot/files/image.php?width=400&height=100&image=".$location;
                 }              
            	    array_push($items,$row);
