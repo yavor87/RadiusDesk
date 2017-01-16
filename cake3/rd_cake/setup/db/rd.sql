@@ -1058,7 +1058,7 @@ CREATE TABLE `dynamic_detail_social_logins` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1132,7 +1132,7 @@ CREATE TABLE `dynamic_details` (
   `reg_auto_add` tinyint(1) NOT NULL DEFAULT '0',
   `reg_email` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1219,9 +1219,10 @@ CREATE TABLE `dynamic_photos` (
   `file_name` varchar(128) NOT NULL DEFAULT 'logo.jpg',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1230,7 +1231,7 @@ CREATE TABLE `dynamic_photos` (
 
 LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
-INSERT INTO `dynamic_photos` VALUES (100,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2013-05-28 15:07:03'),(101,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2013-05-28 15:03:19'),(102,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01'),(103,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40'),(104,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04'),(105,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30'),(106,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04');
+INSERT INTO `dynamic_photos` VALUES (107,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2017-01-16 10:00:46',1),(108,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2017-01-16 10:00:01',1),(109,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01',1),(110,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40',1),(111,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04',1),(112,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30',1),(113,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04',1);
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4036,7 +4037,7 @@ CREATE TABLE `user_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4045,7 +4046,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(72,44,'realm_id','34','2017-01-09 10:12:00','2017-01-09 10:12:00'),(73,44,'show_recent_failures','0','2017-01-09 10:12:00','2017-01-09 10:12:00'),(74,44,'show_data_usage','0','2017-01-09 10:12:00','2017-01-09 10:12:00');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(75,44,'realm_id','34','2017-01-16 10:05:45','2017-01-16 10:05:45'),(76,44,'show_recent_failures','0','2017-01-16 10:05:45','2017-01-16 10:05:45'),(77,44,'show_data_usage','1','2017-01-16 10:05:45','2017-01-16 10:05:45');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4207,4 +4208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-13 17:15:43
+-- Dump completed on 2017-01-16 12:06:26
