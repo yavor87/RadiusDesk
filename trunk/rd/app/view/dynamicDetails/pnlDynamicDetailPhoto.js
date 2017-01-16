@@ -31,6 +31,11 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                         '<tpl else>',
                             '<div><a href="{url}" target="_blank">{url}</a></div>',
                         '</tpl>',
+                        '<tpl if="active">',
+                            '<div class="txtGreen">( <i class="fa   fa-check-circle"></i> Enabled )</div>',
+                        '<tpl else>',
+                            '<div class="txtGrey">( <i class="fa   fa-minus-circle"></i> Disabled )</div>',
+                        '</tpl>',
                     '</div>',
                 '</div>',
             '</tpl>'
