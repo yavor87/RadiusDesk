@@ -68,7 +68,15 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                     iconCls: 'upload-icon',
                     glyph: Rd.config.icnFolder
                 }  
-            }          
+            },
+            {
+                xtype       : 'checkbox',      
+                fieldLabel  : "Active",
+                name        : 'active',
+                inputValue  : 'active',
+                checked     : false,
+                labelClsExtra: 'lblRdReq'
+            }            
         ],
         buttons: [
             {

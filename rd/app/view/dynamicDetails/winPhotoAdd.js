@@ -63,6 +63,14 @@ Ext.define('Rd.view.dynamicDetails.winPhotoAdd', {
                     iconCls: 'upload-icon',
                     glyph: Rd.config.icnFolder
                 }     
+            },
+            {
+                xtype       : 'checkbox',      
+                fieldLabel  : "Active",
+                name        : 'active',
+                inputValue  : 'active',
+                checked     : true,
+                labelClsExtra: 'lblRdReq'
             }          
         ],
         buttons: [
