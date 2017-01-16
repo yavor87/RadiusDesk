@@ -7,40 +7,7 @@ Ext.define('Rd.view.meshes.vcMeshNodeGeneric', {
     init: function() {
         var me = this;
     },
-    
-    loadAdvancedWifiSettings: function(win){
-        var me      = this;
-        var form    = win.down('form');
-        var hw      = form.down('cmbHardwareOptions');
-        var val     = hw.getValue();
-
-        //We have to disable this and hide it upon initial loading
-        var tabAdvRadio1 = form.down('#tabAdvWifiRadio1');
-        tabAdvRadio1.setDisabled(true);
-        tabAdvRadio1.tab.hide();
-        form.load({
-            url     : me.getUrlAdvancedSettingsForModel(), 
-            method  : 'GET',
-            params  : {model:val},
-            success : function(a,b,c){
-                if(b.result.data.device_type == 'ac'){
-                    //Determine the 5G radio
-                    if(b.result.data.radio0_band == 5){
-                        me.addAcHtMode(0);
-                        me.removeAcHtMode(1);
-                    }
-                    if(b.result.data.radio1_band == 5){
-                        me.addAcHtMode(1);
-                        me.removeAcHtMode(0);
-                    }
-                }else{
-                    me.removeAcHtMode(0);
-                    me.removeAcHtMode(1);
-                }
-            }
-        });
-    },
-      
+     
     onCmbHardwareOptionsChange: function(cmb){
 		var me      = this;
         var form    = cmb.up('form');
@@ -64,7 +31,7 @@ Ext.define('Rd.view.meshes.vcMeshNodeGeneric', {
         }else{
             var params      = {model:val,node_id:window.nodeId};
         }
-            
+             
         //Load the advanced settings for this hardware...
         form.load({
             url     : me.getUrlAdvancedSettingsForModel(), 
@@ -85,22 +52,28 @@ Ext.define('Rd.view.meshes.vcMeshNodeGeneric', {
                 }else{
                     me.removeAcHtMode(0);
                     me.removeAcHtMode(1);
+                }   
+            },
+            listeners       : {
+                actioncomplete  : function(){
+                    console.log("Action is complete");
                 }
-            }
+            } 
         });
         
-        
-		if(r_count == 2){
-			radio.setDisabled(false);	
-			radio.tab.show();
+        if(r_count == 2){
+	        radio.setDisabled(false);	
+	        radio.tab.show();
             tabAdvRadio1.setDisabled(false);
             tabAdvRadio1.tab.show();
-		}else{
-			radio.setDisabled(true);
-			radio.tab.hide();
+        }else{
+	        radio.setDisabled(true);
+	        radio.tab.hide();
             tabAdvRadio1.setDisabled(true);
             tabAdvRadio1.tab.hide();
-		}
+        }
+        
+        
 	},
 	onChkRadioEnableChange: function(chk){
 		var me 		= this;

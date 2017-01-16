@@ -11,7 +11,7 @@ Ext.define('Rd.view.meshes.cmbHardwareOptions', {
     mode            : 'local',
     itemId          : 'hardware',
     name            : 'hardware',
-    value           : 'dragino', //Default value
+   // value           : 'dragino', //Default value
     labelClsExtra   : 'lblRd',
     initComponent: function(){
         var me      = this;

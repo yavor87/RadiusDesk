@@ -6,7 +6,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
     resizable:  true,
     title:      i18n('sNew_mesh_node'),
     width:      450,
-    height:     500,
+    height:     550,
     plain:      true,
     border:     false,
     layout:     'fit',
@@ -17,9 +17,6 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 	meshName	: '',
     defaults: {
             border: false
-    },
-    listeners : {
-        beforeshow : 'loadAdvancedWifiSettings'
     },
     requires: [
         'Ext.tab.Panel',
@@ -140,12 +137,12 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                         },
 						{
 							title       : 'Radios',
-                            disabled    : true,
+                        //    disabled    : true,
 							layout      : 'fit',
                             itemId      : 'tabRadio',
                             glyph       : Rd.config.icnWifi,
-                            autoScroll	:true,
-							hidden		: true,
+                            autoScroll	: true,
+						//	hidden		: true,
                             items       : [ {
                                 layout  : 'fit',
                                 xtype   : 'tabpanel',
@@ -207,7 +204,6 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        inputValue	: '24',
 											        itemId      : 'radio24',
 											        labelClsExtra: 'lblRd',
-											        checked		: true,
 											        listeners   : {
 											            change  : 'onRadio_0_BandChange'
 											        }
@@ -306,7 +302,6 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
 											        name      	: 'radio1_band',
 											        inputValue	: '5',
 											        itemId      : 'radio5',
-											        checked		: true,
 											        labelClsExtra: 'lblRd',
 											        listeners   : {
 											            change  : 'onRadio_1_BandChange'
@@ -375,8 +370,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                                     {
                                                         boxLabel  : 'HT20',
                                                         name      : 'radio0_htmode',
-                                                        inputValue: 'HT20',
-                                                        checked   : true
+                                                        inputValue: 'HT20'
                                                     }, 
                                                     {
                                                         boxLabel  : 'HT40',
@@ -496,8 +490,7 @@ Ext.define('Rd.view.meshes.winMeshAddNode', {
                                                     {
                                                         boxLabel  : 'HT20',
                                                         name      : 'radio1_htmode',
-                                                        inputValue: 'HT20',
-                                                        checked   : true
+                                                        inputValue: 'HT20'
                                                     }, 
                                                     {
                                                         boxLabel  : 'HT40',
