@@ -8989,7 +8989,7 @@ tr.x-grid-subtable-row {
     font-size: 16px;
     padding: 5px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:85 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:84 */
 .thumb-wrap {
     /*Wallpaper selection */
     text-align: center;
@@ -8997,42 +8997,39 @@ tr.x-grid-subtable-row {
     padding: 5px;
     border: 2px solid #86a5e5;
     background: #f3f5f9;
+    cursor: move;
 }
 /* /usr/share/nginx/html/rd/sass/src/Application.scss:93 */
 .thumb-wrap:hover {
     border: 2px solid #526b9d;
     background: #c4cbd7;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:98 */
-.thumb-wrap img {
-    cursor: pointer;
-}
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:102 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:99 */
 .thumb-wrap.x-item-selected {
     border: 1px solid #fd6473;
     background: #e1c8d4;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:107 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:104 */
 .thumb-wrap h1 {
     padding: 10px;
     color: #526b9d;
     font-size: 20px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:113 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:110 */
 .thumb-wrap .description {
     padding: 10px;
     color: #526b9d;
     font-size: 14px;
     font-style: oblique;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:121 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:118 */
 .banner {
     /* Windows needs a banner */
     width: 100%;
     height: 100%;
     background-color: #dbdbdb;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:127 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:124 */
 .banner h1 {
     margin-left: 52px;
     padding: 18px;
@@ -9040,7 +9037,7 @@ tr.x-grid-subtable-row {
     color: #00359a;
     font-size: 25px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:136 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:133 */
 .gridTree .x-grid-cell-inner {
     /* Grid styles */
     color: #676d76;
@@ -9052,12 +9049,12 @@ tr.x-grid-subtable-row {
     padding: 2px !important;
     margin: 2px !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:145 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:142 */
 .gridMain .x-grid-cell-inner {
     color: #0b42b3;
     font-size: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:150 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:147 */
 .gridRealm.availAll {
     background: black;
     border: 1px solid #ccc;
@@ -9066,7 +9063,7 @@ tr.x-grid-subtable-row {
     color: white;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:159 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:156 */
 .gridTag {
     background: #e7edf6;
     border: 1px solid #616b77;
@@ -9075,23 +9072,23 @@ tr.x-grid-subtable-row {
     color: #727982;
     font-size: 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:168 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:165 */
 .gridComment .x-grid-cell-inner {
     color: #676d76;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:174 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:171 */
 .x-grid-cell-checkcolumn .x-grid-cell-inner {
     /* EXP for check column */
     padding-top: 4px;
     padding-bottom: 2px;
     line-height: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:179 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:176 */
 .x-grid-with-row-lines .x-grid-cell-checkcolumn .x-grid-cell-inner {
     padding-top: 3px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:183 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:180 */
 .x-grid-checkheader {
     /*
     width: 13px;
@@ -9140,25 +9137,25 @@ tr.x-grid-subtable-row {
     display: block;
     margin: auto;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:209 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:206 */
 .x-grid-checkheader-checked {
     /* background-position: 0 -13px;*/
     /* background-position: 0 -13px;*/
     background-image: url(images/16x16/yes.png);
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:214 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:211 */
 .x-grid-checkheader-disabled {
     background-position: -39px 0;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:218 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:215 */
 .x-grid-checkheader-checked-disabled {
     background-position: -39px -13px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:222 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:219 */
 .x-grid-checkheader-editor .x-form-cb-wrap {
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:227 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:224 */
 .noRight {
     /* EXP column display yes/no */
     background: #f6cecf;
@@ -9168,7 +9165,7 @@ tr.x-grid-subtable-row {
     color: #6b032f;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:236 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:233 */
 .hasRight {
     background: #d4e0ce;
     border: 1px solid #ccc;
@@ -9177,7 +9174,7 @@ tr.x-grid-subtable-row {
     color: #1e5304;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:247 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:244 */
 .fieldRed {
     /* Note rather replace the .hasRight and .noRight with a more generic class eg. red or green */
     background: #f6cecf;
@@ -9188,7 +9185,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:257 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:254 */
 .fieldGreen {
     background: #d4e0ce;
     margin: 1px 0px 1px 0px;
@@ -9198,7 +9195,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:267 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:264 */
 .fieldBlue {
     background: #c5f5fd;
     margin: 1px 0px 1px 0px;
@@ -9208,7 +9205,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:277 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:274 */
 .fieldOrange {
     background: #ffd9b3;
     margin: 1px 0px 1px 0px;
@@ -9218,7 +9215,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:287 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:284 */
 .fieldGrey {
     background: #e6e6e6;
     margin: 1px 0px 1px 0px;
@@ -9228,7 +9225,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:297 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:294 */
 .fieldYellow {
     background: #ffffb3;
     margin: 1px 0px 1px 0px;
@@ -9238,7 +9235,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:307 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:304 */
 .fieldRedWhite {
     background: #e00404;
     margin: 1px 0px 1px 0px;
@@ -9248,7 +9245,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:317 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:314 */
 .fieldGreenWhite {
     background: #1a9406;
     margin: 1px 0px 1px 0px;
@@ -9258,7 +9255,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:327 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:324 */
 .fieldGreyWhite {
     background: #767575;
     color: #fff;
@@ -9268,7 +9265,7 @@ tr.x-grid-subtable-row {
     margin: 1px 0px 1px 0px;
     padding: 2px 0px 2px 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:338 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:335 */
 .fieldBlueWhite {
     background: #1e66d2;
     margin: 1px 0px 1px 0px;
@@ -9278,7 +9275,7 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:348 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:345 */
 .fieldPurpleWhite {
     background: #99f;
     margin: 1px 0px 1px 0px;
@@ -9288,48 +9285,48 @@ tr.x-grid-subtable-row {
     font-weight: bold;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:359 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:356 */
 .txtGrey {
     color: #98989b;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:363 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:360 */
 .txtGreen {
     color: #2c7607;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:367 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:364 */
 .txtRed {
     color: #d92435;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:371 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:368 */
 .txtBlue {
     color: #5c88e0;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:375 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:372 */
 .txtBold {
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:379 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:376 */
 .green_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #0ca630;
     background: #d0f8da;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:386 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:383 */
 .blue_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #4a709b;
     background: #d3dfec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:393 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:390 */
 .red_round {
     margin: 5px;
     padding: 5px;
     border: 2px solid #d92435;
     background: #f1e2e2;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:400 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:397 */
 .fileViewer {
     padding: 10px;
     margin: 2px;
@@ -9339,37 +9336,37 @@ tr.x-grid-subtable-row {
     /* For IE8 and earlier */
     filter: opacity=90;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:409 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:406 */
 .ux-filtered-column .x-column-header-inner {
     background-image: url(images/16x16/filter.png) !important;
     background-repeat: no-repeat;
     padding-left: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:416 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:413 */
 .x-grid-cell-inner-treecolumn .admin {
     /* Treeview does not support Glyphs yet */
     background-image: url(images/16x16/list.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:420 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:417 */
 .x-grid-cell-inner-treecolumn .users {
     background-image: url(images/16x16/users.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:424 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:421 */
 .x-grid-cell-inner-treecolumn .user {
     background-image: url(images/16x16/user.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:428 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:425 */
 .list {
     background-image: url(images/16x16/list.png) !important;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:436 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:433 */
 .ux-wallpaper {
     /*----------------------------------------------------
     FIN: Desktop DataView
 */
     background-color: #3d71b8;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:441 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:438 */
 .ux-desktop-shortcut {
     cursor: pointer;
     text-align: center;
@@ -9378,7 +9375,7 @@ tr.x-grid-subtable-row {
     width: 210px;
     height: 70px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:450 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:447 */
 .ux-desktop-shortcut-icon {
     width: 52px;
     height: 52px;
@@ -9389,7 +9386,7 @@ tr.x-grid-subtable-row {
     border-radius: 50%;
     text-align: center;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:461 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:458 */
 .ux-desktop-shortcut-text {
     font: bold 14px tahoma, arial, verdana, sans-serif;
     text-decoration: none;
@@ -9399,11 +9396,11 @@ tr.x-grid-subtable-row {
     text-align: left;
     padding-top: 20px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:471 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:468 */
 .x-view-over .ux-desktop-shortcut-text {
     text-decoration: underline;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:475 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:472 */
 .ux-desktop-shortcut.x-view-over {
     background: #361919;
     /* Fall-back for browsers that don't support rgba */
@@ -9411,64 +9408,64 @@ tr.x-grid-subtable-row {
     /* Fall-back for browsers that don't support rgba */
     border: 1px solid #2f4078;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:483 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:480 */
 .vouchers-shortcut {
     /* Fin Desktop shortcuts */
     background-image: url(images/48x48/vouchers.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:488 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:485 */
 .byod-shortcut {
     background-image: url(images/48x48/devices.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:493 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:490 */
 .users-shortcut {
     background-image: url(images/48x48/users.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:498 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:495 */
 .activity-shortcut {
     background-image: url(images/48x48/activity.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:503 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:500 */
 .password-shortcut {
     background-image: url(images/48x48/key.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:508 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:505 */
 .apdesk-shortcut {
     background-image: url(images/48x48/cloud.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:513 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:510 */
 .meshdesk-shortcut {
     background-image: url(images/48x48/mesh.png);
     background-repeat: no-repeat;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:519 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:516 */
 #east-region-body {
     background-color: #ececec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:524 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:521 */
 .mapInfoDiv {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:530 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:527 */
 .mapEditDiv {
     height: 190px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:536 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:533 */
 .divMapAction {
     margin: 5px;
     padding: 5px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:541 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:538 */
 .lblMap {
     width: 120px;
     float: left;
@@ -9477,147 +9474,147 @@ tr.x-grid-subtable-row {
     font-size: 14px;
     margin: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:550 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:547 */
 .lblValue {
     text-align: left;
     font-size: 14px;
     margin: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:556 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:553 */
 .subTab {
     background: #cce5ff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:560 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:557 */
 .subSubTab {
     background: #bababa;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:566 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:563 */
 td.grdBold div {
     /*--- Translator applet ---*/
     /*--- Translator applet ---*/
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:570 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:567 */
 td.grdGrey div {
     color: #4b4b4b;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:574 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:571 */
 td.grdItalic div {
     font-style: italic;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:578 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:575 */
 td.grdEditable div {
     border: 1px solid #a9bfd3;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:582 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:579 */
 .regMsg {
     margin: 15px;
     font-size: 16px;
     color: #6b6a72;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:588 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:585 */
 .bodyCls {
     background-color: white;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:592 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:589 */
 .new {
     background-color: #12f6f9;
     font-style: italic;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:599 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:596 */
 .combo-wrapper {
     border: 1px solid #ccc;
     padding: 1px;
     margin: 2px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:605 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:602 */
 .combo-wrapper img {
     float: right;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:610 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:607 */
 .combo-country {
     font-weight: bold;
     font-size: 16px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:615 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:612 */
 .combo-language {
     font-size: 12px;
     color: #666;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:622 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:619 */
 .combo-main {
     font-weight: bold;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:627 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:624 */
 .combo-detail {
     color: #392bef;
     font-size: 12px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:633 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:630 */
 .x-grid-row-summary .x-grid-cell-inner {
     font-weight: bold;
     font-size: 12px;
     color: #0652c3;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:640 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:637 */
 .x-progress.wifired .x-progress-bar {
     /*Red progressbar */
     background-color: #e00404;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:647 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:644 */
 .x-progress.wifiyellow .x-progress-bar {
     /*Yello progressbar */
     background-color: #f90;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:652 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:649 */
 .x-progress.wifigreen .x-progress-bar {
     /*Green progressbar*/
     background-color: #1a9406;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:657 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:654 */
 .conn {
     height: 250px;
     width: 350px;
     margin: 0px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:663 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:660 */
 .grpInfo {
     color: grey;
     font-size: 10px;
     font-style: italic;
     font-weight: lighter;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:670 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:667 */
 .grpNever {
     color: #1383bd;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:675 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:672 */
 .grpUp {
     color: green;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:680 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:677 */
 .grpDown {
     color: red;
     font-size: 14px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:686 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:683 */
 .divTip {
     background: #595959;
     margin-top: 2px;
     padding: 5px 10px;
     color: #fff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:693 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:690 */
 .divInfo {
     color: #0273b1;
     text-align: center;
     padding: 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:700 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:697 */
 .node {
     background-color: transparent;
     font-weight: bold;
@@ -9627,48 +9624,48 @@ td.grdEditable div {
     text-align: center;
     padding: 40px 10px 10px 10px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:710 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:707 */
 .node:hover {
     color: #393434;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:714 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:711 */
 .hidden {
     display: none;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:718 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:715 */
 .lightGreen {
     background-color: #eaffea;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:722 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:719 */
 .lightBlue {
     background-color: #e9fdff;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:726 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:723 */
 .lightGrey {
     background-color: #dcdcdc;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:730 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:727 */
 .lightRed {
     background-color: #ffecec;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:734 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:731 */
 .sectionHeader {
     color: white;
     background-color: grey;
     padding: 1px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:740 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:737 */
 .sectionHeader h2 {
     margin: 2px;
     padding: 2px;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:745 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:742 */
 .twoColumnContainer {
     width: 500px;
     overflow: hidden;
     display: inline-block;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:751 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:748 */
 .twoColumnItem {
     position: relative;
     float: left;
@@ -9678,7 +9675,7 @@ td.grdEditable div {
     margin-top: 10px;
     background-color: #d7d7d4;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:761 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:758 */
 .lblTipItem {
     width: 120px;
     float: left;
@@ -9688,7 +9685,7 @@ td.grdEditable div {
     margin: 1px;
     font-weight: bold;
 }
-/* /usr/share/nginx/html/rd/sass/src/Application.scss:771 */
+/* /usr/share/nginx/html/rd/sass/src/Application.scss:768 */
 .lblTipValue {
     text-align: left;
     font-size: 14px;
