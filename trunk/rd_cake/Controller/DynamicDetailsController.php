@@ -134,7 +134,7 @@ class DynamicDetailsController extends AppController {
     }
 
     public function id_me(){
-         $this->layout = 'rd';
+        $this->layout = 'rd';
         $u_a = $this->request->header('User-Agent');
         $this->set('u_a',$u_a);
         $this->set(array(

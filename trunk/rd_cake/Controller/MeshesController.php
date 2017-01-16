@@ -1187,8 +1187,8 @@ class MeshesController extends AppController {
                 $id     = $h['id'];
                 if($model == $id){
                     $device_type = 'standard';
-                    $radio0_band = 24;
-                    $radio1_band = 24;
+                    $radio0_band = '24';
+                    $radio1_band = false;
                     foreach(array_keys($h) as $key){
                     
                         //AC Device or not
@@ -1199,14 +1199,20 @@ class MeshesController extends AppController {
                         //Radio zero band adjust
                         if($key == 'five'){
                             if($h["$key"]){
-                                $radio0_band = 5;
+                                $radio0_band = '5';
                             }
                         }
                         
                         //Radio one band adjust
                         if($key == 'five1'){
                             if($h["$key"]){
-                                $radio1_band = 5;
+                                $radio1_band = '5';
+                            }
+                        }
+                        
+                        if($key == 'two1'){
+                            if($h["$key"]){
+                                $radio1_band = '24';
                             }
                         }
                         
@@ -1220,7 +1226,9 @@ class MeshesController extends AppController {
                     }
                        
                     $data['radio0_band'] = $radio0_band;
-                    $data['radio1_band'] = $radio1_band;
+                    if($radio1_band){
+                        $data['radio1_band'] = $radio1_band;
+                    }
                     $data['device_type'] = $device_type;
                     break;
                 }
