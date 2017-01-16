@@ -10,7 +10,7 @@ App::uses('Component', 'Controller');
 
 class AaComponent extends Component {
 
-    public $components = array('TokenAuth', 'TokenAcl');
+    public $components = ['TokenAuth', 'TokenAcl'];
 
     public function user_for_token($controller){
         return $this->TokenAuth->check_if_valid($controller);

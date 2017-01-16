@@ -169,7 +169,7 @@ class AccessProvidersController extends AppController {
         ));
     }
 
-     public function index_tree(){
+    public function index_tree(){
         //-- Required query attributes: token;
         //-- Optional query attribute: sel_language (for i18n error messages)
         //-- also LIMIT: limit, page, start (optional - use sane defaults)
