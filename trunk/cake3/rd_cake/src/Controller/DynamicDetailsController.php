@@ -52,7 +52,14 @@ class DynamicDetailsController extends AppController{
 
             $q_r = $this->{$this->main_model}
                 ->find()
-                ->contain(['DynamicPages','DynamicPhotos','DynamicDetailSocialLogins'])
+                ->contain([
+                    'DynamicPages',
+                    'DynamicPhotos' => function ($q) {
+                       return $q
+                            ->where(['DynamicPhotos.active' => true]);
+                    },
+                    'DynamicDetailSocialLogins'
+                ])
                 ->where([$this->main_model.'.id' =>$dynamic_id])
                 ->first();                
 
@@ -83,7 +90,17 @@ class DynamicDetailsController extends AppController{
            	
 			$q_r = $this->DynamicPairs
                 ->find()
-                ->contain(['DynamicDetails' => ['DynamicPhotos','DynamicPages','DynamicDetailSocialLogins']])
+                ->contain([
+                    'DynamicDetails' => 
+                        [
+                            'DynamicPhotos' => function ($q) {
+                               return $q
+                                    ->where(['DynamicPhotos.active' => true]);
+                            },
+                            'DynamicPages',
+                            'DynamicDetailSocialLogins'
+                        ]
+                ])
                 ->where([$conditions])
                 ->order(['DynamicPairs.priority' => 'DESC'])
                 ->first();                
@@ -95,6 +112,7 @@ class DynamicDetailsController extends AppController{
                 foreach($q_r->dynamic_detail->dynamic_photos as $i){
                     $q_r->dynamic_detail->dynamic_photos[$c]['file_name'] = Configure::read('paths.dynamic_photos').$i->file_name;
                     $c++;
+
                 }
                 $items['photos']    = $q_r->dynamic_detail->dynamic_photos;
                 $items['pages']     = $q_r->dynamic_detail->dynamic_pages;
@@ -805,6 +823,16 @@ class DynamicDetailsController extends AppController{
         if(!$user){
             return;
         }
+        
+        $check_items = array('active');
+        foreach($check_items as $ci){
+            if(isset($this->request->data[$ci])){
+                $this->request->data[$ci] = 1;
+            }else{
+                $this->request->data[$ci] = 0;
+            }
+        }
+        
 
         //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
         //are posted to the server.
@@ -895,6 +923,15 @@ class DynamicDetailsController extends AppController{
         }
         $this->viewBuilder()->layout('ext_file_upload'); 
         $entity = $this->DynamicPhotos->get($this->request->data['id']);
+        
+        $check_items = array('active');
+        foreach($check_items as $ci){
+            if(isset($this->request->data[$ci])){
+                $this->request->data[$ci] = 1;
+            }else{
+                $this->request->data[$ci] = 0;
+            }
+        }
         
         if($entity){ 
             $new_photo = false;
