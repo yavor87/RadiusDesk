@@ -27,7 +27,7 @@ Ext.define('Rd.controller.cAccessProviders', {
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd          : '/cake3/rd_cake/access_providers/add.json',
+        urlAdd          : '/cake3/rd_cake/access-providers/add.json',
         urlEdit         : '/cake3/rd_cake/access-providers/edit.json',
         urlDelete       : '/cake3/rd_cake/access-providers/delete.json',
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
