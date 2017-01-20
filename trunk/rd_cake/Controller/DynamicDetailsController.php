@@ -1759,7 +1759,7 @@ class DynamicDetailsController extends AppController {
         }
 
         $success    = false;
-        $msg        = array('message' => __('Could not create note'));
+        $message    = array('message' => __('Could not create note'));
         $this->DynamicDetail->DynamicDetailNote->Note->create(); 
         //print_r($this->request->data);
         if ($this->DynamicDetail->DynamicDetailNote->Note->save($this->request->data)) {

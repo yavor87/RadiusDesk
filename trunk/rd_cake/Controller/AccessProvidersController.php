@@ -252,7 +252,7 @@ class AccessProvidersController extends AppController {
             $this->request->data['active'] = 1;
         }
 
-        if(array_key_exists('monior',$this->request->data)){
+        if(array_key_exists('monitor',$this->request->data)){
             $this->request->data['monitor'] = 1;
         }
 
