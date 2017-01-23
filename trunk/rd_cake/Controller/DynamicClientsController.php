@@ -766,6 +766,11 @@ class DynamicClientsController extends AppController {
 
         //Empty by default
         $menu = array();
+       
+        $shared_secret = "(Please specify one)"; 
+        if(Configure::read('DynamicClients.shared_secret')){
+            $shared_secret = Configure::read('DynamicClients.shared_secret');
+        }
 
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
@@ -788,11 +793,14 @@ class DynamicClientsController extends AppController {
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'=> __('Delete')),
                     array('xtype' => 'button', 'glyph'     => Configure::read('icnEdit'), 'scale' => 'large', 'itemId' => 'edit',     'tooltip'=> __('Edit'))
                 )),
-                 array('xtype' => 'buttongroup','title' => __('Other'), 'items' => array(
+                array('xtype' => 'buttongroup','title' => __('Other'), 'items' => array(
                     array('xtype' => 'button','glyph'=> Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note', 'tooltip'=> __('Add notes')),
                     array('xtype' => 'button','glyph'=> Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv', 'tooltip'=> __('Export CSV')),
                     array('xtype' => 'button','glyph'=> Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph','tooltip'=> __('Graphs')),
                     array('xtype' => 'button','glyph'=> Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',   'tooltip'=> __('Map'))
+                )),
+                array('xtype' => 'buttongroup', 'width'=> 300,'title' => '<span class="txtBlue"><i class="fa  fa-lightbulb-o"></i> Site Wide Shared Secret</span>', 'items' => array(
+                    array('xtype' => 'tbtext', 'html' => "<h1>$shared_secret</h1>")
                 )),
             );
         }
@@ -855,7 +863,14 @@ class DynamicClientsController extends AppController {
                     array('xtype' => 'button','glyph'=> Configure::read('icnNote'),'scale' => 'large', 'itemId' => 'note', 'tooltip'=> __('Add notes')),
                     array('xtype' => 'button','glyph'=> Configure::read('icnCsv'),'scale' => 'large', 'itemId' => 'csv', 'tooltip'=> __('Export CSV')),
                     array('xtype' => 'button','glyph'=> Configure::read('icnGraph'),'scale' => 'large', 'itemId' => 'graph','tooltip'=> __('Graphs')),
-                    array('xtype' => 'button','glyph'=> Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',   'tooltip'=> __('Map'))
+                    array('xtype' => 'button','glyph'=> Configure::read('icnMap'),'scale' => 'large', 'itemId' => 'map',   'tooltip'=> __('Map')),
+                )),
+                array(
+                    'xtype'     => 'buttongroup', 
+                    'width'     => 300,
+                    'title'     => '<span class="txtBlue"><i class="fa  fa-lightbulb-o"></i> Site Wide Shared Secret</span>', 
+                    'items'     => array(
+                        array('xtype' => 'tbtext', 'html' => "<h1>$shared_secret</h1>")
                 )),
             );
         }
