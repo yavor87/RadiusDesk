@@ -42,6 +42,15 @@ class DashboardController extends AppController{
                 //We can get the detail for the user
                 $u = $this->Users->find()->contain(['Groups'])->where(['Users.id' => $user['id']])->first();
                 $data = $this->_get_user_detail($u);
+                
+                // added for rolling token; enhanced security
+                // --- BEGIN ---
+                $u->set('token',''); //Setting it ti '' will trigger a new token generation
+                $this->Users->save($u);
+                $data['token']  = $u->get('token');
+                // --- END ---
+                
+                
                 $this->set(array(
                     'data'          => $data,
                     'success'       => true,
@@ -439,7 +448,7 @@ class DashboardController extends AppController{
                 'id'      => 'cAccessPoints',
                 'layout'  => 'fit' 
             ),
-          /*  
+             
             array(
                 'title'   => __('DNSdesk'),
                 'glyph'   => Configure::read('icnShield'),
@@ -458,14 +467,20 @@ class DashboardController extends AppController{
                         'id'      => 'cGlobalTags',
                         'layout'  => 'fit'
                     ),
+                     array(
+                        'title'   => 'Schedules',
+                        'glyph'   => Configure::read('icnWatch'),
+                        'id'      => 'cSchedules',
+                        'layout'  => 'fit'
+                    ), 
                     array(
                         'title'   => 'Policies',
                         'glyph'   => Configure::read('icnScale'),
                         'id'      => 'cPolicies',
                         'layout'  => 'fit'
-                    )  
+                    ),  
                 ) 
-            ), */ 
+            ), 
             array(
                 'title'   => __('Other'),
                 'glyph'   => Configure::read('icnGears'),
@@ -667,8 +682,7 @@ class DashboardController extends AppController{
             }  
          
         //No realm specified in settings; get a default one (if there might be one )    
-        }else{ 
-           
+        }else{            
             $realm_detail = $this->_ap_default_realm($user_id);
             if(array_key_exists('realm_id',$realm_detail)){
                 $data['realm_name'] = $realm_detail['realm_name'];
@@ -1002,13 +1016,13 @@ class DashboardController extends AppController{
        
                
         foreach($q_r as $i){    
-            $user_id    = $i->id;
-             
-            $r = $this->Realms->find()->where(['Realms.user_id' => $user_id,'Realms.available_to_siblings'=> true])->all();
+            $user_id    = $i->id;          
+            $r          = $this->Realms->find()->where(['Realms.user_id' => $user_id,'Realms.available_to_siblings'=> true])->all();
                
             foreach($r  as $j){
                 $id     = $j->id;
                 $name   = $j->name;
+
                 $read = $this->Acl->check(
                             array('model' => 'User', 'foreign_key' => $ap_id), 
                             array('model' => 'Realm','foreign_key' => $id), 'read');
@@ -1025,7 +1039,7 @@ class DashboardController extends AppController{
         //will automatically be under full controll of this access provider  
         if($found_flag == false){           
             $this->children     = $this->Users->find_access_provider_children($ap_id);
-            $or_array           = array();
+            $or_array           = array(['Realms.user_id' => $ap_id]); //Start with itself
             if($this->children){   //Only if the AP has any children...
                 foreach($this->children as $i){
                     $id = $i['id'];

@@ -61,6 +61,12 @@ class GridButtonsComponent extends Component {
             $menu = array($b,$d,$a);
         }
         
+        if($type == 'profiles'){
+            $b  = $this->_fetchBasic();
+            $n  = $this->_fetchNote();
+            $menu = array($b,$n);
+        }
+        
         
         return $menu;
     }
@@ -221,6 +227,49 @@ class GridButtonsComponent extends Component {
             $menu = array('xtype' => 'buttongroup', 'title' => __('Document'),        'items' => $document_group );
         }
             
+        return $menu;
+    }
+    
+    private function _fetchNote(){
+
+        $user = $this->user;
+        $menu = array();
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                'xtype' => 'buttongroup',
+                'title' => __('Document'), 
+                'width' => 100,
+                'items' => array(
+                    array(
+                        'xtype'     => 'button', 
+                        'iconCls'   => 'b-note',    
+                        'glyph'     => Configure::read('icnNote'), 
+                        'scale'     => 'large', 
+                        'itemId'    => 'note',    
+                        'tooltip'   => __('Add notes')
+                    )
+                )
+            );
+        }
+        
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $document_group = array();
+
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'noteIndex')){ 
+                array_push($document_group,array(
+                    'xtype'     => 'button', 
+                    'iconCls'   => 'b-note',
+                    'glyph'     => Configure::read('icnNote'),    
+                    'scale'     => 'large', 
+                    'itemId'    => 'note',      
+                    'tooltip'   => __('Add Notes')));
+            }
+
+            $menu = array('xtype' => 'buttongroup', 'title' => __('Document'), 'width' => 100,  'items' => $document_group );
+        }         
         return $menu;
     }
     
