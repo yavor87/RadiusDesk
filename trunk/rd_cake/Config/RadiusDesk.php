@@ -346,6 +346,19 @@ $config['icnData']      = 'xf1c0@'.$config['webFont'];
 $config['icnGears']     = 'xf085@'.$config['webFont'];
 $config['icnWizard']    = 'xf0d0@'.$config['webFont'];
 
+//=== Dynamic RADIUS Clients 23/1/17 ===
+/*--- This has to be the same value as the ons specified in--
+sudo vi /etc/freeradius/sites-enabled/dynamic-clients
+       FreeRADIUS-Client-Secret = "testing123"
+       
+TIP: Also remember to change the values in:
+ApProfiles.php
+MESHdesk.php 
+*/
+$config['DynamicClients']['shared_secret'] = 'testing123';
+
+
+
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
 $config['experimental']['active']                   = false;
