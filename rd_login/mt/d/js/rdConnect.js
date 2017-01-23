@@ -484,14 +484,14 @@ var rdConnect = (function () {
 
 			    //Voucher specified
 			    if($$('voucher').getValue().length > 0){
-				    userName = escape($$('voucher').getValue());
+				    userName = encodeURI($$('voucher').getValue());
                 	password = $$('voucher').getValue();
 				    found_flag = true;	   
 			    }
 
 			    //Username specified
 			    if(($$('Username').getValue().length > 0)&&($$('Password').getValue().length > 0)){
-				    userName = escape($$('Username').getValue());
+				    userName = encodeURI($$('Username').getValue().toLowerCase()); //Make it lowercase since some browsers make first character UC
             		password = $$('Password').getValue();
 				    found_flag = true;
 			    }
@@ -508,7 +508,7 @@ var rdConnect = (function () {
 				    showLoginError(i18n('sSupply_value_for_voucher'));
 				    return;
 			    }
-			    userName = escape($$('voucher').getValue());
+			    userName = encodeURI($$('voucher').getValue());
                 password = $$('voucher').getValue();
 		    }
 
@@ -526,7 +526,7 @@ var rdConnect = (function () {
 				    showLoginError(i18n('sSupply_Password'));
                 	return;
 			    }
-			    userName = escape($$('Username').getValue());
+			    userName = encodeURI($$('Username').getValue().toLowerCase()); //Make it lowercase since some browsers make first character UC
         		password = $$('Password').getValue();
 		    }
 		    
