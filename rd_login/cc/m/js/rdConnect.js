@@ -159,6 +159,9 @@ var rdConnect = (function () {
         var execRedirect    = function (redir_url) {
             if (redir_url != '' && redir_url != undefined) {
                 window.location = redir_url;
+            }else{
+                //We redirect to google
+                window.location = 'http://google.com';
             }
         }
         
@@ -524,14 +527,14 @@ $$('sliderData').refresh();
 
 			    //Voucher specified
 			    if($$('voucher').getValue().length > 0){
-				    userName = escape($$('voucher').getValue());
+				    userName = encodeURI($$('voucher').getValue());
                 	password = $$('voucher').getValue();
 				    found_flag = true;	   
 			    }
 
 			    //Username specified
 			    if(($$('Username').getValue().length > 0)&&($$('Password').getValue().length > 0)){
-				    userName = escape($$('Username').getValue());
+				    userName = encodeURI($$('Username').getValue().toLowerCase()); //Make it lowercase since some browsers make first character UC
             		password = $$('Password').getValue();
 				    found_flag = true;
 			    }
@@ -548,7 +551,7 @@ $$('sliderData').refresh();
 				    showLoginError(i18n('sSupply_value_for_voucher'));
 				    return;
 			    }
-			    userName = escape($$('voucher').getValue());
+			    userName = encodeURI($$('voucher').getValue());
                 password = $$('voucher').getValue();
 		    }
 
@@ -566,7 +569,7 @@ $$('sliderData').refresh();
 				    showLoginError(i18n('sSupply_Password'));
                 	return;
 			    }
-			    userName = escape($$('Username').getValue());
+			    userName = encodeURI($$('Username').getValue().toLowerCase()); //Make it lowercase since some browsers make first character UC
         		password = $$('Password').getValue();
 		    }
 		    
