@@ -8,6 +8,7 @@ use Cake\ORM\Table;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Utility\Text;
+use Cake\Validation\Validator;
 
 class UsersTable extends Table
 {
