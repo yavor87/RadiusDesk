@@ -16,12 +16,11 @@ class RadgroupchecksTable extends Table
     public function initialize(array $config)
     {
         $this->addBehavior('Timestamp');
-        $this->table('radgroupcheck');   
-       /* $this->belongsTo('ProfileComponents',[
-            'className'    => 'ProfileComponents'
-            'foreignKey'   => 'groupname'
-        ]);*/
-    
-        
+        $this->table('radgroupcheck'); 
+        $this->belongsTo('ProfileComponents',[
+            'className'    => 'ProfileComponents',
+            'foreignKey'   => 'groupname',
+            'bindingKey'   => 'name'
+        ]);   
     }
 }

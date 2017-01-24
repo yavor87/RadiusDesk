@@ -29,9 +29,9 @@ class ProfilesController extends AppController
         $this->loadModel('Users');
         $this->loadModel('Groups');
         
-       // $this->loadModel('Radusergroups');
-       // $this->loadModel('Radgroupchecks');
-
+        $this->loadModel('ProfileComponents');
+        $this->loadModel('Radusergroups');
+        
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
             'model' => 'Profiles'
         ]);
@@ -43,145 +43,59 @@ class ProfilesController extends AppController
         ]);
     }
 
-    public function index_ap()
-    {
+    public function indexAp(){
+    
         $user = $this->_ap_right_check();
         if (!$user) {
             return;
         }
-        $user_id = null;
-        $admin_flag = false;
-
-        if ($user['group_name'] == Configure::read('group.admin')) {  //Admin
-            $user_id = $user['id'];
-            $admin_flag = true;
-        }
-
-        if ($user['group_name'] == Configure::read('group.ap')) {
-            $user_id = $user['id'];
-        }//Or AP
-        $items = array();
-        $ap_id = false;
-
         if (isset($this->request->query['ap_id'])) {
-            $ap_id = $this->request->query['ap_id'];
+            $ap_id = $this->request->query['ap_id'];  
+            if($ap_id !== 0){       
+                //Now we have to make the ap_id the 'user'
+                $q_ap = $this->Users->find()->where(['Users.id' => $ap_id])->contain(['Groups'])->first();
+                $ap_user                = [];
+                $ap_user['id']          = $q_ap->id;
+                $ap_user['group_name']  = $q_ap->group->name;
+                $ap_user['group_id']    = $q_ap->group->id;
+                //Override the user
+                $user = $ap_user;
+            }  
         }
+        
+        $query      = $this->{$this->main_model}->find();
+        $this->CommonQuery->build_common_query($query, $user, ['Radusergroups'=> ['Radgroupchecks']]);
+        $q_r        = $query->all();
+        
+        $items      = array();
+        
+        foreach($q_r as $i){    
+            $data_cap_in_profile    = false; 
+            $time_cap_in_profile    = false;   
+            $id                     = $i->id;
+            $name                   = $i->name;
+            $data_cap_in_profile    = false; 
+            $time_cap_in_profile    = false; 
 
-        $query = $this->{$this->main_model}->find();
-
-        if ($admin_flag) {
-            $this->Profile->contain(array('Radusergroups' => array('Radgroupchecks')));
-
-            $r = $query->all();
-            foreach ($r as $j) {
-         
-
-                $data_cap_in_profile = false;
-                $time_cap_in_profile = false;
-
-                /*
-                foreach($j['Radusergroup'] as $cmp){
-                    foreach($cmp['Radgroupcheck'] as $chk){
-                        //  print_r($chk);
-                        if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                            $data_cap_in_profile = true;
-                        }
-                        if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                            $time_cap_in_profile = true;
-                        }
+            foreach ($i->radusergroups as $cmp){
+                foreach ($cmp->radgroupchecks as $radgroupcheck) {
+                    if($radgroupcheck->attribute == 'Rd-Reset-Type-Data'){
+                        $data_cap_in_profile = true;
                     }
-                    unset($cmp['Radgroupcheck']);
+                    if($radgroupcheck->attribute == 'Rd-Reset-Type-Time'){
+                        $time_cap_in_profile = true;
+                    }              
                 }
-                */
-                array_push($items,
-                    array(
-                        'id' => $j->id,
-                        'name' => $j->name,
-                        'data_cap_in_profile' => $data_cap_in_profile,
-                        'time_cap_in_profile' => $time_cap_in_profile
-                    )
-                );
             }
-
-        } else {
-            //Access Providers needs more work...
-            if ($ap_id == false) {
-                $ap_id = $user_id;
-            }
-            if ($ap_id == 0) {
-                $ap_id = $user_id;
-            }
-            $q_r = $this->User->getPath($ap_id); //Get all the parents up to the root
-
-            foreach ($q_r as $i) {
-                $user_id = $i['User']['id'];
-
-                $this->Profile->contain(array('Radusergroup' => array('Radgroupcheck')));
-                $r = $this->Profile->find('all', array('conditions' => array('Profile.user_id' => $user_id, 'Profile.available_to_siblings' => true)));
-                foreach ($r as $j) {
-                    $data_cap_in_profile = false;
-                    $time_cap_in_profile = false;
-                    /*
-                    foreach ($j['Radusergroup'] as $cmp) {
-                        if (array_key_exists('Radgroupcheck', $cmp)) {
-                            foreach ($cmp['Radgroupcheck'] as $chk) {
-                                if ($chk['attribute'] == 'Rd-Reset-Type-Data') {
-                                    $data_cap_in_profile = true;
-                                }
-                                if ($chk['attribute'] == 'Rd-Reset-Type-Time') {
-                                    $time_cap_in_profile = true;
-                                }
-                            }
-                            unset($cmp['Radgroupcheck']);
-                        }
-                    }
-                    */
-                    array_push($items,
+            array_push($items,
                         array(
-                            'id' => $j->id,
-                            'name' => $j->name,
-                            'data_cap_in_profile' => $data_cap_in_profile,
-                            'time_cap_in_profile' => $time_cap_in_profile
+                            'id'                    => $id, 
+                            'name'                  => $name,
+                            'data_cap_in_profile'   => $data_cap_in_profile,
+                            'time_cap_in_profile'   => $time_cap_in_profile
                         )
                     );
-                }
-            }
-            //----------------
-            //FIXME: There might be more of the hierarchical things that needs this add-on
-            //We also need to list all the Profiles for this Access Provider NOT available to siblings
-            //------------------
-            $r = $this->Profile->find('all', array('conditions' => array('Profile.user_id' => $ap_id, 'Profile.available_to_siblings' => false)));
-            foreach ($r as $j) {
-
-                $data_cap_in_profile = false;
-                $time_cap_in_profile = false;
-                /*
-                foreach($j['Radusergroup'] as $cmp){
-                    if(array_key_exists('Radgroupcheck',$cmp)){
-                        foreach($cmp['Radgroupcheck'] as $chk){
-                            if($chk['attribute'] == 'Rd-Reset-Type-Data'){
-                                $data_cap_in_profile = true;
-                            }
-                            if($chk['attribute'] == 'Rd-Reset-Type-Time'){
-                                $time_cap_in_profile = true;
-                            }
-                        }
-                        unset($cmp['Radgroupcheck']);
-                    }
-                }
-                */
-                array_push($items,
-                    array(
-                        'id' => $j->id,
-                        'name' => $j->name,
-                        'data_cap_in_profile' => $data_cap_in_profile,
-                        'time_cap_in_profile' => $time_cap_in_profile
-                    )
-                );
-            }
-
-
-        }
+        } 
         $this->set(array(
             'items' => $items,
             'success' => true,
@@ -190,19 +104,16 @@ class ProfilesController extends AppController
 
     }
 
-    public function index()
-    {
+    public function index(){
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if (!$user) {
             return;
         }
-        $user_id = $user['id'];
-
-        $query = $this->{$this->main_model}->find();
+        $user_id    = $user['id'];
+        $query      = $this->{$this->main_model}->find();
 
         $this->CommonQuery->build_common_query($query, $user, ['Users', 'ProfileNotes' => ['Notes'],'Radusergroups'=> ['Radgroupchecks']]); //AP QUERY is sort of different in a way
-
 
         //===== PAGING (MUST BE LAST) ======
         $limit = 50;   //Defaults
@@ -213,7 +124,6 @@ class ProfilesController extends AppController
             $page = $this->request->query['page'];
             $offset = $this->request->query['start'];
         }
-
 
         $query->page($page);
         $query->limit($limit);
@@ -232,7 +142,6 @@ class ProfilesController extends AppController
             } else {
                 $owner_tree = $this->owner_tree[$owner_id];
             }
-
 
             //Add the components (already from the highest priority
             $components = array();
@@ -283,33 +192,34 @@ class ProfilesController extends AppController
             'totalCount' => $total,
             '_serialize' => array('items', 'success', 'totalCount')
         ));
-
     }
 
-    public function index_for_filter()
-    {
+    public function add(){
 
-    }
-
-    public function add()
-    {
-
-        if (!$this->_ap_right_check()) {
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
-
-        $user = $this->Aa->user_for_token($this);
-        $user_id = $user['id'];
+        $user_id    = $user['id'];
 
         // get creators id
-        if ($this->request->data['user_id'] == '0') { //This is the holder of the token - override '0'
-            $this->request->data['user_id'] = $user_id;
+        if(isset($this->request->data['user_id'])){
+            if($this->request->data['user_id'] == '0'){ //This is the holder of the token - override '0'
+                $this->request->data['user_id'] = $user_id;
+            }
+        } 
+        $check_items = array(
+			'available_to_siblings'
+		);
+		
+        foreach($check_items as $i){
+            if(isset($this->request->data[$i])){
+                $this->request->data[$i] = 1;
+            }else{
+                $this->request->data[$i] = 0;
+            }
         }
-        if (isset($this->request->data['available_to_siblings'])) {
-            $this->request->data['available_to_siblings'] = 1;
-        } else {
-            $this->request->data['available_to_siblings'] = 0;
-        }
+        
 
         $entity = $this->{$this->main_model}->newEntity($this->request->data());
         if ($this->{$this->main_model}->save($entity)) {
@@ -318,158 +228,158 @@ class ProfilesController extends AppController
                 '_serialize' => array('success')
             ));
         } else {
-            $message = 'Error';
+        
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
             $this->set(array(
-                'errors' => $this->{$this->modelClass}->validationErrors,
-                'success' => false,
-                'message' => array('message' => __('Could not create item')),
-                '_serialize' => array('errors', 'success', 'message')
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
             ));
+            
         }
-
     }
 
-    public function manageComponents()
-    {
+    public function manageComponents(){
+
         $user = $this->_ap_right_check();
-        if (!$user) {
+        if(!$user){
             return;
         }
-        $user_id = $user['id'];
+        $user_id    = $user['id'];
+        $rb         = $this->request->data['rb']; 
 
-        $rb = $this->request->data['rb'];
-
-        if (($rb == 'add') || ($rb == 'remove')) {
-            $component_id = $this->request->data['component_id'];
-            $this->ProfileComponent = ClassRegistry::init('ProfileComponent');
-            $q_r = $this->ProfileComponent->findById($component_id);
-            $component_name = $q_r['ProfileComponent']['name'];
+        if(($rb == 'add')||($rb == 'remove')){
+            $component_id   = $this->request->data['component_id'];
+            $entity         = $this->ProfileComponents->get($this->request->data['component_id']);  
+            $component_name = $entity->name;
         }
+        
+        foreach(array_keys($this->request->data) as $key){
+            if(preg_match('/^\d+/',$key)){
 
-        foreach (array_keys($this->request->data) as $key) {
-            if (preg_match('/^\d+/', $key)) {
-
-                if ($rb == 'sub') {
-                    $this->Profile->id = $key;
-                    $this->Profile->saveField('available_to_siblings', 1);
+                if($rb == 'sub'){
+                    $entity = $this->{$this->main_model}->get($key);
+                    $entity->set('available_to_siblings', 1);
+                    $this->{$this->main_model}->save($entity);
                 }
 
-                if ($rb == 'no_sub') {
-                    $this->Profile->id = $key;
-                    $this->Profile->saveField('available_to_siblings', 0);
+                if($rb == 'no_sub'){
+                    $entity = $this->{$this->main_model}->get($key);
+                    $entity->set('available_to_siblings', 0);
+                    $this->{$this->main_model}->save($entity);
                 }
 
-                if ($rb == 'remove') {
-                    $q_r = $this->Profile->findById($key);
-                    $profile_name = $q_r['Profile']['name'];
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(
-                        array('Radusergroup.username' => $profile_name, 'Radusergroup.groupname' => $component_name), false
+                if($rb == 'remove'){
+                    $entity         = $this->{$this->main_model}->get($key);
+                    $profile_name   = $entity->name;
+                    $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name,'Radusergroups.groupname' => $component_name]);
+                }
+               
+                if($rb == 'add'){
+                    $entity         = $this->{$this->main_model}->get($key);
+                    $profile_name   = $entity->name;
+                    
+                    $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name,'Radusergroups.groupname' => $component_name]);
+                    
+                    $priority = $this->request->data['priority'];
+                    $ne = $this->Radusergroups->newEntity(
+                        [
+                            'username'  => $profile_name,
+                            'groupname' => $component_name,
+                            'priority'  => $priority
+                        ]
                     );
+                    $this->Radusergroups->save($ne);
                 }
-
-                if ($rb == 'add') {
-                    $q_r = $this->Profile->findById($key);
-                    $profile_name = $q_r['Profile']['name'];
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name, 'Radusergroup.groupname' => $component_name), false
-                    );
-                    $d = array();
-                    $d['username'] = $profile_name;
-                    $d['groupname'] = $component_name;
-                    $d['priority'] = $this->request->data['priority'];
-                    $this->{$this->modelClass}->Radusergroup->create();
-                    $this->{$this->modelClass}->Radusergroup->save($d);
-                }
-                //-------------
+                
             }
         }
 
         $this->set(array(
-            'success' => true,
-            '_serialize' => array('success')
+            'success'       => true,
+            '_serialize'    => array('success')
         ));
-
-    }
-
-    public function delete($id = null)
-    {
-        if (!$this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
+       
+	}
+	  
+    public function delete($id = null) {
+		if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
 
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
-        if (!$user) {
+        if(!$user){
             return;
         }
 
-        $user_id = $user['id'];
+        $user_id   = $user['id'];
         $fail_flag = false;
 
-        if (isset($this->data['id'])) {   //Single item delete
-            $message = "Single item " . $this->data['id'];
+	    if(isset($this->request->data['id'])){   //Single item delete
+            $message = "Single item ".$this->request->data['id'];
 
-            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:
-            $item = $this->{$this->modelClass}->findById($this->data['id']);
-            $owner_id = $item['Profile']['user_id'];
-            $profile_name = $item['Profile']['name'];
-            if ($owner_id != $user_id) {
-                if ($this->_is_sibling_of($user_id, $owner_id) == true) {
-                    $this->{$this->modelClass}->id = $this->data['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name), false
-                    );
-                } else {
+            //NOTE: we first check of the user_id is the logged in user OR a sibling of them:         
+            $entity         = $this->{$this->main_model}->get($this->request->data['id']);
+            $profile_name   = $entity->name;   
+            $owner_id       = $entity->user_id;
+            
+            if($owner_id != $user_id){
+                if($this->Users->is_sibling_of($user_id,$owner_id)== true){
+                    $this->{$this->main_model}->delete($entity);
+                    $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name]);
+                }else{
                     $fail_flag = true;
                 }
-            } else {
-                $this->{$this->modelClass}->id = $this->data['id'];
-                $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                    array('Radusergroup.username' => $profile_name), false
-                );
+            }else{
+                $this->{$this->main_model}->delete($entity);
+                $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name]);
             }
-
-        } else {                          //Assume multiple item delete
-            foreach ($this->data as $d) {
-
-                $item = $this->{$this->modelClass}->findById($d['id']);
-                $owner_id = $item['Profile']['user_id'];
-                $profile_name = $item['Profile']['name'];
-                if ($owner_id != $user_id) {
-                    if ($this->_is_sibling_of($user_id, $owner_id) == true) {
-                        $this->{$this->modelClass}->id = $d['id'];
-                        $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                        $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                            array('Radusergroup.username' => $profile_name), false
-                        );
-                    } else {
+   
+        }else{                          //Assume multiple item delete
+            foreach($this->request->data as $d){
+                $entity         = $this->{$this->main_model}->get($d['id']);
+                $profile_name   = $entity->name;   
+                $owner_id       = $entity->user_id;
+                
+                if($owner_id != $user_id){
+                    if($this->Users->is_sibling_of($user_id,$owner_id) == true){
+                        $this->{$this->main_model}->delete($entity);
+                        $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name]);
+                    }else{
                         $fail_flag = true;
                     }
-                } else {
-                    $this->{$this->modelClass}->id = $d['id'];
-                    $this->{$this->modelClass}->delete($this->{$this->modelClass}->id, true);
-                    $this->{$this->modelClass}->Radusergroup->deleteAll(   //Delete a previous one
-                        array('Radusergroup.username' => $profile_name), false
-                    );
+                }else{
+                    $this->{$this->main_model}->delete($entity);
+                    $this->Radusergroups->deleteAll(['Radusergroups.username' => $profile_name]);
                 }
             }
         }
 
-        if ($fail_flag == true) {
+        if($fail_flag == true){
             $this->set(array(
-                'success' => false,
-                'message' => array('message' => __('Could not delete some items')),
-                '_serialize' => array('success', 'message')
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete some items')),
+                '_serialize' => array('success','message')
             ));
-        } else {
+        }else{
             $this->set(array(
                 'success' => true,
                 '_serialize' => array('success')
             ));
         }
-    }
+	}
 
 
     public function noteIndex()
@@ -518,6 +428,4 @@ class ProfilesController extends AppController
             '_serialize' => array('items', 'success')
         ));
     }
-
-
 }

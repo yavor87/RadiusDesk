@@ -19,6 +19,7 @@ class UsersTable extends Table
     {
         $this->addBehavior('Timestamp');
         $this->addBehavior('Tree');
+        //$this->addBehavior('Acl.Acl', ['type' => 'requester']);
           
         $this->belongsTo('Groups');
         $this->belongsTo('Languages');
@@ -29,7 +30,7 @@ class UsersTable extends Table
             'foreignKey'    => 'parent_id'
         ]);
         
-        $this->hasMany('UserNotes');
+        $this->hasMany('UserNotes');      
     }
       
     public function find_access_provider_children($id){
@@ -77,4 +78,19 @@ class UsersTable extends Table
         //No match
         return false; 
     }
+    
+    public function validationDefault(Validator $validator){
+        $validator = new Validator();
+        $validator
+            ->notEmpty('name', 'A name is required')
+            ->add('name', [ 
+                'nameUnique' => [
+                    'message' => 'The name you provided is already taken. Please provide another one.',
+                    'rule' => 'validateUnique', 
+                    'provider' => 'table'
+                ]
+            ]);
+        return $validator;
+    }
+    
 }
