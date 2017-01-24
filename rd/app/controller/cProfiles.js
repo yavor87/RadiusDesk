@@ -25,13 +25,12 @@ Ext.define('Rd.controller.cProfiles', {
     models: ['mProfile',  'mAccessProviderTree'],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/profiles/add.json',
-        urlEdit:            '/cake2/rd_cake/profiles/edit.json',
-        urlDelete:          '/cake2/rd_cake/profiles/delete.json',
+        urlAdd:             '/cake3/rd_cake/profiles/add.json',
+        urlDelete:          '/cake3/rd_cake/profiles/delete.json',
         urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/profiles/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/profiles/note_add.json',
-        urlManageComponents:'/cake2/rd_cake/profiles/manage_components.json'
+        urlExportCsv:       '/cake3/rd_cake/profiles/export-csv',
+        urlNoteAdd:         '/cake3/rd_cake/profiles/note_add.json',
+        urlManageComponents:'/cake3/rd_cake/profiles/manage-components.json'
     },
     refs: [
         {  ref: 'grid',  selector:   'gridProfiles'}       

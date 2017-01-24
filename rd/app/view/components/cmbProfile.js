@@ -21,7 +21,7 @@ Ext.define('Rd.view.components.cmbProfile', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/profiles/index_ap.json',
+                url     : '/cake3/rd_cake/profiles/index-ap.json',
                 reader: {
                     type            : 'json',
                     rootProperty    : 'items',

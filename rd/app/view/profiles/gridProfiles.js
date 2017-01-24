@@ -13,7 +13,7 @@ Ext.define('Rd.view.profiles.gridProfiles' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/profiles/menu_for_grid.json',
+    urlMenu: '/cake3/rd_cake/profiles/menu-for-grid.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this; 
