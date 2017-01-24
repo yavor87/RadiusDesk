@@ -64,7 +64,6 @@ Ext.define('Rd.controller.cActivityMonitor', {
     selectedRecord: null,
     specific_nas : undefined,
     config: {
-      //  urlEdit:            '/cake2/rd_cake/profiles/edit.json',
         urlExportCsvAcct:     '/cake2/rd_cake/radaccts/export_csv',
         urlExportCsvAuth:     '/cake2/rd_cake/radpostauths/export_csv',
         urlKickActive:        '/cake2/rd_cake/radaccts/kick_active.json',

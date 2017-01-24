@@ -27,9 +27,9 @@ Ext.define('Rd.controller.cAccessProviders', {
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd          : '/cake3/rd_cake/access-providers/add.json',
+        urlAdd          : '/cake2/rd_cake/access_providers/add.json', //Keep this still the original untill everything is ported for AROs
         urlEdit         : '/cake3/rd_cake/access-providers/edit.json',
-        urlDelete       : '/cake3/rd_cake/access-providers/delete.json',
+        urlDelete       : '/cake2/rd_cake/access_providers/delete.json', //Keep this still the original untill everything is ported for AROs
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv    : '/cake3/rd_cake/access-providers/exportCsv',
         urlNoteAdd      : '/cake3/rd_cake/access-providers/note_add.json',
