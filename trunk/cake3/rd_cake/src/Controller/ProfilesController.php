@@ -51,7 +51,7 @@ class ProfilesController extends AppController
         }
         if (isset($this->request->query['ap_id'])) {
             $ap_id = $this->request->query['ap_id'];  
-            if($ap_id !== 0){       
+            if($ap_id !== '0'){       
                 //Now we have to make the ap_id the 'user'
                 $q_ap = $this->Users->find()->where(['Users.id' => $ap_id])->contain(['Groups'])->first();
                 $ap_user                = [];
