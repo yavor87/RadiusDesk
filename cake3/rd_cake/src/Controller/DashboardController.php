@@ -467,7 +467,13 @@ class DashboardController extends AppController{
                         'id'      => 'cGlobalTags',
                         'layout'  => 'fit'
                     ),
-                     array(
+                    array(
+                        'title'   => 'Filters',
+                        'glyph'   => Configure::read('icnFilter'),
+                        'id'      => 'cFilters',
+                        'layout'  => 'fit'
+                    ), 
+                    array(
                         'title'   => 'Schedules',
                         'glyph'   => Configure::read('icnWatch'),
                         'id'      => 'cSchedules',
