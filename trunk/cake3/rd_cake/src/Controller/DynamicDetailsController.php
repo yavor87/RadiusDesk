@@ -1432,7 +1432,7 @@ class DynamicDetailsController extends AppController{
             return;
         }
         
-        $menu = $this->GridButtons->returnButtons($user,false,'basic');
+        $menu = $this->GridButtons->returnButtons($user,false,'basic_no_disabled');
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -1446,7 +1446,7 @@ class DynamicDetailsController extends AppController{
             return;
         }
         
-        $menu = $this->GridButtons->returnButtons($user,false,'basic');
+        $menu = $this->GridButtons->returnButtons($user,false,'basic_no_disabled');
         $this->set(array(
             'items'         => $menu,
             'success'       => true,
@@ -1460,7 +1460,7 @@ class DynamicDetailsController extends AppController{
             return;
         }
         
-        $menu = $this->GridButtons->returnButtons($user,false,'basic');
+        $menu = $this->GridButtons->returnButtons($user,false,'basic_no_disabled');
         $this->set(array(
             'items'         => $menu,
             'success'       => true,

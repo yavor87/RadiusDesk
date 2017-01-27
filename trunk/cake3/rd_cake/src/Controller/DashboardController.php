@@ -41,7 +41,16 @@ class DashboardController extends AppController{
             if ($user){
                 //We can get the detail for the user
                 $u = $this->Users->find()->contain(['Groups'])->where(['Users.id' => $user['id']])->first();
-                $data = $this->_get_user_detail($u);
+               
+                //Check for auto-compact setting
+                $auto_compact = false;
+                if(isset($this->request->data['auto_compact'])){
+                    if($this->request->data['auto_compact']=='true'){ //Carefull with the query's true and false it is actually a string
+                        $auto_compact = true;
+                    }
+                }
+                   
+                $data = $this->_get_user_detail($u,$auto_compact);
                 
                 // added for rolling token; enhanced security
                 // --- BEGIN ---
@@ -86,7 +95,16 @@ class DashboardController extends AppController{
             
             }else{
                // print_r($user);
-                $data = $this->_get_user_detail($user);
+               
+                //Check for auto-compact setting
+                $auto_compact = false;
+                if(isset($this->request->query['auto_compact'])){
+                    if($this->request->query['auto_compact']=='true'){ //Carefull with the query's true and false it is actually a string
+                        $auto_compact = true;
+                    }
+                }
+               
+                $data = $this->_get_user_detail($user,$auto_compact);
                 $this->set(array(
                     'data'          => $data,
                     'success'       => true,
@@ -163,27 +181,25 @@ class DashboardController extends AppController{
         
         $data['show_data_usage']        = 'show_data_usage';
         $data['show_recent_failures']   = 'show_recent_failures';
+        $data['compact_view']           = 'compact_view';
         
+        $check_items = array(
+		    'show_data_usage',
+		    'show_recent_failures',
+		    'compact_view'
+	    );
+	    
+	    foreach($check_items as $i){
+	        $q_rc = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => "$i"])->first();
+            if($q_rc){
+                $val_rc = 0;
+                if($q_rc->value == 1){
+                    $val_rc = "$i";
+                }
+                $data["$i"] = $val_rc;
+            }   
+        }   
            
-        $q_rf = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => 'show_recent_failure'])->first();
-        if($q_rf){
-            $val_rf = 0;
-            if($q_rf->value == 1){
-                $val_rf = 'show_recent_failures';
-            }
-            $data['show_recent_failures'] = $val_rf;
-        }
-        
-        $q_rdu = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => 'show_data_usage'])->first();
-        if($q_rdu){
-        
-            $val_du = 0;
-            if($q_rdu->value == 1){
-                $val_du = 'show_data_usage';
-            }
-            $data['show_data_usage'] = $val_du;
-        }
-        
         //Now for the more difficult bit finding the default realm if there are not one.
         $q_rr = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => 'realm_id'])->first();
         if($q_rr){
@@ -229,40 +245,34 @@ class DashboardController extends AppController{
           
         if(isset($this->request->data['realm_id'])){
         
-            if(isset($this->request->data['show_data_usage'])){
-                $this->request->data['show_data_usage'] = 1;
-            }else{
-                $this->request->data['show_data_usage'] = 0;
-            }
-            
-            if(isset($this->request->data['show_recent_failures'])){
-                $this->request->data['show_recent_failures'] = 1;
-            }else{
-                $this->request->data['show_recent_failures'] = 0;
-            }
-        
             //Delete old entries (if there are any)
             $this->UserSettings->deleteAll(['UserSetting.user_id' => $user_id,'UserSetting.name' => 'realm_id']);
-            $this->UserSettings->deleteAll(['UserSetting.user_id' => $user_id,'UserSetting.name' => 'show_recent_failures']);
-            $this->UserSettings->deleteAll(['UserSetting.user_id' => $user_id,'UserSetting.name' => 'show_data_usage']);
-            
-            $s = $this->UserSettings->newEntity();
+            $check_items = array(
+			    'show_data_usage',
+			    'show_recent_failures',
+			    'compact_view'
+		    );
+		    
+		    $s = $this->UserSettings->newEntity();
             $s->user_id = $user_id;
             $s->name    = 'realm_id';
             $s->value   = $this->request->data['realm_id'];
             $this->UserSettings->save($s);
-            
-            $s = $this->UserSettings->newEntity();
-            $s->user_id = $user_id;
-            $s->name    = 'show_recent_failures';
-            $s->value   = $this->request->data['show_recent_failures'];
-            $this->UserSettings->save($s);
-            
-            $s = $this->UserSettings->newEntity();
-            $s->user_id = $user_id;
-            $s->name    = 'show_data_usage';
-            $s->value   = $this->request->data['show_data_usage'];
-            $this->UserSettings->save($s);
+		    
+            foreach($check_items as $i){
+                if(isset($this->request->data[$i])){
+                    $this->request->data[$i] = 1;
+                }else{
+                    $this->request->data[$i] = 0;
+                }
+                $this->UserSettings->deleteAll(['UserSetting.user_id' => $user_id,'UserSetting.name' => "$i"]);
+                
+                $s          = $this->UserSettings->newEntity();
+                $s->user_id = $user_id;
+                $s->name    = "$i";
+                $s->value   = $this->request->data["$i"];
+                $this->UserSettings->save($s);        
+            }
         }
 
         $this->set(array(
@@ -292,7 +302,7 @@ class DashboardController extends AppController{
         ));
     }
     
-    private function _get_user_detail($user){
+    private function _get_user_detail($user,$auto_compact=false){
          
         $group      = $user->group->name;
         $username   = $user->username;
@@ -304,15 +314,21 @@ class DashboardController extends AppController{
         
         $isRootUser = false;
         
-         if( $group == Configure::read('group.admin')){  //Admin
+        $display = 'take_setting'; //Default is to take the settings value 
+   
+        if($auto_compact){
+            $display = 'compact'; //Override setting due to screen size to small
+        }
+        
+        if( $group == Configure::read('group.admin')){  //Admin
             $cls = 'admin';
-            $tabs= $this->_build_admin_tabs($id);  //We do not care for rights here;
+            $tabs= $this->_build_admin_tabs($id,$display);  //We do not care for rights here;
             $isRootUser = true;
         }
         
         if( $group == Configure::read('group.ap')){  //Or AP
             $cls = 'access_provider';
-            $tabs= $this->_build_ap_tabs($id);  //We DO care for rights here!  
+            $tabs= $this->_build_ap_tabs($id,$display);  //We DO care for rights here!  
             //$tabs    = array();    
         }
         
@@ -326,11 +342,24 @@ class DashboardController extends AppController{
         
     }
     
-     private function _build_admin_tabs($user_id){
-    
+     private function _build_admin_tabs($user_id,$style = 'take_setting'){
+        $show = 'title'; //Default is not compact
+        if($style == 'take_setting'){
+            $q_rc = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => "compact_view"])->first();
+            if($q_rc){
+                if($q_rc->value == 1){
+                    $show = 'tooltip';
+                }
+            }   
+        }
+        
+        if($style == 'compact'){ //override due to screen size
+            $show = 'tooltip'; 
+        }
+        
         $tabs = array(
             array(
-                'title'   => __('Admin'),
+                "$show"   => __('Admin'),
                 'glyph'   => Configure::read('icnAdmin'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -351,7 +380,7 @@ class DashboardController extends AppController{
             
             ),
             array(
-                'title'   => __('Users'),
+                "$show"   => __('Users'),
                 'xtype'   => 'tabpanel',
                 'glyph'   => Configure::read('icnUser'),
                 'layout'  => 'fit',
@@ -385,7 +414,7 @@ class DashboardController extends AppController{
                
             ), 
             array(
-                'title'   => __('Profiles'),
+                "$show"   => __('Profiles'),
                 'glyph'   => Configure::read('icnProfile'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -405,7 +434,7 @@ class DashboardController extends AppController{
                 )
             ), 
             array(
-                'title'   => __('RADIUS'),
+                "$show"   => __('RADIUS'),
                 'glyph'   => Configure::read('icnRadius'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -437,20 +466,20 @@ class DashboardController extends AppController{
                 )
             ), 
             array(
-                'title'   => __('MESHdesk'),
+                "$show"   => __('MESHdesk'),
                 'glyph'   => Configure::read('icnMesh'),
                 'id'      => 'cMeshes',
                 'layout'  => 'fit'
             ),
             array(
-                'title'   => __('APdesk'),
+                "$show"   => __('APdesk'),
                 'glyph'   => Configure::read('icnCloud'),
                 'id'      => 'cAccessPoints',
                 'layout'  => 'fit' 
             ),
              
             array(
-                'title'   => __('DNSdesk'),
+                "$show"   => __('DNSdesk'),
                 'glyph'   => Configure::read('icnShield'),
                 'xtype'   => "tabpanel",
                 'layout'  => 'fit',
@@ -488,7 +517,7 @@ class DashboardController extends AppController{
                 ) 
             ), 
             array(
-                'title'   => __('Other'),
+                "$show"   => __('Other'),
                 'glyph'   => Configure::read('icnGears'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -633,7 +662,7 @@ class DashboardController extends AppController{
         );
                
         array_unshift($tabs,array(
-            'title'     => __('Overview'),
+            "$show"     => __('Overview'),
             'xtype'     => 'tabpanel',
             'glyph'     => Configure::read('icnView'),
             'itemId'    => 'tpOverview',
@@ -644,10 +673,24 @@ class DashboardController extends AppController{
         return $tabs;
     }
     
-    private function _build_ap_tabs($id){
+    private function _build_ap_tabs($id,$style = 'take_setting'){
         $tabs   = array();
         $user_id = $id;
         
+        $show = 'title'; //Default is not compact
+        if($style == 'take_setting'){
+            $q_rc = $this->UserSettings->find()->where(['user_id' => $user_id,'name' => "compact_view"])->first();
+            if($q_rc){
+                if($q_rc->value == 1){
+                    $show = 'tooltip';
+                }
+            }   
+        }
+        
+        if($style == 'compact'){ //override due to screen size
+            $show = 'tooltip'; 
+        }
+          
         //Base to start looking from.
         $base   = "Access Providers/Controllers/"; 
            
@@ -747,7 +790,7 @@ class DashboardController extends AppController{
         );
             
         array_push($tabs, array(
-                'title'     => __('Overview'),
+                "$show"     => __('Overview'),
                 'xtype'     => 'tabpanel',
                 'glyph'     => Configure::read('icnView'),
                 'itemId'    => 'tpOverview',
@@ -781,7 +824,7 @@ class DashboardController extends AppController{
 
         if(count($admin_items) > 0){
             array_push($tabs, array(
-                    'title'   => __('Admin'),
+                    "$show"   => __('Admin'),
                     'glyph'   => Configure::read('icnAdmin'),
                     'xtype'   => 'tabpanel',
                     'layout'  => 'fit',
@@ -836,7 +879,7 @@ class DashboardController extends AppController{
         
         if(count($admin_items) > 0){
             array_push($tabs, array(
-                    'title'   => __('Users'),
+                    "$show"   => __('Users'),
                     'xtype'   => 'tabpanel',
                     'glyph'   => Configure::read('icnUser'),
                     'layout'  => 'fit',
@@ -870,7 +913,7 @@ class DashboardController extends AppController{
         
         if(count($profile_items) > 0){
             array_push($tabs, array(
-                'title'   => __('Profiles'),
+                "$show"   => __('Profiles'),
                 'glyph'   => Configure::read('icnProfile'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -925,7 +968,7 @@ class DashboardController extends AppController{
         
         if(count($radius_items) > 0){
             array_push($tabs, array(
-                'title'   => __('RADIUS'),
+                "$show"   => __('RADIUS'),
                 'glyph'   => Configure::read('icnRadius'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
@@ -938,7 +981,7 @@ class DashboardController extends AppController{
         
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
              array_push($tabs, array(
-                    'title'   => __('MESHdesk'),
+                    "$show"   => __('MESHdesk'),
                     'glyph'   => Configure::read('icnMesh'),
                     'id'      => 'cMeshes',
                     'layout'  => 'fit'
@@ -950,7 +993,7 @@ class DashboardController extends AppController{
         
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
              array_push($tabs, array(
-                    'title'   => __('APdesk'),
+                    "$show"   => __('APdesk'),
                     'glyph'   => Configure::read('icnCloud'),
                     'id'      => 'cAccessPoints',
                     'layout'  => 'fit' 
@@ -1000,7 +1043,7 @@ class DashboardController extends AppController{
         
         if(count($other_items) > 0){
             array_push($tabs, array(
-                'title'   => __('Other'),
+                "$show"   => __('Other'),
                 'glyph'   => Configure::read('icnGears'),
                 'xtype'   => 'tabpanel',
                 'layout'  => 'fit',
