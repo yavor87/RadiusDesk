@@ -28,11 +28,18 @@ Ext.define('Rd.controller.cStartup', {
             me.application.runAction('cLogin','Index');
         }else{
 
+            var screen_width = Ext.getBody().getViewSize().width;
+            var auto_compact = false;
+            if(screen_width < 1000){ //Smaller screens -> Auto compact
+                auto_compact = true;
+            }
+            
             //Check if the back-end likes our token
             Ext.Ajax.request({
                 url: me.getUrlCheckToken(),
                 params: {
-                    token: token
+                    token       : token,
+                    auto_compact: auto_compact
                 },
                 method: 'GET',
                 success: function(response){

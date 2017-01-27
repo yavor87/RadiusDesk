@@ -116,6 +116,7 @@ Rd.config = {
     'icnHourHalf'   : 'xf252@FontAwesome',
     'icnHourEnd'    : 'xf253@FontAwesome',
     'icnBullhorn'   : 'xf0a1@FontAwesome',
-    'icnList'       : 'xf03a@FontAwesome'
+    'icnList'       : 'xf03a@FontAwesome',
+    'icnFilter'     : 'xf0b0@FontAwesome'
 }
 

@@ -53,6 +53,9 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                     keepRawData : true,
                     type        : 'json',
                     rootProperty: 'items'
+                },
+                api: {
+                    destroy  : '/cake3/rd_cake/dynamic-details/delete-photo.json'
                 }
             },
             listeners: {

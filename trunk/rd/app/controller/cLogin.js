@@ -45,9 +45,17 @@ Ext.define('Rd.controller.cLogin', {
         var me      = this;
         var win    = button.up('window'),
         form        = win.down('form');
+        
+        var screen_width = Ext.getBody().getViewSize().width;
+        var auto_compact = false;
+        if(screen_width < 1000){ //Smaller screens -> Auto compact
+            auto_compact = true;
+        }
+        
         form.submit({
-            clientValidation: true,
-            url: me.getUrlLogin(),
+            clientValidation    : true,
+            url                 : me.getUrlLogin(),
+            params              : {auto_compact: auto_compact},
             success: function(form, action) {
                 me.application.setDashboardData(action.result.data);
 
