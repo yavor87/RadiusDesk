@@ -187,8 +187,12 @@ Ext.define('Rd.controller.cDashboard', {
 				    activate	: function(pnl){
 				        me.application.runAction('cSchedules','Index',pnl);
 				    }
-			    }
-                    
+			    },
+			    'tpDashboard #cFilters' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cFilters','Index',pnl);
+				    }
+			    }      
 		    }
         );
     },

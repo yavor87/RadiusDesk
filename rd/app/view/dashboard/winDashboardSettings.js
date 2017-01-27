@@ -5,7 +5,7 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
     layout  : 'fit',
     autoShow: false,
     width   : 350,
-    height  : 250,
+    height  : 300,
     glyph   : Rd.config.icnSpanner,
     requires: [
         'Rd.view.components.cmbRealm'
@@ -38,6 +38,14 @@ Ext.define('Rd.view.dashboard.winDashboardSettings', {
                         boxLabel  : 'Show Data Usage',
                         name        : 'show_data_usage',
                         inputValue  : 'show_data_usage',
+                        checked     : true,
+                        cls         : 'lblRdReq'
+                    },
+                    {
+                        xtype       : 'checkbox',      
+                        boxLabel    : 'Compact View',
+                        name        : 'compact_view',
+                        inputValue  : 'compact_view',
                         checked     : true,
                         cls         : 'lblRdReq'
                     }/*,
