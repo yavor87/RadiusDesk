@@ -34,6 +34,11 @@ class GridButtonsComponent extends Component {
             $menu = array($b);
         }
         
+        if($type == 'basic_no_disabled'){
+            $b = $this->_fetchBasic('no_disabled');
+            $menu = array($b);
+        }
+        
         if($type == 'access_providers'){
             $b  = $this->_fetchBasic();
             $d  = $this->_fetchDocument();
@@ -71,9 +76,15 @@ class GridButtonsComponent extends Component {
         return $menu;
     }
     
-    private function _fetchBasic(){
+    private function _fetchBasic($action='disabled'){
     
         $user = $this->user;
+        
+        if($action == 'no_disabled'){
+            $disabled = false; 
+        }else{
+            $disabled = true;
+        }
         
         $menu = array();
         
@@ -147,7 +158,7 @@ class GridButtonsComponent extends Component {
                     'glyph'     => Configure::read('icnDelete'),   
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
-                    'disabled'  => true,   
+                    'disabled'  => $disabled,   
                     'tooltip'   => __('Delete')));
             }
 
@@ -159,7 +170,7 @@ class GridButtonsComponent extends Component {
                     'glyph'     => Configure::read('icnEdit'),     
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
-                    'disabled'  => true,     
+                    'disabled'  => $disabled,     
                     'tooltip'   => __('Edit')));
             }
 
