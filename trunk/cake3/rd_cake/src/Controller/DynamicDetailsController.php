@@ -882,7 +882,6 @@ class DynamicDetailsController extends AppController{
         }
 
 	    if(isset($this->request->data['id'])){   //Single item delete
-
             //Get the filename to delete
             $entity = $this->DynamicPhotos->get($this->request->data['id']);
             if($entity){
