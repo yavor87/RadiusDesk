@@ -173,9 +173,9 @@ Ext.define('Rd.controller.cDashboard', {
 				        me.application.runAction('cGlobalDomains','Index',pnl);
 				    }
 			    },
-			    'tpDashboard #cGlobalTags' : {
+			    'tpDashboard #cCategories' : {
 				    activate	: function(pnl){
-				        me.application.runAction('cGlobalTags','Index',pnl);
+				        me.application.runAction('cCategories','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cPolicies' : {
