@@ -178,21 +178,21 @@ Ext.define('Rd.controller.cDashboard', {
 				        me.application.runAction('cCategories','Index',pnl);
 				    }
 			    },
-			    'tpDashboard #cPolicies' : {
+			    'tpDashboard #cFilters' : {
 				    activate	: function(pnl){
-				        me.application.runAction('cPolicies','Index',pnl);
+				        me.application.runAction('cFilters','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cSchedules' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cSchedules','Index',pnl);
 				    }
-			    },
-			    'tpDashboard #cFilters' : {
+			    },   
+			    'tpDashboard #cPolicies' : {
 				    activate	: function(pnl){
-				        me.application.runAction('cFilters','Index',pnl);
+				        me.application.runAction('cPolicies','Index',pnl);
 				    }
-			    }      
+			    }     
 		    }
         );
     },
