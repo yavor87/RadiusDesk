@@ -228,7 +228,7 @@ class OpauthAppController extends AppController {
 			}else{
 
 				$strategy 	= $social_login_info['name'];
-				$s_key		= $social_login_info['key'];
+				$s_key		= $social_login_info['special_key'];
 				$s_secret	= $social_login_info['secret'];
 
 				if($strategy == 'Facebook'){ //Facebook = app_id and app_secret
