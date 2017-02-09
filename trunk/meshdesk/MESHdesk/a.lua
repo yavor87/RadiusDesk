@@ -835,7 +835,6 @@ if(mode == 'off')then
     os.exit()
 end
 
-
 --=====================
 --Pre-setup: ----------
 --Configure Firmware is there is a server running on the correct IP and port
@@ -849,9 +848,13 @@ do_fw_config()
 if(mode == 'ap')then
     print("Device in AP Mode");
     ap_wait_for_lan()
+    --Make sure alfred started
+    os.execute("/etc/init.d/alfred start")
 elseif(mode == 'mesh')then
     print("Device in Mesh node");
     wait_for_lan()
+    --Make sure alfred started
+    os.execute("/etc/init.d/alfred start")
 else
     print("Device in unknown mode of "..mode)    
 end

@@ -88,10 +88,15 @@ function rdAlfred:slaveEnableAndStart()
         self.x.set('alfred','alfred','interface', self.interface)
     end
 
-    local mode      = self.x.get('alfred','alfred','mode')
-    if(mode ~= 'slave')then
-        self.x.set('alfred','alfred','mode','slave')
+    local mode  = self.x.get('alfred','alfred','mode')
+    --Make it master due to crashes / reboots
+    --if(mode ~= 'slave')then
+    --    self.x.set('alfred','alfred','mode','slave')
+    --end
+    if(mode ~= 'master')then
+        self.x.set('alfred','alfred','mode','master')
     end
+    
 
     local disabled  = self.x.get('alfred','alfred','disabled')
     if(disabled ~= '0')then
