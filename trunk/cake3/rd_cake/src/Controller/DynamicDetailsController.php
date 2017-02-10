@@ -824,7 +824,7 @@ class DynamicDetailsController extends AppController{
             return;
         }
         
-        $check_items = array('active');
+        $check_items = array('active','include_title','include_description');
         foreach($check_items as $ci){
             if(isset($this->request->data[$ci])){
                 $this->request->data[$ci] = 1;
@@ -923,7 +923,7 @@ class DynamicDetailsController extends AppController{
         $this->viewBuilder()->layout('ext_file_upload'); 
         $entity = $this->DynamicPhotos->get($this->request->data['id']);
         
-        $check_items = array('active');
+        $check_items = array('active','include_title','include_description');
         foreach($check_items as $ci){
             if(isset($this->request->data[$ci])){
                 $this->request->data[$ci] = 1;
