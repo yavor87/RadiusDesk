@@ -61,5 +61,34 @@ Ext.define('Rd.view.dynamicDetails.vcDynamicDetailSettings', {
         }else{
              pnl.down('#txtRegSuffix').setDisabled(true);
         }
+    },
+    chkSlideshowChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var nr      = form.down('#nrEnforceInSeconds');
+        var chkEnforce = form.down('#chkSlideshowEnforce');
+        var value   = chk.getValue();
+        if(value){
+            chkEnforce.setDisabled(false);
+            if(chkEnforce.getValue()){ 
+                nr.setDisabled(false);
+            }else{
+                nr.setDisabled(true);
+            }             
+        }else{
+            nr.setDisabled(true);
+            chkEnforce.setDisabled(true);
+        }
+    },
+    chkEnforceChange: function(chk){
+        var me      = this;
+        var form    = chk.up('form');
+        var nr      = form.down('#nrEnforceInSeconds');
+        var value   = chk.getValue();
+        if(value){   
+            nr.setDisabled(false);          
+        }else{
+            nr.setDisabled(true);
+        }
     }
 });

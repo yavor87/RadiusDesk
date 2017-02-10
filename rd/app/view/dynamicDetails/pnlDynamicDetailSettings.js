@@ -112,13 +112,29 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
 								        name        : 'slideshow_check',
 								        inputValue  : 'slideshow_check',
 								        checked     : false,
-								        labelClsExtra: 'lblRdReq'
+								        labelClsExtra: 'lblRdReq',
+								        listeners   : {
+                                            change : 'chkSlideshowChange'
+                                        }   
+								    },
+								    {
+								        xtype       : 'checkbox',      
+								        fieldLabel  : 'Enforce Watching',
+								        itemId      : 'chkSlideshowEnforce',
+								        name        : 'slideshow_enforce_watching',
+								        inputValue  : 'slideshow_enforce_watching',
+								        checked     : false,
+								        labelClsExtra: 'lblRd',
+								        disabled    : true,
+								        listeners   : {
+                                            change : 'chkEnforceChange'
+                                        }      
 								    },
 								    {
 								        xtype       : 'numberfield',
-								        name        : 'seconds_per_slide',
-								        fieldLabel  : 'Seconds per slide',
-								        itemId      : 'nrSecondsPerSlide',
+								        name        : 'slideshow_enforce_seconds',
+								        fieldLabel  : 'Enforce in Seconds',
+								        itemId      : 'nrEnforceInSeconds',
 								        value       : 30,
 								        maxValue    : 300,
 								        minValue    : 10,
