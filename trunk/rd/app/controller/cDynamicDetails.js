@@ -159,9 +159,6 @@ Ext.define('Rd.controller.cDynamicDetails', {
             'pnlDynamicDetail #tabSettings #chkRedirect' : {
                 change:  me.chkRedirectChange
             },
-            'pnlDynamicDetail #tabSettings #chkSlideshow' : {
-                change:  me.chkSlideshowChange
-            },
 			'pnlDynamicDetail #tabSettings #chkUsage' : {
                 change:  me.chkUsageChange
             },
@@ -445,17 +442,6 @@ Ext.define('Rd.controller.cDynamicDetails', {
             url.setDisabled(false);                
         }else{
             url.setDisabled(true);
-        }
-    },
-    chkSlideshowChange: function(chk){
-        var me      = this;
-        var form    = chk.up('form');
-        var nr      = form.down('#nrSecondsPerSlide');
-        var value   = chk.getValue();
-        if(value){
-            nr.setDisabled(false);                
-        }else{
-            nr.setDisabled(true);
         }
     },
 	chkUsageChange: function(chk){

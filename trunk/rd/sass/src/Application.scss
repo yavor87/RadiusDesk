@@ -114,6 +114,10 @@
     font-style:oblique;
 }
 
+.thumb-info {
+    text-align: left;
+}
+
 /* Windows needs a banner */
 .banner {
     width: 100%;
@@ -772,3 +776,6 @@ background-color:#ffecec;
     color: #ffffff;
 }
 
+.custom-color-picker-swatch {
+    z-index: 10 !important;
+}

@@ -19,6 +19,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
         var me = this;
 
         //Create the view for the wallpapers:
+        /*
         var imageTpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<div class="thumb-wrap">',
@@ -40,6 +41,68 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailPhoto', {
                 '</div>',
             '</tpl>'
         );
+        */
+        
+        
+        var imageTpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<div class="thumb-wrap">',
+                    '<div>',
+                        '<div><h1>{title}</h1></div>',
+                            '<img src="{img}" />',
+                        '<div class="description">{description}</div>',
+                        '<tpl if="Ext.isEmpty(url)">', //If the url is not empty add the link
+                            '<div></div>',
+                        '<tpl else>',
+                            '<div><a href="{url}" target="_blank">{url}</a></div>',
+                        '</tpl>',
+                    '</div>',
+                //'</div>',
+                    '<div class="thumb-info">',
+                        '<ul class="fa-ul">',
+                        //Active start 
+                        '<tpl if="active">',
+                            '<li><span class="txtGreen"><i class="fa-li fa fa-check-circle"></i>Enabled</span></li>',
+                        '<tpl else>',
+                            '<li><span class="txtGrey"><i class="fa-li fa fa-minus-circle"></i>Disabled</span></li>',
+                        '</tpl>',
+                        //Active end
+                        //Fit start 
+                        '<tpl if="fit==\'stretch_to_fit\'">',
+                            '<li><i class="fa-li fa fa-expand"></i>Stretch To Fit</li>',
+                        '</tpl>',
+                        '<tpl if="fit==\'horizontal\'">',
+                            '<li><i class="fa-li fa fa-expand"></i>Horizontal Fit</li>',
+                        '</tpl>',
+                        '<tpl if="fit==\'vertical\'">',
+                            '<li><i class="fa-li fa fa-expand"></i>Vertical Fit</li>',
+                        '</tpl>',
+                        '<tpl if="fit==\'original\'">',
+                            '<li><i class="fa-li fa fa-expand"></i>Original Size</li>',
+                        '</tpl>', 
+                        //Fit end
+                          '<li style="background-color:#{background_color};"><i class="fa-li fa fa-paint-brush"></i>Background HTML <b>#{background_color}</b></li>',
+                          '<li><i class="fa-li fa fa-clock-o"></i>Slide duration <b>{slide_duration}</b> seconds</li>',
+                        //Title 
+                        '<tpl if="include_title">',
+                            '<li><span class="txtGreen"><i class="fa-li fa fa-check-circle"></i>Show Title</span></li>',
+                        '<tpl else>',
+                            '<li><span class="txtGrey"><i class="fa-li fa fa-minus-circle"></i>Hide Title</span></li>',
+                        '</tpl>',
+                        //Title end
+                        //Description 
+                        '<tpl if="include_description">',
+                            '<li><span class="txtGreen"><i class="fa-li fa fa-check-circle"></i>Show Description</span></li>',
+                        '<tpl else>',
+                            '<li><span class="txtGrey"><i class="fa-li fa fa-minus-circle"></i>Hide Description</span></li>',
+                        '</tpl>',
+                        //Description end
+                        '</ul>',
+                    '</div>',
+                '</div>',   
+            '</tpl>'
+        );
+        
 
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mDynamicPhoto',
