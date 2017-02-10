@@ -1156,6 +1156,8 @@ CREATE TABLE `dynamic_details` (
   `reg_mac_check` tinyint(1) NOT NULL DEFAULT '0',
   `reg_auto_add` tinyint(1) NOT NULL DEFAULT '0',
   `reg_email` tinyint(1) NOT NULL DEFAULT '0',
+  `slideshow_enforce_watching` tinyint(1) NOT NULL DEFAULT '1',
+  `slideshow_enforce_seconds` int(4) NOT NULL DEFAULT '10',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1166,7 +1168,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1484077003.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2017-01-13 15:15:04',1,1,1,'mysite',1,120,'Default',0,1,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','en_GB',NULL,NULL,0,'',0,0,0);
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1484077003.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2017-01-13 15:15:04',1,1,1,'mysite',1,120,'Default',0,1,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','en_GB',NULL,NULL,0,'',0,0,0,1,10);
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1245,6 +1247,11 @@ CREATE TABLE `dynamic_photos` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
+  `fit` enum('stretch_to_fit','horizontal','vertical','original') DEFAULT 'stretch_to_fit',
+  `background_color` varchar(7) NOT NULL DEFAULT 'ffffff',
+  `slide_duration` int(4) NOT NULL DEFAULT '10',
+  `include_title` tinyint(1) NOT NULL DEFAULT '1',
+  `include_description` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `title` (`title`)
 ) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
@@ -1256,7 +1263,7 @@ CREATE TABLE `dynamic_photos` (
 
 LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
-INSERT INTO `dynamic_photos` VALUES (107,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2017-01-16 10:00:46',1),(108,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2017-01-16 10:00:01',1),(109,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01',1),(110,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40',1),(111,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04',1),(112,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30',1),(113,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04',1);
+INSERT INTO `dynamic_photos` VALUES (107,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2017-01-16 10:00:46',1,'stretch_to_fit','ffffff',10,1,1),(108,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2017-01-16 10:00:01',1,'stretch_to_fit','ffffff',10,1,1),(109,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01',1,'stretch_to_fit','ffffff',10,1,1),(110,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40',1,'stretch_to_fit','ffffff',10,1,1),(111,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04',1,'stretch_to_fit','ffffff',10,1,1),(112,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30',1,'stretch_to_fit','ffffff',10,1,1),(113,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04',1,'stretch_to_fit','ffffff',10,1,1);
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4233,4 +4240,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-24 11:07:29
+-- Dump completed on 2017-02-10 10:34:19
