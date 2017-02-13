@@ -136,7 +136,9 @@ class DynamicDetailsController extends AppController{
 			'slideshow_check',      'seconds_per_slide','connect_check',    'connect_username', 'connect_suffix',
 			'connect_delay',        'connect_only',     'user_login_check', 'voucher_login_check',
 			'auto_suffix_check',    'auto_suffix',      'usage_show_check', 'usage_refresh_interval', 
-			'register_users',       'lost_password'
+			'register_users',       'lost_password',
+			'slideshow_enforce_watching',
+			'slideshow_enforce_seconds'
 		);
         
 		//print_r($q_r);
