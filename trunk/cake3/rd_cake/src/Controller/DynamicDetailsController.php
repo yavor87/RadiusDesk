@@ -67,9 +67,27 @@ class DynamicDetailsController extends AppController{
                 //Modify the photo path:
                 $c = 0;
                 foreach($q_r->dynamic_photos as $i){
-                    $q_r->dynamic_photos[$c]['file_name'] = Configure::read('paths.dynamic_photos').$i->file_name;
+                
+                    $full_file_name = Configure::read('paths.absolute_photo_path').$i->file_name;
+                    $info           = getimagesize($full_file_name);
+                    $width          = $info[0];
+                    $height         = $info[1];
+                    
+                    $layout = 'landscape';
+                    if($width == $height){
+                        $layout = 'block';
+                    }
+                    if($width < $height){
+                        $layout = 'portrait';
+                    }
+                    
+                    $q_r->dynamic_detail->dynamic_photos[$c]['file_name']   = Configure::read('paths.dynamic_photos').$i->file_name;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['width']       = $width;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['height']      = $height;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['layout']      = $layout;
                     $c++;
                 }
+                
                 $items['photos']    = $q_r->dynamic_photos;
                 $items['pages']     = $q_r->dynamic_pages;
 				$sl_items           = $q_r->dynamic_detail_social_logins;
@@ -110,10 +128,28 @@ class DynamicDetailsController extends AppController{
                 //Modify the photo path:
                 $c = 0;
                 foreach($q_r->dynamic_detail->dynamic_photos as $i){
-                    $q_r->dynamic_detail->dynamic_photos[$c]['file_name'] = Configure::read('paths.dynamic_photos').$i->file_name;
+                    $full_file_name = Configure::read('paths.absolute_photo_path').$i->file_name;
+                    $info           = getimagesize($full_file_name);
+                    $width          = $info[0];
+                    $height         = $info[1];
+                    
+                    $layout = 'landscape';
+                    if($width == $height){
+                        $layout = 'block';
+                    }
+                    if($width < $height){
+                        $layout = 'portrait';
+                    }
+                    
+                    $q_r->dynamic_detail->dynamic_photos[$c]['file_name']   = Configure::read('paths.dynamic_photos').$i->file_name;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['width']       = $width;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['height']      = $height;
+                    $q_r->dynamic_detail->dynamic_photos[$c]['layout']      = $layout;
                     $c++;
 
                 }
+                
+                
                 $items['photos']    = $q_r->dynamic_detail->dynamic_photos;
                 $items['pages']     = $q_r->dynamic_detail->dynamic_pages;
 				$sl_items           = $q_r->dynamic_detail->dynamic_detail_social_logins;
@@ -549,7 +585,8 @@ class DynamicDetailsController extends AppController{
             'voucher_login_check',
             'auto_suffix_check',
             'usage_show_check',
-            'lost_password'
+            'lost_password',
+            'slideshow_enforce_watching'
 	    );
 	    
         foreach($check_items as $i){

@@ -78,6 +78,7 @@ $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
 $config['paths']['dynamic_photos']      = "/cake3/rd_cake/img/dynamic_photos/";   
 $config['paths']['dynamic_detail_icon'] = "/cake3/rd_cake/img/dynamic_details/";
 $config['paths']['real_photo_path']     = "/cake3/rd_cake/webroot/img/dynamic_photos/";
+$config['paths']['absolute_photo_path'] = "/usr/share/nginx/html/cake3/rd_cake/webroot/img/dynamic_photos/";
 
 //Define default settings for the users:
 $config['user_settings']['wallpaper']       = "9.jpg";
@@ -356,6 +357,9 @@ $config['icnWizard']    = 'xf0d0@'.$config['webFont'];
 $config['icnShield']    = 'xf132@'.$config['webFont'];
 $config['icnList']      = 'xf03a@'.$config['webFont'];
 $config['icnScale']     = 'xf24e@'.$config['webFont'];
+$config['icnFilter']    = 'xf0b0@'.$config['webFont'];
+$config['icnDropbox']   = 'xf16b@'.$config['webFont'];
+
 
 //=== EXPERIMENTAL STUFF =====
 //Show experimental menus
