@@ -40,6 +40,7 @@ if not exists (select * from information_schema.columns
     alter table dynamic_details add column `slideshow_enforce_seconds` int(4) NOT NULL DEFAULT 10;
 end if;
 
+alter table dynamic_photos MODIFY column `fit` enum('stretch_to_fit','horizontal','vertical','original','dynamic') DEFAULT 'stretch_to_fit';
 
 end//
 

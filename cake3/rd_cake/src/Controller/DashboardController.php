@@ -491,9 +491,9 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     ),
                     array(
-                        'title'   => 'Domain Tags',
-                        'glyph'   => Configure::read('icnTag'),
-                        'id'      => 'cGlobalTags',
+                        'title'   => 'Categories',
+                        'glyph'   => Configure::read('icnDropbox'),
+                        'id'      => 'cCategories',
                         'layout'  => 'fit'
                     ),
                     array(
