@@ -81,10 +81,10 @@ class DynamicDetailsController extends AppController{
                         $layout = 'portrait';
                     }
                     
-                    $q_r->dynamic_detail->dynamic_photos[$c]['file_name']   = Configure::read('paths.dynamic_photos').$i->file_name;
-                    $q_r->dynamic_detail->dynamic_photos[$c]['width']       = $width;
-                    $q_r->dynamic_detail->dynamic_photos[$c]['height']      = $height;
-                    $q_r->dynamic_detail->dynamic_photos[$c]['layout']      = $layout;
+                    $q_r->dynamic_photos[$c]['file_name']   = Configure::read('paths.dynamic_photos').$i->file_name;
+                    $q_r->dynamic_photos[$c]['width']       = $width;
+                    $q_r->dynamic_photos[$c]['height']      = $height;
+                    $q_r->dynamic_photos[$c]['layout']      = $layout;
                     $c++;
                 }
                 
