@@ -17,7 +17,8 @@ Ext.define('Rd.view.dynamicDetails.winPhotoEdit', {
                 {"id":"stretch_to_fit",     "name":"Stretch To Fit"},
                 {"id":"horizontal",         "name":"Horizontal Fit"},
                 {"id":"vertical",           "name":"Vertical Fit"},
-                {"id":"original",           "name":"Original Size"}
+                {"id":"original",           "name":"Original Size"},
+                {"id":"dynamic",            "name":"Device Dependent Fit"}
             ]
         });
         
