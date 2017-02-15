@@ -137,7 +137,7 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
 								        itemId      : 'nrEnforceInSeconds',
 								        value       : 30,
 								        maxValue    : 300,
-								        minValue    : 10,
+								        minValue    : 1,
 								        disabled    : true
 								    }
                                 ]
