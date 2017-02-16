@@ -106,7 +106,7 @@ class RegisterUsersController extends AppController {
         ///if($q_r['DynamicDetail']['reg_auto_suffix_check']){ 
         ///    $username	= $this->request->data['username'].'@'.$q_r['DynamicDetail']['reg_auto_suffix'];
        /// }else{
-            $username	= $this->request->data['username'];
+        $username	= $this->request->data['username'];
        /// }
 		$password	= $this->request->data['password'];
 		
@@ -136,6 +136,7 @@ class RegisterUsersController extends AppController {
             'token'         => $token,
             'username'      => $username,
             'password'      => $password,
+            'email'         => $username, //Email and username will be the same / email required
 			'extra_name'	=> $mac_name,
 			'extra_value'	=> $mac_value,
 			'auto_add'      => $auto_add

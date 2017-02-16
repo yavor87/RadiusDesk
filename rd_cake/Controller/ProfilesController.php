@@ -364,14 +364,8 @@ class ProfilesController extends AppController {
 
 
     public function manage_components() {
-
-        //__ Authentication + Authorization __
-        $user = $this->_ap_right_check();
-        if(!$user){
-            return;
-        }
-
-          //__ Authentication + Authorization __
+    
+         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
