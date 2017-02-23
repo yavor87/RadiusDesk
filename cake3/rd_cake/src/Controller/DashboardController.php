@@ -357,8 +357,11 @@ class DashboardController extends AppController{
             $show = 'tooltip'; 
         }
         
-        $tabs = array(
-            array(
+        
+        $tabs = [];
+        
+        //Admin
+        array_push($tabs, array(
                 "$show"   => __('Admin'),
                 'glyph'   => Configure::read('icnAdmin'),
                 'xtype'   => 'tabpanel',
@@ -377,9 +380,12 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     )
                 )
-            
-            ),
-            array(
+
+            )
+        );
+        
+        //Users
+        array_push($tabs, array(
                 "$show"   => __('Users'),
                 'xtype'   => 'tabpanel',
                 'glyph'   => Configure::read('icnUser'),
@@ -411,9 +417,11 @@ class DashboardController extends AppController{
                     ),
                     
                 )
-               
-            ), 
-            array(
+            )
+        );
+        
+        //Users
+        array_push($tabs, array(
                 "$show"   => __('Profiles'),
                 'glyph'   => Configure::read('icnProfile'),
                 'xtype'   => 'tabpanel',
@@ -432,8 +440,11 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     )   
                 )
-            ), 
-            array(
+            )
+        );
+        
+        //RADIUS
+        array_push($tabs, array(
                 "$show"   => __('RADIUS'),
                 'glyph'   => Configure::read('icnRadius'),
                 'xtype'   => 'tabpanel',
@@ -464,21 +475,32 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     )  
                 )
-            ), 
-            array(
+            )
+        );
+        
+        
+        //MESHdesk
+        array_push($tabs, array(
                 "$show"   => __('MESHdesk'),
                 'glyph'   => Configure::read('icnMesh'),
                 'id'      => 'cMeshes',
                 'layout'  => 'fit'
-            ),
-            array(
+            )
+        );
+        
+        //APdesk
+        array_push($tabs, array(
                 "$show"   => __('APdesk'),
                 'glyph'   => Configure::read('icnCloud'),
                 'id'      => 'cAccessPoints',
-                'layout'  => 'fit' 
-            ),
-             
-            array(
+                'layout'  => 'fit'
+            )
+        );
+        
+        //Experi-mental 
+        if(Configure::read('experimental.active')){
+        
+            $dns_desk = [
                 "$show"   => __('DNSdesk'),
                 'glyph'   => Configure::read('icnShield'),
                 'xtype'   => "tabpanel",
@@ -515,8 +537,12 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     ),  
                 ) 
-            ), 
-            array(
+            ];
+            array_push($tabs, $dns_desk);   
+        }
+        
+        //Other
+        array_push($tabs, array(
                 "$show"   => __('Other'),
                 'glyph'   => Configure::read('icnGears'),
                 'xtype'   => 'tabpanel',
@@ -559,8 +585,8 @@ class DashboardController extends AppController{
                         'layout'  => 'fit'
                     )    
                 )
-              )
-        ); 
+            )
+        );       
               
         //____ Overview Tab ___
         //This one is a bit different :-)
@@ -668,7 +694,7 @@ class DashboardController extends AppController{
             'itemId'    => 'tpOverview',
             'layout'    => 'fit',
             'items'     => $overview_items
-        ));   
+        ));
                 
         return $tabs;
     }
@@ -1003,30 +1029,38 @@ class DashboardController extends AppController{
         
         
         //___ DNSdesk tab ___
-      /*  
-        $dns_desk_items = array();
-        
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
-            array_push($dns_desk_items, array(
-                    'title'   => 'Domain Names',
-                    'glyph'   => Configure::read('icnList'),
-                    'id'      => 'cGlobalDomains',
-                    'layout'  => 'fit'             
-                )
-            );  
-        }
-        
-         if(count($dns_desk_items) > 0){
-            array_push($tabs, array(
-                'title'   => __('DNSdesk'),
+       //Experi-mental 
+        if(Configure::read('experimental.active')){
+            //FIXME Also do rights check on this for Access Providers
+            $dns_desk = [
+                "$show"   => __('DNSdesk'),
                 'glyph'   => Configure::read('icnShield'),
-                'xtype'   => 'tabpanel',
+                'xtype'   => "tabpanel",
                 'layout'  => 'fit',
-                'items'   => $dns_desk_items
-                )
-            );
+                'items'   => array(
+                    array(
+                        'title'   => 'Filters',
+                        'glyph'   => Configure::read('icnFilter'),
+                        'id'      => 'cFilters',
+                        'layout'  => 'fit'
+                    ), 
+                    array(
+                        'title'   => 'Schedules',
+                        'glyph'   => Configure::read('icnWatch'),
+                        'id'      => 'cSchedules',
+                        'layout'  => 'fit'
+                    ), 
+                    array(
+                        'title'   => 'Policies',
+                        'glyph'   => Configure::read('icnScale'),
+                        'id'      => 'cPolicies',
+                        'layout'  => 'fit'
+                    ),  
+                ) 
+            ];
+            array_push($tabs, $dns_desk);   
         }
-          */
+            
         // ____ Other Tab ____
         
         $other_items = array();
