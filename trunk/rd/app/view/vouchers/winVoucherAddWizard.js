@@ -225,7 +225,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     name        : 'days_valid',
                                     fieldLabel  : i18n('sDays_available_after_first_login'),
                                     value       : 0,
-                                    maxValue    : 90,
+                                    maxValue    : 366,
                                     minValue    : 0,
                                     itemId      : 'days_valid',
                                     hidden      : true,
