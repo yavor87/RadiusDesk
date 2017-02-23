@@ -536,22 +536,41 @@ class NodesController extends AppController {
                 }
 
                 if(($type == 'captive_portal')&&($gateway)){
+                
+                    //---WIP Start---
+                    $n          = "$start_number"."$start_number";
+                    $if_ip      = "10.$n.$n.$n";
+                    //---WIP END---
 
                     //Add the captive portal's detail
                     if($type =='captive_portal'){
                         $a = $me['MeshExitCaptivePortal'];
                         $a['hslan_if'] = 'br-'.$if_name;
                         $a['network']  = $if_name;
+                        
+                        //---WIP Start---
+                        $a['dns1']      = $if_ip;
+                        //---WIP END---
+                        
                         array_push($captive_portal_data,$a);             
                     }
 
                     $interfaces =  "bat0.".$start_number;
+                    
+                    
+                    
                     array_push($network,
                         array(
                             "interface"    => "$if_name",
                             "options"   => array(
                                 "ifname"    => $interfaces,
-                                "type"      => "bridge" 
+                                "type"      => "bridge",
+                                
+                                //---WIP Start---
+                                "ipaddr"    => "$if_ip",
+                                "netmask"   => "255.255.255.0",
+                                //---WIP END--- 
+                                
                         ))
                     );
 
