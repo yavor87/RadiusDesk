@@ -989,6 +989,16 @@ class MeshesController extends AppController {
             '_serialize'=> array('success', 'data')
         ));
     }
+    
+    public function mesh_experimental_check(){
+        Configure::load('RadiusDesk'); 
+        $active = Configure::read('experimental.active'); //Read the defaults
+        $this->set(array(
+            'active'     => $active,
+            'success'   => true,
+            '_serialize'=> array('success', 'active')
+        ));
+    }
 
     public function mesh_exit_view(){
 
