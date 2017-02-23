@@ -3,16 +3,12 @@
 $config = array();
 
 //The groups that is defined 
-
-
-
 $config['group']['admin']   = 'Administrators';     //Has all the rights
 $config['group']['ap']      = 'Access Providers';   //Has selected right
-$config['group']['user']    = 'Permanent Users';              //Has very limited rights
+$config['group']['user']    = 'Permanent Users';    //Has very limited rights
 
-$config['language']['default']    = '4_4';     //This is the id 4 of Languages and id 4 of countries (GB_en)
-
-$config['commands']['msgcat'] = '/usr/bin/msgcat';
+$config['language']['default']      = '4_4';     //This is the id 4 of Languages and id 4 of countries (GB_en)
+$config['commands']['msgcat']       = '/usr/bin/msgcat';
 
 //Define the connection types and if they are active or not
 $config['conn_type'][0]     = array('name' => __('Direct (Fixed IP)'),  'id' => 'direct',   'active' => true);
@@ -71,214 +67,36 @@ $config['voucher_formats'][8]     = array('name' => 'Avery L7160',              
 $config['voucher_formats'][9]     = array('name' => 'Avery L7161',              'id' => 'L7161',            'active' => true); 
 $config['voucher_formats'][10]    = array('name' => 'Avery L7163',              'id' => 'L7163',            'active' => true); 
 
-
-//FIXME To incorporate
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
-
 $config['paths']['dynamic_photos']      = "/cake3/rd_cake/img/dynamic_photos/";   
 $config['paths']['dynamic_detail_icon'] = "/cake3/rd_cake/img/dynamic_details/";
 $config['paths']['real_photo_path']     = "/cake3/rd_cake/webroot/img/dynamic_photos/";
 $config['paths']['absolute_photo_path'] = "/usr/share/nginx/html/cake3/rd_cake/webroot/img/dynamic_photos/";
 
 //Define default settings for the users:
-$config['user_settings']['wallpaper']       = "9.jpg";
-$config['user_settings']['map']['type']     = "ROADMAP";
-$config['user_settings']['map']['zoom']     = 18;
-$config['user_settings']['map']['lng']      = -71.0955740216735;
-$config['user_settings']['map']['lat']      = 42.3379770178396;
+$config['user_settings']['wallpaper']                       = "9.jpg";
+$config['user_settings']['map']['type']                     = "ROADMAP";
+$config['user_settings']['map']['zoom']                     = 18;
+$config['user_settings']['map']['lng']                      = -71.0955740216735;
+$config['user_settings']['map']['lat']                      = 42.3379770178396;
 
 //Define default settings for users's Dynamic Clients map
-$config['user_settings']['dynamic_client_map']['type']     = "ROADMAP";
-$config['user_settings']['dynamic_client_map']['zoom']     = 18;
-$config['user_settings']['dynamic_client_map']['lng']      = -71.0955740216735;
-$config['user_settings']['dynamic_client_map']['lat']      = 42.3379770178396;
-
+$config['user_settings']['dynamic_client_map']['type']      = "ROADMAP";
+$config['user_settings']['dynamic_client_map']['zoom']      = 18;
+$config['user_settings']['dynamic_client_map']['lng']       = -71.0955740216735;
+$config['user_settings']['dynamic_client_map']['lat']       = 42.3379770178396;
 
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
-$config['UserCanRemoveDevice']              = true;
+$config['UserCanRemoveDevice']                              = true;
 
 //SMTP configs are defined in the Config/email.php file. Here we specify which one to use application wide
-$config['EmailServer']						= 'default';
-
+$config['EmailServer']						                = 'default';
 
 //== 30/3/16 -> Some server wide configurations ==
-$config['server_settings']['user_stats_cut_off_days']   = 90; //3 months (make zero to have no cut off)
-$config['server_settings']['radacct_cut_off_days']      = 90; //3 months (make zero to have no cut off)
+$config['server_settings']['user_stats_cut_off_days']       = 90; //3 months (make zero to have no cut off)
+$config['server_settings']['radacct_cut_off_days']          = 90; //3 months (make zero to have no cut off)
  
 //== End server wide configurations ==
-
-
-//========== WORK IN PROGRES =============
-//----- PayU settings ----- Change to live and your details once working
-$config['payu']['soapWdslUrl']      = 'https://staging.payu.co.za/service/PayUAPI?wsdl';
-$config['payu']['payuRppUrl']       = 'https://staging.payu.co.za/rpp.do?PayUReference=';
-$config['payu']['notificationUrl']  = 'http://41.134.95.22/cake2/rd_cake/fin_pay_u_transactions/payu_ipn';
-$config['payu']['apiVersion']       = 'ONE_ZERO';
-$config['payu']['safeKey']          = '{45D5C765-16D2-45A4-8C41-8D6F84042F8C}';
-$config['payu']['soapUsername']     = 'Staging Integration Store 1';
-$config['payu']['soapPassword']     = '78cXrW1W';
-
-//--- PayU Vouchers-----
-$config['payu']['vouchers']['a']['data_175m'] = array(
-    'name'      => '175MB',  
-    'price'     => '129.00',
-    'currency'  => 'R', 
-    'position'  => 'pre',
-    'voucher'   => array(
-        'activate_on_login' => '1',
-        'time_valid'        => '0-02-00-00',
-        'expire'            => '05/31/2014',
-        'precede'           => '',
-        'profile_id'        => 7,
-        'pwd_length'        => 5,
-        'realm_id'          => 34,
-        'sel_language'      => '4_4',
-        'user_id'           => '44'
-    )
-);
-
-$config['payu']['vouchers']['a']['data_400m'] = array(
-    'name'      => '400MB',  
-    'price'     => '165.00',
-    'currency'  => 'R', 
-    'position'  => 'pre',
-    'voucher'   => array(
-        'activate_on_login' => '1',
-        'time_valid'        => '2-22-22-00',
-        'expire'            => '05/31/2014',
-        'precede'           => '',
-        'profile_id'        => 7,
-        'pwd_length'        => 5,
-        'realm_id'          => 34,
-        'sel_language'      => '4_4',
-        'user_id'           => '44'
-    )
-);
-
-
-//From Paypal data 'item_name' (RDVoucher') 'item_number' (rd_v1) option_selection1 ('2Hours')
-$config['paypal']['RDVoucher']['rd_v1']['2Hours'] = array(
-                                                        'activate_on_login' => '1',
-                                                        'time_valid'        => '0-02-00-00',
-                                                        'expire'            => '06/31/2014',
-                                                        'precede'           => '',
-                                                        'profile_id'        => 7,
-                                                        'pwd_length'        => 5,
-                                                        'realm_id'          => 34,
-                                                        'sel_language'      => '4_4',
-                                                        'user_id'           => '44'
-                                                    ); 
-
-$config['paypal']['RDVoucher']['rd_v1']['4Hours'] = array(
-                                                        'activate_on_login' => '1',
-                                                        'time_valid'        => '0-04-00-00',
-                                                        'expire'            => '06/31/2014',
-                                                        'precede'           => '',
-                                                        'profile_id'        => 7,
-                                                        'pwd_length'        => 5,
-                                                        'realm_id'          => 34,
-                                                        'sel_language'      => '4_4',
-                                                        'user_id'           => '44'
-                                                    ); 
-
-$config['paypal']['RDVoucher']['rd_v1']['12Hours'] = array(
-                                                        'activate_on_login' => '1',
-                                                        'time_valid'        => '0-12-00-00',
-                                                        'expire'            => '06/31/2014',
-                                                        'precede'           => '',
-                                                        'profile_id'        => 7,
-                                                        'pwd_length'        => 5,
-                                                        'realm_id'          => 34,
-                                                        'sel_language'      => '4_4',
-                                                        'user_id'           => '44'
-                                                    );
-
-//== Premium SMS ==
-
-$config['premium_sms']['50MB'] = array(
-                                    'precede'           => '',
-                                    'profile_id'        => 9,
-									'profile'			=> 'Data-Standard-1G',
-                                    'realm_id'          => 34,
-									'realm'				=> 'Residence Inn',
-                                    'sel_language'      => '4_4',
-                                    'user_id'           => '44'
-                                );
-
-
-//======== END WORK IN PROGRESS ==========
-
-
-    //Original for extjs4.x
-/*
-//==== Define glyphs -> We'll use glyphs insteadd of icons
-$config['icnLock']      = 57495;
-$config['icnYes']       = 57605;
-$config['icnMenu']      = 57594;
-$config['icnInfo']      = 57479;
-$config['icnPower']     = 57541;
-$config['icnSpanner']   = 57583;
-$config['icnHome']      = 57473;
-$config['icnDynamic']   = 57392;
-$config['incVoucher']   = 57606;
-$config['icnReload']    = 57374;
-$config['icnAdd']       = 57537;
-$config['icnEdit']      = 57524;
-$config['icnDelete']    = 57610;
-$config['icnPdf']       = 57447;
-$config['icnCsv']       = 57415;
-$config['icnRadius']    = 57444;
-$config['icnLight']     = 57487;
-$config['icnNote']      = 57531;
-$config['icnKey']       = 57485;
-$config['icnRealm']     = 57557;
-$config['icnNas']       = 57589;
-$config['icnTag']       = 57592;
-$config['icnProfile']   = 57468;
-$config['icnComponent'] = 57544;
-$config['icnLight']     = 57487;
-$config['icnActivity']  = 57408;
-$config['icnLog']       = 57438;
-$config['icnTranslate'] = 57466;
-$config['icnConfigure'] = 57583;
-$config['icnUser']      = 57618;
-$config['icnVoucher']   = 57606;
-$config['icnDevice']    = 57432;
-$config['icnMesh']      = 57460;
-$config['icnBug']       = 57344;
-$config['icnMobile']    = 57431;
-$config['icnDesktop']   = 57429;
-$config['icnView']      = 57650;
-$config['icnMeta']      = 57630;
-$config['icnMap']       = 57645;
-$config['icnConnect']   = 57489;
-$config['icnGraph']     = 57410;
-$config['icnKick']      = 57535;
-$config['icnClose']     = 57609;
-$config['icnFinance']   = 57586;
-$config['icnOnlineShop']= 57554;
-$config['icnEmail']     = 57378;
-$config['icnAttach']    = 57380;
-$config['icnCut']       = 57551;
-$config['icnTopUp']     = 57419;
-$config['icnSubtract']  = 57520;
-$config['icnWatch']     = 57628;
-$config['icnStar']      = 57585;
-$config['icnGrid']      = 57600;
-$config['icnFacebook']	= 57558;
-$config['icnGoogle']	= 57614;
-$config['icnTwitter']	= 57574;
-$config['icnWifi']		= 57550;
-$config['icnIP']		= 57479;
-$config['icnThumbUp']   = 57603;
-$config['icnThumbDown']	= 57602;
-$config['icnCPU']		= 57452;
-$config['icnNotify']	= 57624;
-$config['icnCamera']    = 57399;
-$config['icnRedirect']  = 57372;
-*/
-
-//Modified for ExtJS 6
 
 $config['webFont']      = 'FontAwesome';
 
@@ -291,15 +109,15 @@ $config['icnSpanner']   = 'xf0ad@'.$config['webFont'];
 $config['icnHome']      = 'xf015@'.$config['webFont'];
 $config['icnDynamic']   = 'xf0d0@'.$config['webFont'];
 $config['icnVoucher']   = 'xf145@'.$config['webFont'];
-$config['icnReload']    = 'xf021@'.$config['webFont'];//
-$config['icnAdd']       = 'xf067@'.$config['webFont'];//
-$config['icnEdit']      = 'xf040@'.$config['webFont'];//
-$config['icnDelete']    = 'xf1f8@'.$config['webFont'];//
+$config['icnReload']    = 'xf021@'.$config['webFont'];
+$config['icnAdd']       = 'xf067@'.$config['webFont'];
+$config['icnEdit']      = 'xf040@'.$config['webFont'];
+$config['icnDelete']    = 'xf1f8@'.$config['webFont'];
 $config['icnPdf']       = 'xf1c1@'.$config['webFont'];
 $config['icnCsv']       = 'xf1c3@'.$config['webFont'];
 $config['icnRadius']    = 'xf10c@'.$config['webFont'];
 $config['icnLight']     = 'xf204@'.$config['webFont'];
-$config['icnNote']      = 'xf08d@'.$config['webFont'];//
+$config['icnNote']      = 'xf08d@'.$config['webFont'];
 $config['icnKey']       = 'xf084@'.$config['webFont'];
 $config['icnRealm']     = 'xf17d@'.$config['webFont'];
 $config['icnNas']       = 'xf1cb@'.$config['webFont'];
@@ -362,63 +180,8 @@ $config['icnDropbox']   = 'xf16b@'.$config['webFont'];
 
 
 //=== EXPERIMENTAL STUFF =====
-//Show experimental menus
-$config['experimental']['active']                   = false;
-
-//IP Settings
-$config['experimental']['defaults']['ip_mask']      = '255.255.255.0';
-$config['experimental']['defaults']['ip_dns_1']     = '192.168.99.99';
-$config['experimental']['defaults']['ip_dns_2']     = '192.168.99.100';
-$config['experimental']['defaults']['ip_dns_2']     = '192.168.99.100';
-
-//Wifi Settings
-$config['experimental']['defaults']['wifi_active']  = true;
-$config['experimental']['defaults']['channel']      = 1;
-$config['experimental']['defaults']['power']        = 10;
-$config['experimental']['defaults']['distance']     = 30;
-
-
-$config['experimental']['defaults']['ssid_secure']  = 'RD Wireless';
-$config['experimental']['defaults']['radius']       = '192.168.99.99';
-$config['experimental']['defaults']['secret']       = 'testing123';
-
-$config['experimental']['defaults']['ssid_open']    = 'RD Guest';
-
-//OpenVPN Settings
-$config['experimental']['defaults']['vpn_server']   = '192.168.99.99';
-
-$config['experimental']['openvpn']['start_ip']      = '10.8.1.2';
-$config['experimental']['openvpn']['ca']            = '-----BEGIN CERTIFICATE-----
-MIIDYDCCAsmgAwIBAgIJAK+7qcW3f0W6MA0GCSqGSIb3DQEBBQUAMH4xCzAJBgNV
-BAYTAlpBMRAwDgYDVQQIEwdHYXV0ZW5nMREwDwYDVQQHEwhQcmV0b3JpYTEMMAoG
-A1UEChMDWUZpMRMwEQYDVQQDEwpPcGVuVlBOLUNBMScwJQYJKoZIhvcNAQkBFhhk
-aXJrdmFuZGVyd2FsdEBnbWFpbC5jb20wHhcNMTMwNDE1MDgxOTM1WhcNMjMwNDEz
-MDgxOTM1WjB+MQswCQYDVQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UE
-BxMIUHJldG9yaWExDDAKBgNVBAoTA1lGaTETMBEGA1UEAxMKT3BlblZQTi1DQTEn
-MCUGCSqGSIb3DQEJARYYZGlya3ZhbmRlcndhbHRAZ21haWwuY29tMIGfMA0GCSqG
-SIb3DQEBAQUAA4GNADCBiQKBgQDmfB1FBrjuB5xRYJGjr8fCgoxY9M99nPzMcnBQ
-tFnkc7TjsoPfDTAOgecpmwfPrfxjBvi9Vae+TwiiwiLLMCewvXP47vySRhXIRUVL
-OvEcgapdIGbl26JaHyUrjbsAdrc/Fp5OTmjU5EZ/BciheZJr+ZLUWg/5bkDtI3rH
-g+moPQIDAQABo4HlMIHiMB0GA1UdDgQWBBTf/iG94D0pd+3z5RURkZ+43j43LDCB
-sgYDVR0jBIGqMIGngBTf/iG94D0pd+3z5RURkZ+43j43LKGBg6SBgDB+MQswCQYD
-VQQGEwJaQTEQMA4GA1UECBMHR2F1dGVuZzERMA8GA1UEBxMIUHJldG9yaWExDDAK
-BgNVBAoTA1lGaTETMBEGA1UEAxMKT3BlblZQTi1DQTEnMCUGCSqGSIb3DQEJARYY
-ZGlya3ZhbmRlcndhbHRAZ21haWwuY29tggkAr7upxbd/RbowDAYDVR0TBAUwAwEB
-/zANBgkqhkiG9w0BAQUFAAOBgQCLiXXSKSPIAkMVwFq935zb8RIoEu6fVbo9nbwN
-fVIBgZIqpSZT59Ueef/l5zcTabRH7cIZGe6RqBK17I2nSr4s5+Ut4lgdvu7xe3g8
-t72pyVfDVfHr1sSMRGSjVt1SPI13uz3a6hzFVFxBoHWdyhXoGmvidNIm09hwPsJN
-S6UMIw==
------END CERTIFICATE-----
-';
-$config['experimental']['openvpn']['mask']          = '255.255.0.0';
-$config['experimental']['openvpn']['broadcast']     = '10.8.255.255';
-
-$config['experimental']['eduroam']['radius_server'] = '192.168.10.20';
-$config['experimental']['eduroam']['radius_secret'] = 'eduroam';
-
-$config['experimental']['snmp']['ro']               = 'public';
-$config['experimental']['snmp']['rw']               = 'private';
-$config['experimental']['snmp']['contact']          = 'radiusdesk@gmail.com';
+//--Show experimental menus---
+$config['experimental']['active']  = false;
 
 return $config;
 
