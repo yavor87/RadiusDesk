@@ -211,7 +211,7 @@ CREATE TABLE `ap_profile_exit_ap_profile_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +220,7 @@ CREATE TABLE `ap_profile_exit_ap_profile_entries` (
 
 LOCK TABLES `ap_profile_exit_ap_profile_entries` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` DISABLE KEYS */;
-INSERT INTO `ap_profile_exit_ap_profile_entries` VALUES (56,23,18,'2016-05-10 10:30:15','2016-05-10 10:30:15'),(76,40,17,'2016-09-18 05:00:15','2016-09-18 05:00:15');
+INSERT INTO `ap_profile_exit_ap_profile_entries` VALUES (76,40,17,'2016-09-18 05:00:15','2016-09-18 05:00:15'),(79,23,18,'2017-02-24 21:13:54','2017-02-24 21:13:54');
 /*!40000 ALTER TABLE `ap_profile_exit_ap_profile_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,6 +251,12 @@ CREATE TABLE `ap_profile_exit_captive_portals` (
   `proxy_auth_username` varchar(128) NOT NULL DEFAULT '',
   `proxy_auth_password` varchar(128) NOT NULL DEFAULT '',
   `coova_optional` varchar(255) NOT NULL DEFAULT '',
+  `dns_manual` tinyint(1) NOT NULL DEFAULT '0',
+  `dns1` varchar(128) NOT NULL DEFAULT '',
+  `dns2` varchar(128) NOT NULL DEFAULT '',
+  `uamanydns` tinyint(1) NOT NULL DEFAULT '0',
+  `dnsparanoia` tinyint(1) NOT NULL DEFAULT '0',
+  `dnsdesk` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -261,7 +267,7 @@ CREATE TABLE `ap_profile_exit_captive_portals` (
 
 LOCK TABLES `ap_profile_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `ap_profile_exit_captive_portals` VALUES (5,23,'198.27.111.78','','testing123','','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','',0,'2016-05-10 05:23:30','2016-05-10 10:30:15',1,0,'',3128,'','','ssid=radiusdesk');
+INSERT INTO `ap_profile_exit_captive_portals` VALUES (5,23,'198.27.111.78','','testing123','','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','',0,'2016-05-10 05:23:30','2017-02-24 21:13:54',1,0,'',3128,'','','ssid=radiusdesk',0,'4.4.4.4','8.8.8.8',0,0,0);
 /*!40000 ALTER TABLE `ap_profile_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,7 +300,7 @@ CREATE TABLE `ap_profile_exits` (
 
 LOCK TABLES `ap_profile_exits` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exits` DISABLE KEYS */;
-INSERT INTO `ap_profile_exits` VALUES (23,14,'captive_portal',NULL,1,'35',1,3,'2016-05-10 05:23:30','2016-05-10 10:30:15',NULL),(40,14,'openvpn_bridge',NULL,0,'',0,NULL,'2016-09-18 05:00:15','2016-09-18 05:00:15',2);
+INSERT INTO `ap_profile_exits` VALUES (23,14,'captive_portal',NULL,1,'35',1,3,'2016-05-10 05:23:30','2017-02-24 21:13:54',NULL),(40,14,'openvpn_bridge',NULL,0,'',0,NULL,'2016-09-18 05:00:15','2016-09-18 05:00:15',2);
 /*!40000 ALTER TABLE `ap_profile_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -569,7 +575,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3296 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3269 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1168,7 +1174,7 @@ CREATE TABLE `dynamic_details` (
 
 LOCK TABLES `dynamic_details` WRITE;
 /*!40000 ALTER TABLE `dynamic_details` DISABLE KEYS */;
-INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1484077003.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',0,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2017-01-13 15:15:04',1,1,1,'mysite',1,120,'Default',0,1,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','en_GB',NULL,NULL,0,'',0,0,0,1,10);
+INSERT INTO `dynamic_details` VALUES (3,'SA Coast - Struisbaai',1,'1484077003.png','27128037032','27128037033','27128037034','bredasdorp@discovercapeagulhas.co.za','http://www.discovercapeagulhas.co.za/','1','Longstreet','Bredasdorp','Bredasdorp','South Africa',0,0,44,1,'http://www.radiusdesk.com',0,'http://www.radiusdesk.com',1,30,1,'click_to_connect','ssid',0,0,'2013-05-23 09:57:09','2017-02-15 11:13:56',1,1,1,'mysite',1,120,'Default',0,1,0,187,'/rd_login/cc/d/index.html','/rd_login/cc/m/index.html','/rd_login/mt/d/index.html','/rd_login/mt/m/index.html','en_GB',NULL,NULL,0,'',0,0,0,1,30);
 /*!40000 ALTER TABLE `dynamic_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1247,7 +1253,7 @@ CREATE TABLE `dynamic_photos` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
-  `fit` enum('stretch_to_fit','horizontal','vertical','original') DEFAULT 'stretch_to_fit',
+  `fit` enum('stretch_to_fit','horizontal','vertical','original','dynamic') DEFAULT 'stretch_to_fit',
   `background_color` varchar(7) NOT NULL DEFAULT 'ffffff',
   `slide_duration` int(4) NOT NULL DEFAULT '10',
   `include_title` tinyint(1) NOT NULL DEFAULT '1',
@@ -1263,7 +1269,7 @@ CREATE TABLE `dynamic_photos` (
 
 LOCK TABLES `dynamic_photos` WRITE;
 /*!40000 ALTER TABLE `dynamic_photos` DISABLE KEYS */;
-INSERT INTO `dynamic_photos` VALUES (107,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2017-01-16 10:00:46',1,'stretch_to_fit','ffffff',10,1,1),(108,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2017-01-16 10:00:01',1,'stretch_to_fit','ffffff',10,1,1),(109,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2013-05-28 14:57:01',1,'stretch_to_fit','ffffff',10,1,1),(110,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40',1,'stretch_to_fit','ffffff',10,1,1),(111,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2013-05-28 14:59:04',1,'stretch_to_fit','ffffff',10,1,1),(112,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30',1,'stretch_to_fit','ffffff',10,1,1),(113,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2013-05-28 15:06:04',1,'stretch_to_fit','ffffff',10,1,1);
+INSERT INTO `dynamic_photos` VALUES (107,3,'Rocks rocks rocks','Nature\'s own obstacle course','','1369746199.jpg','2013-05-28 15:03:19','2017-02-15 10:08:58',1,'dynamic','24ee0f',10,1,1),(108,3,'Sounds of the sea','Where land and water meet','','1369746423.jpg','2013-05-28 15:07:03','2017-02-13 11:53:17',1,'vertical','dde5d9',3,1,1),(109,3,'Fresh fish daily','The best yellowtail in South Africa','','1369745821.jpg','2013-05-28 14:57:01','2017-02-15 08:09:49',1,'horizontal','ffffff',10,0,1),(110,3,'Animals Welcome','Nice long beaches to go for a walk','http://radiusdesk.com','1369745727.jpg','2013-05-28 14:55:27','2014-05-21 22:18:40',1,'stretch_to_fit','ffffff',10,1,1),(111,3,'Whiskey on the rocks?','.... or your favourite softdrink','','1369745902.jpg','2013-05-28 14:58:22','2017-02-11 23:35:12',1,'vertical','cd92d6',10,1,1),(112,3,'Castles in the sand','Lots of sand for the kids to play in','','1369746009.jpg','2013-05-28 15:00:09','2013-05-28 15:00:30',1,'stretch_to_fit','ffffff',10,1,1),(113,3,'And a road of my own','With the city and the rat race behind me','','1369746348.jpg','2013-05-28 15:05:48','2017-02-11 23:33:48',1,'vertical','ffffff',10,1,1);
 /*!40000 ALTER TABLE `dynamic_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2029,6 +2035,12 @@ CREATE TABLE `mesh_exit_captive_portals` (
   `proxy_auth_username` varchar(128) NOT NULL DEFAULT '',
   `proxy_auth_password` varchar(128) NOT NULL DEFAULT '',
   `coova_optional` varchar(255) NOT NULL DEFAULT '',
+  `dns_manual` tinyint(1) NOT NULL DEFAULT '0',
+  `dns1` varchar(128) NOT NULL DEFAULT '',
+  `dns2` varchar(128) NOT NULL DEFAULT '',
+  `uamanydns` tinyint(1) NOT NULL DEFAULT '0',
+  `dnsparanoia` tinyint(1) NOT NULL DEFAULT '0',
+  `dnsdesk` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -2039,7 +2051,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2016-04-24 15:58:44',0,0,'192.168.10.10',3128,'admin','admin','');
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2017-02-24 20:56:38',0,0,'192.168.10.10',3128,'admin','admin','',0,'4.4.4.4','8.8.8.8',0,0,0);
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2057,7 +2069,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2066,7 +2078,7 @@ CREATE TABLE `mesh_exit_mesh_entries` (
 
 LOCK TABLES `mesh_exit_mesh_entries` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` DISABLE KEYS */;
-INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(100,33,52,'2016-04-24 15:58:44','2016-04-24 15:58:44'),(102,30,50,'2016-04-30 11:56:06','2016-04-30 11:56:06'),(132,59,54,'2016-09-19 03:34:27','2016-09-19 03:34:27'),(133,60,55,'2016-09-19 03:34:43','2016-09-19 03:34:43');
+INSERT INTO `mesh_exit_mesh_entries` VALUES (65,35,57,'2014-08-11 12:28:41','2014-08-11 12:28:41'),(96,32,53,'2016-04-24 15:33:04','2016-04-24 15:33:04'),(102,30,50,'2016-04-30 11:56:06','2016-04-30 11:56:06'),(132,59,54,'2016-09-19 03:34:27','2016-09-19 03:34:27'),(133,60,55,'2016-09-19 03:34:43','2016-09-19 03:34:43'),(135,33,52,'2017-02-24 20:56:38','2017-02-24 20:56:38');
 /*!40000 ALTER TABLE `mesh_exit_mesh_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2097,7 +2109,7 @@ CREATE TABLE `mesh_exits` (
 
 LOCK TABLES `mesh_exits` WRITE;
 /*!40000 ALTER TABLE `mesh_exits` DISABLE KEYS */;
-INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-30 11:56:06',NULL),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04',NULL),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2016-04-24 15:58:44',NULL),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41',NULL),(59,41,'','openvpn_bridge',1,NULL,'2016-09-19 03:34:27','2016-09-19 03:34:27',1),(60,41,'','openvpn_bridge',1,NULL,'2016-09-19 03:34:43','2016-09-19 03:34:43',2);
+INSERT INTO `mesh_exits` VALUES (30,35,'br-one','bridge',1,NULL,'2014-07-26 04:21:57','2016-04-30 11:56:06',NULL),(32,40,'cheetah_ebr1','bridge',1,NULL,'2014-08-11 12:16:52','2016-04-24 15:33:04',NULL),(33,40,'cheetah_cp1','captive_portal',1,NULL,'2014-08-11 12:21:02','2017-02-24 20:56:38',NULL),(35,41,'lion_ebr1','bridge',1,NULL,'2014-08-11 12:28:41','2014-08-11 12:28:41',NULL),(59,41,'','openvpn_bridge',1,NULL,'2016-09-19 03:34:27','2016-09-19 03:34:27',1),(60,41,'','openvpn_bridge',1,NULL,'2016-09-19 03:34:43','2016-09-19 03:34:43',2);
 /*!40000 ALTER TABLE `mesh_exits` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2752,7 +2764,7 @@ CREATE TABLE `node_wifi_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2761,6 +2773,7 @@ CREATE TABLE `node_wifi_settings` (
 
 LOCK TABLES `node_wifi_settings` WRITE;
 /*!40000 ALTER TABLE `node_wifi_settings` DISABLE KEYS */;
+INSERT INTO `node_wifi_settings` VALUES (1,1,'device_type','standard','2017-02-17 00:09:06','2017-02-17 00:09:06'),(2,1,'radio0_htmode','HT20','2017-02-17 00:09:06','2017-02-17 00:09:06'),(3,1,'radio0_disable_b','radio0_disable_b','2017-02-17 00:09:06','2017-02-17 00:09:06'),(4,1,'radio0_diversity','radio0_diversity','2017-02-17 00:09:06','2017-02-17 00:09:06'),(5,1,'radio0_ldpc','radio0_ldpc','2017-02-17 00:09:06','2017-02-17 00:09:06'),(6,1,'radio0_txpower','21','2017-02-17 00:09:06','2017-02-17 00:09:06'),(7,1,'radio0_beacon_int','100','2017-02-17 00:09:06','2017-02-17 00:09:06'),(8,1,'radio0_distance','300','2017-02-17 00:09:06','2017-02-17 00:09:06'),(9,1,'radio0_ht_capab','SHORT-GI-40','2017-02-17 00:09:06','2017-02-17 00:09:06'),(10,1,'radio0_ht_capab','RX-STBC1','2017-02-17 00:09:06','2017-02-17 00:09:06'),(11,1,'radio0_ht_capab','TX-STBC','2017-02-17 00:09:06','2017-02-17 00:09:06'),(12,1,'radio0_ht_capab','DSSS_CCK-40','2017-02-17 00:09:06','2017-02-17 00:09:06');
 /*!40000 ALTER TABLE `node_wifi_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2800,7 +2813,7 @@ CREATE TABLE `nodes` (
   `radio1_two_chan` int(4) NOT NULL DEFAULT '1',
   `radio1_five_chan` int(4) NOT NULL DEFAULT '44',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2809,6 +2822,7 @@ CREATE TABLE `nodes` (
 
 LOCK TABLES `nodes` WRITE;
 /*!40000 ALTER TABLE `nodes` DISABLE KEYS */;
+INSERT INTO `nodes` VALUES (1,40,'removeMe','','78-A3-51-0B-BC-CA','tl841n',100,'10.5.5.1','2017-02-17 00:14:03',0,NULL,NULL,'logo.jpg','2017-02-17 00:09:06','2017-02-17 00:14:03',1,1,1,24,1,44,1,1,1,5,1,44);
 /*!40000 ALTER TABLE `nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4014,7 +4028,7 @@ CREATE TABLE `unknown_nodes` (
   `new_server` varchar(255) NOT NULL DEFAULT '',
   `new_server_status` enum('awaiting','fetched','replied') DEFAULT 'awaiting',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4023,7 +4037,6 @@ CREATE TABLE `unknown_nodes` (
 
 LOCK TABLES `unknown_nodes` WRITE;
 /*!40000 ALTER TABLE `unknown_nodes` DISABLE KEYS */;
-INSERT INTO `unknown_nodes` VALUES (4,'78-A3-51-0B-BC-CA','Shenzhen # SHENZHEN ZHIBOTONG ELECTRONICS CO.,LTD','192.168.99.158',1,'2016-09-20 15:42:33','2016-09-19 10:42:42','2016-09-20 15:42:33','','awaiting');
 /*!40000 ALTER TABLE `unknown_nodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4069,7 +4082,7 @@ CREATE TABLE `user_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4078,7 +4091,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(75,44,'realm_id','34','2017-01-16 10:05:45','2017-01-16 10:05:45'),(76,44,'show_recent_failures','0','2017-01-16 10:05:45','2017-01-16 10:05:45'),(77,44,'show_data_usage','1','2017-01-16 10:05:45','2017-01-16 10:05:45');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(78,44,'realm_id','34','2017-02-11 22:10:16','2017-02-11 22:10:16'),(79,44,'show_data_usage','0','2017-02-11 22:10:16','2017-02-11 22:10:16'),(80,44,'show_recent_failures','0','2017-02-11 22:10:16','2017-02-11 22:10:16'),(81,44,'compact_view','1','2017-02-11 22:10:16','2017-02-11 22:10:16');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4169,7 +4182,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4178,7 +4191,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','86947313-bf27-482a-83c0-10481272e3b3','root','','','','',1,0,4,8,4,NULL,1,4,'2012-12-10 13:14:13','2017-01-24 09:03:12'),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','',1,1,4,9,4,44,2,3,'2013-08-28 11:31:14','2017-01-01 20:42:14');
+INSERT INTO `users` VALUES (44,'root','9b2b0416194bfdd0db089b9c09fad3163eae5383','b4c6ac81-8c7c-4802-b50a-0a6380555b50','root','','','','',1,0,4,8,4,NULL,1,4,'2012-12-10 13:14:13','2017-02-24 19:25:48'),(182,'admin_college','b0451947e4b0ee5b5ee981afe174e6630d72ff58','521dc362-81a4-4a34-8a0b-052f03662c24','','','','','',1,1,4,9,4,44,2,3,'2013-08-28 11:31:14','2017-01-01 20:42:14');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4240,4 +4253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-10 10:34:19
+-- Dump completed on 2017-02-24 21:31:30
