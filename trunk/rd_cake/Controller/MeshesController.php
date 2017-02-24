@@ -763,7 +763,11 @@ class MeshesController extends AppController {
 				$check_items = array(
 					'swap_octets',
 					'mac_auth',
-                    'proxy_enable'
+                    'proxy_enable',
+                    'dns_manual',
+                    'uamanydns',
+                    'dnsparanoia',
+                    'dnsdesk'
 				);
 			    foreach($check_items as $i){
 			        if(isset($this->request->data[$i])){
@@ -907,7 +911,11 @@ class MeshesController extends AppController {
 					$check_items = array(
 						'swap_octets',
 						'mac_auth',
-                        'proxy_enable'
+                        'proxy_enable',
+                        'dns_manual',
+                        'uamanydns',
+                        'dnsparanoia',
+                        'dnsdesk'
 					);
 					foreach($check_items as $i){
 					    if(isset($this->request->data[$i])){
@@ -1037,6 +1045,14 @@ class MeshesController extends AppController {
             $q_r['MeshExit']['proxy_auth_username']      = $q_r['MeshExitCaptivePortal']['proxy_auth_username'];
             $q_r['MeshExit']['proxy_auth_password']      = $q_r['MeshExitCaptivePortal']['proxy_auth_password'];
             $q_r['MeshExit']['coova_optional']  = $q_r['MeshExitCaptivePortal']['coova_optional'];
+            
+            //DNS settings
+            $q_r['MeshExit']['dns_manual']      = $q_r['MeshExitCaptivePortal']['dns_manual'];
+            $q_r['MeshExit']['dns1']            = $q_r['MeshExitCaptivePortal']['dns1'];
+            $q_r['MeshExit']['dns2']            = $q_r['MeshExitCaptivePortal']['dns2'];
+            $q_r['MeshExit']['uamanydns']       = $q_r['MeshExitCaptivePortal']['uamanydns'];
+            $q_r['MeshExit']['dnsparanoia']     = $q_r['MeshExitCaptivePortal']['dnsparanoia'];
+            $q_r['MeshExit']['dnsdesk']         = $q_r['MeshExitCaptivePortal']['dnsdesk'];
 
         }
 

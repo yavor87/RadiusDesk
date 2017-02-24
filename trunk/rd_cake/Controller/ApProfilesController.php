@@ -662,7 +662,11 @@ class ApProfilesController extends AppController {
 				$check_items = array(
 					'swap_octets',
 					'mac_auth',
-                    'proxy_enable'
+                    'proxy_enable',
+                    'dns_manual',
+                    'uamanydns',
+                    'dnsparanoia',
+                    'dnsdesk'
 				);
 			    foreach($check_items as $i){
 			        if(isset($this->request->data[$i])){
@@ -810,7 +814,11 @@ class ApProfilesController extends AppController {
 					$check_items = array(
 						'swap_octets',
 						'mac_auth',
-                        'proxy_enable'
+                        'proxy_enable',
+                        'dns_manual',
+                        'uamanydns',
+                        'dnsparanoia',
+                        'dnsdesk'
 					);
 					foreach($check_items as $i){
 					    if(isset($this->request->data[$i])){
@@ -923,6 +931,16 @@ class ApProfilesController extends AppController {
             '_serialize'=> array('success', 'data')
         ));
     }
+    
+    public function ap_experimental_check(){
+        Configure::load('RadiusDesk'); 
+        $active = Configure::read('experimental.active'); //Read the defaults
+        $this->set(array(
+            'active'     => $active,
+            'success'   => true,
+            '_serialize'=> array('success', 'active')
+        ));
+    }
 
     public function ap_profile_exit_view(){
 
@@ -980,6 +998,14 @@ class ApProfilesController extends AppController {
             $q_r['ApProfileExit']['proxy_auth_username']      = $q_r['ApProfileExitCaptivePortal']['proxy_auth_username'];
             $q_r['ApProfileExit']['proxy_auth_password']      = $q_r['ApProfileExitCaptivePortal']['proxy_auth_password'];
             $q_r['ApProfileExit']['coova_optional']  = $q_r['ApProfileExitCaptivePortal']['coova_optional'];
+            
+            //DNS settings
+            $q_r['ApProfileExit']['dns_manual']      = $q_r['ApProfileExitCaptivePortal']['dns_manual'];
+            $q_r['ApProfileExit']['dns1']            = $q_r['ApProfileExitCaptivePortal']['dns1'];
+            $q_r['ApProfileExit']['dns2']            = $q_r['ApProfileExitCaptivePortal']['dns2'];
+            $q_r['ApProfileExit']['uamanydns']       = $q_r['ApProfileExitCaptivePortal']['uamanydns'];
+            $q_r['ApProfileExit']['dnsparanoia']     = $q_r['ApProfileExitCaptivePortal']['dnsparanoia'];
+            $q_r['ApProfileExit']['dnsdesk']         = $q_r['ApProfileExitCaptivePortal']['dnsdesk'];
 
         }
         
