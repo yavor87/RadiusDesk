@@ -6,7 +6,7 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
     resizable:  true,
     title:      'Access Point Exit',
     width:      530,
-    height:     450,
+    height:     530,
     plain:      true,
     border:     false,
     layout:     'fit',
@@ -24,9 +24,11 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
         'Ext.form.Panel',
         'Ext.form.field.Text',
         'Rd.view.components.cmbDynamicDetail',
-        'Rd.view.components.cmbOpenVpnServers'
+        'Rd.view.components.cmbOpenVpnServers',
+        'Rd.view.aps.vcAccessPointExitPoint'
     ],
-     initComponent: function() {
+    controller  : 'vcAccessPointExitPoint',
+    initComponent: function() {
         var me = this;
 
         //Set the combo
@@ -252,6 +254,77 @@ Ext.define('Rd.view.aps.winAccessPointEditExit', {
                                                 }
                                             ]
                                         },
+                                        {
+                                            title       : 'DNS',
+                                            itemId      : 'tabDns',
+                                            layout      : 'anchor',
+                                            defaults    : {
+                                                    anchor: '100%'
+                                            },
+                                            autoScroll:true,
+                                            items       :[
+                                                {
+                                                    itemId      : 'chkDnsOverride',
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : 'Enable Override',
+                                                    name        : 'dns_manual',
+                                                    inputValue  : 'dns_manual',
+                                                    checked     : false,
+                                                    labelClsExtra: 'lblRd',
+                                                    listeners   : {
+											            change  : 'onChkDnsOverrideChange'
+											        }
+                                                },
+                                                {
+                                                    itemId      : 'txtDns1',
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'DNS-1',
+                                                    name        : 'dns1',
+                                                    allowBlank  : false,
+                                                    labelClsExtra: 'lblRdReq',
+                                                    disabled    : true
+                                                },
+                                                {
+                                                    itemId      : 'txtDns2',
+                                                    xtype       : 'textfield',
+                                                    fieldLabel  : 'DNS-2',
+                                                    name        : 'dns2',
+                                                    allowBlank  : true,
+                                                    labelClsExtra: 'lblRd',
+                                                    disabled    : true
+                                                },
+                                                {
+                                                    itemId      : 'chkAnyDns',
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : 'Allow Any DNS',
+                                                    name        : 'uamanydns',
+                                                    inputValue  : 'uamanydns',
+                                                    checked     : true,
+                                                    labelClsExtra: 'lblRd'
+                                                },
+                                                {
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : 'DNS Paranoia',
+                                                    name        : 'dnsparanoia',
+                                                    inputValue  : 'dnsparanoia',
+                                                    checked     : false,
+                                                    labelClsExtra: 'lblRd'
+                                                },
+                                                {
+                                                    itemId      : 'chkDnsDesk',
+                                                    xtype       : 'checkbox',      
+                                                    fieldLabel  : 'Use DNSdesk',
+                                                    name        : 'dnsdesk',
+                                                    inputValue  : 'dnsdesk',
+                                                    checked     : false,
+                                                    labelClsExtra: 'lblRd',
+                                                    listeners   : {
+											            change  : 'onChkDnsDeskChange',
+											            beforerender : 'onDnsDeskBeforeRender'
+											        }
+                                                }
+                                            ]
+                                        }, 
                                         {
                                             title       : i18n("sProxy"),
                                             itemId      : 'tabProxy',

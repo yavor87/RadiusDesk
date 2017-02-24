@@ -1374,6 +1374,7 @@ $include-rd-view-aps-pnlaccesspointcommonsettings: dynamic(true);;
 $include-rd-view-aps-pnlaccesspointdetail: dynamic(true);;
 $include-rd-view-aps-pnlaccesspointedit: dynamic(true);;
 $include-rd-view-aps-pnlaccesspointview: dynamic(true);;
+$include-rd-view-aps-vcaccesspointexitpoint: dynamic(true);;
 $include-rd-view-aps-vcapviewentries: dynamic(true);;
 $include-rd-view-aps-winaccesspointaddap: dynamic(true);;
 $include-rd-view-aps-winaccesspointaddentry: dynamic(true);;
