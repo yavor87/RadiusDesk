@@ -538,8 +538,10 @@ class NodesController extends AppController {
                 if(($type == 'captive_portal')&&($gateway)){
                 
                     //---WIP Start---
-                    $n          = "$start_number"."$start_number";
-                    $if_ip      = "10.$n.$n.$n";
+                    if($me['MeshExitCaptivePortal']['dnsdesk'] == true){
+                        $n          = "$start_number"."$start_number";
+                        $if_ip      = "10.$n.$n.$n";
+                    }
                     //---WIP END---
 
                     //Add the captive portal's detail
@@ -549,7 +551,12 @@ class NodesController extends AppController {
                         $a['network']  = $if_name;
                         
                         //---WIP Start---
-                        $a['dns1']      = $if_ip;
+                        if($me['MeshExitCaptivePortal']['dnsdesk'] == true){
+                            $a['dns1']      = $if_ip;
+                            //Also sent along the upstream DNS Server to use
+                            $a['upstream_dns1'] = Configure::read('dnsfilter.dns1'); //Read the defaults
+                            $a['upstream_dns2'] = Configure::read('dnsfilter.dns2'); //Read the defaults
+                        }
                         //---WIP END---
                         
                         array_push($captive_portal_data,$a);             
@@ -558,21 +565,31 @@ class NodesController extends AppController {
                     $interfaces =  "bat0.".$start_number;
                     
                     
-                    
-                    array_push($network,
-                        array(
-                            "interface"    => "$if_name",
-                            "options"   => array(
-                                "ifname"    => $interfaces,
-                                "type"      => "bridge",
-                                
-                                //---WIP Start---
-                                "ipaddr"    => "$if_ip",
-                                "netmask"   => "255.255.255.0",
-                                //---WIP END--- 
-                                
-                        ))
-                    );
+                    if($me['MeshExitCaptivePortal']['dnsdesk'] == true){
+                        array_push($network,
+                            array(
+                                "interface"    => "$if_name",
+                                "options"   => array(
+                                    "ifname"    => $interfaces,
+                                    "type"      => "bridge",
+                                    
+                                    //---WIP Start--- // Add the special bridged interface IP
+                                    "ipaddr"    => "$if_ip",
+                                    "netmask"   => "255.255.255.0",
+                                    //---WIP END--- 
+                                    
+                            ))
+                        );
+                    }else{
+                        array_push($network,
+                            array(
+                                "interface"    => "$if_name",
+                                "options"   => array(
+                                    "ifname"    => $interfaces,
+                                    "type"      => "bridge",       
+                            ))
+                        );
+                    }
 
 					//***With its VLAN***
 					$nr = $this->_number_to_word($start_number);

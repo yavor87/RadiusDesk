@@ -803,32 +803,56 @@ class ApsController extends AppController {
                 }
 
                 if($type == 'captive_portal'){
+                
+                    //---WIP Start---
+                    if($ap_profile_e['ApProfileExitCaptivePortal']['dnsdesk'] == true){
+                        
+                        $n          = ($start_number+1).($start_number+1); //To Avoid the 00 thing
+                        $if_ip      = "10.$n.$n.$n";
+                    }
+                    //---WIP END---
+                       
+                
                     //Add the captive portal's detail
                     if($type =='captive_portal'){
                         $a = $ap_profile_e['ApProfileExitCaptivePortal'];
                         $a['hslan_if']      = 'br-'.$if_name;
                         $a['network']       = $if_name;
+                        
+                        //---WIP Start---
+                        if($ap_profile_e['ApProfileExitCaptivePortal']['dnsdesk'] == true){
+                            $a['dns1']      = $if_ip;
+                            //Also sent along the upstream DNS Server to use
+                            $a['upstream_dns1'] = Configure::read('dnsfilter.dns1'); //Read the defaults
+                            $a['upstream_dns2'] = Configure::read('dnsfilter.dns2'); //Read the defaults
+                        }
+                        //---WIP END---
+                        
+                        
                         //Generate the NAS ID
                         $ap_profile_name    = preg_replace('/\s+/', '_', $ap_profile['ApProfile']['name']);
                         $a['radius_nasid']  = $ap_profile_name.'_'.$ap_profile['ApDetail']['name'].'_cp_'.$ap_profile_e['ApProfileExitCaptivePortal']['ap_profile_exit_id'];
                         array_push($captive_portal_data,$a);             
                     }
                     
-                    //===Add-on hack=== 
-                    if($this->request->query['mac'] == $this->special_mac){ ////Tampa hack
-                         array_push($network,
+
+                    if($ap_profile_e['ApProfileExitCaptivePortal']['dnsdesk'] == true){
+                    
+                        array_push($network,
                             array(
                                 "interface"    => "$if_name",
                                 "options"   => array(
                                     "type"      => "bridge",
                                     "proto"     => "none",
-                                    "ifname"    => "eth1",
-     
+                                    
+                                    //---WIP Start--- // Add the special bridged interface IP
+                                    "ipaddr"    => "$if_ip",
+                                    "netmask"   => "255.255.255.0",
+                                    //---WIP END--- 
                             ))
-                        );  
+                        ); 
                     
-                    }else{///Tampa hack
-                    
+                    }else{
                         array_push($network,
                             array(
                                 "interface"    => "$if_name",
@@ -838,7 +862,9 @@ class ApsController extends AppController {
      
                             ))
                         ); 
-                    } ////Tampa hack                             
+                    }
+                        
+                             
                     $start_number++;
                     continue; //We dont care about the other if's
                 }
