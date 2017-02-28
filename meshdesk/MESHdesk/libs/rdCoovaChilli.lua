@@ -15,8 +15,9 @@ function rdCoovaChilli:rdCoovaChilli()
 	self.specific   = "/etc/MESHdesk/captive_portals/"
 	self.priv_start = "1"
 	--self.proxy_start= 3128
-	self.proxy_start= 8118
-	self.privoxy_conf = "privoxy.conf"
+	self.proxy_start    = 8118
+	self.privoxy_conf   = "privoxy.conf"
+	self.resolv_dnsdesk = "/tmp/resolv.conf.dnsdesk"
 	
 	-- character table string
     self.enc_str ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -30,9 +31,10 @@ end
  
 function rdCoovaChilli:createConfigs(cp)
 	cp = cp or {}
-	self:removeConfigs()	--Clean up previous ones
+	self:removeConfigs()    --Clean up previous ones
 	self:stopPortals()
 	self:__doConfigs(cp)
+	self:__checkDnsDesk(cp)
 	
 end     
 
@@ -43,8 +45,7 @@ end
 
 function rdCoovaChilli:startPortals()
 	
-	for i=1,self.cpCount do
-	
+	for i=1,self.cpCount do	
 	        local s_file = self.specific..i.."/specific.conf"
 	        print("Testing for file " .. s_file)
 	        local f=io.open(s_file,"r")
@@ -58,7 +59,6 @@ function rdCoovaChilli:startPortals()
 	        	print("Sleep first a bit...")
 	        	self:__sleep(5)
 	        end
-	
  	end
 end
 
@@ -76,6 +76,43 @@ end
 
 function rdCoovaChilli.__sleep(self,sec)                                                                     
     self.socket.select(nil, nil, sec)                              
+end
+
+function rdCoovaChilli.__checkDnsDesk(self,p)
+    local dnsDeskFound  = false;
+    local resolv_string = '';
+    
+    for k,v in ipairs(p)do
+        if(v['dnsdesk'] == true)then
+            dnsDeskFound = true;
+            --Get the upstream DNS server we will use on dnsmasq
+            resolv_string = "nameserver "..v['upstream_dns1'].."\n";
+		    if(string.len(v['upstream_dns2']) ~= 0)then --Maybe a fallback value. Not guranteed
+		        resolv_string = resolv_string.."nameserver "..v['upstream_dns2'].."\n";   
+		    end          
+            break --Found one no need to go on      
+        end
+    end
+    
+    if(dnsDeskFound == true)then
+        local f,err = io.open(self.resolv_dnsdesk,"w")
+		if not f then return print(err) end
+		f:write(resolv_string);
+		f:close();
+		self.x.foreach('dhcp','dnsmasq', 
+		    function(a)
+		        self.x.set('dhcp', a['.name'], 'add_mac','1');
+		        self.x.set('dhcp', a['.name'], 'resolvfile',self.resolv_dnsdesk);
+	    end)
+        self.x.commit('dhcp');
+    else
+        self.x.foreach('dhcp','dnsmasq', 
+		    function(a)
+		        self.x.delete('dhcp', a['.name'], 'add_mac');
+		        self.x.set('dhcp', a['.name'], 'resolvfile','/tmp/resolv.conf.auto');
+	    end)
+        self.x.commit('dhcp');
+    end    
 end 
 
     
@@ -134,6 +171,20 @@ function rdCoovaChilli.__doConfigs(self,p)
 		local coova_optional = '';
 		local dns_override1 = false;
 		local dns_override2 = false;
+		--We also add another few checks..
+		
+		--FOR DNS Specifics--
+		--(remove uamanydns from common.conf)
+		local uamanydns = '';
+		if(v['uamanydns'] == true)then
+		    uamanydns = "uamanydns\n";
+		end
+		
+		local dnsparanoia = '';
+		if(v['dnsparanoia'] == true)then
+		    dnsparanoia = "dnsparanoia\n";
+		end
+			
 		if(string.len(v['coova_optional']) ~= 0)then
 			coova_optional = v['coova_optional'];
 			if(string.find(coova_optional, "dns1"))then
@@ -165,6 +216,22 @@ function rdCoovaChilli.__doConfigs(self,p)
             end      
 		end
 		
+		--If we use DNSdesk we override the dns_string
+		if(v['dnsdesk'] == true)then
+		    dns_string = "dns1 '"..v['dns1'].."'\n"; --One should always have an auto generated value
+		    if(string.len(v['dns2']) ~= 0)then --Maybe a fallback value. Not guranteed
+		        dns_string = dns_string.."dns2 '"..v['dns2'].."'\n";   
+		    end
+		end
+		
+		--If we specify the DNS servers manually we override the dns string
+		if(v['dns_manual'] == true)then
+		    dns_string = "dns1 '"..v['dns1'].."'\n"; --One should always have at least one value
+		    if(string.len(v['dns2']) ~= 0)then --Maybe a fallback value. Not guranteed
+		        dns_string = dns_string.."dns2 '"..v['dns2'].."'\n";   
+		    end
+		end
+		
 		local s_content = "radiusserver1  '"..v['radius_1'].."'\n"..
 			"radiusserver2  '".. r2 .."'\n"..
 			"radiussecret '".. v['radius_secret'].."'\n"..
@@ -178,6 +245,8 @@ function rdCoovaChilli.__doConfigs(self,p)
 			"pidfile    '/var/run/chilli." .. v['hslan_if'] .. ".pid'\n"..
 			dns_string..
 			proxy_string..
+			uamanydns..
+			dnsparanoia..
 			coova_optional
 
 		if(v['mac_auth'])then
