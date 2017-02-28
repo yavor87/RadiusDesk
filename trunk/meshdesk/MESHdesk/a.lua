@@ -40,6 +40,7 @@ debug			        = true
 l			            = rdLogger()
 ext 			        = rdExternal()
 alfred                  = rdAlfred()
+config_server           = fetch_config_value('meshdesk.settings.config_server')
 
 --Reboot on SOS
 sos_reboot_timeout		= 30
@@ -158,9 +159,14 @@ function do_fw_config()
     local network = rdNetwork()
 	network:frmwrStart()
     sleep(4) --just so it eases out
-    require("rdFirmwareConfig")
-    local f = rdFirmwareConfig()
-    f:runConfig()
+    
+    --See if we can at least ping the machine running the utility
+    local conf  = rdConfig();
+    if(conf:pingTest(config_server))then
+        require("rdFirmwareConfig")
+        local f = rdFirmwareConfig()
+        f:runConfig()
+    end
 end
 
 --=====================
@@ -548,7 +554,10 @@ function configure_device(config)
     	require("rdCoovaChilli")
     	local a = rdCoovaChilli()
     	a:createConfigs(o.config_settings.captive_portals)                  
-    	a:startPortals()	
+    	a:startPortals()
+    	sleep(5)
+    	os.execute("/etc/init.d/dnsmasq stop");
+        os.execute("/etc/init.d/dnsmasq start");    	
     end
     
     if(o.config_settings.openvpn_bridges ~= nil)then
