@@ -101,14 +101,14 @@ function rdCoovaChilli.__checkDnsDesk(self,p)
 		f:close();
 		self.x.foreach('dhcp','dnsmasq', 
 		    function(a)
-		        self.x.set('dhcp', a['.name'], 'add_mac','1');
+		        self.x.set('dhcp', a['.name'], 'addmac','1');
 		        self.x.set('dhcp', a['.name'], 'resolvfile',self.resolv_dnsdesk);
 	    end)
         self.x.commit('dhcp');
     else
         self.x.foreach('dhcp','dnsmasq', 
 		    function(a)
-		        self.x.delete('dhcp', a['.name'], 'add_mac');
+		        self.x.delete('dhcp', a['.name'], 'addmac');
 		        self.x.set('dhcp', a['.name'], 'resolvfile','/tmp/resolv.conf.auto');
 	    end)
         self.x.commit('dhcp');
