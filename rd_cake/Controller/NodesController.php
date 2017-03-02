@@ -458,6 +458,7 @@ class NodesController extends AppController {
                 //=======================================
                 //========= GATEWAY NODES ===============
                 //=======================================
+                $captive_portal_count = 1;
 
                 if(($type == 'tagged_bridge')&&($gateway)){
 
@@ -539,9 +540,9 @@ class NodesController extends AppController {
                 
                     //---WIP Start---
                     if($me['MeshExitCaptivePortal']['dnsdesk'] == true){
-                        $n          = "$start_number"."$start_number";
-                        $if_ip      = "10.$n.$n.$n";
+                        $if_ip      = "10.$captive_portal_count.0.2";
                     }
+                    $captive_portal_count++; //Up it for the next one
                     //---WIP END---
 
                     //Add the captive portal's detail
@@ -575,7 +576,8 @@ class NodesController extends AppController {
                                     
                                     //---WIP Start--- // Add the special bridged interface IP
                                     "ipaddr"    => "$if_ip",
-                                    "netmask"   => "255.255.255.0",
+                                    "netmask"   => "255.255.0.0",
+                                    "proto"     => "static",
                                     //---WIP END--- 
                                     
                             ))
