@@ -751,6 +751,9 @@ class ApsController extends AppController {
             }
           
             if($has_entries_attached == true){
+            
+                $captive_portal_count = 1;
+                
                 if($type == 'tagged_bridge'){
                 
 					$br_int = $this->_eth_br_for($this->Hardware);
@@ -805,11 +808,10 @@ class ApsController extends AppController {
                 if($type == 'captive_portal'){
                 
                     //---WIP Start---
-                    if($ap_profile_e['ApProfileExitCaptivePortal']['dnsdesk'] == true){
-                        
-                        $n          = ($start_number+1).($start_number+1); //To Avoid the 00 thing
-                        $if_ip      = "10.$n.$n.$n";
+                    if($ap_profile_e['ApProfileExitCaptivePortal']['dnsdesk'] == true){ 
+                        $if_ip      = "10.$captive_portal_count.0.2";
                     }
+                    $captive_portal_count++; //Up it for the next one
                     //---WIP END---
                        
                 
@@ -848,6 +850,7 @@ class ApsController extends AppController {
                                     //---WIP Start--- // Add the special bridged interface IP
                                     "ipaddr"    => "$if_ip",
                                     "netmask"   => "255.255.255.0",
+                                    "proto"     => "static",
                                     //---WIP END--- 
                             ))
                         ); 
