@@ -556,8 +556,8 @@ function configure_device(config)
     	a:createConfigs(o.config_settings.captive_portals)                  
     	a:startPortals()
     	sleep(5)
-    	os.execute("/etc/init.d/dnsmasq stop");
-        os.execute("/etc/init.d/dnsmasq start");    	
+    	a:setDnsMasq(o.config_settings.captive_portals)
+    	
     end
     
     if(o.config_settings.openvpn_bridges ~= nil)then
@@ -805,7 +805,9 @@ function ap_configure_device(config)
     	require("rdCoovaChilli")
     	local a = rdCoovaChilli()
     	a:createConfigs(o.config_settings.captive_portals)                  
-    	a:startPortals()	
+    	a:startPortals()
+    	sleep(5)
+    	a:setDnsMasq(o.config_settings.captive_portals)   		
     end
     
     if(o.config_settings.openvpn_bridges ~= nil)then
