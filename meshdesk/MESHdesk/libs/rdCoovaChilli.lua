@@ -67,6 +67,20 @@ function rdCoovaChilli:stopPortals()
 	print("We have a return value of "..ret_val)
 end
 
+function rdCoovaChilli:setDnsMasq(cp)
+    local dnsDeskFound  = false;
+    for k,v in ipairs(cp)do
+        if(v['dnsdesk'] == true)then
+            dnsDeskFound = true;
+            os.execute('ip addr add '..v['dns1']..'/16 brd + dev '..v['hslan_if']) 
+        end
+    end
+    if(dnsDeskFound == true)then
+        os.execute("/etc/init.d/dnsmasq stop");
+        os.execute("/etc/init.d/dnsmasq start");
+    end
+end
+
 --[[--
 =========================================
 ========= Private methods =============== 
@@ -113,9 +127,8 @@ function rdCoovaChilli.__checkDnsDesk(self,p)
 	    end)
         self.x.commit('dhcp');
     end    
-end 
-
-    
+end
+  
 function rdCoovaChilli.__doConfigs(self,p)
 
 	for k,v in ipairs(p)do 

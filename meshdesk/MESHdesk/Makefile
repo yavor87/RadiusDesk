@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zzz-MESHdesk
-PKG_VERSION:=5.0.0
-PKG_RELEASE:=2
+PKG_VERSION:=5.5.0
+PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -47,7 +47,7 @@ function pidof(program)
 end
 
 function batman_neighbour_count()
-	local handle = io.popen('batctl o ')
+	local handle = io.popen('batctl n ')
         local result = handle:read("*a")
         handle:close()
         local n = select(2, result:gsub('\n', '\n'))	--Get the line count of the output
