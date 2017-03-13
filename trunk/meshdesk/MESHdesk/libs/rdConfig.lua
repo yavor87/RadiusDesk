@@ -48,9 +48,10 @@ function rdConfig:pingTest(server)
 	local result = handle:read("*a")                          
 	handle:close()     
 	result = string.gsub(result, "[\r\n]+$", "")
-	if(string.find(result,"is unreachable"))then --If the network is down
+	if(string.find(result," unreachable"))then --If the network is down
 		return false
-	end      
+	end
+	      
 	result = string.gsub(result, "^.*transmitted,", "")       
 	result = string.gsub(result, "packets.*$", "")            
 	result = tonumber(result)                          
