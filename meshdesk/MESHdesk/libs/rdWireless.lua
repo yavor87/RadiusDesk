@@ -58,8 +58,6 @@ function rdWireless:configureFromTable(tbl)
 	
 end
 
-
-
 function rdWireless:log(m,p)
 	if(self.debug)then
 		self.logger:log(m,p)

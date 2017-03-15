@@ -204,4 +204,11 @@ config hardware 'eap300'
     option morse_led '/sys/class/leds/engenius:blue:power/brightness'
     option internet_led '/sys/class/leds/engenius:blue:lan/brightness'
     option wifi_led 'engenius:blue:wlan'
+    
+config hardware 'yc_xd3200'
+    option morse_led '/sys/class/leds/xd3200:green:system/brightness'
+    option internet_led '/sys/class/leds/xd3200:green:wan/brightness'
+    option wifi_led 'xd3200:blue:wlan2g'
+    
+    
 
