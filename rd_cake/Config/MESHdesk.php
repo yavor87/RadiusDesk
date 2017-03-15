@@ -1129,6 +1129,108 @@ $config['hardware'][30]      = array(
     )
 );
 
+$config['hardware'][31]      = array(
+    'name'          => __('AP 505'),
+    'id'            => 'ap_505' ,
+    'radios'        => 1,
+    'active'        => true,
+    'max_power'     => '23',
+    'eth_br'        => 'eth0 eth1', 
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '23',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ldpc'           => true,
+    'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+);
+
+$config['hardware'][32]      = array(
+    'name'          => __('AP 602'),
+    'id'            => 'ap_602' ,
+    'radios'        => 1,
+    'active'        => true,
+    'max_power'     => '23',
+    'eth_br'        => 'eth0 eth1', 
+    'two'           => true,
+    'five'          => false,
+    'hwmode'        => '11g',
+
+    //Default Advanced WiFi settings (Enchancement made 8/9/15)
+    'radio0_htmode'         => 'HT20',
+    'radio0_txpower'        => '23',
+    'radio0_diversity'      => true,
+    'radio0_distance'       => '300',
+    'radio0_noscan'         => false,
+    'radio0_ldpc'           => true,
+    'radio0_beacon_int'     => 100,
+    'radio0_disable_b'      => true,
+    'radio0_ht_capab'       => array(
+        'SHORT-GI-40',
+        'RX-STBC1',
+        'TX-STBC',
+        'DSSS_CCK-40'
+    )
+);
+
+$config['hardware'][33]      = array(
+		'name' 		    => __('Yuncore  XD3200'),	
+		'id'    	    => 'yc_xd3200',
+		'radios'	    => 2, 
+		'active'        => true,
+		'device_type'   => 'ac', //Options are 'standard' (if left out) or 'ac' for AC devices, more options to follow
+		'eth_br'	    => 'eth0.1',
+
+		//First radio 
+		'max_power'     => '30',
+		'two'		    => false,
+		'five'		    => true,
+		'hwmode'	    => '11a',
+
+		//Second radio - This is extra for two radio devices
+		'max_power1'    => '30',
+		'two1'		    => true,
+		'five1'		    => false,
+		'hwmode1'	    => '11n',
+
+        'radio0_htmode'         => 'VHT80',
+        'radio0_txpower'        => '30',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_ht_capab'       => array(
+   
+        ),
+
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '30',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+);
 
 
 

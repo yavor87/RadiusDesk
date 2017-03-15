@@ -187,4 +187,7 @@ $config['DynamicClients']['shared_secret'] = 'testing123';
 //Show experimental menus
 $config['experimental']['active']   = false;
 
+$config['dnsfilter']['dns1'] = '8.8.8.8';
+$config['dnsfilter']['dns2'] = '4.4.4.4';
+
 ?>
