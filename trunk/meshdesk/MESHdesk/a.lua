@@ -279,8 +279,8 @@ function try_settings_through_lan()
 		--Here we have a timer to limit the loops 
 	    local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= gw_dhcp_timeout)then
-		    log('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
-			print('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+		    log('No contact to Internet for '..gw_dhcp_timeout..' seconds')
+			print('No contact to Internet for '..gw_dhcp_timeout..' seconds')
 			break
         end
         --Here we break since NTP we assume is already up and adjusted.
@@ -685,8 +685,8 @@ function ap_try_settings_through_lan()
 		--Here we have a timer to limit the loops 
 	    local time_diff = os.difftime(os.time(), start_time)
 		if(time_diff >= gw_dhcp_timeout)then
-		    log('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
-			print('No contact to Ineternet for '..gw_dhcp_timeout..' seconds')
+		    log('No contact to Internet for '..gw_dhcp_timeout..' seconds')
+			print('No contact to Internet for '..gw_dhcp_timeout..' seconds')
 			break
         end
         --Here we break since NTP we assume is already up and adjusted.
