@@ -54,9 +54,9 @@ class DashboardController extends AppController{
                 
                 // added for rolling token; enhanced security
                 // --- BEGIN ---
-                $u->set('token',''); //Setting it ti '' will trigger a new token generation
-                $this->Users->save($u);
-                $data['token']  = $u->get('token');
+               // $u->set('token',''); //Setting it ti '' will trigger a new token generation
+              //  $this->Users->save($u);
+              //  $data['token']  = $u->get('token');
                 // --- END ---
                 
                 
@@ -320,10 +320,30 @@ class DashboardController extends AppController{
             $display = 'compact'; //Override setting due to screen size to small
         }
         
+        //White Label
+        $white_label    = [];
+        
         if( $group == Configure::read('group.admin')){  //Admin
             $cls = 'admin';
             $tabs= $this->_build_admin_tabs($id,$display);  //We do not care for rights here;
             $isRootUser = true;
+            
+            if(Configure::read('whitelabel.active') == true){
+                $white_label['active']      = true;
+                $white_label['hName']       = Configure::read('whitelabel.hName');
+                $white_label['hBg']         = Configure::read('whitelabel.hBg');
+                $white_label['hFg']         = Configure::read('whitelabel.hFg');
+                $white_label['hName']       = Configure::read('whitelabel.hName');
+                
+                $white_label['fName']       = Configure::read('whitelabel.fName');
+                
+                $white_label['imgActive']   = Configure::read('whitelabel.imgActive');
+                
+                $ap_logo_path               = Configure::read('paths.ap_logo_path');
+                
+                $white_label['imgFile']    = $ap_logo_path.Configure::read('whitelabel.imgFile');
+            }
+            
         }
         
         if( $group == Configure::read('group.ap')){  //Or AP
@@ -332,12 +352,17 @@ class DashboardController extends AppController{
             //$tabs    = array();    
         }
         
+        
+        
+        
+        
         return array(
             'token'         =>  $token,
             'isRootUser'    =>  $isRootUser,
             'tabs'          =>  $tabs,
             'data_usage'    => array('realm_id' => $this->realm_id, 'realm_name' => $this->realm_name),
-            'user'          =>  array('id' => $id, 'username' => $username,'group' => $group,'cls' => $cls)
+            'user'          =>  array('id' => $id, 'username' => $username,'group' => $group,'cls' => $cls),
+            'white_label'   => $white_label
         );
         
     }
