@@ -32,7 +32,9 @@ class AccessProvidersController extends AppController{
         $this->loadComponent('Notes', [
             'model'     => 'UserNotes',
             'condition' => 'user_id'
-        ]);    
+        ]);
+        
+        $this->loadComponent('WhiteLabel');    
     }
     
     
@@ -337,6 +339,11 @@ class AccessProvidersController extends AppController{
                 $items['owner']     = $owner_tree;
                 $language           = $q_r->country_id.'_'.$q_r->language_id;
                 $items['language']  = $language;
+                
+                //Get the White Label Detail
+                $wl = $this->WhiteLabel->detail($this->request->query['ap_id']);
+                
+                $items = array_merge($items, $wl);   
             }
         }
         
@@ -349,6 +356,10 @@ class AccessProvidersController extends AppController{
   
     public function edit(){
     
+         //This is a deviation from the standard JSON serialize view since extjs requires a html type reply when files
+        //are posted to the server.    
+        $this->viewBuilder()->layout('ext_file_upload');
+    
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
@@ -360,10 +371,14 @@ class AccessProvidersController extends AppController{
         unset($this->request->data['token']);
         unset($this->request->data['password']);
         unset($this->request->data['parent_id']);
+        
+        $ap_id = $this->request->data['id'];
 
         $check_items = array(
 			'active',
-			'monitor'
+			'monitor',
+			'wl_active',
+			'wl_img_active',
 		);
         foreach($check_items as $i){
             if(isset($this->request->data[$i])){
@@ -384,6 +399,25 @@ class AccessProvidersController extends AppController{
         
         $entity = $this->{$this->main_model}->get($this->request->data['id']);
         $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+        
+        //The White Label stuff ONLY if it is enabled Site Wide
+        
+        if(Configure::read('whitelabel.active') == true){
+            $this->loadModel('UserSettings');
+            $looking_for    = ['wl_active','wl_header','wl_h_bg','wl_h_fg','wl_footer','wl_img_active'];
+        
+            foreach($looking_for as $i){
+                
+                //Delete old one
+                $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => $i]);
+                //Add a New ONE
+                $entity = $this->UserSettings->newEntity();
+                $entity->user_id    = $ap_id;
+                $entity->name       = $i;
+                $entity->value      = $this->request->data["$i"];
+                $this->UserSettings->save($entity);
+            }  
+        }
 
         if ($this->{$this->main_model}->save($entity)) {
             $this->set(array(
