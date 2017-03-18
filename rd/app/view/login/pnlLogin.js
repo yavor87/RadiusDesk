@@ -6,14 +6,14 @@ Ext.define('Rd.view.login.pnlLogin', {
     layout      : 'fit',
     requires    : ['Rd.view.components.compWallpaper'],
     url         : null,   //Placheholder for wallpaper URL   
-    title       : 'RADIUSdesk',
+    title       : Rd.config.headerName,
     dockedItems : [{
         xtype   : 'toolbar',
         dock    : 'bottom',
         ui      : 'footer', 
         items   : [
             '->', 
-            '<b>RADIUSdesk</b> 2012-2016 GPL license'
+            '<b>'+Rd.config.footerName+"</b> "+Rd.config.footerLicense //2012-2016 GPL license'
         ]
     }],    
     initComponent: function () {
