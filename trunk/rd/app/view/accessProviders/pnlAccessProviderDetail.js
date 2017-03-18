@@ -14,7 +14,7 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                 width   :  450,
                 layout  : 'fit',
                 autoScroll:true,
-                frame   : false,
+                frame   : true,
                 border  : false,
                 fieldDefaults: {
                     msgTarget       : 'under',
@@ -44,13 +44,6 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                 autoScroll:true,
                                 items: [
                                     {
-                                        itemId  : 'parent_id',
-                                        xtype   : 'textfield',
-                                        name    : "parent_id",
-                                        value   : me.user_id,
-                                        hidden  : true
-                                    },   
-                                    {
                                         itemId      : 'owner',
                                         xtype       : 'displayfield',
                                         fieldLabel  : i18n('sOwner'),
@@ -59,9 +52,10 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                         labelClsExtra: 'lblRdReq'
                                     },
                                     {
-                                        xtype: 'textfield',
-                                        name : "id",
-                                        hidden: true
+                                        xtype   : 'textfield',
+                                        name    : "id",
+                                        hidden  : true,
+                                        value   : me.ap_id
                                     },
                                     {
                                         xtype       : 'textfield',
@@ -125,6 +119,83 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                         name      : 'address',
                                         fieldLabel: i18n('sAddress'),
                                         anchor    : '100%'
+                                    }
+                                ]
+                            },
+                            { 
+                                title       : 'White Label',
+                                'layout'    : 'anchor',
+                                defaults    : {
+                                    anchor  : '100%'
+                                },
+                                autoScroll:true,
+                                items: [
+                                     {
+                                        xtype       : 'checkbox',      
+                                        fieldLabel  : i18n('sActivate'),
+                                        name        : 'wl_active',
+                                        inputValue  : 'wl_active',
+                                        checked     : false
+                                    },
+                                    {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Header Text',
+                                        name        : "wl_header"
+                                    },
+                                    {
+                                        xtype       : 'colorfield',
+                                        fieldLabel  : 'Header Background',
+                                        name        : 'wl_h_bg',
+                                        beforeBodyEl: [
+                                            '<div class="' + Ext.baseCSSPrefix + 'colorpicker-field-swatch custom-color-picker-swatch">' +
+                                                '<div id="{id}-swatchEl" data-ref="swatchEl" class="' + Ext.baseCSSPrefix +
+                                                        'colorpicker-field-swatch-inner"></div>' +
+                                            '</div>'
+                                        ],
+                                        value       : '#FFFFFF'
+                                    },
+                                    {
+                                        xtype       : 'colorfield',
+                                        fieldLabel  : 'Header Foreground',
+                                        name        : 'wl_h_fg',
+                                        beforeBodyEl: [
+                                            '<div class="' + Ext.baseCSSPrefix + 'colorpicker-field-swatch custom-color-picker-swatch">' +
+                                                '<div id="{id}-swatchEl" data-ref="swatchEl" class="' + Ext.baseCSSPrefix +
+                                                        'colorpicker-field-swatch-inner"></div>' +
+                                            '</div>'
+                                        ],
+                                        value       : '#4b4c4c'
+                                    },
+                                    {
+                                        xtype       : 'textfield',
+                                        fieldLabel  : 'Footer Text',
+                                        name        : "wl_footer"
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
+                                        fieldLabel  : 'Include Logo',
+                                        name        : 'wl_img_active',
+                                        inputValue  : 'wl_img_active',
+                                        checked     : false
+                                    },
+                                    {
+                                        xtype       : 'filefield',
+                                        itemId      : 'form-file',
+                                        emptyText   : i18n('sSelect_an_image'),
+                                        fieldLabel  : 'New Logo File',
+                                        allowBlank  : true,
+                                        name        : 'wl_img_file',
+                                        buttonText  : '',
+                                        buttonConfig: {
+                                            iconCls: 'upload-icon',
+                                            glyph: Rd.config.icnFolder
+                                        }  
+                                    },
+                                    {
+                                        xtype       : 'image',
+                                        src         : '/cake3/rd_cake/img/access_providers/logo.png',
+                                        autoEl      : 'div',
+                                        title       : 'Current Logo'
                                     }
                                 ]
                             }

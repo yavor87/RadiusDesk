@@ -1,7 +1,10 @@
 Rd = {};
 
 Rd.config = {
-    //buttonMargin    : '0 20 40 0',
+
+    headerName      : 'RADIUSdesk',
+    footerName      : 'RADIUSdesk',
+    footerLicense   : '2012-2017 GPL license',  
     selLanguage     : '4_4', //4_4 = en_GB
     buttonMargin    : '10 15 10 15',
     fieldMargin     : 15,
@@ -12,7 +15,6 @@ Rd.config = {
     winHeight       : 500,
     gridNumberCol   : 150,
     radioMargin     : 10,
-
     panelGrey       : '#e5e6ef',
     'icnSignIn'     : 'xf090@FontAwesome',
     'icnSignOut'    : 'xf08b@FontAwesome',
