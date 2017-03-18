@@ -73,6 +73,10 @@ $config['paths']['dynamic_detail_icon'] = "/cake3/rd_cake/img/dynamic_details/";
 $config['paths']['real_photo_path']     = "/cake3/rd_cake/webroot/img/dynamic_photos/";
 $config['paths']['absolute_photo_path'] = "/usr/share/nginx/html/cake3/rd_cake/webroot/img/dynamic_photos/";
 
+$config['paths']['ap_logo_path']        = "/cake3/rd_cake/img/access_providers/";
+$config['paths']['real_ap_logo_path']   = "/cake3/rd_cake/webroot/img/access_providers/";
+
+
 //Define default settings for the users:
 $config['user_settings']['wallpaper']                       = "9.jpg";
 $config['user_settings']['map']['type']                     = "ROADMAP";
@@ -181,7 +185,20 @@ $config['icnDropbox']   = 'xf16b@'.$config['webFont'];
 
 //=== EXPERIMENTAL STUFF =====
 //--Show experimental menus---
-$config['experimental']['active']  = false;
+$config['experimental']['active']   = false;
+
+//=== White Label ====
+$config['whitelabel']['active']     = true;
+
+$config['whitelabel']['hName']      = 'RADIUSdesk';
+$config['whitelabel']['hBg']        = '#FFFFFF';
+$config['whitelabel']['hFg']        = '#4b4c4c';
+                                    
+$config['whitelabel']['imgActive']  = true;
+$config['whitelabel']['imgFile']    = 'logo.png';
+
+$config['whitelabel']['fName']      = 'RADIUSdesk';
+                                      
 
 return $config;
 
