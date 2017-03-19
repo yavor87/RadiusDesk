@@ -37,6 +37,7 @@ class WhiteLabelComponent extends Component {
                 $wl['wl_img_active']= 'wl_img_active';
             }       
             $wl['wl_img']       = Configure::read('paths.ap_logo_path').Configure::read('whitelabel.imgFile');
+            $wl['wl_img_file']  = Configure::read('whitelabel.imgFile');
             
             //After we have the site settings lets see if the Access Provider or one of its parents has an override
             $wl_for_ap          = $this->lookForUserSettings($user_id);  
