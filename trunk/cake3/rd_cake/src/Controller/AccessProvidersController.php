@@ -404,7 +404,7 @@ class AccessProvidersController extends AppController{
         
         if(Configure::read('whitelabel.active') == true){
             $this->loadModel('UserSettings');
-            $looking_for    = ['wl_active','wl_header','wl_h_bg','wl_h_fg','wl_footer','wl_img_active'];
+            $looking_for    = ['wl_active','wl_header','wl_h_bg','wl_h_fg','wl_footer','wl_img_active','wl_img_file'];
         
             //Only if it is enabled do we do it
             if($this->request->data['wl_active'] == 1){
@@ -430,11 +430,14 @@ class AccessProvidersController extends AppController{
                         $entity->value      = $filename;
                         $this->UserSettings->save($entity);
                     }
-                }
-            
+                }   
             
                 foreach($looking_for as $i){    
                     //Delete old one
+                    if(($i == 'wl_img_file')&&($new_logo == true)){
+                        continue; //We skip it if we added a new file
+                    }
+                      
                     $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => $i]);
                     //Add a New ONE
                     $entity             = $this->UserSettings->newEntity();
