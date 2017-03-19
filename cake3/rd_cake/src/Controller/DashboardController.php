@@ -9,13 +9,15 @@ use Cake\Core\Configure\Engine\PhpConfig;
 class DashboardController extends AppController{
   
     protected $base  = "Access Providers/Controllers/Dashboard/";
+    
   
     public function initialize(){  
         parent::initialize();
         $this->loadModel('Users');
         $this->loadModel('UserSettings');
         $this->loadModel('Realms');   
-        $this->loadComponent('Aa');      
+        $this->loadComponent('Aa');
+        $this->loadComponent('WhiteLabel');      
     }
     
     public function authenticate(){
@@ -53,13 +55,13 @@ class DashboardController extends AppController{
                 $data = $this->_get_user_detail($u,$auto_compact);
                 
                 // added for rolling token; enhanced security
+                //FIXME Bring it back later with Config option -> Makes it hard to colaborate and troubleshoot
                 // --- BEGIN ---
                // $u->set('token',''); //Setting it ti '' will trigger a new token generation
               //  $this->Users->save($u);
               //  $data['token']  = $u->get('token');
                 // --- END ---
-                
-                
+                          
                 $this->set(array(
                     'data'          => $data,
                     'success'       => true,
@@ -333,7 +335,6 @@ class DashboardController extends AppController{
                 $white_label['hName']       = Configure::read('whitelabel.hName');
                 $white_label['hBg']         = Configure::read('whitelabel.hBg');
                 $white_label['hFg']         = Configure::read('whitelabel.hFg');
-                $white_label['hName']       = Configure::read('whitelabel.hName');
                 
                 $white_label['fName']       = Configure::read('whitelabel.fName');
                 
@@ -349,13 +350,25 @@ class DashboardController extends AppController{
         if( $group == Configure::read('group.ap')){  //Or AP
             $cls = 'access_provider';
             $tabs= $this->_build_ap_tabs($id,$display);  //We DO care for rights here!  
-            //$tabs    = array();    
+            //$tabs    = array();
+            
+            if(Configure::read('whitelabel.active') == true){  
+                $wl                     = $this->WhiteLabel->detail($id);
+                $white_label['active']  = true;
+                $white_label['hName']   = $wl['wl_header'];
+                $white_label['hBg']     = '#'.$wl['wl_h_bg'];
+                $white_label['hFg']     = '#'.$wl['wl_h_fg'];   
+                $white_label['fName']   = $wl['wl_footer'];
+                
+                if($wl['wl_img_active'] == 'wl_img_active'){
+                    $white_label['imgActive'] = true;   
+                }else{
+                    $white_label['imgActive'] = false;
+                }
+                $white_label['imgFile']    = $wl['wl_img'];     
+            }   
         }
-        
-        
-        
-        
-        
+            
         return array(
             'token'         =>  $token,
             'isRootUser'    =>  $isRootUser,
@@ -685,6 +698,8 @@ class DashboardController extends AppController{
                 array_push($overview_items, array(
                         'title'   => __('Welcome Message'),
                         'glyph'   => Configure::read('icnNote'),
+                        'margin'  => 10,
+                        'padding' => 10,
                         'id'      => 'cWelcome',
                         'layout'  => 'fit'
                     )
@@ -814,6 +829,8 @@ class DashboardController extends AppController{
                 array_push($overview_items, array(
                         'title'   => __('Welcome Message'),
                         'glyph'   => Configure::read('icnNote'),
+                        'margin'  => 10,
+                        'padding' => 10,
                         'id'      => 'cWelcome',
                         'layout'  => 'fit'
                     )
