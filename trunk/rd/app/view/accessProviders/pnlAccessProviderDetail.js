@@ -59,7 +59,8 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                         xtype   : 'textfield',
                                         name    : "id",
                                         hidden  : true,
-                                        value   : me.ap_id
+                                        value   : me.ap_id,
+                                        itemId  : 'ap_id'
                                     },
                                     {
                                         xtype       : 'textfield',
@@ -208,7 +209,7 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                         allowBlank  : true,
                                         name        : 'wl_img_file_upload',
                                         buttonText  : '',
-                                        disabled    : true,
+                                      //  disabled    : true,
                                         buttonConfig: {
                                             iconCls: 'upload-icon',
                                             glyph: Rd.config.icnFolder

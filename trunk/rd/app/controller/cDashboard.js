@@ -33,6 +33,11 @@ Ext.define('Rd.controller.cDashboard', {
         me.inited = true; 
         this.control(
             {
+                'tpDashboard #cWelcome' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cWelcome','Index',pnl);
+				    }
+			    },         
                 'tpDashboard #cDataUsage' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cDataUsage','Index',pnl);

@@ -65,10 +65,7 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
                     } 
                 ]
             }
-        ];
-        
-        
-        
+        ];    
         this.callParent();
     }
 });

@@ -346,13 +346,28 @@ Ext.define('Rd.controller.cAccessProviders', {
         form.submit({
             clientValidation: true,
             url: me.getUrlEdit(),
-            success: function(form, action) {
+            success: function(f, action) {
                 Ext.ux.Toaster.msg(
                     i18n('sItem_updated'),
                     i18n('sItem_updated_fine'),
                     Ext.ux.Constants.clsInfo,
                     Ext.ux.Constants.msgInfo
                 );
+                
+                //Refresh the form
+                var ap_id = form.down('#ap_id').getValue();
+                form.load({
+                    url :me.getUrlViewAPDetail(), 
+                    method:'GET',
+                    params:{ap_id:ap_id},
+                    success    : function(a,b,c){
+                        if(b.result.data.wl_img != null){
+                            var img = form.down("#imgWlLogo");
+                            img.setSrc(b.result.data.wl_img);
+                        }
+                    }
+                });
+                    
             },
             failure: Ext.ux.formFail
         });
