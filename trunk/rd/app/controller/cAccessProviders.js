@@ -740,7 +740,17 @@ Ext.define('Rd.controller.cAccessProviders', {
         var me      = this;
         var form    = tab.down('form');
         var ap_id  = tab.up('pnlAccessProvider').ap_id;
-        form.load({url:me.getUrlViewAPDetail(), method:'GET',params:{ap_id:ap_id}});
+        form.load({
+            url :me.getUrlViewAPDetail(), 
+            method:'GET',
+            params:{ap_id:ap_id},
+            success    : function(a,b,c){
+                if(b.result.data.wl_img != null){
+                    var img = form.down("#imgWlLogo");
+                    img.setSrc(b.result.data.wl_img);
+                }
+            }
+        });
     },
     changePassword: function(){
         var me = this;

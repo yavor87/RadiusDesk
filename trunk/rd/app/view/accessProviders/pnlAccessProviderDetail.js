@@ -5,6 +5,10 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
     ap_id  : null,
     layout: 'hbox',
     bodyStyle: {backgroundColor : Rd.config.panelGrey },
+    requires    : [
+        'Rd.view.accessProviders.vcAccessProviderDetails'
+    ],
+    controller  : 'vcAccessProviderDetails',
     initComponent: function(){
         var me = this;
 
@@ -131,16 +135,22 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                 autoScroll:true,
                                 items: [
                                      {
-                                        xtype       : 'checkbox',      
+                                        xtype       : 'checkbox',
+                                        itemId      : 'chkWlActive',      
                                         fieldLabel  : i18n('sActivate'),
                                         name        : 'wl_active',
                                         inputValue  : 'wl_active',
-                                        checked     : false
+                                        checked     : false,
+                                        listeners   : {
+                                            change : 'onChkWlActiveChange'
+                                        } 
                                     },
                                     {
                                         xtype       : 'textfield',
                                         fieldLabel  : 'Header Text',
-                                        name        : "wl_header"
+                                        name        : "wl_header",
+                                        itemId      : 'txtWlHeader',
+                                        disabled    : true
                                     },
                                     {
                                         xtype       : 'colorfield',
@@ -152,7 +162,9 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                                         'colorpicker-field-swatch-inner"></div>' +
                                             '</div>'
                                         ],
-                                        value       : '#FFFFFF'
+                                        value       : '#FFFFFF',
+                                        itemId      : 'clrWlHeaderBg',
+                                        disabled    : true
                                     },
                                     {
                                         xtype       : 'colorfield',
@@ -164,38 +176,55 @@ Ext.define('Rd.view.accessProviders.pnlAccessProviderDetail', {
                                                         'colorpicker-field-swatch-inner"></div>' +
                                             '</div>'
                                         ],
-                                        value       : '#4b4c4c'
+                                        value       : '#4b4c4c',
+                                        itemId      : 'clrWlHeaderFg',
+                                        disabled    : true
+                                        
                                     },
                                     {
                                         xtype       : 'textfield',
                                         fieldLabel  : 'Footer Text',
-                                        name        : "wl_footer"
+                                        name        : "wl_footer",
+                                        itemId      : 'txtWlFooter',
+                                        disabled    : true
                                     },
                                     {
-                                        xtype       : 'checkbox',      
+                                        xtype       : 'checkbox',
+                                        itemId      : 'chkWlImgActive',      
                                         fieldLabel  : 'Include Logo',
                                         name        : 'wl_img_active',
                                         inputValue  : 'wl_img_active',
-                                        checked     : false
+                                        checked     : false,
+                                        disabled    : true,
+                                        listeners   : {
+                                            change : 'onChkWlImgActiveChange'
+                                        } 
                                     },
                                     {
                                         xtype       : 'filefield',
-                                        itemId      : 'form-file',
+                                        itemId      : 'flWlImgFileUpload',
                                         emptyText   : i18n('sSelect_an_image'),
                                         fieldLabel  : 'New Logo File',
                                         allowBlank  : true,
-                                        name        : 'wl_img_file',
+                                        name        : 'wl_img_file_upload',
                                         buttonText  : '',
+                                        disabled    : true,
                                         buttonConfig: {
                                             iconCls: 'upload-icon',
                                             glyph: Rd.config.icnFolder
                                         }  
                                     },
                                     {
+                                        xtype       : 'textfield',
+                                        name        : "wl_img_file",
+                                        hidden      : true
+                                    },
+                                    {
                                         xtype       : 'image',
-                                        src         : '/cake3/rd_cake/img/access_providers/logo.png',
+                                      //  src         : '/cake3/rd_cake/img/access_providers/logo.png', //Souces it when form loads
                                         autoEl      : 'div',
-                                        title       : 'Current Logo'
+                                        title       : 'Current Logo',
+                                        itemId      : 'imgWlLogo'
                                     }
                                 ]
                             }
