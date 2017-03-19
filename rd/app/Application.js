@@ -9,7 +9,7 @@ Ext.define('Rd.Application', {
     name: 'Rd',
     
     requires: [
-    // 'Ext.*',   //Uncomment when building production
+     //'Ext.*',   //Uncomment when building production
      //'Rd.*'    //Uncomment when building production
     ],
 
