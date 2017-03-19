@@ -188,7 +188,7 @@ $config['icnDropbox']   = 'xf16b@'.$config['webFont'];
 $config['experimental']['active']   = false;
 
 //=== White Label ====
-$config['whitelabel']['active']     = true;
+$config['whitelabel']['active']     = false;
 
 $config['whitelabel']['hName']      = 'RADIUSdesk';
 $config['whitelabel']['hBg']        = '#FFFFFF';
