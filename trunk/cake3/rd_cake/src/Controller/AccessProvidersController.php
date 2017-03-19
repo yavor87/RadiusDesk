@@ -406,15 +406,50 @@ class AccessProvidersController extends AppController{
             $this->loadModel('UserSettings');
             $looking_for    = ['wl_active','wl_header','wl_h_bg','wl_h_fg','wl_footer','wl_img_active'];
         
-            foreach($looking_for as $i){
-                
-                //Delete old one
-                $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => $i]);
-                //Add a New ONE
+            //Only if it is enabled do we do it
+            if($this->request->data['wl_active'] == 1){
+            
+                $new_logo = false;
+            
+                //Check if there came some image with it
+                if(isset($_FILES['wl_img_file_upload'])){
+                    if($_FILES['wl_img_file_upload']['size'] > 0){    
+                        $path_parts     = pathinfo($_FILES['wl_img_file_upload']['name']);
+                        $unique         = time();
+                        $filename       = $unique.'.'.$path_parts['extension'];
+                        $dest           = WWW_ROOT."img/access_providers/".$filename;
+                        move_uploaded_file ($_FILES['wl_img_file_upload']['tmp_name'] , $dest);
+                        $new_logo       = true;
+                    }
+                    
+                    if($new_logo == true){
+                        $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => 'wl_img_file']);
+                        $entity = $this->UserSettings->newEntity();
+                        $entity->user_id    = $ap_id;
+                        $entity->name       = 'wl_img_file';
+                        $entity->value      = $filename;
+                        $this->UserSettings->save($entity);
+                    }
+                }
+            
+            
+                foreach($looking_for as $i){    
+                    //Delete old one
+                    $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => $i]);
+                    //Add a New ONE
+                    $entity             = $this->UserSettings->newEntity();
+                    $entity->user_id    = $ap_id;
+                    $entity->name       = $i;
+                    $entity->value      = $this->request->data["$i"];
+                    $this->UserSettings->save($entity);
+                }
+            }else{
+                //Only disable it
+                $this->UserSettings->deleteAll(['user_id' => $ap_id,'name' => 'wl_active']);
                 $entity = $this->UserSettings->newEntity();
                 $entity->user_id    = $ap_id;
-                $entity->name       = $i;
-                $entity->value      = $this->request->data["$i"];
+                $entity->name       = 'wl_active';
+                $entity->value      = 0;
                 $this->UserSettings->save($entity);
             }  
         }
