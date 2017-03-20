@@ -564,34 +564,15 @@ class NodesController extends AppController {
                     }
 
                     $interfaces =  "bat0.".$start_number;
-                    
-                    
-                    if($me['MeshExitCaptivePortal']['dnsdesk'] == true){
-                        array_push($network,
-                            array(
-                                "interface"    => "$if_name",
-                                "options"   => array(
-                                    "ifname"    => $interfaces,
-                                    "type"      => "bridge",
-                                    
-                                    //---WIP Start--- // Add the special bridged interface IP
-                                    "ipaddr"    => "$if_ip",
-                                    "netmask"   => "255.255.0.0",
-                                    "proto"     => "static",
-                                    //---WIP END--- 
-                                    
-                            ))
-                        );
-                    }else{
-                        array_push($network,
-                            array(
-                                "interface"    => "$if_name",
-                                "options"   => array(
-                                    "ifname"    => $interfaces,
-                                    "type"      => "bridge",       
-                            ))
-                        );
-                    }
+                                      
+                    array_push($network,
+                        array(
+                            "interface"    => "$if_name",
+                            "options"   => array(
+                                "ifname"    => $interfaces,
+                                "type"      => "bridge",       
+                        ))
+                    );
 
 					//***With its VLAN***
 					$nr = $this->_number_to_word($start_number);
@@ -1477,38 +1458,89 @@ class NodesController extends AppController {
 
       	if(($mesh['NodeDetail']['radio0_enable'] == 1)&&($mesh['NodeDetail']['radio0_mesh'] == 1)){
 		    $one = $this->_number_to_word(1);
-		    array_push( $wireless,
-		            array(
-		                "wifi-iface"    => "$one",
-		                "options"   => array(
-		                    "device"        => "radio0",
-		                    "ifname"        => "$one"."0",
-		                    "mode"          => "ap",
-		                    "encryption"    => "psk-mixed",
-		                    "network"       => $one,
-		                    "ssid"          => "meshdesk_config",
-		                    "key"           => $client_key,
-		                    "hidden"        => "1"
-		               )
-		            ));
+		    
+		    //The ATH10K does not like this VAP so we try to avoid it on 5G
+		    //Only if the other radio is enabled but without mesh
+		    if(
+		        ($mesh['NodeDetail']['radio0_band'] == 5)&&
+		        ($mesh['NodeDetail']['radio1_enable'] == 1)&&
+		        ($mesh['NodeDetail']['radio1_mesh'] !== 1)
+		    ){ 
+                array_push( $wireless,
+                    array(
+                        "wifi-iface"    => "$one",
+                        "options"   => array(
+                            "device"        => "radio1",
+                            "ifname"        => "$one"."1",
+                            "mode"          => "ap",
+                            "encryption"    => "psk-mixed",
+                            "network"       => $one,
+                            "ssid"          => "meshdesk_config",
+                            "key"           => $client_key,
+                            "hidden"        => "1"
+                       )
+                ));
+		    
+		    }else{		        
+	            array_push( $wireless,
+	                array(
+	                    "wifi-iface"    => "$one",
+	                    "options"   => array(
+	                        "device"        => "radio0",
+	                        "ifname"        => "$one"."0",
+	                        "mode"          => "ap",
+	                        "encryption"    => "psk-mixed",
+	                        "network"       => $one,
+	                        "ssid"          => "meshdesk_config",
+	                        "key"           => $client_key,
+	                        "hidden"        => "1"
+	                   )
+	                ));
+		    }    
 		}
 
 		if(($mesh['NodeDetail']['radio1_enable'] == 1)&&($mesh['NodeDetail']['radio1_mesh'] == 1)){
 		    $one = $this->_number_to_word(1);
-		    array_push( $wireless,
-		            array(
-		                "wifi-iface"    => "$one"."_1",
-		                "options"   => array(
-		                    "device"        => "radio1",
-		                    "ifname"        => "$one"."1",
-		                    "mode"          => "ap",
-		                    "encryption"    => "psk-mixed",
-		                    "network"       => $one,
-		                    "ssid"          => "meshdesk_config",
-		                    "key"           => $client_key,
-		                    "hidden"        => "1"
-		               )
-		            ));
+		    
+		    //The ATH10K does not like this VAP so we try to avoid it on 5G
+		    //Only if the other radio is enabled but without mesh
+		    if(
+		        ($mesh['NodeDetail']['radio1_band'] == 5)&&
+		        ($mesh['NodeDetail']['radio0_enable'] == 1)&&
+		        ($mesh['NodeDetail']['radio0_mesh'] !== 1)
+		    ){
+		    
+		        array_push( $wireless,
+	                array(
+	                    "wifi-iface"    => "$one"."_1",
+	                    "options"   => array(
+	                        "device"        => "radio0",
+	                        "ifname"        => "$one"."0",
+	                        "mode"          => "ap",
+	                        "encryption"    => "psk-mixed",
+	                        "network"       => $one,
+	                        "ssid"          => "meshdesk_config",
+	                        "key"           => $client_key,
+	                        "hidden"        => "1"
+	                   )
+	            ));
+		       
+		    }else{
+		        array_push( $wireless,
+	                array(
+	                    "wifi-iface"    => "$one"."_1",
+	                    "options"   => array(
+	                        "device"        => "radio1",
+	                        "ifname"        => "$one"."1",
+	                        "mode"          => "ap",
+	                        "encryption"    => "psk-mixed",
+	                        "network"       => $one,
+	                        "ssid"          => "meshdesk_config",
+	                        "key"           => $client_key,
+	                        "hidden"        => "1"
+	                   )
+	            ));
+		    }
 		}
 
         $start_number = 2;
