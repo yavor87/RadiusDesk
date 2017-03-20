@@ -1191,7 +1191,7 @@ $config['hardware'][33]      = array(
 		'radios'	    => 2, 
 		'active'        => true,
 		'device_type'   => 'ac', //Options are 'standard' (if left out) or 'ac' for AC devices, more options to follow
-		'eth_br'	    => 'eth0.1',
+		'eth_br'	    => 'eth0',
 
 		//First radio 
 		'max_power'     => '30',

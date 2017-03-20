@@ -476,6 +476,49 @@ $config['ApProfiles']['hardware'][13]      = array(
     )	
 );
 
+$config['ApProfiles']['hardware'][14]      = array(
+        'name' 		            => __('Yuncore  XD3200'),	
+		'id'    	            => 'yc_xd3200',
+		'radios'	            => 2, 
+        'active'    	        => true,
+        'device_type'           => 'ac', //Options are 'standard' (if left out) or 'ac' for AC devices, more options to follow
+        'eth_br'                => 'eth0',
+        
+        'radio0_disabled'       => 0,
+        'radio0_band'           => '5',
+        'radio0_channel_five'   => '44',
+        'radio0_hwmode'         => '11a',
+        'radio0_htmode'         => 'VHT80',
+        'radio0_txpower'        => '30',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio0_ht_capab'       => array(
+           
+        ),
+        
+        'radio1_disabled'       => 0,
+        'radio1_band'           => '24',
+        'radio1_channel_two'    => '1',
+        'radio1_hwmode'         => '11g',
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '30',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+);
+
 
 //== OpenWrt timezones====
 
