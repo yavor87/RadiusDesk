@@ -210,5 +210,8 @@ config hardware 'yc_xd3200'
     option internet_led '/sys/class/leds/xd3200:green:wan/brightness'
     option wifi_led 'xd3200:blue:wlan2g'
     
+config hardware 'wally_dr344_ac'
+    option morse_led '/sys/class/leds/dr344:green:sig4/brightness'
+    option internet_led '/sys/class/leds/dr344:green:sig3/brightness'
+    option wifi_led 'dr344:green:status'
     
-
