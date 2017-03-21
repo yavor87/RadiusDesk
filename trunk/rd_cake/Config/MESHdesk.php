@@ -1186,7 +1186,7 @@ $config['hardware'][32]      = array(
 );
 
 $config['hardware'][33]      = array(
-		'name' 		    => __('Yuncore  XD3200'),	
+		'name' 		    => __('Yuncore  XD3200 (AC)'),	
 		'id'    	    => 'yc_xd3200',
 		'radios'	    => 2, 
 		'active'        => true,
@@ -1231,6 +1231,55 @@ $config['hardware'][33]      = array(
             'DSSS_CCK-40'
         )
 );
+
+
+$config['hardware'][34]      = array(
+		'name' 		    => __('Wally DR344 (AC)'),	
+		'id'    	    => 'wally_dr344_ac',
+		'radios'	    => 2, 
+		'active'        => true,
+		'device_type'   => 'ac', //Options are 'standard' (if left out) or 'ac' for AC devices, more options to follow
+		'eth_br'	    => 'eth0 eth1',
+
+		//First radio 
+		'max_power'     => '30',
+		'two'		    => false,
+		'five'		    => true,
+		'hwmode'	    => '11a',
+
+		//Second radio - This is extra for two radio devices
+		'max_power1'    => '30',
+		'two1'		    => true,
+		'five1'		    => false,
+		'hwmode1'	    => '11n',
+
+        'radio0_htmode'         => 'VHT80',
+        'radio0_txpower'        => '30',
+        'radio0_diversity'      => true,
+        'radio0_distance'       => '300',
+        'radio0_noscan'         => false,
+        'radio0_ldpc'           => true,
+        'radio0_beacon_int'     => 100,
+        'radio0_ht_capab'       => array(
+   
+        ),
+
+        'radio1_htmode'         => 'HT20',
+        'radio1_txpower'        => '30',
+        'radio1_diversity'      => true,
+        'radio1_distance'       => '300',
+        'radio1_noscan'         => false,
+        'radio1_ldpc'           => true,
+        'radio1_beacon_int'     => 100,
+        'radio0_disable_b'      => true,
+        'radio1_ht_capab'       => array(
+            'SHORT-GI-40',
+            'RX-STBC1',
+            'TX-STBC',
+            'DSSS_CCK-40'
+        )
+);
+
 
 
 
