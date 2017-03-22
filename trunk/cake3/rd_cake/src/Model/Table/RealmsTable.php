@@ -13,7 +13,8 @@ class RealmsTable extends Table
         $this->hasMany('RealmNotes',['dependent' => true]);
         $this->hasMany('NaRealms',['dependent' => true]);
         $this->hasMany('DynamicClientRealms',['dependent' => true]);
-        $this->hasMany('DynamicSocialLogins',['dependent' => true]);
+        $this->hasMany('DynamicDetailSocialLogins',['dependent' => true]);
+        $this->addBehavior('Acl.Acl',['type' => 'controlled']);
     }
     
     public function validationDefault(Validator $validator){
