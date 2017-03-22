@@ -1077,7 +1077,7 @@ class RealmsController extends AppController{
             $ap_id  = $this->request->query['ap_id'];
             $id     = $this->request->data['id'];
             
-            try{
+        //    try{
                        
                 if($this->request->data['create'] == true){
                     $this->Acl->allow(
@@ -1120,9 +1120,9 @@ class RealmsController extends AppController{
                 } 
                 $success = true;
                     
-            }catch(\Exception $e){               
-                $success = false;  
-            }        
+          //  }catch(\Exception $e){               
+         //       $success = false;  
+         //   }        
             Configure::write('debug', $temp_debug); // turn off debugging 
         }
 
