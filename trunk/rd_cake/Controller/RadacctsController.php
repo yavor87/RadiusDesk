@@ -706,7 +706,7 @@ class RadacctsController extends AppController {
                 $name   = $r_p['Realm']['name'];
                 $read   = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $user['id']), 
-                                array('model' => 'Realm','foreign_key' => $id), 'read');
+                                array('model' => 'Realms','foreign_key' => $id), 'read');
                 if($read == true){
                     array_push($ap_clause,array($this->modelClass.'.realm' => $name));
                 }                  

@@ -2128,17 +2128,17 @@ class PermanentUsersController extends AppController {
                     //Only those realms that this user has specified to have read access to
                     $read = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $user['id']), 
-                                array('model' => 'Realm','foreign_key' => $realm_id), 'read');
+                                array('model' => 'Realms','foreign_key' => $realm_id), 'read');
                 }else{
                     $read = false; //Since the user is not the owner and they can not view other's permanent users we leave it out
                 }  
                 
                 $update = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $user['id']), 
-                                array('model' => 'Realm','foreign_key' => $realm_id), 'update');
+                                array('model' => 'Realms','foreign_key' => $realm_id), 'update');
                 $delete = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $user['id']), 
-                                array('model' => 'Realm','foreign_key' => $realm_id), 'delete');
+                                array('model' => 'Realms','foreign_key' => $realm_id), 'delete');
                 //Prime it                 
                 $this->AclCache[$realm_id] =  array('update' => $update, 'delete' => $delete,'read' => $read);      
                 return array('update' => $update, 'delete' => $delete,'read' => $read);
