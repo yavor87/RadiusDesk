@@ -105,7 +105,7 @@ class RealmsController extends AppController{
                         try{
                             $create = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), 'create'); //Only if they have create right
+                                array('model' => 'Realms','foreign_key' => $id), 'create'); //Only if they have create right
                         }catch(\Exception $e){               
                              $create = false;  
                         }
@@ -113,7 +113,7 @@ class RealmsController extends AppController{
                         try{
                             $read = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), 'read'); //Only if they have create right
+                                array('model' => 'Realms','foreign_key' => $id), 'read'); //Only if they have create right
                         }catch(\Exception $e){               
                              $read = false;  
                         }
@@ -121,7 +121,7 @@ class RealmsController extends AppController{
                         try{
                             $update = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), 'update'); //Only if they have create right
+                                array('model' => 'Realms','foreign_key' => $id), 'update'); //Only if they have create right
                         }catch(\Exception $e){               
                              $update = false;  
                         }
@@ -129,7 +129,7 @@ class RealmsController extends AppController{
                         try{
                             $delete = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), 'delete'); //Only if they have create right
+                                array('model' => 'Realms','foreign_key' => $id), 'delete'); //Only if they have create right
                         }catch(\Exception $e){               
                              $delete = false;  
                         }
@@ -1082,41 +1082,41 @@ class RealmsController extends AppController{
                 if($this->request->data['create'] == true){
                     $this->Acl->allow(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'create');
+                    array('model' => 'Realms','foreign_key' => $id), 'create');
                 }else{
                     $this->Acl->deny(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'create');
+                    array('model' => 'Realms','foreign_key' => $id), 'create');
                 } 
 
                 if($this->request->data['read'] == true){
                     $this->Acl->allow(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'read');
+                    array('model' => 'Realms','foreign_key' => $id), 'read');
                 }else{
                     $this->Acl->deny(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'read');
+                    array('model' => 'Realms','foreign_key' => $id), 'read');
                 }
 
                 if($this->request->data['update'] == true){
                     $this->Acl->allow(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'update');
+                    array('model' => 'Realms','foreign_key' => $id), 'update');
                 }else{
                     $this->Acl->deny(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'update');
+                    array('model' => 'Realms','foreign_key' => $id), 'update');
                 } 
                 
                 if($this->request->data['delete'] == true){
                     $this->Acl->allow(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'delete');
+                    array('model' => 'Realms','foreign_key' => $id), 'delete');
                 }else{
                     $this->Acl->deny(
                     array('model' => 'User', 'foreign_key' => $ap_id), 
-                    array('model' => 'Realm','foreign_key' => $id), 'delete');
+                    array('model' => 'Realms','foreign_key' => $id), 'delete');
                 } 
                 $success = true;
                     
@@ -1194,7 +1194,7 @@ class RealmsController extends AppController{
                         try{
                             $create = $this->Acl->check(
                                 array('model' => 'User', 'foreign_key' => $ap_id), 
-                                array('model' => 'Realm','foreign_key' => $id), $right); //Only if they have create right
+                                array('model' => 'Realms','foreign_key' => $id), $right); //Only if they have create right
                         }catch(\Exception $e){               
                              $create = false;  
                         }

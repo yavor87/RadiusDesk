@@ -1150,7 +1150,7 @@ class DashboardController extends AppController{
 
                 $read = $this->Acl->check(
                             array('model' => 'User', 'foreign_key' => $ap_id), 
-                            array('model' => 'Realm','foreign_key' => $id), 'read');
+                            array('model' => 'Realms','foreign_key' => $id), 'read');
                 if($read == true){
                     $realm['realm_id']      = $id;
                     $realm['realm_name']    = $name;
