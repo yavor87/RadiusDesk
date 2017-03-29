@@ -90,9 +90,6 @@ class User extends AppModel {
 		'Voucher' => array(
             'dependent'     => true   
         ),
-		'FinPaymentPlan' => array(
-            'dependent'     => true   
-        ),
 		'DynamicDetail' => array(
             'dependent'     => true   
         ),

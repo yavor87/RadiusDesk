@@ -21,8 +21,7 @@ class Profile extends AppModel {
             'foreignKey'	=> false,
             'finderQuery'   => 'SELECT Radusergroup.* FROM radusergroup AS Radusergroup, profiles WHERE profiles.name=Radusergroup.username AND profiles.id={$__cakeID__$} ORDER BY Radusergroup.priority ASC',
             'dependent'     => true
-        ),
-		'FinPaymentPlan'
+        )
     );
 
     public $validate 	= array(
