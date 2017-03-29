@@ -83,10 +83,10 @@ class UsersTable extends Table
     public function validationDefault(Validator $validator){
         $validator = new Validator();
         $validator
-            ->notEmpty('name', 'A name is required')
-            ->add('name', [ 
-                'nameUnique' => [
-                    'message' => 'The name you provided is already taken. Please provide another one.',
+            ->notEmpty('username', 'A usrname is required')
+            ->add('username', [ 
+                'usernameUnique' => [
+                    'message' => 'The username you provided is already taken. Please provide another one.',
                     'rule' => 'validateUnique', 
                     'provider' => 'table'
                 ]
