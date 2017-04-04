@@ -51,7 +51,9 @@ local choices = {
     "ZBT WE2026",
     "ZBT WE3826",
     "Archer C7(AC)",
-    "MiWiFi Mini(AC)"
+    "MiWiFi Mini(AC)",
+    "Yuncore AP90Q",
+    "Yuncore XD3200 (AC)"
 }
 local hardware      = {}
 hardware[0]         = 'dragino'
@@ -86,6 +88,8 @@ hardware[28]        = 'zbt_we2026'
 hardware[29]        = 'zbt_we3826'
 hardware[30]        = 'tl_ac1750_c7'
 hardware[31]        = 'miwifi_mini'
+hardware[32]        = 'yc_ap90q'
+hardware[33]        = 'yc_xd3200'
 
 local mode_choices = {
     "Mesh",
@@ -361,8 +365,14 @@ function HandleEvents(event)
     if(event:GetSelection() == 30)then
         sbmHardware:SetBitmap(bm_tl_ac1750_c7)
     end
-     if(event:GetSelection() == 31)then
+    if(event:GetSelection() == 31)then
         sbmHardware:SetBitmap(bm_miwifi_mini)
+    end
+    if(event:GetSelection() == 32)then
+        sbmHardware:SetBitmap(bm_yc_ap90q)
+    end
+    if(event:GetSelection() == 33)then
+        sbmHardware:SetBitmap(bm_yc_xd3200)
     end
     
 end
@@ -663,6 +673,12 @@ function build_gui()
     bm_miwifi_mini      = wx.wxBitmap();
     bm_miwifi_mini:LoadFile("./graphics/miwifi_mini.png",wx.wxBITMAP_TYPE_ANY )
     
+    bm_yc_ap90q      = wx.wxBitmap();
+    bm_yc_ap90q:LoadFile("./graphics/yc_ap90q.png",wx.wxBITMAP_TYPE_ANY )
+    
+    bm_yc_xd3200      = wx.wxBitmap();
+    bm_yc_xd3200:LoadFile("./graphics/yc_xd3200.png",wx.wxBITMAP_TYPE_ANY )
+    
     
     --Some Icons--
     bm_icn_info         = wx.wxBitmap();
@@ -911,7 +927,8 @@ function build_gui()
             local hboxZ = wx.wxBoxSizer(wx.wxHORIZONTAL)
             sbmHardware = wx.wxStaticBitmap(pnlSettings,-1,bm_dragino)
             hboxZ:Add(vbox3, 1,  wx.wxALL +wx.wxEXPAND ,5)
-            hboxZ:Add(sbmHardware,0,wx.wxALL+wx.wxGROW,10)
+            --hboxZ:Add(sbmHardware,0,wx.wxALL+wx.wxEXPAND,20)
+            hboxZ:Add(sbmHardware,0,1,20)
             
             szrSettings:Add(hboxZ,1,wx.wxALL +wx.wxEXPAND,5)
             
