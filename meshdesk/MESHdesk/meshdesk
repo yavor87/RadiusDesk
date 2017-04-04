@@ -215,3 +215,8 @@ config hardware 'wally_dr344_ac'
     option internet_led '/sys/class/leds/dr344:green:sig3/brightness'
     option wifi_led 'dr344:green:status'
     
+config hardware 'yc_ap90q'
+    option morse_led '/sys/class/leds/ap90q:green:lan/brightness'
+    option internet_led '/sys/class/leds/ap90q:green:wan/brightness'
+    option wifi_led 'ap90q:green:wlan'
+    
