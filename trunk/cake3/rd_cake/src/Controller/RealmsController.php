@@ -286,7 +286,33 @@ class RealmsController extends AppController{
 
         $items      = array();
 
-        foreach($q_r as $i){    
+        foreach($q_r as $i){
+          
+            //------------------------
+            //We only list realms which the Access Provider has read rights to at least
+            
+            $id         = $i->{"id"};
+            if($i->user_id !== $user_id){
+                $read       = false;
+                $temp_debug = Configure::read('debug');
+                Configure::write('debug', 0); // turn off debugging     
+                try{
+                    $read = $this->Acl->check(
+                        array('model' => 'User', 'foreign_key' => $user_id), 
+                        array('model' => 'Realms','foreign_key' => $id), 'read'); //Only if they have create right             
+                }catch(\Exception $e){               
+                 $read = false;  
+                }
+                        
+                Configure::write('debug', $temp_debug); // return previous setting 
+                if($read == false){
+                    continue;
+                }
+                
+            }
+            //------------------------
+       
+       
             $owner_id   = $i->user_id;
             if(!array_key_exists($owner_id,$this->owner_tree)){
                 $owner_tree     = $this->Users->find_parents($owner_id);
@@ -294,7 +320,7 @@ class RealmsController extends AppController{
                 $owner_tree = $this->owner_tree[$owner_id];
             }
             
-            $action_flags   = $this->Aa->get_action_flags($owner_id,$user);
+            $action_flags   = $this->Aa->get_action_flags($owner_id,$user);   
             
             $notes_flag     = false;
             foreach($i->realm_notes as $un){
