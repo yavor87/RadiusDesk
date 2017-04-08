@@ -11,7 +11,7 @@ $config['Meshes']['captive_portal']['radius_1']         = '198.27.111.78'; // Th
 //$config['ApProfiles']['captive_portal']['radius_2']         = '198.27.111.78'; //Optional second fallback RADIUS
 $config['Meshes']['captive_portal']['radius_secret']    = 'testing123'; //Change this to the common site wide secret used by Dynamic RADIUS Clients
 //Use DNS name in ual_url to look more professional / or IP Address 
-$config['Meshes']['captive_portal']['uam_url']          = 'http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/'; 
+$config['Meshes']['captive_portal']['uam_url']          = 'http://198.27.111.78/cake3/rd_cake/dynamic-details/chilli-browser-detect/'; 
 $config['Meshes']['captive_portal']['uam_secret']       = 'greatsecret'; //Usually you will not change this value
 
 //$config['ApProfiles']['captive_portal']['walled_garden'] = "www.radiusdesk.com,www.google.com"; //Optional
