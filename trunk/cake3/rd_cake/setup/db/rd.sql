@@ -267,7 +267,7 @@ CREATE TABLE `ap_profile_exit_captive_portals` (
 
 LOCK TABLES `ap_profile_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `ap_profile_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `ap_profile_exit_captive_portals` VALUES (5,23,'198.27.111.78','','testing123','','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','',0,'2016-05-10 05:23:30','2017-02-24 21:13:54',1,0,'',3128,'','','ssid=radiusdesk',0,'4.4.4.4','8.8.8.8',0,0,0);
+INSERT INTO `ap_profile_exit_captive_portals` VALUES (5,23,'198.27.111.78','','testing123','','http://198.27.111.78/cake3/rd_cake/dynamic-details/chilli-browser-detect/','greatsecret','',0,'2016-05-10 05:23:30','2017-02-24 21:13:54',1,0,'',3128,'','','ssid=radiusdesk',0,'4.4.4.4','8.8.8.8',0,0,0);
 /*!40000 ALTER TABLE `ap_profile_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1527,7 +1527,7 @@ CREATE TABLE `mesh_exit_captive_portals` (
 
 LOCK TABLES `mesh_exit_captive_portals` WRITE;
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` DISABLE KEYS */;
-INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake2/rd_cake/dynamic_details/chilli_browser_detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2017-02-24 20:56:38',0,0,'192.168.10.10',3128,'admin','admin','',0,'4.4.4.4','8.8.8.8',0,0,0);
+INSERT INTO `mesh_exit_captive_portals` VALUES (1,33,'198.27.111.78','','testing123','cheetah_cp1','http://198.27.111.78/cake3/rd_cake/dynamic-details/chilli-browser-detect/','greatsecret','www.radiusdesk.com',0,'2014-08-11 12:21:02','2017-02-24 20:56:38',0,0,'192.168.10.10',3128,'admin','admin','',0,'4.4.4.4','8.8.8.8',0,0,0);
 /*!40000 ALTER TABLE `mesh_exit_captive_portals` ENABLE KEYS */;
 UNLOCK TABLES;
 
