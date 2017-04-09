@@ -1131,18 +1131,18 @@ $config['hardware'][30]      = array(
 
 $config['hardware'][31]      = array(
     'name'          => __('AP 505'),
-    'id'            => 'ap_505' ,
+    'id'            => 'pw_cpe505n' ,
     'radios'        => 1,
     'active'        => true,
-    'max_power'     => '23',
-    'eth_br'        => 'eth0 eth1', 
+    'max_power'     => '30',
+    'eth_br'        => 'eth0', 
     'two'           => true,
     'five'          => false,
     'hwmode'        => '11g',
 
     //Default Advanced WiFi settings (Enchancement made 8/9/15)
     'radio0_htmode'         => 'HT20',
-    'radio0_txpower'        => '23',
+    'radio0_txpower'        => '30',
     'radio0_diversity'      => true,
     'radio0_distance'       => '300',
     'radio0_noscan'         => false,
