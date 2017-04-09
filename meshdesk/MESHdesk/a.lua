@@ -859,7 +859,7 @@ function prep_leds()
 end
 
 function configure_mode()
-
+    local hw        = uci_cursor.get('meshdesk','settings','hardware');
     local sled      = uci_cursor.get('meshdesk',hw,'single_led');
     local sysled    = uci_cursor.get('meshdesk',hw,'system_led');
     if(sysled ~= sled)then -- Only when the single mode is not the same LED (else we switch it off)
