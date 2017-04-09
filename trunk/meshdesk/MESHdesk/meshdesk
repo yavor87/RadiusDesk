@@ -204,12 +204,7 @@ config hardware 'eap300'
     option morse_led '/sys/class/leds/engenius:blue:power/brightness'
     option internet_led '/sys/class/leds/engenius:blue:lan/brightness'
     option wifi_led 'engenius:blue:wlan'
-    
-config hardware 'yc_xd3200'
-    option morse_led '/sys/class/leds/xd3200:green:system/brightness'
-    option internet_led '/sys/class/leds/xd3200:green:wan/brightness'
-    option wifi_led 'xd3200:blue:wlan2g'
-    
+       
 config hardware 'wally_dr344_ac'
     option morse_led '/sys/class/leds/dr344:green:sig4/brightness'
     option internet_led '/sys/class/leds/dr344:green:sig3/brightness'
@@ -219,4 +214,21 @@ config hardware 'yc_ap90q'
     option morse_led '/sys/class/leds/ap90q:green:lan/brightness'
     option internet_led '/sys/class/leds/ap90q:green:wan/brightness'
     option wifi_led 'ap90q:green:wlan'
+    
+config hardware 'pw_cpe505n'
+    option morse_led '/sys/class/leds/cpe505n:green:lan/brightness'
+    option internet_led '/sys/class/leds/cpe505n:green:wan/brightness'
+    option wifi_led 'cpe505n:green:status'
+    option single_led 'cpe505n:green:status'
+    option meshed_led 'cpe505n:blue:wlan'
+    option system_led 'cpe505n:red:diag'
+    
+config hardware 'yc_xd3200'
+    option morse_led '/sys/class/leds/xd3200:green:system/brightness'
+    option internet_led '/sys/class/leds/xd3200:green:wan/brightness'
+    option wifi_led 'xd3200:green:system'
+    option single_led 'xd3200:green:system'
+    option meshed_led 'xd3200:blue:wlan2g'
+    option system_led 'xd3200:green:system'
+
     

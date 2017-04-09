@@ -438,6 +438,8 @@ end
 
 function configure_device(config)
 
+    configure_mode();
+    
 	print("Configuring device according to " .. config)
 	
 	local contents        = readAll(config) 
@@ -839,6 +841,33 @@ end
 --END AP Specifics ----
 --=====================
 
+function prep_leds()
+    local hw        = uci_cursor.get('meshdesk','settings','hardware');
+    local sled      = uci_cursor.get('meshdesk',hw,'single_led');
+    local mled      = uci_cursor.get('meshdesk',hw,'meshed_led');
+    local sysled    = uci_cursor.get('meshdesk',hw,'system_led');
+    
+    if((sled ~= nil)and(mled ~= nil)and(sysled ~= nil))then
+        os.execute("echo '0' > '/sys/class/leds/"..sled.."/brightness'");   --Single off
+        os.execute("echo '0' > '/sys/class/leds/"..mled.."/brightness'");   --Multiple off
+        os.execute("echo '1' > '/sys/class/leds/"..sysled.."/brightness'"); --System on
+        uci_cursor.set('system','wifi_led','sysfs',sled);
+        uci_cursor.commit('system');
+        os.execute("/etc/init.d/led stop")
+        os.execute("/etc/init.d/led start")
+    end
+end
+
+function configure_mode()
+
+    local sled      = uci_cursor.get('meshdesk',hw,'single_led');
+    local sysled    = uci_cursor.get('meshdesk',hw,'system_led');
+    if(sysled ~= sled)then -- Only when the single mode is not the same LED (else we switch it off)
+        os.execute("echo '0' > '/sys/class/leds/"..sysled.."/brightness'"); --System on    
+    end
+end
+
+
 --Get the mode
 mode = fetch_config_value('meshdesk.settings.mode')
 
@@ -851,6 +880,11 @@ end
 --Configure Firmware is there is a server running on the correct IP and port
 --=====================
 do_fw_config()
+
+--Prep the LEDs if needs to
+prep_leds()
+
+
 
 --=======================================
 -- Check if we are and AP or a MESH node=
