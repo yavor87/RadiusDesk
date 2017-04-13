@@ -53,7 +53,8 @@ local choices = {
     "Archer C7(AC)",
     "MiWiFi Mini(AC)",
     "Yuncore AP90Q",
-    "Yuncore XD3200 (AC)"
+    "Yuncore XD3200 (AC)",
+    "AP505"
 }
 local hardware      = {}
 hardware[0]         = 'dragino'
@@ -90,6 +91,7 @@ hardware[30]        = 'tl_ac1750_c7'
 hardware[31]        = 'miwifi_mini'
 hardware[32]        = 'yc_ap90q'
 hardware[33]        = 'yc_xd3200'
+hardware[34]        = 'pw_cpe505n'
 
 local mode_choices = {
     "Mesh",
@@ -373,6 +375,9 @@ function HandleEvents(event)
     end
     if(event:GetSelection() == 33)then
         sbmHardware:SetBitmap(bm_yc_xd3200)
+    end
+    if(event:GetSelection() == 34)then
+        sbmHardware:SetBitmap(bm_pw_cpe505n)
     end
     
 end
@@ -679,6 +684,8 @@ function build_gui()
     bm_yc_xd3200      = wx.wxBitmap();
     bm_yc_xd3200:LoadFile("./graphics/yc_xd3200.png",wx.wxBITMAP_TYPE_ANY )
     
+    bm_pw_cpe505n     = wx.wxBitmap();
+    bm_pw_cpe505n:LoadFile("./graphics/pw_cpe505n.png",wx.wxBITMAP_TYPE_ANY )
     
     --Some Icons--
     bm_icn_info         = wx.wxBitmap();
@@ -695,7 +702,6 @@ function build_gui()
     
     bm_icn_security         = wx.wxBitmap();
     bm_icn_security:LoadFile("./graphics/security.png",wx.wxBITMAP_TYPE_ANY )
-    
     
     
      --Nice Icons
