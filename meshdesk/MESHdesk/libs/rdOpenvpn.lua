@@ -125,6 +125,7 @@ function rdOpenvpn.__configureFromTable(self,table)
         self.x.set('vpn-gateways',interface,'gateway')
         self.x.set('vpn-gateways',interface,'ipaddr',vpn_gateway_address);
         self.x.set('vpn-gateways',interface,'vpn_client_id',vpn_client_id);
+        self.x.set('vpn-gateways',interface,'interface',interface);
       
     end
     self.x.commit('openvpn');
