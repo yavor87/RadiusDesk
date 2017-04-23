@@ -9,7 +9,10 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
         var username =  me.dashboard_data.user.username;
         
         //Some initial values
-        var header  = '<h1>'+Rd.config.headerName+'</h1>';
+        var header  = Rd.config.headerName;
+        var lA      = Rd.config.levelAColor; 
+        var tpl     = new Ext.XTemplate('<h1>'+header+'<span style="color:'+lA+'"><i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
+        
         var footer  = Rd.config.footerName;
         var style   = {}; //Empty Style
         var imgActive = false; //No Image
@@ -28,9 +31,12 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
             fg      = me.dashboard_data.white_label.hFg;
             if(me.dashboard_data.white_label.imgActive == true){
                 var img = me.dashboard_data.white_label.imgFile;
-                header  = '<img src="'+img+'" alt="Logo" style="float:left; padding-right: 20px;"><h1 style="color:'+fg+';">'+header+'</h1>';
+                var tpl = new Ext.XTemplate(
+                '<img src="'+img+'" alt="Logo" style="float:left; padding-right: 20px;">',
+                '<h1 style="color:'+fg+';">'+header+'<span style="color:'+lA+'"><i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
             }else{
-                header  = '<h1 style="color:'+fg+';">'+header+'</h1>';
+                var tpl = new Ext.XTemplate('<h1 style="color:'+fg+';">'+header+'<span style="color:'+lA+'">',
+                '<i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
             }
         }      
         
@@ -51,7 +57,12 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
                 ui      : 'default',
                 style   : style,
                 items   : [              
-                    header,
+                    {
+                        xtype   : 'tbtext',
+                        itemId  : 'tbtHeader', 
+                        tpl     : tpl,
+                        data    : {headerName:Rd.config.headerName}
+                    },
                     '->',
                     {
                     xtype   : 'button',

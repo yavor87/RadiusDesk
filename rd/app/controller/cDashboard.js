@@ -26,13 +26,13 @@ Ext.define('Rd.controller.cDashboard', {
         {   ref: 'pnlDashboard',    selector: 'pnlDashboard',   xtype: 'pnlDashboard' }
     ],
     init: function() {
-        var me      = this;
+        var me  = this;
         if (me.inited) {
             return;
         }
         me.inited = true; 
         this.control(
-            {
+            {           
                 'tpDashboard #cWelcome' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cWelcome','Index',pnl);
@@ -56,11 +56,13 @@ Ext.define('Rd.controller.cDashboard', {
 			    'tpDashboard #cMeshes' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cMeshes','Index',pnl);
+				        me.updateBanner(pnl);
 				    }
 			    },
 			    'tpDashboard #cAccessPoints' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cAccessPoints','Index',pnl);
+				        me.updateBanner(pnl);
 				    }
 			    },
 			    'tpDashboard #cProfileComponents' : {
@@ -180,12 +182,22 @@ Ext.define('Rd.controller.cDashboard', {
 			    },
 			    'tpDashboard #cCategories' : {
 				    activate	: function(pnl){
-				        me.application.runAction('cCategories','Index',pnl);
+				     //   me.application.runAction('cCategories','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cFilters' : {
 				    activate	: function(pnl){
 				        me.application.runAction('cFilters','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cBlackLists' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cBlackLists','Index',pnl);
+				    }
+			    },
+			    'tpDashboard #cWhiteLists' : {
+				    activate	: function(pnl){
+				        me.application.runAction('cWhiteLists','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cSchedules' : {
@@ -197,7 +209,10 @@ Ext.define('Rd.controller.cDashboard', {
 				    activate	: function(pnl){
 				        me.application.runAction('cPolicies','Index',pnl);
 				    }
-			    }     
+			    },
+			    'tpDashboard > tabpanel' : {
+                    activate   : me.updateBanner
+                }     
 		    }
         );
     },
@@ -298,5 +313,21 @@ Ext.define('Rd.controller.cDashboard', {
             },
             failure: Ext.ux.formFail
         });
+    },
+    updateBanner: function(tabpanel) {  
+        var glyph   = tabpanel.getGlyph();
+        var title   = tabpanel.getTitle();
+        var iConfig = tabpanel.getInitialConfig();
+        if(iConfig.tooltip !== undefined){
+            title = iConfig.tooltip;
+        }
+        //Glyph needs to be witout '@FontAwesome';
+        glyph       = glyph.replace('@FontAwesome', "");
+        
+        //Now we can set it in the header...
+        var pnlDashboard = tabpanel.up('pnlDashboard');
+        pnlDashboard.down('#tbtHeader').setData({fa_value:'&#'+glyph+';', value :title});
+        console.log(glyph);
+        console.log(title);
     }
 });

@@ -4,7 +4,9 @@ Rd.config = {
 
     headerName      : 'RADIUSdesk',
     footerName      : 'RADIUSdesk',
-    footerLicense   : '2012-2017 GPL license',  
+    footerLicense   : '2012-2017 GPL license',
+    levelAColor     : '#0066ff',
+    levelBColor     : '#33ccff',  
     selLanguage     : '4_4', //4_4 = en_GB
     buttonMargin    : '10 15 10 15',
     fieldMargin     : 15,
