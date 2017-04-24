@@ -182,7 +182,7 @@ Ext.define('Rd.controller.cDashboard', {
 			    },
 			    'tpDashboard #cCategories' : {
 				    activate	: function(pnl){
-				     //   me.application.runAction('cCategories','Index',pnl);
+				       me.application.runAction('cCategories','Index',pnl);
 				    }
 			    },
 			    'tpDashboard #cFilters' : {
@@ -327,7 +327,5 @@ Ext.define('Rd.controller.cDashboard', {
         //Now we can set it in the header...
         var pnlDashboard = tabpanel.up('pnlDashboard');
         pnlDashboard.down('#tbtHeader').setData({fa_value:'&#'+glyph+';', value :title});
-        console.log(glyph);
-        console.log(title);
     }
 });
