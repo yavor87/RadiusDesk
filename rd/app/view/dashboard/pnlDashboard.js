@@ -35,10 +35,10 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
                 var img = me.dashboard_data.white_label.imgFile;
                 var tpl = new Ext.XTemplate(
                 '<img src="'+img+'" alt="Logo" style="float:left; padding-right: 20px;">',
-                '<h1 style="color:'+fg+';">'+header+'<span style="'+stA+'"> / <i class="fa">{fa_value}</i> {value}</span><h1>');
+                '<h1 style="color:'+fg+';">'+header+'<span style="'+stA+'"> | <i class="fa">{fa_value}</i> {value}</span><h1>');
             }else{
                 var tpl = new Ext.XTemplate('<h1 style="color:'+fg+';">'+header+'<span style="'+stA+'">',
-                ' / <i class="fa">{fa_value}</i> {value}</span><h1>');
+                ' | <i class="fa">{fa_value}</i> {value}</span><h1>');
             }
         }      
         
