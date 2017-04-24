@@ -11,7 +11,8 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
         //Some initial values
         var header  = Rd.config.headerName;
         var lA      = Rd.config.levelAColor; 
-        var tpl     = new Ext.XTemplate('<h1>'+header+'<span style="color:'+lA+'"><i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
+        var stA     = 'color:'+lA+';font-weight:200; letter-spacing: 2px;';
+        var tpl     = new Ext.XTemplate('<h1>'+header+'<span style="'+stA+'"> / <i class="fa">{fa_value}</i> {value}</span><h1>');
         
         var footer  = Rd.config.footerName;
         var style   = {}; //Empty Style
@@ -33,10 +34,10 @@ Ext.define('Rd.view.dashboard.pnlDashboard', {
                 var img = me.dashboard_data.white_label.imgFile;
                 var tpl = new Ext.XTemplate(
                 '<img src="'+img+'" alt="Logo" style="float:left; padding-right: 20px;">',
-                '<h1 style="color:'+fg+';">'+header+'<span style="color:'+lA+'"><i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
+                '<h1 style="color:'+fg+';">'+header+'<span style="'+stA+'"> / <i class="fa">{fa_value}</i> {value}</span><h1>');
             }else{
-                var tpl = new Ext.XTemplate('<h1 style="color:'+fg+';">'+header+'<span style="color:'+lA+'">',
-                '<i> / <i class="fa">{fa_value}</i> {value}</i></span><h1>');
+                var tpl = new Ext.XTemplate('<h1 style="color:'+fg+';">'+header+'<span style="'+stA+'">',
+                ' / <i class="fa">{fa_value}</i> {value}</span><h1>');
             }
         }      
         
