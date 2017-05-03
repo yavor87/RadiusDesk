@@ -72,11 +72,17 @@ class GridButtonsComponent extends Component {
             $menu = array($b,$n);
         }
         
+        if($type == 'permanent_users'){
+            $b  = $this->_fetchBasic('disabled',true);
+            $d  = $this->_fetchDocument();
+            $a  = $this->_fetchPermanentUserExtras();
+            $menu = array($b,$d,$a);
+        }
         
         return $menu;
     }
     
-    private function _fetchBasic($action='disabled'){
+    private function _fetchBasic($action='disabled',$with_reload_timer=false){
     
         $user = $this->user;
         
@@ -88,20 +94,39 @@ class GridButtonsComponent extends Component {
         
         $menu = array();
         
+        
+        $reload = [
+            'xtype'     => 'button',  
+            'glyph'     => Configure::read('icnReload'), 
+            'scale'     => 'large', 
+            'itemId'    => 'reload',   
+            'tooltip'=> __('Reload')
+        ];
+        
+        if($with_reload_timer == true){
+            $reload = [
+                'xtype'     => "splitbutton",
+                'glyph'     => Configure::read('icnReload'),
+                'scale'     => 'large',
+                'itemId'    => 'reload',
+                'tooltip'   => __('Reload'),
+                'menu'      => [
+                    'items' => [
+                        '<b class="menu-title">'.__('Reload every').':</b>',
+                        array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
+                        array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
+                        array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
+                        array( 'text'  => __('Stop auto reload'),'itemId'    => 'mnuRefreshCancel', 'group' => 'refresh', 'checked' => true)
+                    ]
+                ] 
+            ];
+        }
         //Admin => all power
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array('xtype' => 'buttongroup','title' => $this->t, 'items' => array(
-                    array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-reload',  
-                        'glyph'     => Configure::read('icnReload'), 
-                        'scale'     => 'large', 
-                        'itemId'    => 'reload',   
-                        'tooltip'=> __('Reload')
-                    ),
+                    $reload,
                     array(
                         'xtype'     => 'button',
-                        'iconCls'   => 'b-add',
                         'glyph'     => Configure::read('icnAdd'),
                         'scale'     => 'large',
                         'itemId'    => 'add',
@@ -109,7 +134,6 @@ class GridButtonsComponent extends Component {
                     ),
                     array(
                         'xtype'     => 'button',
-                        'iconCls'   => 'b-delete',
                         'glyph'     => Configure::read('icnDelete'),
                         'scale'     => 'large',
                         'itemId'    => 'delete',
@@ -117,7 +141,6 @@ class GridButtonsComponent extends Component {
                     ),
                     array(
                         'xtype'     => 'button',
-                        'iconCls'   => 'b-edit',
                         'glyph'     => Configure::read('icnEdit'),
                         'scale'     => 'large',
                         'itemId'    => 'edit',
@@ -132,19 +155,12 @@ class GridButtonsComponent extends Component {
             $id             = $user['id'];
             $action_group   = array();
 
-            array_push($action_group,array(  
-                'xtype'     => 'button',
-                'iconCls'   => 'b-reload',
-                'glyph'     => Configure::read('icnReload'),   
-                'scale'     => 'large', 
-                'itemId'    => 'reload',   
-                'tooltip'   => __('Reload')));
+            array_push($action_group,$reload);
 
             //Add
             if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-add',
                     'glyph'     => Configure::read('icnAdd'),      
                     'scale'     => 'large', 
                     'itemId'    => 'add',
@@ -154,7 +170,6 @@ class GridButtonsComponent extends Component {
             if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-delete',
                     'glyph'     => Configure::read('icnDelete'),   
                     'scale'     => 'large', 
                     'itemId'    => 'delete',
@@ -166,7 +181,6 @@ class GridButtonsComponent extends Component {
             if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-edit',
                     'glyph'     => Configure::read('icnEdit'),     
                     'scale'     => 'large', 
                     'itemId'    => 'edit',
@@ -191,16 +205,14 @@ class GridButtonsComponent extends Component {
                 'title' => __('Document'), 
                 'items' => array(
                     array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',    
+                        'xtype'     => 'button',     
                         'glyph'     => Configure::read('icnNote'), 
                         'scale'     => 'large', 
                         'itemId'    => 'note',    
                         'tooltip'   => __('Add notes')
                     ),
                     array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-csv',     
+                        'xtype'     => 'button',     
                         'glyph'     => Configure::read('icnCsv'), 
                         'scale'     => 'large', 
                         'itemId'    => 'csv',      
@@ -218,7 +230,6 @@ class GridButtonsComponent extends Component {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'noteIndex')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-note',
                     'glyph'     => Configure::read('icnNote'),    
                     'scale'     => 'large', 
                     'itemId'    => 'note',      
@@ -228,7 +239,6 @@ class GridButtonsComponent extends Component {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'exportCsv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-csv',
                     'glyph'     => Configure::read('icnCsv'),     
                     'scale'     => 'large', 
                     'itemId'    => 'csv',      
@@ -253,8 +263,7 @@ class GridButtonsComponent extends Component {
                 'width' => 100,
                 'items' => array(
                     array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-note',    
+                        'xtype'     => 'button',    
                         'glyph'     => Configure::read('icnNote'), 
                         'scale'     => 'large', 
                         'itemId'    => 'note',    
@@ -272,7 +281,6 @@ class GridButtonsComponent extends Component {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'noteIndex')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-note',
                     'glyph'     => Configure::read('icnNote'),    
                     'scale'     => 'large', 
                     'itemId'    => 'note',      
@@ -296,15 +304,13 @@ class GridButtonsComponent extends Component {
                 'items' => array(
                     array(
                         'xtype'     => 'button', 
-                        'iconCls'   => 'b-password', 
                         'glyph'     => Configure::read('icnLock'), 
                         'scale'     => 'large', 
                         'itemId'    => 'password', 
                         'tooltip'   => __('Change Password')
                     ),
                     array(
-                        'xtype'     => 'button', 
-                        'iconCls'   => 'b-disable',  
+                        'xtype'     => 'button',  
                         'glyph'     => Configure::read('icnLight'),
                         'scale'     => 'large', 
                         'itemId'    => 'enable_disable',
@@ -322,7 +328,6 @@ class GridButtonsComponent extends Component {
             if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'changePassword')){      
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-password',
                     'glyph'     => Configure::read('icnLock'),
                     'scale'     => 'large', 
                     'itemId'    => 'password', 
@@ -332,7 +337,6 @@ class GridButtonsComponent extends Component {
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'enableDisable')){      
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
-                    'iconCls'   => 'b-disable',
                     'glyph'     => Configure::read('icnLight'),
                     'scale'     => 'large', 
                     'itemId'    => 'enable_disable',
@@ -376,16 +380,14 @@ class GridButtonsComponent extends Component {
             'title' => __('Preview'), 
             'items' => array(
                 array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-mobile',   
+                    'xtype'     => 'button',  
                     'glyph'     => Configure::read('icnMobile'),  
                     'scale'     => 'large', 
                     'itemId'    => 'mobile',    
                     'tooltip'   => __('Mobile')
                 ),
                 array(
-                    'xtype'     => 'button', 
-                    'iconCls'   => 'b-desktop',  
+                    'xtype'     => 'button',  
                     'glyph'     => Configure::read('icnDesktop'),  
                     'scale'     => 'large', 
                     'itemId'    => 'desktop',   
@@ -393,6 +395,95 @@ class GridButtonsComponent extends Component {
                 )
             )
         );             
+        return $menu;
+    }
+    
+    private function _fetchPermanentUserExtras(){
+    
+        $user = $this->user;
+        $menu = array();
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin   
+             $menu = array(
+                'xtype' => 'buttongroup',
+                'title' => __('Extra actions'), 
+                'items' => array(
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnLock'), 
+                        'scale'     => 'large', 
+                        'itemId'    => 'password', 
+                        'tooltip'   => __('Change Password')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnLight'),
+                        'scale'     => 'large', 
+                        'itemId'    => 'enable_disable',
+                        'tooltip'   => __('Enable / Disable')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnRadius'), 
+                        'scale'     => 'large', 
+                        'itemId'    => 'test_radius',  
+                        'tooltip'=> __('Test RADIUS')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnGraph'),   
+                        'scale'     => 'large', 
+                        'itemId'    => 'graph',  
+                        'tooltip'   => __('Graphs')
+                    )
+                )
+            );    
+        }
+        
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $specific_group = array();
+
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'changePassword')){      
+                array_push($specific_group,array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnLock'),
+                    'scale'     => 'large', 
+                    'itemId'    => 'password', 
+                    'tooltip'   => __('Change Password')));
+           }
+            
+           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'enableDisable')){      
+                array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnLight'),
+                    'scale'     => 'large', 
+                    'itemId'    => 'enable_disable',
+                    'tooltip'   => __('Enable / Disable')));
+            }
+            
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/testRadius')){      
+                array_push($specific_group, array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnRadius'), 
+                        'scale'     => 'large', 
+                        'itemId'    => 'test_radius',  
+                        'tooltip'=> __('Test RADIUS')
+                    ));
+            }
+            
+            array_push($specific_group, array(
+                'xtype'     => 'button', 
+                'glyph'     => Configure::read('icnGraph'),   
+                'scale'     => 'large', 
+                'itemId'    => 'graph',  
+                'tooltip'   => __('Graphs')
+            ));
+           
+            $menu = array('xtype' => 'buttongroup', 'title' =>  __('Extra actions'), 'items' => $specific_group );
+        }
+                
         return $menu;
     }
     

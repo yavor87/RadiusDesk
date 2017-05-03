@@ -561,7 +561,19 @@ class DashboardController extends AppController{
                         'glyph'   => Configure::read('icnFilter'),
                         'id'      => 'cFilters',
                         'layout'  => 'fit'
-                    ), 
+                    ),
+                    array(
+                        'title'   => 'Black Lists',
+                        'glyph'   => Configure::read('icnBan'),
+                        'id'      => 'cBlackLists',
+                        'layout'  => 'fit'
+                    ),
+                    array(
+                        'title'   => 'White Lists',
+                        'glyph'   => Configure::read('icnCheckC'),
+                        'id'      => 'cWhiteLists',
+                        'layout'  => 'fit'
+                    ),  
                     array(
                         'title'   => 'Schedules',
                         'glyph'   => Configure::read('icnWatch'),
@@ -1085,7 +1097,19 @@ class DashboardController extends AppController{
                         'glyph'   => Configure::read('icnFilter'),
                         'id'      => 'cFilters',
                         'layout'  => 'fit'
-                    ), 
+                    ),
+                    array(
+                        'title'   => 'Black Lists',
+                        'glyph'   => Configure::read('icnBan'),
+                        'id'      => 'cBlackLists',
+                        'layout'  => 'fit'
+                    ),
+                    array(
+                        'title'   => 'White Lists',
+                        'glyph'   => Configure::read('icnCheckC'),
+                        'id'      => 'cWhiteLists',
+                        'layout'  => 'fit'
+                    ),   
                     array(
                         'title'   => 'Schedules',
                         'glyph'   => Configure::read('icnWatch'),

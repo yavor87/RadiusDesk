@@ -23,6 +23,10 @@ class ProfilesTable extends Table
             'sort'          => ['Radusergroups.priority' => 'ASC'],
             'dependent'     => true
         ]);
+        
+        $this->hasMany('PermanentUsers',[
+            'dependent' => true
+        ]);
     }
     
     public function validationDefault(Validator $validator){
@@ -37,5 +41,17 @@ class ProfilesTable extends Table
                 ]
             ]);
         return $validator;
+    }
+    
+    public function entityBasedOnPost($post_data){
+        $entity = false;
+        if(isset($post_data['profile_id'])){
+            $entity = $this->get($post_data['profile_id']);
+        }
+        if(isset($post_data['profile'])){ //This is a bit different we will find the entity based on the name provided
+            $p_name = $post_data['profile'];          
+            $entity = $this->find()->where(['Profiles.name' => $p_name])->first();
+        }
+        return $entity;
     }
 }

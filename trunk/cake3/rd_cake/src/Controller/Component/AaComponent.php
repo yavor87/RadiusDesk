@@ -21,6 +21,8 @@ class AaComponent extends Component {
     
     protected $parents  = false;
     protected $children = false;
+    
+    protected $AclCache = [];
 
     public function user_for_token($controller){
         return $this->TokenAuth->check_if_valid($controller);
@@ -140,7 +142,7 @@ class AaComponent extends Component {
             }  
         }
     }
-    
+      
     public function test_for_private_parent($item,$user){
         //Most tables that has entries which belongs to an Access Provider as the user_id also includes
         // and available_to_siblings flag which if not set; makes the entry private
