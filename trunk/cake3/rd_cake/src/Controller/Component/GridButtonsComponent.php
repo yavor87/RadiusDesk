@@ -26,7 +26,7 @@ class GridButtonsComponent extends Component {
             $this->t = null;
         }
         
-        $menu = array();
+        $menu = [];
         $this->user = $user;
         
         if($type == 'basic'){
@@ -78,8 +78,40 @@ class GridButtonsComponent extends Component {
             $a  = $this->_fetchPermanentUserExtras();
             $menu = array($b,$d,$a);
         }
+
+        if($type == 'fr_acct_and_auth'){
+            $b  = $this->_fetchFrAcctAuthBasic();
+            $menu = [$b];
+        }
         
         return $menu;
+    }
+
+    private function _fetchFrAcctAuthBasic(){
+
+        $user = $this->user;
+        $menu = [];
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $menu = array(
+                    array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                )) 
+            );
+        }
+
+        return $menu;
+
     }
     
     private function _fetchBasic($action='disabled',$with_reload_timer=false){
