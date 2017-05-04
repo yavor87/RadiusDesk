@@ -29,6 +29,12 @@ class FreeRadiusBehavior extends Behavior {
         'cleartext_password'=> 'Cleartext-Password' 
     ];
 
+    protected  $readOnlyAttributes = [
+            'Rd-User-Type', 'Rd-Device-Owner', 'Rd-Account-Disabled', 'User-Profile', 'Expiration',
+            'Rd-Account-Activation-Time', 'Rd-Not-Track-Acct', 'Rd-Not-Track-Auth', 'Rd-Auth-Type', 
+            'Rd-Cap-Type-Data', 'Rd-Cap-Type-Time' ,'Rd-Realm', 'Cleartext-Password'
+    ];
+
     protected $binaries = [
         'ssid_only',
         'auto_add',
@@ -55,8 +61,9 @@ class FreeRadiusBehavior extends Behavior {
 
     public function initialize(array $config){
         // Some initialization code here
-        $this->Radchecks = TableRegistry::get('Radchecks'); 
-        $this->UserSsids = TableRegistry::get('UserSsids');
+        $this->Radchecks    = TableRegistry::get('Radchecks');
+        $this->Radreplies   = TableRegistry::get('Radreplies');
+        $this->UserSsids    = TableRegistry::get('UserSsids');
     }
 
     //This checks if the $username has a Rd-Ssid-Check and if set to 1 wit return true 
@@ -64,7 +71,7 @@ class FreeRadiusBehavior extends Behavior {
         
         $count = $this->Radchecks->find()->where([
             'username'  => $username,
-            'attribute' => 'rd-Ssid-Check',
+            'attribute' => 'Rd-Ssid-Check',
             'value'     => '1'
         ])->count();
 
@@ -89,6 +96,88 @@ class FreeRadiusBehavior extends Behavior {
             array_push($ssid_list , array('id' => $j->id, 'name' => $j->name));
         }
         return $ssid_list;
+    }
+
+    public function setRestrictListOfDevices($username, $restrict = true){
+        if($restrict == 'true'){
+            $this->_replace_radcheck_item($username,'Rd-Mac-Check',1);
+        }else{
+           $this->_remove_radcheck_item($username,'Rd-Mac-Check'); 
+        }
+    }
+
+    public function setAutoMac($username, $auto = true){
+        if($auto == 'true'){
+            $this->_replace_radcheck_item($username,'Rd-Auto-Mac',1);
+        }else{
+           $this->_remove_radcheck_item($username,'Rd-Auto-Mac'); 
+        }
+    }
+
+    public function deviceMenuSettings($username){
+        $settings = ['listed_only' => false,'add_mac' => false];
+
+        $c_listed = $this->Radchecks->find()->where([
+            'username'  => $username,
+            'attribute' => 'Rd-Mac-Check',
+            'value'     => '1'
+        ])->count();
+        if($c_listed > 0){
+            $settings['listed_only'] = true;
+        }
+
+        $c_auto = $this->Radchecks->find()->where([
+            'username'  => $username,
+            'attribute' => 'Rd-Auto-Mac',
+            'value'     => '1'
+        ])->count();
+        if($c_auto > 0){
+            $settings['add_mac'] = true;
+        }
+
+        return $settings;
+    }
+
+    public function  privateAttrIndex($username){
+        $items  = [];
+        $q_r    =  $this->Radchecks->find()->where(['username' => $username])->all();
+        foreach($q_r as $i){
+            $edit_flag      = true;
+            $delete_flag    = true;
+            if(in_array($i->attribute,$this->readOnlyAttributes)){
+                $edit_flag      = false;
+                $delete_flag    = false;
+            }     
+            array_push($items,array(
+                'id'        => 'chk_'.$i->id,
+                'type'      => 'check', 
+                'attribute' => $i->attribute,
+                'op'        => $i->op,
+                'value'     => $i->value,
+                'edit'      => $edit_flag,
+                'delete'    => $delete_flag
+            ));
+        }
+
+        $q_r    =  $this->Radreplies->find()->where(['username' => $username])->all();
+        foreach($q_r as $i){
+            $edit_flag      = true;
+            $delete_flag    = true;
+            if(in_array($i->attribute,$this->readOnlyAttributes)){
+                $edit_flag      = false;
+                $delete_flag    = false;
+            }     
+            array_push($items,array(
+                'id'        => 'rpl_'.$i->id,
+                'type'      => 'check', 
+                'attribute' => $i->attribute,
+                'op'        => $i->op,
+                'value'     => $i->value,
+                'edit'      => $edit_flag,
+                'delete'    => $delete_flag
+            ));
+        }
+        return $items;
     }
 
     public function afterSave($event, $entity){
@@ -137,23 +226,27 @@ class FreeRadiusBehavior extends Behavior {
         foreach(array_keys($this->puChecks) as $key){
             if($entity->dirty("$key")){
                 $value = $entity->{$key};
-                if(in_array($key,$this->binaries)){
-                    $value = 1;
-                    if($key == 'ssid_only'){
-                        $ssid_only = true;
-                    }  
-                }
-                if(in_array($key,$this->reverse_binaries)){
-                    if($value == 0){
+                if($value !== null){
+                    if(in_array($key,$this->binaries)){
                         $value = 1;
-                    }else{
-                        $value = 0;
+                        if($key == 'ssid_only'){
+                            $ssid_only = true;
+                        }  
                     }
+                    if(in_array($key,$this->reverse_binaries)){
+                        if($value == 0){
+                            $value = 1;
+                        }else{
+                            $value = 0;
+                        }
+                    }
+                    if(in_array($key,$this->fr_dates)){   
+                        $value = $this->_radius_format_date($value); 
+                    }
+
+                    $this->_replace_radcheck_item($username,$this->puChecks["$key"],$value);
                 }
-                if(in_array($key,$this->fr_dates)){
-                    $value = $this->_radius_format_date($value);
-                }  
-                $this->_replace_radcheck_item($username,$this->puChecks["$key"],$value);
+
                 if($key =='static_ip'){
                     if($entity->{$key} !== ''){
                         $this->_replace_radcheck_item($username,'Service-Type','Framed-User');
@@ -284,6 +377,7 @@ class FreeRadiusBehavior extends Behavior {
 
 
     private function _radius_format_date($d){
+
         //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
         $formatted  = $d->format("d/m/Y"); //We added this since we fixed a bug that actually made this a datetime object
         $arr_date   = explode('/',$formatted);

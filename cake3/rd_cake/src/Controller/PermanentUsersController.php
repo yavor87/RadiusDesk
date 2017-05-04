@@ -489,6 +489,69 @@ class PermanentUsersController extends AppController{
         }
     }
 
+    public function privateAttrIndex(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $username   = $this->request->query['username'];
+        $items      =  $this->{$this->main_model}->privateAttrIndex($username);
+
+        $this->set(array(
+            'items'         => $items,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    public function restrictListOfDevices(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if((isset($this->request->query['username']))&&(isset($this->request->query['restrict']))){
+            $username = $this->request->query['username'];
+            if($this->request->query['restrict'] == 'true'){
+                $this->{$this->main_model}->setRestrictListOfDevices($username,true);      
+            }else{
+                $this->{$this->main_model}->setRestrictListOfDevices($username,false);
+            }
+        }
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+    public function autoMacOnOff(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        if((isset($this->request->query['username']))&&(isset($this->request->query['auto_mac']))){
+            $username = $this->request->query['username'];
+            if($this->request->query['auto_mac'] == 'true'){
+                $this->{$this->main_model}->setAutoMac($username,true);     
+            }else{
+                $this->{$this->main_model}->setAutoMac($username,false);
+            }
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
 
     public function enableDisable(){
         
@@ -562,8 +625,7 @@ class PermanentUsersController extends AppController{
         }        
         
     }
-
-    
+   
     public function menuForGrid(){
         $user = $this->Aa->user_for_token($this);
         if(!$user){   //If not a valid user
@@ -577,7 +639,82 @@ class PermanentUsersController extends AppController{
             '_serialize'    => array('items','success')
         ));
     }
-    	
+
+    function menuForUserDevices(){
+
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+
+        $settings = ['listed_only' => false,'add_mac' => false];
+
+        if(isset($this->request->query['username'])){
+            $username = $this->request->query['username'];
+            $settings = $this->{$this->main_model}->deviceMenuSettings($username,true);     
+        }
+
+        //Empty by default
+        $menu = array(
+                array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
+                    array( 'xtype'=>  'button', 'glyph'   => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                    array( 
+                        'xtype'         => 'checkbox', 
+                        'boxLabel'      => 'Connect only from listed devices', 
+                        'itemId'        => 'chkListedOnly',
+                        'checked'       => $settings['listed_only'], 
+                        'cls'           => 'lblRd',
+                        'margin'        => 5
+                    ),
+                    array( 
+                        'xtype'         => 'checkbox', 
+                        'boxLabel'      => 'Auto-add device after authentication', 
+                        'itemId'        => 'chkAutoAddMac',
+                        'checked'       => $settings['add_mac'], 
+                        'cls'           => 'lblRd',
+                        'margin'        => 5
+                    )
+            )) 
+        );
+
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    function menuForAccountingData(){
+
+       $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,true,'fr_acct_and_auth');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    function menuForAuthenticationData(){
+
+       $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,true,'fr_acct_and_auth');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+
     public function noteIndex(){
         //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
