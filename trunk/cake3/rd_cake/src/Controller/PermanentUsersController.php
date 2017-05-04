@@ -284,6 +284,211 @@ class PermanentUsersController extends AppController{
         }
 	}
 
+    public function viewBasicInfo(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $user_id    = $user['id'];
+        $entity     = $this->{$this->main_model}->get( $this->request->query['user_id']);
+        $username   = $entity->username;
+
+        //List these items
+        $include_items = [
+            'realm','realm_id','profile','profile_id',
+            'static_ip','extra_name','extra_value','time_cap_type',
+            'data_cap_type', 'from_date','to_date' 
+        ];
+
+        $items = [];
+        foreach($include_items as $i){
+            $items[$i] = $entity->{$i};
+        }
+
+        if(($items['from_date'] == null)&&($items['to_date'] == null)){
+            $items['always_active'] = true;
+            unset($items['from_date']);
+            unset($items['to_date']);
+
+        }else{
+             $items['always_active'] = false;
+             $items['from_date']    = $items['from_date']->format("d/m/Y");
+             $items['to_date']      = $items['to_date']->format("d/m/Y");
+        }
+
+        //Check if it has an SSID limitation
+        if($this->{$this->main_model}->hasSsidCheck($username)){
+            $items['ssid_only'] = true;
+            //FIXME We need to add the SSIDs to the list
+            $items['ssid_list'] = $this->{$this->main_model}->listRestrictedSsids($username);
+        }
+
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function editBasicInfo(){
+    
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        //---Set Realm related things--- 
+        $realm_entity           = $this->Realms->entityBasedOnPost($this->request->data);
+        if($realm_entity){
+            $this->request->data['realm']   = $realm_entity->name;
+            $this->request->data['realm_id']= $realm_entity->id;
+            //FIXME WE HAVE TO CHECK AND CHANGE USERNAME IF CHANGE ...
+        
+        }else{
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        
+        //---Set profile related things---
+        $profile_entity = $this->Profiles->entityBasedOnPost($this->request->data);
+        if($profile_entity){
+            $this->request->data['profile']   = $profile_entity->name;
+            $this->request->data['profile_id']= $profile_entity->id;
+        }else{
+            $this->set(array(
+                'success' => false,
+                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
+                '_serialize' => array('success','message')
+            ));
+            return;
+        }
+        
+        //Zero the token to generate a new one for this user:
+        unset($this->request->data['token']);
+
+        //Set the date and time
+        $extDateSelects = [
+                'from_date',
+                'to_date'
+        ];
+        foreach($extDateSelects as $d){
+            if(isset($this->request->data[$d])){
+                $newDate = date_create_from_format('d/m/Y', $this->request->data[$d]);
+                $this->request->data[$d] = $newDate;
+            }  
+        }
+        
+        $entity = $this->{$this->main_model}->get($this->request->data['id']);
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+     
+        if ($this->{$this->main_model}->save($entity)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';
+            
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+
+    public function viewPersonalInfo(){
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $items      = [];
+        //TODO Check if the owner of this user is in the chain of the APs
+        if(isset($this->request->query['user_id'])){
+            $entity         = $this->{$this->main_model}->get( $this->request->query['user_id']);
+            $include_items  = ['name','surname','phone','address', 'email','language_id','country_id'];
+            foreach($include_items as $i){
+                $items[$i] = $entity->{$i};
+            }
+            $items['language'] = $items['country_id'].'_'.$items['language_id'];
+        }
+        $this->set(array(
+            'data'   => $items, //For the form to load we use data instead of the standard items as for grids
+            'success' => true,
+            '_serialize' => array('success','data')
+        ));
+    }
+
+    public function editPersonalInfo(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        //TODO Check if the owner of this user is in the chain of the APs
+        unset($this->request->data['token']);
+        //Get the language and country
+        $country_language   = explode( '_', $this->request->data['language'] );
+
+        $country            = $country_language[0];
+        $language           = $country_language[1];
+
+        $this->request->data['language_id'] = $language;
+        $this->request->data['country_id']  = $country;
+
+        $entity = $this->{$this->main_model}->get($this->request->data['id']);
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+     
+        if ($this->{$this->main_model}->save($entity)) {
+            $this->set(array(
+                'success' => true,
+                '_serialize' => array('success')
+            ));
+        } else {
+            $message = 'Error';  
+            $errors = $entity->errors();
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+        }
+    }
+
 
     public function enableDisable(){
         
