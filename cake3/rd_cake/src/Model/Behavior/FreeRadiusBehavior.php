@@ -114,6 +114,14 @@ class FreeRadiusBehavior extends Behavior {
         }
     }
 
+    public function getCleartextPassword($username){
+        $qr = $this->Radchecks->find()->where([
+            'username'  => $username,
+            'attribute' => 'Cleartext-Password'
+        ])->first();
+        return $qr->value;
+    }
+
     public function deviceMenuSettings($username){
         $settings = ['listed_only' => false,'add_mac' => false];
 
@@ -505,12 +513,11 @@ class FreeRadiusBehavior extends Behavior {
     private function _remove_radcheck_item($username,$item){
         $this->{'Radchecks'}->deleteAll(['username' => $username,'attribute' => $item]);
     }
-
-
+    
     private function _radius_format_date($d){
 
         //Format will be month/date/year eg 03/06/2013 we need it to be 6 Mar 2013
-        $formatted  = $d->format("d/m/Y"); //We added this since we fixed a bug that actually made this a datetime object
+        $formatted  = $d->format("m/d/Y"); //We added this since we fixed a bug that actually made this a datetime object
         $arr_date   = explode('/',$formatted);
         $month      = intval($arr_date[0]);
         $m_arr      = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');

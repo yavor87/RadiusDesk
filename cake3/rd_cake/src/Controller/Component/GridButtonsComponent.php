@@ -15,7 +15,7 @@ use Cake\Core\Configure\Engine\PhpConfig;
 class GridButtonsComponent extends Component {
 
     public $components = ['Acl'];
-    
+    protected $scale   = 'large';  //Later we will improve the code to change this to small for smaller screens
     public function returnButtons($user,$title = true,$type='basic'){
         //First we will ensure there is a token in the request
         $this->controller = $this->_registry->getController();
@@ -95,8 +95,8 @@ class GridButtonsComponent extends Component {
         if($user['group_name'] == Configure::read('group.admin')){  //Admin
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => $this->scale, 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => $this->scale, 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -104,8 +104,8 @@ class GridButtonsComponent extends Component {
         if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
             $menu = array(
                     array('xtype' => 'buttongroup','title' => __('Action'), 'items' => array(
-                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => 'large', 'itemId' => 'reload',   'tooltip'   => __('Reload')),
-                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => 'large', 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
+                        array( 'xtype'=>  'button', 'glyph'     => Configure::read('icnReload'), 'scale' => $this->scale, 'itemId' => 'reload',   'tooltip'   => __('Reload')),
+                        array('xtype' => 'button',  'glyph'     => Configure::read('icnDelete'), 'scale' => $this->scale, 'itemId' => 'delete',   'tooltip'   => __('Delete')), 
                 )) 
             );
         }
@@ -130,7 +130,7 @@ class GridButtonsComponent extends Component {
         $reload = [
             'xtype'     => 'button',  
             'glyph'     => Configure::read('icnReload'), 
-            'scale'     => 'large', 
+            'scale'     => $this->scale, 
             'itemId'    => 'reload',   
             'tooltip'=> __('Reload')
         ];
@@ -139,7 +139,7 @@ class GridButtonsComponent extends Component {
             $reload = [
                 'xtype'     => "splitbutton",
                 'glyph'     => Configure::read('icnReload'),
-                'scale'     => 'large',
+                'scale'     => $this->scale,
                 'itemId'    => 'reload',
                 'tooltip'   => __('Reload'),
                 'menu'      => [
@@ -160,21 +160,21 @@ class GridButtonsComponent extends Component {
                     array(
                         'xtype'     => 'button',
                         'glyph'     => Configure::read('icnAdd'),
-                        'scale'     => 'large',
+                        'scale'     => $this->scale,
                         'itemId'    => 'add',
                         'tooltip'   => __('Add')
                     ),
                     array(
                         'xtype'     => 'button',
                         'glyph'     => Configure::read('icnDelete'),
-                        'scale'     => 'large',
+                        'scale'     => $this->scale,
                         'itemId'    => 'delete',
                         'tooltip'   => __('Delete')
                     ),
                     array(
                         'xtype'     => 'button',
                         'glyph'     => Configure::read('icnEdit'),
-                        'scale'     => 'large',
+                        'scale'     => $this->scale,
                         'itemId'    => 'edit',
                         'tooltip'   => __('Edit')
                     )
@@ -194,7 +194,7 @@ class GridButtonsComponent extends Component {
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnAdd'),      
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'add',
                     'tooltip'   => __('Add')));
             }
@@ -203,7 +203,7 @@ class GridButtonsComponent extends Component {
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnDelete'),   
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'delete',
                     'disabled'  => $disabled,   
                     'tooltip'   => __('Delete')));
@@ -214,7 +214,7 @@ class GridButtonsComponent extends Component {
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnEdit'),     
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'edit',
                     'disabled'  => $disabled,     
                     'tooltip'   => __('Edit')));
@@ -239,14 +239,14 @@ class GridButtonsComponent extends Component {
                     array(
                         'xtype'     => 'button',     
                         'glyph'     => Configure::read('icnNote'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'note',    
                         'tooltip'   => __('Add notes')
                     ),
                     array(
                         'xtype'     => 'button',     
                         'glyph'     => Configure::read('icnCsv'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'csv',      
                         'tooltip'   => __('Export CSV')
                     )
@@ -263,7 +263,7 @@ class GridButtonsComponent extends Component {
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnNote'),    
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'note',      
                     'tooltip'   => __('Add Notes')));
             }
@@ -272,7 +272,7 @@ class GridButtonsComponent extends Component {
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnCsv'),     
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'csv',      
                     'tooltip'   => __('Export CSV')));
             }
@@ -297,7 +297,7 @@ class GridButtonsComponent extends Component {
                     array(
                         'xtype'     => 'button',    
                         'glyph'     => Configure::read('icnNote'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'note',    
                         'tooltip'   => __('Add notes')
                     )
@@ -314,7 +314,7 @@ class GridButtonsComponent extends Component {
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnNote'),    
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'note',      
                     'tooltip'   => __('Add Notes')));
             }
@@ -337,14 +337,14 @@ class GridButtonsComponent extends Component {
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnLock'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'password', 
                         'tooltip'   => __('Change Password')
                     ),
                     array(
                         'xtype'     => 'button',  
                         'glyph'     => Configure::read('icnLight'),
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'enable_disable',
                         'tooltip'   => __('Enable / Disable')
                     )
@@ -361,7 +361,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnLock'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'password', 
                     'tooltip'   => __('Change Password')));
            }
@@ -370,7 +370,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnLight'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'enable_disable',
                     'tooltip'   => __('Enable / Disable')));
             }
@@ -389,14 +389,14 @@ class GridButtonsComponent extends Component {
                 array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnGraph'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'graph',
                     'tooltip'   => __('Graphs')
                 ),
                 array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnCamera'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'logo',     
                     'tooltip'   => __('Edit logo')
                 )
@@ -414,14 +414,14 @@ class GridButtonsComponent extends Component {
                 array(
                     'xtype'     => 'button',  
                     'glyph'     => Configure::read('icnMobile'),  
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'mobile',    
                     'tooltip'   => __('Mobile')
                 ),
                 array(
                     'xtype'     => 'button',  
                     'glyph'     => Configure::read('icnDesktop'),  
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'desktop',   
                     'tooltip'   => __('Desktop')
                 )
@@ -443,28 +443,28 @@ class GridButtonsComponent extends Component {
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnLock'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'password', 
                         'tooltip'   => __('Change Password')
                     ),
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnLight'),
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'enable_disable',
                         'tooltip'   => __('Enable / Disable')
                     ),
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnRadius'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'test_radius',  
                         'tooltip'=> __('Test RADIUS')
                     ),
                     array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnGraph'),   
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'graph',  
                         'tooltip'   => __('Graphs')
                     )
@@ -481,7 +481,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnLock'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'password', 
                     'tooltip'   => __('Change Password')));
            }
@@ -490,7 +490,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnLight'),
-                    'scale'     => 'large', 
+                    'scale'     => $this->scale, 
                     'itemId'    => 'enable_disable',
                     'tooltip'   => __('Enable / Disable')));
             }
@@ -499,7 +499,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group, array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnRadius'), 
-                        'scale'     => 'large', 
+                        'scale'     => $this->scale, 
                         'itemId'    => 'test_radius',  
                         'tooltip'=> __('Test RADIUS')
                     ));
@@ -508,7 +508,7 @@ class GridButtonsComponent extends Component {
             array_push($specific_group, array(
                 'xtype'     => 'button', 
                 'glyph'     => Configure::read('icnGraph'),   
-                'scale'     => 'large', 
+                'scale'     => $this->scale, 
                 'itemId'    => 'graph',  
                 'tooltip'   => __('Graphs')
             ));

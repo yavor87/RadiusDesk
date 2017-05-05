@@ -6,6 +6,8 @@ use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 
+use Cake\Utility\Inflector;
+
 class PermanentUsersController extends AppController{
 
     protected $base         = "Access Providers/Controllers/PermanentUsers/";
@@ -17,8 +19,7 @@ class PermanentUsersController extends AppController{
         $this->loadModel('PermanentUsers'); 
         $this->loadModel('Users');
         $this->loadModel('Realms');
-        $this->loadModel('Profiles');
-        
+        $this->loadModel('Profiles');      
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
@@ -28,8 +29,79 @@ class PermanentUsersController extends AppController{
         $this->loadComponent('Notes', [
             'model'     => 'PermanentUserNotes',
             'condition' => 'permanent_user_id'
-        ]);        
+        ]); 
+
+        $this->loadComponent('JsonErrors');       
     }
+
+
+     public function exportCsv(){
+
+        $this->autoRender   = false;
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $query = $this->{$this->main_model}->find(); 
+        $this->CommonQuery->build_common_query($query,$user,['Users','PermanentUserNotes' => ['Notes']]);
+        
+        $q_r    = $query->all();
+
+        //Create file
+        $this->ensureTmp();     
+        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
+        $fp             = fopen($tmpFilename, 'w');
+
+        //Headings
+        $heading_line   = array();
+        if(isset($this->request->query['columns'])){
+            $columns = json_decode($this->request->query['columns']);
+            foreach($columns as $c){
+                array_push($heading_line,$c->name);
+            }
+        }
+        fputcsv($fp, $heading_line,';','"');
+        foreach($q_r as $i){
+
+            $columns    = array();
+            $csv_line   = array();
+            if(isset($this->request->query['columns'])){
+                $columns = json_decode($this->request->query['columns']);
+                foreach($columns as $c){
+                    $column_name = $c->name;
+                    if($column_name == 'notes'){
+                        $notes   = '';
+                        foreach($i->permanent_user_notes as $un){
+                            if(!$this->Aa->test_for_private_parent($un->note,$user)){
+                                $notes = $notes.'['.$un->note->note.']';    
+                            }
+                        }
+                        array_push($csv_line,$notes);
+                    }elseif($column_name =='owner'){
+                        $owner_id       = $i->user_id;
+                        $owner_tree     = $this->Users->find_parents($owner_id);
+                        array_push($csv_line,$owner_tree); 
+                    }elseif($column_name == 'cleartext_password'){
+                        $cleartext_password = $this->{$this->main_model}->getCleartextPassword($i->username);
+                        array_push($csv_line,$cleartext_password);
+                    }else{
+                        array_push($csv_line,$i->{$column_name});  
+                    }
+                }
+                fputcsv($fp, $csv_line,';','"');
+            }
+        }
+
+        //Return results
+        fclose($fp);
+        $data = file_get_contents( $tmpFilename );
+        $this->cleanupTmp( $tmpFilename );
+        $this->RequestHandler->respondAs('csv');
+        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
+        $this->response->body($data);
+    } 
 
     public function index(){
         $user = $this->_ap_right_check();
@@ -65,7 +137,7 @@ class PermanentUsersController extends AppController{
             }else{
                 $owner_tree = $this->owner_tree[$owner_id];
             }
-            
+
             #FIXME We need to determine the rights of the user in terms of the REALM not its position wrt the Owner tree
             #For the action flags
             
@@ -138,11 +210,7 @@ class PermanentUsersController extends AppController{
             }
         
         }else{
-            $this->set(array(
-                'success' => false,
-                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
-                '_serialize' => array('success','message')
-            ));
+            $this->JsonErrors->errorMessage('realm or realm_id not found in DB or not supplied');
             return;
         }
         
@@ -152,11 +220,7 @@ class PermanentUsersController extends AppController{
             $this->request->data['profile']   = $profile_entity->name;
             $this->request->data['profile_id']= $profile_entity->id;
         }else{
-            $this->set(array(
-                'success' => false,
-                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
-                '_serialize' => array('success','message')
-            ));
+            $this->JsonErrors->errorMessage('profile or profile_id not found in DB or not supplied');
             return;
         }
         
@@ -175,7 +239,7 @@ class PermanentUsersController extends AppController{
         ];
         foreach($extDateSelects as $d){
             if(isset($this->request->data[$d])){
-                $newDate = date_create_from_format('d/m/Y', $this->request->data[$d]);
+                $newDate = date_create_from_format('m/d/Y', $this->request->data[$d]);
                 $this->request->data[$d] = $newDate;
             }  
         }
@@ -201,23 +265,8 @@ class PermanentUsersController extends AppController{
                 '_serialize' => array('success')
             ));
         }else{
-            $message    = 'Error';
-            $errors     = $entity->errors();
-            $a          = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }   
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
+            $message = __('Could not create item');
+            $this->JsonErrors->entityErros($entity,$message);
         }      
     }
 
@@ -267,11 +316,8 @@ class PermanentUsersController extends AppController{
         }
 
         if($fail_flag == true){
-            $this->set(array(
-                'success'   => false,
-                'message'   => array('message' => __('Could not delete some items')),
-                '_serialize' => array('success','message')
-            ));
+            $message = __('Could not delete some items');
+            $this->JsonErrors->errorMessage($message);
         }else{
             $this->set(array(
                 'success' => true,
@@ -309,8 +355,8 @@ class PermanentUsersController extends AppController{
 
         }else{
              $items['always_active'] = false;
-             $items['from_date']    = $items['from_date']->format("d/m/Y");
-             $items['to_date']      = $items['to_date']->format("d/m/Y");
+             $items['from_date']    = $items['from_date']->format("m/d/Y");
+             $items['to_date']      = $items['to_date']->format("m/d/Y");
         }
 
         //Check if it has an SSID limitation
@@ -341,11 +387,8 @@ class PermanentUsersController extends AppController{
             //FIXME WE HAVE TO CHECK AND CHANGE USERNAME IF CHANGE ...
         
         }else{
-            $this->set(array(
-                'success' => false,
-                'message'   => array('message' => 'realm or realm_id not found in DB or not supplied'),
-                '_serialize' => array('success','message')
-            ));
+            $message = __('realm or realm_id not found in DB or not supplied');
+            $this->JsonErrors->errorMessage($message);
             return;
         }
         
@@ -355,11 +398,8 @@ class PermanentUsersController extends AppController{
             $this->request->data['profile']   = $profile_entity->name;
             $this->request->data['profile_id']= $profile_entity->id;
         }else{
-            $this->set(array(
-                'success' => false,
-                'message'   => array('message' => 'profile or profile_id not found in DB or not supplied'),
-                '_serialize' => array('success','message')
-            ));
+            $message = __('profile or profile_id not found in DB or not supplied');
+            $this->JsonErrors->errorMessage($message);
             return;
         }
         
@@ -373,7 +413,7 @@ class PermanentUsersController extends AppController{
         ];
         foreach($extDateSelects as $d){
             if(isset($this->request->data[$d])){
-                $newDate = date_create_from_format('d/m/Y', $this->request->data[$d]);
+                $newDate = date_create_from_format('m/d/Y', $this->request->data[$d]);
                 $this->request->data[$d] = $newDate;
             }  
         }
@@ -387,25 +427,8 @@ class PermanentUsersController extends AppController{
                 '_serialize' => array('success')
             ));
         } else {
-            $message = 'Error';
-            
-            $errors = $entity->errors();
-            $a = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }
-            
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
+            $message = __('Could not update item');
+            $this->JsonErrors->entityErros($entity,$message);
         }
     }
 
@@ -460,24 +483,8 @@ class PermanentUsersController extends AppController{
                 '_serialize' => array('success')
             ));
         } else {
-            $message = 'Error';  
-            $errors = $entity->errors();
-            $a = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }
-            
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
+            $message = __('Could not update item');
+            $this->JsonErrors->entityErros($entity,$message);
         }
     }
 
@@ -507,23 +514,8 @@ class PermanentUsersController extends AppController{
         $entity =  $this->{$this->main_model}->privateAttrAdd();
         $errors = $entity->errors();
         if($errors){
-            $a = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }
-            
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-
+            $message = __('Could not create item');
+            $this->JsonErrors->entityErros($entity,$message);
         }else{        
             $this->request->data['id'] = $entity->id;
             $this->set(array(
@@ -543,23 +535,8 @@ class PermanentUsersController extends AppController{
         $entity =  $this->{$this->main_model}->privateAttrEdit();    
         $errors = $entity->errors();
         if($errors){
-            $a = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }
-            
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-
+            $message = __('Could not edit item');
+            $this->JsonErrors->entityErros($entity,$message);
         }else{        
             $this->request->data['id'] = $entity->id;
             $this->set(array(
@@ -576,11 +553,8 @@ class PermanentUsersController extends AppController{
             return;
         }
         if($this->{$this->main_model}->privateAttrDelete()){
-            $this->set(array(
-                'success'   => false,
-                'message'   => array('message' => __('Could not delete item')),
-                '_serialize' => array('success','message')
-            ));
+            $message = __('Could not delete some items');
+            $this->JsonErrors->errorMessage($message);  
         }else{
             $this->set(array(
                 'success'   => true,
@@ -667,6 +641,49 @@ class PermanentUsersController extends AppController{
         ));
     }
 
+    public function viewPassword(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+
+        $success    = false;
+        $value      = false;
+        $activate   = false;
+        $expire     = false;
+
+        if(isset($this->request->query['user_id'])){
+
+            $q_r = $this->{$this->main_model}->get($this->request->query['user_id']);
+            if($q_r){
+               if($q_r->from_date ){
+                 $activate = $q_r->from_date->format("m/d/Y");   
+               }
+               if($q_r->to_date ){
+                 $expire = $q_r->to_date->format("m/d/Y");   
+               }
+            }
+            $pw = $this->{$this->main_model}->getCleartextPassword($q_r->username);
+
+            if($pw){
+                $value = $pw;
+            }
+
+            $success = true;
+        }
+        $this->set(array(
+            'success'   => $success,
+            'value'     => $value,
+            'activate'  => $activate,
+            'expire'    => $expire,
+            '_serialize' => array('success','value','activate','expire')
+        ));
+
+    }
+
     public function changePassword(){
 
         //__ Authentication + Authorization __
@@ -676,9 +693,24 @@ class PermanentUsersController extends AppController{
         }
         $user_id    = $user['id'];
 
-        $this->request->data['token'] = ''; //Clear the token so it can generate a new one
+        unset($this->request->data['token']);
+
+        //Set the date and time
+        $extDateSelects = [
+                'from_date',
+                'to_date'
+        ];
+        foreach($extDateSelects as $d){
+            if(isset($this->request->data[$d])){
+                $newDate = date_create_from_format('m/d/Y', $this->request->data[$d]);
+                $this->request->data[$d] = $newDate;
+            }  
+        }
+
         $entity = $this->{$this->main_model}->get($this->request->data['user_id']);
-         $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+        unset($this->request->data['user_id']);
+
+        $this->{$this->main_model}->patchEntity($entity, $this->request->data());
 
         if ($this->{$this->main_model}->save($entity)) {
             $this->set(array(
@@ -686,26 +718,9 @@ class PermanentUsersController extends AppController{
                 '_serialize' => array('success')
             ));
         } else {
-            $message = 'Error';       
-            $errors = $entity->errors();
-            $a = [];
-            foreach(array_keys($errors) as $field){
-                $detail_string = '';
-                $error_detail =  $errors[$field];
-                foreach(array_keys($error_detail) as $error){
-                    $detail_string = $detail_string." ".$error_detail[$error];   
-                }
-                $a[$field] = $detail_string;
-            }
-
-            $this->set(array(
-                'errors'    => $a,
-                'success'   => false,
-                'message'   => array('message' => __('Could not create item')),
-                '_serialize' => array('errors','success','message')
-            ));
-        }        
-        
+            $message = __('Could not change password');
+            $this->JsonErrors->entityErros($entity,$message);
+        }           
     }
    
     public function menuForGrid(){
