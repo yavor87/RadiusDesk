@@ -32,7 +32,6 @@ class PermanentUsersController extends AppController{
     }
 
     public function index(){
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
@@ -106,9 +105,8 @@ class PermanentUsersController extends AppController{
     }
     
     public function add(){
-    
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
+        $user = $this->_ap_right_check();
+        if(!$user){
             return;
         }
         
@@ -227,8 +225,6 @@ class PermanentUsersController extends AppController{
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
-
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
@@ -285,8 +281,6 @@ class PermanentUsersController extends AppController{
 	}
 
     public function viewBasicInfo(){
-
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
@@ -333,8 +327,7 @@ class PermanentUsersController extends AppController{
         ));
     }
 
-    public function editBasicInfo(){
-    
+    public function editBasicInfo(){ 
         $user = $this->_ap_right_check();
         if(!$user){
             return;
@@ -417,12 +410,12 @@ class PermanentUsersController extends AppController{
     }
 
     public function viewPersonalInfo(){
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
         $user_id    = $user['id'];
+
         $items      = [];
         //TODO Check if the owner of this user is in the chain of the APs
         if(isset($this->request->query['user_id'])){
@@ -441,13 +434,12 @@ class PermanentUsersController extends AppController{
     }
 
     public function editPersonalInfo(){
-
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
         $user_id    = $user['id'];
+
         //TODO Check if the owner of this user is in the chain of the APs
         unset($this->request->data['token']);
         //Get the language and country
@@ -490,12 +482,11 @@ class PermanentUsersController extends AppController{
     }
 
     public function privateAttrIndex(){
-
-        //__ Authentication + Authorization __
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
+
         $user_id    = $user['id'];
         $username   = $this->request->query['username'];
         $items      =  $this->{$this->main_model}->privateAttrIndex($username);
@@ -507,12 +498,103 @@ class PermanentUsersController extends AppController{
         ));
     }
 
-    public function restrictListOfDevices(){
-
+    public function privateAttrAdd(){
         $user = $this->_ap_right_check();
         if(!$user){
             return;
         }
+
+        $entity =  $this->{$this->main_model}->privateAttrAdd();
+        $errors = $entity->errors();
+        if($errors){
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+
+        }else{        
+            $this->request->data['id'] = $entity->id;
+            $this->set(array(
+                'items'     => $this->request->data,
+                'success'   => true,
+                '_serialize' => array('success','items')
+            ));
+        }
+    }
+
+    public function privateAttrEdit(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
+        $entity =  $this->{$this->main_model}->privateAttrEdit();    
+        $errors = $entity->errors();
+        if($errors){
+            $a = [];
+            foreach(array_keys($errors) as $field){
+                $detail_string = '';
+                $error_detail =  $errors[$field];
+                foreach(array_keys($error_detail) as $error){
+                    $detail_string = $detail_string." ".$error_detail[$error];   
+                }
+                $a[$field] = $detail_string;
+            }
+            
+            $this->set(array(
+                'errors'    => $a,
+                'success'   => false,
+                'message'   => array('message' => __('Could not create item')),
+                '_serialize' => array('errors','success','message')
+            ));
+
+        }else{        
+            $this->request->data['id'] = $entity->id;
+            $this->set(array(
+                'items'     => $this->request->data,
+                'success'   => true,
+                '_serialize' => array('success','items')
+            ));
+        }
+    }
+
+    public function privateAttrDelete(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        if($this->{$this->main_model}->privateAttrDelete()){
+            $this->set(array(
+                'success'   => false,
+                'message'   => array('message' => __('Could not delete item')),
+                '_serialize' => array('success','message')
+            ));
+        }else{
+            $this->set(array(
+                'success'   => true,
+                '_serialize' => array('success')
+            ));
+        }
+    }
+
+    public function restrictListOfDevices(){
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+
         $user_id    = $user['id'];
 
         if((isset($this->request->query['username']))&&(isset($this->request->query['restrict']))){

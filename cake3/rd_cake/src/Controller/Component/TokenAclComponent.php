@@ -35,9 +35,7 @@ class TokenAclComponent extends Component {
                 '_serialize'    => array('success', 'message')
             ));
     }
-
-
-
+    
     //This is checking the right of the person to do this - users will only be able to do things on themselves
 
 }

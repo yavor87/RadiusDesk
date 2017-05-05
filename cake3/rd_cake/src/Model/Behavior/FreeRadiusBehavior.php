@@ -169,7 +169,7 @@ class FreeRadiusBehavior extends Behavior {
             }     
             array_push($items,array(
                 'id'        => 'rpl_'.$i->id,
-                'type'      => 'check', 
+                'type'      => 'reply', 
                 'attribute' => $i->attribute,
                 'op'        => $i->op,
                 'value'     => $i->value,
@@ -178,6 +178,137 @@ class FreeRadiusBehavior extends Behavior {
             ));
         }
         return $items;
+    }
+
+    public function privateAttrAdd(){
+        $this->request = Router::getRequest();
+        if(isset($this->request->query['username'])){
+            $username                           = $this->request->query['username'];
+            $this->request->data['username']    = $username;
+            unset($this->request->data['id']); 
+
+            if($this->request->data['type'] == 'check'){
+			    $entity = $this->{'Radchecks'}->newEntity($this->request->data);
+                $this->{'Radchecks'}->save($entity);
+                return $entity;	
+            }
+
+            if($this->request->data['type'] == 'reply'){
+                $entity = $this->{'Radreplies'}->newEntity($this->request->data);
+                $this->{'Radchecks'}->save($entity);
+                return $entity;
+            }
+        }
+    }
+
+    public function privateAttrEdit(){
+
+        $this->request = Router::getRequest();
+        if(isset($this->request->query['username'])){
+            $username                           = $this->request->query['username'];
+            $this->request->data['username']    = $username;
+
+            //Check if the type check was not changed
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='check')){ //check Type remained the same
+                //Get the id for this one
+                $type_id                        = explode( '_', $this->request->data['id']);
+                $this->request->data['id']      = $type_id[1];
+                $entity                         = $this->{'Radchecks'}->get($this->request->data['id']);
+                $this->{'Radchecks'}->patchEntity($entity, $this->request->data());
+                $this->{'Radchecks'}->save($entity);
+                return $entity;	
+            }
+
+            //Check if the type reply was not changed
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->request->data['type']=='reply')){ //reply Type remained the same
+                //Get the id for this one
+                $type_id                        = explode( '_', $this->request->data['id']);
+                $this->request->data['id']      = $type_id[1];
+                $entity                         = $this->{'Radreplies'}->get($this->request->data['id']);
+                $this->{'Radreplies'}->patchEntity($entity, $this->request->data());
+                $this->{'Radreplies'}->save($entity);
+                return $entity;	
+            }
+
+            //____ Attribute Type changes ______
+            if((preg_match("/^chk_/",$this->request->data['id']))&&($this->request->data['type']=='reply')){
+                //Delete the check; add a reply
+                $type_id    = explode( '_', $this->request->data['id']);
+                $d_id       = $type_id[1];
+                $e_delete   = $this->{'Radchecks'}->get($d_id);
+                $this->{'Radchecks'}->delete($e_delete);
+                $entity = $this->{'Radreplies'}->newEntity($this->request->data);
+                $this->{'Radreplies'}->save($entity);
+                $id = 'rpl_'.$entity->id;
+                $this->request->data['id'] = $id;
+                return $entity;	
+            }
+
+            if((preg_match("/^rpl_/",$this->request->data['id']))&&($this->request->data['type']=='check')){
+                //Delete the reply; add a reply
+                $type_id    = explode( '_', $this->request->data['id']);
+                $d_id       = $type_id[1];
+                $e_delete   = $this->{'Radreplies'}->get($d_id);
+                $this->{'Radreplies'}->delete($e_delete);
+                $entity = $this->{'Radchecks'}->newEntity($this->request->data);
+                $this->{'Radchecks'}->save($entity);
+                $id = 'chk_'.$entity->id;
+                $this->request->data['id'] = $id;
+                return $entity;
+            }
+        }
+    }
+
+    public function privateAttrDelete(){
+        $fail_flag = false;
+        $this->request = Router::getRequest();
+        if(isset($this->request->data['id'])){   //Single item delete
+            $type_id            = explode( '_', $this->request->data['id']);
+            if(preg_match("/^chk_/",$this->request->data['id'])){    
+                //Check if it should not be deleted
+                $qr = $this->{'Radchecks'}->get($type_id[1]);
+                if($qr){
+                    $name = $qr->attribute;
+                    if(in_array($name,$this->readOnlyAttributes)){
+                        $fail_flag = true;
+                    }else{
+                        $this->{'Radchecks'}->delete($qr);
+                    }            
+                }
+            }
+
+            if(preg_match("/^rpl_/",$this->request->data['id'])){   
+                $qr = $this->{'Radreplies'}->get($type_id[1]);
+                if($qr){
+                    $this->{'Radreplies'}->delete($qr);
+                }
+            }         
+   
+        }else{ 
+            foreach($this->request->data as $d){
+                $type_id            = explode( '_', $d['id']);
+                if(preg_match("/^chk_/",$d['id'])){
+
+                    $qr = $this->{'Radchecks'}->get($type_id[1]);
+                    if($qr){
+                        $name = $qr->attribute;
+                        if(in_array($name,$this->readOnlyAttributes)){
+                            $fail_flag = true;
+                        }else{
+                            $this->{'Radchecks'}->delete($qr);
+                        }            
+                    }
+
+                }
+                if(preg_match("/^rpl_/",$d['id'])){   
+                    $qr = $this->{'Radreplies'}->get($type_id[1]);
+                    if($qr){
+                        $this->{'Radreplies'}->delete($qr);
+                    }
+                }           
+            }
+        }
+        return $fail_flag;
     }
 
     public function afterSave($event, $entity){
