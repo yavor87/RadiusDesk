@@ -35,23 +35,22 @@ Ext.define('Rd.controller.cPermanentUsers', {
         'mRadacct',                 'mRadpostauth',     'mAttribute',   'mVendor',  'mPrivateAttribute', 'mDevice' ],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/permanent_users/add.json',
-        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/permanent_users/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/permanent_users/note_add.json',
-        urlViewBasic:       '/cake2/rd_cake/permanent_users/view_basic_info.json',
-        urlEditBasic:       '/cake2/rd_cake/permanent_users/edit_basic_info.json',
-        urlViewPersonal:    '/cake2/rd_cake/permanent_users/view_personal_info.json',
-        urlEditPersonal:    '/cake2/rd_cake/permanent_users/edit_personal_info.json',
-        urlViewTracking:    '/cake2/rd_cake/permanent_users/view_tracking.json',
-        urlEditTracking:    '/cake2/rd_cake/permanent_users/edit_tracking.json',
-        urlEnableDisable:   '/cake2/rd_cake/permanent_users/enable_disable.json',
-        urlChangePassword:  '/cake2/rd_cake/permanent_users/change_password.json',
-        urlDevicesListedOnly:'/cake2/rd_cake/permanent_users/restrict_list_of_devices.json',
-        urlAutoAddMac:      '/cake2/rd_cake/permanent_users/auto_mac_on_off.json',
-        urlDelete:          '/cake2/rd_cake/permanent_users/delete.json',
-        urlDeleteRadaccts:  '/cake2/rd_cake/radaccts/delete.json',
-        urlDeletePostAuths: '/cake2/rd_cake/radpostauths/delete.json'
+        urlAdd              : '/cake3/rd_cake/permanent-users/add.json',
+        urlApChildCheck     : '/cake3/rd_cake/access-providers/child-check.json',  
+        urlExportCsv        : '/cake3/rd_cake/permanent-users/export-csv',
+        urlNoteAdd          : '/cake3/rd_cake/permanent-users/note-add.json',
+        urlViewBasic        : '/cake3/rd_cake/permanent-users/view-basic-info.json',
+        urlEditBasic        : '/cake3/rd_cake/permanent-users/edit-basic-info.json',
+        urlViewPersonal     : '/cake3/rd_cake/permanent-users/view-personal-info.json',
+        urlEditPersonal     : '/cake3/rd_cake/permanent-users/edit-personal-info.json',
+        urlEnableDisable    : '/cake3/rd_cake/permanent-users/enable-disable.json',
+        urlChangePassword   : '/cake3/rd_cake/permanent-users/change-password.json',
+        urlDelete           : '/cake3/rd_cake/permanent-users/delete.json', 
+        urlDevicesListedOnly: '/cake3/rd_cake/permanent-users/restrict-list-of-devices.json',
+        urlAutoAddMac       : '/cake3/rd_cake/permanent-users/auto-mac-on-off.json',  
+        
+        urlDeleteRadaccts   :  '/cake2/rd_cake/radaccts/delete.json',
+        urlDeletePostAuths  : '/cake2/rd_cake/radpostauths/delete.json'
     },
     refs: [
         {  ref: 'grid',         selector:   'gridPermanentUsers'},
@@ -218,12 +217,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
             },
             'pnlPermanentUser #tabPersonalInfo #save' : {
                 click: me.savePersonalInfo
-            },
-            'pnlPermanentUser #tabTracking' : {
-                activate: me.onTabTrackingActive
-            },
-            'pnlPermanentUser #tabTracking #save' : {
-                click: me.saveTracking
             },
             // -- Graphs --
             '#tabPermanentUsers pnlPermanentUserGraphs #daily' : {
@@ -593,23 +586,19 @@ Ext.define('Rd.controller.cPermanentUsers', {
             });
         }
     },
-  /*  onStorePermanentUsersLoaded: function() {
-        var me      = this;
-        var count   = me.getStore('sPermanentUsers').getTotalCount();
-        me.getGrid().down('#count').update({count: count});
-    },*/
-
+    
     csvExport: function(button,format) {
         var me          = this;
-        var columns     = me.getGrid().columns;
+        var columns     = me.getGrid().down('headercontainer').getGridColumns();
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
             if(item.dataIndex != ''){
                 var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
-                col_list[index] = chk;
+                col_list.push(chk);
             }
-        }); 
-
+        });
+        col_list.push({boxLabel: 'Cleartext Password', name: 'cleartext_password', checked: false});
+          
         if(!Ext.WindowManager.get('winCsvColumnSelectPermanentUsers')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectPermanentUsers',columns: col_list});
             w.show();         
@@ -1205,18 +1194,18 @@ Ext.define('Rd.controller.cPermanentUsers', {
         form.load({url:me.getUrlViewBasic(), method:'GET',params:{user_id:user_id}, 
             success : function(a,b){
                 //Set the CAP's of the permanent user
-                if(b.result.data.cap_data != undefined){
+                if(b.result.data.data_cap_type != undefined){
                     var cmbDataCap  = form.down('#cmbDataCap');
                     cmbDataCap.setVisible(true);
                     cmbDataCap.setDisabled(false);
-                    cmbDataCap.setValue(b.result.data.cap_data);
+                    cmbDataCap.setValue(b.result.data.data_cap_type);
                 }
 
-                if(b.result.data.cap_time != undefined){
+                if(b.result.data.time_cap_type != undefined){
                     var cmbTimeCap  = form.down('#cmbTimeCap');
                     cmbTimeCap.setVisible(true);
                     cmbTimeCap.setDisabled(false);
-                    cmbTimeCap.setValue(b.result.data.cap_time);
+                    cmbTimeCap.setValue(b.result.data.time_cap_type);
                 }
 
 				//If the SSID must be restricted specify which SSIDs
@@ -1275,35 +1264,6 @@ Ext.define('Rd.controller.cPermanentUsers', {
         form.submit({
             clientValidation    : true,
             url                 : me.getUrlEditPersonal(),
-            params              : {id: user_id},
-            success             : function(form, action) {
-                me.reload();
-                Ext.ux.Toaster.msg(
-                    i18n('sItems_modified'),
-                    i18n('sItems_modified_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure             : Ext.ux.formFail
-        });
-    },
-    onTabTrackingActive: function(t){
-        var me      = this;
-        var form    = t.down('form');
-        //get the user's id
-        var user_id = t.up('pnlPermanentUser').pu_id;
-        form.load({url:me.getUrlViewTracking(), method:'GET',params:{user_id:user_id}});
-    },
-    saveTracking:function(button){
-
-        var me      = this;
-        var form    = button.up('form');
-        var user_id = button.up('pnlPermanentUser').pu_id;
-        //Checks passed fine...      
-        form.submit({
-            clientValidation    : true,
-            url                 : me.getUrlEditTracking(),
             params              : {id: user_id},
             success             : function(form, action) {
                 me.reload();

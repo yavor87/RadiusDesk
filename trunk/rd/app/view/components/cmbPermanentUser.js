@@ -24,7 +24,7 @@ Ext.define('Rd.view.components.cmbPermanentUser', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/permanent_users/index.json',
+                url     : '/cake3/rd_cake/permanent-users/index.json',
                 reader  : {
                     type: 'json',
                     rootProperty: 'items',

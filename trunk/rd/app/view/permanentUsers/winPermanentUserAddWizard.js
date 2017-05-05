@@ -1,27 +1,26 @@
 Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
-    extend:     'Ext.window.Window',
-    alias :     'widget.winPermanentUserAddWizard',
-    closable:   true,
-    draggable:  true,
-    resizable:  false,
-    title:      i18n('sNew_permanent_user'),
-    width:      400,
-    height:     500,
-    plain:      true,
-    border:     false,
-    layout:     'card',
-    iconCls:    'add',
-    glyph: Rd.config.icnAdd,
-    autoShow:   false,
-    defaults: {
-            border: false
+    extend      : 'Ext.window.Window',
+    alias       : 'widget.winPermanentUserAddWizard',
+    closable    : true,
+    draggable   : true,
+    resizable   : true,
+    title       : i18n('sNew_permanent_user'),
+    width       : 500,
+    height      : 550,
+    plain       : true,
+    border      : false,
+    layout      : 'card',
+    glyph       : Rd.config.icnAdd,
+    autoShow    :   false,
+    defaults    : {
+        border: false
     },
-    no_tree	: false, //If the user has no children we don't bother giving them a branchless tree
-    user_id	: '',
-    owner	: '',
-    startScreen: 'scrnApTree', //Default start screen
-    selLanguage: null,
-    requires: [
+    no_tree	    : false, //If the user has no children we don't bother giving them a branchless tree
+    user_id	    : '',
+    owner	    : '',
+    startScreen : 'scrnApTree', //Default start screen
+    selLanguage : null,
+    requires    : [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
         'Ext.form.field.Text',
@@ -50,10 +49,7 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
 
     //_______ Data for permanent user  _______
     mkScrnData: function(){
-
-
         var me      = this;
-
         //Set default values for from and to:
         var dtFrom  = new Date();
         var dtTo    = new Date();
@@ -187,7 +183,8 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_data'),
                                     itemId      : 'cmbDataCap',
-                                    name        : 'cap_data'
+                                    //name        : 'cap_data'
+                                    name        : 'data_cap_type'
                                 },
                                 {
                                     xtype       : 'cmbCap',
@@ -198,7 +195,8 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_time'),
                                     itemId      : 'cmbTimeCap',
-                                    name        : 'cap_time'
+                                    //name        : 'cap_time'
+                                    name        : 'time_cap_type'
                                 }
                             ]
                         },
@@ -359,31 +357,6 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     cls         : 'lblRd',
                                     itemId      : 'auto_add'
                                 }  
-                            ]   
-                        },
-                        { 
-                            'title' : i18n('sTracking'),
-                            'layout'    : 'anchor',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            items       : [
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_authentication'),
-                                    name        : 'track_auth',
-                                    inputValue  : 'track_auth',
-                                    checked     : false, //Default not to track it
-                                    cls         : 'lblRd'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_accounting'),
-                                    name        : 'track_acct',
-                                    inputValue  : 'track_acct',
-                                    checked     : true,
-                                    cls         : 'lblRd'
-                                }
                             ]   
                         }
                     ]
