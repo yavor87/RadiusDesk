@@ -133,10 +133,10 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                     writeAllFields: true 
                 },
                 api         : {
-                    create      : '/cake2/rd_cake/permanent_users/private_attr_add.json',
-                    read        : '/cake2/rd_cake/permanent_users/private_attr_index.json',
-                    update      : '/cake2/rd_cake/permanent_users/private_attr_edit.json',
-                    destroy     : '/cake2/rd_cake/permanent_users/private_attr_delete.json'
+                    create      : '/cake3/rd_cake/permanent-users/private-attr-add.json',
+                    read        : '/cake3/rd_cake/permanent-users/private-attr-index.json',
+                    update      : '/cake3/rd_cake/permanent-users/private-attr-edit.json',
+                    destroy     : '/cake3/rd_cake/permanent-users/private-attr-delete.json'
                 }
             },
             listeners: {

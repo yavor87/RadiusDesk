@@ -12,13 +12,8 @@ Ext.define('Rd.view.permanentUsers.gridUserRadaccts' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/permanent_users/menu_for_accounting_data.json',
-    plugins     : 'gridfilters',  //*We specify this
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },
-        '->',
-        {   xtype: 'component', itemId: 'totals',  tpl: i18n('tpl_In_{in}_Out_{out}_Total_{total}'),   style: 'margin-right:5px', cls: 'lblRd' }
-    ],
+    urlMenu: '/cake3/rd_cake/permanent-users/menu-for-accounting-data.json',
+    plugins     : 'gridfilters',
     columns: [
         {xtype: 'rownumberer',stateId: 'StateGridUserRadaccts1'},
         { text: i18n('sAcct_session_id'),dataIndex: 'acctsessionid',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},    hidden: true,stateId: 'StateGridUserRadaccts2'},
@@ -93,25 +88,22 @@ Ext.define('Rd.view.permanentUsers.gridUserRadaccts' ,{
 
         //Create a store specific to this Permanent User
         me.store = Ext.create(Ext.data.Store,{
-            model: 'Rd.model.mRadacct',
-            buffered: true,
-            leadingBufferZone: 450, 
-            pageSize: 150,
-            //To force server side sorting:
-            remoteSort: true,
+            model       : 'Rd.model.mRadacct',
+            pageSize    : 100,
+            remoteSort  : true,
             proxy: {
-                type    : 'ajax',
-                keepRawData     : true,
-                format  : 'json',
+                type        : 'ajax',
+                keepRawData : true,
+                format      : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/radaccts/index.json',
-                extraParams: { 'username' : me.username },
-                reader: {
+                url         : '/cake2/rd_cake/radaccts/index.json',
+                extraParams : { 'username' : me.username },
+                reader      : {
                     keepRawData     : true,
-                    type: 'json',
-                    rootProperty: 'items',
-                    messageProperty: 'message',
-                    totalProperty: 'totalCount' //Required for dynamic paging
+                    type            : 'json',
+                    rootProperty    : 'items',
+                    messageProperty : 'message',
+                    totalProperty   : 'totalCount' //Required for dynamic paging
                 },
                 api: {
                     destroy  : '/cake2/rd_cake/radaccts/delete.json'
@@ -129,17 +121,28 @@ Ext.define('Rd.view.permanentUsers.gridUserRadaccts' ,{
                         );
                         //console.log(store.getProxy().getReader().rawData.message.message);
                     }else{
-                        var count       = me.getStore().getTotalCount();
                         var totalIn     = Ext.ux.bytesToHuman(me.getStore().getProxy().getReader().rawData.totalIn);
                         var totalOut    = Ext.ux.bytesToHuman(me.getStore().getProxy().getReader().rawData.totalOut);
                         var totalInOut  = Ext.ux.bytesToHuman(me.getStore().getProxy().getReader().rawData.totalInOut);
-                        me.down('#count').update({count: count});
                         me.down('#totals').update({'in': totalIn, 'out': totalOut, 'total': totalInOut });
                     }   
                 },
                 scope: this
             }   
         });
+        
+        me.bbar     = [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            },
+            '->',
+            {   xtype: 'component', itemId: 'totals',  tpl: i18n('tpl_In_{in}_Out_{out}_Total_{total}'),   style: 'margin-right:5px', cls: 'lblRd' }
+        ];
+        
+        
         me.callParent(arguments);
     }
 });

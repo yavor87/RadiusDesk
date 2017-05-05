@@ -12,11 +12,8 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/permanent_users/menu_for_user_devices.json',
-    plugins     : 'gridfilters',  //*We specify this
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
+    urlMenu: '/cake3/rd_cake/permanent-users/menu-for-user-devices.json',
+    plugins: 'gridfilters',  //*We specify this
     columns: [
             {xtype: 'rownumberer',stateId: 'StateGridUserRadaccts1'},
             { text: i18n('sOwner'),         dataIndex: 'user',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts2'},
@@ -144,9 +141,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
         //Create a store specific to this Permanent User
         me.store = Ext.create(Ext.data.Store,{
             model: 'Rd.model.mDevice',
-            buffered: true,
-            leadingBufferZone: 450, 
-            pageSize: 150,
+            pageSize: 100,
             //To force server side sorting:
             remoteSort: true,
             proxy: {
@@ -157,35 +152,26 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 extraParams: { 'permanent_user_id' : me.user_id },
                 reader: {
                     keepRawData     : true,
-                    type: 'json',
-                    rootProperty: 'items',
-                    messageProperty: 'message',
-                    totalProperty: 'totalCount' //Required for dynamic paging
+                    type            : 'json',
+                    rootProperty    : 'items',
+                    messageProperty : 'message',
+                    totalProperty   : 'totalCount' //Required for dynamic paging
                 },
                 api: {
                     destroy  : '/cake2/rd_cake/devices/delete.json'
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
-            },
-            listeners: {
-                load: function(store, records, successful) {
-                    if(!successful){
-                        Ext.ux.Toaster.msg(
-                            'Error encountered',
-                            store.getProxy().getReader().rawData.message.message,
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
-                    }else{
-                        var count       = me.getStore().getTotalCount();
-                        me.down('#count').update({count: count});
-
-                    }   
-                },
-                scope: this
-            }   
+            }
         });
+        
+        me.bbar =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
        
         me.callParent(arguments);
     }

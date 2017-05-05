@@ -49,8 +49,8 @@ Ext.define('Rd.controller.cPassword', {
     models: ['mPermanentUser'],
     selectedRecord: null,
     config: {
-        urlGetPwd:              '/cake2/rd_cake/permanent_users/view_password.json',
-        urlChangePassword:      '/cake2/rd_cake/permanent_users/change_password.json'
+        urlGetPwd:              '/cake3/rd_cake/permanent-users/view-password.json',
+        urlChangePassword:      '/cake3/rd_cake/permanent-users/change-password.json'
     },
     refs: [
                

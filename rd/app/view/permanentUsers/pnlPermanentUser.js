@@ -62,7 +62,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         value       : 'hard',
                         fieldLabel  : i18n('sCap_type_for_data'),
                         itemId      : 'cmbDataCap',
-                        name        : 'cap_data'
+                        //name        : 'cap_data'
+                        name        : 'time_cap_type'
                     },
                     {
                         xtype       : 'cmbCap',
@@ -73,7 +74,8 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         value       : 'hard',
                         fieldLabel  : i18n('sCap_type_for_time'),
                         itemId      : 'cmbTimeCap',
-                        name        : 'cap_time'
+                        //name        : 'cap_time'
+                        name        : 'data_cap_type'
                     },
                     {
                         xtype       : 'checkbox',      
@@ -241,57 +243,6 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
             layout  : 'fit',
             xtype   : 'gridUserPrivate',  
             username: me.pu_name
-        },
-        { 
-            title   : i18n('sTracking'),
-            itemId: 'tabTracking',
-            layout: 'hbox',
-            items:  { 
-                xtype   :  'form',
-                height  : '100%', 
-                width   :  400,
-                autoScroll:true,
-                layout  : 'anchor',
-                frame   : true,
-                defaults    : {
-                    anchor: '100%'
-                },
-                fieldDefaults: {
-                    msgTarget: 'under',
-                    labelClsExtra: 'lblRd',
-                    labelAlign: 'left',
-                    labelSeparator: '',
-                    margin: 15
-                },
-                items       : [
-                    {
-                        xtype       : 'checkbox',      
-                        boxLabel    : i18n('sRADIUS_authentication'),
-                        name        : 'track_auth',
-                        inputValue  : 'track_auth',
-                        checked     : true,
-                        cls         : 'lblRd'
-                    },
-                    {
-                        xtype       : 'checkbox',      
-                        boxLabel    : i18n('sRADIUS_accounting'),
-                        name        : 'track_acct',
-                        inputValue  : 'track_acct',
-                        checked     : true,
-                        cls         : 'lblRd'
-                    }                
-                ],
-                buttons: [
-                    {
-                        itemId: 'save',
-                        text: i18n('sSave'),
-                        scale: 'large',
-                        iconCls: 'b-save',
-                        glyph: Rd.config.icnYes,
-                        margin: '0 20 40 0'
-                    }
-                ]
-            }
         },
         { 
             title   : i18n('sAuthentication_data'),

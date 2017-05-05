@@ -1,80 +1,83 @@
 Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
-    extend:'Ext.grid.Panel',
-    alias : 'widget.gridUserPrivate',
-    multiSelect: true,
-    stateful: true,
-    stateId: 'StateGridUserPrivate',
-    stateEvents:['groupclick','columnhide'],
-    border: false,
-    viewConfig: {
-        loadMask:true
+    extend      :'Ext.grid.Panel',
+    alias       : 'widget.gridUserPrivate',
+    multiSelect : true,
+    stateful    : true,
+    stateId     : 'StateGridUserPrivate',
+    stateEvents :['groupclick','columnhide'],
+    border      : false,
+    viewConfig  : {
+        loadMask    :true
     },
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
-    tbar: [
+    tbar        : [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 
-            {   xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
-            {   xtype: 'button',  iconCls: 'b-delete', glyph: Rd.config.icnDelete,   scale: 'large',      itemId: 'delete',    disabled: true,    tooltip:    i18n('sDelete')}
+            {   glyph: Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
+            {   glyph: Rd.config.icnDelete,   scale: 'large',   itemId: 'delete',    disabled: true,    tooltip:    i18n('sDelete')}
         ]}, 
         { xtype: 'buttongroup', title: i18n('sSelection'),items : [
             {   xtype: 'cmbVendor'     , itemId:'cmbVendor',    emptyText: i18n('sSelect_a_vendor') },
             {   xtype: 'cmbAttribute'  , itemId:'cmbAttribute', emptyText: i18n('sSelect_an_attribute') },
-            {   xtype: 'button',  iconCls: 'b-add', glyph: Rd.config.icnAdd,   scale: 'large', itemId: 'add',       tooltip:    i18n('sAdd')}
+            {   glyph: Rd.config.icnAdd, scale: 'large',        itemId: 'add',       tooltip:    i18n('sAdd')}
         ]}        
     ],
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ],
-    username: 'nobody', //dummy value
+    username    : 'nobody', //dummy value
     initComponent: function(){
-        var me      = this;
+        var me     = this;
+        me.plugins = [Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1
+        })];
 
         me.columns = [
-            {xtype: 'rownumberer',stateId: 'StateGridUserPrivate1'},
+            {xtype: 'rownumberer',stateId: 'StateGridUserPrivate1'},          
             {
-                header: i18n('sType'),
-                dataIndex: 'type',
-                width: 130,
-                editor: {
-                    xtype: 'combobox',
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    selectOnTab: true,
-                    store: [
+                header      : i18n('sType'),
+                dataIndex   : 'type',
+                width       : 130,
+                editor      : {
+                    xtype           : 'combobox',
+                    typeAhead       : true,
+                    triggerAction   : 'all',
+                    selectOnTab     : true,
+                    store           : [
                         ['check','Check'],
                         ['reply','Reply']
                     ],
-                    lazyRender: true,
-                    listClass: 'x-combo-list-small'
+                    lazyRender      : true,
+                    listClass       : 'x-combo-list-small'
                 },
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
+                renderer: function(value){
                     if(value == "check"){
                         return i18n('sCheck');
                     }else{
                         return i18n('sReply');
                     }
-                },stateId: 'StateGridUserPrivate2'
-            },
-            { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1,stateId: 'StateGridUserPrivate3'},
+                },
+                stateId     : 'StateGridUserPrivate2'
+            },  
             {
-                header: i18n('sOperator'),
-                dataIndex: 'op',
-                width: 100,
-                editor: {
-                    allowBlank: false,
-                    xtype: 'combobox',
-                    typeAhead: true,
+                header      : i18n('sAttribute'),
+                xtype       : 'templatecolumn',
+                tdCls       : 'gridTree',
+                flex        : 1,
+                stateId     : 'StateGridUserPrivate3', 
+                tpl         : new Ext.XTemplate(
+                    "<tpl if='edit == true'><div class=\"fieldBlue\"><i class=\"fa fa-edit\"></i> {attribute}</div></tpl>",
+                    "<tpl if='edit == false'><div class=\"fieldGreyWhite\"><i class=\"fa fa-ban\"></i> {attribute}</div></tpl>"
+                ),
+                dataIndex   : 'attribute'
+            }, 
+            {
+                header      : i18n('sOperator'),
+                dataIndex   : 'op',
+                width       : 100,
+                stateId     : 'StateGridUserPrivate4',
+                editor      : {
+                    allowBlank  : false,
+                    xtype       : 'combobox',
+                    typeAhead   : true,
                     triggerAction: 'all',
-                    selectOnTab: true,
-                    store: [
+                    selectOnTab : true,
+                    store       : [
                         ['=' ,  '=' ],
                         [':=',  ':='],
                         ['+=',  '+='],
@@ -84,29 +87,19 @@ Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
                         ['>=',  '>='],
                         ['!*',  '!*']
                     ],
-                    lazyRender: true,
-                    listClass: 'x-combo-list-small'
-                },
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
-                    return value;
-                },stateId: 'StateGridUserPrivate4'
+                    lazyRender  : true,
+                    listClass   : 'x-combo-list-small'
+                }
             },
             { 
-                text: i18n('sValue'),        dataIndex: 'value', flex: 1,
-                editor: { xtype: 'textfield',    allowBlank: false},
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
-                    return value;
-                },stateId: 'StateGridUserPrivate5'
+                text        : i18n('sValue'),
+                dataIndex   : 'value',     
+                flex        : 1,
+                editor      : { 
+                    xtype       : 'textfield',    
+                    allowBlank  : false
+               },
+               stateId: 'StateGridUserPrivate5'
             }
         ];
 
@@ -129,29 +122,15 @@ Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
                     writeAllFields: true 
                 },
                 api         : {
-                    create      : '/cake2/rd_cake/permanent_users/private_attr_add.json',
-                    read        : '/cake2/rd_cake/permanent_users/private_attr_index.json',
-                    update      : '/cake2/rd_cake/permanent_users/private_attr_edit.json',
-                    destroy     : '/cake2/rd_cake/permanent_users/private_attr_delete.json'
+                    create      : '/cake3/rd_cake/permanent-users/private-attr-add.json',
+                    read        : '/cake3/rd_cake/permanent-users/private-attr-index.json',
+                    update      : '/cake3/rd_cake/permanent-users/private-attr-edit.json',
+                    destroy     : '/cake3/rd_cake/permanent-users/private-attr-delete.json'
                 }
             },
             listeners: {
-                load: function(store, records, successful) {
-                    if(!successful){
-                        Ext.ux.Toaster.msg(
-                            'Error encountered',
-                            store.getProxy().getReader().rawData.message.message,
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
-                    }else{
-                        var count   = me.getStore().getTotalCount();
-                        me.down('#count').update({count: count});
-                    }   
-                },
                 update: function(store, records, action, options,a,b) {
-                    if(action == 'edit'){ //Filter for edit (after commited a second action will fire called commit)
+                    if(action == 'edit'){ 
                         store.sync({
                             success: function(batch,options){
                                 Ext.ux.Toaster.msg(
@@ -179,7 +158,15 @@ Ext.define('Rd.view.permanentUsers.gridUserPrivate' ,{
             autoLoad: false,
             autoSync: false    
         });
-
+        
+        me.bbar =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
         me.callParent(arguments);
     }
 });
