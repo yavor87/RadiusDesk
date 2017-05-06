@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Linux (i686)
+-- MySQL dump 10.13  Distrib 5.7.18, for Linux (i686)
 --
 -- Host: localhost    Database: rd
 -- ------------------------------------------------------
--- Server version	5.7.17-0ubuntu0.16.04.1
+-- Server version	5.7.18-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -57,7 +57,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=443 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=442 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,7 +575,7 @@ CREATE TABLE `aros` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3270 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3269 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -605,7 +605,7 @@ CREATE TABLE `aros_acos` (
   `_delete` varchar(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ARO_ACO_KEY` (`aro_id`,`aco_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=404 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -777,6 +777,63 @@ LOCK TABLES `auto_setups` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `black_list_entries`
+--
+
+DROP TABLE IF EXISTS `black_list_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `black_list_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `black_list_id` int(11) DEFAULT NULL,
+  `domain` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `black_list_entries`
+--
+
+LOCK TABLES `black_list_entries` WRITE;
+/*!40000 ALTER TABLE `black_list_entries` DISABLE KEYS */;
+INSERT INTO `black_list_entries` VALUES (6,1,'cnn.com','2017-04-22 07:38:07','2017-04-23 09:54:36'),(8,2,'cnn.comzz','2017-04-23 09:54:57','2017-04-23 09:57:20'),(9,2,'cnn.comza','2017-04-23 09:55:12','2017-04-23 10:00:44'),(10,1,'cnn.comz','2017-04-23 10:05:33','2017-04-23 10:05:33');
+/*!40000 ALTER TABLE `black_list_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `black_lists`
+--
+
+DROP TABLE IF EXISTS `black_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `black_lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `black_lists`
+--
+
+LOCK TABLES `black_lists` WRITE;
+/*!40000 ALTER TABLE `black_lists` DISABLE KEYS */;
+INSERT INTO `black_lists` VALUES (1,'BanCNN','We Ban CNN','We don\'t like Fake News',1,44,'2017-04-22 04:38:50','2017-04-22 04:38:50'),(2,'BanCNNz','','',0,44,'2017-04-23 09:53:13','2017-04-23 09:53:13');
+/*!40000 ALTER TABLE `black_lists` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categories`
 --
 
@@ -871,7 +928,7 @@ CREATE TABLE `device_notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -880,6 +937,7 @@ CREATE TABLE `device_notes` (
 
 LOCK TABLES `device_notes` WRITE;
 /*!40000 ALTER TABLE `device_notes` DISABLE KEYS */;
+INSERT INTO `device_notes` VALUES (2,1,90,'2017-05-06 09:39:49','2017-05-06 09:39:49');
 /*!40000 ALTER TABLE `device_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -909,8 +967,16 @@ CREATE TABLE `devices` (
   `data_cap` bigint(20) DEFAULT NULL,
   `time_used` int(12) DEFAULT NULL,
   `time_cap` int(12) DEFAULT NULL,
+  `time_cap_type` enum('hard','soft') DEFAULT 'soft',
+  `data_cap_type` enum('hard','soft') DEFAULT 'soft',
+  `realm` varchar(100) NOT NULL DEFAULT '',
+  `realm_id` int(11) DEFAULT NULL,
+  `profile` varchar(100) NOT NULL DEFAULT '',
+  `profile_id` int(11) DEFAULT NULL,
+  `from_date` datetime DEFAULT NULL,
+  `to_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1165,7 +1231,7 @@ CREATE TABLE `dynamic_details` (
   `slideshow_enforce_watching` tinyint(1) NOT NULL DEFAULT '1',
   `slideshow_enforce_seconds` int(4) NOT NULL DEFAULT '10',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1299,6 +1365,644 @@ LOCK TABLES `email_messages` WRITE;
 /*!40000 ALTER TABLE `email_messages` DISABLE KEYS */;
 INSERT INTO `email_messages` VALUES (3,'April','Goed Self','Wasssssssaaaap!','2016-03-14 05:43:51','2016-03-14 05:43:51');
 /*!40000 ALTER TABLE `email_messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `filter_categories`
+--
+
+DROP TABLE IF EXISTS `filter_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `filter_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `filter_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `filter_categories`
+--
+
+LOCK TABLES `filter_categories` WRITE;
+/*!40000 ALTER TABLE `filter_categories` DISABLE KEYS */;
+INSERT INTO `filter_categories` VALUES (6,1,2,'2017-04-30 03:34:47','2017-04-30 03:34:47'),(7,1,3,'2017-04-30 03:34:47','2017-04-30 03:34:47');
+/*!40000 ALTER TABLE `filter_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `filters`
+--
+
+DROP TABLE IF EXISTS `filters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `filters` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `protection_level` enum('low','medium','high','custom') DEFAULT 'low',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `filters`
+--
+
+LOCK TABLES `filters` WRITE;
+/*!40000 ALTER TABLE `filters` DISABLE KEYS */;
+INSERT INTO `filters` VALUES (1,'TestFilter','','',1,'high',44,'2017-04-19 12:08:17','2017-04-30 03:49:59');
+/*!40000 ALTER TABLE `filters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_authorize_net_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_authorize_net_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_authorize_net_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_authorize_net_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_authorize_net_transaction_notes`
+--
+
+LOCK TABLES `fin_authorize_net_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_authorize_net_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_authorize_net_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_authorize_net_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_authorize_net_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_authorize_net_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `voucher_id` int(11) DEFAULT NULL,
+  `voucher_name` char(50) NOT NULL DEFAULT '',
+  `top_up_id` int(11) DEFAULT NULL,
+  `description` char(50) NOT NULL DEFAULT '',
+  `x_response_code` int(2) DEFAULT NULL,
+  `x_response_subcode` int(4) DEFAULT NULL,
+  `x_response_reason_code` int(4) DEFAULT NULL,
+  `x_response_reason_text` char(200) NOT NULL DEFAULT '',
+  `x_auth_code` char(50) NOT NULL DEFAULT '',
+  `x_avs_code` char(50) NOT NULL DEFAULT '',
+  `x_trans_id` char(50) NOT NULL DEFAULT '',
+  `x_method` char(5) NOT NULL DEFAULT '',
+  `x_card_type` char(50) NOT NULL DEFAULT '',
+  `x_account_number` char(50) NOT NULL DEFAULT '',
+  `x_first_name` char(50) NOT NULL DEFAULT '',
+  `x_last_name` char(50) NOT NULL DEFAULT '',
+  `x_company` char(50) NOT NULL DEFAULT '',
+  `x_address` char(50) NOT NULL DEFAULT '',
+  `x_city` char(50) NOT NULL DEFAULT '',
+  `x_state` char(50) NOT NULL DEFAULT '',
+  `x_zip` char(50) NOT NULL DEFAULT '',
+  `x_country` char(50) NOT NULL DEFAULT '',
+  `x_phone` char(50) NOT NULL DEFAULT '',
+  `x_fax` char(50) NOT NULL DEFAULT '',
+  `x_email` char(50) NOT NULL DEFAULT '',
+  `x_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `x_catalog_link_id` char(50) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `tag` varchar(100) NOT NULL DEFAULT 'unknown',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_authorize_net_transactions`
+--
+
+LOCK TABLES `fin_authorize_net_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_authorize_net_transactions` DISABLE KEYS */;
+INSERT INTO `fin_authorize_net_transactions` VALUES (1,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 13:30:46','2014-10-21 13:09:52','unknown'),(2,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:05:44','2014-10-21 13:10:01','unknown'),(3,NULL,NULL,'',NULL,'',1,1,1,'This transaction has been approved.','','P','1821199455','CC','','','John','Smith','','','','','','','','','',5.00,'1abacb70-d45d-4d12-ba51-98f01523720d','2014-10-16 14:07:26','2014-10-21 13:09:56','unknown');
+/*!40000 ALTER TABLE `fin_authorize_net_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_token_failures`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_token_failures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_token_failures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `fin_payment_plan_id` int(11) DEFAULT NULL,
+  `error_code` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_token_failures`
+--
+
+LOCK TABLES `fin_my_gate_token_failures` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_token_failures` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_token_failures` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_token_notes`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_token_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_token_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_my_gate_token_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_token_notes`
+--
+
+LOCK TABLES `fin_my_gate_token_notes` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_token_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_token_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_tokens`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `permanent_user_id` int(11) DEFAULT NULL,
+  `fin_payment_plan_id` int(11) DEFAULT NULL,
+  `client_pin` varchar(50) NOT NULL,
+  `client_uci` varchar(50) NOT NULL,
+  `client_uid` varchar(50) NOT NULL,
+  `override` decimal(15,2) DEFAULT '0.00',
+  `override_completed` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_tokens`
+--
+
+LOCK TABLES `fin_my_gate_tokens` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_my_gate_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_transaction_notes`
+--
+
+LOCK TABLES `fin_my_gate_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_my_gate_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_my_gate_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_my_gate_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `fin_my_gate_token_id` int(11) DEFAULT NULL,
+  `status` enum('pending','success','fail','submitted') DEFAULT 'pending',
+  `type` enum('credit_card','debit_order') DEFAULT 'credit_card',
+  `amount` decimal(15,2) DEFAULT '0.00',
+  `my_gate_reference` varchar(255) NOT NULL DEFAULT '',
+  `message` varchar(255) NOT NULL DEFAULT '',
+  `permanent_user` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_my_gate_transactions`
+--
+
+LOCK TABLES `fin_my_gate_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_my_gate_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_my_gate_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_pay_u_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_pay_u_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_pay_u_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_pay_u_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_pay_u_transaction_notes`
+--
+
+LOCK TABLES `fin_pay_u_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_pay_u_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_pay_u_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_pay_u_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_pay_u_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_pay_u_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `voucher_id` int(11) DEFAULT NULL,
+  `top_up_id` int(11) DEFAULT NULL,
+  `merchantReference` varchar(64) NOT NULL,
+  `payUReference` varchar(64) NOT NULL,
+  `TransactionType` enum('RESERVE','FINALISE','PAYMENT','EFFECT_STAGING','CREDIT','RESERVE_CANCEL','REGISTER_LINK') DEFAULT 'PAYMENT',
+  `TransactionState` enum('NEW','PROCESSING','SUCCESSFUL','FAILED','TIMEOUT') DEFAULT 'NEW',
+  `ResultCode` int(11) DEFAULT NULL,
+  `ResultMessage` varchar(255) DEFAULT NULL,
+  `DisplayMessage` varchar(255) DEFAULT NULL,
+  `merchUserId` varchar(255) DEFAULT NULL,
+  `firstName` varchar(255) DEFAULT NULL,
+  `lastName` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `regionalId` varchar(255) DEFAULT NULL,
+  `amountInCents` int(11) NOT NULL,
+  `currencyCode` varchar(255) DEFAULT 'ZAR',
+  `description` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_pay_u_transactions`
+--
+
+LOCK TABLES `fin_pay_u_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_pay_u_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_pay_u_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_payment_plan_notes`
+--
+
+DROP TABLE IF EXISTS `fin_payment_plan_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_payment_plan_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_payment_plan_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_payment_plan_notes`
+--
+
+LOCK TABLES `fin_payment_plan_notes` WRITE;
+/*!40000 ALTER TABLE `fin_payment_plan_notes` DISABLE KEYS */;
+INSERT INTO `fin_payment_plan_notes` VALUES (1,6,78,'2015-02-01 18:34:51','2015-02-01 18:34:51');
+/*!40000 ALTER TABLE `fin_payment_plan_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_payment_plans`
+--
+
+DROP TABLE IF EXISTS `fin_payment_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_payment_plans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `profile_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT '',
+  `type` enum('voucher','user') DEFAULT 'user',
+  `currency_code` enum('USD','ZAR','GBP','EUR') DEFAULT 'ZAR',
+  `value` decimal(15,2) DEFAULT '0.00',
+  `tax` decimal(15,2) DEFAULT '0.00',
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_payment_plans`
+--
+
+LOCK TABLES `fin_payment_plans` WRITE;
+/*!40000 ALTER TABLE `fin_payment_plans` DISABLE KEYS */;
+INSERT INTO `fin_payment_plans` VALUES (6,44,9,'Test','test1','user','ZAR',100.00,0.00,1,'2015-02-01 18:33:38','2015-02-14 21:38:16');
+/*!40000 ALTER TABLE `fin_payment_plans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_paypal_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_paypal_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_paypal_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_paypal_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_paypal_transaction_notes`
+--
+
+LOCK TABLES `fin_paypal_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_paypal_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_paypal_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_paypal_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_paypal_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_paypal_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `voucher_id` int(11) DEFAULT NULL,
+  `top_up_id` int(11) DEFAULT NULL,
+  `business` varchar(255) NOT NULL,
+  `txn_id` varchar(20) NOT NULL,
+  `option_name1` varchar(255) DEFAULT NULL,
+  `option_selection1` varchar(255) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `item_number` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `payer_email` varchar(255) DEFAULT NULL,
+  `payer_id` varchar(255) DEFAULT NULL,
+  `payer_status` varchar(255) DEFAULT NULL,
+  `payment_gross` decimal(10,2) NOT NULL,
+  `mc_gross` decimal(10,2) NOT NULL,
+  `mc_fee` decimal(10,2) NOT NULL,
+  `mc_currency` varchar(255) DEFAULT 'GBP',
+  `payment_date` varchar(255) NOT NULL,
+  `payment_status` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_paypal_transactions`
+--
+
+LOCK TABLES `fin_paypal_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_paypal_transactions` DISABLE KEYS */;
+INSERT INTO `fin_paypal_transactions` VALUES (2,44,87,NULL,'radiusdesk_merch@gmail.com','2N879041J5073971B','Vouchers','2Hours','RDVoucher','rd_v1','Renier','Viljoen','radiusdesk_buyer@gmail.com','NWBRWDPU862AY','verified',2.00,2.00,0.36,'USD','02:55:52 Apr 25, 2014 PDT','Completed','2014-04-25 09:23:27','2014-04-28 05:44:43');
+/*!40000 ALTER TABLE `fin_paypal_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_payu_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_payu_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_payu_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `merchant_reference` varchar(64) NOT NULL,
+  `payu_reference` varchar(64) NOT NULL,
+  `transaction_type` enum('RESERVE','FINALISE','PAYMENT','EFFECT_STAGING','CREDIT','RESERVE_CANCEL','REGISTER_LINK') DEFAULT 'PAYMENT',
+  `transaction_state` enum('NEW','PROCESSING','SUCCESSFUL','FAILED') DEFAULT 'NEW',
+  `result_code` int(11) DEFAULT NULL,
+  `result_message` varchar(255) DEFAULT NULL,
+  `display_message` varchar(255) DEFAULT NULL,
+  `merchant_user_id` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `regional_id` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `amount_in_cents` int(11) NOT NULL,
+  `currency_code` varchar(255) DEFAULT 'ZAR',
+  `description` varchar(255) NOT NULL,
+  `product_code` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_payu_transactions`
+--
+
+LOCK TABLES `fin_payu_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_payu_transactions` DISABLE KEYS */;
+INSERT INTO `fin_payu_transactions` VALUES (1,'1394549753','146344301661','PAYMENT','',999,'PayU Timeout','',NULL,NULL,NULL,NULL,NULL,NULL,94500,'ZAR','5120MB Internet voucher','dat_5120m','2014-03-11 16:55:55','2014-03-11 16:55:55'),(2,'1394568726','146407795408','PAYMENT','SUCCESSFUL',0,'Successful','Successful',NULL,NULL,NULL,NULL,NULL,NULL,12900,'ZAR','175MB Internet voucher','dat_175m','2014-03-11 22:12:09','2014-03-11 22:39:34');
+/*!40000 ALTER TABLE `fin_payu_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_premium_sms_transaction_notes`
+--
+
+DROP TABLE IF EXISTS `fin_premium_sms_transaction_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_premium_sms_transaction_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fin_premium_sms_transaction_id` int(11) NOT NULL,
+  `note_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_premium_sms_transaction_notes`
+--
+
+LOCK TABLES `fin_premium_sms_transaction_notes` WRITE;
+/*!40000 ALTER TABLE `fin_premium_sms_transaction_notes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fin_premium_sms_transaction_notes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fin_premium_sms_transactions`
+--
+
+DROP TABLE IF EXISTS `fin_premium_sms_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fin_premium_sms_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `voucher_id` int(11) DEFAULT NULL,
+  `top_up_id` int(11) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `description` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fin_premium_sms_transactions`
+--
+
+LOCK TABLES `fin_premium_sms_transactions` WRITE;
+/*!40000 ALTER TABLE `fin_premium_sms_transactions` DISABLE KEYS */;
+INSERT INTO `fin_premium_sms_transactions` VALUES (1,NULL,NULL,NULL,NULL,'','2014-10-14 12:29:22','2014-10-14 12:29:22');
+/*!40000 ALTER TABLE `fin_premium_sms_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `global_domain_categories`
+--
+
+DROP TABLE IF EXISTS `global_domain_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `global_domain_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `global_domain_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `global_domain_categories`
+--
+
+LOCK TABLES `global_domain_categories` WRITE;
+/*!40000 ALTER TABLE `global_domain_categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `global_domain_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `global_domains`
+--
+
+DROP TABLE IF EXISTS `global_domains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `global_domains` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `global_domains`
+--
+
+LOCK TABLES `global_domains` WRITE;
+/*!40000 ALTER TABLE `global_domains` DISABLE KEYS */;
+INSERT INTO `global_domains` VALUES (1,'cnn.com','','',1,44,'2017-04-24 19:17:42','2017-04-24 19:17:42');
+/*!40000 ALTER TABLE `global_domains` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2317,7 +3021,7 @@ CREATE TABLE `notes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2326,7 +3030,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'This is a note',1,182,'2014-01-07 22:12:23','2014-01-07 22:12:23'),(78,'Up the price a bit',1,44,'2015-02-01 18:34:51','2015-02-01 18:34:51'),(87,'Multi\nLine\nNote',0,44,'2017-01-02 06:17:25','2017-01-02 06:17:25');
+INSERT INTO `notes` VALUES (76,'Sample data for RADIUSdesk',1,44,'2013-05-25 12:38:42','2013-05-25 12:38:42'),(77,'This is a note',1,182,'2014-01-07 22:12:23','2014-01-07 22:12:23'),(78,'Up the price a bit',1,44,'2015-02-01 18:34:51','2015-02-01 18:34:51'),(87,'Multi\nLine\nNote',0,44,'2017-01-02 06:17:25','2017-01-02 06:17:25'),(90,'Device Note',1,44,'2017-05-06 09:39:49','2017-05-06 09:39:49');
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2572,7 +3276,7 @@ CREATE TABLE `permanent_users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2581,7 +3285,7 @@ CREATE TABLE `permanent_users` (
 
 LOCK TABLES `permanent_users` WRITE;
 /*!40000 ALTER TABLE `permanent_users` DISABLE KEYS */;
-INSERT INTO `permanent_users` VALUES (198,'dvdwalt','5db12f09b204bb56b5dac06877550d3c064e4e1a','58d3c18c-1434-4ec8-98aa-048403662c24','','','','','','sql',1,'2017-03-23 15:05:04',NULL,'127.0.0.1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'soft','soft','MESHdesk',36,'1G-1Day',15,NULL,NULL,0,1,'','','',4,4,182,'2017-03-23 14:37:32','2017-03-23 14:37:32');
+INSERT INTO `permanent_users` VALUES (248,'dvdwalt@meshdesk','5db12f09b204bb56b5dac06877550d3c064e4e1a','1afb04b4-0d81-4091-881f-1db84296bfcf','','','','','','sql',1,'2017-05-07 00:29:02',NULL,'127.0.0.1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'hard','soft','MESHdesk',36,'1G-1Day',15,NULL,NULL,0,1,'','','',4,4,44,'2017-05-06 19:57:06','2017-05-06 19:57:06');
 /*!40000 ALTER TABLE `permanent_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2639,6 +3343,67 @@ LOCK TABLES `phrase_values` WRITE;
 /*!40000 ALTER TABLE `phrase_values` DISABLE KEYS */;
 INSERT INTO `phrase_values` VALUES (11,4,4,1,'United Kingdom','2012-10-05 04:55:28','2012-10-05 04:55:28'),(12,4,4,2,'English','2012-10-05 04:55:28','2012-10-05 04:55:28'),(13,4,4,6,'Username','2012-10-05 04:55:28','2012-11-24 14:36:26'),(18,4,4,7,'Password','2012-10-07 21:58:45','2012-10-07 21:59:45');
 /*!40000 ALTER TABLE `phrase_values` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `policies`
+--
+
+DROP TABLE IF EXISTS `policies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `policies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `policies`
+--
+
+LOCK TABLES `policies` WRITE;
+/*!40000 ALTER TABLE `policies` DISABLE KEYS */;
+INSERT INTO `policies` VALUES (1,'TestPolicy','','',1,44,'2017-04-19 12:08:30','2017-04-19 12:08:30');
+/*!40000 ALTER TABLE `policies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `policy_entries`
+--
+
+DROP TABLE IF EXISTS `policy_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `policy_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `policy_id` int(11) DEFAULT NULL,
+  `type` enum('filter','white_list','black_list') DEFAULT 'filter',
+  `filter_id` int(11) DEFAULT NULL,
+  `black_list_id` int(11) DEFAULT NULL,
+  `white_list_id` int(11) DEFAULT NULL,
+  `schedule_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `policy_entries`
+--
+
+LOCK TABLES `policy_entries` WRITE;
+/*!40000 ALTER TABLE `policy_entries` DISABLE KEYS */;
+INSERT INTO `policy_entries` VALUES (1,1,'filter',1,NULL,1,1,'2017-04-19 12:08:42','2017-04-23 12:24:51'),(2,1,'white_list',1,NULL,1,1,'2017-04-24 13:01:18','2017-04-24 14:22:31'),(3,1,'black_list',NULL,1,1,1,'2017-04-24 13:12:25','2017-04-24 13:38:04');
+/*!40000 ALTER TABLE `policy_entries` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2883,7 +3648,7 @@ CREATE TABLE `radcheck` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radcheck_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9999 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10382 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2892,7 +3657,7 @@ CREATE TABLE `radcheck` (
 
 LOCK TABLES `radcheck` WRITE;
 /*!40000 ALTER TABLE `radcheck` DISABLE KEYS */;
-INSERT INTO `radcheck` VALUES (9779,'AA-BB-BB-DD-EE-F1','Rd-User-Type',':=','voucher-device'),(9780,'AA-BB-BB-DD-EE-F1','Rd-Voucher-Device-Owner',':=','cheerypet'),(9781,'AA-BB-BB-DD-EE-F1','User-Profile',':=','Data-Standard-1G'),(9782,'AA-BB-BB-DD-EE-F1','Rd-Realm',':=','Residence Inn'),(9987,'dvdwalt','Cleartext-Password',':=','dvdwalt'),(9988,'dvdwalt','Rd-User-Type',':=','user'),(9989,'dvdwalt','Rd-Realm',':=','MESHdesk'),(9990,'dvdwalt','User-Profile',':=','1G-1Day'),(9991,'dvdwalt','Rd-Cap-Type-Time',':=','hard'),(9992,'dvdwalt','Rd-Account-Disabled',':=','0');
+INSERT INTO `radcheck` VALUES (10336,'dvdwalt@meshdesk','User-Profile',':=','1G-1Day'),(10337,'dvdwalt@meshdesk','Rd-Realm',':=','MESHdesk'),(10338,'dvdwalt@meshdesk','Rd-Cap-Type-Time',':=','hard'),(10339,'dvdwalt@meshdesk','Rd-Account-Disabled',':=','0'),(10340,'dvdwalt@meshdesk','Cleartext-Password',':=','dvdwalt'),(10341,'dvdwalt@meshdesk','Rd-User-Type',':=','user');
 /*!40000 ALTER TABLE `radcheck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3015,7 +3780,7 @@ CREATE TABLE `radpostauth` (
   `nasname` varchar(128) NOT NULL DEFAULT '',
   `authdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3024,7 +3789,7 @@ CREATE TABLE `radpostauth` (
 
 LOCK TABLES `radpostauth` WRITE;
 /*!40000 ALTER TABLE `radpostauth` DISABLE KEYS */;
-INSERT INTO `radpostauth` VALUES (7,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2017-03-23 13:04:47'),(8,'dvdwalt',NULL,'dvdwalt','Access-Accept','','2017-03-23 13:05:04');
+INSERT INTO `radpostauth` VALUES (2,'dvdwalt@meshdesk',NULL,'dvdwalt','Access-Accept','','2017-05-06 22:29:02');
 /*!40000 ALTER TABLE `radpostauth` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3044,7 +3809,7 @@ CREATE TABLE `radreply` (
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32)),
   KEY `FK_radreply_ref_vouchers` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3146,8 +3911,9 @@ CREATE TABLE `realms` (
   `suffix` char(200) NOT NULL DEFAULT '',
   `suffix_permanent_users` tinyint(1) NOT NULL DEFAULT '0',
   `suffix_vouchers` tinyint(1) NOT NULL DEFAULT '0',
+  `suffix_devices` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3156,8 +3922,75 @@ CREATE TABLE `realms` (
 
 LOCK TABLES `realms` WRITE;
 /*!40000 ALTER TABLE `realms` DISABLE KEYS */;
-INSERT INTO `realms` VALUES (36,'MESHdesk',1,'logo.jpg','','','','','','','','','','',0,0,44,'2017-03-23 11:57:12','2017-03-23 11:57:12','','','','','','','','',0,0);
+INSERT INTO `realms` VALUES (36,'MESHdesk',1,'logo.jpg','','','','','','','','','','',0,0,44,'2017-03-23 11:57:12','2017-05-06 19:44:24','','','','','','','','meshdesk',1,0,1);
 /*!40000 ALTER TABLE `realms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schedule_entries`
+--
+
+DROP TABLE IF EXISTS `schedule_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schedule_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule_id` int(11) DEFAULT NULL,
+  `every_day` tinyint(1) NOT NULL DEFAULT '1',
+  `monday` tinyint(1) NOT NULL DEFAULT '0',
+  `tuesday` tinyint(1) NOT NULL DEFAULT '0',
+  `wednesday` tinyint(1) NOT NULL DEFAULT '0',
+  `thursday` tinyint(1) NOT NULL DEFAULT '0',
+  `friday` tinyint(1) NOT NULL DEFAULT '0',
+  `saturday` tinyint(1) NOT NULL DEFAULT '0',
+  `sunday` tinyint(1) NOT NULL DEFAULT '0',
+  `always` tinyint(1) NOT NULL DEFAULT '1',
+  `start` int(6) DEFAULT NULL,
+  `stop` int(6) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedule_entries`
+--
+
+LOCK TABLES `schedule_entries` WRITE;
+/*!40000 ALTER TABLE `schedule_entries` DISABLE KEYS */;
+INSERT INTO `schedule_entries` VALUES (2,1,0,1,1,1,1,1,0,0,0,595,845,'2017-04-28 04:37:40','2017-04-28 04:37:40');
+/*!40000 ALTER TABLE `schedule_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schedules`
+--
+
+DROP TABLE IF EXISTS `schedules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedules`
+--
+
+LOCK TABLES `schedules` WRITE;
+/*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
+INSERT INTO `schedules` VALUES (1,'TestSchedule','','',1,44,'2017-04-19 12:03:06','2017-04-19 12:03:06');
+/*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3557,7 +4390,7 @@ CREATE TABLE `user_settings` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3566,7 +4399,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `user_settings` WRITE;
 /*!40000 ALTER TABLE `user_settings` DISABLE KEYS */;
-INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(82,44,'realm_id','36','2017-03-23 13:04:11','2017-03-23 13:04:11'),(83,44,'show_data_usage','1','2017-03-23 13:04:11','2017-03-23 13:04:11'),(84,44,'show_recent_failures','0','2017-03-23 13:04:11','2017-03-23 13:04:11'),(85,44,'compact_view','1','2017-03-23 13:04:11','2017-03-23 13:04:11');
+INSERT INTO `user_settings` VALUES (52,44,'map_zoom','18','2013-04-05 11:30:19','2015-07-10 03:33:42'),(53,44,'map_type','HYBRID','2013-04-05 11:30:19','2015-07-10 03:33:42'),(54,44,'map_lat','-25.737590494704','2013-04-05 11:30:19','2015-07-10 03:33:42'),(55,44,'map_lng','28.30269861188','2013-04-05 11:30:19','2015-07-10 03:33:42'),(56,44,'wallpaper','8.jpg','2013-04-06 13:51:50','2016-11-01 14:43:20'),(57,182,'map_zoom','18','2013-08-30 07:01:35','2013-08-30 07:01:35'),(58,182,'map_type','ROADMAP','2013-08-30 07:01:35','2013-08-30 07:01:35'),(59,182,'map_lat','42.33821464661343','2013-08-30 07:01:35','2013-08-30 07:01:35'),(60,182,'map_lng','-71.09557402167296','2013-08-30 07:01:35','2013-08-30 07:01:35'),(61,182,'wallpaper','1.jpg','2013-09-06 17:59:42','2016-05-04 04:59:04'),(62,44,'dynamic_client_map_zoom','18','2016-03-19 04:40:21','2016-03-19 04:40:21'),(63,44,'dynamic_client_map_type','ROADMAP','2016-03-19 04:40:21','2016-03-19 04:40:21'),(64,44,'dynamic_client_map_lat','42.33725929507717','2016-03-19 04:40:21','2016-03-19 04:40:21'),(65,44,'dynamic_client_map_lng','-71.09232318434691','2016-03-19 04:40:21','2016-03-19 04:40:21'),(86,44,'realm_id','36','2017-05-02 10:32:38','2017-05-02 10:32:38'),(87,44,'show_data_usage','0','2017-05-02 10:32:38','2017-05-02 10:32:38'),(88,44,'show_recent_failures','0','2017-05-02 10:32:38','2017-05-02 10:32:38'),(89,44,'compact_view','1','2017-05-02 10:32:38','2017-05-02 10:32:38');
 /*!40000 ALTER TABLE `user_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3584,7 +4417,7 @@ CREATE TABLE `user_ssids` (
   `priority` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `username` (`username`(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3657,7 +4490,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3707,7 +4540,7 @@ CREATE TABLE `vouchers` (
   `time_cap` int(12) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ak_vouchers` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3716,7 +4549,65 @@ CREATE TABLE `vouchers` (
 
 LOCK TABLES `vouchers` WRITE;
 /*!40000 ALTER TABLE `vouchers` DISABLE KEYS */;
+INSERT INTO `vouchers` VALUES (1,'hardbikes','','new',NULL,NULL,NULL,NULL,NULL,NULL,NULL,44,'2017-05-04 00:46:10','2017-05-04 00:46:10','','','hardbikes','MESHdesk',36,'1G-1Day',15,'','',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `vouchers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `white_list_entries`
+--
+
+DROP TABLE IF EXISTS `white_list_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `white_list_entries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `white_list_id` int(11) DEFAULT NULL,
+  `domain` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `white_list_entries`
+--
+
+LOCK TABLES `white_list_entries` WRITE;
+/*!40000 ALTER TABLE `white_list_entries` DISABLE KEYS */;
+INSERT INTO `white_list_entries` VALUES (1,1,'bbc.com','2017-04-23 11:57:15','2017-04-23 11:57:15');
+/*!40000 ALTER TABLE `white_list_entries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `white_lists`
+--
+
+DROP TABLE IF EXISTS `white_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `white_lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `available_to_siblings` tinyint(1) NOT NULL DEFAULT '1',
+  `user_id` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `white_lists`
+--
+
+LOCK TABLES `white_lists` WRITE;
+/*!40000 ALTER TABLE `white_lists` DISABLE KEYS */;
+INSERT INTO `white_lists` VALUES (1,'WhiteListTest','Test WL','We Test',1,44,'2017-04-23 11:57:02','2017-04-24 19:01:16');
+/*!40000 ALTER TABLE `white_lists` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -3728,4 +4619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-05 15:03:14
+-- Dump completed on 2017-05-07  0:29:44
