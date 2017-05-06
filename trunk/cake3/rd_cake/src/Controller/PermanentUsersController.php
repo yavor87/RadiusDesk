@@ -183,10 +183,7 @@ class PermanentUsersController extends AppController{
         }
         
         /*__ To incorporate __
-            -> Check if the owner of the new PermanentUser and the Realm we want it to belong to has sufficient rights
-            -> Check if the realm this user belongs to has suffix_permanent_users set and if so the value of the suffix
-            -> Add the RADIUS things ... maybe a behaviour?
-       
+            -> Check if the owner of the new PermanentUser and the Realm we want it to belong to has sufficient rights  
        */
         
         //---Get the language and country---

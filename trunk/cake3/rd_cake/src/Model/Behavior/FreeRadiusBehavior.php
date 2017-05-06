@@ -26,7 +26,7 @@ class FreeRadiusBehavior extends Behavior {
         'auto_add'          => 'Rd-Auto-Mac',
         'auth_type'         => 'Rd-Auth-Type',
         'ssid_only'         => 'Rd-Ssid-Check',
-        'cleartext_password'=> 'Cleartext-Password' 
+        'cleartext_password'=> 'Cleartext-Password'
     ];
 
     protected  $readOnlyAttributes = [
@@ -64,6 +64,7 @@ class FreeRadiusBehavior extends Behavior {
         $this->Radchecks    = TableRegistry::get('Radchecks');
         $this->Radreplies   = TableRegistry::get('Radreplies');
         $this->UserSsids    = TableRegistry::get('UserSsids');
+    
     }
 
     //This checks if the $username has a Rd-Ssid-Check and if set to 1 wit return true 
@@ -332,6 +333,10 @@ class FreeRadiusBehavior extends Behavior {
         if($config['for_model']== 'PermanentUsers'){
             $this->_deleteUsernameEntriesFromTables($entity->username);
         }
+
+        if($config['for_model']== 'Devices'){
+            $this->_deleteUsernameEntriesFromTables($entity->name);
+        }
     }
 
     private function _deleteUsernameEntriesFromTables($username){
@@ -349,10 +354,67 @@ class FreeRadiusBehavior extends Behavior {
             if($config['for_model']== 'PermanentUsers'){
                 $this->_forPermanentUserAdd($entity);
             }
+
+            if($config['for_model']== 'Devices'){
+                $this->_forDeviceAdd($entity);
+            }
         }else{
             //We do the update bit
             if($config['for_model']== 'PermanentUsers'){
                  $this->_forPermanentUserEdit($entity);
+            }
+            if($config['for_model']== 'Devices'){
+                 $this->_forDeviceEdit($entity);
+            }
+        }
+    }
+
+    private function _forDeviceEdit($entity){
+         $username       = $entity->name;
+         foreach(array_keys($this->puChecks) as $key){
+            if($entity->dirty("$key")){
+                $value = $entity->{$key};
+                if($value !== null){
+                    if(in_array($key,$this->reverse_binaries)){
+                        if($value == 0){
+                            $value = 1;
+                        }else{
+                            $value = 0;
+                        }
+                    }
+                    if(in_array($key,$this->fr_dates)){   
+                        $value = $this->_radius_format_date($value); 
+                    }
+                    $this->_replace_radcheck_item($username,$this->puChecks["$key"],$value);
+                }
+            }  
+        }
+
+        //Check if the owner changed - This can be fairly
+        if($entity->dirty('permanent_user_id')){
+            $new_owner_id       = $entity->permanent_user_id;
+            $permanent_users    = TableRegistry::get('PermanentUsers');
+            $e_pu               = $permanent_users->get($new_owner_id,[
+                'contain' => ['Realms']
+            ]);
+            $new_realm_id   = $e_pu->real_realm->id;
+            $new_realm      = $e_pu->real_realm->name;
+            $new_owner_name = $e_pu->username;
+            if($new_realm_id !== $entity->realm_id){
+                //Big thing - Its into another realm
+                $this->_replace_radcheck_item($username,'Rd-Device-Owner',$new_owner_name);
+
+            }else{
+                //Small thing Realm stays the same owner change
+                $this->_replace_radcheck_item($username,'Rd-Device-Owner',$new_owner_name);
+            }
+        }
+       
+        //If always_active is selected remove fr->dates
+        $request = Router::getRequest();
+        if(isset($request->data['always_active'])){
+            foreach($this->fr_dates as $d){
+                $this->_remove_radcheck_item($username,$this->puChecks["$d"]);
             }
         }
     }
@@ -421,6 +483,34 @@ class FreeRadiusBehavior extends Behavior {
         }
     }
 
+     private function _forDeviceAdd($entity){
+        $username = $entity->name;
+        //Remove any references if there are perhaps any
+        $this->{'Radchecks'}->deleteAll(['username' => $username]);
+
+        foreach(array_keys($this->puChecks) as $key){
+            if(($entity->{$key} !== '')&&($entity->{$key} !== null)){
+                $value = $entity->{$key};
+                if(in_array($key,$this->reverse_binaries)){
+                    if($value == 0){
+                        $value = 1;
+                    }else{
+                        $value = 0;
+                    }
+                }
+                if(in_array($key,$this->fr_dates)){
+                    $value = $this->_radius_format_date($value);
+                }
+                $this->_add_radcheck_item($username,$this->puChecks["$key"],$value);
+            }
+        }
+
+        $request = Router::getRequest();
+        $this->_add_radcheck_item($username,'Rd-Device-Owner',$request->data['rd_device_owner']);
+        //This is probably not even needed any more
+        $this->_add_radcheck_item($username,'Rd-User-Type','device');    
+    }
+
     
     private function _forPermanentUserAdd($entity){
         $username = $entity->username;
@@ -455,7 +545,7 @@ class FreeRadiusBehavior extends Behavior {
                 if($key =='static_ip'){
                      $this->_add_radcheck_item($username,'Service-Type','Framed-User');
                 } 
-            }
+            } 
         }
 
         //If there are a restriction on SSID level we need to add those SSID's;
@@ -463,6 +553,8 @@ class FreeRadiusBehavior extends Behavior {
             $request = Router::getRequest();
             $this->_replace_user_ssids($username,$request->data['ssid_list']);
         }
+        //This is probably not even needed any more
+        $this->_add_radcheck_item($username,'Rd-User-Type','user');
     }
 
     private function _replace_user_ssids($username,$ssid_list){

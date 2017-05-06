@@ -58,7 +58,9 @@ class CommonQueryComponent extends Component {
                 if($f->type == 'string'){
                     if($f->field == 'owner'){
                         array_push($where_clause,array("Users.username LIKE" => '%'.$f->value.'%'));   
-                    }else{
+                    }elseif($f->field == 'permanent_user')
+                        array_push($where_clause,array("PermanentUsers.username LIKE" => '%'.$f->value.'%'));
+                    else{
                         $col = $model.'.'.$f->field;
                         array_push($where_clause,array("$col LIKE" => '%'.$f->value.'%'));
                     }

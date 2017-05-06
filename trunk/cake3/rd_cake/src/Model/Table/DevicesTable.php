@@ -8,8 +8,15 @@ use Cake\Validation\Validator;
 class DevicesTable extends Table
 {
     public function initialize(array $config){
-        $this->addBehavior('Timestamp');  
-        $this->belongsTo('PermanentUsers');      
+        $this->addBehavior('Timestamp');
+         $this->addBehavior('FreeRadius',
+            [
+                'for_model' => 'Devices'
+            ]
+        );
+
+        $this->belongsTo('PermanentUsers'); 
+        $this->hasMany('DeviceNotes');     
     }
     
     public function validationDefault(Validator $validator){
