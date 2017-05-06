@@ -151,7 +151,7 @@ Ext.define('Rd.controller.cAccessProviders', {
             'winPermanentUserPassword #save': {
                 click: me.changePasswordSubmit
             },
-            'winEnableDisable #save': {
+            '#winEnableDisableUser #save': {
                 click: me.enableDisableSubmit
             }
         });;

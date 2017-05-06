@@ -13,7 +13,7 @@ Ext.define('Rd.view.devices.gridDevices' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/devices/menu_for_grid.json',
+    urlMenu: '/cake3/rd_cake/devices/menu-for-grid.json',
     plugins     : 'gridfilters',  //*We specify this
    
     initComponent: function(){
@@ -30,7 +30,7 @@ Ext.define('Rd.view.devices.gridDevices' ,{
 
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridDevices1'},
-            { text: i18n('sOwner'),         dataIndex: 'user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices2'},
+            { text: i18n('sOwner'),dataIndex: 'permanent_user',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices2'},
             { text: i18n('sMAC_address'),   dataIndex: 'name',      tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices3'},
             { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridDevices4'},
            // { text: i18n('sVendor'),        dataIndex: 'vendor',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'}},

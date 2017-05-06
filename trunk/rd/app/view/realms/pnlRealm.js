@@ -10,8 +10,7 @@ Ext.define('Rd.view.realms.pnlRealm', {
             {   
                 title:  i18n('sDetail'),
                 xtype:  'pnlRealmDetail',
-                itemId: 'tabDetail'
-                   
+                itemId: 'tabDetail'       
             },
             { 
                 title   : i18n('sLogo'),

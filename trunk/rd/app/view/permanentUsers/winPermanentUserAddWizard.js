@@ -57,34 +57,31 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
 
         var buttons = [
                 {
-                    itemId: 'btnDataPrev',
-                    text: i18n('sPrev'),
-                    scale: 'large',
-                    iconCls: 'b-prev',
-                    glyph: Rd.config.icnBack,
-                    margin: '0 20 40 0'
+                    itemId  : 'btnDataPrev',
+                    text    : i18n('sPrev'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnBack,
+                    margin  : Rd.config.buttonMargin
                 },
                 {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
+                    itemId  : 'btnDataNext',
+                    text    : i18n('sNext'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin  : Rd.config.buttonMargin
                 }
             ];
 
         if(me.no_tree == true){
             var buttons = [
                 {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
+                    itemId  : 'btnDataNext',
+                    text    : i18n('sNext'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin  : Rd.config.buttonMargin
                 }
             ];
         }
@@ -178,24 +175,20 @@ Ext.define('Rd.view.permanentUsers.winPermanentUserAddWizard', {
                                     xtype       : 'cmbCap',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'cap',
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_data'),
                                     itemId      : 'cmbDataCap',
-                                    //name        : 'cap_data'
                                     name        : 'data_cap_type'
                                 },
                                 {
                                     xtype       : 'cmbCap',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'cap',
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_time'),
                                     itemId      : 'cmbTimeCap',
-                                    //name        : 'cap_time'
                                     name        : 'time_cap_type'
                                 }
                             ]

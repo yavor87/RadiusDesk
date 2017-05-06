@@ -1,86 +1,83 @@
 Ext.define('Rd.view.devices.gridDevicePrivate' ,{
-    extend:'Ext.grid.Panel',
-    alias : 'widget.gridDevicePrivate',
-    multiSelect: true,
-    stateful: true,
-    stateId: 'StateGridDevicePrivate',
-    stateEvents:['groupclick','columnhide'],
-    border: false,
-    viewConfig: {
-        loadMask:true
+    extend      :'Ext.grid.Panel',
+    alias       : 'widget.gridDevicePrivate',
+    multiSelect : true,
+    stateful    : true,
+    stateId     : 'StateGridDevicePrivate',
+    stateEvents :['groupclick','columnhide'],
+    border      : false,
+    viewConfig  : {
+        loadMask    :true
     },
-    plugins     : 'gridfilters',  //*We specify this
-    bbar: [
-        {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' }
-    ],
-    tbar: [
+    tbar        : [
         { xtype: 'buttongroup', title: i18n('sAction'),items : [ 
-            {   xtype: 'button',  iconCls: 'b-reload', glyph: Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
-            {   xtype: 'button',  iconCls: 'b-delete', glyph: Rd.config.icnDelete, scale: 'large',      itemId: 'delete',    disabled: true,   tooltip:    i18n('sDelete')}
+            {   glyph: Rd.config.icnReload,   scale: 'large',   itemId: 'reload',    tooltip:    i18n('sReload')},
+            {   glyph: Rd.config.icnDelete,   scale: 'large',   itemId: 'delete',    disabled: true,    tooltip:    i18n('sDelete')}
         ]}, 
         { xtype: 'buttongroup', title: i18n('sSelection'),items : [
             {   xtype: 'cmbVendor'     , itemId:'cmbVendor',    emptyText: i18n('sSelect_a_vendor') },
             {   xtype: 'cmbAttribute'  , itemId:'cmbAttribute', emptyText: i18n('sSelect_an_attribute') },
-            {   xtype: 'button',  iconCls: 'b-add',   glyph: Rd.config.icnAdd, scale: 'large', itemId: 'add',       tooltip:    i18n('sAdd')}
+            {   glyph: Rd.config.icnAdd, scale: 'large',        itemId: 'add',       tooltip:    i18n('sAdd')}
         ]}        
     ],
-    plugins: [
-        Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 1
-        })
-    ],
-    username: 'nobody', //dummy value
+    username    : 'nobody', //dummy value
     initComponent: function(){
-        var me      = this;
-
-        //Very important to avoid weird behaviour:
+        var me     = this;
         me.plugins = [Ext.create('Ext.grid.plugin.CellEditing', {
                 clicksToEdit: 1
         })];
 
         me.columns = [
-            {xtype: 'rownumberer',stateId: 'StateGridDevicePrivate1'},
+            {xtype: 'rownumberer',stateId: 'StateGridDevicePrivate1'},          
             {
-                header: i18n('sType'),
-                dataIndex: 'type',
-                width: 130,
-                editor: {
-                    xtype: 'combobox',
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    selectOnTab: true,
-                    store: [
+                header      : i18n('sType'),
+                dataIndex   : 'type',
+                width       : 130,
+                editor      : {
+                    xtype           : 'combobox',
+                    typeAhead       : true,
+                    triggerAction   : 'all',
+                    selectOnTab     : true,
+                    store           : [
                         ['check','Check'],
                         ['reply','Reply']
                     ],
-                    lazyRender: true,
-                    listClass: 'x-combo-list-small'
+                    lazyRender      : true,
+                    listClass       : 'x-combo-list-small'
                 },
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
+                renderer: function(value){
                     if(value == "check"){
                         return i18n('sCheck');
                     }else{
                         return i18n('sReply');
                     }
-                },stateId: 'StateGridDevicePrivate'
-            },
-            { text: i18n('sAttribute_name'),    dataIndex: 'attribute', tdCls: 'gridTree', flex: 1,stateId: 'StateGridDevicePrivate2'},
+                },
+                stateId     : 'StateGridDevicePrivate2'
+            },  
             {
-                header: i18n('sOperator'),
-                dataIndex: 'op',
-                width: 100,
-                editor: {
-                    allowBlank: false,
-                    xtype: 'combobox',
-                    typeAhead: true,
+                header      : i18n('sAttribute'),
+                xtype       : 'templatecolumn',
+                tdCls       : 'gridTree',
+                flex        : 1,
+                stateId     : 'StateGridDevicePrivate3', 
+                tpl         : new Ext.XTemplate(
+                    "<tpl if='edit == true'><div class=\"fieldBlue\"><i class=\"fa fa-edit\"></i> {attribute}</div></tpl>",
+                    "<tpl if='edit == false'><div class=\"fieldGreyWhite\"><i class=\"fa fa-ban\"></i> {attribute}</div></tpl>"
+                ),
+                dataIndex   : 'attribute'
+            }, 
+            {
+                header      : i18n('sOperator'),
+                dataIndex   : 'op',
+                width       : 100,
+                stateId     : 'StateGridDevicePrivate4',
+                editor      : {
+                    allowBlank  : false,
+                    xtype       : 'combobox',
+                    typeAhead   : true,
                     triggerAction: 'all',
-                    selectOnTab: true,
-                    store: [
+                    selectOnTab : true,
+                    store       : [
                         ['=' ,  '=' ],
                         [':=',  ':='],
                         ['+=',  '+='],
@@ -90,31 +87,22 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                         ['>=',  '>='],
                         ['!*',  '!*']
                     ],
-                    lazyRender: true,
-                    listClass: 'x-combo-list-small'
-                },
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
-                    return value;
-                },stateId: 'StateGridDevicePrivate3'
+                    lazyRender  : true,
+                    listClass   : 'x-combo-list-small'
+                }
             },
             { 
-                text: i18n('sValue'),        dataIndex: 'value', flex: 1,
-                editor: { xtype: 'textfield',    allowBlank: false},
-                renderer: function(value,metaData,record){
-                    if(record.get('edit') != false){
-                        metaData.tdCls = 'grdEditable';
-                    }else{
-                        metaData.tdCls = 'gridTree';
-                    }
-                    return value;
-                },stateId: 'StateGridDevicePrivate4'
+                text        : i18n('sValue'),
+                dataIndex   : 'value',     
+                flex        : 1,
+                editor      : { 
+                    xtype       : 'textfield',    
+                    allowBlank  : false
+               },
+               stateId: 'StateGridDevicePrivate5'
             }
         ];
+
 
         //Create a store specific to this Access Provider
         me.store = Ext.create(Ext.data.Store,{
@@ -125,6 +113,7 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                 batchActions: true,
                 extraParams : { 'username' : me.username },
                 reader      : {
+                    keepRawData     : true,
                     type        : 'json',
                     rootProperty        : 'items',
                     messageProperty: 'message'
@@ -133,29 +122,15 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
                     writeAllFields: true 
                 },
                 api         : {
-                    create      : '/cake3/rd_cake/permanent-users/private-attr-add.json',
-                    read        : '/cake3/rd_cake/permanent-users/private-attr-index.json',
-                    update      : '/cake3/rd_cake/permanent-users/private-attr-edit.json',
-                    destroy     : '/cake3/rd_cake/permanent-users/private-attr-delete.json'
+                    create      : '/cake3/rd_cake/devices/private-attr-add.json',
+                    read        : '/cake3/rd_cake/devices/private-attr-index.json',
+                    update      : '/cake3/rd_cake/devices/private-attr-edit.json',
+                    destroy     : '/cake3/rd_cake/devices/private-attr-delete.json'
                 }
             },
             listeners: {
-                load: function(store, records, successful) {
-                    if(!successful){
-                        Ext.ux.Toaster.msg(
-                            'Error encountered',
-                            store.getProxy().getReader().rawData.message.message,
-                            Ext.ux.Constants.clsWarn,
-                            Ext.ux.Constants.msgWarn
-                        );
-                        //console.log(store.getProxy().getReader().rawData.message.message);
-                    }else{
-                        var count   = me.getStore().getTotalCount();
-                        me.down('#count').update({count: count});
-                    }   
-                },
                 update: function(store, records, action, options,a,b) {
-                    if(action == 'edit'){ //Filter for edit (after commited a second action will fire called commit)
+                    if(action == 'edit'){ 
                         store.sync({
                             success: function(batch,options){
                                 Ext.ux.Toaster.msg(
@@ -183,7 +158,15 @@ Ext.define('Rd.view.devices.gridDevicePrivate' ,{
             autoLoad: false,
             autoSync: false    
         });
- 
+        
+        me.bbar =  [
+            {
+                xtype       : 'pagingtoolbar',
+                store       : me.store,
+                dock        : 'bottom',
+                displayInfo : true
+            }  
+        ];
         me.callParent(arguments);
     }
 });

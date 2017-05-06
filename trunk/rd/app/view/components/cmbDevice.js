@@ -24,7 +24,7 @@ Ext.define('Rd.view.components.cmbDevice', {
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/devices/index.json',
+                url     : '/cake3/rd_cake/devices/index.json',
                 reader  : {
                     type: 'json',
                     rootProperty: 'items',

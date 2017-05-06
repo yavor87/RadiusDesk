@@ -246,7 +246,7 @@ Ext.define('Rd.controller.cPermanentUsers', {
             '#tabPermanentUsers pnlPermanentUserGraphs #monthly #day' : {
                 change:      me.changeMonthlyGraph
             },
-            'winEnableDisable #save': {
+            '#winEnableDisablePermanentUser #save': {
                 click: me.enableDisableSubmit
             },
             'winPermanentUserPassword #save': {
@@ -929,8 +929,8 @@ Ext.define('Rd.controller.cPermanentUsers', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!Ext.WindowManager.get('winEnableDisableUser')){
-                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
+            if(!Ext.WindowManager.get('winEnableDisablePermanentUser')){
+                var w = Ext.widget('winEnableDisable',{id:'winEnableDisablePermanentUser'});
                 w.show();       
             }    
         }
