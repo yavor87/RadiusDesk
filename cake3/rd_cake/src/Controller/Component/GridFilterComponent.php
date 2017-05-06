@@ -34,12 +34,12 @@ class GridFilterComponent extends Component {
     public function xformFilter($f){
     
         if(property_exists($f, 'operator')){
-        
+     
             if($f->operator == 'like'){
                 $f->type = 'string';
             }
             
-            if($f->operator == '='){
+            if($f->operator == '=='){
                 $f->type = 'boolean';
             }
 

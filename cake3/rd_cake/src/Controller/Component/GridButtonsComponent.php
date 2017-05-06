@@ -83,6 +83,13 @@ class GridButtonsComponent extends Component {
             $b  = $this->_fetchFrAcctAuthBasic();
             $menu = [$b];
         }
+
+        if($type == 'devices'){
+            $b  = $this->_fetchBasic('disabled',true);
+            $d  = $this->_fetchDocument();
+            $a  = $this->_fetchDeviceExtras();
+            $menu = array($b,$d,$a);
+        }
         
         return $menu;
     }
@@ -486,6 +493,79 @@ class GridButtonsComponent extends Component {
                     'tooltip'   => __('Change Password')));
            }
             
+           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'enableDisable')){      
+                array_push($specific_group, array(
+                    'xtype'     => 'button', 
+                    'glyph'     => Configure::read('icnLight'),
+                    'scale'     => $this->scale, 
+                    'itemId'    => 'enable_disable',
+                    'tooltip'   => __('Enable / Disable')));
+            }
+            
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/testRadius')){      
+                array_push($specific_group, array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnRadius'), 
+                        'scale'     => $this->scale, 
+                        'itemId'    => 'test_radius',  
+                        'tooltip'=> __('Test RADIUS')
+                    ));
+            }
+            
+            array_push($specific_group, array(
+                'xtype'     => 'button', 
+                'glyph'     => Configure::read('icnGraph'),   
+                'scale'     => $this->scale, 
+                'itemId'    => 'graph',  
+                'tooltip'   => __('Graphs')
+            ));
+           
+            $menu = array('xtype' => 'buttongroup', 'title' =>  __('Extra actions'), 'items' => $specific_group );
+        }
+                
+        return $menu;
+    }
+
+     private function _fetchDeviceExtras(){
+    
+        $user = $this->user;
+        $menu = array();
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin   
+             $menu = array(
+                'xtype' => 'buttongroup',
+                'title' => __('Extra actions'), 
+                'items' => array(
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnLight'),
+                        'scale'     => $this->scale, 
+                        'itemId'    => 'enable_disable',
+                        'tooltip'   => __('Enable / Disable')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnRadius'), 
+                        'scale'     => $this->scale, 
+                        'itemId'    => 'test_radius',  
+                        'tooltip'=> __('Test RADIUS')
+                    ),
+                    array(
+                        'xtype'     => 'button', 
+                        'glyph'     => Configure::read('icnGraph'),   
+                        'scale'     => $this->scale, 
+                        'itemId'    => 'graph',  
+                        'tooltip'   => __('Graphs')
+                    )
+                )
+            );    
+        }
+        
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $specific_group = array();
+      
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'enableDisable')){      
                 array_push($specific_group, array(
                     'xtype'     => 'button', 

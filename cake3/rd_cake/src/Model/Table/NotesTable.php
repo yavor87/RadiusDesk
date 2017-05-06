@@ -16,7 +16,8 @@ class NotesTable extends Table
         $this->hasMany('DynamicDetailNotes',['dependent' => true]);
         $this->hasMany('ProfileNotes',['dependent' => true]);
         
-        $this->hasMany('PermanentUserNotes',['dependent' => true]);       
+        $this->hasMany('PermanentUserNotes',['dependent' => true]);
+        $this->hasMany('DeviceNotes',['dependent' => true]);     
     }
       
 }

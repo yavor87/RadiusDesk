@@ -412,7 +412,8 @@ class RealmsController extends AppController{
         $check_items = array(
 			'available_to_siblings',
 			'suffix_permanent_users',
-			'suffix_vouchers'
+			'suffix_vouchers',
+            'suffix_devices'
 		);
 		
         foreach($check_items as $i){
