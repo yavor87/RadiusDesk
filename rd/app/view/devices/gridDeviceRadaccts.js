@@ -12,7 +12,7 @@ Ext.define('Rd.view.devices.gridDeviceRadaccts' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/devices/menu_for_accounting_data.json',
+    urlMenu: '/cake3/rd_cake/devices/menu-for-accounting-data.json',
     plugins     : 'gridfilters',  //*We specify this
     bbar: [
         {   xtype: 'component', itemId: 'count',   tpl: i18n('sResult_count_{count}'),   style: 'margin-right:5px', cls: 'lblYfi' },

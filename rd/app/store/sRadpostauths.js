@@ -15,9 +15,6 @@ Ext.define('Rd.store.sRadpostauths', {
                 messageProperty: 'message',
                 totalProperty: 'totalCount' //Required for dynamic paging
             },
-            api: {
-               // destroy  : '/cake2/rd_cake/devices/delete.json'
-            },
             simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
     }
 });

@@ -14,7 +14,7 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                 width   :  450,
                 layout  : 'fit',
                 autoScroll:true,
-                frame   : false,
+                frame   : true,
                 fieldDefaults: {
                     msgTarget       : 'under',
                     labelClsExtra   : 'lblRd',
@@ -96,6 +96,14 @@ Ext.define('Rd.view.realms.pnlRealmDetail', {
                                         boxLabel    : i18n('sAdd_suffix_when_creating_Vouchers'),
                                         name        : 'suffix_vouchers',
                                         inputValue  : 'suffix_vouchers',
+                                        checked     : false,
+                                        cls         : 'lblRd'
+                                    },
+                                    {
+                                        xtype       : 'checkbox',      
+                                        boxLabel    : 'Add suffix when creating BYOD',
+                                        name        : 'suffix_devices',
+                                        inputValue  : 'suffix_devices',
                                         checked     : false,
                                         cls         : 'lblRd'
                                     }

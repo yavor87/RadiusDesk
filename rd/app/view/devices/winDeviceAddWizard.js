@@ -1,24 +1,23 @@
 Ext.define('Rd.view.devices.winDeviceAddWizard', {
-    extend:     'Ext.window.Window',
-    alias :     'widget.winDeviceAddWizard',
-    closable:   true,
-    draggable:  false,
-    resizable:  false,
-    title:      i18n('sNew_device'),
-    width:      500,
-    height:     500,
-    plain:      true,
-    border:     false,
-    layout:     'card',
-    iconCls:    'add',
-    glyph: Rd.config.icnAdd,
-    autoShow:   false,
-    defaults: {
+    extend      : 'Ext.window.Window',
+    alias       : 'widget.winDeviceAddWizard',
+    closable    : true,
+    draggable   : true,
+    resizable   : true,
+    title       : i18n('sNew_device'),
+    width       : 500,
+    height      : 460,
+    plain       : true,
+    border      : false,
+    layout      : 'card',
+    glyph       : Rd.config.icnAdd,
+    autoShow    :   false,
+    defaults    : {
             border: false
     },
-    owner: '',
-    startScreen: 'scrnData', //Default start screen
-    selLanguage: null,
+    owner       : '',
+    startScreen : 'scrnData', //Default start screen
+    selLanguage : null,
     requires: [
         'Ext.layout.container.Card',
         'Ext.form.Panel',
@@ -43,34 +42,31 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
 
         var buttons = [
                 {
-                    itemId: 'btnDataPrev',
-                    text: i18n('sPrev'),
-                    scale: 'large',
-                    iconCls: 'b-prev',
-                    glyph: Rd.config.icnBack,
-                    margin: '0 20 40 0'
+                    itemId  : 'btnDataPrev',
+                    text    : i18n('sPrev'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnBack,
+                    margin  : Rd.config.buttonMargin
                 },
                 {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
+                    itemId  : 'btnDataNext',
+                    text    : i18n('sNext'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin  : Rd.config.buttonMargin
                 }
             ];
 
         if(me.no_tree == true){
             var buttons = [
                 {
-                    itemId: 'btnDataNext',
-                    text: i18n('sNext'),
-                    scale: 'large',
-                    iconCls: 'b-next',
-                    glyph: Rd.config.icnNext,
+                    itemId  : 'btnDataNext',
+                    text    : i18n('sNext'),
+                    scale   : 'large',
+                    glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin  : Rd.config.buttonMargin
                 }
             ];
         }
@@ -97,6 +93,7 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                     margins : '0 0 0 0',
                     plain   : true,
                     tabPosition: 'bottom',
+                    cls     : 'subTab',
                     border  : false,
                     items   : [
                         { 
@@ -141,23 +138,21 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                     xtype       : 'cmbCap',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'cap',
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_data'),
                                     itemId      : 'cmbDataCap',
-                                    name        : 'cap_data'
+                                    name        : 'data_cap_type'
                                 },
                                 {
                                     xtype       : 'cmbCap',
                                     allowBlank  : false,
                                     labelClsExtra: 'lblRdReq',
-                                    itemId      : 'cap',
                                     hidden      : true,
                                     value       : 'hard',
                                     fieldLabel  : i18n('sCap_type_for_time'),
                                     itemId      : 'cmbTimeCap',
-                                    name        : 'cap_time'
+                                    name        : 'time_cap_type'
                                 }
                             ]
                         },
@@ -206,31 +201,6 @@ Ext.define('Rd.view.devices.winDeviceAddWizard', {
                                     value       : dtTo
                                 }
                             ]
-                        },
-                        { 
-                            'title' : i18n('sTracking'),
-                            'layout'    : 'anchor',
-                            defaults    : {
-                                anchor: '100%'
-                            },
-                            items       : [
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_authentication'),
-                                    name        : 'track_auth',
-                                    inputValue  : 'track_auth',
-                                    checked     : false, //Default not to track it
-                                    cls         : 'lblRd'
-                                },
-                                {
-                                    xtype       : 'checkbox',      
-                                    boxLabel    : i18n('sRADIUS_accounting'),
-                                    name        : 'track_acct',
-                                    inputValue  : 'track_acct',
-                                    checked     : true,
-                                    cls         : 'lblRd'
-                                }
-                            ]   
                         }
                     ]
                 }

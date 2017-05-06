@@ -2,7 +2,7 @@ Ext.define('Rd.model.mDevice', {
     extend: 'Ext.data.Model',
     fields: [
          {name: 'id',           type: 'int'     },
-         {name: 'user',         type: 'string'  },
+         {name: 'permanent_user',type: 'string'  },
          {name: 'permanent_user_id'},
          {name: 'realm',        type: 'string'  },
          {name: 'profile',      type: 'string'  },

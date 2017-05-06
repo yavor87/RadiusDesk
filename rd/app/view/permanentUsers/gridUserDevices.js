@@ -16,18 +16,19 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
     plugins: 'gridfilters',  //*We specify this
     columns: [
             {xtype: 'rownumberer',stateId: 'StateGridUserRadaccts1'},
-            { text: i18n('sOwner'),         dataIndex: 'user',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts2'},
-            { text: i18n('sMAC_address'),   dataIndex: 'name',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts3'},
+            { text: i18n('sOwner'),dataIndex: 'permanent_user',    tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts2'},
+            { text: i18n('sMAC_address'),   dataIndex: 'name',     tdCls: 'gridMain', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts3'},
             { text: i18n('sDescription'),   dataIndex: 'description',tdCls: 'gridTree', flex: 1,filter: {type: 'string'},stateId: 'StateGridUserRadaccts4'},
             { text: i18n('sRealm'),         dataIndex: 'realm',     tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridUserRadaccts5'},
             { text: i18n('sProfile'),       dataIndex: 'profile',   tdCls: 'gridTree', flex: 1,filter: {type: 'string'}, sortable: false,stateId: 'StateGridUserRadaccts6'},
             { 
-                text        : i18n('sActive'),  
-                xtype       : 'templatecolumn', 
+                text        : i18n('sActive'),
+                tdCls       : 'gridTree',   
+                xtype       : 'templatecolumn',
                 tpl         : new Ext.XTemplate(
-                                "<tpl if='active == true'><div class=\"hasRight\">"+i18n("sYes")+"</div></tpl>",
-                                "<tpl if='active == false'><div class=\"noRight\">"+i18n("sNo")+"</div></tpl>"
-                            ),
+                    "<tpl if='active == true'><div class=\"fieldGreen\"><i class=\"fa fa-check-circle\"></i> "+i18n("sYes")+"</div></tpl>",
+                    "<tpl if='active == false'><div class=\"fieldRed\"><i class=\"fa fa-times-circle\"></i> "+i18n("sNo")+"</div></tpl>"
+                ), 
                 dataIndex   : 'active',
                 filter      : { type: 'boolean'},stateId: 'StateGridUserRadaccts7'
             },
@@ -148,7 +149,7 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                 type    : 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url     : '/cake2/rd_cake/devices/index.json',
+                url     : '/cake3/rd_cake/devices/index.json',
                 extraParams: { 'permanent_user_id' : me.user_id },
                 reader: {
                     keepRawData     : true,
@@ -156,9 +157,6 @@ Ext.define('Rd.view.permanentUsers.gridUserDevices' ,{
                     rootProperty    : 'items',
                     messageProperty : 'message',
                     totalProperty   : 'totalCount' //Required for dynamic paging
-                },
-                api: {
-                    destroy  : '/cake2/rd_cake/devices/delete.json'
                 },
                 simpleSortMode: true //This will only sort on one column (sort) and a direction(dir) value ASC or DESC
             }

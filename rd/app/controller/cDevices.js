@@ -35,16 +35,15 @@ Ext.define('Rd.controller.cDevices', {
     ],
     selectedRecord: null,
      config: {
-        urlAdd:             '/cake2/rd_cake/devices/add.json',
-        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/devices/export_csv',
-        urlNoteAdd:         '/cake2/rd_cake/devices/note_add.json',
-        urlViewBasic:       '/cake2/rd_cake/devices/view_basic_info.json',
-        urlEditBasic:       '/cake2/rd_cake/devices/edit_basic_info.json',
-        urlViewTracking:    '/cake2/rd_cake/devices/view_tracking.json',
-        urlEditTracking:    '/cake2/rd_cake/devices/edit_tracking.json',
-        urlEnableDisable:   '/cake2/rd_cake/devices/enable_disable.json',
-        urlDelete:          '/cake2/rd_cake/devices/delete.json',
+        urlAdd              : '/cake3/rd_cake/devices/add.json',
+        urlApChildCheck     : '/cake3/rd_cake/access-providers/child-check.json',
+        urlExportCsv        : '/cake3/rd_cake/devices/export-csv',
+        urlNoteAdd          : '/cake3/rd_cake/devices/note-add.json',
+        urlViewBasic        : '/cake3/rd_cake/devices/view-basic-info.json',
+        urlEditBasic        : '/cake3/rd_cake/devices/edit-basic-info.json',
+        urlEnableDisable    : '/cake3/rd_cake/devices/enable-disable.json',
+        urlDelete           : '/cake3/rd_cake/devices/delete.json',
+        
         urlDeleteRadaccts:  '/cake2/rd_cake/radaccts/delete.json',
         urlDeletePostAuths: '/cake2/rd_cake/radpostauths/delete.json'
     },
@@ -136,7 +135,7 @@ Ext.define('Rd.controller.cDevices', {
             'winNoteAdd[noteForGrid=devices] #btnNoteAddNext'  : {   
                 click: me.btnNoteAddNext
             },
-            'winEnableDisable #save': {
+            '#winEnableDisableDevice #save': {
                 click: me.enableDisableSubmit
             },
             'pnlDevice gridUserRadpostauths #reload' :{
@@ -183,12 +182,6 @@ Ext.define('Rd.controller.cDevices', {
             },
             'pnlDevice #tabBasicInfo #save' : {
                 click: me.saveBasicInfo
-            },
-            'pnlDevice #tabTracking' : {
-                activate: me.onTabTrackingActive
-            },
-            'pnlDevice #tabTracking #save' : {
-                click: me.saveTracking
             },
             'gridDevicePrivate' : {
                 beforeedit:     me.onBeforeEditDevicePrivate
@@ -487,12 +480,12 @@ Ext.define('Rd.controller.cDevices', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        var columns     = me.getGrid().columns;
+        var columns     = me.getGrid().down('headercontainer').getGridColumns();
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
             if(item.dataIndex != ''){
                 var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
-                col_list[index] = chk;
+                col_list.push(chk);
             }
         }); 
 
@@ -760,8 +753,8 @@ Ext.define('Rd.controller.cDevices', {
                         Ext.ux.Constants.msgWarn
             );
         }else{
-            if(!Ext.WindowManager.get('winEnableDisableUser')){
-                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableUser'});
+            if(!Ext.WindowManager.get('winEnableDisableDevice')){
+                var w = Ext.widget('winEnableDisable',{id:'winEnableDisableDevice'});
                 w.show();      
             }    
         }
@@ -820,18 +813,18 @@ Ext.define('Rd.controller.cDevices', {
         form.load({url:me.getUrlViewBasic(), method:'GET',params:{device_id:device_id}, 
             success : function(a,b){
                 //Set the CAP's of the permanent user
-                if(b.result.data.cap_data != undefined){
+                if(b.result.data.data_cap_type != undefined){
                     var cmbDataCap  = form.down('#cmbDataCap');
                     cmbDataCap.setVisible(true);
                     cmbDataCap.setDisabled(false);
-                    cmbDataCap.setValue(b.result.data.cap_data);
+                    cmbDataCap.setValue(b.result.data.data_cap_type);
                 }
 
-                if(b.result.data.cap_time != undefined){
+                if(b.result.data.time_cap_type != undefined){
                     var cmbTimeCap  = form.down('#cmbTimeCap');
                     cmbTimeCap.setVisible(true);
                     cmbTimeCap.setDisabled(false);
-                    cmbTimeCap.setValue(b.result.data.cap_time);
+                    cmbTimeCap.setValue(b.result.data.time_cap_type);
                 }
             } 
         });
@@ -845,35 +838,6 @@ Ext.define('Rd.controller.cDevices', {
         form.submit({
             clientValidation    : true,
             url                 : me.getUrlEditBasic(),
-            params              : {id: device_id},
-            success             : function(form, action) {
-                me.reload();
-                Ext.ux.Toaster.msg(
-                    i18n('sItems_modified'),
-                    i18n('sItems_modified_fine'),
-                    Ext.ux.Constants.clsInfo,
-                    Ext.ux.Constants.msgInfo
-                );
-            },
-            failure             : Ext.ux.formFail
-        });
-    },
-    onTabTrackingActive: function(t){
-        var me      = this;
-        var form    = t.down('form');
-        //get the user's id
-        var device_id = t.up('pnlDevice').d_id;
-        form.load({url:me.getUrlViewTracking(), method:'GET',params:{device_id:device_id}});
-    },
-    saveTracking:function(button){
-
-        var me      = this;
-        var form    = button.up('form');
-        var device_id = button.up('pnlDevice').d_id;
-        //Checks passed fine...      
-        form.submit({
-            clientValidation    : true,
-            url                 : me.getUrlEditTracking(),
             params              : {id: device_id},
             success             : function(form, action) {
                 me.reload();
@@ -1125,7 +1089,7 @@ Ext.define('Rd.controller.cDevices', {
         var pnlDevice               = cmb.up('pnlDevice');
         pnlDevice.cmbOwnerRendered  = true;
         if(pnlDevice.record != undefined){
-            var un      = pnlDevice.record.get('user');
+            var un      = pnlDevice.record.get('permanent_user');
             var u_id    = pnlDevice.record.get('permanent_user_id');
             var rec     = Ext.create('Rd.model.mPermanentUser', {username: un, id: u_id});
             cmb.getStore().loadData([rec],false);

@@ -57,24 +57,20 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                         xtype       : 'cmbCap',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'cap',
                         hidden      : true,
                         value       : 'hard',
                         fieldLabel  : i18n('sCap_type_for_data'),
                         itemId      : 'cmbDataCap',
-                        //name        : 'cap_data'
                         name        : 'time_cap_type'
                     },
                     {
                         xtype       : 'cmbCap',
                         allowBlank  : false,
                         labelClsExtra: 'lblRdReq',
-                        itemId      : 'cap',
                         hidden      : true,
                         value       : 'hard',
                         fieldLabel  : i18n('sCap_type_for_time'),
                         itemId      : 'cmbTimeCap',
-                        //name        : 'cap_time'
                         name        : 'data_cap_type'
                     },
                     {
@@ -146,12 +142,11 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                 ],
                 buttons: [
                     {
-                        itemId: 'save',
-                        text: i18n('sSave'),
-                        scale: 'large',
-                        iconCls: 'b-save',
-                        glyph: Rd.config.icnYes,
-                        margin: '0 20 40 0'
+                        itemId  : 'save',
+                        text    : i18n('sSave'),
+                        scale   : 'large',
+                        glyph   : Rd.config.icnYes,
+                        margin  : Rd.config.buttonMargin
                     }
                 ]
             }  
@@ -221,12 +216,11 @@ Ext.define('Rd.view.permanentUsers.pnlPermanentUser', {
                 ],
                 buttons: [
                     {
-                        itemId: 'save',
-                        text: i18n('sSave'),
-                        scale: 'large',
-                        iconCls: 'b-save',
-                        glyph: Rd.config.icnYes,
-                        margin: '0 20 40 0'
+                        itemId  : 'save',
+                        text    : i18n('sSave'),
+                        scale   : 'large',
+                        glyph   : Rd.config.icnYes,
+                        margin  : Rd.config.buttonMargin
                     }
                 ]
             }
