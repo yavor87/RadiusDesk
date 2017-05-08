@@ -188,7 +188,7 @@ $config['icnCheckC']    = 'xf058@'.$config['webFont'];
 
 //=== EXPERIMENTAL STUFF =====
 //--Show experimental menus---
-$config['experimental']['active']   = true;
+$config['experimental']['active']   = false;
 
 //=== White Label ====
 $config['whitelabel']['active']     = false;
