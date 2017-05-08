@@ -45,7 +45,7 @@ class PermanentUsersController extends AppController{
             return;
         }
         $query = $this->{$this->main_model}->find(); 
-        $this->CommonQuery->build_common_query($query,$user,['Users','PermanentUserNotes' => ['Notes']]);
+        $this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']);
         
         $q_r    = $query->all();
 
@@ -110,7 +110,7 @@ class PermanentUsersController extends AppController{
         }
                 
         $query = $this->{$this->main_model}->find();
-        $this->CommonQuery->build_common_query($query,$user,['Users','PermanentUserNotes' => ['Notes']]);
+        $this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']);
  
         $limit  = 50;
         $page   = 1;
@@ -359,7 +359,6 @@ class PermanentUsersController extends AppController{
         //Check if it has an SSID limitation
         if($this->{$this->main_model}->hasSsidCheck($username)){
             $items['ssid_only'] = true;
-            //FIXME We need to add the SSIDs to the list
             $items['ssid_list'] = $this->{$this->main_model}->listRestrictedSsids($username);
         }
 
