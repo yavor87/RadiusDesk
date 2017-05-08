@@ -182,10 +182,13 @@ $config['icnScale']     = 'xf24e@'.$config['webFont'];
 $config['icnFilter']    = 'xf0b0@'.$config['webFont'];
 $config['icnDropbox']   = 'xf16b@'.$config['webFont'];
 
+$config['icnBan']       = 'xf05e@'.$config['webFont'];
+$config['icnCheckC']    = 'xf058@'.$config['webFont'];
+
 
 //=== EXPERIMENTAL STUFF =====
 //--Show experimental menus---
-$config['experimental']['active']   = false;
+$config['experimental']['active']   = true;
 
 //=== White Label ====
 $config['whitelabel']['active']     = false;

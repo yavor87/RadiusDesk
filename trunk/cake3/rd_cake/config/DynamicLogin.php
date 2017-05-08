@@ -242,9 +242,10 @@ $config['DynamicLogin']['theme']['Turqois Grey Red'] = array(
 $config['DynamicLogin']['ruckus']['northbound']['password'] = 'stayoutnow123!';
 
 $config['DynamicLogin']['i18n'][0]     = array('name' => 'English',     'id' => 'en_GB',   'active' => true);
-$config['DynamicLogin']['i18n'][1]     = array('name' => 'Italian',     'id' => 'it_IT',   'active' => true);
-$config['DynamicLogin']['i18n'][2]     = array('name' => 'Spanish',     'id' => 'es_ES',   'active' => true);
-$config['DynamicLogin']['i18n'][3]     = array('name' => 'Afrikaans',   'id' => 'af_ZA',   'active' => true);
+$config['DynamicLogin']['i18n'][1]     = array('name' => 'French',      'id' => 'fr_FR',   'active' => true);
+$config['DynamicLogin']['i18n'][2]     = array('name' => 'Italian',     'id' => 'it_IT',   'active' => true);
+$config['DynamicLogin']['i18n'][3]     = array('name' => 'Spanish',     'id' => 'es_ES',   'active' => true);
+$config['DynamicLogin']['i18n'][4]     = array('name' => 'Afrikaans',   'id' => 'af_ZA',   'active' => true);
 
 return $config;
 
