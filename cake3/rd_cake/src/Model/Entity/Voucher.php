@@ -11,11 +11,9 @@ use Cake\Utility\Text;
 class Voucher extends Entity
 {
     protected function _setNeverExpire($value){
-
         if($value == 'never_expire'){ 
             $this->set('expire', '');
         }
-
     }
         
 }

@@ -386,9 +386,11 @@ class FreeRadiusBehavior extends Behavior {
                 $valid      = $request->data['days_valid']."-".$hours."-".$minutes."-00";
                 $entity->time_valid = $valid;    
             }
+        }else{
+            $entity->time_valid = '';
         }
 		//Auto-populate the time_cap field with the value for time_valid
-		if($entity->time_valid){
+		if($entity->time_valid !== ''){
 			$expire		= $entity->time_valid;
 			$pieces     = explode("-", $expire);
             $time_avail = ($pieces[0] * 86400)+($pieces[1] * 3600)+($pieces[2] * 60)+($pieces[3]);
@@ -481,8 +483,13 @@ class FreeRadiusBehavior extends Behavior {
             $this->UserSsids->deleteAll(['username' => $username]);
         }
 
-        //If always_active is selected remove fr->dates
         $request = Router::getRequest();
+        if(!(isset($request->data['days_valid']))){
+            $this->_remove_radcheck_item($username,$this->vChecks["time_valid"]);
+        }
+
+        //If always_active is selected remove fr->dates
+       
         if(isset($request->data['never_expire'])){
             $this->_remove_radcheck_item($username,$this->vChecks["expire"]);
         }
