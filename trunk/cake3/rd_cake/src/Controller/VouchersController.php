@@ -7,6 +7,9 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 
 use Cake\Utility\Inflector;
+use Cake\ORM\TableRegistry;
+
+use Cake\Mailer\Email;
 
 class VouchersController extends AppController{
   
@@ -31,16 +34,179 @@ class VouchersController extends AppController{
 
     }
 
-    public function pdfExportSettings(){
-		Configure::load('Vouchers'); 
-        $data       = Configure::read('voucher_dafaults'); //Read the defaults
+    public function exportCsv(){
 
-		$this->set(array(
-            'data'     => $data,
-            'success'   => true,
-            '_serialize'=> array('success', 'data')
-        ));
-	}
+        $this->autoRender   = false;
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $query = $this->{$this->main_model}->find(); 
+        $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+        
+        $q_r    = $query->all();
+
+        //Create file
+        $this->ensureTmp();     
+        $tmpFilename    = TMP . $this->tmpDir . DS .  strtolower( Inflector::pluralize($this->modelClass) ) . '-' . date('Ymd-Hms') . '.csv';
+        $fp             = fopen($tmpFilename, 'w');
+
+        //Headings
+        $heading_line   = array();
+        if(isset($this->request->query['columns'])){
+            $columns = json_decode($this->request->query['columns']);
+            foreach($columns as $c){
+                array_push($heading_line,$c->name);
+            }
+        }
+        fputcsv($fp, $heading_line,';','"');
+        foreach($q_r as $i){
+            $columns    = array();
+            $csv_line   = array();
+            if(isset($this->request->query['columns'])){
+                $columns = json_decode($this->request->query['columns']);
+                foreach($columns as $c){
+                    $column_name = $c->name;
+                    if($column_name =='owner'){
+                        $owner_id       = $i->user_id;
+                        $owner_tree     = $this->Users->find_parents($owner_id);
+                        array_push($csv_line,$owner_tree); 
+                    }else{
+                        array_push($csv_line,$i->{$column_name});  
+                    }
+                }
+                fputcsv($fp, $csv_line,';','"');
+            }
+        }
+
+        //Return results
+        fclose($fp);
+        $data = file_get_contents( $tmpFilename );
+        $this->cleanupTmp( $tmpFilename );
+        $this->RequestHandler->respondAs('csv');
+        $this->response->download( strtolower( Inflector::pluralize( $this->modelClass ) ) . '.csv' );
+        $this->response->body($data);
+    }
+
+     public function exportPdf(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id    = $user['id'];
+        $this->response->type('pdf');
+		//We improve this function by also allowing the user to specify certain values
+		//which in turn will influence the outcome of the PDF
+		Configure::load('Vouchers');
+        $output_instr  	= Configure::read('voucher_dafaults'); //Read the defaults
+
+		foreach(array_keys($output_instr) as $k){
+			if(isset($this->request->query[$k])){
+				if(($k == 'language')||($k == 'format')||($k == 'orientation')){
+					$output_instr["$k"] 	= $this->request->query["$k"];
+				}else{
+					$output_instr["$k"] = true;
+				}    
+		    }else{
+				if(!(($k == 'language')||($k == 'format')||($k == 'orientation'))){
+					$output_instr["$k"] = false;
+				}
+			}
+		}
+
+        $pieces = explode('_',$output_instr['language']);
+        $languages  = TableRegistry::get('Languages');
+        $l_entity   = $languages->get($pieces[1]);
+
+        if($l_entity->rtl == '1'){
+			$output_instr['rtl'] = true;
+        }else{
+			$output_instr['rtl'] = false;
+        }
+
+		$this->set('output_instr',$output_instr);
+
+        //==== Selected items is the easiest =====
+        //We need to see if there are a selection:
+        if(isset($this->request->query['selected'])){
+            $selected = json_decode($this->request->query['selected']);
+            $sel_condition = array();
+            foreach($selected as $i){
+                array_push($sel_condition, array("Vouchers.id" => $i)); 
+            }
+
+            $voucher_data = array();
+            $query = $this->{$this->main_model}->find();
+            $q_r   = $query->where(['OR' => $sel_condition])->all();
+
+            foreach($q_r as $i){
+                $v                  = array();
+                $v['username']      = $i->name;
+                $v['password']      = $i->password;
+                $v['expiration']    = $i->expire;
+                $v['days_valid']    = $i->time_valid;
+                $v['profile']       = $i->profile;
+                $v['extra_name']    = $i->extra_name;
+                $v['extra_value']   = $i->extra_value;
+
+                $realm_id           = $i->realm_id;
+                $realm              = $i->realm;
+                if(!array_key_exists($realm,$voucher_data)){
+                    $e_realm    = $this->{'Realms'}->get($realm_id);
+                    $row        = [];
+                    $r_fields   = $this->{'Realms'}->schema()->columns();
+                    foreach($r_fields as $r_field){
+                        $row["$r_field"]= $e_realm->{"$r_field"};
+                    } 
+                    $voucher_data[$realm] = $row;
+                    $voucher_data[$realm]['vouchers'] = array();
+                }
+                array_push($voucher_data[$realm]['vouchers'],$v); 
+            }
+            $this->set('voucher_data',$voucher_data);
+        }else{
+            //Check if there is a filter applied
+            $query = $this->{$this->main_model}->find(); 
+            $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+            $q_r   = $query->all();
+            $voucher_data = array();
+            foreach($q_r as $i){
+                $v                  = array();
+                $v['username']      = $i->name;
+                $v['password']      = $i->password;
+                $v['expiration']    = $i->expire;
+                $v['days_valid']    = $i->time_valid;
+                $v['profile']       = $i->profile;
+                $v['extra_name']    = $i->extra_name;
+                $v['extra_value']   = $i->extra_value;
+
+                $realm_id           = $i->realm_id;
+                $realm              = $i->realm;
+                if(!array_key_exists($realm,$voucher_data)){
+                    $e_realm = $this->{'Realms'}->get($realm_id);
+                    $row = [];
+                    $r_fields    = $this->{'Realms'}->schema()->columns();
+                    foreach($r_fields as $r_field){
+                        $row["$r_field"]= $e_realm->{"$r_field"};
+                    } 
+                    $voucher_data[$realm] = $row;
+                    $voucher_data[$realm]['vouchers'] = array();
+                }
+                array_push($voucher_data[$realm]['vouchers'],$v);    
+            }
+            $this->set('voucher_data',$voucher_data);
+        }     
+    }
+
+    public function pdfView($schedule_id = null){
+        $this->viewBuilder()->layout('ajax');
+        $this->set('title', 'My Great Title');
+        $this->set('file_name', '2016-06' . '_June_CLM.pdf');
+        $this->response->type('pdf');
+    } 
     
     //____ BASIC CRUD Manager ________
     public function index(){
@@ -53,7 +219,8 @@ class VouchersController extends AppController{
                 
         $query = $this->{$this->main_model}->find();
 
-        $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms']);
+        $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+
  
         $limit  = 50;
         $page   = 1;
@@ -291,21 +458,6 @@ class VouchersController extends AppController{
             $this->JsonErrors->entityErros($entity,$message);
         }
     }
-
-	
-    public function menuForGrid(){
-        $user = $this->Aa->user_for_token($this);
-        if(!$user){   //If not a valid user
-            return;
-        }
-         
-        $menu = $this->GridButtons->returnButtons($user,true,'basic'); 
-        $this->set(array(
-            'items'         => $menu,
-            'success'       => true,
-            '_serialize'    => array('items','success')
-        ));
-    }
     
     public function delete() {
 		if (!$this->request->is('post')) {
@@ -441,6 +593,141 @@ class VouchersController extends AppController{
                 '_serialize' => array('success')
             ));
         }
+    }
+
+    public function changePassword(){
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $user_id = $user['id'];
+
+        if(
+            (isset($this->request->data['voucher_id']))||
+            (isset($this->request->data['name'])) //Can also change by specifying name
+        ){
+			$single_field = false;
+            if(isset($this->request->data['name'])){
+                $entity =  $this->{$this->main_model}->find()->where(['name' => $this->request->data['name']])->first();       
+            }else{
+                $entity =  $this->{$this->main_model}->get($this->request->data['voucher_id']); 
+			}
+
+            if($entity){
+                if( $entity->name == $entity->password){
+                    $message = __('Cannot change the password of a single field voucher');
+                    $this->JsonErrors->errorMessage($message);
+                }else{
+                    $this->{$this->main_model}->patchEntity($entity, $this->request->data());
+                    if ($this->{$this->main_model}->save($entity)) {
+                        $this->set(array(
+                            'success' => true,
+                            '_serialize' => array('success')
+                        ));
+                    } else {
+                        $message = __('Could not change Password this time');
+                        $this->JsonErrors->entityErros($entity,$message);
+                    }
+                }
+            }else{
+                $message = __('Could not change Password this time');
+                $this->JsonErrors->errorMessage($message); 
+            }
+        }
+    }
+
+    public function emailVoucherDetails(){
+
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }
+        $to     = $this->request->data['email'];
+        $message= $this->request->data['message'];
+
+        $entity = $this->{$this->main_model}->get($this->request->data['id']);
+        if($entity){
+
+            $username       = $entity->name;
+            $password       = $entity->password;
+            $valid_for      = $entity->time_valid;
+            $profile        = $entity->profile;
+            $extra_name     = $entity->extra_name;
+            $extra_value    = $entity->extra_value;
+
+            $email_server   = Configure::read('EmailServer'); //FIXME!!!
+            $email          = new Email($email_server);
+            $email->subject('Your voucher detail')
+                ->to($to)
+                ->viewVars(compact( 'username', 'password','valid_for','profile','extra_name','extra_value','message'))
+                ->template('voucher_detail', 'voucher_notify')
+                ->emailFormat('html')
+                ->send();
+        }
+
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        ));
+    }
+
+    public function pdfExportSettings(){
+		Configure::load('Vouchers'); 
+        $data  = Configure::read('voucher_dafaults'); //Read the defaults
+
+		$this->set(array(
+            'data'     => $data,
+            'success'   => true,
+            '_serialize'=> array('success', 'data')
+        ));
+	}
+
+    public function pdfVoucherFormats(){
+        Configure::load('Vouchers'); 
+        $data  = Configure::read('voucher_formats'); //Read the defaults
+        $items = array();
+        foreach($data as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+
+    public function menuForGrid(){
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,true,'vouchers');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
+    }
+
+    function menuForAccountingData(){
+
+       $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $menu = $this->GridButtons->returnButtons($user,true,'fr_acct_and_auth');
+        $this->set(array(
+            'items'         => $menu,
+            'success'       => true,
+            '_serialize'    => array('items','success')
+        ));
     }
 
 
