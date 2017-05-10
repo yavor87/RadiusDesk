@@ -10,7 +10,8 @@
         "mobiledetect/mobiledetectlib": "2.*",
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "*",
-        "cakephp/acl": "^0.2.2"
+        "cakephp/acl": "^0.2.2",
+        "tecnickcom/tcpdf": "^6.2"
     },
     "require-dev": {
         "psy/psysh": "@stable",
