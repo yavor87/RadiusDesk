@@ -35,11 +35,12 @@ class CommonQueryComponent extends Component {
         $this->_ap_filter_for_aps($query,$user,$where_clause);
     }
 
-    public function build_with_realm_query($query,$user,$contain_array = ['Users']){
+    public function build_with_realm_query($query,$user,$contain_array = ['Users'],$order_column='username'){
         $query->contain($contain_array);
-        $this->_common_sort($query,'username');
+        $this->_common_sort($query,$order_column);
         $where_clause = $this->_common_filter();
         //FIXME We have to cleverly apply the AP filter to only show realms an AP has rights to
+        $query->where($where_clause);
     }
 
 
