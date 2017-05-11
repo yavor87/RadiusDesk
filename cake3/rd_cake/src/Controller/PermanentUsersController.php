@@ -31,11 +31,11 @@ class PermanentUsersController extends AppController{
             'condition' => 'permanent_user_id'
         ]); 
 
-        $this->loadComponent('JsonErrors');       
+        $this->loadComponent('JsonErrors'); 
+        $this->loadComponent('TimeCalculations');       
     }
 
-
-     public function exportCsv(){
+    public function exportCsv(){
 
         $this->autoRender   = false;
 
@@ -145,7 +145,27 @@ class PermanentUsersController extends AppController{
             $row            = array();
             $fields         = $this->{$this->main_model}->schema()->columns();
             foreach($fields as $field){
-                $row["$field"]= $i->{"$field"};
+                $row["$field"]= $i->{"$field"};   
+                if($field = 'created'){
+                    $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'modified'){
+                    $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'last_accept_time'){
+                    if($i->{"$field"}){
+                        $row['last_accept_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_accept_time_in_words'] = __("Never");
+                    }
+                } 
+                if($field = 'last_reject_time'){
+                    if($i->{"$field"}){
+                        $row['last_reject_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_reject_time_in_words'] = __("Never");
+                    }
+                }    
             }
             
             //Unset password and token fields

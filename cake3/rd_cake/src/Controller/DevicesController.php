@@ -34,7 +34,8 @@ class DevicesController extends AppController{
             'condition' => 'device_id'
         ]);
 
-         $this->loadComponent('JsonErrors');          
+         $this->loadComponent('JsonErrors'); 
+         $this->loadComponent('TimeCalculations');          
     }
 
     public function exportCsv(){
@@ -138,6 +139,28 @@ class DevicesController extends AppController{
             $fields         = $this->{$this->main_model}->schema()->columns();
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
+                
+                if($field = 'created'){
+                    $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'modified'){
+                    $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'last_accept_time'){
+                    if($i->{"$field"}){
+                        $row['last_accept_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_accept_time_in_words'] = __("Never");
+                    }
+                } 
+                if($field = 'last_reject_time'){
+                    if($i->{"$field"}){
+                        $row['last_reject_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_reject_time_in_words'] = __("Never");
+                    }
+                }        
+                
             }
             
             $action_flags           = $this->Aa->get_action_flags($i->permanent_user->user_id,$user);  

@@ -31,7 +31,7 @@ class VouchersController extends AppController{
         ]);  
         $this->loadComponent('JsonErrors'); 
         $this->loadComponent('VoucherGenerator'); 
-
+        $this->loadComponent('TimeCalculations'); 
     }
 
     public function exportCsv(){
@@ -254,6 +254,27 @@ class VouchersController extends AppController{
             $fields    = $this->{$this->main_model}->schema()->columns();
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
+                
+                if($field = 'created'){
+                    $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'modified'){
+                    $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'last_accept_time'){
+                    if($i->{"$field"}){
+                        $row['last_accept_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_accept_time_in_words'] = __("Never");
+                    }
+                } 
+                if($field = 'last_reject_time'){
+                    if($i->{"$field"}){
+                        $row['last_reject_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                    }else{
+                        $row['last_reject_time_in_words'] = __("Never");
+                    }
+                }        
             } 
             
             $row['owner']   = $owner_tree;

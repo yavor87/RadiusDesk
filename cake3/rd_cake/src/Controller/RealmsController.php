@@ -148,8 +148,7 @@ class RealmsController extends AppController{
                     
                 }   
             }
-
-           
+        
             //All the realms owned by anyone this access provider created (and also itself) 
             //will automatically be under full controll of this access provider
             $tree_array     = [['Realms.user_id' => $ap_id]]; //Itself
