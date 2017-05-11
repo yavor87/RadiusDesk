@@ -2,8 +2,8 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
     extend      : 'Ext.window.Window',
     alias       : 'widget.winTopUpAddWizard',
     closable    : true,
-    draggable   : false,
-    resizable   : false,
+    draggable   : true,
+    resizable   : true,
     title       : 'New TopUp',
     width       : 500,
     height      : 500,
@@ -127,8 +127,6 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
 
         cmbTimeUnit.select(cmbTimeUnit.getStore().getAt(0));
         //---
-
-
         var buttons = [
                 {
                     itemId: 'btnDataPrev',

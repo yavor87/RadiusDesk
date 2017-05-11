@@ -104,21 +104,26 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
             { 
                 text        : 'Created',
                 dataIndex   : 'created', 
-                tdCls       : 'gridTree',
-                hidden      : false, 
-                flex        : 1,
-                xtype       : 'datecolumn',   
-                format      :'Y-m-d H:i:s',
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridTopUps9'
-            },
+                tdCls       : 'gridTree',  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId     : 'StateGridTopUps9',
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                width       : 200
+            },  
             { 
                 text        : 'Modified',
                 dataIndex   : 'modified', 
                 tdCls       : 'gridTree',
                 hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
                 flex        : 1,
-                xtype       : 'datecolumn',   
-                format      :'Y-m-d H:i:s',
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridTopUps10'
             }
         ]; 

@@ -13,7 +13,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
     viewConfig: {
         loadMask:true
     },
-    urlMenu: '/cake2/rd_cake/vouchers/menu_for_grid.json',
+    urlMenu: '/cake3/rd_cake/vouchers/menu-for-grid.json',
     plugins     : 'gridfilters',  //*We specify this
     initComponent: function(){
         var me      = this;
@@ -26,8 +26,7 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
             }  
         ];     
         me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
-        
-        
+            
         var status = Ext.create('Ext.data.Store', {
             fields: ['id', 'text'],
             data : [
@@ -37,7 +36,6 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
 				{"id":"expired",    "text": "Expired"}
             ]
         });
-
 
         me.columns  = [
             {xtype: 'rownumberer',stateId: 'StateGridVouchers1'},
@@ -158,14 +156,19 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                                 store   : status
                               },stateId: 'StateGridVouchers10'
             },
-            {
+            { 
                 text        : i18n('sLast_accept_time'),
-                flex        : 1,
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridVouchers11'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_accept_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridVouchers11'
+            },  
             {
                 text        : i18n('sLast_accept_nas'),
                 flex        : 1,
@@ -174,14 +177,19 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 hidden      : true,
                 filter      : {type: 'string'},stateId: 'StateGridVouchers12'
             },
-            {
+            { 
                 text        : i18n('sLast_reject_time'),
-                flex        : 1,
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridVouchers13'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_reject_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridVouchers13'
+            },  
             {
                 text        : i18n('sLast_reject_nas'),
                 flex        : 1,
@@ -213,6 +221,33 @@ Ext.define('Rd.view.vouchers.gridVouchers' ,{
                 tdCls       : 'gridTree',
                 hidden      : true,
                 filter      : {type: 'string'},stateId: 'StateGridVouchers17'
+            },
+            { 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId		: 'StateGridVouchers18',
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                width       : 200
+            },  
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridVouchers19'
             }         
         ];
         

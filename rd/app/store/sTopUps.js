@@ -8,7 +8,7 @@ Ext.define('Rd.store.sTopUps', {
             type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            url     : '/cake2/rd_cake/top_ups/index.json',
+            url     : '/cake3/rd_cake/top-ups/index.json',
             reader: {
                 type: 'json',
                 rootProperty: 'items',

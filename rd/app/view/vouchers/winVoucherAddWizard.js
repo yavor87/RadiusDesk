@@ -174,7 +174,7 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                                     name        : 'quantity',
                                     fieldLabel  : i18n('sHow_many_qm'),
                                     value       : 1,
-                                    maxValue    : 500,
+                                    maxValue    : 5000,
                                     minValue    : 1,
                                     labelClsExtra: 'lblRdReq',
                                     itemId      : 'quantity'
