@@ -26,6 +26,8 @@ class PermanentUsersTable extends Table
      
         //It is very impartant that we specify 'cascadeCallbacks' in order for the devices to also be taken for the system
         $this->hasMany('Devices',['dependent' => true,'cascadeCallbacks' =>true]);
+        
+        $this->hasMany('TopUps',['dependent' => true,'cascadeCallbacks' =>true]);
     }
     
     public function validationDefault(Validator $validator){

@@ -31,7 +31,10 @@ class UsersTable extends Table
             'foreignKey'    => 'parent_id'
         ]);
         
-        $this->hasMany('UserNotes');      
+        $this->hasMany('UserNotes');
+      
+        //FIXME We have to include all the things that users can have
+        $this->hasMany('TopUps');      
     }
       
     public function find_access_provider_children($id){

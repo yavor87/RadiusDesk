@@ -13,14 +13,31 @@ use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\ORM\TableRegistry;
 
-class CommonQueryComponent extends Component { 
-    public $components = array('GridFilter'); 
+class CommonQueryComponent extends Component {
+ 
+    public $components              = array('GridFilter');
+    
+    //Some default configs
+    public $available_to_siblings   = true; //Default is true
+    public $sort_by                 = 'name';
+    
+    public function initialize(array $config){
+    
+        if($this->config('no_available_to_siblings')){
+            $this->available_to_siblings = false;
+        }
+    } 
 
     public function build_common_query($query,$user,$contain_array = ['Users']){
         $query->contain($contain_array);
-        $this->_common_sort($query,'name');
+        $this->_common_sort($query,$this->sort_by);
         $where_clause = $this->_common_filter();
-        $this->_ap_filter_for_available_to_siblings($query,$user,$where_clause);
+        
+        if($this->available_to_siblings == true){
+            $this->_ap_filter_for_available_to_siblings($query,$user,$where_clause);
+        }else{
+            $this->_ap_filter_for_no_siblings($query,$user,$where_clause);
+        }
     }
     
     public function build_ap_query($query,$user){
@@ -50,6 +67,11 @@ class CommonQueryComponent extends Component {
         $model  = $this->config('model');
         $sort   = $model.'.'.$default_column;
         $dir    = 'DESC';
+        
+        //This is to owerride the default sort order
+        if($this->config('sort_by')){
+            $sort = $this->config('sort_by');
+        }
 
         if(isset($this->request->query['sort'])){
             if($this->request->query['sort'] == 'owner'){
@@ -80,6 +102,7 @@ class CommonQueryComponent extends Component {
                             array_push($where_clause,array("Users.username LIKE" => '%'.$f->value.'%'));
                         }   
                     }elseif($f->field == 'permanent_user') //For Devices
+                        
                         array_push($where_clause,array("PermanentUsers.username LIKE" => '%'.$f->value.'%'));
                     else{
                         $col = $model.'.'.$f->field;
@@ -90,6 +113,21 @@ class CommonQueryComponent extends Component {
                 if($f->type == 'boolean'){
                      $col = $model.'.'.$f->field;
                      array_push($where_clause,array("$col" => $f->value));
+                }
+                
+                 if($f->type == 'date'){
+                    //date we want it in "2018-03-12"
+                    $col = $model.'.'.$f->field;
+                    if($f->comparison == 'eq'){
+                        array_push($where_clause,array("DATE($col)" => $f->value));
+                    }
+
+                    if($f->comparison == 'lt'){
+                        array_push($where_clause,array("DATE($col) <" => $f->value));
+                    }
+                    if($f->comparison == 'gt'){
+                        array_push($where_clause,array("DATE($col) >" => $f->value));
+                    }
                 }
             }
         }
@@ -143,6 +181,30 @@ class CommonQueryComponent extends Component {
                 }
             }
                  
+            //** ALL the AP's children
+            $children = $users->find('children', ['for' => $user_id]);
+            if($children){   //Only if the AP has any children...
+                foreach($children as $i){
+                    $id = $i->id;
+                    array_push($tree_array,array($model.'.'.'user_id' => $id));
+                }       
+            }      
+            //Add it as an OR clause
+            if(count($tree_array) > 0){
+                array_push($where_clause,array('OR' => $tree_array));
+            }  
+        }
+        $query->where($where_clause);
+    }
+    
+    private function _ap_filter_for_no_siblings($query,$user,$where_clause){
+         $model   = $this->config('model');
+         if($user['group_name'] == Configure::read('group.ap')){  //AP
+            $tree_array = array();
+            $user_id    = $user['id'];
+            
+            array_push($tree_array,array($model.'.'.'user_id' => $i_id)); //That is the access provider self
+                
             //** ALL the AP's children
             $children = $users->find('children', ['for' => $user_id]);
             if($children){   //Only if the AP has any children...
