@@ -41,18 +41,20 @@ Ext.define('Rd.controller.cVouchers', {
 	],
     selectedRecord: null,
     config: {
-        urlAdd:             '/cake2/rd_cake/vouchers/add.json',
-        urlDelete:          '/cake2/rd_cake/vouchers/delete.json',
-        urlViewBasic:       '/cake2/rd_cake/vouchers/view_basic_info.json',
-        urlEditBasic:       '/cake2/rd_cake/vouchers/edit_basic_info.json',
-        urlApChildCheck:    '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv:       '/cake2/rd_cake/vouchers/export_csv',
-        urlChangePassword:  '/cake2/rd_cake/vouchers/change_password.json',
-        urlPdfBase:         '/cake2/rd_cake/vouchers/export_pdf',
-        urlEmailSend:       '/cake2/rd_cake/vouchers/email_voucher_details.json',
-		urlAddDevice:		'/cake2/rd_cake/vouchers/voucher_device_add.json',
-		urlPdfExportLoad:	'/cake2/rd_cake/vouchers/pdf_export_settings.json',
-		urlAddCsv:          '/cake2/rd_cake/vouchers/add_csv/',
+        urlAdd              : '/cake3/rd_cake/vouchers/add.json',
+        urlDelete           : '/cake3/rd_cake/vouchers/delete.json',
+        urlViewBasic        : '/cake3/rd_cake/vouchers/view-basic-info.json',
+        urlEditBasic        : '/cake3/rd_cake/vouchers/edit_basic_info.json',  
+        urlApChildCheck     : '/cake3/rd_cake/access-providers/child-check.json',
+        urlExportCsv        : '/cake3/rd_cake/vouchers/export_csv',
+        urlPdfExportLoad    : '/cake3/rd_cake/vouchers/pdf-export-settings.json',
+        urlChangePassword   : '/cake3/rd_cake/vouchers/change-password.json',
+        urlPdfBase          : '/cake3/rd_cake/vouchers/export-pdf',
+        urlEmailSend        : '/cake3/rd_cake/vouchers/email-voucher-details.json',
+        
+		urlAddDevice        : '/cake2/rd_cake/vouchers/voucher_device_add.json',
+		urlAddCsv           : '/cake2/rd_cake/vouchers/add_csv/',
+		
 		urlDeleteRadaccts:  '/cake2/rd_cake/radaccts/delete.json',
         urlDeletePostAuths: '/cake2/rd_cake/radpostauths/delete.json'
     },
@@ -392,7 +394,7 @@ Ext.define('Rd.controller.cVouchers', {
         var me      = this;
         var win     = button.up('window');
         var form    = win.down('form');
-       // form.setLoading(true); //Mask it
+        //form.setLoading("Generating Vouchers - Please Wait"); //Mask it
         form.submit({
             clientValidation: true,
             url: me.getUrlAdd(),
@@ -665,6 +667,7 @@ Ext.define('Rd.controller.cVouchers', {
     pdfExportSubmit: function(button){
         var me      = this;      
         var form    = button.up('form');
+        var win     = form.up('window');
 
 		//Get the values from the form:
 		form_to_string 	= form.getForm().getValues(true);
@@ -692,12 +695,11 @@ Ext.define('Rd.controller.cVouchers', {
                 f_count         = f_count + 1;
                 
             }     
-        }
-        
+        }  
         
         if(f_found){
             filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
-            url_to_add  = url_to_add+filter_json;
+            url_to_add  = url_to_add+filter_json+'&';
             //console.log(url_to_add);
         }
         //--- END Filter thing -----
@@ -720,23 +722,10 @@ Ext.define('Rd.controller.cVouchers', {
                 }
             }
         }
-        me.pdfOpenWindow(url_to_add);
-    },
-    pdfOpenWindow: function(url_to_add){
-        var me      = this;
-        var title   = i18n('sVoucher_export_to_pdf');
-        var urlPdf  = me.getUrlPdfBase()+'?'+url_to_add;      
-        if(!Ext.WindowManager.get('winPdfId')){
-            var w = Ext.widget('winPdf',{
-                id          : 'winPdfId',
-                title       : title,
-                srcUrl      : urlPdf
-            });
-            w.show();      
-        }else{
-            Ext.WindowManager.get('winPdfId').setSrc(urlPdf);
-            Ext.WindowManager.get('winPdfId').setTitle(title);
-        }
+        
+        var urlPdf  = me.getUrlPdfBase()+'?'+url_to_add;
+        window.open(urlPdf);
+        win.close();
     },
 	frmPdfExportLoad: function(tab){
         var me      = this;
@@ -745,14 +734,14 @@ Ext.define('Rd.controller.cVouchers', {
     },
     csvExport: function(button,format) {
         var me          = this;
-        var columns     = me.getGrid().columns;
+        var columns     = me.getGrid().down('headercontainer').getGridColumns();
         var col_list    = [];
         Ext.Array.each(columns, function(item,index){
             if(item.dataIndex != ''){
                 var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
-                col_list[index] = chk;
+                col_list.push(chk);
             }
-        }); 
+        });
 
         if(!Ext.WindowManager.get('winCsvColumnSelectVouchers')){
             var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectVouchers',columns: col_list});
@@ -796,7 +785,7 @@ Ext.define('Rd.controller.cVouchers', {
                 var i = 0;
                 while (f_count < filter_collection.count()) { 
 
-                  //  console.log(filter_collection.getAt(f_count).serialize( ));
+                    //console.log(filter_collection.getAt(f_count).serialize( ));
                     f_found         = true;
                     var ser_item    = filter_collection.getAt(f_count).serialize( );
                     ser_item.field  = ser_item.property;
@@ -805,7 +794,7 @@ Ext.define('Rd.controller.cVouchers', {
                     
                 }     
             }
-           
+               
             var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
             var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
             var append_url      = "?"+extra_params+'&'+col_json;

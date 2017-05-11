@@ -90,18 +90,20 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                         yesText         : 'Yes',
                         noText          : 'No'
                 },stateId: 'StateGridPermanentUsers12'
-            },
-            {
+            },   
+            { 
                 text        : i18n('sLast_accept_time'),
-                flex        : 1,
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {
-                    type        : 'date',
-                    dateFormat  : "Y-m-d" 
-                },stateId: 'StateGridPermanentUsers13'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_accept_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridPermanentUsers13'
+            },    
             {
                 text        : i18n('sLast_accept_nas'),
                 flex        : 1,
@@ -110,17 +112,19 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 hidden      : true,
                 filter      : {type: 'string'},stateId: 'StateGridPermanentUsers14'
             },
-            {
+            { 
                 text        : i18n('sLast_reject_time'),
-                flex        : 1,
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {
-                    type        : 'date',
-                    dateFormat  : "Y-m-d" 
-                },stateId: 'StateGridPermanentUsers15'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_reject_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridPermanentUsers15'
+            },   
             {
                 text        : i18n('sLast_reject_nas'),
                 flex        : 1,
@@ -225,6 +229,33 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
 				stateId		: 'StateGridPermanentUsers22'
             },
             { 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId		: 'StateGridPermanentUsers23',
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                width       : 200
+            },  
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridPermanentUsers24'
+            },
+            { 
                 text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
@@ -233,7 +264,7 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><span class=\"fa fa-thumb-tack fa-lg txtGreen\"></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridPermanentUsers23'
+                dataIndex: 'notes',stateId: 'StateGridPermanentUsers25'
             }      
         ];
 

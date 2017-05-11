@@ -17,18 +17,19 @@ Ext.define('Rd.controller.cTopUps', {
     },
 
     views:  [
-        'topUps.gridTopUps',    'topUps.winTopUpAddWizard',
-        'components.cmbPermanentUser',      'topUps.winTopUpEdit'
-  
+        'topUps.gridTopUps',            'topUps.winTopUpAddWizard',
+        'components.cmbPermanentUser',  'topUps.winTopUpEdit',
+        'components.winCsvColumnSelect'
     ],
     stores: ['sTopUps', 'sAccessProvidersTree', 'sPermanentUsers'],
     models: ['mTopUp',  'mAccessProviderTree',  'mPermanentUser' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
-        urlExportCsv    : '/cake2/rd_cake/top_ups/export_csv',
-        urlAdd          : '/cake2/rd_cake/top_ups/add.json',
-        urlDelete       : '/cake2/rd_cake/top_ups/delete.json'
+        urlExportCsv    : '/cake3/rd_cake/top-ups/export_csv',
+        urlAdd          : '/cake3/rd_cake/top-ups/add.json',
+        urlExportCsv    : '/cake3/rd_cake/top-ups/export_csv', 
+        urlDelete       : '/cake3/rd_cake/top-ups/delete.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridTopUps'}       
@@ -76,7 +77,10 @@ Ext.define('Rd.controller.cTopUps', {
             },
             'winTopUpAddWizard #cmbType' : {
                 change:  me.cmbTopUpTypeChanged
-            }
+            },
+            '#winCsvColumnSelectTopUps #save': {
+                click:  me.csvExportSubmit
+            },
         });
     },
     appClose:   function(){
@@ -161,6 +165,11 @@ Ext.define('Rd.controller.cTopUps', {
             var win = button.up('winTopUpAddWizard');
             win.down('#owner').setValue(sr.get('username'));
             win.down('#user_id').setValue(sr.getId());
+            
+            //We need to update the Store of the Realms and Profile select list to reflect the specific Access Provider
+            win.down('#permanent_user_id').getStore().getProxy().setExtraParam('ap_id',sr.getId());
+            win.down('#permanent_user_id').getStore().load();
+            
             win.getLayout().setActiveItem('scrnData');
         }else{
             Ext.ux.Toaster.msg(
@@ -317,5 +326,76 @@ Ext.define('Rd.controller.cTopUps', {
                 }
             }
         }
-    }
+    },
+    csvExport: function(button,format) {
+        var me          = this;
+        var columns     = me.getGrid().down('headercontainer').getGridColumns();
+        var col_list    = [];
+        Ext.Array.each(columns, function(item,index){
+            if(item.dataIndex != ''){
+                var chk = {boxLabel: item.text, name: item.dataIndex, checked: true};
+                col_list.push(chk);
+            }
+        });
+        if(!Ext.WindowManager.get('winCsvColumnSelectTopUps')){
+            var w = Ext.widget('winCsvColumnSelect',{id:'winCsvColumnSelectTopUps',columns: col_list});
+            w.show();         
+        }
+    },
+    csvExportSubmit: function(button){
+        var me      = this;
+        var win     = button.up('window');
+        var form    = win.down('form');
+
+        var chkList = form.query('checkbox');
+        var c_found = false;
+        var columns = [];
+        var c_count = 0;
+        Ext.Array.each(chkList,function(item){
+            if(item.getValue()){ //Only selected items
+                c_found = true;
+                columns[c_count] = {'name': item.getName()};
+                c_count = c_count +1; //For next one
+            }
+        },me);
+
+        if(!c_found){
+            Ext.ux.Toaster.msg(
+                        i18n('sSelect_one_or_more'),
+                        i18n('sSelect_one_or_more_columns_please'),
+                        Ext.ux.Constants.clsWarn,
+                        Ext.ux.Constants.msgWarn
+            );
+        }else{     
+            //next we need to find the filter values:
+            var filters     = [];
+            var f_count     = 0;
+            var f_found     = false;
+            var filter_json ='';
+             
+            var filter_collection = me.getGrid().getStore().getFilters();     
+            if(filter_collection.count() > 0){
+                var i = 0;
+                while (f_count < filter_collection.count()) { 
+
+                    //console.log(filter_collection.getAt(f_count).serialize( ));
+                    f_found         = true;
+                    var ser_item    = filter_collection.getAt(f_count).serialize( );
+                    ser_item.field  = ser_item.property;
+                    filters[f_count]= ser_item;
+                    f_count         = f_count + 1;
+                    
+                }     
+            }          
+            var col_json        = "columns="+encodeURIComponent(Ext.JSON.encode(columns));
+            var extra_params    = Ext.Object.toQueryString(Ext.Ajax.getExtraParams());
+            var append_url      = "?"+extra_params+'&'+col_json;
+            if(f_found){
+                filter_json = "filter="+encodeURIComponent(Ext.JSON.encode(filters));
+                append_url  = append_url+'&'+filter_json;
+            }
+            window.open(me.getUrlExportCsv()+append_url);
+            win.close();
+        }
+    },
 });

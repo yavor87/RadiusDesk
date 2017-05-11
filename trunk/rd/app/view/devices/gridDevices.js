@@ -52,14 +52,19 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                         noText          : 'No'
                 },stateId: 'StateGridDevices7'
             },
-            {
+            { 
                 text        : i18n('sLast_accept_time'),
-                flex        : 1,
                 dataIndex   : 'last_accept_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridDevices8'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_accept_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridDevices8'
+            },  
             {
                 text        : i18n('sLast_accept_nas'),
                 flex        : 1,
@@ -68,14 +73,19 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                 hidden      : true,
                 filter      : {type: 'string'},stateId: 'StateGridDevices9'
             },
-            {
+            { 
                 text        : i18n('sLast_reject_time'),
-                flex        : 1,
                 dataIndex   : 'last_reject_time',
                 tdCls       : 'gridTree',
-                hidden      : true,
-                filter      : {type: 'date'},stateId: 'StateGridDevices10'
-            },
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{last_reject_time_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridDevices10'
+            },  
             {
                 text        : i18n('sLast_reject_nas'),
                 flex        : 1,
@@ -153,6 +163,33 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                 stateId: 'StateGridDevices14'
             },
             { 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId		: 'StateGridDevices15',
+                format      : 'Y-m-d H:i:s',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                width       : 200
+            },  
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridDevices16'
+            },   
+            { 
                 text    : i18n('sNotes'),
                 sortable: false,
                 width   : 130,
@@ -161,7 +198,7 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><span class=\"fa fa-thumb-tack fa-lg txtGreen\"></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridDevices15'
+                dataIndex: 'notes',stateId: 'StateGridDevices17'
             }      
         ];
 
