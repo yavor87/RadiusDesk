@@ -33,7 +33,10 @@ class RealmsController extends AppController{
         $this->loadComponent('Notes', [
             'model'     => 'RealmNotes',
             'condition' => 'realm_id'
-        ]);         
+        ]);
+        $this->loadComponent('TimeCalculations');  
+        
+        $this->loadComponent('RealmAcl');        
     }
     
     public function indexApCreate(){
@@ -253,14 +256,6 @@ class RealmsController extends AppController{
             return;
         }
         $user_id    = $user['id'];
-        
-        //Fields
-		$fields  	= array(
-			'id',		'name',			'phone',		'fax',			'cell',		'email',
-			'url',		'street_no',	'street',		'town_suburb',	'city',		'country',
-			'lat',		'lon',			'twitter',		'facebook',		'youtube',	'google_plus',
-			'linkedin',	't_c_title',	't_c_content',	'available_to_siblings'	
-		);
  
         $query = $this->{$this->main_model}->find();
 
@@ -286,33 +281,17 @@ class RealmsController extends AppController{
         $items      = array();
 
         foreach($q_r as $i){
-          
+         
             //------------------------
-            //We only list realms which the Access Provider has read rights to at least
-            
+            //We only list realms which the Access Provider has read rights to at least    
             $id         = $i->{"id"};
-            if($i->user_id !== $user_id){
-                $read       = false;
-                $temp_debug = Configure::read('debug');
-                Configure::write('debug', 0); // turn off debugging     
-                try{
-                    $read = $this->Acl->check(
-                        array('model' => 'User', 'foreign_key' => $user_id), 
-                        array('model' => 'Realms','foreign_key' => $id), 'read'); //Only if they have create right             
-                }catch(\Exception $e){               
-                 $read = false;  
-                }
-                        
-                Configure::write('debug', $temp_debug); // return previous setting 
-                if($read == false){
+            $owner_id   = $i->{"user_id"};
+            if($owner_id !== $user_id){     
+                if(!$this->RealmAcl->can_manage_realm($user_id,$owner_id, $id)){
                     continue;
                 }
-                
             }
-            //------------------------
-       
-       
-            $owner_id   = $i->user_id;
+            //-----------------------
             if(!array_key_exists($owner_id,$this->owner_tree)){
                 $owner_tree     = $this->Users->find_parents($owner_id);
             }else{
@@ -329,11 +308,19 @@ class RealmsController extends AppController{
                 }
             }
             
-            $row = array();
+            $row        = array();
+            $fields     = $this->{$this->main_model}->schema()->columns();
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
-            }
-            
+                
+                if($field = 'created'){
+                    $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'modified'){
+                    $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }   
+            } 
+                 
             $row['owner']		= $owner_tree;
 			$row['notes']		= $notes_flag;
 			$row['update']		= $action_flags['update'];

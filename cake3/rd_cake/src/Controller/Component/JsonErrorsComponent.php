@@ -18,7 +18,8 @@ class JsonErrorsComponent extends Component {
     public function errorMessage($message="An error has occured"){
         $this->controller->set(array(
             'success' => false,
-            'message'   => array('message' => $message),
+           // 'message'   => array('message' => $message),
+            'message'   => $message,
             '_serialize' => array('success','message')
         ));
     }
@@ -38,7 +39,8 @@ class JsonErrorsComponent extends Component {
             $this->controller->set(array(
                 'errors'    => $a,
                 'success'   => false,
-                'message'   => array('message' => $message),
+              //  'message'   => array('message' => $message),
+                'message'   => $message,
                 '_serialize' => array('errors','success','message')
             ));   
     }

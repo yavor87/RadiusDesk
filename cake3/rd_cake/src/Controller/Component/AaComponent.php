@@ -70,38 +70,7 @@ class AaComponent extends Component {
             }
         }
     }
-
-    public function aa_check($controller,$realm_id){
-
-        //-- Authenticate check --
-        $token_check = $this->TokenAuth->check_if_valid($controller);
-        if(!$token_check){
-            return false;
-        }
-
-        //-- Authorisation check --
-        //::A::- Can the person do this action for this realm? --
-        if($token_check['group_name'] == Configure::read('group.ap')){    //This is an access provider
-            if(!$this->TokenAcl->can_manage_realm($token_check['user']['id'],$realm_id)){ //Does this AP have rights for this realm?
-
-                $this->TokenAcl->fail_no_rights($controller);
-                return false;
-
-            }
-        }elseif($token_check['group_name'] == Configure::read('group.user')){ //This is a user
-                $this->TokenAcl->fail_no_rights($controller);
-                return false;
-        }
-
-        //::B::-- Can this person do this action? --
-        if(!$this->TokenAcl->action_check($controller->name,$controller->request->action)){
-            $this->TokenAcl->fail_no_rights($controller);
-            return false;
-        }
-        //-> Authorization check complete - continuie --
-        return true;
-    }
-     
+ 
     public function get_action_flags($owner_id,$user){
     
         if($user['group_name'] == Configure::read('group.admin')){  //Admin

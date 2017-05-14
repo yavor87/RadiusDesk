@@ -26,7 +26,8 @@ class DevicesController extends AppController{
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
-            'model' => 'Devices'
+            'model'     => 'Devices',
+            'sort_by'   => 'Devices.name'
         ]); 
         
         $this->loadComponent('Notes', [
@@ -47,8 +48,12 @@ class DevicesController extends AppController{
         if(!$user){
             return;
         }
-        $query = $this->{$this->main_model}->find(); 
-        $this->CommonQuery->build_common_query($query,$user,['PermanentUsers','DeviceNotes' => ['Notes']]);
+        $query = $this->{$this->main_model}->find();
+        
+        if($this->CommonQuery->build_with_realm_query($query,$user,['PermanentUsers','DeviceNotes' => ['Notes']]) == false){
+            //FIXME Later we can redirect to an error page for CSV
+            return;
+        }
         
         $q_r    = $query->all();
 
@@ -109,8 +114,11 @@ class DevicesController extends AppController{
             return;
         }
                 
-        $query = $this->{$this->main_model}->find();
-        $this->CommonQuery->build_common_query($query,$user,['PermanentUsers','DeviceNotes' => ['Notes']]);
+        $query = $this->{$this->main_model}->find();   
+        if($this->CommonQuery->build_with_realm_query($query,$user,['PermanentUsers','DeviceNotes' => ['Notes']]) == false){
+            return;
+        }
+        
 
         //This is to list devices owned by a specific permanent user
         if(isset($this->request->query['permanent_user_id'])){

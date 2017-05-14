@@ -262,7 +262,7 @@ class GridButtonsComponent extends Component {
                 'tooltip'   => __('Reload'),
                 'menu'      => [
                     'items' => [
-                        '<b class="menu-title">'.__('Reload every').':</b>',
+                        '<b class="menu-title">Reload every:</b>',
                         array( 'text'  => __('30 seconds'),      'itemId'    => 'mnuRefresh30s', 'group' => 'refresh','checked' => false ),
                         array( 'text'  => __('1 minute'),        'itemId'    => 'mnuRefresh1m', 'group' => 'refresh' ,'checked' => false),
                         array( 'text'  => __('5 minutes'),       'itemId'    => 'mnuRefresh5m', 'group' => 'refresh', 'checked' => false ),
@@ -634,8 +634,8 @@ class GridButtonsComponent extends Component {
            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'enableDisable')){      
                 array_push($specific_group, $this->btnEnable);
             }
-            
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/testRadius')){      
+            //FIXME when FreeRadius has been ported ... update this one also
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/test_radius')){      
                 array_push($specific_group, $this->btnRadius);
             }
             

@@ -23,7 +23,8 @@ class PermanentUsersController extends AppController{
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
-            'model' => 'PermanentUsers'
+            'model'     => 'PermanentUsers',
+            'sort_by'   => 'PermanentUsers.username'
         ]); 
         
         $this->loadComponent('Notes', [
@@ -32,7 +33,9 @@ class PermanentUsersController extends AppController{
         ]); 
 
         $this->loadComponent('JsonErrors'); 
-        $this->loadComponent('TimeCalculations');       
+        $this->loadComponent('TimeCalculations'); 
+        
+        $this->loadComponent('RealmAcl');      
     }
 
     public function exportCsv(){
@@ -45,7 +48,11 @@ class PermanentUsersController extends AppController{
             return;
         }
         $query = $this->{$this->main_model}->find(); 
-        $this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']);
+   
+        if($this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']) == false){
+            //FIXME Later we can redirect to an error page for CSV
+            return;
+        }
         
         $q_r    = $query->all();
 
@@ -110,7 +117,11 @@ class PermanentUsersController extends AppController{
         }
                 
         $query = $this->{$this->main_model}->find();
-        $this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']);
+        
+        //If this return false it means we sit with a non-admin user having no rights to any realm
+        if($this->CommonQuery->build_with_realm_query($query,$user,['Users','PermanentUserNotes' => ['Notes'],'Realms']) == false){
+            return;
+        }
  
         $limit  = 50;
         $page   = 1;

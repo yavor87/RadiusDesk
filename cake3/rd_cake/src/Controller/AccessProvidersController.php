@@ -34,7 +34,8 @@ class AccessProvidersController extends AppController{
             'condition' => 'user_id'
         ]);
         
-        $this->loadComponent('WhiteLabel');    
+        $this->loadComponent('WhiteLabel'); 
+        $this->loadComponent('TimeCalculations');     
     }
     
     
@@ -161,6 +162,8 @@ class AccessProvidersController extends AppController{
                 $owner_tree = $this->owner_tree[$owner_id];
             }
             
+            
+            
             $action_flags   = $this->Aa->get_action_flags($owner_id,$user); 
             $notes_flag     = false;
             foreach($i->user_notes as $un){
@@ -170,23 +173,29 @@ class AccessProvidersController extends AppController{
                 }
             } 
             
-            //print_r($i); 
-
-            array_push($items,array(
-                'id'        => $i->id, 
-                'owner'     => $owner_tree,
-                'username'  => $i->username,
-                'name'      => $i->name,
-                'surname'   => $i->surname, 
-                'phone'     => $i->phone, 
-                'email'     => $i->email,
-                'address'   => $i->address,
-                'active'    => $i->active, 
-                'monitor'   => $i->monitor,
-                'update'    => $action_flags['update'],
-                'delete'    => $action_flags['delete'],
-                'notes'     => $notes_flag 
-            ));
+            $row        = array();
+            $fields     = $this->{$this->main_model}->schema()->columns();
+            foreach($fields as $field){
+                $row["$field"]= $i->{"$field"};
+                
+                if($field = 'created'){
+                    $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }
+                if($field = 'modified'){
+                    $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
+                }   
+            } 
+            
+            //Unset password and token fields
+            unset($row["password"]);
+            unset($row["token"]);
+            
+            $row['owner']		= $owner_tree;
+			$row['notes']		= $notes_flag;
+			$row['update']		= $action_flags['update'];
+			$row['delete']		= $action_flags['delete'];
+            
+            array_push($items,$row);
         }
        
         //___ FINAL PART ___

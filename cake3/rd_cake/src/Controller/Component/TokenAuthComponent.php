@@ -77,7 +77,4 @@ class TokenAuthComponent extends Component {
         }
     }
     
-    
-    
-    
 }

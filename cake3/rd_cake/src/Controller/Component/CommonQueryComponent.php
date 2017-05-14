@@ -15,7 +15,7 @@ use Cake\ORM\TableRegistry;
 
 class CommonQueryComponent extends Component {
  
-    public $components              = array('GridFilter');
+    public $components              = ['GridFilter','RealmAcl','JsonErrors'];
     
     //Some default configs
     public $available_to_siblings   = true; //Default is true
@@ -26,7 +26,15 @@ class CommonQueryComponent extends Component {
         if($this->config('no_available_to_siblings')){
             $this->available_to_siblings = false;
         }
+        
+        if($this->config('sort_by')){
+            $this->sort_by = $this->config('sort_by');
+        }
     } 
+    
+    public function get_filter_conditions(){
+        return $this->_common_filter();
+    }
 
     public function build_common_query($query,$user,$contain_array = ['Users']){
         $query->contain($contain_array);
@@ -52,21 +60,31 @@ class CommonQueryComponent extends Component {
         $this->_ap_filter_for_aps($query,$user,$where_clause);
     }
 
-    public function build_with_realm_query($query,$user,$contain_array = ['Users'],$order_column='username'){
+    public function build_with_realm_query($query,$user,$contain_array = ['Users'],$order_column='username'){ 
+    
         $query->contain($contain_array);
-        $this->_common_sort($query,$order_column);
+        $this->_common_sort($query,$this->sort_by);
         $where_clause = $this->_common_filter();
-        //FIXME We have to cleverly apply the AP filter to only show realms an AP has rights to
+        
+        if($user['group_name'] == Configure::read('group.ap')){ //Admin - return true    
+            $realms = $this->RealmAcl->realm_list_for_ap($user['id'],'read');
+            if(!$realms){
+                $this->JsonErrors->errorMessage('Access Provider Not Assigned to any Realms - Please Check');
+                return false;
+            }else{
+                array_push($where_clause,array('OR' => $realms));
+            }  
+        }  
         $query->where($where_clause);
+        return true;
     }
-
-
+ 
     private function _common_sort($query, $default_column = 'name'){
 
         //Defaults
         $model  = $this->config('model');
         $sort   = $model.'.'.$default_column;
-        $dir    = 'DESC';
+        $dir    = 'ASC';
         
         //This is to owerride the default sort order
         if($this->config('sort_by')){
@@ -114,6 +132,16 @@ class CommonQueryComponent extends Component {
                      $col = $model.'.'.$f->field;
                      array_push($where_clause,array("$col" => $f->value));
                 }
+                
+                if($f->type == 'list'){
+                    $list_array = array();
+                    foreach($f->value as $filter_list){
+                        $col = $model.'.'.$f->field;
+                        array_push($list_array,array("$col" => "$filter_list"));
+                    }
+                    array_push($where_clause,array('OR' => $list_array));
+                }
+
                 
                  if($f->type == 'date'){
                     //date we want it in "2018-03-12"
