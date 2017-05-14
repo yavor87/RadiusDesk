@@ -9,6 +9,8 @@
 namespace App\Controller\Component;
 use Cake\Controller\Component;
 
+use Cake\I18n\Time;
+
 class TimeCalculationsComponent extends Component {
 
     public function time_if($timespan='hour'){
@@ -40,12 +42,11 @@ class TimeCalculationsComponent extends Component {
 		return $modified;
     }
     
-    
     function time_elapsed_string($datetime, $full = false,$no_suffix = false) {
-        $now = new \DateTime;
-        $then = new \DateTime( $datetime );
-        $diff = (array) $now->diff( $then );
-
+        //The timezones is messing with us FIX it soooon
+        $now    = new Time();
+        $diff   = (array) $now->diff($datetime);
+     
         $diff['w']  = floor( $diff['d'] / 7 );
         $diff['d'] -= $diff['w'] * 7;
 

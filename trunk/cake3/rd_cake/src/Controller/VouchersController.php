@@ -27,7 +27,8 @@ class VouchersController extends AppController{
         $this->loadComponent('Aa');
         $this->loadComponent('GridButtons');
         $this->loadComponent('CommonQuery', [ //Very important to specify the Model
-            'model' => 'Vouchers'
+            'model'     => 'Vouchers',
+            'sort_by'   => 'Vouchers.name'
         ]);  
         $this->loadComponent('JsonErrors'); 
         $this->loadComponent('VoucherGenerator'); 
@@ -44,7 +45,11 @@ class VouchersController extends AppController{
             return;
         }
         $query = $this->{$this->main_model}->find(); 
-        $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+  
+        if($this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms']) == false){
+            //FIXME Later we can redirect to an error page for CSV
+            return;
+        }
         
         $q_r    = $query->all();
 
@@ -170,7 +175,12 @@ class VouchersController extends AppController{
         }else{
             //Check if there is a filter applied
             $query = $this->{$this->main_model}->find(); 
-            $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+            
+            if($this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms']) == false){
+                //FIXME Later we can redirect to an error page for CSV
+                return;
+            }
+            
             $q_r   = $query->all();
             $voucher_data = array();
             foreach($q_r as $i){
@@ -218,8 +228,10 @@ class VouchersController extends AppController{
         }
                 
         $query = $this->{$this->main_model}->find();
-
-        $this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms'],'name');
+        
+        if($this->CommonQuery->build_with_realm_query($query,$user,['Users','Realms']) == false){
+            return;
+        }
 
  
         $limit  = 50;
@@ -478,6 +490,26 @@ class VouchersController extends AppController{
             $message = __('Could not update item');
             $this->JsonErrors->entityErros($entity,$message);
         }
+    }
+    
+    public function bulkDelete(){
+    
+        if (!$this->request->is('post')) {
+			throw new MethodNotAllowedException();
+		}
+
+        //__ Authentication + Authorization __
+        $user = $this->_ap_right_check();
+        if(!$user){
+            return;
+        }  
+        $conditions = $this->CommonQuery->get_filter_conditions();
+        $this->{$this->main_model}->deleteAll($conditions);
+        
+        $this->set(array(
+            'success' => true,
+            '_serialize' => array('success')
+        )); 
     }
     
     public function delete() {
