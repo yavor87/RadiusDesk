@@ -37,7 +37,6 @@ class RealmAclComponent extends Component {
                 array_push($children_list,$id);
             }       
         } 
-        
         //If it is in the children list we have rights
         if(in_array($owner_id,$children_list)){
             return true;
@@ -55,8 +54,7 @@ class RealmAclComponent extends Component {
             $read = false;  
         }       
         Configure::write('debug', $temp_debug); // return previous setting 
-        return $read;
-            
+        return $read;        
     }
     
     public function realm_list_for_ap($ap_id,$right='read'){

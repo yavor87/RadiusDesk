@@ -33,9 +33,7 @@ class PermanentUsersController extends AppController{
         ]); 
 
         $this->loadComponent('JsonErrors'); 
-        $this->loadComponent('TimeCalculations'); 
-        
-        $this->loadComponent('RealmAcl');      
+        $this->loadComponent('TimeCalculations');       
     }
 
     public function exportCsv(){
