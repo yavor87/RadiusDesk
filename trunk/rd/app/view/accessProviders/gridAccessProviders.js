@@ -84,6 +84,32 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                         noText          : 'No'
                 }, stateId: 'StateGridAccessProviders9'
             },
+            { 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId		: 'StateGridAccessProviders10',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                flex        : 1
+            },  
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGridAccessProviders11'
+            },
              { 
                 text    : i18n('sNotes'),
                 sortable: false,
@@ -92,7 +118,7 @@ Ext.define('Rd.view.accessProviders.gridAccessProviders' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><span class=\"fa fa-thumb-tack fa-lg txtGreen\"></tpl>"
                 ),
-                dataIndex: 'notes', stateId: 'StateGridAccessProviders10'
+                dataIndex: 'notes', stateId: 'StateGridAccessProviders12'
             }      
         ]; 
         me.callParent(arguments);

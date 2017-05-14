@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cTopUps', {
         }     
         pnl.add({
             xtype   : 'gridTopUps',
-            border  : true,
+            border  : false,
             itemId  : 'pnlTopUps',
             plain   : true
         });
