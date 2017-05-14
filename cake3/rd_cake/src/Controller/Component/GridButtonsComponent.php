@@ -400,7 +400,7 @@ class GridButtonsComponent extends Component {
             $action_group   = array();
             $disabled       = true;
 
-            array_push($action_group,$reload);
+            array_push($action_group,$this->btnReloadTimer);
 
             //Add
             if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base."add")){
@@ -412,7 +412,7 @@ class GridButtonsComponent extends Component {
             }
 
             //Edit
-            if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'edit')){
+            if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'editBasicInfo')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnEdit'),     
@@ -673,7 +673,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group, $this->btnEnable);
             }
             
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/testRadius')){      
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/test_radius')){      
                 array_push($specific_group, $this->btnRadius);
             }
             
@@ -710,7 +710,7 @@ class GridButtonsComponent extends Component {
                 array_push($specific_group,$this->btnPassword);
             }
              
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/testRadius')){      
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), 'Access Providers/Controllers/FreeRadius/test_radius')){      
                 array_push($specific_group, $this->btnRadius);
             }
             
