@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cDevices', {
         }     
         pnl.add({
             xtype   : 'tabpanel',
-            border  : true,
+            border  : false,
             itemId  : 'tabDevices',
             plain	: true,
             cls     : 'subSubTab', //Make darker -> Maybe grey

@@ -9,7 +9,7 @@ Ext.define('Rd.controller.cVouchers', {
         }     
         pnl.add({
             xtype   : 'tabpanel',
-            border  : true,
+            border  : false,
             itemId  : 'tabVouchers',
             plain	: true,
             cls     : 'subSubTab', //Make darker -> Maybe grey
@@ -43,6 +43,7 @@ Ext.define('Rd.controller.cVouchers', {
     config: {
         urlAdd              : '/cake3/rd_cake/vouchers/add.json',
         urlDelete           : '/cake3/rd_cake/vouchers/delete.json',
+        urlBulkDelete       : '/cake3/rd_cake/vouchers/bulk-delete.json',
         urlViewBasic        : '/cake3/rd_cake/vouchers/view-basic-info.json',
         urlEditBasic        : '/cake3/rd_cake/vouchers/edit_basic_info.json',  
         urlApChildCheck     : '/cake3/rd_cake/access-providers/child-check.json',
@@ -70,6 +71,8 @@ Ext.define('Rd.controller.cVouchers', {
         me.inited 		= true;
 		me.singleField	= true;
 		me.addCsvList   = false;
+		
+		me.simpleDel    = true;
 
         me.control({
             '#tabDevices' : {
@@ -89,6 +92,9 @@ Ext.define('Rd.controller.cVouchers', {
             },
             'gridVouchers #delete'   : {
                 click:      me.del
+            },
+            'gridVouchers #delete menuitem[group=delete]'   : {
+                click:      me.delOptionClick
             },
             'gridVouchers #edit'   : {
                 click:      me.edit
@@ -500,8 +506,79 @@ Ext.define('Rd.controller.cVouchers', {
             }
         }
     },
+    delOptionClick: function(menu_item){
+		var me = this;
+		var n  = menu_item.getItemId();
+		if(n == 'deleteSimple'){
+			me.simpleDel = true;
+        }
+		if(n == 'deleteBulk'){
+			me.simpleDel = false;
+        }
+	},
+	delInBulk: function(){
+	
+	    var me          = this;
+        var filters     = [];
+        var f_count     = 0;
+        var f_found     = false;
+        var filter_json ='';
+        var warn_string = "This will delete <b>ALL</b> the <b>CURRENT</b> listed items<br><br>Are you <b>VERY</b> sure?";
+         
+        var filter_collection = me.getGrid().getStore().getFilters();     
+        if(filter_collection.count() > 0){
+            var i = 0;
+            while (f_count < filter_collection.count()) { 
+                f_found         = true;
+                var ser_item    = filter_collection.getAt(f_count).serialize( );
+                ser_item.field  = ser_item.property;
+                filters[f_count]= ser_item;
+                f_count         = f_count + 1; 
+            }     
+        }
+            
+        if(f_found){
+            filter_json = "?filter="+encodeURIComponent(Ext.JSON.encode(filters));
+            warn_string = "A <b>FILTER</b> is applied on the grid and the <b>DELETE</b> will be according to this filter.<br><br>Are you <b>VERY</b> sure?";
+        }
+	
+	    Ext.MessageBox.confirm(i18n('sConfirm'),warn_string, function(val){
+            if(val== 'yes'){
+                console.log("You choose YES");
+                Ext.Ajax.request({
+                    url     : me.getUrlBulkDelete()+filter_json,
+                    method  : 'POST',
+                    success : function(batch,options){
+                        //console.log('success');
+                        Ext.ux.Toaster.msg(
+                            "Bulk delete completed",
+                            "Bulk delete completed",
+                            Ext.ux.Constants.clsInfo,
+                            Ext.ux.Constants.msgInfo
+                        );
+                        me.reload(); //Reload from server
+                    },                                    
+                    failure: function(batch,options){
+                        Ext.ux.Toaster.msg(
+                            "Problems with bulk delete",
+                            batch.proxy.getReader().rawData.message.message,
+                            Ext.ux.Constants.clsWarn,
+                            Ext.ux.Constants.msgWarn
+                        );
+                        me.reload(); //Reload from server
+                    }
+                });   
+            }
+        });
+	},
     del:   function(){
-        var me      = this;     
+        var me      = this; 
+        
+        if(me.simpleDel == false){
+            me.delInBulk();
+            return;
+        }
+            
         //Find out if there was something selected
         if(me.getGrid().getSelectionModel().getCount() == 0){
              Ext.ux.Toaster.msg(

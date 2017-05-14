@@ -17,5 +17,18 @@ Ext.define('Rd.store.sDevices', {
         },
         simpleSortMode: true 
     },
+    listeners: {
+        load: function(store, records, successful, operation) {
+            if(!successful){ 
+                var error = operation.getError();
+                Ext.ux.Toaster.msg(
+                    'Warning',
+                    error,
+                    Ext.ux.Constants.clsWarn,
+                    Ext.ux.Constants.msgWarn
+                );
+            }
+        }
+    },
     autoLoad    : false
 });

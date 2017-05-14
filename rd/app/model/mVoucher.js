@@ -32,6 +32,6 @@ Ext.define('Rd.model.mVoucher', {
          {name: 'created',           type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
          {name: 'modified',          type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
          {name: 'created_in_words',  type: 'string'  },
-         {name: 'modified_in_words', type: 'string'  },
+         {name: 'modified_in_words', type: 'string'  }
         ]
 });

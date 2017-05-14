@@ -172,9 +172,8 @@ Ext.define('Rd.view.devices.gridDevices' ,{
                     "<div class=\"fieldBlue\">{created_in_words}</div>"
                 ),
                 stateId		: 'StateGridDevices15',
-                format      : 'Y-m-d H:i:s',
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},
-                width       : 200
+                flex        : 1
             },  
             { 
                 text        : 'Modified',

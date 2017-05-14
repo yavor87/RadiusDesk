@@ -238,9 +238,8 @@ Ext.define('Rd.view.permanentUsers.gridPermanentUsers' ,{
                     "<div class=\"fieldBlue\">{created_in_words}</div>"
                 ),
                 stateId		: 'StateGridPermanentUsers23',
-                format      : 'Y-m-d H:i:s',
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},
-                width       : 200
+                flex        : 1
             },  
             { 
                 text        : 'Modified',

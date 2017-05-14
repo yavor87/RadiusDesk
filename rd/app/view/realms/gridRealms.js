@@ -60,7 +60,33 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 dataIndex: 'available_to_siblings',
                     filter  : {
                         type: 'boolean'    
-                },stateId: 'StateGridRealms9'
+                },stateId: 'StateGR16'
+            },
+            { 
+                text        : 'Created',
+                dataIndex   : 'created', 
+                tdCls       : 'gridTree',
+                hidden      : true,  
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{created_in_words}</div>"
+                ),
+                stateId		: 'StateGR17',
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                flex        : 1
+            },  
+            { 
+                text        : 'Modified',
+                dataIndex   : 'modified', 
+                tdCls       : 'gridTree',
+                hidden      : true, 
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    "<div class=\"fieldBlue\">{modified_in_words}</div>"
+                ),
+                flex        : 1,
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},
+                stateId		: 'StateGR18'
             },
             { 
                 text    : i18n('sNotes'),
@@ -70,7 +96,7 @@ Ext.define('Rd.view.realms.gridRealms' ,{
                 tpl     : new Ext.XTemplate(
                                 "<tpl if='notes == true'><span class=\"fa fa-thumb-tack fa-lg txtGreen\"></tpl>"
                 ),
-                dataIndex: 'notes',stateId: 'StateGridRealms10'
+                dataIndex: 'notes',stateId: 'StateGR19'
             }
         ];
 
