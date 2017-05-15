@@ -33,6 +33,7 @@ class VouchersController extends AppController{
         $this->loadComponent('JsonErrors'); 
         $this->loadComponent('VoucherGenerator'); 
         $this->loadComponent('TimeCalculations'); 
+        
     }
 
     public function exportCsv(){
@@ -504,6 +505,19 @@ class VouchersController extends AppController{
             return;
         }  
         $conditions = $this->CommonQuery->get_filter_conditions();
+        
+        //Very important for Access Providers to prevent them not to delete other's items
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $this->loadComponent('RealmAcl');
+            $realms = $this->RealmAcl->realm_list_for_ap($user['id'],'delete');
+            if(!$realms){
+                $this->JsonErrors->errorMessage('Access Provider Not Assigned to any Realms - Please Check');
+                return false;
+            }else{
+                array_push($conditions,array('OR' => $realms));
+            }  
+        }
+        
         $this->{$this->main_model}->deleteAll($conditions);
         
         $this->set(array(

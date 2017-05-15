@@ -946,7 +946,7 @@ class DashboardController extends AppController{
                 )
             );
         }
-      /*  
+        
         if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."TopUps/index")){
             array_push($users_items, array(
                     'title'     => __('Top-Ups'),
@@ -955,7 +955,7 @@ class DashboardController extends AppController{
                     'layout'    => 'fit'
                 )
             ); 
-        }*/
+        }
         
         if(count($admin_items) > 0){
             array_push($tabs, array(

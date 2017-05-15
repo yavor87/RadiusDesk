@@ -202,6 +202,13 @@ class GridButtonsComponent extends Component {
             $menu = array($b,$d,$a);
         }
         
+        if($type == 'top_ups'){
+            $b  = $this->_fetchBasic('disabled',false);
+            $d  = $this->_fetchDocumentTopUp();
+            $menu = array($b,$d);
+        }
+        
+        
         return $menu;
     }
 
@@ -229,7 +236,6 @@ class GridButtonsComponent extends Component {
         }
 
         return $menu;
-
     }
     
     private function _fetchBasic($action='disabled',$with_reload_timer=false){
@@ -320,7 +326,6 @@ class GridButtonsComponent extends Component {
                     'disabled'  => $disabled,   
                     'tooltip'   => __('Delete')));
             }
-
             //Edit
             if($this->controller->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'edit')){
                 array_push($action_group,array(
@@ -331,10 +336,8 @@ class GridButtonsComponent extends Component {
                     'disabled'  => $disabled,     
                     'tooltip'   => __('Edit')));
             }
-
             $menu = array('xtype' => 'buttongroup','title' => $this->t,  'items' => $action_group);
-        }
-        
+        }   
         return $menu;
     }
 
@@ -494,6 +497,38 @@ class GridButtonsComponent extends Component {
         }
             
         return $menu;
+    }
+    
+    private function _fetchDocumentTopUp(){
+         $user = $this->user;
+        $menu = array();
+        //Admin => all power
+        if($user['group_name'] == Configure::read('group.admin')){  //Admin
+            $menu = array(
+                'xtype' => 'buttongroup',
+                'title' => __('Document'), 
+                'width' => 100,
+                'items' => array(
+                    $this->btnCSV
+                )
+            );
+        }
+        
+        //AP depend on rights
+        if($user['group_name'] == Configure::read('group.ap')){ //AP (with overrides)
+            $id             = $user['id'];
+            $document_group = array();
+         
+            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->controller->base.'exportCsv')){ 
+                array_push($document_group,$this->btnCSV);
+            }
+
+            $menu = array('xtype' => 'buttongroup', 'title' => __('Document'),  'width' => 100,  'items' => $document_group );
+        }
+            
+        return $menu;
+    
+    
     }
     
     private function _fetchNote(){
