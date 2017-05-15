@@ -117,6 +117,7 @@ class MigrateTask extends Shell{
     }
     
     public function main(){
+    
         $this->_rename_acos_entries();
         $this->_clean_up_acos();     
         $this->_addTopUps();
@@ -131,19 +132,19 @@ class MigrateTask extends Shell{
         $q_ap_c = $this->Acos->find()->where(['alias' => 'Controllers','parent_id' => $ap_id])->first();
         $c_id   = $q_ap_c->id;
         $this->out("Controllers ID is ".$c_id);
-        
-         $q_a = $this->Acos->find()->where(['alias' => 'DynamicDetails','parent_id' => $c_id])->first();
-         $dd_id = $q_a->id;
-         
-         $q_b = $this->Acos->find()->where(['alias' => 'shufflePhoto','parent_id' => $dd_id])->first();
-         
-         if($q_b){
+
+        $q_a = $this->Acos->find()->where(['alias' => 'DynamicDetails','parent_id' => $c_id])->first();
+        $dd_id = $q_a->id;
+
+        $q_b = $this->Acos->find()->where(['alias' => 'shufflePhoto','parent_id' => $dd_id])->first();
+
+        if($q_b){
             $this->out("shufflePhoto is already present");
-         }else{
+        }else{
             $this->out("$i is NOT present");
             $output = shell_exec("bin/cake acl create aco $dd_id shufflePhoto");
             print($output);
-         }
+        }
          
         $q_c        = $this->Acos->find()->where(['alias' => 'shufflePhoto','parent_id' => $dd_id ])->first();
         $sp_id      = $q_c->id;
