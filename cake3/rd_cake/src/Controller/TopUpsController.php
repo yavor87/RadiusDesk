@@ -256,7 +256,7 @@ class TopUpsController extends AppController{
             return;
         }
          
-        $menu = $this->GridButtons->returnButtons($user,true,'basic'); 
+        $menu = $this->GridButtons->returnButtons($user,true,'top_ups'); 
         $this->set(array(
             'items'         => $menu,
             'success'       => true,

@@ -5,7 +5,8 @@ use Cake\Console\Shell;
 
 class MigrateTask extends Shell{
 
-
+    private $aro_ap_id = 3116;
+    
     private $acos_entries_rename  = [
         'Ssids' => [
             ['old' => 'index_ap', 'new' => 'indexAp']
@@ -112,12 +113,137 @@ class MigrateTask extends Shell{
     public function initialize(){
         parent::initialize();
         $this->loadModel('Acos');
+        $this->loadModel('ArosAcos');
     }
     
     public function main(){
-    
         $this->_rename_acos_entries();
+        $this->_clean_up_acos();     
+        $this->_addTopUps();
+        $this->_addMisc();    
+    }
+    
+    private function _addMisc(){
+        $this->out("Adding Misc Items");   
+        $q_ap   = $this->Acos->find()->where(['alias' => 'Access Providers'])->first();
+        $ap_id  = $q_ap->id;
+        $this->out("AccessProviders id is ".$ap_id);
+        $q_ap_c = $this->Acos->find()->where(['alias' => 'Controllers','parent_id' => $ap_id])->first();
+        $c_id   = $q_ap_c->id;
+        $this->out("Controllers ID is ".$c_id);
         
+         $q_a = $this->Acos->find()->where(['alias' => 'DynamicDetails','parent_id' => $c_id])->first();
+         $dd_id = $q_a->id;
+         
+         $q_b = $this->Acos->find()->where(['alias' => 'shufflePhoto','parent_id' => $dd_id])->first();
+         
+         if($q_b){
+            $this->out("shufflePhoto is already present");
+         }else{
+            $this->out("$i is NOT present");
+            $output = shell_exec("bin/cake acl create aco $dd_id shufflePhoto");
+            print($output);
+         }
+         
+        $q_c        = $this->Acos->find()->where(['alias' => 'shufflePhoto','parent_id' => $dd_id ])->first();
+        $sp_id      = $q_c->id;
+        $aros_id    = $this->aro_ap_id;
+        $output     = shell_exec("bin/cake acl grant $aros_id $sp_id");
+        print($output);
+    }
+    
+    private function _addTopUps(){
+    
+        $this->out("Adding Rights for TopUps");
+        //Find the id of 'Access Providers'
+        $q_ap   = $this->Acos->find()->where(['alias' => 'Access Providers'])->first();
+        $ap_id  = $q_ap->id;
+        $this->out("AccessProviders id is ".$ap_id);
+        $q_ap_c = $this->Acos->find()->where(['alias' => 'Controllers','parent_id' => $ap_id])->first();
+        $c_id   = $q_ap_c->id;
+        $this->out("Controllers ID is ".$c_id);
+        
+        //Check if it exists perhaps already
+        $q_a = $this->Acos->find()->where(['alias' => 'TopUps','parent_id' => $c_id])->first();
+        if($q_a){
+           $this->out("TopUps already added it has an ID of ".$q_a->id); 
+        
+        }else{
+            $this->out("TopUps NOT added YET adding it");
+            //$this->dispatchShell("acl create aco 31 TopUps");
+            $output = shell_exec("bin/cake acl create aco $c_id TopUps");
+            print($output);
+        }
+        
+        //Now we can loop through the items and see if they are not created
+        $tu_methods = [
+            'exportCsv',
+            'index',
+            'add',
+            'edit',
+            'delete'
+        ];
+        
+        //Get the topups id
+        $this->out("Finding the ID of the top-up entry");
+        $q_a = $this->Acos->find()->where(['alias' => 'TopUps','parent_id' => $c_id])->first();
+        $top_up_id = $q_a->id;
+        foreach($tu_methods as $i){
+            $this->out("Checking and / or adding $i");
+            $q_b = $this->Acos->find()->where(['alias' => $i,'parent_id' => $top_up_id])->first();
+            if($q_b){
+                $this->out("$i is already present");
+            }else{
+                $this->out("$i is NOT present");
+                $output = shell_exec("bin/cake acl create aco $top_up_id $i");
+                print($output);
+            }
+        }
+        
+        //Set the topup's righs
+        foreach($tu_methods as $i){
+            $this->out("Setting TopUp right for $i");
+            $q_b        = $this->Acos->find()->where(['alias' => $i,'parent_id' => $top_up_id])->first();
+            $m_id       = $q_b->id;
+            $aros_id    = $this->aro_ap_id;
+            $output     = shell_exec("bin/cake acl grant $aros_id $m_id");
+            print($output);
+        }    
+    }
+    
+    private function _clean_up_acos(){
+        //Somehow the table got littered with junk all having a parent_id of 35
+        
+        //Confirm id 35 is "Realms"
+        $entity = $this->Acos->find()->where(['id' => 35])->first();
+        if($entity){
+            if($entity->alias == 'Realms'){
+                $this->out("Found Junk entity called Realms on ID 35 go on and delete ID 35 related entries");
+                $this->Acos->deleteAll(['parent_id' => 35]);
+                $this->Acos->deleteAll(['id' => 35]);
+            }
+        }
+        
+        //We can also remove some ocos items
+        //Vouchers has note_add and note_del double(255 and 256)
+        
+        $entity = $this->Acos->find()->where(['id' => 255])->first();
+        if($entity){
+            if($entity->alias == 'note_add'){
+                $this->out("Removing double note_add entry");
+                $this->Acos->delete($entity);
+                $this->ArosAcos->deleteAll(['aco_id' => 255]);
+            }$q_a = $this->Acos->find()->where(['alias' => $a,'parent_id' => $c_id])->first();
+        }
+        
+        $entity = $this->Acos->find()->where(['id' => 256])->first();
+        if($entity){
+            if($entity->alias == 'note_del'){
+                $this->out("Removing double note_del entry");
+                $this->Acos->delete($entity);
+                $this->ArosAcos->deleteAll(['aco_id' => 256]);
+            }
+        }   
     }
     
     private function _rename_acos_entries(){
@@ -156,7 +282,5 @@ class MigrateTask extends Shell{
             }
         }   
         $this->hr();
-    
-    
     }
 }

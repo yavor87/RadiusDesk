@@ -231,9 +231,10 @@ class CommonQueryComponent extends Component {
             $tree_array = array();
             $user_id    = $user['id'];
             
-            array_push($tree_array,array($model.'.'.'user_id' => $i_id)); //That is the access provider self
+            array_push($tree_array,array($model.'.'.'user_id' => $user_id)); //That is the access provider self
                 
             //** ALL the AP's children
+            $users    = TableRegistry::get('Users');
             $children = $users->find('children', ['for' => $user_id]);
             if($children){   //Only if the AP has any children...
                 foreach($children as $i){
