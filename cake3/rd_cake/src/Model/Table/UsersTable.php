@@ -32,9 +32,8 @@ class UsersTable extends Table
         ]);
         
         $this->hasMany('UserNotes');
-      
-        //FIXME We have to include all the things that users can have
-        $this->hasMany('TopUps');      
+        $this->hasMany('TopUps',['dependent' => true,'cascadeCallbacks' =>true]);
+        $this->hasMany('TopUpTransactions',['dependent' => true,'cascadeCallbacks' =>true]);      
     }
       
     public function find_access_provider_children($id){
