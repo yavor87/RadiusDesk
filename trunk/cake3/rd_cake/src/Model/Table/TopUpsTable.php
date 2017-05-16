@@ -158,7 +158,20 @@ class TopUpsTable extends Table
             $e_t  = $this->TopUpTransactions->newEntity($d_t);
             $this->TopUpTransactions->save($e_t);
         }else{
+         /*   if($entity->type == 'data'){
+                if($entity->dirty('data')){
+                    //Get the old value
+                    $original   = $entity->getOriginal('data');
+                    $new        = $entity->data;
+                    if($new > $original){
+                    
+                    }
+                
+                }
+           */ 
+            }
             //Here we'll have to edit the entries
+            
         
         }
     }

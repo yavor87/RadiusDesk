@@ -113,6 +113,16 @@ class PermanentUsersController extends AppController{
         if(!$user){
             return;
         }
+        
+        //This might be in the request if we want to list the avaialble Permanent Users visible for another Access Provider - Like TopUps
+        if(isset($this->request->query['ap_id'])){
+            $e_ap = $this->{'Users'}->find()->where(['Users.id' => $this->request->query['ap_id']])->contain(['Groups'])->first();
+            if($e_ap){
+                $user['id']         = $e_ap->id;
+                $user['group_name'] = $e_ap->group->name;
+                $user['group_id']   = $e_ap->group_id;
+            }    
+        }
                 
         $query = $this->{$this->main_model}->find();
         
