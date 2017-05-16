@@ -14,6 +14,7 @@ Ext.define('Rd.model.mTopUp', {
         {name: 'modified',          type: 'date',       dateFormat: 'Y-m-d H:i:s'   },
         {name: 'created_in_words',  type: 'string'  },
         {name: 'modified_in_words', type: 'string'  },
+        {name: 'type',              type: 'string'  },
         {name: 'update',            type: 'bool'},
         {name: 'delete',            type: 'bool'}
     ]

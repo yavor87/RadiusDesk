@@ -2257,5 +2257,5 @@ $Rd-resource-path: 'images' !default;
 $current-package: false;
 $current-resource-root: $Rd-resource-root;
 $relative-image-path-for-uis: $Rd-resource-path;
-@import '../../../../../sass/src/view/dashboard/pnlDashboard';
 @import '../../../../../sass/src/Application';
+@import '../../../../../sass/src/view/dashboard/pnlDashboard';

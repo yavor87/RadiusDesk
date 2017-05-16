@@ -208,27 +208,29 @@ Ext.define('Rd.Application', {
 
         //--- Form Fail message --->
         Ext.ux.formFail = function(form,action){
+        
+            console.log(action);
             switch (action.failureType) {
             case Ext.form.action.Action.CLIENT_INVALID:
                 Ext.ux.Toaster.msg(
-                    i18n('sFailure'),
-                    i18n('Form fields may not be submitted with invalid values'),
+                    'Failure',
+                    'Form fields may not be submitted with invalid values',
                     Ext.ux.Constants.clsWarn,
                     Ext.ux.Constants.msgWarn
                 );
             break;
             case Ext.form.action.Action.CONNECT_FAILURE:
                 Ext.ux.Toaster.msg(
-                    i18n('sFailure'),
-                    i18n('Ajax communication failed'),
+                    'Failure',
+                    'Ajax communication failed',
                     Ext.ux.Constants.clsWarn,
                     Ext.ux.Constants.msgWarn
                 );
             break;
             case Ext.form.action.Action.SERVER_INVALID:
                 Ext.ux.Toaster.msg(
-                    i18n('sFailure'),
-                    action.result.message.message,
+                    'Failure',
+                    action.result.message,
                     Ext.ux.Constants.clsWarn,
                     Ext.ux.Constants.msgWarn
                 );

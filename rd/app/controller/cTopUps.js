@@ -6,13 +6,38 @@ Ext.define('Rd.controller.cTopUps', {
         
         if (me.populated) {
             return; 
-        }     
+        }  
+        
+        pnl.add({
+            xtype   : 'tabpanel',
+            border  : false,
+            itemId  : 'tabTopUps',
+            plain	: true,
+            cls     : 'subSubTab', //Make darker -> Maybe grey
+            items   : [
+                { 
+                    'title' : i18n('sHome'), 
+                     xtype  : 'gridTopUps',
+                     border : false,
+                     plain  : true,
+                    'glyph' : Rd.config.icnHome
+                },
+                { 
+                    title   : 'Transaction History', 
+                    // xtype  : 'gridTopUps',
+                    border  : false,
+                    plain   : true,
+                    glyph   : Rd.config.icnHistory
+                }
+            ]
+        });
+        /*   
         pnl.add({
             xtype   : 'gridTopUps',
             border  : false,
             itemId  : 'pnlTopUps',
             plain   : true
-        });
+        });*/
         me.populated = true; 
     },
 
@@ -29,7 +54,8 @@ Ext.define('Rd.controller.cTopUps', {
         urlExportCsv    : '/cake3/rd_cake/top-ups/export_csv',
         urlAdd          : '/cake3/rd_cake/top-ups/add.json',
         urlExportCsv    : '/cake3/rd_cake/top-ups/export_csv', 
-        urlDelete       : '/cake3/rd_cake/top-ups/delete.json'
+        urlDelete       : '/cake3/rd_cake/top-ups/delete.json',
+        urlEdit         : '/cake3/rd_cake/top-ups/edit.json'
     },
     refs: [
         {  ref: 'grid',  selector: 'gridTopUps'}       
@@ -81,6 +107,12 @@ Ext.define('Rd.controller.cTopUps', {
             '#winCsvColumnSelectTopUps #save': {
                 click:  me.csvExportSubmit
             },
+            'winTopUpEdit #dispType' : {
+                change: me.editDispTypeChanged
+            },
+            'winTopUpEdit #save': {
+                click: me.btnEditSave
+            }
         });
     },
     appClose:   function(){
@@ -304,28 +336,102 @@ Ext.define('Rd.controller.cTopUps', {
                         Ext.ux.Constants.msgWarn
                 );
             }else{
-                var sr              = me.getGrid().getSelectionModel().getLastSelected();
-
-                var permanent_user  = sr.get('permanent_user');
-                var data            = sr.get('data');
-                var time            = sr.get('time');
-                var days_to_use     = sr.get('days_to_use');
-                var comment         = sr.get('comment');
-
+                var sr  = me.getGrid().getSelectionModel().getLastSelected();
+                
                 if(!Ext.WindowManager.get('winTopUpEditId')){
                     var w = Ext.widget('winTopUpEdit',{ 
-                        id              : 'winTopUpEditId', 
-                        topUpId         : sr.getId(), 
-                        permanent_user  : permanent_user,
-                        data            : data,
-                        time            : time,
-                        days_to_use     : days_to_use,
-                        comment         : comment     
+                        id      : 'winTopUpEditId',
+                        record  : sr 
                     });
-                    w.show();      
+                    w.down('form').loadRecord(sr);
+                    w.show();         
                 }
             }
         }
+    },
+    editDispTypeChanged: function(dispField, newValue, oldValue){
+        var me      = this;
+        var form    = dispField.up('form');
+        var win     = dispField.up('window');
+        new_value   = dispField.getValue();
+         
+        var cmbDataUnit = form.down('#cmbDataUnit');
+        var cmbTimeUnit = form.down('#cmbTimeUnit');
+        var txtAmount   = form.down('#txtAmount');
+
+        if(new_value == 'data'){
+            cmbDataUnit.setVisible(true);
+            cmbDataUnit.setDisabled(false);
+            cmbTimeUnit.setVisible(false);
+            cmbTimeUnit.setDisabled(true);
+            txtAmount.setFieldLabel('Amount'); 
+            
+            var amount          = win.record.get('data');
+            var result_for_gig  = amount / (1024 * 1024 * 1024);
+            var result_for_meg  = amount / (1024 * 1024);
+            if(result_for_gig < 1){
+                cmbDataUnit.setValue('mb');
+                txtAmount.setValue(result_for_meg);
+            }else{
+                cmbDataUnit.setValue('gb');
+                txtAmount.setValue(result_for_gig);
+            }
+        }
+
+        if(new_value == 'time'){
+            cmbDataUnit.setVisible(false);
+            cmbDataUnit.setDisabled(true);
+            cmbTimeUnit.setVisible(true);
+            cmbTimeUnit.setDisabled(false);
+            txtAmount.setFieldLabel('Amount');   
+            var amount          = win.record.get('time');
+            var result_for_min  = amount / (60);
+            var result_for_hour = amount / (60 * 60);
+            var result_for_day  = amount / (60 * 60 * 24);
+            
+            if(result_for_hour < 1){
+                cmbTimeUnit.setValue('minutes');
+                txtAmount.setValue(result_for_min);
+            }
+            if(result_for_day < 1){
+                cmbTimeUnit.setValue('hours');
+                txtAmount.setValue(result_for_hour);
+            }else{
+                cmbTimeUnit.setValue('days');
+                txtAmount.setValue(result_for_day);
+            }
+        }
+
+        if(new_value == 'days_to_use'){
+            cmbDataUnit.setVisible(false);
+            cmbDataUnit.setDisabled(true);
+            cmbTimeUnit.setVisible(false);
+            cmbTimeUnit.setDisabled(true);
+            txtAmount.setFieldLabel('Days');
+            
+            var amount = win.record.get('days_to_use');
+            console.log("Days is "+amount);
+        }
+    },
+    btnEditSave:  function(button){
+        var me      = this;
+        var win     = button.up("window");
+        var form    = win.down('form');
+        form.submit({
+            clientValidation: true,
+            url: me.getUrlEdit(),
+            success: function(form, action) {
+                win.close();
+                me.reload(); //Reload from server
+                Ext.ux.Toaster.msg(
+                    i18n('sItem_updated'),
+                    i18n('sItem_updated_fine'),
+                    Ext.ux.Constants.clsInfo,
+                    Ext.ux.Constants.msgInfo
+                );
+            },
+            failure: Ext.ux.formFail
+        });
     },
     csvExport: function(button,format) {
         var me          = this;
@@ -397,5 +503,5 @@ Ext.define('Rd.controller.cTopUps', {
             window.open(me.getUrlExportCsv()+append_url);
             win.close();
         }
-    },
+    }
 });
