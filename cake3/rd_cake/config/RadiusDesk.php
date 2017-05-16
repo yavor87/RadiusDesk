@@ -54,18 +54,7 @@ $config['nas_types'][3]     = array('name' => 'Mikrotik',               'id' => 
 $config['nas_types'][4]     = array('name' => 'Mikrotik-Heartbeat',     'id' => 'Mikrotik-Heartbeat',       'active' => true);
 $config['nas_types'][5]     = array('name' => 'Telkom',                 'id' => 'Telkom',                   'active' => true);
 
-//Define Voucher format types
-$config['voucher_formats'][0]     = array('name' => 'Generic A4',               'id' => 'a4',               'active' => true);
-$config['voucher_formats'][1]     = array('name' => 'Generic A4 Page/Voucher',  'id' => 'a4_page',          'active' => true);
-$config['voucher_formats'][2]     = array('name' => 'Avery 5160',               'id' => '5160',             'active' => true);
-$config['voucher_formats'][3]     = array('name' => 'Avery 5161',               'id' => '5161',             'active' => true);
-$config['voucher_formats'][4]     = array('name' => 'Avery 5162',               'id' => '5162',             'active' => true);
-$config['voucher_formats'][5]     = array('name' => 'Avery 5163',               'id' => '5163',             'active' => true);
-$config['voucher_formats'][6]     = array('name' => 'Avery 5164',               'id' => '5164',             'active' => false); //gives trouble
-$config['voucher_formats'][7]     = array('name' => 'Avery 8600',               'id' => '8600',             'active' => true); 
-$config['voucher_formats'][8]     = array('name' => 'Avery L7160',              'id' => 'L7160',            'active' => true); 
-$config['voucher_formats'][9]     = array('name' => 'Avery L7161',              'id' => 'L7161',            'active' => true); 
-$config['voucher_formats'][10]    = array('name' => 'Avery L7163',              'id' => 'L7163',            'active' => true); 
+
 
 $config['paths']['wallpaper_location']  = "/rd/resources/images/wallpapers/";
 $config['paths']['dynamic_photos']      = "/cake3/rd_cake/img/dynamic_photos/";   
@@ -93,8 +82,8 @@ $config['user_settings']['dynamic_client_map']['lat']       = 42.3379770178396;
 //Set to true to allow  the user to remove their device out of the realm it has been assigned to
 $config['UserCanRemoveDevice']                              = true;
 
-//SMTP configs are defined in the Config/email.php file. Here we specify which one to use application wide
-$config['EmailServer']						                = 'default';
+//SMTP configs are defined in the Config/app.php file. Here we specify which one to use application wide
+$config['EmailServer']						                = 'default'; //e.g. 'gmail'
 
 //== 30/3/16 -> Some server wide configurations ==
 $config['server_settings']['user_stats_cut_off_days']       = 90; //3 months (make zero to have no cut off)
