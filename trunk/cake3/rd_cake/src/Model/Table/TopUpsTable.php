@@ -12,9 +12,11 @@ class TopUpsTable extends Table
     public function initialize(array $config){
         $this->addBehavior('Timestamp');     
         $this->belongsTo('PermanentUsers');
-        $this->belongsTo('Users'); 
-        
-        $this->Radchecks    = TableRegistry::get('Radchecks');      
+        $this->belongsTo('Users');  
+        $this->hasMany('TopUpTransactions',['dependent' => false]);
+          
+        $this->Radchecks            = TableRegistry::get('Radchecks'); 
+       // $this->TopUpTransactions    = TableRegistry::get('TopUpTransactions');     
     }
     
     public function beforeDelete($event, $entity){
@@ -54,65 +56,107 @@ class TopUpsTable extends Table
     }
     
     private function _doBeforeDelete($entity){
-    
         if($entity->permanent_user_id){
+        
+            $old_value = null;
+            $new_value = null;
+        
             $e = $this->PermanentUsers->get($entity->permanent_user_id);
-            $username = $e->username;       
+            $username = $e->username;
+                   
             if($entity->type == 'data'){
-                $q_e = $this->Radchecks->find()->where(['username' => $username, 'attribute' => 'Rd-Total-Data'])->first();
-                if($q_e){
-                    $q_e->value = $q_e->value - $entity->data;
-                    $this->Radchecks->save($q_e);
-                }
+                $attribute  = 'Rd-Total-Data';
+                $value      = $entity->data;
             }
             
             if($entity->type == 'time'){
-                $q_e = $this->Radchecks->find()->where(['username' => $username, 'attribute' => 'Rd-Total-Time'])->first();
-                if($q_e){
-                    $q_e->value = $q_e->value - $entity->time;
-                    $this->Radchecks->save($q_e);
-                }
+                $attribute  = 'Rd-Total-Time';
+                $value      = $entity->time;
             }
+            
+            if($entity->type == 'days_to_use'){
+                $attribute  = 'Expiration';
+                $value      = $entity->days_to_use;
+            } 
+            
+            $q_e = $this->Radchecks->find()->where(['username' => $username, 'attribute' => $attribute])->first();
+            if($q_e){
+                $old_value  = $q_e->value;
+                $q_e->value = $q_e->value - $value;
+                $new_value  = $q_e->value;
+                $this->Radchecks->save($q_e);
+            }
+            
+            $d_t = [
+                'user_id'           => $entity->user_id,
+                'permanent_user_id' => $entity->permanent_user_id,
+                'permanent_user'    => $username,
+                'top_up_id'         => $entity->id,
+                'type'              => $entity->type,
+                'action'            => 'delete',
+                'radius_attribute'  => $attribute,
+                'old_value'         => $old_value,
+                'new_value'         => $new_value
+            ];
+            $e_t  = $this->TopUpTransactions->newEntity($d_t);
+            $this->TopUpTransactions->save($e_t);            
         }
     }
       
     private function _doAfterSave($entity){
-        if ($entity->isNew()){
+    
+        if($entity->isNew()){
             //Data Type of Entries
+            $old_value = null;
+            $new_value = null;
+            
             if($entity->type == 'data'){
-                //See it there is a radcheck item for this permanent_user
-                $q_e = $this->Radchecks->find()->where(['username' => $entity->permanent_user, 'attribute' => 'Rd-Total-Data'])->first();
-                if($q_e){
-                    $q_e->value = $q_e->value + $entity->data;
-                    $this->Radchecks->save($q_e);
-                }else{
-                    $d = [];
-                    $d['username']  = $entity->permanent_user;
-                    $d['attribute'] = 'Rd-Total-Data';
-                    $d['op']        = ':=';
-                    $d['value']     = $entity->data;
-                    $n_e = $this->Radchecks->newEntity($d);
-                    $this->Radchecks->save($n_e);
-                }
+                $attribute  = 'Rd-Total-Data';
+                $value      = $entity->data;
             }
             
-            //Time Type of Entries
             if($entity->type == 'time'){
-                //See it there is a radcheck item for this permanent_user
-                $q_e = $this->Radchecks->find()->where(['username' => $entity->permanent_user, 'attribute' => 'Rd-Total-Time'])->first();
-                if($q_e){
-                    $q_e->value = $q_e->value + $entity->data;
-                    $this->Radchecks->save($q_e);
-                }else{
-                    $d = [];
-                    $d['username']  = $entity->permanent_user;
-                    $d['attribute'] = 'Rd-Total-Time';
-                    $d['op']        = ':=';
-                    $d['value']     = $entity->time;
-                    $n_e = $this->Radchecks->newEntity($d);
-                    $this->Radchecks->save($n_e);
-                }
+                $attribute  = 'Rd-Total-Time';
+                $value      = $entity->time;
             }
+            
+            if($entity->type == 'days_to_use'){
+                $attribute  = 'Expiration';
+                $value      = $entity->days_to_use;
+            } 
+            //See it there is a radcheck item for this permanent_user
+            $q_e = $this->Radchecks->find()->where(['username' => $entity->permanent_user, 'attribute' => $attribute])->first();
+            if($q_e){
+                $old_value  = $q_e->value;
+                $q_e->value = $q_e->value + $value;
+                $new_value  = $q_e->value;
+                $this->Radchecks->save($q_e);
+                $top_up_id  = $q_e->id;  
+            }else{
+                $d = [];
+                $d['username']  = $entity->permanent_user;
+                $d['attribute'] = $attribute;
+                $d['op']        = ':=';
+                $d['value']     = $value;
+                $new_value      = $d['value'];
+                $n_e            = $this->Radchecks->newEntity($d);
+                $this->Radchecks->save($n_e);
+                $top_up_id      = $n_e->id;
+            }
+            
+            $d_t = [
+                'user_id'           => $entity->user_id,
+                'permanent_user_id' => $entity->permanent_user_id,
+                'permanent_user'    => $entity->permanent_user,
+                'top_up_id'         => $entity->id,
+                'type'              => $entity->type,
+                'action'            => 'create',
+                'radius_attribute'  => $attribute,
+                'old_value'         => $old_value,
+                'new_value'         => $new_value
+            ];
+            $e_t  = $this->TopUpTransactions->newEntity($d_t);
+            $this->TopUpTransactions->save($e_t);
         }else{
             //Here we'll have to edit the entries
         
