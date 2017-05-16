@@ -193,6 +193,14 @@ return [
             'tls' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
+        'gmail' => [
+            'host'       => 'ssl://smtp.gmail.com',
+            'port'      => 465,
+            //Your Gmail Detail Here...
+            'username'  => '',
+            'password'  => '',
+            'className' => 'Smtp'
+        ]
     ],
 
     /**
@@ -207,10 +215,16 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => 'dirkvanderwalt@gmail.com',
+            'sender'
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
+        'gmail' => [
+            'transport'     => 'gmail',
+            'from'          => 'dirkvanderwalt@gmail.com',
+            'sender'        => 'dirkvanderwalt@gmail.com'
+        ]
     ],
 
     /**
