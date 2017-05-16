@@ -49,7 +49,6 @@ if not exists (select * from information_schema.columns
     alter table realms add column `suffix_devices` tinyint(1) NOT NULL DEFAULT '0';
 end if;
 
-
 end//
 
 delimiter ;
