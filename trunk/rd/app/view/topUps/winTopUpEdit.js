@@ -2,17 +2,16 @@ Ext.define('Rd.view.topUps.winTopUpEdit', {
     extend      : 'Ext.window.Window',
     alias       : 'widget.winTopUpEdit',
     closable    : true,
-    draggable   : false,
-    resizable   : false,
+    draggable   : true,
+    resizable   : true,
     title       : 'Edit TopUp',
-    width       : 400,
+    width       : 500,
     height      : 500,
     plain       : true,
     border      : false,
     layout      : 'card',
     glyph       : Rd.config.icnEdit,
     autoShow    : false,
-    topUpId     : '',
     defaults    : {
             border: false
     },
@@ -36,10 +35,7 @@ Ext.define('Rd.view.topUps.winTopUpEdit', {
     //_______ Data for profile  _______
     mkScrnData: function(){
         var me      = this;
-
-        console.log("We have to look at data "+me.data+" time "+me.time+" days to use "+me.days_to_use);
-
-        var value = 0;
+        var value   = 0;
         var dataUnit = Ext.create('Ext.data.Store', {
             fields: ['id', 'name'],
             data : [
@@ -159,12 +155,12 @@ Ext.define('Rd.view.topUps.winTopUpEdit', {
 
         var buttons = [
             {
-                itemId  : 'btnTopUpSave',
+                itemId  : 'save',
                 text    : i18n('sOK'),
                 scale   : 'large',
                 glyph   : Rd.config.icnYes,
                 formBind: true,
-                margin  : '0 20 40 0'
+                margin  : Rd.config.buttonMargin
             }
         ];
 
@@ -188,19 +184,23 @@ Ext.define('Rd.view.topUps.winTopUpEdit', {
             items:[
                 
                 {
-                    xtype   : 'textfield',
-                    name    : "id",
-                    hidden  : true,
-                    value   : me.topUpId
-                }, 
-                {
-                    itemId      : 'permanent_user',
-                    xtype       : 'displayfield',
-                    fieldLabel  : 'Permanent user',
-                    value       : me.permanent_user,
-                    labelClsExtra: 'lblRdReq'
+                    xtype       : 'textfield',
+                    name        : "id",
+                    itemId      : 'topUpId',
+                    hidden      : true
                 },
-                cmbType,
+                {
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Type',
+                    name        : 'type',
+                    itemId      : 'dispType',
+                    editable    : false
+                },
+                {
+                    xtype       : 'displayfield',
+                    fieldLabel  : 'Permanet User',
+                    name        : 'permanent_user'
+                },
                 {
                     xtype       : 'numberfield',
                     name        : 'value',

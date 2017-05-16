@@ -10,7 +10,6 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
     plain		: true,
     border		: false,
     layout		: 'card',
-    iconCls		: 'add',
     glyph   	: Rd.config.icnAdd,
     autoShow	: false,
     apId    	: false,
@@ -63,18 +62,16 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                     itemId: 'btnDataPrev',
                     text: i18n('sPrev'),
                     scale: 'large',
-                    iconCls: 'b-prev',
                     glyph   : Rd.config.icnBack,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 },
                 {
                     itemId: 'btnDataNext',
                     text: i18n('sNext'),
                     scale: 'large',
-                    iconCls: 'b-next',
                     glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 }
             ];
 
@@ -84,10 +81,9 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                     itemId: 'btnDataNext',
                     text: i18n('sNext'),
                     scale: 'large',
-                    iconCls: 'b-next',
                     glyph   : Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 }
             ];
         }
@@ -102,8 +98,8 @@ Ext.define('Rd.view.vouchers.winVoucherAddWizard', {
                 labelClsExtra: 'lblRd',
                 labelAlign: 'left',
                 labelSeparator: '',
-                labelWidth: 150,
-                margin: 15
+                labelWidth      : Rd.config.labelWidth,
+                margin          : Rd.config.fieldMargin
             },
             defaultType: 'textfield',
             items:[

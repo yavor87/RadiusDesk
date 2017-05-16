@@ -132,18 +132,16 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                     itemId: 'btnDataPrev',
                     text: i18n('sPrev'),
                     scale: 'large',
-                    iconCls: 'b-prev',
                     glyph: Rd.config.icnBack,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 },
                 {
                     itemId: 'btnDataNext',
                     text: i18n('sNext'),
                     scale: 'large',
-                    iconCls: 'b-next',
                     glyph: Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 }
             ];
 
@@ -153,10 +151,9 @@ Ext.define('Rd.view.topUps.winTopUpAddWizard', {
                     itemId: 'btnDataNext',
                     text: i18n('sNext'),
                     scale: 'large',
-                    iconCls: 'b-next',
                     glyph: Rd.config.icnNext,
                     formBind: true,
-                    margin: '0 20 40 0'
+                    margin: Rd.config.buttonMargin
                 }
             ];
         }

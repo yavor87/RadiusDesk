@@ -122,6 +122,7 @@ Rd.config = {
     'icnBullhorn'   : 'xf0a1@FontAwesome',
     'icnList'       : 'xf03a@FontAwesome',
     'icnFilter'     : 'xf0b0@FontAwesome',
-    'icnDropbox'    : 'xf16b@FontAwesome'
+    'icnDropbox'    : 'xf16b@FontAwesome',
+    'icnHistory'    : 'xf1da@FontAwesome'
 }
 
