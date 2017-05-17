@@ -16,7 +16,7 @@ namespace Cake\TestSuite\Fixture;
 
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
-use Cake\Database\Schema\Table;
+use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\TableSchemaInterface;
 use Cake\Utility\Inflector;
@@ -243,7 +243,7 @@ class FixtureManager
         $exists = in_array($table, $sources);
 
         if (($drop && $exists) ||
-            ($exists && !$isFixtureSetup && $fixture instanceof TableSchemaInterface && $fixture->schema() instanceof Table)
+            ($exists && !$isFixtureSetup && $fixture instanceof TableSchemaInterface && $fixture->schema() instanceof TableSchema)
         ) {
             $fixture->drop($db);
             $fixture->create($db);
@@ -360,7 +360,7 @@ class FixtureManager
     {
         $dbs = $this->_fixtureConnections($fixtures);
         foreach ($dbs as $connection => $fixtures) {
-            $db = ConnectionManager::get($connection, false);
+            $db = ConnectionManager::get($connection);
             $logQueries = $db->logQueries();
             if ($logQueries && !$this->_debug) {
                 $db->logQueries(false);

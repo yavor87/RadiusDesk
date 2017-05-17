@@ -21,6 +21,8 @@ use DirectoryIterator;
 
 /**
  * Shell for I18N management.
+ *
+ * @property \Cake\Shell\Task\ExtractTask $Extract
  */
 class I18nShell extends Shell
 {
@@ -33,9 +35,17 @@ class I18nShell extends Shell
     public $tasks = ['Extract'];
 
     /**
+     * @var string[]
+     */
+    protected $_paths;
+
+    /**
      * Override main() for help message hook
      *
      * @return void
+     * @throws \InvalidArgumentException
+     * @throws \Cake\Core\Exception\MissingPluginException
+     * @throws \Cake\Console\Exception\StopException
      */
     public function main()
     {
@@ -72,7 +82,8 @@ class I18nShell extends Shell
      * Inits PO file from POT file.
      *
      * @param string|null $language Language code to use.
-     * @return int|null
+     * @return void
+     * @throws \Cake\Console\Exception\StopException
      */
     public function init($language = null)
     {
@@ -80,7 +91,7 @@ class I18nShell extends Shell
             $language = $this->in('Please specify language code, e.g. `en`, `eng`, `en_US` etc.');
         }
         if (strlen($language) < 2) {
-            return $this->error('Invalid language code. Valid is `en`, `eng`, `en_US` etc.');
+            $this->abort('Invalid language code. Valid is `en`, `eng`, `en_US` etc.');
         }
 
         $this->_paths = [APP];
@@ -104,7 +115,7 @@ class I18nShell extends Shell
             }
             $filename = $fileinfo->getFilename();
             $newFilename = $fileinfo->getBasename('.pot');
-            $newFilename = $newFilename . '.po';
+            $newFilename .= '.po';
 
             $this->createFile($targetFolder . $newFilename, file_get_contents($sourceFolder . $filename));
             $count++;
@@ -117,6 +128,7 @@ class I18nShell extends Shell
      * Gets the option parser instance and configures it.
      *
      * @return \Cake\Console\ConsoleOptionParser
+     * @throws \Cake\Console\Exception\ConsoleException
      */
     public function getOptionParser()
     {
@@ -140,7 +152,7 @@ class I18nShell extends Shell
             ]
         ];
 
-        $parser->description(
+        $parser->setDescription(
             'I18n Shell generates .pot files(s) with translations.'
         )->addSubcommand('extract', [
             'help' => 'Extract the po translations from your application',

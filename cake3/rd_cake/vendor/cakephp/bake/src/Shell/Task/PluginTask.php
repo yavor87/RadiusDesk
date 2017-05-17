@@ -14,7 +14,6 @@
  */
 namespace Bake\Shell\Task;
 
-use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -88,7 +87,7 @@ class PluginTask extends BakeTask
      * Also update the autoloader and the root composer.json file if it can be found
      *
      * @param string $plugin Name of the plugin in CamelCased format
-     * @return bool|void
+     * @return bool|null
      */
     public function bake($plugin)
     {
@@ -103,7 +102,7 @@ class PluginTask extends BakeTask
         $looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
 
         if (strtolower($looksGood) !== 'y') {
-            return;
+            return null;
         }
 
         $this->_generateFiles($plugin, $this->path);
@@ -159,6 +158,7 @@ class PluginTask extends BakeTask
     protected function _generateFiles($pluginName, $path)
     {
         $namespace = str_replace('/', '\\', $pluginName);
+        $baseNamespace = Configure::read('App.namespace');
 
         $name = $pluginName;
         $vendor = 'your-name-here';
@@ -170,6 +170,7 @@ class PluginTask extends BakeTask
         $this->BakeTemplate->set([
             'package' => $package,
             'namespace' => $namespace,
+            'baseNamespace' => $baseNamespace,
             'plugin' => $pluginName,
             'routePath' => Inflector::dasherize($pluginName),
             'path' => $path,
@@ -241,7 +242,7 @@ class PluginTask extends BakeTask
 
         $this->out('<info>Modifying composer autoloader</info>');
 
-        $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+        $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
         $this->createFile($file, $out);
 
         $composer = $this->findComposer();
@@ -332,7 +333,7 @@ class PluginTask extends BakeTask
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
-        $parser->description(
+        $parser->setDescription(
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .
             'Can create plugins in any of your bootstrapped plugin paths.'
         )->addArgument('name', [

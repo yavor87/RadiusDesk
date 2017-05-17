@@ -31,10 +31,10 @@ class RedirectRoute extends Route
     /**
      * A Response object
      *
-     * @var \Cake\Network\Response
+     * @var \Cake\Http\Response
      * @deprecated 3.2.0 This property is unused.
      */
-    public $response = null;
+    public $response;
 
     /**
      * The location to redirect to. Either a string or a CakePHP array URL.
@@ -65,7 +65,7 @@ class RedirectRoute extends Route
      *
      * @param string $url The URL to parse.
      * @param string $method The HTTP method being used.
-     * @return false|null False on failure. An exception is raised on a successful match.
+     * @return bool|null False on failure. An exception is raised on a successful match.
      * @throws \Cake\Routing\Exception\RedirectException An exception is raised on successful match.
      *   This is used to halt route matching and signal to the middleware that a redirect should happen.
      */

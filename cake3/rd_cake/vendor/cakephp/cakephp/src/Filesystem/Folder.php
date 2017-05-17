@@ -72,7 +72,7 @@ class Folder
      *
      * @var string
      */
-    public $path = null;
+    public $path;
 
     /**
      * Sortedness. Whether or not list results
@@ -167,7 +167,7 @@ class Folder
      * Change directory to $path.
      *
      * @param string $path Path to the directory to change to
-     * @return string The new path. Returns false on failure
+     * @return string|bool The new path. Returns false on failure
      */
     public function cd($path)
     {
@@ -238,11 +238,11 @@ class Folder
         }
 
         if ($dirs) {
-            $dirs = call_user_func_array('array_merge', $dirs);
+            $dirs = array_merge(...array_values($dirs));
         }
 
         if ($files) {
-            $files = call_user_func_array('array_merge', $files);
+            $files = array_merge(...array_values($files));
         }
 
         return [$dirs, $files];
@@ -368,7 +368,7 @@ class Folder
      */
     public static function correctSlashFor($path)
     {
-        return (Folder::isWindowsPath($path)) ? '\\' : '/';
+        return Folder::isWindowsPath($path) ? '\\' : '/';
     }
 
     /**
@@ -879,10 +879,8 @@ class Folder
         }
         $options += ['to' => $to, 'from' => $this->path, 'mode' => $this->mode, 'skip' => [], 'recursive' => true];
 
-        if ($this->copy($options)) {
-            if ($this->delete($options['from'])) {
-                return (bool)$this->cd($options['to']);
-            }
+        if ($this->copy($options) && $this->delete($options['from'])) {
+            return (bool)$this->cd($options['to']);
         }
 
         return false;
@@ -924,7 +922,7 @@ class Folder
      * Get the real path (taking ".." and such into account)
      *
      * @param string $path Path to resolve
-     * @return string The resolved path
+     * @return string|bool The resolved path
      */
     public function realpath($path)
     {

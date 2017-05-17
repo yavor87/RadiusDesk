@@ -111,8 +111,8 @@ class JsonView extends SerializedView
             if ($this->viewVars['_jsonp'] === true) {
                 $jsonpParam = 'callback';
             }
-            if (isset($this->request->query[$jsonpParam])) {
-                $return = sprintf('%s(%s)', h($this->request->query[$jsonpParam]), $return);
+            if ($this->request->getQuery($jsonpParam)) {
+                $return = sprintf('%s(%s)', h($this->request->getQuery($jsonpParam)), $return);
                 $this->response->type('js');
             }
         }
@@ -147,7 +147,7 @@ class JsonView extends SerializedView
         }
 
         if (Configure::read('debug')) {
-            $jsonOptions = $jsonOptions | JSON_PRETTY_PRINT;
+            $jsonOptions |= JSON_PRETTY_PRINT;
         }
 
         return json_encode($data, $jsonOptions);

@@ -20,8 +20,6 @@ use Cake\Database\ValueBinder;
 
 /**
  * This class represents a SQL Case statement
- *
- * @internal
  */
 class CaseExpression implements ExpressionInterface
 {
@@ -49,7 +47,7 @@ class CaseExpression implements ExpressionInterface
      *
      * @var string|\Cake\Database\ExpressionInterface|array|null
      */
-    protected $_elseValue = null;
+    protected $_elseValue;
 
     /**
      * Constructs the case expression
@@ -128,18 +126,18 @@ class CaseExpression implements ExpressionInterface
                 continue;
             }
 
-            array_push($this->_conditions, $c);
+            $this->_conditions[] = $c;
             $value = isset($rawValues[$k]) ? $rawValues[$k] : 1;
 
             if ($value === 'literal') {
                 $value = $keyValues[$k];
-                array_push($this->_values, $value);
+                $this->_values[] = $value;
                 continue;
             }
 
             if ($value === 'identifier') {
                 $value = new IdentifierExpression($keyValues[$k]);
-                array_push($this->_values, $value);
+                $this->_values[] = $value;
                 continue;
             }
 
@@ -150,11 +148,11 @@ class CaseExpression implements ExpressionInterface
             }
 
             if ($value instanceof ExpressionInterface) {
-                array_push($this->_values, $value);
+                $this->_values[] = $value;
                 continue;
             }
 
-            array_push($this->_values, ['value' => $value, 'type' => $type]);
+            $this->_values[] = ['value' => $value, 'type' => $type];
         }
     }
 

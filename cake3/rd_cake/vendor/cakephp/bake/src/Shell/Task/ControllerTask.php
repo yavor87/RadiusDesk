@@ -130,12 +130,14 @@ class ControllerTask extends BakeTask
         $singularName = $this->_singularName($currentModelName);
         $singularHumanName = $this->_singularHumanName($controllerName);
         $pluralHumanName = $this->_variableName($controllerName);
+        $entityClassName = $this->_entityName($modelObj->getAlias());
 
         $data = compact(
             'actions',
             'admin',
             'components',
             'currentModelName',
+            'entityClassName',
             'helpers',
             'modelObj',
             'namespace',
@@ -189,12 +191,12 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return void|string Baked test
+     * @return string|null Baked test
      */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
-            return;
+            return null;
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
@@ -258,7 +260,7 @@ class ControllerTask extends BakeTask
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
-        $parser->description(
+        $parser->setDescription(
             'Bake a controller skeleton.'
         )->addArgument('name', [
             'help' => 'Name of the controller to bake (without the `Controller` suffix). ' .

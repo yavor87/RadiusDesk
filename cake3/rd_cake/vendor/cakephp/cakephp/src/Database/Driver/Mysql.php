@@ -78,7 +78,7 @@ class Mysql extends Driver
             $config['init'][] = sprintf("SET time_zone = '%s'", $config['timezone']);
         }
         if (!empty($config['encoding'])) {
-            $config['init'][] = sprintf("SET NAMES %s", $config['encoding']);
+            $config['init'][] = sprintf('SET NAMES %s', $config['encoding']);
         }
 
         $config['flags'] += [
@@ -135,7 +135,7 @@ class Mysql extends Driver
         $isObject = $query instanceof Query;
         $statement = $this->_connection->prepare($isObject ? $query->sql() : $query);
         $result = new MysqlStatement($statement, $this);
-        if ($isObject && $query->bufferResults() === false) {
+        if ($isObject && $query->isBufferedResultsEnabled() === false) {
             $result->bufferResults(false);
         }
 

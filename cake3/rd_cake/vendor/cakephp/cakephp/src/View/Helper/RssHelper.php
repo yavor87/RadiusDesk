@@ -20,8 +20,8 @@ use Cake\View\Helper;
 /**
  * RSS Helper class for easy output RSS structures.
  *
- * @property UrlHelper $Url
- * @property TimeHelper $Time
+ * @property \Cake\View\Helper\UrlHelper $Url
+ * @property \Cake\View\Helper\TimeHelper $Time
  * @link http://book.cakephp.org/3.0/en/views/helpers/rss.html
  */
 class RssHelper extends Helper
@@ -39,14 +39,14 @@ class RssHelper extends Helper
      *
      * @var string
      */
-    public $base = null;
+    public $base;
 
     /**
      * URL to current action.
      *
      * @var string
      */
-    public $here = null;
+    public $here;
 
     /**
      * Parameter array.
@@ -60,28 +60,28 @@ class RssHelper extends Helper
      *
      * @var string
      */
-    public $action = null;
+    public $action;
 
     /**
      * POSTed model data
      *
      * @var array
      */
-    public $data = null;
+    public $data;
 
     /**
      * Name of the current model
      *
      * @var string
      */
-    public $model = null;
+    public $model;
 
     /**
      * Name of the current field
      *
      * @var string
      */
-    public $field = null;
+    public $field;
 
     /**
      * Default spec version of generated RSS
@@ -210,6 +210,7 @@ class RssHelper extends Helper
                     break;
                 case 'category':
                     if (is_array($val) && !empty($val[0])) {
+                        $categories = [];
                         foreach ($val as $category) {
                             $attrib = [];
                             if (is_array($category) && isset($category['domain'])) {
@@ -247,7 +248,7 @@ class RssHelper extends Helper
                 case 'enclosure':
                     if (is_string($val['url']) && is_file(WWW_ROOT . $val['url']) && file_exists(WWW_ROOT . $val['url'])) {
                         if (!isset($val['length']) && strpos($val['url'], '://') === false) {
-                            $val['length'] = sprintf("%u", filesize(WWW_ROOT . $val['url']));
+                            $val['length'] = sprintf('%u', filesize(WWW_ROOT . $val['url']));
                         }
                         if (!isset($val['type']) && function_exists('mime_content_type')) {
                             $val['type'] = mime_content_type(WWW_ROOT . $val['url']);
@@ -281,7 +282,7 @@ class RssHelper extends Helper
      */
     public function time($time)
     {
-        return $this->Time->toRSS($time);
+        return $this->Time->toRss($time);
     }
 
     /**
