@@ -103,6 +103,7 @@ class VouchersController extends AppController{
             return;
         }
         $user_id    = $user['id'];
+          $this->viewBuilder()->setLayout('pdf');
         $this->response->type('pdf');
 		//We improve this function by also allowing the user to specify certain values
 		//which in turn will influence the outcome of the PDF
