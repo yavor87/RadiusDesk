@@ -52,7 +52,7 @@ abstract class CacheEngine
      *
      * @var string
      */
-    protected $_groupPrefix = null;
+    protected $_groupPrefix;
 
     /**
      * Initialize the cache engine
@@ -65,7 +65,7 @@ abstract class CacheEngine
      */
     public function init(array $config = [])
     {
-        $this->config($config);
+        $this->setConfig($config);
 
         if (!empty($this->_config['groups'])) {
             sort($this->_config['groups']);
@@ -166,7 +166,6 @@ abstract class CacheEngine
      */
     abstract public function delete($key);
 
-
     /**
      * Delete all keys from the cache
      *
@@ -245,12 +244,12 @@ abstract class CacheEngine
      */
     public function key($key)
     {
-        if (empty($key)) {
+        if (!$key) {
             return false;
         }
 
         $prefix = '';
-        if (!empty($this->_groupPrefix)) {
+        if ($this->_groupPrefix) {
             $prefix = vsprintf($this->_groupPrefix, $this->groups());
         }
 

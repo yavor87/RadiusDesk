@@ -63,28 +63,28 @@ class RulesChecker
     /**
      * The list of rules to be checked on both create and update operations
      *
-     * @var array
+     * @var callable[]
      */
     protected $_rules = [];
 
     /**
      * The list of rules to check during create operations
      *
-     * @var array
+     * @var callable[]
      */
     protected $_createRules = [];
 
     /**
      * The list of rules to check during update operations
      *
-     * @var array
+     * @var callable[]
      */
     protected $_updateRules = [];
 
     /**
      * The list of rules to check during delete operations
      *
-     * @var array
+     * @var callable[]
      */
     protected $_deleteRules = [];
 
@@ -293,7 +293,7 @@ class RulesChecker
     protected function _checkRules(EntityInterface $entity, array $options = [], array $rules = [])
     {
         $success = true;
-        $options = $options + $this->_options;
+        $options += $this->_options;
         foreach ($rules as $rule) {
             $success = $rule($entity, $options) && $success;
         }

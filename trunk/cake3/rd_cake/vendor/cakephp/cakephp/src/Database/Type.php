@@ -76,7 +76,7 @@ class Type implements TypeInterface
      *
      * @var string
      */
-    protected $_name = null;
+    protected $_name;
 
     /**
      * Constructor
@@ -257,7 +257,7 @@ class Type implements TypeInterface
     public static function boolval($value)
     {
         if (is_string($value) && !is_numeric($value)) {
-            return strtolower($value) === 'true' ? true : false;
+            return strtolower($value) === 'true';
         }
 
         return !empty($value);
@@ -269,7 +269,7 @@ class Type implements TypeInterface
      * Will convert values into strings
      *
      * @param mixed $value The value to convert to a string.
-     * @return bool
+     * @return string
      * @deprecated 3.1.8 This method is now unused.
      */
     public static function strval($value)

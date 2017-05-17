@@ -27,7 +27,7 @@ $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|bool save(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
-$annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null)";
+$annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
 foreach ($behaviors as $behavior => $behaviorData) {
     $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
 }
@@ -62,16 +62,16 @@ class <%= $name %>Table extends Table
         parent::initialize($config);
 
 <% if (!empty($table)): %>
-        $this->table('<%= $table %>');
+        $this->setTable('<%= $table %>');
 <% endif %>
 <% if (!empty($displayField)): %>
-        $this->displayField('<%= $displayField %>');
+        $this->setDisplayField('<%= $displayField %>');
 <% endif %>
 <% if (!empty($primaryKey)): %>
 <% if (count($primaryKey) > 1): %>
-        $this->primaryKey([<%= $this->Bake->stringifyList((array)$primaryKey, ['indent' => false]) %>]);
+        $this->setPrimaryKey([<%= $this->Bake->stringifyList((array)$primaryKey, ['indent' => false]) %>]);
 <% else: %>
-        $this->primaryKey('<%= current((array)$primaryKey) %>');
+        $this->setPrimaryKey('<%= current((array)$primaryKey) %>');
 <% endif %>
 <% endif %>
 <% if (!empty($behaviors)): %>

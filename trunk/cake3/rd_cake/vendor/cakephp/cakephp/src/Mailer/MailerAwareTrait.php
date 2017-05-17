@@ -35,7 +35,7 @@ trait MailerAwareTrait
      * @return \Cake\Mailer\Mailer
      * @throws \Cake\Mailer\Exception\MissingMailerException if undefined mailer class.
      */
-    public function getMailer($name, Email $email = null)
+    protected function getMailer($name, Email $email = null)
     {
         if ($email === null) {
             $email = new Email();
@@ -47,6 +47,6 @@ trait MailerAwareTrait
             throw new MissingMailerException(compact('name'));
         }
 
-        return (new $className($email));
+        return new $className($email);
     }
 }

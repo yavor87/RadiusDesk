@@ -31,6 +31,13 @@ abstract class BaseErrorHandler
 {
 
     /**
+     * Options to use for the Error handling.
+     *
+     * @var array
+     */
+    protected $_options = [];
+
+    /**
      * Display an error message in an environment specific way.
      *
      * Subclasses should implement this method to display the error as
@@ -68,7 +75,7 @@ abstract class BaseErrorHandler
         set_error_handler([$this, 'handleError'], $level);
         set_exception_handler([$this, 'wrapAndHandleException']);
         register_shutdown_function(function () {
-            if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg')) {
+            if (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') {
                 return;
             }
             $megabytes = Configure::read('Error.extraFatalErrorMemory');
@@ -121,7 +128,7 @@ abstract class BaseErrorHandler
         if (error_reporting() === 0) {
             return false;
         }
-        list($error, $log) = $this->mapErrorCode($code);
+        list($error, $log) = static::mapErrorCode($code);
         if ($log === LOG_ERR) {
             return $this->handleFatalError($code, $description, $file, $line);
         }
@@ -224,7 +231,7 @@ abstract class BaseErrorHandler
      * Increases the PHP "memory_limit" ini setting by the specified amount
      * in kilobytes
      *
-     * @param string $additionalKb Number in kilobytes
+     * @param int $additionalKb Number in kilobytes
      * @return void
      */
     public function increaseMemoryLimit($additionalKb)
@@ -235,9 +242,9 @@ abstract class BaseErrorHandler
         }
         $limit = trim($limit);
         $units = strtoupper(substr($limit, -1));
-        $current = substr($limit, 0, strlen($limit) - 1);
+        $current = (int)substr($limit, 0, strlen($limit) - 1);
         if ($units === 'M') {
-            $current = $current * 1024;
+            $current *= 1024;
             $units = 'K';
         }
         if ($units === 'G') {
@@ -315,12 +322,12 @@ abstract class BaseErrorHandler
     /**
      * Get the request context for an error/exception trace.
      *
-     * @param \Cake\Network\Request $request The request to read from.
+     * @param \Cake\Http\ServerRequest $request The request to read from.
      * @return string
      */
     protected function _requestContext($request)
     {
-        $message = "\nRequest URL: " . $request->here();
+        $message = "\nRequest URL: " . $request->getRequestTarget();
 
         $referer = $request->env('HTTP_REFERER');
         if ($referer) {
@@ -347,9 +354,11 @@ abstract class BaseErrorHandler
             $exception;
         $config = $this->_options;
         $message = sprintf(
-            "[%s] %s",
+            '[%s] %s in %s on line %s',
             get_class($exception),
-            $exception->getMessage()
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine()
         );
         $debug = Configure::read('debug');
 

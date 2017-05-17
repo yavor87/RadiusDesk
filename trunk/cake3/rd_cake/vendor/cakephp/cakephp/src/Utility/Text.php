@@ -97,7 +97,7 @@ class Text
                 }
             }
             if ($tmpOffset !== -1) {
-                $buffer .= mb_substr($data, $offset, ($tmpOffset - $offset));
+                $buffer .= mb_substr($data, $offset, $tmpOffset - $offset);
                 $char = mb_substr($data, $tmpOffset, 1);
                 if (!$depth && $char === $separator) {
                     $results[] = $buffer;
@@ -119,6 +119,7 @@ class Text
                             $open = true;
                         } else {
                             $depth--;
+                            $open = false;
                         }
                     }
                 }
@@ -172,7 +173,7 @@ class Text
         $format = $options['format'];
         $data = (array)$data;
         if (empty($data)) {
-            return ($options['clean']) ? static::cleanInsert($str, $options) : $str;
+            return $options['clean'] ? static::cleanInsert($str, $options) : $str;
         }
 
         if (!isset($format)) {
@@ -192,7 +193,7 @@ class Text
                 $str = substr_replace($str, $val, $pos, 1);
             }
 
-            return ($options['clean']) ? static::cleanInsert($str, $options) : $str;
+            return $options['clean'] ? static::cleanInsert($str, $options) : $str;
         }
 
         asort($data);
@@ -208,7 +209,7 @@ class Text
         }
         $dataReplacements = array_combine($hashKeys, array_values($data));
         foreach ($dataReplacements as $tmpHash => $tmpValue) {
-            $tmpValue = (is_array($tmpValue)) ? '' : $tmpValue;
+            $tmpValue = is_array($tmpValue) ? '' : $tmpValue;
             $str = str_replace($tmpHash, $tmpValue, $str);
         }
 
@@ -216,7 +217,7 @@ class Text
             $str = str_replace($options['escape'] . $options['before'], $options['before'], $str);
         }
 
-        return ($options['clean']) ? static::cleanInsert($str, $options) : $str;
+        return $options['clean'] ? static::cleanInsert($str, $options) : $str;
     }
 
     /**
@@ -346,7 +347,7 @@ class Text
 
         if (!empty($options['indentAt']) && $options['indentAt'] === 0) {
             $indentLength = !empty($options['indent']) ? strlen($options['indent']) : 0;
-            $options['width'] = $options['width'] - $indentLength;
+            $options['width'] -= $indentLength;
 
             return self::wrap($text, $options);
         }
@@ -455,7 +456,8 @@ class Text
      *
      * - `format` The piece of HTML with that the phrase will be highlighted
      * - `html` If true, will ignore any HTML tags, ensuring that only the correct text is highlighted
-     * - `regex` a custom regex rule that is used to match words, default is '|$tag|iu'
+     * - `regex` A custom regex rule that is used to match words, default is '|$tag|iu'
+     * - `limit` A limit, optional, defaults to -1 (none)
      *
      * @param string $text Text to search the phrase in.
      * @param string|array $phrase The phrase or phrases that will be searched.
@@ -472,9 +474,11 @@ class Text
         $defaults = [
             'format' => '<span class="highlight">\1</span>',
             'html' => false,
-            'regex' => "|%s|iu"
+            'regex' => '|%s|iu',
+            'limit' => -1,
         ];
         $options += $defaults;
+        $html = $format = $ellipsis = $exact = $limit = null;
         extract($options);
 
         if (is_array($phrase)) {
@@ -487,11 +491,11 @@ class Text
                     $segment = "(?![^<]+>)$segment(?![^<]+>)";
                 }
 
-                $with[] = (is_array($format)) ? $format[$key] : $format;
+                $with[] = is_array($format) ? $format[$key] : $format;
                 $replace[] = sprintf($options['regex'], $segment);
             }
 
-            return preg_replace($replace, $with, $text);
+            return preg_replace($replace, $with, $text, $limit);
         }
 
         $phrase = '(' . preg_quote($phrase, '|') . ')';
@@ -499,7 +503,7 @@ class Text
             $phrase = "(?![^<]+>)$phrase(?![^<]+>)";
         }
 
-        return preg_replace(sprintf($options['regex'], $phrase), $format, $text);
+        return preg_replace(sprintf($options['regex'], $phrase), $format, $text, $limit);
     }
 
     /**
@@ -543,6 +547,7 @@ class Text
             'ellipsis' => '...', 'exact' => true
         ];
         $options += $default;
+        $exact = $ellipsis = null;
         extract($options);
 
         if (mb_strlen($text) <= $length) {
@@ -911,7 +916,7 @@ class Text
         $length = strlen($string);
 
         for ($i = 0; $i < $length; $i++) {
-            $value = ord(($string[$i]));
+            $value = ord($string[$i]);
             if ($value > 128) {
                 return true;
             }

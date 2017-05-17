@@ -48,7 +48,7 @@ class Date extends MutableDate implements JsonSerializable
      * The format to use when formatting a time using `Cake\I18n\Date::timeAgoInWords()`
      * and the difference is more than `Cake\I18n\Date::$wordEnd`
      *
-     * @var string
+     * @var string|array|int
      * @see \Cake\I18n\DateFormatTrait::parseDate()
      */
     public static $wordFormat = [IntlDateFormatter::SHORT, -1];
@@ -77,13 +77,13 @@ class Date extends MutableDate implements JsonSerializable
      * @see \Cake\I18n\Date::timeAgoInWords()
      */
     public static $wordAccuracy = [
-        'year' => "day",
-        'month' => "day",
-        'week' => "day",
-        'day' => "day",
-        'hour' => "day",
-        'minute' => "day",
-        'second' => "day",
+        'year' => 'day',
+        'month' => 'day',
+        'week' => 'day',
+        'day' => 'day',
+        'hour' => 'day',
+        'minute' => 'day',
+        'second' => 'day',
     ];
 
     /**
@@ -130,6 +130,6 @@ class Date extends MutableDate implements JsonSerializable
      */
     public function timeAgoInWords(array $options = [])
     {
-        return $this->diffFormatter()->dateAgoInWords($this, $options);
+        return static::diffFormatter()->dateAgoInWords($this, $options);
     }
 }

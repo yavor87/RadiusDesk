@@ -345,7 +345,7 @@ class Hash
         $count = count($path);
         $last = $count - 1;
         foreach ($path as $i => $key) {
-            if ((is_numeric($key) && (int)($key) > 0 || $key === '0') &&
+            if ((is_numeric($key) && (int)$key > 0 || $key === '0') &&
                 strpos($key, '0') !== 0
             ) {
                 $key = (int)$key;
@@ -446,7 +446,7 @@ class Hash
      * @param string|null $groupPath A dot-separated string.
      * @return array Combined array
      * @link http://book.cakephp.org/3.0/en/core-libraries/hash.html#Cake\Utility\Hash::combine
-     * @throws \RuntimeException  When keys and values count is unequal.
+     * @throws \RuntimeException When keys and values count is unequal.
      */
     public static function combine(array $data, $keyPath, $valuePath = null, $groupPath = null)
     {
@@ -464,6 +464,7 @@ class Hash
             return [];
         }
 
+        $vals = null;
         if (!empty($valuePath) && is_array($valuePath)) {
             $format = array_shift($valuePath);
             $vals = static::format($data, $valuePath, $format);
@@ -484,6 +485,7 @@ class Hash
             $group = static::extract($data, $groupPath);
             if (!empty($group)) {
                 $c = count($keys);
+                $out = [];
                 for ($i = 0; $i < $c; $i++) {
                     if (!isset($group[$i])) {
                         $group[$i] = 0;
@@ -639,12 +641,12 @@ class Hash
     /**
      * Callback function for filtering.
      *
-     * @param array $var Array to filter.
+     * @param mixed $var Array to filter.
      * @return bool
      */
     protected static function _filter($var)
     {
-        return $var === 0 || $var === '0' || !empty($var);
+        return $var === 0 || $var === 0.0 || $var === '0' || !empty($var);
     }
 
     /**
@@ -742,6 +744,7 @@ class Hash
     {
         $args = array_slice(func_get_args(), 1);
         $return = $data;
+        $stack = [];
 
         foreach ($args as &$curArg) {
             $stack[] = [(array)$curArg, &$return];
@@ -816,7 +819,7 @@ class Hash
         $depth = 1;
         while ($elem = array_shift($data)) {
             if (is_array($elem)) {
-                $depth += 1;
+                $depth++;
                 $data = $elem;
             } else {
                 break;
@@ -837,7 +840,7 @@ class Hash
     public static function maxDimensions(array $data)
     {
         $depth = [];
-        if (is_array($data) && reset($data) !== false) {
+        if (is_array($data) && !empty($data)) {
             foreach ($data as $value) {
                 if (is_array($value)) {
                     $depth[] = static::maxDimensions($value) + 1;
@@ -1074,8 +1077,7 @@ class Hash
         $intersection = array_intersect_key($data, $compare);
         while (($key = key($intersection)) !== null) {
             if ($data[$key] == $compare[$key]) {
-                unset($data[$key]);
-                unset($compare[$key]);
+                unset($data[$key], $compare[$key]);
             }
             next($intersection);
         }

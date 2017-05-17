@@ -12,7 +12,6 @@
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Error\Debugger;
 ?>
 <!DOCTYPE html>
 <html>
@@ -206,8 +205,8 @@ use Cake\Error\Debugger;
             <span class="header-type"><?= get_class($error) ?></span>
         </h1>
         <div class="header-help">
-            <a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a>
-            <a target="_blank" href="http://api.cakephp.org/">API</a>
+            <a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a>
+            <a target="_blank" href="https://api.cakephp.org/">API</a>
         </div>
     </header>
 
