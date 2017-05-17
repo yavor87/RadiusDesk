@@ -1,7 +1,7 @@
 Ext.define('Rd.view.dynamicDetails.cmbDynamicDetailLanguages', {
     extend          : 'Ext.form.ComboBox',
     alias           : 'widget.cmbDynamicDetailLanguages',
-    fieldLabel      : i18n('sLanguage'),
+    fieldLabel      : 'Default Language',
     labelSeparator  : '',
     queryMode       : 'local',
     valueField      : 'id',
@@ -10,7 +10,6 @@ Ext.define('Rd.view.dynamicDetails.cmbDynamicDetailLanguages', {
     mode            : 'local',
     name            : 'default_language',
     multiSelect     : false,
-    labelClsExtra   : 'lblRdReq',
     allowBlank      : false,
     initComponent: function(){
         var me      = this;

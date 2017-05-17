@@ -12,6 +12,27 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
     user_id : undefined, // The user_id of the Access Provider who owns the Dynamic Login page -> This will influence the list of Realms and Profiles
     initComponent: function(){
         var me = this;
+        
+        
+        var s   = Ext.create('Ext.data.Store', {
+            fields: [
+                {name: 'id',    type: 'string'},
+                {name: 'name',  type: 'string'}
+            ],
+            proxy: {
+                    type    : 'ajax',
+                    format  : 'json',
+                    batchActions: true, 
+                    url     : '/cake3/rd_cake/dynamic-details/i18n.json',
+                    reader: {
+                        type            : 'json',
+                        rootProperty    : 'items',
+                        messageProperty : 'message'
+                    }
+            },
+            autoLoad: true
+        });
+        
 
         me.items =  { 
                 xtype   :  'form',
@@ -350,7 +371,19 @@ Ext.define('Rd.view.dynamicDetails.pnlDynamicDetailSettings', {
                                 autoScroll:true,
                                 items       : [
                                     {
-                                        xtype       : 'cmbDynamicDetailLanguages'
+                                        xtype           : 'cmbDynamicDetailLanguages',
+                                        labelClsExtra   : 'lblRdReq'
+                                    },
+                                    {
+                                        fieldLabel      : 'Available Languages',
+                                        store           : s,
+                                        queryMode       : 'local',
+                                        emptyText       : 'Just The Default Language',
+                                        displayField    : 'name',
+                                        valueField      : 'id',
+                                        xtype           : 'tagfield',
+                                        name            : 'available_languages[]',
+                                        labelClsExtra   : 'lblRd'
                                     } 
                                 ]
                             }
