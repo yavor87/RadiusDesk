@@ -16,6 +16,11 @@ class DynamicDetailsController extends AppController{
     protected $owner_tree = array();
     
     protected $main_model = 'DynamicDetails';
+    
+    protected $theme_default    = 'Default';
+	protected $theme_selected   = 'Default';	
+	protected $default_language = 'en_GB';
+    
   
     public function initialize(){  
         parent::initialize();  
@@ -597,6 +602,21 @@ class DynamicDetailsController extends AppController{
             }
         }
         
+        $count      = 0;
+        
+        if (array_key_exists('available_languages', $this->request->data)) {
+            $comma_separated = implode(",", $this->request->data['available_languages']);
+            if($comma_separated == 'Just The Default Language'){
+                $comma_separated = '';
+            }else{
+                if (strpos($comma_separated, $this->request->data['default_language']) == false) {
+                    $comma_separated = $comma_separated.','.$this->request->data['default_language'];
+                } 
+            }
+            $this->request->data['available_languages'] = $comma_separated;
+        }
+        
+        
         $entity = $this->{$this->main_model}->get($this->request->data['id']);
         $this->{$this->main_model}->patchEntity($entity, $this->request->data());
 
@@ -778,8 +798,17 @@ class DynamicDetailsController extends AppController{
                 
                 foreach($fields as $field){
 	                $items["$field"]= $q_r->{"$field"};
-		        }      
-		           
+		        } 
+		        
+		        if($items['default_language'] == ''){
+		            $items['default_language'] = $this->default_language;
+		        }
+		        
+		        if($items['available_languages'] !== ''){
+		            $items['available_languages[]'] = explode(',',$items['available_languages']);
+		        }
+		        
+		       // $items['available_languages[]'] = ['fr_FR','it_IT'];  
                 $items['owner']     = $owner_tree; 
                 $items['realm']     = $realm;
                 $items['profile']   = $profile;               
