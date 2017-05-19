@@ -92,7 +92,7 @@ var rdDynamic = (function () {
             
             eventBindings();
             
-            slideShowCheck();
+            slideShowCheck(); 
             
             //Fill it         
             //Call the Connect side....
@@ -103,26 +103,29 @@ var rdDynamic = (function () {
 		    
         };
         
+        function showLogin() {
+            var h = $$("tbMain").$height;
+            $$('winLogin').define("height", window.innerHeight - h);
+            $$("winLogin").resize();
+
+            if ($$("winHelp").isVisible()) {
+                $$("winHelp").hide();
+            }
+
+            if ($$("winAbout").isVisible()) {
+                $$("winAbout").hide();
+            }
+
+            if (!$$("winLogin").isVisible()) {
+                $$("winLogin").show();
+            }
+        }
+        
         var eventBindings = function(){
         
             //Show the main connection window
             $$("btnMainConnect").attachEvent("onItemClick",function(){ 
-            
-                var h = $$("tbMain").$height;
-                $$('winLogin').define("height", window.innerHeight-h);
-                $$("winLogin").resize();
-                
-                if($$("winHelp").isVisible()){
-                    $$("winHelp").hide();
-                }
-                
-                if($$("winAbout").isVisible()){
-                    $$("winAbout").hide();
-                }
-                
-                if(!$$("winLogin").isVisible()){
-                    $$("winLogin").show();
-                }
+               showLogin();
             });
             
             //Show tha side menu
