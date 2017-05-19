@@ -179,7 +179,8 @@ class DynamicDetailsController extends AppController{
 			'auto_suffix_check',    'auto_suffix',      'usage_show_check', 'usage_refresh_interval', 
 			'register_users',       'lost_password',
 			'slideshow_enforce_watching',
-			'slideshow_enforce_seconds'
+			'slideshow_enforce_seconds',
+			'available_languages'
 		);
         
 		//print_r($q_r);
@@ -206,10 +207,25 @@ class DynamicDetailsController extends AppController{
                         $items['settings']["$field"]= $q_r->{"$field"};  
                     }else{
                         $items['settings']["$field"]= $q_r->dynamic_detail->{"$field"}; 
-                    }
+                    } 
                 }
-        
-
+                
+                //IF the available languages are selected we need to get more data on them
+                if($items['settings']["available_languages"] !== ''){
+                    $final_array = [];
+                    $selected_array = explode(",",$items['settings']["available_languages"]);
+                    Configure::load('DynamicLogin','default'); 
+                    $i18n = Configure::read('DynamicLogin.i18n');
+                    foreach($i18n as $i){
+                        if($i['active']){
+                            if(in_array($i['id'],$selected_array)){
+                                array_push($final_array,['value' => $i['name'],'id'=>$i['id']]);   
+                            }
+                        }
+                    }
+                    $items['settings']["available_languages"] = $final_array;
+                }
+                
 			if($social_enable){
 				$items['settings']['social_login']['active'] = true;			
 				//Find the temp username and password
@@ -807,8 +823,7 @@ class DynamicDetailsController extends AppController{
 		        if($items['available_languages'] !== ''){
 		            $items['available_languages[]'] = explode(',',$items['available_languages']);
 		        }
-		        
-		       // $items['available_languages[]'] = ['fr_FR','it_IT'];  
+		         
                 $items['owner']     = $owner_tree; 
                 $items['realm']     = $realm;
                 $items['profile']   = $profile;               
