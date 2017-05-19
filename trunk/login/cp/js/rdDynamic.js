@@ -697,6 +697,7 @@ var rdDynamic = (function () {
             }
                 
             function img(obj){
+            
                 /*A Typical object will look like this:
                 {
                     "id": 107,
@@ -720,14 +721,16 @@ var rdDynamic = (function () {
                 
                 
                 var return_string = "<div style='background-color: #"+obj.background_color+";' class='divCarousel'>\n"; //Wrapper
+                
+                //var return_string = '';
                 //Title Check
                 if(obj.include_title){
-                    return_string = return_string+ "<h1 class='itemTitle'>"+obj.title+"</h1>\n";
+                    return_string = return_string+ "<div class='itemTitle'>"+obj.title+"</div>\n";
                 }
                 
                 //Title Check
                 if(obj.include_description){
-                    return_string = return_string+ "<p class='itemDescription'>"+obj.description+"</p>\n";
+                    return_string = return_string+ "<div class='itemDescription'>"+obj.description+"</div>\n";
                 }
                  
                 var scrn = 'landscape';
@@ -781,6 +784,8 @@ var rdDynamic = (function () {
                 return_string = return_string + "<div class='itemImage "+imgFit+"'><img src='"+obj.file_name+"' ondragstart='return false'/></div>\n"; 
                 
                 return_string = return_string+"</div>";
+                
+                console.log(return_string);
                 return return_string;
                 
 		       // return '<div style="height: 100%; width: 100%;"><img src="'+file+'" class="content" ondragstart="return false"/></div>'

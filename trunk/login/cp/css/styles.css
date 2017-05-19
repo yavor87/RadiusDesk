@@ -21,7 +21,11 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 }
 
 .itemTitle {
-    text-align: center;
+	font-weight: 300;
+	font-family: 'Titillium Web', sans-serif;
+	font-size: 30px;
+	color: #3e3e3e;
+	padding: 5px;
 }
 
 .imgX img {
@@ -49,7 +53,11 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 }
 
 .itemDescription {
-
+    font-weight: 200;
+	font-family: 'Titillium Web', sans-serif;
+	font-size: 16px;
+	color: #767676;
+	padding: 5px;
 }
 
 
@@ -72,28 +80,6 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
 .webix_view .divClear{
     background-image: none;
 	background-color: transparent;
-}
-
-.webix_view .scrnHome{
-    background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
-.webix_view .scrnHelp{
-    background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-}
-
-.webix_view .scrnPhoto{
-    background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-}
-
-.webix_view .scrnAbout {
-    background: linear-gradient(to bottom, #e5f5ff 0%, #4dbaff 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
 }
 
 .btnConnect .webix_el_htmlbutton { 
@@ -235,7 +221,6 @@ div.webix_item_tab, .webix_item_tab .webix_icon {
     height:28px;
     display:block;
 }
-
 
 .rdFlag{
     margin-left:28px;
