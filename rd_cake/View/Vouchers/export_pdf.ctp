@@ -79,5 +79,3 @@ if(($output_instr['format'] == 'a4')||($output_instr['format'] == 'a4_page')){
 }
 ?>
 
-
-?>

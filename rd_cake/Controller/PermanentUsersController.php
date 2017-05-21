@@ -2256,5 +2256,4 @@ class PermanentUsersController extends AppController {
 			$u->id = null;			
 		}
 	}
-
 }

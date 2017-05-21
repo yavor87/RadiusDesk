@@ -53,8 +53,7 @@ class Voucher extends AppModel {
             	$this->data['Voucher']['password']  = $this->_generatePassword();
 			}   
         }
-        $this->_build_time_valid(); //Do this regardless
-         
+        $this->_build_time_valid(); //Do this regardless    
     }
 
     public function afterSave($created,$options = array()){

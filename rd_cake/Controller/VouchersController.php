@@ -132,8 +132,6 @@ class VouchersController extends AppController {
 			}
 		}
 
-		
-
         $pieces = explode('_',$output_instr['language']);
         $l      = ClassRegistry::init('Language');
         $l->contain();
@@ -1429,9 +1427,7 @@ class VouchersController extends AppController {
 
     //--------- END BASIC CRUD ---------------------------
 
-
      public function pdf_voucher_formats(){
-
         $items = array();
         $ct = Configure::read('voucher_formats');
         foreach($ct as $i){
@@ -1439,7 +1435,6 @@ class VouchersController extends AppController {
                 array_push($items, $i);
             }
         }
-
         $this->set(array(
             'items' => $items,
             'success' => true,
