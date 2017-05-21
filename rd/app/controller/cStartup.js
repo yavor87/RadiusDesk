@@ -8,7 +8,6 @@ If they are logged in it will load the Dashboard controller and call it's Index 
 Ext.define('Rd.controller.cStartup', {
     extend: 'Ext.app.Controller',
     config: {
-        urlLocalizedStrings:    '/cake2/rd_cake/phrase_values/get_language_strings.json',
         urlCheckToken:          '/cake3/rd_cake/dashboard/check_token.json'
     },
    actionIndex: function(){
