@@ -125,6 +125,21 @@ class DashboardController extends AppController{
          
     }
     
+    public function i18n(){
+        $items = array();
+        $i18n = Configure::read('Admin.i18n');
+        foreach($i18n as $i){
+            if($i['active']){
+                array_push($items, $i);
+            }
+        }
+        $this->set(array(
+            'items' => $items,
+            'success' => true,
+            '_serialize' => array('items','success')
+        ));
+    }
+    
      public function utilitiesItems(){       
         $data = array(
             array(
