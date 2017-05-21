@@ -6,6 +6,7 @@ var rdConnect = (function () {
         var uamIp,uamPort;  //Variables with 'global' scope
 
         var h               = document.location.hostname;
+        var isMikroTik      = getParameterByName('link_status') != "";
         var urlUse          = location.protocol+'//'+h+'/cake2/rd_cake/radaccts/get_usage.json'
         var urlUam          = location.protocol+'//'+h+'/login/services/uam.php';
 	    var urlSocialBase   = location.protocol+'//'+h+'/cake2/rd_cake/auth/'; //Be sure this is the same as specified in FB e.g. IP or DNS!!
@@ -129,13 +130,13 @@ var rdConnect = (function () {
 					    timeUntilUsage = cDynamicData.settings.usage_refresh_interval;
 					    usageInterval  = timeUntilUsage;
 				    }
-                    coovaRefresh(true);
+                    refresh(true);
                 }else{
                     fDebug("It is NOT a hotspot");
                     window.rdDynamic.showNotHotspot();
                 }  
             }else{
-                coovaRefresh(true);  //Already established we are a hotspot, simply refresh
+                refresh(true);  //Already established we are a hotspot, simply refresh
             }
             
         }
@@ -174,8 +175,18 @@ var rdConnect = (function () {
 			    timeUntilUsage  = usageInterval;
             }
         }
+        
+        var testForHotspot = function () {
+            if (isMikroTik) {
+                return testForHotspotMT();
+            }
+            else {
+                return testForHotspotCoova();
+            }
+        }
 
-        var testForHotspot = function(){
+
+        var testForHotspotCoova = function(){
 
             var ip      = getParameterByName('uamip');
             var port    = getParameterByName('uamport');
@@ -191,12 +202,31 @@ var rdConnect = (function () {
             }
             return true;        //Is a hotspot
         }
+        
+        var testForHotspotMT = function () {
+            var ls = getParameterByName('link_status');
+            if (ls != undefined) {  //Override defaults
+                return true
+            } else {
+                return false;   //Not a hotspot
+            }
+        }
+
             
         function getParameterByName(name) {
            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
                results = regex.exec(location.search);
            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        
+        var refresh = function (do_usage_also) {
+
+            if (isMikroTik) {
+                mtRefresh(do_usage_also);
+            } else {
+                coovaRefresh(do_usage_also);
+            }
         }
         
         var coovaRefresh    = function(do_usage_also){
@@ -259,6 +289,75 @@ var rdConnect = (function () {
                             text: i18n('sThe_hotspot_is_not_responding_to_status_queries'),
                             type:"confirm-error"
                         }); 
+                        showLoginError(i18n('sHotspot_not_responding'));
+                    }
+                });
+        }
+         
+        var mtRefresh = function (do_usage_also) {
+
+            if (typeof (do_usage_also) === "undefined") { do_usage_also = false; } //By default we give feedback
+            var urlStatus = getParameterByName('link_status');
+
+            $.ajax({ url: urlStatus + "?var=?", dataType: "jsonp", timeout: ajaxTimeout })
+                .done(function (j) {
+                    statusFb = j;		//Store the status feedback
+
+                    fDebug("mtRefresh...");
+                    fDebug(j);
+
+                    currentRetry = 0 //Reset the current retry if it was perhaps already some value
+                    if (j.logged_in == 'no') {
+
+                        window.rdDynamic.showConnect();
+                        clearRefresh();
+                        clearLoginError();
+                    }
+
+                    if (j.logged_in == 'yes') {
+                        hideOverlay();
+                        var redirect_check = false;
+                        var redirect_url = 'http://google.com';
+                        if (cDynamicData != undefined) { //We had to add this sine it is not always populated by the time this is run
+                            redirect_check = cDynamicData.settings.redirect_check;
+                            redirect_url = cDynamicData.settings.redirect_url;
+                        }
+
+                        if (redirect_check) {
+                            window.location = redirect_url;
+                        } else {
+
+                            window.rdDynamic.showStatus();
+
+                            //Refresh status window
+                            refreshStatus(j);
+
+                            //We also want ot get the latest usage if enabled
+                            if (do_usage_also) {
+                                rdUsageRefresh();
+                            }
+
+                            if (counter == undefined) {    //If it is the first time so initialise the loop counter
+                                sessionData = j;
+                                refreshCounter();
+                            }
+                        }
+                    }
+                })
+                .fail(function () {
+                    //console.log("Could not fetch the coova status");	
+                    //We will retry for me.retryCount
+                    currentRetry = currentRetry + 1;
+                    if (currentRetry <= retryCount) {
+                        //console.log("Retry to fetch Coova status "+currentRetry);
+                        mtRefresh(do_usage_also);
+                    } else {
+                        fDebug("Timed out"); //FIXME
+                        webix.alert({
+                            title: i18n('sHotspot_not_responding'),
+                            text: i18n('sThe_hotspot_is_not_responding_to_status_queries'),
+                            type: "confirm-error"
+                        });
                         showLoginError(i18n('sHotspot_not_responding'));
                     }
                 });
@@ -330,12 +429,17 @@ var rdConnect = (function () {
 	    var onBtnDisconnectClick = function(){
 	        showOverlay();
 		    showFeedback(i18n('sDisconnect_the_user'));
-            var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
-
+		    
+		    if(isMikroTik) {
+                var urlLogoff = getParameterByName('link_logout');
+            } else {
+                var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
+            }
+		    
             $.ajax({url: urlLogoff + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
             .done(function(j){
                 hideOverlay();
-                coovaRefresh();
+                refresh();
             })
             .fail(function(){
                 //We will retry for me.retryCount
@@ -347,7 +451,6 @@ var rdConnect = (function () {
                 }
             });
 	    }
-	    
 	    
 	    var refreshStatus = function(j){
 
@@ -381,7 +484,7 @@ var rdConnect = (function () {
                     $('#status_refresh').text(timeUntilStatus);
                     if(timeUntilStatus == 0){      //Each time we reach null we refresh the screens
                         timeUntilStatus = refreshInterval; //Start anew
-                        coovaRefresh();
+                        refresh();
                     }
                 }
 
@@ -484,8 +587,12 @@ $$('sliderData').refresh();
 		            }
 		        }
 		    } 
-		    showOverlay();       
-            getLatestChallenge();   
+		    showOverlay(); 
+		     if (isMikroTik) {
+                login();
+            } else {
+                getLatestChallenge();
+            }         
         }
         
         
@@ -595,7 +702,11 @@ $$('sliderData').refresh();
 			}
 			
 			showOverlay();
-         	getLatestChallenge();   
+         	if (isMikroTik) {
+                login(password);
+            } else {
+                getLatestChallenge();
+            }  
         }
         
         var getLatestChallenge = function(){
@@ -654,27 +765,41 @@ $$('sliderData').refresh();
             });
         }
 
-        var login =  function(encPwd){
-		    showFeedback(i18n('sLog')+" "+userName+" "+i18n('sinto_Captive_Portal'));
-            var urlLogin = 'http://'+uamIp+':'+uamPort+'/json/logon';
-            $.ajax({url: urlLogin + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: encPwd}})
-            .done(function(j){
-                loginResults(j);
-            })
-            .fail(function(){
-                //We will retry for me.retryCount
-                currentRetry = currentRetry+1;
-                if(currentRetry <= retryCount){
-                    login(encPwd);
-                }else{
-                    webix.alert({
-                        title: i18n('sCoova_Not_responding_to_login_requests'),
-                        text: i18n('sCoova_Not_responding_to_login_requests'),
-                        type:"confirm-error"
-                    });
-                    showLoginError(i18n('sCoova_Not_responding_to_login_requests'));
-                }
-            });
+        var login = function (encPwd) {
+            showFeedback(i18n('sLog') + " " + userName + " " + i18n('sinto_Captive_Portal'));
+            var urlLogin = "";
+            var ajax ={};
+            if (isMikroTik) {
+                urlLogin = getParameterByName('link_login_only');
+                ajax = {url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: encPwd}};
+            } else {
+                urlLogin = 'http://' + uamIp + ':' + uamPort + '/json/logon';
+                ajax = { url: urlLogin + "?callback=?", dataType: "jsonp", timeout: ajaxTimeout, data: { username: userName, password: encPwd } };
+            }         
+            $.ajax(ajax)
+                .done(function (j) {
+                    loginResults(j);
+                })
+                .fail(function (error) {
+                    //We will retry for me.retryCount
+                    currentRetry = currentRetry + 1;
+                    if (currentRetry <= retryCount) {
+                        login(encPwd);
+                    } else {
+                        if (isMikroTik) {
+                            error = i18n('sMT_Not_responding_to_login_requests');
+                        } else {
+                            error = i18n('sCoova_Not_responding_to_login_requests');
+                        }
+
+                        webix.alert({
+                            title: error,
+                            text: error,
+                            type: "confirm-error"
+                        });
+                        showLoginError(i18n('sCoova_Not_responding_to_login_requests'));
+                    }
+                });
         }
         
         var loginResults = function(j){
@@ -691,13 +816,15 @@ $$('sliderData').refresh();
             
                 //Set a cookie and see if we can get it
                 var mac =  getParameterByName('mac');
-                $.cookie("dnsDeskMAC", mac, { path: '/', expires: 7 });
+                if(mac !== undefined){
+                    Cookies.set("dnsDeskMAC", mac,{ expires: 7, path: '' });
+                }
                       
                 initRedirect();
                 if(redirect_check) {
                     execRedirect(redirect_url)
                 } else {
-                    coovaRefresh(true); //Refresh
+                    refresh(true); //Refresh
                 }
             }
         }
@@ -733,10 +860,10 @@ $$('sliderData').refresh();
                            if (redirect_check) {         // Check if the dynamic login page instructs us to redirect to a URL
                                 execRedirect(redirect_url);
                            } else {
-                                coovaRefresh();  
+                                refresh();  
                            }
                     } else {                             // If the user is not of the social login type, simply refresh and show status page
-                        coovaRefresh();
+                        refresh();
                     }
                     
                 }
@@ -897,7 +1024,7 @@ $$('sliderData').refresh();
                     if(redirect_check){
                         execRedirect(redirect_url);
 				    }else{             
-                        coovaRefresh(); //Refresh 
+                        refresh(); //Refresh 
                     }
                 }
             })
@@ -964,7 +1091,7 @@ $$('sliderData').refresh();
 			    if(redirect_check){
 		            execRedirect(redirect_url);
 			    }else{             
-                    coovaRefresh(true); //Refresh session and usage
+                    refresh(true); //Refresh session and usage
                 }
             }
         }
