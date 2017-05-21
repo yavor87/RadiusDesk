@@ -35,7 +35,6 @@ class Note extends AppModel {
         'ProfileNote'               		=> array('dependent'    => true),
         'ProfileComponentNote'      		=> array('dependent'    => true),
         'DynamicDetailNote'         		=> array('dependent'    => true),
-        'AutoMacNote'               		=> array('dependent'    => true),
         'MeshNote'                  		=> array('dependent'    => true),
         'FinPaypalTransactionNote'  		=> array('dependent'    => true),
 		'FinPayUTransactionNote'  			=> array('dependent'    => true),
