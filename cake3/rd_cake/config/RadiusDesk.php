@@ -190,7 +190,17 @@ $config['whitelabel']['imgActive']  = true;
 $config['whitelabel']['imgFile']    = 'logo.png';
 
 $config['whitelabel']['fName']      = 'RADIUSdesk';
-                                      
+
+//=== Language List =====
+$config['Admin']['i18n'][0]     = array(    
+    'id'        => '4_4',
+    'country'   => 'United Kingdom',
+    'language'  => 'English',
+    'text'      =>	'United Kingdom -> English',
+    'rtl'       => false,
+    'icon_file' =>	'/cake3/rd_cake/img/flags/GB.png',  
+    'active'    => true
+);
 
 return $config;
 
