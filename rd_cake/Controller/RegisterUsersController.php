@@ -99,15 +99,8 @@ class RegisterUsersController extends AppController {
         $cap_data 	= 'hard';
         $language   = '4_4';
         $parent_id  = 0;        
-        $url        = 'http://127.0.0.1/cake2/rd_cake/permanent_users/add.json';
-        
-        //This is a nice to have to allow one user to register with the same email addy many places!
-        ///(This is now taken care of in the realm itself and with the add function of the Permanent Users Controller)
-        ///if($q_r['DynamicDetail']['reg_auto_suffix_check']){ 
-        ///    $username	= $this->request->data['username'].'@'.$q_r['DynamicDetail']['reg_auto_suffix'];
-       /// }else{
+        $url        = 'http://127.0.0.1/cake3/rd_cake/permanent-users/add.json'; 
         $username	= $this->request->data['username'];
-       /// }
 		$password	= $this->request->data['password'];
 		
 		$auto_add   = 0;
@@ -139,7 +132,10 @@ class RegisterUsersController extends AppController {
             'email'         => $username, //Email and username will be the same / email required
 			'extra_name'	=> $mac_name,
 			'extra_value'	=> $mac_value,
-			'auto_add'      => $auto_add
+			'auto_add'      => $auto_add,
+			'name'          => $this->request->data['name'],
+			'surname'       => $this->request->data['surname'],
+			'phone'         => $this->request->data['phone']
         );
      
         // Setup cURL
