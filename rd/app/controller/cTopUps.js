@@ -24,30 +24,22 @@ Ext.define('Rd.controller.cTopUps', {
                 },
                 { 
                     title   : 'Transaction History', 
-                    // xtype  : 'gridTopUps',
-                    border  : false,
-                    plain   : true,
+                    xtype   : 'gridTopUpTransactions',
                     glyph   : Rd.config.icnHistory
                 }
             ]
         });
-        /*   
-        pnl.add({
-            xtype   : 'gridTopUps',
-            border  : false,
-            itemId  : 'pnlTopUps',
-            plain   : true
-        });*/
         me.populated = true; 
     },
 
     views:  [
         'topUps.gridTopUps',            'topUps.winTopUpAddWizard',
         'components.cmbPermanentUser',  'topUps.winTopUpEdit',
-        'components.winCsvColumnSelect'
+        'components.winCsvColumnSelect',
+        'topUps.gridTopUpTransactions' 
     ],
-    stores: ['sTopUps', 'sAccessProvidersTree', 'sPermanentUsers'],
-    models: ['mTopUp',  'mAccessProviderTree',  'mPermanentUser' ],
+    stores: ['sTopUps', 'sAccessProvidersTree', 'sPermanentUsers', 'sTopUpTransactions'],
+    models: ['mTopUp',  'mAccessProviderTree',  'mPermanentUser',  'mTopUpTransaction' ],
     selectedRecord: null,
     config: {
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
