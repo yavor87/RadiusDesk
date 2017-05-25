@@ -15,7 +15,7 @@ use Cake\ORM\TableRegistry;
 
 class CommonQueryComponent extends Component {
  
-    public $components              = ['GridFilter','RealmAcl','JsonErrors'];
+    public $components              = ['RealmAcl','JsonErrors'];
     
     //Some default configs
     public $available_to_siblings   = true; //Default is true
@@ -108,53 +108,68 @@ class CommonQueryComponent extends Component {
         $model          = $this->config('model');
 
         if(isset($this->request->query['filter'])){
-            $filter = json_decode($this->request->query['filter']);
-            foreach($filter as $f){        
-                 $f = $this->GridFilter->xformFilter($f);
-                //Strings
-                if($f->type == 'string'){
-                    if($f->field == 'owner'){
+            $filter = json_decode($this->request->query['filter']);    
+            
+            foreach($filter as $f){ 
+            
+                //Strings (like)
+                if($f->operator == 'like'){
+                    if($f->property == 'owner'){
                         if($this->config('model') == 'Users'){ //For Access Providers
                             array_push($where_clause,array("Owners.username LIKE" => '%'.$f->value.'%'));  
                         }else{
                             array_push($where_clause,array("Users.username LIKE" => '%'.$f->value.'%'));
                         }   
-                    }elseif($f->field == 'permanent_user') //For Devices
+                    }elseif($f->property == 'permanent_user') //For Devices
                         
                         array_push($where_clause,array("PermanentUsers.username LIKE" => '%'.$f->value.'%'));
                     else{
-                        $col = $model.'.'.$f->field;
+                        $col = $model.'.'.$f->property;
                         array_push($where_clause,array("$col LIKE" => '%'.$f->value.'%'));
                     }
                 }
+                
                 //Bools
-                if($f->type == 'boolean'){
-                     $col = $model.'.'.$f->field;
+                if($f->operator == '=='){
+                     $col = $model.'.'.$f->property;
                      array_push($where_clause,array("$col" => $f->value));
                 }
                 
-                if($f->type == 'list'){
+                if($f->operator == 'in'){
                     $list_array = array();
                     foreach($f->value as $filter_list){
-                        $col = $model.'.'.$f->field;
+                        $col = $model.'.'.$f->property;
                         array_push($list_array,array("$col" => "$filter_list"));
                     }
                     array_push($where_clause,array('OR' => $list_array));
                 }
-
                 
-                 if($f->type == 'date'){
+                if(($f->operator == 'gt')||($f->operator == 'lt')||($f->operator == 'eq')){
                     //date we want it in "2018-03-12"
-                    $col = $model.'.'.$f->field;
-                    if($f->comparison == 'eq'){
-                        array_push($where_clause,array("DATE($col)" => $f->value));
-                    }
+                    $col = $model.'.'.$f->property;
+                    $date_array = ['created', 'modified'];
+                    if(in_array($f->property,$date_array)){
+                        if($f->operator == 'eq'){
+                            array_push($where_clause,array("DATE($col)" => $f->value));
+                        }
 
-                    if($f->comparison == 'lt'){
-                        array_push($where_clause,array("DATE($col) <" => $f->value));
-                    }
-                    if($f->comparison == 'gt'){
-                        array_push($where_clause,array("DATE($col) >" => $f->value));
+                        if($f->operator == 'lt'){
+                            array_push($where_clause,array("DATE($col) <" => $f->value));
+                        }
+                        if($f->operator == 'gt'){
+                            array_push($where_clause,array("DATE($col) >" => $f->value));
+                        }
+                    }else{
+                        if($f->operator == 'eq'){
+                            array_push($where_clause,array("$col" => $f->value));
+                        }
+
+                        if($f->operator == 'lt'){
+                            array_push($where_clause,array("$col <" => $f->value));
+                        }
+                        if($f->operator == 'gt'){
+                            array_push($where_clause,array("$col >" => $f->value));
+                        }
                     }
                 }
             }
