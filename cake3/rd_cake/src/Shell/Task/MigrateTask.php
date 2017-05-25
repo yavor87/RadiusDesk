@@ -121,6 +121,7 @@ class MigrateTask extends Shell{
         $this->_rename_acos_entries();
         $this->_clean_up_acos();     
         $this->_addTopUps();
+        $this->_addTopUpTransactions();
         $this->_addMisc();    
     }
     
@@ -212,6 +213,61 @@ class MigrateTask extends Shell{
         }    
     }
     
+     private function _addTopUpTransactions(){
+    
+        $this->out("Adding Rights for TopUpTransactions");
+        //Find the id of 'Access Providers'
+        $q_ap   = $this->Acos->find()->where(['alias' => 'Access Providers'])->first();
+        $ap_id  = $q_ap->id;
+        $this->out("AccessProviders id is ".$ap_id);
+        $q_ap_c = $this->Acos->find()->where(['alias' => 'Controllers','parent_id' => $ap_id])->first();
+        $c_id   = $q_ap_c->id;
+        $this->out("Controllers ID is ".$c_id);
+        
+        //Check if it exists perhaps already
+        $q_a = $this->Acos->find()->where(['alias' => 'TopUpTransactions','parent_id' => $c_id])->first();
+        if($q_a){
+           $this->out("TopUpTransactions already added it has an ID of ".$q_a->id); 
+        
+        }else{
+            $this->out("TopUpTransactionss NOT added YET adding it");
+            //$this->dispatchShell("acl create aco 31 TopUps");
+            $output = shell_exec("bin/cake acl create aco $c_id TopUpTransactions");
+            print($output);
+        }
+        
+        //Now we can loop through the items and see if they are not created
+        $tu_methods = [        
+            'index'
+        ];
+        
+        //Get the topups id
+        $this->out("Finding the ID of the top-up entry");
+        $q_a = $this->Acos->find()->where(['alias' => 'TopUpTransactions','parent_id' => $c_id])->first();
+        $top_up_id = $q_a->id;
+        foreach($tu_methods as $i){
+            $this->out("Checking and / or adding $i");
+            $q_b = $this->Acos->find()->where(['alias' => $i,'parent_id' => $top_up_id])->first();
+            if($q_b){
+                $this->out("$i is already present");
+            }else{
+                $this->out("$i is NOT present");
+                $output = shell_exec("bin/cake acl create aco $top_up_id $i");
+                print($output);
+            }
+        }
+        
+        //Set the topup's righs
+        foreach($tu_methods as $i){
+            $this->out("Setting TopUpTransactions right for $i");
+            $q_b        = $this->Acos->find()->where(['alias' => $i,'parent_id' => $top_up_id])->first();
+            $m_id       = $q_b->id;
+            $aros_id    = $this->aro_ap_id;
+            $output     = shell_exec("bin/cake acl grant $aros_id $m_id");
+            print($output);
+        }    
+    }
+    
     private function _clean_up_acos(){
         //Somehow the table got littered with junk all having a parent_id of 35
         
@@ -234,7 +290,7 @@ class MigrateTask extends Shell{
                 $this->out("Removing double note_add entry");
                 $this->Acos->delete($entity);
                 $this->ArosAcos->deleteAll(['aco_id' => 255]);
-            }$q_a = $this->Acos->find()->where(['alias' => $a,'parent_id' => $c_id])->first();
+            }
         }
         
         $entity = $this->Acos->find()->where(['id' => 256])->first();
