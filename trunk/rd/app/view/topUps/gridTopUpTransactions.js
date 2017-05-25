@@ -1,20 +1,17 @@
-Ext.define('Rd.view.topUps.gridTopUps' ,{
+Ext.define('Rd.view.topUps.gridTopUpTransactions' ,{
     extend      :'Ext.grid.Panel',
-    alias       : 'widget.gridTopUps',
+    alias       : 'widget.gridTopUpTransactions',
     multiSelect : true,
-    store       : 'sTopUps',
+    store       : 'sTopUpTransactions',
     stateful    : true,
-    stateId     : 'StateGridTopUps',
+    stateId     : 'StateGridTut',
     stateEvents :['groupclick','columnhide'],
     border      : true,
-    requires: [
-        'Rd.view.components.ajaxToolbar'
-    ],
-    viewConfig: {
+    padding     : 10,
+    viewConfig  : {
         loadMask    :true
     },
-    urlMenu     : '/cake3/rd_cake/top-ups/menu-for-grid.json',
-    plugins     : 'gridfilters',  //*We specify this
+    plugins     : 'gridfilters',  
     initComponent: function(){
         var me      = this;
          me.bbar     =  [
@@ -35,10 +32,17 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
             ]
         });
         
+        var actions = Ext.create('Ext.data.Store', {
+            fields: ['id', 'text'],
+            data : [
+                {"id":"create",   "text": "Create"},
+                {"id":"update",   "text": "Update"},
+				{"id":"delete",   "text": "Delete"}
+            ]
+        });
         
-        me.tbar     = Ext.create('Rd.view.components.ajaxToolbar',{'url': me.urlMenu});
         me.columns  = [
-            { xtype: 'rownumberer',stateId: 'StateGridTopUps1'},
+            { xtype: 'rownumberer',stateId: 'StateGridTut1'},
             { 
 
                 text        :'Owner', 
@@ -47,7 +51,7 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
                 flex        : 1,
                 hidden      : true,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridTopUps2',
+                stateId     : 'StateGridTut2',
                 hidden      : true
             },
             { 
@@ -61,73 +65,73 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
                     '<tpl if="type==\'days_to_use\'"><div class="fieldPurpleWhite"><i class="fa fa-clock-o"></i> '+' '+'Days To Use'+'</div></tpl>',
                     '<tpl if="type==\'time\'"><div class="fieldBlueWhite"><i class="fa fa-hourglass"></i> '+' '+'Time'+'</div></tpl>'
                 ),        
-                stateId : 'StateGridTopUps3',
+                stateId : 'StateGridTut3',
                 filter  : {
                     type    : 'list',
                     store   : types
                 }
             },
             { 
-
                 text        : 'Permanent user', 
                 dataIndex   : 'permanent_user',          
                 tdCls       : 'gridMain', 
                 flex        : 1,
                 hidden      : false,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridTopUps4'
+                stateId     : 'StateGridTut4'
             },
             { 
-
-                text        : 'TopUp ID', 
-                dataIndex   : 'id',          
+                text        : 'Action',                 
+                dataIndex   : 'action',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
-                hidden      : true,
-                filter      : {type: 'number'},
-                stateId     : 'StateGridTopUps5'
+                xtype       : 'templatecolumn', 
+                tpl         : new Ext.XTemplate(
+                    '<tpl if="action==\'create\'"><div class="fieldGreenWhite"><i class="fa fa-star"></i>  Create</div></tpl>',
+                    '<tpl if="action==\'update\'"><div class="fieldBlueWhite"><i class="fa fa-pencil"></i> Update</div></tpl>',
+                    '<tpl if="action==\'delete\'"><div class="fieldRedWhite"><i class="fa fa-trash"></i> Delete</div></tpl>'
+                ),        
+                stateId     : 'StateGridTut5',
+                filter      : {
+                    type    : 'list',
+                    store   : actions
+                }
             },
             { 
-                text        : 'Data', 
-                dataIndex   : 'data',   
-                tdCls       : 'gridTree', 
-                flex        : 1,
-                filter      : {type: 'string'},
-                renderer    : function(value){
-                    return Ext.ux.bytesToHuman(value)              
-                },
-                stateId     : 'StateGridTopUps6'
-            },
-            { 
-                text        : 'Time', 
-                dataIndex   : 'time',   
-                tdCls       : 'gridTree', 
-                flex        : 1,
-                filter      : {type: 'string'},
-                renderer    : function(value){
-                    return Ext.ux.secondsToHuman(value)              
-                },
-                stateId     : 'StateGridTopUps7'
-            },
-            { 
-
-                text        : 'Days to use', 
-                dataIndex   : 'days_to_use',          
-                tdCls       : 'gridTree', 
-                flex        : 1,
-                hidden      : true,
-                filter      : {type: 'string'},
-                stateId     : 'StateGridTopUps8'
-            },
-            { 
-
-                text        : 'Comment', 
-                dataIndex   : 'comment',          
+                text        : 'RADIUS Attribute', 
+                dataIndex   : 'radius_attribute',          
                 tdCls       : 'gridTree', 
                 flex        : 1,
                 hidden      : false,
                 filter      : {type: 'string'},
-                stateId     : 'StateGridTopUps9'
+                stateId     : 'StateGridTut6'
+            }, 
+            { 
+                text        : 'Old Value', 
+                dataIndex   : 'old_value',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridTut7'
+            }, 
+             { 
+                text        : 'New Value', 
+                dataIndex   : 'new_value',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'string'},
+                stateId     : 'StateGridTut8'
+            }, 
+            { 
+                text        : 'TopUp ID', 
+                dataIndex   : 'top_up_id',          
+                tdCls       : 'gridTree', 
+                flex        : 1,
+                hidden      : false,
+                filter      : {type: 'number'},
+                stateId     : 'StateGridTut9'
             },
             { 
                 text        : 'Created',
@@ -137,7 +141,7 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
                 tpl         : new Ext.XTemplate(
                     "<div class=\"fieldBlue\">{created_in_words}</div>"
                 ),
-                stateId     : 'StateGridTopUps10',
+                stateId     : 'StateGridTut10',
                 format      : 'Y-m-d H:i:s',
                 filter      : {type: 'date',dateFormat: 'Y-m-d'},
                 width       : 200
@@ -152,7 +156,7 @@ Ext.define('Rd.view.topUps.gridTopUps' ,{
                     "<div class=\"fieldBlue\">{modified_in_words}</div>"
                 ),
                 flex        : 1,
-                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridTopUps11'
+                filter      : {type: 'date',dateFormat: 'Y-m-d'},stateId: 'StateGridTut11'
             }
         ]; 
         me.callParent(arguments);
