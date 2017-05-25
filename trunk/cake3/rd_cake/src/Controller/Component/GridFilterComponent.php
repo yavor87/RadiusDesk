@@ -30,7 +30,7 @@ class GridFilterComponent extends Component {
         like => string; = => boolean; gt,lt,eq => date
 
     */
-
+    
     public function xformFilter($f){
     
         if(property_exists($f, 'operator')){
@@ -51,7 +51,6 @@ class GridFilterComponent extends Component {
                 $f->type = 'date';
                 $f->comparison = $f->operator;
             }
-        
         }
         
         if(property_exists($f, 'property')){
