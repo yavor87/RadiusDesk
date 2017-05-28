@@ -540,7 +540,9 @@ class FreeRadiusBehavior extends Behavior {
         $request = Router::getRequest();
         if(isset($request->data['always_active'])){
             foreach($this->fr_dates as $d){
-                $this->_remove_radcheck_item($username,$this->puChecks["$d"]);
+                if(array_key_exists($d, $this->puChecks)){
+                    $this->_remove_radcheck_item($username,$this->puChecks["$d"]);
+                }
             }
         }
     }
@@ -605,7 +607,9 @@ class FreeRadiusBehavior extends Behavior {
         $request = Router::getRequest();
         if(isset($request->data['always_active'])){
             foreach($this->fr_dates as $d){
-                $this->_remove_radcheck_item($username,$this->puChecks["$d"]);
+                if(array_key_exists($d, $this->puChecks)){
+                    $this->_remove_radcheck_item($username,$this->puChecks["$d"]);
+                }
             }
         }
     }
