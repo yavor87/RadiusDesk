@@ -22,11 +22,14 @@ class FreeRadiusBehavior extends Behavior {
         'active'            => 'Rd-Account-Disabled',
         'from_date'         => 'Rd-Account-Activation-Time',
         'to_date'           => 'Expiration',
-        'static_ip'         => 'Framed-IP-Address',
         'auto_add'          => 'Rd-Auto-Mac',
         'auth_type'         => 'Rd-Auth-Type',
         'ssid_only'         => 'Rd-Ssid-Check',
         'cleartext_password'=> 'Cleartext-Password'
+    ];
+    
+    protected $puReplies = [
+        'static_ip'         => 'Framed-IP-Address'
     ];
 
     protected $vChecks = [
@@ -575,18 +578,28 @@ class FreeRadiusBehavior extends Behavior {
 
                     $this->_replace_radcheck_item($username,$this->puChecks["$key"],$value);
                 }
-
-                if($key =='static_ip'){
-                    if($entity->{$key} !== ''){
-                        $this->_replace_radcheck_item($username,'Service-Type','Framed-User');
-                    }else{
-                        //Remove it if it is empty
-                        $this->_remove_radcheck_item($username,'Service-Type');
-                        $this->_remove_radcheck_item($username,$this->puChecks["$key"]);
-                    }
-                }
             }  
         }
+        
+        foreach(array_keys($this->puReplies) as $key){
+            if($entity->dirty("$key")){
+                $value = $entity->{$key};
+                if($key =='static_ip'){
+                    if($entity->{$key} !== ''){
+                        $this->_replace_radreply_item($username,'Service-Type','Framed-User');
+                        $this->_replace_radreply_item($username,$this->puReplies["$key"],$value);
+                    }else{
+                        //Remove it if it is empty
+                        $this->_remove_radreply_item($username,'Service-Type');
+                        $this->_remove_radreply_item($username,$this->puReplies["$key"]);
+                    }
+                }else{
+                    $this->_replace_radreply_item($username,$this->puReplies["$key"],$value);
+                }
+            }
+        }
+        
+        
         //If there are a restriction on SSID level we need to add those SSID's;
         if($ssid_only == true){
             $request = Router::getRequest();
@@ -720,12 +733,17 @@ class FreeRadiusBehavior extends Behavior {
                     $value = $this->_radius_format_date($value);
                 }
                 $this->_add_radcheck_item($username,$this->puChecks["$key"],$value);
-                if($key =='static_ip'){
-                     $this->_add_radcheck_item($username,'Service-Type','Framed-User');
-                } 
             } 
         }
-
+        
+        foreach(array_keys($this->puReplies) as $key){
+           if(($entity->{$key} !== '')&&($entity->{$key} !== null)){
+                $this->_add_radreply_item($username,$this->puReplies["$key"],$value);
+                if($key =='static_ip'){
+                    $this->_add_radreply_item($username,'Service-Type','Framed-User');
+                }
+            }
+        }
         //If there are a restriction on SSID level we need to add those SSID's;
         if($ssid_only == true){
             $request = Router::getRequest();
@@ -756,7 +774,6 @@ class FreeRadiusBehavior extends Behavior {
 		}
 	}
 
- 
     private function _add_radcheck_item($username,$item,$value,$op = ":="){
         $data = [
             'username'  => $username,
@@ -766,6 +783,17 @@ class FreeRadiusBehavior extends Behavior {
         ];
         $entity = $this->{'Radchecks'}->newEntity($data);
         $this->{'Radchecks'}->save($entity);
+    }
+    
+    private function _add_radreply_item($username,$item,$value,$op = ":="){
+        $data = [
+            'username'  => $username,
+            'op'        => $op,
+            'attribute' => $item,
+            'value'     => $value
+        ];
+        $entity = $this->{'Radreplies'}->newEntity($data);
+        $this->{'Radreplies'}->save($entity);
     }
 
     private function _replace_radcheck_item($username,$item,$value,$op = ":="){
@@ -779,9 +807,25 @@ class FreeRadiusBehavior extends Behavior {
         $entity = $this->{'Radchecks'}->newEntity($data);
         $this->{'Radchecks'}->save($entity);
     }
+    
+    private function _replace_radreply_item($username,$item,$value,$op = ":="){
+        $this->{'Radreplies'}->deleteAll(['username' => $username,'attribute' => $item]);
+        $data = [
+            'username'  => $username,
+            'op'        => $op,
+            'attribute' => $item,
+            'value'     => $value
+        ];
+        $entity = $this->{'Radreplies'}->newEntity($data);
+        $this->{'Radreplies'}->save($entity);
+    }
 
     private function _remove_radcheck_item($username,$item){
         $this->{'Radchecks'}->deleteAll(['username' => $username,'attribute' => $item]);
+    }
+    
+    private function _remove_radreply_item($username,$item){
+        $this->{'Radreplies'}->deleteAll(['username' => $username,'attribute' => $item]);
     }
     
     private function _radius_format_date($d,$is_string=false){
