@@ -6,7 +6,7 @@ Ext.define('Rd.view.topUps.winTopUpEdit', {
     resizable   : true,
     title       : 'Edit TopUp',
     width       : 500,
-    height      : 500,
+    height      : 400,
     plain       : true,
     border      : false,
     layout      : 'card',

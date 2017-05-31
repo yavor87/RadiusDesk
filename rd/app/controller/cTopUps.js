@@ -60,7 +60,7 @@ Ext.define('Rd.controller.cTopUps', {
         me.inited = true;
 
         me.control({
-            '#tabDevices' : {
+            '#tabTopUps' : {
                 destroy   :      me.appClose   
             },
             'gridTopUps #reload': {
@@ -104,8 +104,18 @@ Ext.define('Rd.controller.cTopUps', {
             },
             'winTopUpEdit #save': {
                 click: me.btnEditSave
+            },
+            '#tabTopUps gridTopUpTransactions' : {
+                activate:      me.gridActivate
+            },
+            '#tabTopUps gridTopUps' : {
+                activate:      me.gridActivate
             }
         });
+    },
+    gridActivate: function(g){
+        var me = this;
+        g.getStore().load();
     },
     appClose:   function(){
         var me = this;
@@ -400,9 +410,8 @@ Ext.define('Rd.controller.cTopUps', {
             cmbTimeUnit.setVisible(false);
             cmbTimeUnit.setDisabled(true);
             txtAmount.setFieldLabel('Days');
-            
             var amount = win.record.get('days_to_use');
-            console.log("Days is "+amount);
+            txtAmount.setValue(amount);
         }
     },
     btnEditSave:  function(button){
