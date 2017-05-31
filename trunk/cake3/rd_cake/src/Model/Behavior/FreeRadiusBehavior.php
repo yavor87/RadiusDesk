@@ -572,8 +572,9 @@ class FreeRadiusBehavior extends Behavior {
                             $value = 0;
                         }
                     }
-                    if($key == 'expire'){
-                        $value = $this->_radius_format_date($value,true);
+                     
+                    if(in_array($key,$this->fr_dates)){   
+                        $value = $this->_radius_format_date($value); 
                     }
 
                     $this->_replace_radcheck_item($username,$this->puChecks["$key"],$value);
