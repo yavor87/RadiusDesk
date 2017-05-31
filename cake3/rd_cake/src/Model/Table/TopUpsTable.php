@@ -6,6 +6,8 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
 
+use Cake\I18n\Time;
+
 class TopUpsTable extends Table
 {
 
@@ -15,7 +17,7 @@ class TopUpsTable extends Table
         $this->belongsTo('Users');  
         $this->hasMany('TopUpTransactions',['dependent' => false]);
           
-        $this->Radchecks            = TableRegistry::get('Radchecks'); 
+        $this->Radchecks    = TableRegistry::get('Radchecks'); 
        // $this->TopUpTransactions    = TableRegistry::get('TopUpTransactions');     
     }
     
@@ -76,8 +78,10 @@ class TopUpsTable extends Table
             }
             
             if($entity->type == 'days_to_use'){
+                $ret_val    = $this->_delete_days_to_use($e,$entity);  
                 $attribute  = 'Expiration';
-                $value      = $entity->days_to_use;
+                $this->_add_top_up_transaction($entity,'delete',$attribute,$ret_val['old'],$ret_val['new']);
+                return;
             }       
             $ret_val = $this->_update_radchecks($entity->permanent_user,$attribute,$value,'sub');        
             $this->_add_top_up_transaction($entity,'delete',$attribute,$ret_val['old'],$ret_val['new']);      
@@ -98,7 +102,17 @@ class TopUpsTable extends Table
 
         if($entity->type == 'days_to_use'){
             $attribute  = 'Expiration';
-            $value      = $entity->days_to_use;
+            $e  = $this->PermanentUsers->get($entity->permanent_user_id);
+            if($entity->isNew()){
+                $ret_val    = $this->_new_days_to_use($e,$entity);
+                $this->_add_top_up_transaction($entity,'create',$attribute,$ret_val['old'],$ret_val['new']);
+            }else{
+                $ret_val    = $this->_update_days_to_use($e,$entity);
+                if($ret_val){
+                    $this->_add_top_up_transaction($entity,'update',$attribute,$ret_val['old'],$ret_val['new']);
+                }
+            }
+            return;
         } 
     
         if($entity->isNew()){
@@ -106,7 +120,7 @@ class TopUpsTable extends Table
             $ret_val = $this->_update_radchecks($entity->permanent_user,$attribute,$value);          
             $this->_add_top_up_transaction($entity,'create',$attribute,$ret_val['old'],$ret_val['new']);           
         }else{ 
-            $items = ['data', 'time','days_to_use']; 
+            $items = ['data', 'time']; 
             foreach($items as $i){
                 if($entity->type == $i){
                     if($entity->dirty($i)){
@@ -170,5 +184,93 @@ class TopUpsTable extends Table
             $top_up_id      = $n_e->id;
         }                 
         return ['old' => $old_value, 'new' => $new_value ];
+    }
+    
+    private function _new_days_to_use($e,$entity){
+    
+        $value = $entity->days_to_use;    
+        if($e->to_date == null){ //Looks fresh
+            $old_value = null;
+            $from_date = new Time();
+            $to_date   = new Time();
+            $to_date->modify('+ '.$value.' days');  
+            $e->from_date = $from_date;
+            $e->to_date   = $to_date;
+            $this->PermanentUsers->save($e);
+        }else{
+            $now_time           = new Time();
+            $now_seconds        = $now_time->toUnixString();
+            $to_date_seconds    = $e->to_date->toUnixString();
+            $old_value          = 'Not available';
+            $q_o = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+            if($q_o){
+                $old_value = $q_o->value;
+            }
+            
+            //We use this if for instance the user had some expiry in the past and then bought a top-up
+            if($to_date_seconds > $now_seconds){
+                $updated_val = $to_date_seconds + ($value * 86400);
+            }else{
+                $updated_val = $now_seconds + ($value * 86400);
+            }    
+            $e->to_date = Time::createFromTimestamp($updated_val);
+            $this->PermanentUsers->save($e);
+        } 
+        $q_n = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+        if($q_n){
+            $new_value = $q_n->value;
+        }         
+        return ['old' => $old_value, 'new' => $new_value ];
+    }          
+    
+    private function _delete_days_to_use($e,$entity){
+    
+        $value              = $entity->days_to_use;
+        $to_date_seconds    = $e->to_date->toUnixString();
+        $updated_val        = $to_date_seconds - ($value * 86400);
+               
+        $q_o = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+        if($q_o){
+            $old_value = $q_o->value;
+        }
+       
+        $e->to_date = Time::createFromTimestamp($updated_val);
+        $this->PermanentUsers->save($e);
+        
+        $q_n = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+        if($q_n){
+            $new_value = $q_n->value;
+        }         
+        return ['old' => $old_value, 'new' => $new_value ];   
+    }
+    
+    private function _update_days_to_use($e,$entity){
+    
+        if($entity->dirty('days_to_use')){
+            $value              = $entity->days_to_use;
+            $original           = $entity->getOriginal('days_to_use');
+            $to_date_seconds    = $e->to_date->toUnixString();
+            if($value > $original){
+                $updated_val  = $to_date_seconds + ($value * 86400);
+            }else{
+                $updated_val  = $to_date_seconds - ($value * 86400);
+            }
+        
+            $q_o = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+            if($q_o){
+                $old_value = $q_o->value;
+            }
+            
+            $e->to_date = Time::createFromTimestamp($updated_val);
+            $this->PermanentUsers->save($e);
+
+            $q_n = $this->Radchecks->find()->where(['username' => $e->username, 'attribute' => 'Expiration'])->first();
+            if($q_n){
+                $new_value = $q_n->value;
+            }         
+            return ['old' => $old_value, 'new' => $new_value ]; 
+        }
+        return false; //return false is nothing changed
+        
     }          
 }
