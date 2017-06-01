@@ -314,7 +314,7 @@ class RealmsController extends AppController{
                 $row["$field"]= $i->{"$field"};
                 
                 if($field == 'created'){
-                    print_r($i->{"$field"}->i18nFormat('yyyy-MM-dd HH:mm:ss','Africa/Johannesburg'));
+                   // print_r($i->{"$field"}->i18nFormat('yyyy-MM-dd HH:mm:ss','Africa/Johannesburg'));
                    // print_r($i->{"$field"}->listTimezones());
                     $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
