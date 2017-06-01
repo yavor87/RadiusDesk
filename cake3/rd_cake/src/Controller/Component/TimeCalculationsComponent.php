@@ -9,7 +9,7 @@
 namespace App\Controller\Component;
 use Cake\Controller\Component;
 
-use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 class TimeCalculationsComponent extends Component {
 
@@ -43,10 +43,8 @@ class TimeCalculationsComponent extends Component {
     }
     
     function time_elapsed_string($datetime, $full = false,$no_suffix = false) {
-        //The timezones is messing with us FIX it soooon
-        $now    = new Time();
-        $diff   = (array) $now->diff($datetime);
-     
+        $now        = new FrozenTime();
+        $diff       = (array) $now->diff($datetime);
         $diff['w']  = floor( $diff['d'] / 7 );
         $diff['d'] -= $diff['w'] * 7;
 

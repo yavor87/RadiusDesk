@@ -68,10 +68,10 @@ class TopUpTransactionsController extends AppController{
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
                 
-                if($field = 'created'){
+                if($field == 'created'){
                     $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
-                if($field = 'modified'){
+                if($field == 'modified'){
                     $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
             } 
