@@ -148,20 +148,20 @@ class DevicesController extends AppController{
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
                 
-                if($field = 'created'){
+                if($field == 'created'){
                     $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
-                if($field = 'modified'){
+                if($field == 'modified'){
                     $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
-                if($field = 'last_accept_time'){
+                if($field == 'last_accept_time'){
                     if($i->{"$field"}){
                         $row['last_accept_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                     }else{
                         $row['last_accept_time_in_words'] = __("Never");
                     }
                 } 
-                if($field = 'last_reject_time'){
+                if($field == 'last_reject_time'){
                     if($i->{"$field"}){
                         $row['last_reject_time_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                     }else{

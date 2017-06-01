@@ -256,7 +256,6 @@ class RealmsController extends AppController{
             return;
         }
         $user_id    = $user['id'];
- 
         $query = $this->{$this->main_model}->find();
 
         $this->CommonQuery->build_common_query($query,$user,['Users','RealmNotes' => ['Notes']]);
@@ -307,16 +306,19 @@ class RealmsController extends AppController{
                     break;
                 }
             }
+           
             
             $row        = array();
             $fields     = $this->{$this->main_model}->schema()->columns();
             foreach($fields as $field){
                 $row["$field"]= $i->{"$field"};
                 
-                if($field = 'created'){
+                if($field == 'created'){
+                    print_r($i->{"$field"}->i18nFormat('yyyy-MM-dd HH:mm:ss','Africa/Johannesburg'));
+                   // print_r($i->{"$field"}->listTimezones());
                     $row['created_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }
-                if($field = 'modified'){
+                if($field == 'modified'){
                     $row['modified_in_words'] = $this->TimeCalculations->time_elapsed_string($i->{"$field"});
                 }   
             } 
