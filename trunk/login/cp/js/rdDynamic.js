@@ -806,8 +806,8 @@ var rdDynamic = (function () {
                 height      : 400,
                 elements:[
                     { label:i18n('sContact_Detail'), type:"label"},
-                    { label :i18n('Cell'),              type :"text", id:"abt_cell"},
-                    { label :i18n('Phone'),             type :"text", id:"abt_phone"},
+                    { label :i18n('sCell'),              type :"text", id:"abt_cell"},
+                    { label :i18n('sPhone'),             type :"text", id:"abt_phone"},
                     { label :i18n('sFax'),              type :"text", id:"abt_fax"},
                     { label :i18n('semail'),            type :"text", id:"abt_email"},
                     { label :i18n('sURL'),              type :"text", id:"abt_url"},
