@@ -1143,7 +1143,7 @@ $$('sliderData').refresh();
                                 view        : 'text',
                                 label       : i18n('sFirst_Name'),
                                 name        : 'name',
-                                placeholder : 'Supply a value',
+                                placeholder : i18n('sSupply_a_value'),
                                 required    : true
                             },
                             {
@@ -1171,7 +1171,7 @@ $$('sliderData').refresh();
                             },
                             {
                                 view        : 'text',
-                                label       : 'Cell',
+                                label       : i18n('sCell'),
                                 name        : 'phone',
                                 placeholder : i18n('sSupply_a_value'),
                                 bottomLabel : "* "+i18n('sThe_number_must_have_10_digits'),
