@@ -9,8 +9,13 @@ var rdConnect = (function () {
         var isMikroTik      = getParameterByName('link_status') != "";
         var urlUse          = location.protocol+'//'+h+'/cake2/rd_cake/radaccts/get_usage.json'
         var urlUam          = location.protocol+'//'+h+'/login/services/uam.php';
-	    var urlSocialBase   = location.protocol+'//'+h+'/cake2/rd_cake/auth/'; //Be sure this is the same as specified in FB e.g. IP or DNS!!
-	    var urlSocialInfoFor= location.protocol+'//'+h+'/cake2/rd_cake/third_party_auths/info_for.json'; //To pull the username and password associated with this ID + typ 
+        
+        //Be sure this is the same as specified in FB e.g. IP or DNS!!
+	    var urlSocialBase   = location.protocol+'//'+h+'/cake3/rd_cake/third-party-auths/index.json'; 
+	    
+	    //To pull the username and password associated with this ID + typ
+	    var urlSocialInfoFor= location.protocol+'//'+h+'/cake3/rd_cake/third-party-auths/info-for.json';
+	      
 	    var urlAdd			= location.protocol+'//'+h+'/cake2/rd_cake/register_users/new_permanent_user.json';
 		var urlLostPw		= location.protocol+'//'+h+'/cake2/rd_cake/register_users/lost_password.json';
 		
@@ -91,19 +96,19 @@ var rdConnect = (function () {
             //Social Login things
             if($$('btnFacebook') != undefined){
                 $$('btnFacebook').attachEvent("onItemClick", function(){
-                    onBtnClickSocialLogin('facebook');
+                    onBtnClickSocialLogin('Facebook');
                 });
             }
             
             if($$('btnGoogle') != undefined){
                 $$('btnGoogle').attachEvent("onItemClick", function(){
-                    onBtnClickSocialLogin('google');
+                    onBtnClickSocialLogin('Google');
                 });
             }
             
             if($$('btnTwitter') != undefined){
                 $$('btnTwitter').attachEvent("onItemClick", function(){
-                    onBtnClickSocialLogin('twitter');
+                    onBtnClickSocialLogin('Twitter');
                 });
             }
             
@@ -842,7 +847,8 @@ $$('sliderData').refresh();
 		    }
 
             showOverlay();
-		    socialName = a.toLowerCase();
+		    //socialName = a.toLowerCase();
+		    socialName = a
 		    showFeedback(i18n('sStarting_social_login_for')+' '+ socialName)
 
 		    var urlStatus = 'http://'+uamIp+':'+uamPort+'/json/status';
@@ -942,12 +948,11 @@ $$('sliderData').refresh();
                 required.hostname   	= window.location.hostname;
                 required.protocol   	= window.location.protocol;
 			    required.social_login 	= 1;
-
+			    required.idp_name       = socialName;
 			    var q_s 	 			= $.param(required);
 			    //console.log(q_s);
 			    //Dynamically build the redirect URL to which Social Login we will use...
-			    window.location			= urlSocialBase+socialName+"?"+q_s;
-			    //window.location="http://rd01.wificity.asia/cake2/rd_cake/auth/facebook?"+q_s;
+			    window.location			= urlSocialBase+"?"+q_s;
             }
 	    }
 
@@ -960,8 +965,6 @@ $$('sliderData').refresh();
 			    (getParameterByName('sl_value') != '')   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
 		    ){ 
 			    //console.log("Finding transaction details for "+ me.queryObj.tx);
-			
-
 			    var t = getParameterByName('sl_type');
 			    var n = getParameterByName('sl_name');
 			    var v = getParameterByName('sl_value');
