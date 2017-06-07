@@ -776,7 +776,7 @@ $$('sliderData').refresh();
             var ajax ={};
             if (isMikroTik) {
                 urlLogin = getParameterByName('link_login_only');
-                ajax = {url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: encPwd}};
+                ajax = {url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}};
             } else {
                 urlLogin = 'http://' + uamIp + ':' + uamPort + '/json/logon';
                 ajax = { url: urlLogin + "?callback=?", dataType: "jsonp", timeout: ajaxTimeout, data: { username: userName, password: encPwd } };
