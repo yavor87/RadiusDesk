@@ -1609,15 +1609,26 @@ class DynamicDetailsController extends AppController{
 	}
 	
 	private function _doBrowserDetectFor($captive_portal = 'coova' ){ //Can be 'coova' / 'mikrotik' / 'ruckus'
-    
+   
         $conditions     = array("OR" =>array());
 		$query_string   = $_SERVER['QUERY_STRING'];
-
-		foreach(array_keys($this->request->query) as $key){
-                array_push($conditions["OR"],
-                    array("DynamicPairs.name" => $key, "DynamicPairs.value" =>  $this->request->query[$key])
+				
+		if($this->request->is('post')){
+		    $q_array = array();
+		    foreach(array_keys($this->request->data) as $key){
+		        $q_array[$key] = $this->request->data[$key];
+		        array_push($conditions["OR"],
+                    ["DynamicPairs.name" => $key, "DynamicPairs.value" =>  $this->request->data[$key]]
                 ); //OR query all the keys
-       	}
+		     }     
+		     $query_string =  http_build_query($q_array);
+		}else{
+		    foreach(array_keys($this->request->query) as $key){
+                    array_push($conditions["OR"],
+                        ["DynamicPairs.name" => $key, "DynamicPairs.value" =>  $this->request->query[$key]]
+                    ); //OR query all the keys
+           	}
+        }
 
        	$q_r = $this->DynamicPairs
        	    ->find()
@@ -1626,7 +1637,6 @@ class DynamicDetailsController extends AppController{
        	    ->order(['DynamicPairs.priority' => 'DESC'])
        	    ->first();
       	
-
 		//See which Theme are selected
 		$theme          = 'Default';
 		$theme_selected = 'Default';	
