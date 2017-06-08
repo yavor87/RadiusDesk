@@ -280,6 +280,12 @@ class DynamicDetailsController extends AppController{
         return $this->response;	
     }
     
+    public function mikrotikBrowserDetect(){  
+		$redir_to = $this->_doBrowserDetectFor('coova');
+		$this->response->header('Location', $redir_to);
+        return $this->response;	
+    }
+    
     public function ruckusBrowserDetect(){  
 		$redir_to = $this->_doBrowserDetectFor('ruckus');
 		$this->response->header('Location', $redir_to);
