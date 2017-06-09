@@ -235,8 +235,6 @@ var rdConnect = (function () {
         }
         
         var coovaRefresh    = function(do_usage_also){
-        
-
 		    if (typeof(do_usage_also) === "undefined") { do_usage_also = false; } //By default we give feedback
             var urlStatus = 'http://'+uamIp+':'+uamPort+'/json/status';
              
@@ -266,7 +264,7 @@ var rdConnect = (function () {
 				            window.rdDynamic.showStatus();
 				             
                             //Refresh status window
-                            refreshStatus(j);
+                            refreshStatusCoova(j);
 
 						    //We also want ot get the latest usage if enabled
 						    if(do_usage_also){
@@ -335,7 +333,7 @@ var rdConnect = (function () {
                             window.rdDynamic.showStatus();
 
                             //Refresh status window
-                            refreshStatus(j);
+                            refreshStatusMikrotik(j);
 
                             //We also want ot get the latest usage if enabled
                             if (do_usage_also) {
@@ -435,19 +433,25 @@ var rdConnect = (function () {
 	        showOverlay();
 		    showFeedback(i18n('sDisconnect_the_user'));
 		    
-		    if(isMikroTik) {
-                var urlLogoff = getParameterByName('link_logout');
-            } else {
-                var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
-            }
+		    var urlLogoff = 'http://'+uamIp+':'+uamPort+'/json/logoff';
+		    var cb        = "?callback?"; //Coova uses 'callback'
 		    
-            $.ajax({url: urlLogoff + "?callback=?", dataType: "jsonp",timeout: ajaxTimeout})
-            .done(function(j){
+		    if(isMikroTik) {
+                urlLogoff = getParameterByName('link_logout');
+                cb = "?var=?"; //MT uses 'var'
+            }
+           
+            $.ajax({url: urlLogoff +cb, dataType: "jsonp",timeout: ajaxTimeout ,date: {}})
+            .done(function(j){    
                 hideOverlay();
-                refresh();
+                if(isMikroTik){
+                    mtRefresh(); //Refresh
+                }else{
+                    refresh();
+                }
             })
             .fail(function(){
-                //We will retry for me.retryCount
+                //We will retry for me.retryCount    
                 currentRetry = currentRetry+1;
                 if(currentRetry <= retryCount){
                     onBtnDisconnectClick();
@@ -457,7 +461,16 @@ var rdConnect = (function () {
             });
 	    }
 	    
-	    var refreshStatus = function(j){
+	     var refreshStatusMikrotik = function(j){     
+            var dat_i   = bytes(j.bytes_in);
+            var dat_o   = bytes(j.bytes_out);
+            var t       = parseInt(j.bytes_out) + parseInt(j.bytes_in);
+            var dat_t   = bytes(t);      
+            $$('propertySession').setValues({acct_un:j.username,acct_up:j.uptime,acct_di:dat_i,acct_do:dat_o,acct_dt:dat_t});
+             
+        }
+	    
+	    var refreshStatusCoova = function(j){
 
             var gw = 4294967296;
 
@@ -515,18 +528,33 @@ var rdConnect = (function () {
 		    if(cDynamicData.settings.usage_show_check == false){
 			    return;
 		    }
-
-		    if(statusFb != undefined){
-			    if(statusFb.redir == undefined){
-				    return;
-			    }else{
-				    var mac	= statusFb.redir.macAddress;
-			    }
-			    if(statusFb.session == undefined){
-				    return;
-			    }else{
-				    var un	= statusFb.session.userName;
-			    }
+		    
+		    if(isMikroTik){
+		         if(statusFb != undefined){
+			        if(statusFb.mac == undefined){
+				        return;
+			        }else{
+                        var mac = statusFb.mac.replace(/:/g, "-");
+			        }
+			        if(statusFb.username == undefined){
+				        return;
+			        }else{
+				        var un	= statusFb.username;
+			        }
+		        }
+		    }else{
+		        if(statusFb != undefined){
+			        if(statusFb.redir == undefined){
+				        return;
+			        }else{
+				        var mac	= statusFb.redir.macAddress;
+			        }
+			        if(statusFb.session == undefined){
+				        return;
+			        }else{
+				        var un	= statusFb.session.userName;
+			        }
+		        }
 		    }
 
             $.getJSON(urlUse,{'username' : un, 'mac' : mac}, 
@@ -599,9 +627,7 @@ $$('sliderData').refresh();
                 getLatestChallenge();
             }         
         }
-        
-        
-        
+         
         var onBtnConnectClick = function(){  //Get the latest challenge and continue from there onwards....
                    
             //Auto suffix check
@@ -783,7 +809,11 @@ $$('sliderData').refresh();
             }         
             $.ajax(ajax)
                 .done(function (j) {
-                    loginResults(j);
+                    if(isMikroTik){
+                        loginResultsMt(j);
+                    }else{
+                        loginResultsCoova(j);
+                    }
                 })
                 .fail(function (error) {
                     //We will retry for me.retryCount
@@ -807,24 +837,29 @@ $$('sliderData').refresh();
                 });
         }
         
-        var loginResults = function(j){
+        var loginResultsMt = function(j){
 
             currentRetry = 0;    //Reset if there were retries
-            if(j.clientState == 0){
-               
+            if(j.logged_in == 'yes'){          
+                mtRefresh(true); //Refresh
+            }else{
+                var msg = i18n('sAuthentication_failure_please_try_again')
+                if(j.error_orig != undefined){
+                    msg =j.error_orig;
+                }
+                showLoginError(msg);  
+            }
+        }
+        
+        var loginResultsCoova = function(j){
+            currentRetry = 0;    //Reset if there were retries
+            if(j.clientState == 0){    
                 var msg = i18n('sAuthentication_failure_please_try_again')
                 if(j.message != undefined){
                     msg =j.message;
                 }
                 showLoginError(msg);
-            }else{  
-            
-                //Set a cookie and see if we can get it
-                var mac =  getParameterByName('mac');
-                if(mac !== undefined){
-                    Cookies.set("dnsDeskMAC", mac,{ expires: 7, path: '' });
-                }
-                      
+            }else{      
                 initRedirect();
                 if(redirect_check) {
                     execRedirect(redirect_url)
@@ -834,8 +869,192 @@ $$('sliderData').refresh();
             }
         }
         
+        //===================
         //_________ Social Login _________________
-	    var onBtnClickSocialLogin = function(a){
+	    var onBtnClickSocialLoginMt = function(a){
+            var me 				= this;   
+            if(cDynamicData.settings.t_c_check == true){
+		        if($$('checkboxTandC') != undefined){
+		            if(!$$('checkboxTandC').getValue()){
+		                showLoginError(i18n('sFirst_agree_to_T_amp_C'));
+		                return;
+		            }
+		        }
+		    }
+		    
+            showOverlay();
+            
+		    socialName  = a
+		    showFeedback(i18n('sStarting_social_login_for')+' '+ socialName)
+
+            userName = cDynamicData.settings.social_login.temp_username; 
+            password = cDynamicData.settings.social_login.temp_password;  
+            socialTempLoginMt(); 
+	    }
+                
+        var socialTempLoginMt	= function(){
+		    showFeedback(i18n('sLog_temp_user_into_Captive_Portal'));
+
+            var urlLogin = getParameterByName('link_login_only');
+            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
+            .done(function(j){
+                socialTempLoginResultsMt(j);
+            })
+            .fail(function(){
+                //We will retry for retryCount
+                currentRetry = currentRetry+1;
+                if(currentRetry <= retryCount){
+                    socialTempLogin();
+                }else{
+                    showLoginError(i18n('sMT_Not_responding_to_login_requests'));
+                }
+            });
+	    }
+	    
+	    
+	    var socialTempLoginResultsMt = function(j){
+
+            currentRetry = 0;    //Reset if there were retries
+            if(j.logged_in == 'no'){       
+                var msg = i18n('sAuthentication_failure_please_try_again')
+                if(j.error_orig != undefined){
+                    msg =j.error_orig;
+                }
+                showLoginError(msg);
+            }else{            
+                //console.log("Temp social login user logged in fine.... time to check if we are authenticated");
+			    //We need to add a query string but do not need to add ALL the items
+
+			    var queryString 		= window.location.search;
+			    queryString 			= queryString.substring(1);
+			    var query_object		= parseQueryString(queryString);
+			    var required			= query_object;
+
+			    $.each(notRequired, function( index, value ) { //FIXME adapt the notRequired list for MT
+				    //console.log( index + ": " + value );
+				    delete required[value];
+			    });
+
+			    required.pathname   	= window.location.pathname;
+                required.hostname   	= window.location.hostname;
+                required.protocol   	= window.location.protocol;
+			    required.social_login 	= 1;
+			    required.idp_name       = socialName;
+			    var q_s 	 			= $.param(required);
+			    window.location			= urlSocialBase+"?"+q_s;
+            }
+	    }
+        
+
+        //FIXME this needs to run during startup! 
+        var checkSocialLoginReturnMt = function(){
+
+           	if(	(getParameterByName('sl_type') 	!= '')&& //e.g. user or voucher
+			    (getParameterByName('sl_name') 	!= '')&& //e.g. Facebook
+			    (getParameterByName('sl_value') != '')   //e.g. 3_34564654645694 (Dynamic Pages ID + provider unique ID)
+		    ){ 
+			    //console.log("Finding transaction details for "+ me.queryObj.tx);
+			
+
+			    var t = getParameterByName('sl_type');
+			    var n = getParameterByName('sl_name');
+			    var v = getParameterByName('sl_value');
+
+			    t = t.replace(/#.?/g, ""); //JQuery Mobile tend to add a #bla which we need to filter out
+			    n = n.replace(/#.?/g, "");
+			    v = v.replace(/#.?/g, "");
+
+			    var jqxhr = $.getJSON( urlSocialInfoFor, {'sl_type' : t,'sl_name' : n,'sl_value' : v}, function(j) {
+				    //console.log( "success getting social login return" );
+				    if(j.success){   
+					    userName = j.data.username; //Makes this unique
+					    password = j.data.password;   
+					    socialTempDisconnectMt();
+				    }else{
+					    //console.log("big problems");
+					    showLoginError(i18n('sCould_not_retrieve_Social_Login_Info')); 
+				    }
+			    })
+			    .fail(function() {
+				    showLoginError(i18n('sCould_not_retrieve_Social_Login_Info')); 
+			    });
+            }
+	    }
+	    
+	    var socialTempDisconnectMt 	=  function(){
+	    
+            showFeedback(i18n('sDisconnect_the_social_temp_user'));
+            var urlLogout = getParameterByName('link_logout');
+            $.ajax({url: urlLogout + "?var=?", dataType: "jsonp",timeout: ajaxTimeout,date: {}})
+            .done(function(j){
+                retryCount = 0;
+                socialFinalLoginMt();
+            })
+            .fail(function(){ 
+                //We will retry for me.retryCount
+                currentRetry = currentRetry+1;
+                if(currentRetry <= retryCount){
+                    socialTempDisconnectMt();
+                }else{
+                    showLoginError(i18n('sMT_Not_responding_to_logout_requests'));
+                }     
+            });
+        }
+
+        var socialFinalLoginMt = function(encPwd){
+		    showFeedback(i18n('sDoing_final_login'));
+
+            var urlLogin = getParameterByName('link_login_only');
+            $.ajax({url: urlLogin + "?var=?", dataType: "jsonp",timeout: ajaxTimeout, data: {username: userName, password: password}})
+            .done(function(j){
+                socialFinalLoginResultsMt(j);
+            })
+            .fail(function(){
+                //We will retry for retryCount
+                currentRetry = currentRetry+1;
+                if(currentRetry <= retryCount){
+                    socialFinalLoginMt();
+                }else{
+                    showLoginError(i18n('sMT_Not_responding_to_login_requests'));
+                }
+            });
+        }
+          
+        var socialFinalLoginResultsMt = function(j){
+            hideFeedback();
+            currentRetry = 0;    //Reset if there were retries
+            if(j.logged_in == 'yes'){          
+                var redirect_check 	= false;
+			    var redirect_url  	= 'http://google.com';
+			    if($("body").data("DynamicDetail") != undefined){ //We had to add this sine it is not always populated by the time this is run
+				    redirect_check = cDynamicData.settings.redirect_check;
+				    redirect_url   = cDynamicData.settings.redirect_url;
+			    }
+			    if(redirect_check){
+		            window.location= redirect_url;
+			    }else{             
+                    mtRefresh(true); //Refresh session and usage
+                }
+            }else{
+                var msg = i18n('sAuthentication_failure_please_try_again')
+                if(j.error_orig != undefined){
+                    msg =j.error_orig;
+                }
+                showLoginError(msg);  
+            }
+        } 
+        //=====================
+        
+        var onBtnClickSocialLogin = function(a){
+            if (isMikroTik) {
+                onBtnClickSocialLoginMt(a);
+            }else{
+                onBtnClickSocialLoginChilli(a);
+            }
+        }
+            
+        //_________ Social Login _________________
+	    var onBtnClickSocialLoginChilli = function(a){
 	    
 	        if(cDynamicData.settings.t_c_check == true){
 		        if($$('checkboxTandC') != undefined){
@@ -955,8 +1174,16 @@ $$('sliderData').refresh();
 			    window.location			= urlSocialBase+"?"+q_s;
             }
 	    }
+	    
+	    var checkSocialLoginReturn = function(){
+	        if(isMikroTik){
+                checkSocialLoginReturnMt();
+            }else{
+                checkSocialLoginReturnChilli()
+            }  
+	    }
 
-        var checkSocialLoginReturn = function(){
+        var checkSocialLoginReturnChilli = function(){
 
 		    //console.log("Check for social login returns...");
 
