@@ -98,7 +98,7 @@ var rdDynamic = (function () {
             //Call the Connect side....
             var c       = rdConnect({cDynamicData: cDynamicData});
             c.index(); 
-            //Check if this page was a sosial login return
+            //Check if this page was a social login return
 		    c.checkSocialLoginReturn();		    
 		    
         };
