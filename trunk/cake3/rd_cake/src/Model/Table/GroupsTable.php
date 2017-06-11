@@ -11,7 +11,7 @@ class GroupsTable extends Table
     public function initialize(array $config)
     {
         $this->addBehavior('Timestamp'); 
-        //$this->addBehavior('Acl.Acl', ['type' => 'requester']); 
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']); 
         $this->hasMany('Users');    
     }
 }

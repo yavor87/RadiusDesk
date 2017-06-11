@@ -169,15 +169,18 @@ class DashboardController extends AppController{
                 'glyph'   => Configure::read('icnData'),
                 'scale'   => 'large',
                 'itemId'  => 'btnDataUsage'
-            ),
-           /* array(
+            )
+        );
+        
+        if(Configure::read('extensions.active')){
+            array_push($data,[
                 'xtype'   => 'button',
                 'text'    => 'Setup Wizard',
                 'glyph'   => Configure::read('icnWizard'),
                 'scale'   => 'large',
                 'itemId'  => 'btnSetupWizard'
-            )*/
-        );
+            ]);
+        }
         
         $this->set(array(
             'data'   => $data,
@@ -896,7 +899,7 @@ class DashboardController extends AppController{
         
          //____ Admin Tab ____
         $admin_items = array();
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."AccessProviders/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."AccessProviders/index")){
         
             array_push($admin_items, array(
                     'title'   => __('Admins'),
@@ -907,7 +910,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Realms/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Realms/index")){
             array_push($admin_items, array(
                     'title'   => __('Realms (Groups)'),
                     'glyph'   => Configure::read('icnRealm'),
@@ -931,7 +934,7 @@ class DashboardController extends AppController{
         //____ Users Tab ____   
         $users_items = array();
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."PermanentUsers/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."PermanentUsers/index")){
             array_push($users_items, array(
                     'title'     => __('Permanent Users'),
                     'glyph'     => Configure::read('icnUser'),
@@ -942,7 +945,7 @@ class DashboardController extends AppController{
         
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Vouchers/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Vouchers/index")){
             array_push($users_items, array(
                     'title'     => __('Vouchers'),
                     'glyph'     => Configure::read('icnVoucher'),
@@ -952,7 +955,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Devices/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Devices/index")){
             array_push($users_items, array(
                     'title'     => __('BYOD'),
                     'glyph'     => Configure::read('icnDevice'),
@@ -962,7 +965,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."TopUps/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."TopUps/index")){
             array_push($users_items, array(
                     'title'     => __('Top-Ups'),
                     'glyph'     => Configure::read('icnTopUp'),
@@ -986,7 +989,7 @@ class DashboardController extends AppController{
         //____ Profiles Tab ____   
         $profile_items = array();
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ProfileComponents/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."ProfileComponents/index")){
             array_push($profile_items, array(
                     'title'   => __('Profile Components'),
                     'glyph'   => Configure::read('icnComponent'),
@@ -996,7 +999,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Profiles/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Profiles/index")){
             array_push($profile_items, array(
                     'title'   => __('Profiles'),
                     'glyph'   => Configure::read('icnProfile'),
@@ -1020,7 +1023,7 @@ class DashboardController extends AppController{
         //____ RADIUS Tab ____  
         $radius_items = array();
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicClients/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."DynamicClients/index")){
             array_push($radius_items, array(
                     'title'   => __('Dynamic RADIUS Clients'),
                     'glyph'   => Configure::read('icnDynamicNas'),
@@ -1030,7 +1033,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Nas/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Nas/index")){
             array_push($radius_items, array(
                     'title'   => __('NAS Devices'),
                     'glyph'   => Configure::read('icnNas'),
@@ -1040,7 +1043,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Tags/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Tags/index")){
             array_push($radius_items, array(
                     'title'   => __('NAS Device Tags'),
                     'glyph'   => Configure::read('icnTag'),
@@ -1051,7 +1054,7 @@ class DashboardController extends AppController{
             );
         }
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Ssids/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Ssids/index")){
             array_push($radius_items, array(
                     'title'   => __('SSIDs'),
                     'glyph'   => Configure::read('icnSsid'),
@@ -1074,7 +1077,7 @@ class DashboardController extends AppController{
         
         //___ MESHdesk tab ___
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."Meshes/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."Meshes/index")){
              array_push($tabs, array(
                     "$show"   => __('MESHdesk'),
                     'glyph'   => Configure::read('icnMesh'),
@@ -1086,7 +1089,7 @@ class DashboardController extends AppController{
         
         //___ APdesk tab ___
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."ApProfiles/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."ApProfiles/index")){
              array_push($tabs, array(
                     "$show"   => __('APdesk'),
                     'glyph'   => Configure::read('icnCloud'),
@@ -1146,7 +1149,7 @@ class DashboardController extends AppController{
         
         $other_items = array();
         
-        if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $base."DynamicDetails/index")){
+        if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $base."DynamicDetails/index")){
             array_push($other_items, array(
                     'title'   => __('Dynamic Login Pages'),
                     'glyph'   => Configure::read('icnDynamic'),
@@ -1188,7 +1191,7 @@ class DashboardController extends AppController{
                 $name   = $j->name;
 
                 $read = $this->Acl->check(
-                            array('model' => 'User', 'foreign_key' => $ap_id), 
+                            array('model' => 'Users', 'foreign_key' => $ap_id), 
                             array('model' => 'Realms','foreign_key' => $id), 'read');
                 if($read == true){
                     $realm['realm_id']      = $id;

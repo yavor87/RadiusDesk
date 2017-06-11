@@ -48,7 +48,7 @@ class RealmAclComponent extends Component {
         Configure::write('debug', 0); // turn off debugging     
         try{
             $read = $this->Acl->check(
-                array('model' => 'User', 'foreign_key' => $user_id), 
+                array('model' => 'Users', 'foreign_key' => $user_id), 
                 array('model' => 'Realms','foreign_key' => $id), 'read'); //Only if they have create right             
         }catch(\Exception $e){               
             $read = false;  
@@ -87,7 +87,7 @@ class RealmAclComponent extends Component {
                 Configure::write('debug', 0); // turn off debugging
                 try{
                     $result = $this->Acl->check(
-                        array('model' => 'User',    'foreign_key' => $ap_id), 
+                        array('model' => 'Users',    'foreign_key' => $ap_id), 
                         array('model' => 'Realms',  'foreign_key' => $r->id), $right); //Only if they have the right
                 }catch(\Exception $e){               
                      $result = false;  

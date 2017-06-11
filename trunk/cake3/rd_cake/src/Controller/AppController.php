@@ -118,7 +118,7 @@ class AppController extends Controller
             $temp_debug = Configure::read('debug');
            // Configure::write('debug', 0); // turn off debugging
             
-            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
+            if(!$this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
                 Configure::write('debug', $temp_debug); // return previous setting 
                 $this->Aa->fail_no_rights($this);
                 return;

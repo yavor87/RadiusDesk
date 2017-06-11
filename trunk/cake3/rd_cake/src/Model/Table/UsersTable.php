@@ -20,7 +20,7 @@ class UsersTable extends Table
     {
         $this->addBehavior('Timestamp');
         $this->addBehavior('Tree');
-        //$this->addBehavior('Acl.Acl', ['type' => 'requester']);
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
           
         $this->belongsTo('Groups');
         $this->belongsTo('Languages');
