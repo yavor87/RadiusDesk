@@ -27,9 +27,9 @@ Ext.define('Rd.controller.cAccessProviders', {
     models: ['mApUserRight','mApRealms',    'mAccessProviderGrid',      'mAccessProviderTree'],
     selectedRecord: undefined,
     config: {
-        urlAdd          : '/cake2/rd_cake/access_providers/add.json', //Keep this still the original untill everything is ported for AROs
+        urlAdd          : '/cake3/rd_cake/access-providers/add.json', //Keep this still the original untill everything is ported for AROs
         urlEdit         : '/cake3/rd_cake/access-providers/edit.json',
-        urlDelete       : '/cake2/rd_cake/access_providers/delete.json', //Keep this still the original untill everything is ported for AROs
+        urlDelete       : '/cake3/rd_cake/access-providers/delete.json', //Keep this still the original untill everything is ported for AROs
         urlApChildCheck : '/cake3/rd_cake/access-providers/child-check.json',
         urlExportCsv    : '/cake3/rd_cake/access-providers/exportCsv',
         urlNoteAdd      : '/cake3/rd_cake/access-providers/note_add.json',
@@ -415,15 +415,7 @@ Ext.define('Rd.controller.cAccessProviders', {
                                 me.reload(); //Reload from server
                             }   
                         },                                   
-                        failure: function(batch,options){
-                            Ext.ux.Toaster.msg(
-                                i18n('sProblems_deleting_item'),
-                                i18n('sProblems_deleting_item'),
-                                Ext.ux.Constants.clsWarn,
-                                Ext.ux.Constants.msgWarn
-                            );
-                            me.reload(); //Reload from server
-                        }
+                        failure: Ext.ux.ajaxFail
                     });
                 }
             });

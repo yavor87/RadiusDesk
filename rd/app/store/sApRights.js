@@ -6,15 +6,15 @@ Ext.define('Rd.store.sApRights', {
             type: 'ajax',
             format  : 'json',
             batchActions: true, 
-            url   : '/cake2/rd_cake/acos_rights/index_ap.json',
+            url   : '/cake3/rd_cake/acos-rights/index-ap.json',
             reader: {
                 type: 'json',
                 rootProperty: 'items',
                 messageProperty: 'message'
             },
             api: {
-                read    : '/cake2/rd_cake/acos_rights/index_ap.json',
-                update  : '/cake2/rd_cake/acos_rights/edit_ap.json'
+                read    : '/cake3/rd_cake/acos-rights/index-ap.json',
+                update  : '/cake3/rd_cake/acos-rights/edit-ap.json'
             }
     },
     root: {alias: i18n('sDefault_Access_Provider_Rights'),leaf: false, id:'0', iconCls: 'root', expanded: false},

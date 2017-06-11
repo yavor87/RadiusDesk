@@ -25,8 +25,8 @@ Ext.define('Rd.controller.cAcos', {
     acoSelectedRecord: undefined,
     apRightsSelectedRecord: undefined,
     config: {
-        urlAcosRightsAdd:   '/cake2/rd_cake/acos_rights/add.json',
-        urlAcosRightEdit:   '/cake2/rd_cake/acos_rights/edit.json'
+        urlAcosRightsAdd:   '/cake3/rd_cake/acos-rights/add.json',
+        urlAcosRightEdit:   '/cake3/rd_cake/acos-rights/edit.json'
     },
     refs: [
          {  ref:    'treeAco',      selector:   'treeAco'},

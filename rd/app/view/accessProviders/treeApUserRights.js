@@ -75,7 +75,7 @@ Ext.define('Rd.view.accessProviders.treeApUserRights' ,{
                 type: 'ajax',
                 format  : 'json',
                 batchActions: true, 
-                url   : '/cake2/rd_cake/acos_rights/index_ap.json',
+                url   : '/cake3/rd_cake/acos-rights/index-ap.json',
                 extraParams: { 'ap_id' : me.ap_id },
                 reader: {
                     type: 'json',
@@ -83,8 +83,8 @@ Ext.define('Rd.view.accessProviders.treeApUserRights' ,{
                     messageProperty: 'message'
                 },
                 api: {
-                    read    : '/cake2/rd_cake/acos_rights/index_ap.json',
-                    update  : '/cake2/rd_cake/acos_rights/edit_ap.json'
+                    read    : '/cake3/rd_cake/acos-rights/index-ap.json',
+                    update  : '/cake3/rd_cake/acos-rights/edit-ap.json'
                 }
             },
             root: {alias: i18n('sAccess_Provider_Rights'),leaf: false, id:'0', iconCls: 'root', expanded: false},
