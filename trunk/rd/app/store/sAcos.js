@@ -3,18 +3,18 @@ Ext.define('Rd.store.sAcos', {
     model: 'Rd.model.mAco',
     autoLoad: true,
     proxy: {
-            type: 'ajax',
+            type    : 'ajax',
             format  : 'json',
             batchActions: true, 
-            'url'   : '/cake2/rd_cake/acos_rights/index.json',
+            url     : '/cake3/rd_cake/acos-rights/index.json',
             reader: {
                 type: 'json',
                 rootProperty: 'items',
                 messageProperty: 'message'
             },
             api: {
-                read    : '/cake2/rd_cake/acos_rights/index.json',
-                destroy : '/cake2/rd_cake/acos_rights/delete.json'
+                read    : '/cake3/rd_cake/acos-rights/index.json',
+                destroy : '/cake3/rd_cake/acos-rights/delete.json'
             }
     },
     root: {alias: i18n('sAccess_control_objects_br_ACOs_br'),leaf: false, id:'0', iconCls: 'root', expanded: false},

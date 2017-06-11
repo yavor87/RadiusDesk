@@ -6,7 +6,7 @@ Ext.define('Rd.view.utilities.pnlUtilities', {
     ui          : 'light',
     frame       : false,
     config: {
-        urlUtilitiesItems:    '/cake2/rd_cake/dashboard/utilities_items.json'
+        urlUtilitiesItems:    '/cake3/rd_cake/dashboard/utilities-items.json'
     },
     initComponent: function() {
         var me      = this;
