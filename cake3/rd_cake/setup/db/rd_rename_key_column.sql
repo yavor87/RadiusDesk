@@ -9,7 +9,6 @@ if not exists (select * from information_schema.columns
     alter table dynamic_detail_social_logins change `key` `special_key` VARCHAR(100)  NOT NULL DEFAULT '';
 end if;
 
-
 end//
 
 delimiter ;
