@@ -133,7 +133,7 @@ Ext.define('Rd.view.meshes.winMeshEditEntry', {
                                 {
                                     xtype       : 'textfield',
                                     fieldLabel  : i18n('sKey'),
-                                    name        : 'key',
+                                    name        : 'special_key',
                                     itemId      : 'key',
                                     allowBlank  : false,
                                     minLength   : 8,  

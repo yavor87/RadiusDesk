@@ -7,7 +7,7 @@ Ext.define('Rd.model.mAccessPointEntry', {
          {name: 'encryption',       type: 'string'  },
          {name: 'hidden',           type: 'bool'    },
          {name: 'isolate',          type: 'bool'    },
-         {name: 'key',              type: 'string'  },
+         {name: 'special_key',      type: 'string'  },
          {name: 'auth_server',      type: 'string'  },
          {name: 'auth_secret',      type: 'string'  },
          {name: 'connected_to_exit',type: 'bool'    }
