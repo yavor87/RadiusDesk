@@ -398,7 +398,7 @@ class MeshesController extends AppController {
                 'isolate'       => $m['MeshEntry']['isolate'],
                 'apply_to_all'  => $m['MeshEntry']['apply_to_all'],
                 'encryption'    => $m['MeshEntry']['encryption'],
-                'key'           => $m['MeshEntry']['key'],
+                'special_key'   => $m['MeshEntry']['special_key'],
                 'auth_server'   => $m['MeshEntry']['auth_server'],
                 'auth_secret'   => $m['MeshEntry']['auth_secret'],
                 'dynamic_vlan'  => $m['MeshEntry']['dynamic_vlan'],

@@ -103,13 +103,13 @@ class DashboardController extends AppController {
                 'scale'   => 'large',
                 'itemId'  => 'btnDataUsage'
             ),
-           /* array(
+            array(
                 'xtype'   => 'button',
                 'text'    => 'Setup Wizard',
                 'glyph'   => Configure::read('icnWizard'),
                 'scale'   => 'large',
                 'itemId'  => 'btnSetupWizard'
-            )*/
+            )
         );
         
         $this->set(array(

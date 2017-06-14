@@ -393,7 +393,7 @@ class ApProfilesController extends AppController {
                 'hidden'        => $m['ApProfileEntry']['hidden'],
                 'isolate'       => $m['ApProfileEntry']['isolate'],
                 'encryption'    => $m['ApProfileEntry']['encryption'],
-                'key'           => $m['ApProfileEntry']['key'],
+                'special_key'   => $m['ApProfileEntry']['special_key'],
                 'auth_server'   => $m['ApProfileEntry']['auth_server'],
                 'auth_secret'   => $m['ApProfileEntry']['auth_secret'],
                 'dynamic_vlan'  => $m['ApProfileEntry']['dynamic_vlan'],
