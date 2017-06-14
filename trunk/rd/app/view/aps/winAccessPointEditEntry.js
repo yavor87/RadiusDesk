@@ -157,7 +157,7 @@ Ext.define('Rd.view.aps.winAccessPointEditEntry', {
                                     xtype       : 'textfield',
                                     fieldLabel  : i18n("sKey"),
                                     name        : 'key',
-                                    itemId      : 'key',
+                                    itemId      : 'special_key',
                                     minLength   : 8,
                                     allowBlank  : false,  
                                     blankText   : i18n("sSupply_a_value"),

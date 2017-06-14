@@ -93,7 +93,7 @@ Ext.define('Rd.view.aps.gridAccessPointEntries' ,{
                            
                 }, stateId: 'StateGridAccessPointEntries7'
             },
-            { text: 'WPA Personal Key', hidden: true,dataIndex: 'key',          tdCls: 'gridTree', flex: 1, stateId: 'StateGridAccessPointEntries8'},
+            { text: 'WPA Personal Key', hidden: true,dataIndex: 'speical_key',          tdCls: 'gridTree', flex: 1, stateId: 'StateGridAccessPointEntries8'},
             { text: 'RADIUS Server',    hidden: true,dataIndex: 'auth_server',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridAccessPointEntries9'},
             { text: 'RADIUS Secret',    hidden: true,dataIndex: 'auth_secret',  tdCls: 'gridTree', flex: 1, stateId: 'StateGridAccessPointEntries10'}
             
