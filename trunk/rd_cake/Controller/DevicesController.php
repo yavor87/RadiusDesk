@@ -1202,7 +1202,7 @@ class DevicesController extends AppController {
                 ))));
 
             //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnAdd'),     
@@ -1211,7 +1211,7 @@ class DevicesController extends AppController {
                     'tooltip'   => __('Add')));
             }
             //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnDelete'),  
@@ -1222,7 +1222,7 @@ class DevicesController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit_basic_info')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'edit_basic_info')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',
@@ -1233,7 +1233,7 @@ class DevicesController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnNote'),     
@@ -1242,7 +1242,7 @@ class DevicesController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnCsv'),     
@@ -1252,7 +1252,7 @@ class DevicesController extends AppController {
             }
 
             //Enable-disable
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'enable_disable')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'enable_disable')){ 
                   array_push($specific_group, array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnLight'), 
@@ -1499,7 +1499,7 @@ class DevicesController extends AppController {
                 $i_id = $i['User']['id']; 
                 if($i_id != $user_id){ //upstream
                     if($this->Acl->check(array(
-                        'model'         => 'User', 
+                        'model'         => 'Users', 
                         'foreign_key'   => $user_id), 
                         "Access Providers/Other Rights/View users or vouchers not created self")
                     ){
@@ -1621,22 +1621,22 @@ class DevicesController extends AppController {
             
             
                 if($this->Acl->check(array(
-                    'model'         => 'User', 
+                    'model'         => 'Users', 
                     'foreign_key'   => $user['id']), 
                     "Access Providers/Other Rights/View users or vouchers not created self")
                 ){
                     $read = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Users', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realms','foreign_key' => $realm_id), 'read');
                 }else{
                     $read = false; //Since the user is not the owner and they can not view other's vouchers we leave it out
                 }  
             
                 $update = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Users', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realms','foreign_key' => $realm_id), 'update');
                 $delete = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Users', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realms','foreign_key' => $realm_id), 'delete');
                 //Prime it                 
                 $this->AclCache[$realm_id] =  array('update' => $update, 'delete' => $delete,'read' => $read);      

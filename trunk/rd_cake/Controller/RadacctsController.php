@@ -500,7 +500,7 @@ class RadacctsController extends AppController {
             ));    
 
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',
@@ -519,7 +519,7 @@ class RadacctsController extends AppController {
                 'tooltip'   => __('Usage graph')));
 
 
-           if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'kick_active')){ 
+           if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'kick_active')){ 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-kick',
@@ -529,7 +529,7 @@ class RadacctsController extends AppController {
                     'tooltip'   => __('Kick user off')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'close_open')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'close_open')){ 
                 array_push($specific_group, array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-close',
@@ -705,7 +705,7 @@ class RadacctsController extends AppController {
                 $id     = $r_p['Realm']['id'];
                 $name   = $r_p['Realm']['name'];
                 $read   = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Users', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realms','foreign_key' => $id), 'read');
                 if($read == true){
                     array_push($ap_clause,array($this->modelClass.'.realm' => $name));

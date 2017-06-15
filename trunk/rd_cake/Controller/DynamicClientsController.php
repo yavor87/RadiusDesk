@@ -824,7 +824,7 @@ class DynamicClientsController extends AppController {
                     ));
 
             //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-add',
@@ -834,7 +834,7 @@ class DynamicClientsController extends AppController {
                     'tooltip'   => __('Add')));
             }
             //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-delete',
@@ -846,7 +846,7 @@ class DynamicClientsController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',

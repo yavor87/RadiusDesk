@@ -578,7 +578,7 @@ class TagsController extends AppController {
                 'tooltip'   => __('Reload')));
 
             //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-add',
@@ -588,7 +588,7 @@ class TagsController extends AppController {
                     'tooltip'   => __('Add')));
             }
             //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-delete',
@@ -600,7 +600,7 @@ class TagsController extends AppController {
             }
 
             //Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'edit')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-edit',
@@ -611,7 +611,7 @@ class TagsController extends AppController {
                     'tooltip'   => __('Edit')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',
@@ -621,7 +621,7 @@ class TagsController extends AppController {
                         'tooltip'   => __('Add Notes')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',

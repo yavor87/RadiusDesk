@@ -14,7 +14,7 @@ class TokenAclComponent extends Component {
     public $components = array('Acl');
     //This is only called if the user is an AP - we then check if the action they try to do is allowed for the realm (is he assigned to the realm)
     public function can_manage_realm($user_id,$realm_id){
-        return $this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id),array('model' => 'Realms', 'foreign_key' => $realm_id));
+        return $this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id),array('model' => 'Realms', 'foreign_key' => $realm_id));
     }
 
     public function action_check($controller,$action){

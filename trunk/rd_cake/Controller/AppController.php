@@ -113,7 +113,7 @@ class AppController extends Controller {
             $user_id = $user['id'];
         }elseif($user['group_name'] == Configure::read('group.ap')){  //Or AP
             $user_id = $user['id'];
-            if(!$this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
+            if(!$this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.$action)){  //Does AP have right?
                 $this->Aa->fail_no_rights($this);
                 return;
             }

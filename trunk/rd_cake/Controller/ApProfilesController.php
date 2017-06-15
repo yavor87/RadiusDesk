@@ -1987,11 +1987,11 @@ class ApProfilesController extends AppController {
                     $view = false;
 
                     //Here we do a special thing to see if the owner of the ap profile perhaps allowed the person beneath him to edit and view the ap_profile
-                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'ap_profile_entry_edit')){
+                    if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.'ap_profile_entry_edit')){
                         $edit = true;
                     }
 
-                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'ap_profile_entry_view')){
+                    if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.'ap_profile_entry_view')){
                         $view = true;
                     }
                     return array('update' => $edit, 'delete' => false, 'view' => $view );
@@ -2099,7 +2099,7 @@ class ApProfilesController extends AppController {
 
 
             //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnAdd'),     
@@ -2108,7 +2108,7 @@ class ApProfilesController extends AppController {
                     'tooltip'   => __('Add')));
             }
             //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnDelete'),  
@@ -2119,7 +2119,7 @@ class ApProfilesController extends AppController {
             }
 
 			//Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'ap_profile_entry_edit')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'ap_profile_entry_edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnEdit'),  
@@ -2130,7 +2130,7 @@ class ApProfilesController extends AppController {
             }
 
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'glyph'     => Configure::read('icnNote'),     

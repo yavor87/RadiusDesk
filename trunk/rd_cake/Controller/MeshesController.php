@@ -2370,7 +2370,7 @@ class MeshesController extends AppController {
 
 
             //Add
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base."add")){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base."add")){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-add',
@@ -2380,7 +2380,7 @@ class MeshesController extends AppController {
                     'tooltip'   => __('Add')));
             }
             //Delete
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'delete')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'delete')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-delete',
@@ -2392,7 +2392,7 @@ class MeshesController extends AppController {
             }
 
 			//Edit
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'mesh_entry_edit')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'mesh_entry_edit')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnEdit'),  
@@ -2403,7 +2403,7 @@ class MeshesController extends AppController {
             }
 
 			//View
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'mesh_entry_view')){
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'mesh_entry_view')){
                 array_push($action_group,array(
                     'xtype'     => 'button', 
                     'glyph'     => Configure::read('icnView'),  
@@ -2413,7 +2413,7 @@ class MeshesController extends AppController {
                     'tooltip'   => __('View')));
             }
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'note_index')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'note_index')){ 
                 array_push($document_group,array(
                         'xtype'     => 'button', 
                         'iconCls'   => 'b-note',
@@ -2802,11 +2802,11 @@ class MeshesController extends AppController {
                     $view = false;
 
                     //Here we do a special thing to see if the owner of the mesh perhaps allowed the person beneath him to edit and view the mesh
-                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'mesh_entry_edit')){
+                    if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.'mesh_entry_edit')){
                         $edit = true;
                     }
 
-                    if($this->Acl->check(array('model' => 'User', 'foreign_key' => $user_id), $this->base.'mesh_entry_view')){
+                    if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $user_id), $this->base.'mesh_entry_view')){
                         $view = true;
                     }
                     return array('update' => $edit, 'delete' => false, 'view' => $view );
