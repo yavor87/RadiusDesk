@@ -305,7 +305,7 @@ class RadpostauthsController extends AppController {
 
             
 
-            if($this->Acl->check(array('model' => 'User', 'foreign_key' => $id), $this->base.'export_csv')){ 
+            if($this->Acl->check(array('model' => 'Users', 'foreign_key' => $id), $this->base.'export_csv')){ 
                 array_push($document_group,array(
                     'xtype'     => 'button', 
                     'iconCls'   => 'b-csv',
@@ -425,7 +425,7 @@ class RadpostauthsController extends AppController {
                     $id     = $j['Realm']['id'];
                     $name   = $j['Realm']['name'];   
                     $read   = $this->Acl->check(
-                                array('model' => 'User', 'foreign_key' => $user['id']), 
+                                array('model' => 'Users', 'foreign_key' => $user['id']), 
                                 array('model' => 'Realms','foreign_key' => $id), 'read');
                     if($read == true){
                         array_push($ap_clause,array($this->modelClass.'.realm' => $name));
