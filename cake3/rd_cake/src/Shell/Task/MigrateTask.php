@@ -107,6 +107,10 @@ class MigrateTask extends Shell{
             ['old' => 'note_index',         'new' => 'noteIndex'],
             ['old' => 'note_add',           'new' => 'noteAdd'],
             ['old' => 'note_del',           'new' => 'noteDel']   
+        ],
+        'AcosRights'    => [
+            ['old' => 'index_ap',   'new' => 'indexAp'],
+            ['old' => 'edit_ap',    'new' => 'editAp'],  
         ]     
     ];
 
