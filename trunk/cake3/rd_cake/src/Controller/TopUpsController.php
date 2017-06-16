@@ -68,13 +68,18 @@ class TopUpsController extends AppController{
                 $columns = json_decode($this->request->query['columns']);
                 foreach($columns as $c){
                     $column_name = $c->name;
-                    if($column_name =='user'){
+                    if($column_name == 'notes'){
+                        $notes   = '';
+                        foreach($i->na_notes as $un){
+                            if(!$this->Aa->test_for_private_parent($un->note,$user)){
+                                $notes = $notes.'['.$un->note->note.']';    
+                            }
+                        }
+                        array_push($csv_line,$notes);
+                    }elseif($column_name =='owner'){
                         $owner_id       = $i->user_id;
                         $owner_tree     = $this->Users->find_parents($owner_id);
                         array_push($csv_line,$owner_tree); 
-                    }elseif($column_name =='permanent_user'){  
-                        $pu  = $i->{$column_name}->username;
-                        array_push($csv_line,$pu); 
                     }else{
                         array_push($csv_line,$i->{$column_name});  
                     }

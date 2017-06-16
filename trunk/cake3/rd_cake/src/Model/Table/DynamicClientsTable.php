@@ -10,6 +10,7 @@ class DynamicClientsTable extends Table
     {
         $this->addBehavior('Timestamp');  
         $this->belongsTo('Users');
+        $this->hasMany('DynamicClientNotes',['dependent' => true]);
     }
     
     public function validationDefault(Validator $validator){
