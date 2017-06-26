@@ -230,5 +230,9 @@ config hardware 'yc_xd3200'
     option single_led 'xd3200:green:system'
     option meshed_led 'xd3200:blue:wlan2g'
     option system_led 'xd3200:green:system'
-
     
+config hardware 'create_comm_ta8h'
+    option morse_led '/sys/class/leds/ta8h:green:wlan2g/brightness'
+    option internet_led '/sys/class/leds/ta8h:green:status/brightness'
+    option wifi_led 'ta8h:green:wlan5g'
+  
