@@ -545,13 +545,19 @@ class ApProfilesController extends AppController {
             $exit_entries = array();
 
             foreach($m['ApProfileExitApProfileEntry'] as $m_e_ent){
-                array_push($exit_entries,array('name' => $m_e_ent['ApProfileEntry']['name']));
+                if($m_e_ent['ap_profile_entry_id'] != 0){
+                    array_push($exit_entries,array('name' => $m_e_ent['ApProfileEntry']['name']));
+                }
+                if($m_e_ent['ap_profile_entry_id'] == 0){
+                    array_push($exit_entries,array('name' => 'Eth1 (If Hardware Suports It)'));
+                }  
             }
 
             array_push($items,array( 
                 'id'            => $m['ApProfileExit']['id'],
                 'ap_profile_id' => $m['ApProfileExit']['ap_profile_id'],
                 'type'          => $m['ApProfileExit']['type'],
+                'vlan'          => intval($m['ApProfileExit']['vlan']),
                 'connects_with' => $exit_entries
 
             ));
@@ -690,32 +696,26 @@ class ApProfilesController extends AppController {
 
             //Add the entry points
             $count      = 0;
-            $entry_ids  = array();
-            $empty_flag = false;
-
+            $entry_ids  = [];
+                
             if (array_key_exists('entry_points', $this->request->data)) {
-                foreach($this->request->data['entry_points'] as $e){
-                    if($this->request->data['entry_points'][$count] == 0){
-                        $empty_flag = true;
-                        break;
-                    }else{
-                        array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                if(!empty($this->request->data['entry_points'])){
+                    foreach($this->request->data['entry_points'] as $e){
+                        if($e != ''){
+                            array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                        }
+                        $count++;      
                     }
-                    $count++;
                 }
             }
-
-
-            //Only if empty was not specified
-            if((!$empty_flag)&&(count($entry_ids)>0)){
-                foreach($entry_ids as $id){	
-                    $data = array();
-                    $data['ApProfileExitApProfileEntry']['ap_profile_exit_id']  = $new_id;
-                    $data['ApProfileExitApProfileEntry']['ap_profile_entry_id'] = $id;
-					$entry_point->create();
-                    $entry_point->save($data);
-					$entry_point->id = null;
-                }
+            
+            foreach($entry_ids as $id){	
+                $data = array();
+                $data['ApProfileExitApProfileEntry']['ap_profile_exit_id']  = $new_id;
+                $data['ApProfileExitApProfileEntry']['ap_profile_entry_id'] = $id;
+				$entry_point->create();
+                $entry_point->save($data);
+				$entry_point->id = null;
             }
 
             $this->set(array(
@@ -879,35 +879,31 @@ class ApProfilesController extends AppController {
                 //Add the entry points
                 $count      = 0;
                 $entry_ids  = array();
-                $empty_flag = false;
                 $new_id     = $this->request->data['id'];
 
                 //Clear previous ones first:
                 $entry_point->deleteAll(array('ApProfileExitApProfileEntry.ap_profile_exit_id' => $new_id), false);
-
+  
                 if (array_key_exists('entry_points', $this->request->data)) {
-                    foreach($this->request->data['entry_points'] as $e){
-                        if($this->request->data['entry_points'][$count] == 0){
-                            $empty_flag = true;
-                            break;
-                        }else{
-                            array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                    if(!empty($this->request->data['entry_points'])){
+                        foreach($this->request->data['entry_points'] as $e){
+                            if($e != ''){
+                                array_push($entry_ids,$this->request->data['entry_points'][$count]);
+                            }
+                            $count++;      
                         }
-                        $count++;
                     }
                 }
 
-                //Only if empty was not specified
-                if((!$empty_flag)&&(count($entry_ids)>0)){
-                    foreach($entry_ids as $id){
-						$data = array();
-                        $data['ApProfileExitApProfileEntry']['ap_profile_exit_id']  = $new_id;
-                        $data['ApProfileExitApProfileEntry']['ap_profile_entry_id'] = $id;
-						$entry_point->create();
-                        $entry_point->save($data);
-						$entry_point->id = null;
-                    }
+                foreach($entry_ids as $id){
+					$data = array();
+                    $data['ApProfileExitApProfileEntry']['ap_profile_exit_id']  = $new_id;
+                    $data['ApProfileExitApProfileEntry']['ap_profile_entry_id'] = $id;
+					$entry_point->create();
+                    $entry_point->save($data);
+					$entry_point->id = null;
                 }
+
 
                 $this->set(array(
                     'success' => true,
@@ -950,7 +946,11 @@ class ApProfilesController extends AppController {
         }
 
         $exit = ClassRegistry::init('ApProfileExit');
-        $exit->contain('ApProfileExitApProfileEntry','ApProfileExitCaptivePortal','DynamicDetail');
+        $exit->contain(
+            'ApProfileExitApProfileEntry',
+            ['ApProfileExitCaptivePortal'] ,
+            'DynamicDetail'
+        );
 
         $id    = $this->request->query['exit_id'];
         $q_r   = $exit->findById($id);
@@ -1006,6 +1006,14 @@ class ApProfilesController extends AppController {
             $q_r['ApProfileExit']['uamanydns']       = $q_r['ApProfileExitCaptivePortal']['uamanydns'];
             $q_r['ApProfileExit']['dnsparanoia']     = $q_r['ApProfileExitCaptivePortal']['dnsparanoia'];
             $q_r['ApProfileExit']['dnsdesk']         = $q_r['ApProfileExitCaptivePortal']['dnsdesk'];
+            
+            //Upstream VLAN id (if applicable)
+
+            if($q_r['ApProfileExitCaptivePortal']['ap_profile_exit_upstream_id']){
+                $q_r['ApProfileExit']['ap_profile_exit_upstream_id'] = $q_r['ApProfileExitCaptivePortal']['ap_profile_exit_upstream_id'];
+            }else{
+                $q_r['ApProfileExit']['ap_profile_exit_upstream_id'] = 0;
+            }
 
         }
         
@@ -1023,7 +1031,37 @@ class ApProfilesController extends AppController {
             '_serialize'=> array('success', 'data')
         ));
     }
-
+    
+    public function ap_profile_exit_upstream_list(){
+        $user = $this->Aa->user_for_token($this);
+        if(!$user){   //If not a valid user
+            return;
+        }
+        
+        $id     = $this->request->query['ap_profile_id'];
+        $exit   = ClassRegistry::init('ApProfileExit'); 
+        
+        $exit->contain();
+        $exit_q_r  = $exit->find('all',['conditions' => [
+            'ApProfileExit.ap_profile_id'   => $id,
+            'ApProfileExit.type'            => 'tagged_bridge_l3',
+        ]]); 
+        
+        $items  = [
+            ['name'=> 'LAN (Ethernet0)', 'id' => 0 ]
+        ];
+        
+        foreach($exit_q_r as $i){
+            //print_r($i);
+            array_push($items,['name' => "VLAN ".$i['ApProfileExit']['vlan'],'id' => intval($i['ApProfileExit']['id'])]);
+        }
+        
+        $this->set(array(
+            'items'     => $items,
+            'success'   => true,
+            '_serialize'=> array('success', 'items')
+        ));
+    }
 
     public function ap_profile_exit_delete(){
 
@@ -1113,7 +1151,6 @@ class ApProfilesController extends AppController {
         //print_r($ent_q_r);
 
         $items = array();
-        array_push($items,array('id' => 0, 'name' => "(None)")); //Allow the user not to assign at this stage
         foreach($ent_q_r as $i){
 
             //If this entry point is already associated; we will NOT add it
@@ -1134,6 +1171,24 @@ class ApProfilesController extends AppController {
                 }
             }
         }
+        
+        //Eth1 check
+        $exit_entry = ClassRegistry::init('ApProfileExitApProfileEntry');
+        $exit_entry->contain('ApProfileExit');
+        $q_eth1_entry = $exit_entry->find('first',['conditions' => [
+            'ApProfileExit.ap_profile_id' => $ap_profile_id,
+            'ApProfileExitApProfileEntry.ap_profile_entry_id' => 0
+        ]]);
+        
+        if($q_eth1_entry){
+            //Only if it is for this exit
+            if($q_eth1_entry['ApProfileExitApProfileEntry']['ap_profile_exit_id'] == $exit_id){
+                array_push($items,array('id' => 0, 'name' => "Eth1 (If Hardware Suports It)"));
+            }   
+        }else{
+            array_push($items,array('id' => 0, 'name' => "Eth1 (If Hardware Suports It)")); //Allow the user not to assign at this stage
+        }
+         
         $this->set(array(
             'items' => $items,
             'success' => true,
@@ -1290,7 +1345,7 @@ class ApProfilesController extends AppController {
         }
 
         if($no_overrides){
-
+        
             foreach($hw as $h){
                 $id     = $h['id'];
                 if($model == $id){
